@@ -9,15 +9,21 @@
 2. General project rules below apply only where the programme contracts are
    silent.
 
-## Operating model (owner decree, 2026-08-19)
+## Operating model (owner decree, 2026-08-19; DT succession updated 2026-08-23)
 
-- **Codex is the DT/coordinator** (seat held by Kimi K3 from 2026-08-20 and
-  handed to Codex by owner order of 2026-08-21, on quota exhaustion of Kimi K3;
-  the backup DT documented in `docs/prompt-codex-continue.md` was activated).
-  It decomposes work into bounded packets, makes every architecture/adjudication decision, and
+- **Kimi K3 is the DT/coordinator** (seat held by Kimi K3 from 2026-08-20,
+  handed to Codex by owner order of 2026-08-21 on quota exhaustion of Kimi K3,
+  and consummated back to Kimi K3 by explicit owner order of 2026-08-23 —
+  `docs/prompt-dt-fresh-session-2026-08-23.md`). It decomposes work into
+  bounded packets, makes every architecture/adjudication decision, and
   verifies every packet with gates and diff review before any commit. It
   implements personally only the critical pieces (seals, programme contracts,
   delicate surgery).
+- **Codex is a low-frequency read-only technical consultant** from
+  2026-08-23: executive review at the close of long packet runs, phase closes
+  or hard-to-reverse architecture decisions. It holds no gate, no audit seat
+  and no write authority; its review advises the DT and never substitutes the
+  Fable 5 per-packet audit.
 - **Mechanical packets are delegated to Claude terminals via tmux**, with the
   model tier chosen by risk: Sonnet for pure mechanical work, Opus for
   mid-risk, Fable for the full independent audit at the close of each front.

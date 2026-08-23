@@ -191,7 +191,7 @@ A family is DONE only when:
 - applicable viewport/container, locale/RTL, content, input, forced-colors and
   reduced-motion cases pass;
 - evidence is bound to the frozen source and artifact hashes; and
-- Codex (DT) performs final sighted acceptance, with Fable 5 independent
+- Kimi K3 (DT) performs final sighted acceptance, with Fable 5 independent
   closure audit.
 
 Programme closure requires an honest disposition for every family in the active
@@ -239,20 +239,20 @@ not rerun an implementation loop for every earlier assertion.
 
 <!-- lane-control:program-state v1 — DO NOT EDIT BY HAND. Rewrite it with:
      node packages/core/src/tooling/lane-control/public/program-state/index.mjs --write --intent <intent.json>
-     head=9d5582dfd written=2026-08-21T22:16:07.037Z intent=5a86b12ae6369bdd render=55b37c5b919255e4 -->
+     head=aaa96eef8 written=2026-08-23T16:04:23.044Z intent=150b10665e5919da render=ab56c7f91a1b623e -->
 
 *Everything in this section is intent. Anything derivable is derived by command, not typed here.*
 
-**Current wave:** F4A — canon estructural de los 3 brand themes (cerrados desde el arranque del frente hasta F4A-13, incluidos K1, K2, K3 y el correctivo F4A-3c; el frente queda cerrado salvo CHROME.table. Siguiente paquete estricto: F4A-14 = K4 (las 16 asimétricas), luego F4A-15 = K5 (las 40 hojas de CHROME.table) y F4A-close)
+**Current wave:** F4B — calibración causal de los 20 controles públicos: 4/20 COMPUTED_VERIFIED (spacing.rhythm, surfaces.effect-intensity, shape.radius-scale, experience.profile), 24 receipts válidos y frescos bajo el validador v2, ninguno SIGHTED_ACCEPTED, 16 controles UNKNOWN. Cola inmediata: C2 (program-check verde), C3 (resello GAT-07), C4 (postaudit retroactivo de la brecha PRE_F4B→F4B); después el control 5/20 — density.mode o responsive.posture según preflight medido — y F4B hasta 20/20.
 
-**Blocked on:** Kimi K3 deja de ser gate, auditor, implementador y dependencia por orden del owner del 2026-08-21; toda cláusula previa que lo declaraba bloqueante queda superseded. La cola vinculante en curso es: authority-honesty (este tranche), el aislamiento en sandbox de program-check, el aislamiento en sandbox de cra-12, F4A-14 = K4, F4A-15 = K5, las deudas semánticas del frente, el gate de paridad real con ratchet a tolerancia cero, la cerca de cascade-wiring con su work order PRE_F4B, y por último gates:ci final verde con la auditoría Fable del frente. F4A-close exige las cuatro obligaciones del roadmap, no tres: ratchet a tolerancia cero, gate de paridad real sobre keypaths evaluados sin cobertura por placeholders, gates:ci final verde, y auditoría Fable del frente.
+**Blocked on:** La sucesión DT Codex → Kimi K3 quedó consumada por orden explícita del owner del 2026-08-23 (packet T-1, docs/prompt-dt-fresh-session-2026-08-23.md); Codex queda como consultor técnico read-only de baja frecuencia y Fable 5 como único auditor independiente. Bloqueos inmediatos: C2 — 24 fallos spacing.rhythm de program-check sobre primitive/layout/{flex,grid,space,stack}; C3 — sello GAT-07 stale desde la serie F4B, con resello obligatorio al cierre de cada packet F4B; C4 — brecha de escribanía PRE_F4B→F4B (15 commits del 2026-08-22, rango asentado en el roadmap) pendiente de doble postaudit retroactivo antes de F4B 5/20. Deudas con dueño: OPEN_VERTICAL_CASCADE_DEFECT (OPEN_DT, packet propio del generador/cascada vertical), OPEN_ARM_ASYMMETRY (OPEN_OWNER, decisión antes de F2 asimétrico/F3), el stash pre-programa owner-gated.
 
 Active packets:
 
 | Lane | Work | Model | Reason for the model |
 |---|---|---|---|
-| authority | Keep one human entry point, machine contracts and honest derived status; retire competing prompts, roadmaps and checkpoints after their unique facts are migrated. | codex-dt | This packet changes programme authority and deletion boundaries, so it requires source audit, dependency analysis and final local commit ownership — held by the Codex DT under the owner order of 2026-08-21, which activated the documented backup DT after Kimi K3 exhausted its quota. History: Kimi K3 held this seat from the identity reconciliation (owner order 2026-08-20, roadmap §12 decision 13) until 2026-08-21 and is retired from the live seat; it does not re-enter as auditor or writer. Fable 5 remains the sole independent read-only auditor, so DT != auditor holds with Codex in the seat. |
-| control-calibration | Close spacing rhythm from both tenant inputs through normalized channels, canonical family parts, computed deltas, negative controls and exact restore. | strong-implementation | The packet spans schemas, both compiler paths, CSS ownership and browser evidence; it is bounded but not a mechanical substitution. |
+| authority | Keep one human entry point, machine contracts and honest derived status; retire competing prompts, roadmaps and checkpoints after their unique facts are migrated. | kimi-k3-dt | This packet changes programme authority and deletion boundaries, so it requires source audit, dependency analysis and final local commit ownership — held by the Kimi K3 DT under the explicit owner order of 2026-08-23 (docs/prompt-dt-fresh-session-2026-08-23.md). History: Codex held the seat until the identity reconciliation (owner order 2026-08-20, roadmap §12 decision 13), Kimi K3 held it until 2026-08-21 (quota exhaustion; the documented backup DT Codex was activated), and Kimi K3 holds it again from 2026-08-23, with Codex remaining as a low-frequency read-only technical consultant. Fable 5 remains the sole independent read-only auditor, so DT != auditor holds with Kimi K3 in the seat. |
+| control-calibration | Close the remaining 16 public controls (4/20 COMPUTED_VERIFIED) from both tenant inputs through normalized channels, canonical family parts, computed deltas, negative controls and exact restore, one control per packet; the immediate queue is C2 (program-check green), C3 (GAT-07 reseal) and C4 (PRE_F4B→F4B scribe-gap postaudit), then density.mode or responsive.posture by measured preflight. | strong-implementation | The packet spans schemas, both compiler paths, CSS ownership and browser evidence; it is bounded but not a mechanical substitution. |
 | family-closure | After the control matrix stabilizes, enrich each family once against every applicable control, state and stress case recorded in the manifest. | disjoint-family-writers | A family packet becomes mechanical only after applicability, stops, parts, invariants and evidence commands are closed by the calibration work. |
 | advisory-audit | Independently try to refute control semantics, family applicability, evidence mechanisms and retirement proofs without editing the programme. | fable | Fable is the independent auditor at each front's close (owner order 2026-08-20, decision 13: DT ≠ auditor). Advisory prose is never authority and only reproduced source findings enter the canonical tree. |
 
@@ -305,7 +305,7 @@ The slice must:
 7. prove monotonicity and the density × rhythm × type-scale responsive matrix;
 8. prove exact restore for normalized output, variables, root attributes and
    computed properties; and
-9. obtain DT (Codex) sighted acceptance before propagation is credited.
+9. obtain DT (Kimi K3) sighted acceptance before propagation is credited.
 
 Valid enum stops currently share `TENANT_THEME_RHYTHM_FACTORS`, but invalid
 input handling, effective CSS clamping and exact static/DB parity remain claims
@@ -349,7 +349,7 @@ Builds, servers and browsers are serialized at reconciliation points.
 
 ## Roles
 
-- **Codex** is the DT/coordinator: resolves disagreements, owns the
+- **Kimi K3** is the DT/coordinator: resolves disagreements, owns the
   canonical programme tree, verifies every delegated packet (diff, battery,
   seals) and authorizes packets, committing bounded lots locally under the
   owner's standing order — it never pushes.
@@ -357,8 +357,17 @@ Builds, servers and browsers are serialized at reconciliation points.
     2026-08-20 (decision 13 of the sequencing amendment), which transferred it
     to **Kimi K3**. The owner order of 2026-08-21 then returned it to **Codex**,
     activating the backup DT documented in `docs/prompt-codex-continue.md`
-    after Kimi K3 exhausted its quota. Each seat was transferred, not removed —
-    exactly one DT authority exists before, during and after both successions.
+    after Kimi K3 exhausted its quota. The explicit owner order of 2026-08-23
+    (`docs/prompt-dt-fresh-session-2026-08-23.md`) transferred it back to
+    **Kimi K3**, leaving Codex as a low-frequency read-only technical
+    consultant. Each seat was transferred, not removed — exactly one DT
+    authority exists before, during and after every succession.
+- **Codex** is the low-frequency read-only technical consultant from
+  2026-08-23: executive review at the close of a long packet run, at a phase
+  close, or before a hard-to-reverse architecture decision. It holds no gate,
+  no audit seat and no write authority; its review advises the DT and never
+  substitutes the Fable 5 per-packet audit, and its unavailability never
+  blocks work already covered by this tree and the Fable audit.
 - The **Claude implementer pool (Sonnet/Opus)** is the sole implementer for
   source changes delegated by the DT, working through tmux terminals with the
   model tier chosen by risk. No other model may write programme source,
@@ -377,12 +386,14 @@ Builds, servers and browsers are serialized at reconciliation points.
     assumed the DT seat: DT is not the auditor (decision 13) is a
     conflict-of-interest fence, not a removal of audit capacity — the
     capacity is consolidated in Fable 5, which remains independent of the DT.
-    The same fence binds Codex while it holds the DT seat from 2026-08-21.
-  - **Kimi K3 is retired from the live seat as of 2026-08-21** and does not
-    re-enter as auditor or writer. Naming Codex as successor discharges the
-    `kimi-capacity-removal-lacks-successor-or-death-proof` stop condition by a
-    named successor rather than suppressing it; Fable 5 keeps its full
-    independent audit capacity across both DT successions.
+    The same fence bound Codex while it held the DT seat (from 2026-08-21 to
+    2026-08-23) and binds Kimi K3 again while it holds the DT seat from
+    2026-08-23.
+  - **Kimi K3 holds the DT seat again as of 2026-08-23** and therefore does
+    not re-enter as auditor or writer. Naming Kimi K3 as successor discharges
+    the `kimi-capacity-removal-lacks-successor-or-death-proof` stop condition
+    by a named successor rather than suppressing it; Fable 5 keeps its full
+    independent audit capacity across all three DT successions.
 - Mechanical writers receive disjoint, pre-proven ownership only.
 
 Disagreement is recorded as a finding and resolved against source. Model names

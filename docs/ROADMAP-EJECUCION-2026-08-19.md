@@ -1727,6 +1727,84 @@ DT agenda la doble postaudit retroactiva del diff `8d2985638~1..6cfdcc1a9`
 la condición explícitamente y la dispensa se asienta. Esta declaración no
 inventa retroactivamente un ruling que no se registró.
 
+##### T-1 — Sucesión DT Codex → Kimi K3 CONSUMADA (2026-08-23, acto del DT entrante)
+
+**Supersedencia declarada.** La orden explícita del owner del 2026-08-23
+(`docs/prompt-dt-fresh-session-2026-08-23.md`, ejecutada por la sesión fresca
+del DT entrante) consuma la sucesión Codex → Kimi K3. Este asiento supersede,
+sin reescribirlos: el literal "DT vivo: Codex. No hubo sucesión DT el
+2026-08-23" del asiento de autoridad de esta misma fecha (escrito antes de la
+orden), la fila "Codex: DT y autoridad de adjudicación" del bloque Autoridad
+y roles vigentes, y toda cláusula viva que nombraba a Codex como DT. Codex
+queda como consultor técnico read-only de baja frecuencia (sin gate, sin
+asiento de auditoría, sin autoría). Exactamente un DT vivo antes, durante y
+después: es la **tercera** sucesión de la cadena (2026-08-20 Codex→Kimi K3,
+2026-08-21 Kimi K3→Codex, 2026-08-23 Codex→Kimi K3), y la regla DT ≠ auditor
+(decisión 13) vincula a Kimi K3 desde ya.
+
+**Baseline verificado una vez, no reconstruido:** HEAD `aaa96eef8` (commit
+documental del owner con el prompt de sucesión; parent `78dce1f7a`, el HEAD
+que la orden declaraba esperado), `main...origin/main [ahead 521]`, worktree
+limpio, staged 0, sin push, `stash@{0}` intacto (owner-gated). Sesiones tmux:
+f05-opus, f05-sonnet, fable-ejec y f05-kimi3-advisor vivas;
+f05-codex-reviewer recreada con bypass de aprobaciones para la consulta
+read-only de baja frecuencia.
+
+**Write-set (13 paths, ejecutado por el DT entrante; no se delegó autoría de
+autoridades):** `AGENTS.md`, `CLAUDE.md`, `agent-orchestration.json`,
+`program-check.mjs`, `program-check.test.mjs`, `README.md` del programa
+(sección Roles reescrita; bloque stampado re-renderizado por
+`program-state --write`, nunca a mano), `tenant-art-direction.json`,
+`rounds.json`, `program.json`, `quality-rubric.json`,
+`visual-craft-contract.json`, `checkpoint.intent.json` (currentWave F4B,
+blockedOn C2/C3/C4 + deudas con dueño) y este roadmap.
+
+**Rulings DT del packet (decididos una vez):**
+
+1. **Los nombres legacy NO migran.** Los enums `*_PENDING_CODEX_AUDIT` /
+   `IMPLEMENTED_PENDING_CODEX_AUDIT`, el campo `codexDecision`, la clave
+   `maximumFamiliesBetweenCodexCheckpoints` y el token de fórmula
+   `codexSightedApproved` son nombres históricos, no designaciones de asiento
+   (precedente K5: `KIMI-CUSTOMIZATION-PRESERVATION-MANIFEST.json`).
+   Renombrarlos sería una migración de datos sobre evidencia sellada y
+   tooling v2 sin ningún efecto de autoridad.
+2. **El fence `SIGHTED_APPROVER` (`v2/receipts.mjs:7`) queda fuera del
+   write-set.** Su rojo tiene ruling previo del dueño y su reapertura es
+   `OPEN_OWNER`; la orden T-1 sólo permite tocar fences si el ruling vigente
+   lo permite. `finalSightedAuthority` del rubric es contrato vivo
+   checker-pinned y SÍ migró; el fence de receipts es una constante
+   independiente y sigue owner-gated.
+3. **`phase-a/ledger-schema.json` no se toca** (sellado; scope adjudicado
+   `:!**/phase-a/**`).
+4. **Las aceptaciones futuras nombran al rol, no al actor:** R1–R4 GO, R6
+   ("Independent DT certification") y R7 entry/exit quedan en lenguaje de rol
+   (`DT`), coherente con `customization-model.json#r7Execution.entryLaw`.
+
+**Pruebas (Node v22.17.0, antes → después):** `program-check.mjs` BLOCKED con
+el mismo conjunto de 24 fallos `spacing.rhythm` (4 familias × 6 clases) —
+salida byte-idéntica a la baseline (0 nuevos, 0 resueltos; C2 sigue abierto y
+es el próximo packet). `program-check.test.mjs`: 46/48 → 46/48 con identidad
+de fallos preservada: test 1 = **46 errores** (los 24 heredados de
+spacing.rhythm MÁS 22 sobre `card.json` que son artefacto estructural del
+sandbox T-1a — `CLOSURE_MEMBERS` no incluye `packages/core/test-artifacts`,
+así que dentro del sandbox ningún receipt F4B existe; deuda PREEXISTENTE
+T-1a/F4B, invariante bajo T-1, con packet futuro propio: añadir
+`test-artifacts` a `CLOSURE_MEMBERS`, NO hacerlo dentro de T-1) y test 47 =
+A11 preexistente (`cascade-producers.test.mjs` N13/T-21, deuda PRE_F4B).
+`program-state --write` re-renderizó el checkpoint (intent `150b10665e5919da`,
+render `ab56c7f91a1b623e`); `program-state --check` sin violaciones.
+
+**Postaudit Fable del diff T-1: `ACCEPT`.** Memo
+`/private/tmp/t1-succession-fable-postaudit.md`, SHA-256
+`7ed3a67f3a3e353eecbf443046c369c067628fde212f5d6966c8f637df4f3927`
+(verdict en `.ready`: 6/6 puntos falsables atacados, ninguno refuta;
+autorización de commit condicionada a completar estos placeholders — hecho).
+Hallazgos no bloqueantes asentados: (1) la caracterización fina del test 1
+(46 errores, arriba); (2) `SIGHTED_APPROVER` queda doblemente stale y sigue
+owner-gated (al reabrirse: apuntar al asiento por rol o derivarla de
+constante viva, no a otro nombre propio); (3) las sesiones tmux declaradas en
+este asiento son declaración del DT, no hecho auditado.
+
 **F0 — CERRADO (2026-08-19).** Criterio de cierre cumplido:
 `ci-gates OK — 78 blocking gate(s) passed` (2 excluded visibles con razón y
 dueño: channel-liveness y lane-control-drills, ambos esperan a F2); `find src -type d -empty` vacío salvo el inbox

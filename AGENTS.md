@@ -33,27 +33,32 @@ these files in order and obey the machine checks before editing.
 
 | Role | Actor |
 |---|---|
-| DT / coordinator | Codex |
+| DT / coordinator | Kimi K3 |
 | Implementer | Claude implementer pool (Sonnet/Opus) |
 | Auditor | Fable 5 (independent, closure audits) |
+| Technical consultant (read-only, low frequency) | Codex |
 
 DT succession: Codex → Kimi K3, by explicit owner order of 2026-08-20
 (decision 13 of the sequencing amendment); Kimi K3 → Codex, by explicit owner
 order of 2026-08-21, which activated the documented backup DT
-(`docs/prompt-codex-continue.md`) after Kimi K3 exhausted its quota. Each seat
-was transferred, not removed; exactly one DT authority exists before, during
-and after both successions.
+(`docs/prompt-codex-continue.md`) after Kimi K3 exhausted its quota; Codex →
+Kimi K3, by explicit owner order of 2026-08-23
+(`docs/prompt-dt-fresh-session-2026-08-23.md`), which consummated the present
+succession and left Codex as a low-frequency read-only technical consultant.
+Each seat was transferred, not removed; exactly one DT authority exists
+before, during and after every succession.
 
 Kimi K3 left the read-only audit seat on 2026-08-20, the day it assumed the DT
 seat — DT ≠ auditor (decision 13) is a conflict-of-interest fence, not a
 removal of audit capacity; the capacity is consolidated in Fable 5, which
-remains independent of the DT. Kimi K3 is now retired from the live seat and
-does **not** re-enter as auditor or writer: the 2026-08-21 succession names
-Codex as successor and therefore discharges the
+remains independent of the DT. The same fence bound Codex while it held the
+DT seat (2026-08-21 through 2026-08-23) and binds Kimi K3 again while it
+holds the DT seat from 2026-08-23: it does not re-enter as auditor or writer,
+and Codex, as read-only consultant, likewise holds no audit seat and no gate.
+Naming Kimi K3 as successor discharges the
 `kimi-capacity-removal-lacks-successor-or-death-proof` stop condition by a
 named successor rather than suppressing it. Fable 5 keeps its full independent
-audit capacity across both successions, and Codex — as the live DT — holds no
-audit seat.
+audit capacity across all three successions.
 
 Implementer succession: Kimi 2.7 → Cloud Opus implementer pool, by explicit
 owner order of 2026-08-17; Cloud Opus implementer pool → Claude implementer

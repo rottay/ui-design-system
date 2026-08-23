@@ -3,7 +3,7 @@
   "roundBoundary": {
     "default": "stop-after-each-round",
     "checkpointPolicyAuthority": "visual-craft-contract.json#checkpointPolicy",
-    "internalCheckpointLaw": "first three families calibrate each new layer or grammar; every named cohort contains at most twenty-five families and requires explicit Codex GO before further writes",
+    "internalCheckpointLaw": "first three families calibrate each new layer or grammar; every named cohort contains at most twenty-five families and requires explicit DT GO before further writes",
     "nextRoundRequires": [
       "consolidated-round-report",
       "all-round-proposals-adjudicated",
@@ -116,8 +116,8 @@
         "art-direction contract passes all required scenes at 320 390 768 and 1440",
         "zero hard vetoes",
         "all R1 proposals adjudicated",
-        "all three R1 cohort checkpoints have explicit Codex GO receipts",
-        "Codex accepts grammar before propagation"
+        "all three R1 cohort checkpoints have explicit DT GO receipts",
+        "the DT accepts grammar before propagation"
       ],
       "writeDomains": {
         "law": "every domain below must have EXACTLY ONE owning lane in the round ownership proposal. A domain that must not be written in the round is declared no-write WITH A REASON; leaving it implicit is the defect this registry exists to prevent. The checker reads this list from the contract, never from the proposal, so a proposal cannot self-certify by omitting a domain.",
@@ -321,7 +321,7 @@
         "static-layout primitives at least 90",
         "interactive-control-data-overlay primitives at least 92",
         "critical dimensions at least 4-of-5",
-        "all R2 calibration and cohort checkpoints from visual-craft-contract have explicit Codex GO receipts",
+        "all R2 calibration and cohort checkpoints from visual-craft-contract have explicit DT GO receipts",
         "zero hard vetoes and zero round prototypes pending"
       ]
     },
@@ -343,7 +343,7 @@
       "exit": [
         "75-of-75 families have fresh scorecards",
         "every family at least 92",
-        "all R3 calibration and cohort checkpoints from visual-craft-contract have explicit Codex GO receipts",
+        "all R3 calibration and cohort checkpoints from visual-craft-contract have explicit DT GO receipts",
         "zero lower-layer reconstruction",
         "zero hard vetoes and zero round prototypes pending"
       ]
@@ -368,7 +368,7 @@
         "75-of-75 families have fresh scorecards",
         "structures at least 93",
         "surfaces at least 94",
-        "all R4 calibration and cohort checkpoints from visual-craft-contract have explicit Codex GO receipts",
+        "all R4 calibration and cohort checkpoints from visual-craft-contract have explicit DT GO receipts",
         "zero hard vetoes and zero round prototypes pending"
       ]
     },
@@ -403,7 +403,7 @@
     {
       "id": "R6",
       "enabled": true,
-      "name": "Independent Codex certification",
+      "name": "Independent DT certification",
       "scope": {
         "families": 255,
         "tenants": [
@@ -423,8 +423,8 @@
         "all applicable binary contracts pass",
         "all family layer thresholds pass",
         "zero hard vetoes",
-        "Codex sighted approval",
-        "Codex may create an audited local commit after acceptance; this program never pushes"
+        "DT sighted approval",
+        "The DT may create an audited local commit after acceptance; this program never pushes"
       ]
     },
     {
@@ -433,7 +433,7 @@
       "name": "Customization depth, tenant distinctiveness and catalog parity",
       "contract": "customization-model.json#r7Execution",
       "entry": [
-        "R6 has a local Codex-accepted frozen-tree result",
+        "R6 has a local DT-accepted frozen-tree result",
         "the R6 baseline over the complete active inventory remains immutable and source-bound",
         "the owner has explicitly authorized R7",
         "the live customization census is regenerated at R7 entry rather than copied from a prior report",
@@ -530,8 +530,8 @@
         "catalog benchmark has one explicit disposition per compared capability and zero silent inventory additions",
         "all applicable binary contracts and family layer floors remain green",
         "zero hard vetoes",
-        "Codex sighted approval",
-        "Codex may create audited local commits; this program never pushes"
+        "DT sighted approval",
+        "The DT may create audited local commits; this program never pushes"
       ],
       "rollback": [
         "revert the smallest R7 recipe profile contract or family cohort while preserving the accepted R6 baseline",

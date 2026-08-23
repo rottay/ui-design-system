@@ -49,31 +49,37 @@ const FILES = {
 // the current successor by name and requires the unbroken succession chain
 // that discharges the kimi-capacity-removal-lacks-successor-or-death-proof
 // stop condition. The DT seat follows the same law: decision 13 (2026-08-20)
-// moved it from Codex to Kimi K3, and the owner order of 2026-08-21 returned
+// moved it from Codex to Kimi K3, the owner order of 2026-08-21 returned
 // it to Codex when Kimi K3 exhausted its quota (documented backup DT
-// activated). The seat moved twice and was never vacated, so the coordinator
-// is validated as an unbroken CHAIN, exactly like the implementer -- a single
-// pair of constants could not express two successions without erasing the
-// first. Fable 5 remains the sole audit seat throughout: the DT does not hold
-// one (conflict of interest, not capacity removal).
+// activated), and the explicit owner order of 2026-08-23
+// (docs/prompt-dt-fresh-session-2026-08-23.md) consummated the succession
+// Codex -> Kimi K3, leaving Codex as a low-frequency read-only technical
+// consultant. The seat moved three times and was never vacated, so the
+// coordinator is validated as an unbroken CHAIN, exactly like the implementer
+// -- a single pair of constants could not express three successions without
+// erasing history. Fable 5 remains the sole audit seat throughout: the DT
+// does not hold one (conflict of interest, not capacity removal).
 const LIVE_IMPLEMENTER = 'Claude implementer pool (Sonnet/Opus)';
 const RETIRED_IMPLEMENTER = 'Kimi 2.7';
 const IMPLEMENTER_SUCCESSION_ORDER_DATE = '2026-08-17';
 const IMPLEMENTER_SUCCESSION_2_ORDER_DATE = '2026-08-20';
-const LIVE_COORDINATOR = 'Codex';
+const LIVE_COORDINATOR = 'Kimi K3';
 const COORDINATOR_CHAIN_ORIGIN = 'Codex';
 const COORDINATOR_SUCCESSION_ORDER_DATE = '2026-08-20';
 const COORDINATOR_SUCCESSION_2_ORDER_DATE = '2026-08-21';
+const COORDINATOR_SUCCESSION_3_ORDER_DATE = '2026-08-23';
 const RETAINED_AUDITORS = Object.freeze(['Fable 5']);
 
-// Fable P1 correction (2026-08-21): Kimi K3 retired from ALL live seats that
-// day, but tenant-art-direction.json's authority.creativeAdvisor still named
-// a live Kimi seat ("Kimi through KIMI-ANNOTATIONS only"). The
-// kimiProposalBoundary vocabulary and the KIMI-ANNOTATIONS inbox stay
-// intact by design (historical/dormant, not deleted) -- only the live-seat
-// designation is fail-closed here.
+// Fable P1 correction (2026-08-21), extended at the 2026-08-23 DT succession:
+// the creative advisor seat was retired on 2026-08-21 and stays retired.
+// tenant-art-direction.json's authority.creativeAdvisor once named a live Kimi
+// seat ("Kimi through KIMI-ANNOTATIONS only"); the designation is fail-closed
+// here. Kimi K3 holding the DT seat again from 2026-08-23 does NOT revive the
+// advisor seat (DT != advisor). The kimiProposalBoundary vocabulary and the
+// KIMI-ANNOTATIONS inbox stay intact by design (historical/dormant, not
+// deleted).
 const EXPECTED_CREATIVE_ADVISOR =
-  'none — Kimi K3 retired from all live seats on 2026-08-21; KIMI-ANNOTATIONS is historical/dormant';
+  'none — the creative advisor seat was retired on 2026-08-21 and stays retired; Kimi K3 holds only the DT seat from 2026-08-23 (DT != advisor); KIMI-ANNOTATIONS is historical/dormant';
 
 /**
  * The sole-auditor roster is EXACT, not a minimum. Requiring only inclusion
@@ -94,11 +100,12 @@ function isSoleAuditorRoster(actors) {
  * The DT tenure is IMMUTABLE HISTORY, so the chain is pinned record by record,
  * not merely by origin/link/end. Validating only those let
  * `Codex -> AnyActor -> Codex` pass while erasing that Kimi K3 ever held the
- * seat. Two records, exact actors, exact dates.
+ * seat. Three records, exact actors, exact dates.
  */
 const COORDINATOR_SUCCESSION_CHAIN = Object.freeze([
   Object.freeze({ predecessor: 'Codex', successor: 'Kimi K3', ownerOrderDate: '2026-08-20' }),
   Object.freeze({ predecessor: 'Kimi K3', successor: 'Codex', ownerOrderDate: '2026-08-21' }),
+  Object.freeze({ predecessor: 'Codex', successor: 'Kimi K3', ownerOrderDate: '2026-08-23' }),
 ]);
 // The 2026-08-17 successor seat, retired in turn on 2026-08-20. Its name
 // contains "Opus", and the succession chain must still be able to narrate
@@ -274,8 +281,9 @@ function collectTextualFailures() {
       `README.md Roles must record the Cloud Opus implementer pool succession and its ${IMPLEMENTER_SUCCESSION_2_ORDER_DATE} owner order`,
     );
   }
-  // Both DT successions must stay narrated: the 2026-08-20 move to Kimi K3 is
-  // history that the 2026-08-21 move back to Codex must not erase.
+  // All three DT successions must stay narrated: the 2026-08-20 move to Kimi
+  // K3 and the 2026-08-21 move back to Codex are history that the 2026-08-23
+  // move to Kimi K3 must not erase.
   if (!readmeText.includes('Kimi K3') || !readmeText.includes(COORDINATOR_SUCCESSION_ORDER_DATE)) {
     failures.push(
       `README.md Roles must record the Kimi K3 DT succession and its ${COORDINATOR_SUCCESSION_ORDER_DATE} owner order`,
@@ -283,7 +291,12 @@ function collectTextualFailures() {
   }
   if (!readmeText.includes(COORDINATOR_SUCCESSION_2_ORDER_DATE)) {
     failures.push(
-      `README.md Roles must record the ${LIVE_COORDINATOR} DT succession and its ${COORDINATOR_SUCCESSION_2_ORDER_DATE} owner order`,
+      `README.md Roles must record the Codex DT succession and its ${COORDINATOR_SUCCESSION_2_ORDER_DATE} owner order`,
+    );
+  }
+  if (!readmeText.includes(COORDINATOR_SUCCESSION_3_ORDER_DATE)) {
+    failures.push(
+      `README.md Roles must record the ${LIVE_COORDINATOR} DT succession and its ${COORDINATOR_SUCCESSION_3_ORDER_DATE} owner order`,
     );
   }
   if (routesUngovernedModel(readmeText)) {
@@ -696,18 +709,19 @@ function collectContractFailures(contracts) {
     if (orchestration.coordinator?.model !== LIVE_COORDINATOR) {
       failures.push(`agent-orchestration.json coordinator must be ${LIVE_COORDINATOR}`);
     }
-    // The DT seat moved twice (2026-08-20, 2026-08-21) and was never vacated.
-    // The chain is pinned RECORD BY RECORD, not by origin/link/end alone: an
-    // origin/end-only law would accept `Codex -> AnyActor -> Codex` and erase
-    // the Kimi K3 tenure while still passing. The tenure is immutable history,
-    // so the actors, the dates and the record count are all exact, and each
-    // record must retain the exact sole-auditor roster.
+    // The DT seat moved three times (2026-08-20, 2026-08-21, 2026-08-23) and
+    // was never vacated. The chain is pinned RECORD BY RECORD, not by
+    // origin/link/end alone: an origin/end-only law would accept
+    // `Codex -> AnyActor -> Codex` and erase the Kimi K3 tenure while still
+    // passing. The tenure is immutable history, so the actors, the dates and
+    // the record count are all exact, and each record must retain the exact
+    // sole-auditor roster.
     const coordinatorSuccession = orchestration.coordinator?.succession;
     if (!Array.isArray(coordinatorSuccession) || coordinatorSuccession.length === 0) {
       failures.push('agent-orchestration.json coordinator must carry a succession record');
     } else if (coordinatorSuccession.length !== COORDINATOR_SUCCESSION_CHAIN.length) {
       failures.push(
-        `coordinator succession must hold exactly ${COORDINATOR_SUCCESSION_CHAIN.length} records (the ${COORDINATOR_SUCCESSION_ORDER_DATE} and ${COORDINATOR_SUCCESSION_2_ORDER_DATE} owner orders)`,
+        `coordinator succession must hold exactly ${COORDINATOR_SUCCESSION_CHAIN.length} records (the ${COORDINATOR_SUCCESSION_ORDER_DATE}, ${COORDINATOR_SUCCESSION_2_ORDER_DATE} and ${COORDINATOR_SUCCESSION_3_ORDER_DATE} owner orders)`,
       );
     } else {
       COORDINATOR_SUCCESSION_CHAIN.forEach((expected, index) => {
@@ -1689,8 +1703,8 @@ function collectHistoricalContractFailures(contracts) {
   if (r7?.scope?.recipeGroups?.current !== 6 || r7?.scope?.recipeGroups?.target !== 14) {
     errors.push('R7 must expand the six current recipe families into fourteen target groups');
   }
-  if (!r7?.entry?.some((entry) => entry.includes('R6') && entry.includes('Codex-accepted'))) {
-    errors.push('R7 entry must require a Codex-accepted R6 frozen baseline');
+  if (!r7?.entry?.some((entry) => entry.includes('R6') && entry.includes('DT-accepted'))) {
+    errors.push('R7 entry must require a DT-accepted R6 frozen baseline');
   }
   if (!r7?.benchmarkPolicy?.authorityLaw?.includes('existing Rottay')) {
     errors.push('R7 references must preserve existing Rottay semantic authority');
