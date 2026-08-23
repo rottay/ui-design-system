@@ -1385,6 +1385,151 @@ function exhaustiveSetterArguments(setterName, source, declNode) {
   return escaped ? null : args;
 }
 
+/* ------------- closed record via Object.entries (T-ENTRIES-RECORD) --- */
+/**
+ * T-ENTRIES-RECORD -- `for (const [k, v] of Object.entries(R))` where `R` is a
+ * LOCAL CONST whose initializer the resolver already proves to be a closed,
+ * finite record.
+ *
+ * The stamped name is not a literal, but it ranges over exactly the key set of
+ * that record, and this walk can already enumerate that key set with the
+ * machinery it has -- no container semantics, no call-graph enumeration, no
+ * interpretation of the loop body. If the record is enumerable, the domain is
+ * enumerable.
+ *
+ * Fail-closed on everything else: a name that is not the first element of the
+ * `for…of` array pattern; an iterable that is not exactly `Object.entries(<ident>)`;
+ * a binding that is not a local `const`, or that is mutated; an initializer the
+ * resolver cannot prove closed (a spread it could not follow, a computed key, an
+ * open branch, a relay, an unresolved import); and an empty key set.
+ *
+ * Unlike T-DYNAMIC-DOMAIN -- which enumerates a frozen array of PLAIN property
+ * names and refuses outright if a custom property appears -- this rule exists
+ * precisely for records that DO carry custom properties. It therefore publishes
+ * them as the emission they are: the synthetic shape carries one leaf per key,
+ * so the ordinary governance scan classifies the row as a producer. A record of
+ * custom properties can never certify here as a zero emission.
+ */
+function staticKeyUnionOf(shape, depth = 0, seen = new WeakSet(), out = new Set()) {
+  if (!shape || typeof shape !== "object" || depth > 40) return null;
+  if (seen.has(shape)) return null; // cycle / shared node -> fail closed
+  seen.add(shape);
+  switch (shape.kind) {
+    case "nonObject":
+      return out; // an `undefined` arm contributes no key
+    case "object": {
+      for (const entry of shape.order ?? []) {
+        if (entry.kind === "spread") {
+          // a spread only contributes if IT is enumerable too
+          if (!staticKeyUnionOf(entry.shape, depth + 1, seen, out)) return null;
+          continue;
+        }
+        if (entry.unresolvedKey) return null;
+        if (typeof entry.key !== "string" || entry.key.length === 0) return null;
+        out.add(entry.key);
+      }
+      return out;
+    }
+    case "branches": {
+      const arms = shape.branches ?? [];
+      if (!arms.length) return null;
+      for (const arm of arms) if (!staticKeyUnionOf(arm, depth + 1, seen, out)) return null;
+      return out;
+    }
+    default:
+      // array, computedKey, relay, openUnknown, callArgsPending, dynamicSink
+      return null;
+  }
+}
+
+/** The `for…of` whose array pattern binds `identifier` at position 0. */
+function forOfEntriesSourceOf(identifier, source) {
+  let current = identifier.parent;
+  while (current && !ts.isSourceFile(current)) {
+    if (ts.isForOfStatement(current)) {
+      const init = current.initializer;
+      if (!ts.isVariableDeclarationList(init)) return null;
+      if ((init.flags & ts.NodeFlags.Const) === 0) return null;
+      if (init.declarations.length !== 1) return null;
+      const name = init.declarations[0].name;
+      if (!ts.isArrayBindingPattern(name) || name.elements.length === 0) return null;
+      const first = name.elements[0];
+      if (!ts.isBindingElement(first) || !ts.isIdentifier(first.name)) return null;
+      if (first.name.text !== identifier.text) return null; // only the KEY slot
+      // the iterable must be exactly `Object.entries(<ident>)`
+      const call = unwrap(current.expression);
+      if (!ts.isCallExpression(call) || call.arguments.length !== 1) return null;
+      const callee = unwrap(call.expression);
+      if (!ts.isPropertyAccessExpression(callee)) return null;
+      if (!ts.isIdentifier(callee.expression) || callee.expression.text !== "Object") return null;
+      if (callee.name.text !== "entries") return null;
+      const arg = unwrap(call.arguments[0]);
+      return ts.isIdentifier(arg) ? arg : null;
+    }
+    current = current.parent;
+  }
+  return null;
+}
+
+export function entriesRecordSetPropertyDomain(callNode, source, fileRel) {
+  if (!ts.isCallExpression(callNode) || callNode.arguments.length < 1) return null;
+  const nameArg = unwrap(callNode.arguments[0]);
+  if (!ts.isIdentifier(nameArg)) return null;
+  const recordIdent = forOfEntriesSourceOf(nameArg, source);
+  if (!recordIdent) return null;
+
+  const binding = resolveBinding(recordIdent.text, recordIdent, source, collectModuleImports(source));
+  if (!binding || binding.kind !== "localConst" || binding.mutated) return null;
+  /* `localConst` is the resolver's name for "a local with an initializer" and
+   * covers `let` as well; `mutated` then excludes the ones it can SEE rebound.
+   * That is not enough here. A `let` is a binding that PERMITS rebinding, and
+   * this walk sees one file -- absence of an observed write is not proof of
+   * immutability. Require the declaration itself to be `const`. */
+  const declList = binding.declNode?.parent;
+  if (!declList || !ts.isVariableDeclarationList(declList)) return null;
+  if ((declList.flags & ts.NodeFlags.Const) === 0) return null;
+
+  const shape = resolveShape(binding.node, {
+    source,
+    fileRel,
+    depth: 0,
+    path: [{ kind: "entriesRecord", name: recordIdent.text }],
+  });
+  if (!keySetEnumerable(shape)) return null;
+  const keys = staticKeyUnionOf(shape);
+  if (!keys || keys.size === 0) return null;
+
+  const names = [...keys];
+  const order = names.map((key) => ({
+    kind: "leaf",
+    key,
+    node: recordIdent,
+    source,
+    fileRel,
+    declNode: recordIdent,
+    // the VALUE is whatever the record holds; it can never add a key
+    shape: { kind: "nonObject", reason: "set-property-value", path: [] },
+    unresolvedKey: false,
+  }));
+  return {
+    shape: {
+      kind: "object",
+      order,
+      closed: true,
+      path: [{ kind: "terminal-at-sink", form: "dynamic-setProperty" }, { kind: "entriesRecordDomain", name: recordIdent.text }],
+      node: callNode,
+      fileRel,
+    },
+    receipt: {
+      record: recordIdent.text,
+      recordAt: `${fileRel}:${source.getLineAndCharacterOfPosition(recordIdent.getStart(source)).line + 1}`,
+      names,
+      nameCount: names.length,
+      customPropertyCount: names.filter((n) => n.startsWith("--")).length,
+    },
+  };
+}
+
 /* ------------- publicly reachable generic writer (T-PUBLIC-WRITER) --- */
 /**
  * T-PUBLIC-WRITER -- `element.style.setProperty(property, …)` where `property` is

@@ -150,7 +150,7 @@ type PartialCssVariableMap = Record<`--${string}`, string | number | undefined>;
  * @returns Record of CSS custom property names to computed values, or
  *   `undefined` for a variable whose source field(s) were not declared
  */
-export function resolvePartialPersonalityCssVariables(
+export function resolvePublishedPersonalityCssVariables(
   personality: PartialPersonalityInput | undefined,
   transitions?: Partial<TransitionTokens>,
 ): PartialCssVariableMap {
@@ -236,102 +236,102 @@ export function resolvePartialPersonalityCssVariables(
     '--ds-personality-typography-heading-letter-spacing': typography?.headingLetterSpacing,
     '--ds-personality-typography-heading-weight-bias': typography?.headingWeightBias,
     '--ds-personality-typography-label-style': typography?.labelStyle,
-    '--ds-card-shadow': card?.defaultElevation !== undefined ? CARD_ELEVATION_MAP[card.defaultElevation] : undefined,
-    '--ds-card-shadow-hover':
+    '--_ds-personality-resolved-card-shadow': card?.defaultElevation !== undefined ? CARD_ELEVATION_MAP[card.defaultElevation] : undefined,
+    '--_ds-personality-resolved-card-shadow-hover':
       card?.hoverElevation !== undefined ? CARD_HOVER_ELEVATION_MAP[card.hoverElevation] : undefined,
-    '--ds-card-border':
+    '--_ds-personality-resolved-card-border':
       card?.showBorder !== undefined
         ? card.showBorder
           ? 'var(--ds-color-border-primary)'
           : 'transparent'
         : undefined,
-    '--ds-card-border-hover':
+    '--_ds-personality-resolved-card-border-hover':
       card?.showBorder !== undefined
         ? card.showBorder
           ? 'var(--ds-color-border-secondary)'
           : 'transparent'
         : undefined,
-    '--ds-card-header-padding': cardPadding?.css,
-    '--ds-card-body-padding': cardPadding?.css,
-    '--ds-card-footer-padding': cardPadding?.css,
-    '--ds-card-bg-hover':
+    '--_ds-personality-resolved-card-header-padding': cardPadding?.css,
+    '--_ds-personality-resolved-card-body-padding': cardPadding?.css,
+    '--_ds-personality-resolved-card-footer-padding': cardPadding?.css,
+    '--_ds-personality-resolved-card-bg-hover':
       card?.hoverTint !== undefined
         ? card.hoverTint
           ? 'color-mix(in srgb, var(--ds-card-bg) 90%, var(--ds-color-primary-100) 10%)'
           : 'var(--ds-card-bg)'
         : undefined,
-    '--ds-card-hover-transform': hoverTransformValue,
-    '--ds-badge-radius': accent?.badgeShape !== undefined ? BADGE_RADIUS_MAP[accent.badgeShape].css : undefined,
-    '--ds-badge-hover-transform': hoverTransformValue,
-    '--ds-divider-style':
+    '--_ds-personality-resolved-card-hover-transform': hoverTransformValue,
+    '--_ds-personality-resolved-badge-radius': accent?.badgeShape !== undefined ? BADGE_RADIUS_MAP[accent.badgeShape].css : undefined,
+    '--_ds-personality-resolved-badge-hover-transform': hoverTransformValue,
+    '--_ds-personality-resolved-divider-style':
       accent?.dividerStyle !== undefined
         ? accent.dividerStyle === 'none'
           ? 'solid'
           : accent.dividerStyle
         : undefined,
-    '--ds-divider-color':
+    '--_ds-personality-resolved-divider-color':
       accent?.dividerStyle !== undefined
         ? accent.dividerStyle === 'none'
           ? 'transparent'
           : 'var(--ds-color-border-primary)'
         : undefined,
-    '--ds-skeleton-animation-duration':
+    '--_ds-personality-resolved-skeleton-animation-duration':
       animation?.pulseSpeed !== undefined ? PULSE_SPEED_MAP[animation.pulseSpeed] : undefined,
-    '--ds-typography-heading-letter-spacing': typography?.headingLetterSpacing,
-    '--ds-typography-heading-font-weight':
+    '--_ds-personality-resolved-typography-heading-letter-spacing': typography?.headingLetterSpacing,
+    '--_ds-personality-resolved-typography-heading-font-weight':
       typography?.headingWeightBias !== undefined
         ? HEADING_WEIGHT_BIAS_MAP[typography.headingWeightBias]
         : undefined,
-    '--ds-typography-label-transform':
+    '--_ds-personality-resolved-typography-label-transform':
       typography?.labelStyle !== undefined ? LABEL_TRANSFORM_MAP[typography.labelStyle] : undefined,
-    '--ds-button-transition': buttonTransitionValue,
-    '--ds-button-hover-transform': hoverTransformValue,
-    '--ds-button-active-transform': hoverScaleValue !== undefined ? buildActiveTransform(hoverScaleValue) : undefined,
+    '--_ds-personality-resolved-button-transition': buttonTransitionValue,
+    '--_ds-personality-resolved-button-hover-transform': hoverTransformValue,
+    '--_ds-personality-resolved-button-active-transform': hoverScaleValue !== undefined ? buildActiveTransform(hoverScaleValue) : undefined,
     // Toast/message/notification durations are derived from entrance duration but
     // clamped to minimums. Too-fast enter animations look broken, and exits are
     // intentionally shorter (75-80% of enter) so dismissals feel snappy.
-    '--ds-toast-enter-duration':
+    '--_ds-personality-resolved-toast-enter-duration':
       entranceDurationValue !== undefined ? `${Math.max(entranceDurationValue, 160)}ms` : undefined,
-    '--ds-toast-exit-duration':
+    '--_ds-personality-resolved-toast-exit-duration':
       entranceDurationValue !== undefined
         ? `${Math.max(Math.round(entranceDurationValue * 0.75), 120)}ms`
         : undefined,
-    '--ds-toast-enter-easing':
+    '--_ds-personality-resolved-toast-enter-easing':
       useSpringValue !== undefined
         ? useSpringValue
           ? 'cubic-bezier(0.34, 1.56, 0.64, 1)'
           : 'cubic-bezier(0.4, 0, 0.2, 1)'
         : undefined,
-    '--ds-toast-exit-easing': 'cubic-bezier(0.4, 0, 1, 1)',
-    '--ds-message-enter-duration':
+    '--_ds-personality-resolved-toast-exit-easing': 'cubic-bezier(0.4, 0, 1, 1)',
+    '--_ds-personality-resolved-message-enter-duration':
       entranceDurationValue !== undefined ? `${Math.max(entranceDurationValue, 140)}ms` : undefined,
-    '--ds-message-exit-duration':
+    '--_ds-personality-resolved-message-exit-duration':
       entranceDurationValue !== undefined
         ? `${Math.max(Math.round(entranceDurationValue * 0.7), 120)}ms`
         : undefined,
-    '--ds-message-enter-easing':
+    '--_ds-personality-resolved-message-enter-easing':
       useSpringValue !== undefined
         ? useSpringValue
           ? 'cubic-bezier(0.34, 1.56, 0.64, 1)'
           : 'cubic-bezier(0.22, 1, 0.36, 1)'
         : undefined,
-    '--ds-message-exit-easing': 'cubic-bezier(0.4, 0, 1, 1)',
-    '--ds-notification-enter-duration':
+    '--_ds-personality-resolved-message-exit-easing': 'cubic-bezier(0.4, 0, 1, 1)',
+    '--_ds-personality-resolved-notification-enter-duration':
       entranceDurationValue !== undefined ? `${Math.max(entranceDurationValue, 180)}ms` : undefined,
-    '--ds-notification-exit-duration':
+    '--_ds-personality-resolved-notification-exit-duration':
       entranceDurationValue !== undefined
         ? `${Math.max(Math.round(entranceDurationValue * 0.8), 140)}ms`
         : undefined,
-    '--ds-notification-enter-easing':
+    '--_ds-personality-resolved-notification-enter-easing':
       useSpringValue !== undefined
         ? useSpringValue
           ? 'cubic-bezier(0.34, 1.56, 0.64, 1)'
           : 'cubic-bezier(0.22, 1, 0.36, 1)'
         : undefined,
-    '--ds-notification-exit-easing': 'cubic-bezier(0.4, 0, 1, 1)',
-    '--ds-modal-animation-duration':
+    '--_ds-personality-resolved-notification-exit-easing': 'cubic-bezier(0.4, 0, 1, 1)',
+    '--_ds-personality-resolved-modal-animation-duration':
       entranceDurationValue !== undefined ? `${Math.max(entranceDurationValue, 180)}ms` : undefined,
-    '--ds-modal-animation-timing':
+    '--_ds-personality-resolved-modal-animation-timing':
       useSpringValue !== undefined
         ? useSpringValue
           ? 'cubic-bezier(0.34, 1.56, 0.64, 1)'
@@ -341,10 +341,40 @@ export function resolvePartialPersonalityCssVariables(
     // (--ds-duration-fast|normal|slow); falling back to that chain's own
     // underlying primitives here, instead of a re-declared literal, keeps the
     // foundation file the single numeric source when transitions is absent.
-    '--ds-duration-fast': transitions?.fast ?? 'var(--duration-faster)',
-    '--ds-duration-normal': transitions?.normal ?? 'var(--duration-fast)',
-    '--ds-duration-slow': transitions?.slow ?? 'var(--duration-normal)',
+    '--_ds-personality-resolved-duration-fast': transitions?.fast ?? 'var(--duration-faster)',
+    '--_ds-personality-resolved-duration-normal': transitions?.normal ?? 'var(--duration-fast)',
+    '--_ds-personality-resolved-duration-slow': transitions?.slow ?? 'var(--duration-normal)',
   };
+}
+
+/**
+ * Canonical (public) view of the personality payload.
+ *
+ * Same names, same values and same order this function has always returned --
+ * it is now DERIVED from the single published literal above by inverting the
+ * canonical projection, instead of owning a second copy of the variable list.
+ * Iteration order is preserved because the derivation walks the literal in
+ * source order and renames one key at a time.
+ *
+ * @param personality - Personality fields to derive variables from; a
+ *   dimension or field the caller has not declared may be omitted
+ * @param transitions - Transition duration/easing tokens; only consulted by
+ *   the button-transition and duration-alias variables
+ * @returns Record of CSS custom property names to computed values, or
+ *   `undefined` for a variable whose source field(s) were not declared
+ */
+export function resolvePartialPersonalityCssVariables(
+  personality: PartialPersonalityInput | undefined,
+  transitions?: Partial<TransitionTokens>,
+): PartialCssVariableMap {
+  const published = resolvePublishedPersonalityCssVariables(personality, transitions);
+  const canonical: Record<string, string | undefined> = {};
+  for (const [name, value] of Object.entries(published)) {
+    canonical[PERSONALITY_CANONICAL_BY_PROJECTED[name] ?? name] = value as
+      | string
+      | undefined;
+  }
+  return canonical as PartialCssVariableMap;
 }
 
 /**
@@ -434,6 +464,22 @@ export const PERSONALITY_CANONICAL_PROJECTION = Object.freeze({
 } as const);
 
 /**
+ * The inverse of {@link PERSONALITY_CANONICAL_PROJECTION}, derived once from
+ * that table rather than restated. It exists so the canonical public API can be
+ * recovered from the published payload without a second roster: the single
+ * literal above is the only place these variables are ever listed.
+ */
+const PERSONALITY_CANONICAL_BY_PROJECTED: Readonly<Record<string, string>> =
+  Object.freeze(
+    Object.fromEntries(
+      Object.entries(PERSONALITY_CANONICAL_PROJECTION).map(
+        ([canonical, projected]) => [projected, canonical],
+      ),
+    ),
+  );
+
+
+/**
  * Resolve the bridge payload without creating a second component paint owner.
  *
  * Existing `--ds-personality-*` inputs keep their names. Every canonical
@@ -444,28 +490,20 @@ export const PERSONALITY_CANONICAL_PROJECTION = Object.freeze({
 export function resolvePersonalityBridgeCssVariables(
   tokens: DesignTokens,
 ): CssVariableMap {
-  const resolved = resolvePersonalityCssVariables(tokens);
+  /* The published literal IS the bridge payload -- the projection now lives in
+   * the single variable list itself, so there is nothing left to re-map here.
+   * This function keeps its published contract (defined values only); the fail
+   * -closed guarantee the old `throw` provided is now structural: a name that
+   * has no published owner cannot be written in the literal at all. */
+  const published = resolvePublishedPersonalityCssVariables(
+    tokens.personality,
+    tokens.transitions,
+  );
   const bridgeVariables: CssVariableMap = {};
-
-  for (const [name, value] of Object.entries(resolved)) {
-    if (name.startsWith('--ds-personality-')) {
-      bridgeVariables[name as `--ds-personality-${string}`] = value;
-      continue;
-    }
-
-    const projectedName =
-      PERSONALITY_CANONICAL_PROJECTION[
-        name as keyof typeof PERSONALITY_CANONICAL_PROJECTION
-      ];
-    if (projectedName === undefined) {
-      throw new Error(
-        `[design-system] Personality bridge cannot publish canonical channel "${name}" ` +
-          'without a namespaced projection owner.',
-      );
-    }
-    bridgeVariables[projectedName] = value;
+  for (const [name, value] of Object.entries(published)) {
+    if (value === undefined) continue;
+    bridgeVariables[name as `--${string}`] = value;
   }
-
   return bridgeVariables;
 }
 

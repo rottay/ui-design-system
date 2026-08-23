@@ -14,7 +14,7 @@ import { repoRoot as findRepoRoot } from "../../../lib/repo-root/index.mjs";
 
 export const REPO_ABS = findRepoRoot(dirname(fileURLToPath(import.meta.url)));
 
-import { resolveShape, readProperty, isShapeClosed, keySetEnumerable, classifyRelayBoundary, dynamicSetPropertyDomain, publicGenericWriterProof, publicStylePassthroughProof, getSource } from "./cascade-cross-file-resolver.mjs";
+import { resolveShape, readProperty, isShapeClosed, keySetEnumerable, classifyRelayBoundary, dynamicSetPropertyDomain, entriesRecordSetPropertyDomain, publicGenericWriterProof, publicStylePassthroughProof, getSource } from "./cascade-cross-file-resolver.mjs";
 import { governanceOutcome, governanceAnalysis, astPathFromSinkToPart, canonicalPreimageId, legacyPreimageIdWithSymbol, zeroEmissionSiteId, governedProducerSiteId, sourcePartId, decomposeImmediate, orderParts, digestText, canonicalJson, sortSet, digestOf, sha256Hex, utf8 } from "./cascade-governance.mjs";
 /**
  * v4 driver — READ-ONLY. Same verbatim sink-anchored walk as
@@ -734,7 +734,12 @@ export function classifyCrossFileRows() {
          * of names is enumerable and the sink is decidable; when anything is
          * unproven -- including a single `--` entry in the domain -- it stays
          * the unresolved dynamic sink it has always been. */
-        const domain = dynamicSetPropertyDomain(node, source, relFile);
+        const domain = dynamicSetPropertyDomain(node, source, relFile)
+          /* T-ENTRIES-RECORD: the same question for a name ranging over the KEYS
+           * of a local closed record. Distinct grammar from the frozen-array
+           * rule above, and unlike it this one is FOR custom properties: it
+           * publishes them as a producer's keys, never as silence. */
+          ?? entriesRecordSetPropertyDomain(node, source, relFile);
         if (domain) {
           shape = domain.shape;
           dynamicDomainReceipt = domain.receipt;
@@ -1381,6 +1386,13 @@ export function boundedReceiptOf(row) {
         ...(row.typedRelays?.length ? { typedRelays: row.typedRelays } : {}),
         // T-SEQUENTIAL-8: same proof, when a producer rests on a write sequence.
         ...(row.sequentialAssignments?.length ? { sequentialAssignments: row.sequentialAssignments } : {}),
+        /* T-ENTRIES-RECORD: a producer whose stamped NAME is dynamic owes the
+         * artifact the enumeration proof, not just the resulting key union --
+         * the union alone would read as if the names had been authored at the
+         * sink. Named `entriesRecordDomain`, never merged with the frozen-array
+         * receipt, and absent on every producer closed by any other route, so
+         * previously published rows stay byte-identical. */
+        ...(row.dynamicDomain?.record ? { entriesRecordDomain: row.dynamicDomain } : {}),
         governedProducerSiteId: governance?.governedProducerSiteId ?? null,
         customPropertyScanComplete: governance?.customPropertyScanComplete ?? null,
         governedChannelKeys: [...(governance?.governedChannelKeys ?? [])].sort(),
@@ -1443,7 +1455,12 @@ export function boundedReceiptOf(row) {
        * and the (empty) custom-property union that justifies the verdict. */
       if (row.dynamicDomain) {
         return {
-          resolvedVia: "dynamic-property-domain",
+          /* Two rules can enumerate a dynamic name; they are NOT the same proof
+           * and must not share a label. The frozen-array rule refuses custom
+           * properties outright; the record rule exists to publish them. The
+           * receipts are structurally distinct, so the route is read off the
+           * receipt rather than asserted. */
+          resolvedVia: row.dynamicDomain.record ? "entries-record-domain" : "dynamic-property-domain",
           dynamicDomain: row.dynamicDomain,
           customPropertyScanComplete: row.governance?.customPropertyScanComplete ?? null,
           governedChannelKeys: [...(row.governance?.governedChannelKeys ?? [])].sort(),

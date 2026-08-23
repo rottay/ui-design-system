@@ -87,7 +87,10 @@
 
 import { useInsertionEffect, useRef } from 'react';
 
-import { resolvePersonalityBridgeCssVariables } from '@/foundation/tokens/ts/runtime/personality';
+import {
+  resolvePersonalityBridgeCssVariables,
+  resolvePublishedPersonalityCssVariables,
+} from '@/foundation/tokens/ts/runtime/personality';
 import { changeKeyOfMap } from '@/infrastructure/runtime/foundation/change-key';
 
 import { useTokens } from '@/infrastructure/runtime/theming/composition/react/tokens';
@@ -166,9 +169,23 @@ interface PersonalityStyleClaim {
  * The record is mutable and its OBJECT IDENTITY is the hold, so a bridge
  * revises what it publishes in place rather than re-entering the registry.
  */
+/**
+ * A hold carries the canonical INPUT its bridge rendered from, never a derived
+ * snapshot. Every route that publishes -- mount, update and the republish a
+ * departing hold triggers among the survivors -- therefore derives the payload
+ * from the same authority (`resolvePublishedPersonalityCssVariables`) at the
+ * moment it writes, instead of one route trusting a value another route stored.
+ * `key` stays the consensus identity: it is what the holds must agree on, and
+ * what the writer re-proves the recomputed payload against before it mutates.
+ */
+type PublishedPersonalityInput = Parameters<
+  typeof resolvePublishedPersonalityCssVariables
+>;
+
 interface ClaimHold {
   key: string;
-  declarations: Readonly<Record<string, string>>;
+  personality: PublishedPersonalityInput[0];
+  transitions: PublishedPersonalityInput[1];
 }
 
 /**
@@ -464,7 +481,7 @@ function reconcilePersonalityChannel(
   // state would stand. `null` says what is true -- nothing published here is
   // known to be intact -- so the next reconciliation repaints whatever the
   // holds agree on.
-  if (writePersonalityDeclarations(doc, claim, intent.declarations)) {
+  if (writePersonalityDeclarations(doc, claim, intent)) {
     claim.agreedKey = intent.key;
     return;
   }
@@ -547,10 +564,36 @@ function insertPersonalityRootRule(
 function writePersonalityDeclarations(
   doc: Document,
   claim: PersonalityStyleClaim,
-  declarations: Readonly<Record<string, string>>,
+  hold: ClaimHold,
 ): boolean {
   const { element, sheet } = claim;
   const stillOwned = () => claimOwnsSheet(doc, claim);
+
+  /* Derive the payload HERE, from the canonical authority, on every route --
+   * including the republish a departing hold triggers among survivors, where no
+   * bridge is rendering and there is no fresh value to hand in. */
+  const published = resolvePublishedPersonalityCssVariables(
+    hold.personality,
+    hold.transitions,
+  );
+
+  /* Integrity guard, key <-> map: the consensus was reached on `hold.key`, so
+   * the recomputed payload must fold to exactly that key. If it does not, the
+   * input drifted from what every hold agreed to publish, and writing it would
+   * put a snapshot on the channel that nobody consented to. Fail closed and let
+   * the caller clear `agreedKey`. */
+  const recomputed: Record<string, string> = {};
+  for (const [name, value] of Object.entries(published)) {
+    if (value === undefined) continue;
+    recomputed[name] = String(value);
+  }
+  if (changeKeyOfMap(recomputed) !== hold.key) {
+    warnRefused(
+      'the recomputed personality payload no longer folds to the key the ' +
+        'holds agreed on, so the channel keeps its previous state',
+    );
+    return false;
+  }
 
   while (sheet.cssRules.length > 0) {
     if (!stillOwned()) return false;
@@ -566,9 +609,10 @@ function writePersonalityDeclarations(
   );
   if (!rule) return false;
 
-  for (const [name, value] of Object.entries(declarations)) {
+  for (const [name, value] of Object.entries(published)) {
+    if (value === undefined) continue;
     if (!stillOwned()) return false;
-    rule.style.setProperty(name, value);
+    rule.style.setProperty(name, String(value));
   }
 
   // The POSTcondition, which the per-mutation preconditions cannot stand in
@@ -635,7 +679,11 @@ export function SystemCssVariablesBridge(): null {
   // over, so a hold enters the registry already stating what it publishes and a
   // reconciliation triggered by ANOTHER bridge never reads a blank intent.
   useInsertionEffect(() => {
-    const hold: ClaimHold = { key: declarationsKey, declarations };
+    const hold: ClaimHold = {
+      key: declarationsKey,
+      personality: tokens.personality,
+      transitions: tokens.transitions,
+    };
     const claim = claimPersonalityStyleElement(document, hold);
     holdRef.current = claim ? { claim, hold } : null;
     if (claim) reconcilePersonalityChannel(document, claim);
@@ -659,7 +707,8 @@ export function SystemCssVariablesBridge(): null {
     // refused -- made the published result depend on which bridge mounted
     // first.
     held.hold.key = declarationsKey;
-    held.hold.declarations = declarations;
+    held.hold.personality = tokens.personality;
+    held.hold.transitions = tokens.transitions;
     reconcilePersonalityChannel(document, held.claim);
     // `declarations` is absent by design: a fresh object each render, whose
     // identity is `declarationsKey`.

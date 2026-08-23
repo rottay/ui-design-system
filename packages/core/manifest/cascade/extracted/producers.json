@@ -18,7 +18,7 @@
     "cssEdges": "574150a5adeda7dafd9521822da5e39f6a49a1dd056b41534ecdbaa5d22f4139",
     "cascadeRoots": "1bd553d4a5b788d5f6d3c4b9157effec297ac2cce504128787644019551fe624",
     "rootCatalog": "6a0e68de3789a5c7b5751582cd485d42b8d71861bc014b7be4a585c04a963e9a",
-    "srcTsx": "84cd5a2a1cca1e10668f3a1d035dd55415af0372c3eba6f59a5abf11e1647f55",
+    "srcTsx": "b88482dfee8593fc59e0042b5d6e137dce133c7ce7b931b67f7fcd9b579d6e9e",
     "srcCompilers": "6ba454c27fa223147de2ae0077fd0a4f3d2b5d9758491e5ad62abc2e65aeb5d2",
     "artifacts": "dc5a4639ba4329dd2b2f9d905cccd71299788b0f22c06388f0ec743a24347521"
   },
@@ -57,22 +57,22 @@
     "closedZeroGoverned": 627,
     "publicBoundary": 534,
     "privateRelay": 728,
-    "closedProducer": 65,
+    "closedProducer": 66,
     "branchCompositeOpen": 0,
     "authoredOpen": 0,
     "branchConditionalAuthored": 0,
     "openUnknown": 0,
     "computedDomainPending": 0,
-    "dynamicSinkPending": 1,
+    "dynamicSinkPending": 0,
     "callArgsPending": 0,
-    "openBlocking": 1,
+    "openBlocking": 0,
     "openBacklogByDisposition": {
       "BRANCH_COMPOSITE_OPEN": 0,
       "AUTHORED_OPEN": 0,
       "BRANCH_CONDITIONAL_AUTHORED": 0,
       "OPEN_UNKNOWN": 0,
       "COMPUTED_DOMAIN_PENDING": 0,
-      "DYNAMIC_SINK_PENDING": 1,
+      "DYNAMIC_SINK_PENDING": 0,
       "CALL_ARGS_PENDING": 0
     },
     "unknownProvenanceByReason": {},
@@ -2109,24 +2109,24 @@
     "closedZeroGoverned": "7f843d250d72ae7e797ea034ad26a0e6dede7ededd59774b8b70ba85f603b4ba",
     "publicBoundary": "06df16a3e8bf31ed562c957847833566af3f8a50ec454c3d5f1c049e02596d3b",
     "privateRelay": "43ee31bd70e06a8273f4ead98e724b8bcb81988b28962e686d90f033b3d30148",
-    "closedProducer": "410e861cfdb5a70883c260444deeb02416c882eb3e52bf12bf43a7a560a9035b",
+    "closedProducer": "515fcc16861b8839ae2a06320074bd179c2838a0ccb5f5d29c8e55e369d132db",
     "closedZeroGovernedReceipts": "c1e64e62f3e07254aae331e215937a10fa501301ed0866a85e45b4b77fab263b",
     "publicBoundaryReceipts": "9d9d598389c8fd760615cb4fec5631c09cb999708a1011cfe92284d2a628ad8c",
     "privateRelayReceipts": "d00e1da6a814f98b9b0b348328b9a0069046fdcf25ed8c04f61840aab6a54d9d",
-    "closedProducerReceipts": "ac01e78839274a885c0a46898b14a645fab2d8922b9f2a132bdce478deb0c5ea",
+    "closedProducerReceipts": "140a7dc5a3ca18ee73c63fe8d80d7dc16c5635713717c07f718f678c6b82362b",
     "branchCompositeOpen": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
     "authoredOpen": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
     "branchConditionalAuthored": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
     "openUnknown": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
     "computedDomainPending": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
-    "dynamicSinkPending": "86e057f6a7d81ad5e1a57d43595b8d6c14ac209c21b7116d5bbe85cffc4fc862",
+    "dynamicSinkPending": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
     "callArgsPending": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
     "branchCompositeOpenReceipts": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
     "authoredOpenReceipts": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
     "branchConditionalAuthoredReceipts": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
     "openUnknownReceipts": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
     "computedDomainPendingReceipts": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
-    "dynamicSinkPendingReceipts": "94db3a2544835b98dc40aa0ad95a8e2e5d57c0a91e79ac50a827ac2a8a53314a",
+    "dynamicSinkPendingReceipts": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
     "callArgsPendingReceipts": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
   },
   "producerSites": [
@@ -40937,6 +40937,7 @@
     {"plane":"tsx-inline-stamp","file":"packages/core/src/ui/structures/workspace/action-dock/runtime/rendering/index.tsx","symbol":"responsiveStyle","line":118,"ordinal":4876,"template":"...style","reason":"private-relay-unresolved:spread","consumable":false,"tenantSafe":false,"nonConsumableCause":"private-passthrough-not-followed-by-resolver","sinkTags":["Box"],"relayKinds":["CUSTOM_COMPONENT_SINK_NOT_FOLLOWED"],"occurrences":1,"evidence":{"bindingKind":"relay","path":["terminal-at-sink","destructuredParam"]}}
   ],
   "closedProducer": [
+    {"plane":"tsx-inline-stamp","file":"packages/core/src/infrastructure/runtime/theming/presentation/adapters/react/css-variables-bridge/index.tsx","symbol":"writePersonalityDeclarations","line":615,"ordinal":28323,"template":"rule.style.setProperty(name, String(value))","reason":"governed-producer-object:dynamic-setProperty","consumable":false,"tenantSafe":false,"nonConsumableCause":"governed-producer-with-no-attributed-cascade-root","sinkTags":[],"relayKinds":[],"occurrences":1,"evidence":{"entriesRecordDomain":{"record":"published","recordAt":"packages/core/src/infrastructure/runtime/theming/presentation/adapters/react/css-variables-bridge/index.tsx:612","names":["--ds-personality-animation-intensity","--ds-personality-animation-stagger-delay","--ds-personality-animation-stagger-max","--ds-personality-animation-entrance","--ds-personality-animation-entrance-duration","--ds-personality-animation-offset-distance","--ds-personality-animation-hover-lift","--ds-personality-animation-hover-scale","--ds-personality-animation-spring-tension","--ds-personality-animation-spring-friction","--ds-personality-animation-pulse-speed","--ds-personality-animation-skeleton-style","--ds-personality-animation-count-up-enabled","--ds-personality-chart-mount-duration","--ds-personality-chart-line-style","--ds-personality-chart-tooltip-style","--ds-personality-card-padding-density","--ds-personality-card-default-elevation","--ds-personality-card-hover-elevation","--ds-personality-card-show-border","--ds-personality-card-hover-tint","--ds-personality-accent-bar-position","--ds-personality-accent-badge-shape","--ds-personality-accent-icon-shape","--ds-personality-accent-divider-style","--ds-personality-typography-heading-letter-spacing","--ds-personality-typography-heading-weight-bias","--ds-personality-typography-label-style","--_ds-personality-resolved-card-shadow","--_ds-personality-resolved-card-shadow-hover","--_ds-personality-resolved-card-border","--_ds-personality-resolved-card-border-hover","--_ds-personality-resolved-card-header-padding","--_ds-personality-resolved-card-body-padding","--_ds-personality-resolved-card-footer-padding","--_ds-personality-resolved-card-bg-hover","--_ds-personality-resolved-card-hover-transform","--_ds-personality-resolved-badge-radius","--_ds-personality-resolved-badge-hover-transform","--_ds-personality-resolved-divider-style","--_ds-personality-resolved-divider-color","--_ds-personality-resolved-skeleton-animation-duration","--_ds-personality-resolved-typography-heading-letter-spacing","--_ds-personality-resolved-typography-heading-font-weight","--_ds-personality-resolved-typography-label-transform","--_ds-personality-resolved-button-transition","--_ds-personality-resolved-button-hover-transform","--_ds-personality-resolved-button-active-transform","--_ds-personality-resolved-toast-enter-duration","--_ds-personality-resolved-toast-exit-duration","--_ds-personality-resolved-toast-enter-easing","--_ds-personality-resolved-toast-exit-easing","--_ds-personality-resolved-message-enter-duration","--_ds-personality-resolved-message-exit-duration","--_ds-personality-resolved-message-enter-easing","--_ds-personality-resolved-message-exit-easing","--_ds-personality-resolved-notification-enter-duration","--_ds-personality-resolved-notification-exit-duration","--_ds-personality-resolved-notification-enter-easing","--_ds-personality-resolved-notification-exit-easing","--_ds-personality-resolved-modal-animation-duration","--_ds-personality-resolved-modal-animation-timing","--_ds-personality-resolved-duration-fast","--_ds-personality-resolved-duration-normal","--_ds-personality-resolved-duration-slow"],"nameCount":65,"customPropertyCount":65},"governedProducerSiteId":"338507ca5c20adde4135778aba4499fc75d67e35215a26018211e3c6e5baa24d","customPropertyScanComplete":true,"governedChannelKeys":["--ds-personality-accent-badge-shape","--ds-personality-accent-bar-position","--ds-personality-accent-divider-style","--ds-personality-accent-icon-shape","--ds-personality-animation-count-up-enabled","--ds-personality-animation-entrance","--ds-personality-animation-entrance-duration","--ds-personality-animation-hover-lift","--ds-personality-animation-hover-scale","--ds-personality-animation-intensity","--ds-personality-animation-offset-distance","--ds-personality-animation-pulse-speed","--ds-personality-animation-skeleton-style","--ds-personality-animation-spring-friction","--ds-personality-animation-spring-tension","--ds-personality-animation-stagger-delay","--ds-personality-animation-stagger-max","--ds-personality-card-default-elevation","--ds-personality-card-hover-elevation","--ds-personality-card-hover-tint","--ds-personality-card-padding-density","--ds-personality-card-show-border","--ds-personality-chart-line-style","--ds-personality-chart-mount-duration","--ds-personality-chart-tooltip-style","--ds-personality-typography-heading-letter-spacing","--ds-personality-typography-heading-weight-bias","--ds-personality-typography-label-style"],"internalSocketKeys":["--_ds-personality-resolved-badge-hover-transform","--_ds-personality-resolved-badge-radius","--_ds-personality-resolved-button-active-transform","--_ds-personality-resolved-button-hover-transform","--_ds-personality-resolved-button-transition","--_ds-personality-resolved-card-bg-hover","--_ds-personality-resolved-card-body-padding","--_ds-personality-resolved-card-border","--_ds-personality-resolved-card-border-hover","--_ds-personality-resolved-card-footer-padding","--_ds-personality-resolved-card-header-padding","--_ds-personality-resolved-card-hover-transform","--_ds-personality-resolved-card-shadow","--_ds-personality-resolved-card-shadow-hover","--_ds-personality-resolved-divider-color","--_ds-personality-resolved-divider-style","--_ds-personality-resolved-duration-fast","--_ds-personality-resolved-duration-normal","--_ds-personality-resolved-duration-slow","--_ds-personality-resolved-message-enter-duration","--_ds-personality-resolved-message-enter-easing","--_ds-personality-resolved-message-exit-duration","--_ds-personality-resolved-message-exit-easing","--_ds-personality-resolved-modal-animation-duration","--_ds-personality-resolved-modal-animation-timing","--_ds-personality-resolved-notification-enter-duration","--_ds-personality-resolved-notification-enter-easing","--_ds-personality-resolved-notification-exit-duration","--_ds-personality-resolved-notification-exit-easing","--_ds-personality-resolved-skeleton-animation-duration","--_ds-personality-resolved-toast-enter-duration","--_ds-personality-resolved-toast-enter-easing","--_ds-personality-resolved-toast-exit-duration","--_ds-personality-resolved-toast-exit-easing","--_ds-personality-resolved-typography-heading-font-weight","--_ds-personality-resolved-typography-heading-letter-spacing","--_ds-personality-resolved-typography-label-transform"],"sourcePartRefs":["bbd35f46497cdf7e913adaae4ffe137e5be19163c3e6c0d89692c6c1a11e4795"],"path":["terminal-at-sink","entriesRecordDomain"]}},
     {"plane":"tsx-inline-stamp","file":"packages/core/src/ui/patterns/data/list-toolbar/engines/classic/index.tsx","symbol":"ClassicListToolbar","line":621,"ordinal":18937,"template":"searchInputStyle({ height: 38 })","reason":"governed-producer-object:call","consumable":false,"tenantSafe":false,"nonConsumableCause":"governed-producer-with-no-attributed-cascade-root","sinkTags":[],"relayKinds":[],"occurrences":1,"evidence":{"governedProducerSiteId":"bab849320ed22f306c119bd118dc4c110e6072b03cece12f9ff92ab9303c48dc","customPropertyScanComplete":true,"governedChannelKeys":["--ds-input-addon-color","--ds-input-bg","--ds-input-border","--ds-input-clear-color","--ds-input-clear-color-hover","--ds-input-color","--ds-input-color-placeholder"],"internalSocketKeys":[],"sourcePartRefs":["c46452776d169ac4dc5d172b27490c41e8b323d9a5c82de225c1f04aea8604a6"],"path":["terminal-at-sink","callToImport","import","return"]}},
     {"plane":"tsx-inline-stamp","file":"packages/core/src/ui/patterns/data/list-toolbar/engines/classic/index.tsx","symbol":"ClassicListToolbar","line":865,"ordinal":26652,"template":"searchInputStyle({ height: 36 })","reason":"governed-producer-object:call","consumable":false,"tenantSafe":false,"nonConsumableCause":"governed-producer-with-no-attributed-cascade-root","sinkTags":[],"relayKinds":[],"occurrences":1,"evidence":{"governedProducerSiteId":"e12d11178714f5c22de5531d79fd18ad9aac6b51aca0e249c7cecd651d0e3aad","customPropertyScanComplete":true,"governedChannelKeys":["--ds-input-addon-color","--ds-input-bg","--ds-input-border","--ds-input-clear-color","--ds-input-clear-color-hover","--ds-input-color","--ds-input-color-placeholder"],"internalSocketKeys":[],"sourcePartRefs":["c90e012a21c042eab18d78cd2ccdfe45dbd1d21e975683640c984a71b3c69a68"],"path":["terminal-at-sink","callToImport","import","return"]}},
     {"plane":"tsx-inline-stamp","file":"packages/core/src/ui/patterns/navigation/environment-toggle/engines/rustic/index.tsx","symbol":"renderToggle","line":213,"ordinal":6923,"template":"dotStyle(activeEnv?.color ?? 'var(--ds-color-border-secondary, var(--ds-color-border-primary))')","reason":"governed-producer-object:call","consumable":false,"tenantSafe":false,"nonConsumableCause":"governed-producer-with-no-attributed-cascade-root","sinkTags":[],"relayKinds":[],"occurrences":1,"evidence":{"governedProducerSiteId":"ec6692fa4e5acaca18fc3201928c1c0a57a2bef97348748c7134c399d7a163e9","customPropertyScanComplete":true,"governedChannelKeys":["--ds-envtoggle-accent"],"internalSocketKeys":[],"openLeafValues":1,"openLeafValueKinds":["relay"],"sourcePartRefs":["953d1dd4f7b541d7ec312c5bd9e25ed2f282607dd1c4d7ffbb92a95d3ff8fce3"],"path":["terminal-at-sink","callToLocalFunctionValue"]}},
@@ -41004,9 +41005,9 @@
     {"plane":"tsx-inline-stamp","file":"packages/core/src/ui/surfaces/presentation/pages/workspace/collection-workspace/index.tsx","symbol":"CollectionWorkspaceSurface","line":2714,"ordinal":101445,"template":"...densityStyleVars","reason":"governed-producer-object:spread","consumable":false,"tenantSafe":false,"nonConsumableCause":"governed-producer-with-no-attributed-cascade-root","sinkTags":[],"relayKinds":[],"occurrences":1,"evidence":{"governedProducerSiteId":"58a961d17eabf0a2604006a69726ddc00319dc6b6a5b6df4bba26cf9c16cadc9","customPropertyScanComplete":true,"governedChannelKeys":["--ds-density-card-padding","--ds-density-cell-padding","--ds-density-local-factor"],"internalSocketKeys":[],"sourcePartRefs":["b811c81768054fd69b49675871f6cd2df46a23def68699e3267bcbb422f2f2e9"],"path":["terminal-at-sink","localConst","callToHoistedFunction","return"]}}
   ],
   "openBacklogRollup": {
-    "total": 1,
-    "blocking": true,
-    "lotBOpen": false,
+    "total": 0,
+    "blocking": false,
+    "lotBOpen": true,
     "statement": "These sites are CLASSIFIED, not resolved. Each carries a typed disposition, a reason and the resolution path it stopped on, which makes the debt addressable; none is consumable or tenant-safe, and none may be treated as a producer, a cascade root or a tenant-reachable channel. F4B stays blocked while any of them remains.",
     "byDisposition": {
       "BRANCH_COMPOSITE_OPEN": 0,
@@ -41014,7 +41015,7 @@
       "BRANCH_CONDITIONAL_AUTHORED": 0,
       "OPEN_UNKNOWN": 0,
       "COMPUTED_DOMAIN_PENDING": 0,
-      "DYNAMIC_SINK_PENDING": 1,
+      "DYNAMIC_SINK_PENDING": 0,
       "CALL_ARGS_PENDING": 0
     },
     "universe": {
@@ -41025,8 +41026,8 @@
       "closedZeroGoverned": 627,
       "publicBoundary": 534,
       "privateRelay": 728,
-      "closedProducer": 65,
-      "openBlocking": 1
+      "closedProducer": 66,
+      "openBlocking": 0
     }
   },
   "branchCompositeOpen": [],
@@ -41034,8 +41035,6 @@
   "branchConditionalAuthored": [],
   "openUnknown": [],
   "computedDomainPending": [],
-  "dynamicSinkPending": [
-    {"plane":"tsx-inline-stamp","file":"packages/core/src/infrastructure/runtime/theming/presentation/adapters/react/css-variables-bridge/index.tsx","symbol":"writePersonalityDeclarations","line":571,"ordinal":26460,"template":"rule.style.setProperty(name, value)","reason":"dynamic-sink-pending:dynamic-setProperty","disposition":"DYNAMIC_SINK_PENDING","consumable":false,"tenantSafe":false,"closed":false,"blocking":true,"nonConsumableCause":"setProperty-name-is-not-a-literal-at-the-sink","sinkTags":[],"relayKinds":[],"occurrences":1,"evidence":{"path":["terminal-at-sink"]}}
-  ],
+  "dynamicSinkPending": [],
   "callArgsPending": []
 }
