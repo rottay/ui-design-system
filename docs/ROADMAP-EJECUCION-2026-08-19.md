@@ -1880,6 +1880,94 @@ deterministas idénticas, hash `a24805069cf45ee25cebde62e5feb635052dac3baa2260c9
 superseded por este. **Regla operativa adoptada:** el resello `gat07:write`
 es paso obligatorio del cierre de TODO packet F4B, antes de su commit.
 
+##### C4 — brecha PRE_F4B→F4B REGULARIZADA (2026-08-23)
+
+La brecha declarada arriba queda cerrada por doble postaudit retroactiva más
+fixes focales. La condición 6c queda **satisfecha en sustancia** (ver salvedad
+de letra abajo); F4B 5/20 queda habilitado.
+
+**Diff auditado:** `8d2985638~1..6cfdcc1a9` (15 commits, 2026-08-22/23), 9
+archivos, +12.643/−2.105 — diffstat COMPLETO (lección NEW-1: no sub-declarar
+alcance): `cascade-disposition.mjs` (nuevo, 1665), `cascade-governance.mjs`
+(nuevo, 651), `cascade-producers.mjs` (+577), `cascade-producers.test.mjs`
+(+3816), `cascade-public-surface.mjs` (nuevo, 572),
+`cascade-cross-file-resolver.mjs` (nuevo, 3092),
+`manifest/cascade/extracted/producers.json` (4156 líneas modificadas), y los
+2 src fuera del write-set mínimo:
+`src/foundation/tokens/ts/runtime/personality/index.ts`,
+`src/infrastructure/runtime/theming/presentation/adapters/react/css-variables-bridge/index.tsx`.
+
+**Doble postaudit retroactiva:**
+
+- Reauditoría independiente A4–A9: Codex (consultor read-only, caveat de
+  tenure declarado — fue DT cuando aterrizó la brecha; su memo no cuenta como
+  asiento organizacionalmente independiente). Veredicto DEFECTS. Memo
+  `/private/tmp/c4-a4a9-codex-reaudit.md`, SHA-256
+  `5ad31219ba57866522444dd01e93ed891a649d09153db77fc990cfa64ccdbaf8`.
+- Postaudit principal del diff completo: Fable 5. Veredicto **REGULARIZA** —
+  el trabajo es real, correcto y re-derivable; nada que rehacer. Memo
+  `/private/tmp/c4-full-diff-fable-postaudit.md`, SHA-256
+  `645c634ef207b065717b222489ab477556e6756c7f71ca61808c0050d78458e4`.
+  Reproducciones independientes + muestra semántica disjunta de la de Codex;
+  los 5 hallazgos de Codex quedaron 5/5 CONFIRMED contra el árbol.
+- **Condición 6c: satisfecha EN SUSTANCIA** (adjudicación Fable): todos los
+  invariantes que la reauditoría debía establecer fueron verificados además
+  por el asiento independiente. Si el owner exige la letra exacta (reauditor
+  organizacionalmente independiente), una tercera pasada es posible; Fable no
+  la recomienda por falta de valor marginal identificable. Queda ofrecido al
+  owner; por defecto se toma la sustancia.
+- Ambos memos entran en `docs/evidence/2026-08/` en el próximo lote
+  documental (deuda de persistencia asentada).
+
+**Verdad establecida:** `unknownProvenance == []` es real y re-derivable
+(2024 = 69+627+534+728+66; `openBlocking 0`, `ownershipConflicts 0`,
+`lotBOpen true`; sin contador pineado). Muestras semánticas disjuntas
+(20 Codex + 4 Fable) concordantes con fuente.
+
+**Adjudicación D1 (los 2 src):** el cambio (37 canales `--ds-*` → 37 sockets
+`--_ds-personality-resolved-*`, biyección exacta con `personality.css`,
+fórmulas byte-intactas, hold con re-derivación y guard de consenso
+fail-closed, 23/23 tests focales verdes) es **la corrección de autoridad que
+la doctrina exige** (el runtime no emite una capa visual que compita; los
+canales los pinta la proyección estática), aterrizada **por canal indebido**
+(dentro de una brecha declarada como instrumentación, fuera del write-set
+mínimo, sin asiento). **Brecha de PROCESO, no de contenido: se acepta con
+este asiento, sin reversión; los 2 src no se tocan.**
+
+**Fixes focales ejecutados (packet C4-fix, writer Opus):**
+
+1. **T-11 anclado** (`cascade-producers.test.mjs`): el test ahora pinea que
+   los digests PUBLICADOS son el hash de la proyección productiva sobre las
+   filas reales (`relayKinds` incluido — defecto lateral corregido), con
+   guarda de vacuidad (534/728/66 filas) y dos negativas de granularidad
+   (borrado masivo y alteración de UNA fila mueven el digest publicado).
+   Sensibilidad probada por tríada: íntegro+nuevo=PASS, mutado+viejo=PASS
+   (el defecto), mutado+nuevo=FAIL exactamente en el anclaje. La desviación
+   (anclaje en vez de mutación productiva literal) quedó ACEPTADA en
+   sustancia por Fable con fundamento verificado (digest local no
+   exportado; `classifyCrossFileRows()` clava REPO_ABS). Observación
+   registrada: el anclaje es un PIN — un cambio legítimo futuro de la
+   proyección exige actualizar el test en lockstep; ese rojo futuro es
+   diseño, no regresión.
+2. **T-12 renombrado** con comentarios y banner T-FINAL-352 corregidos,
+   CERO cambio de assertions (verificado mecánicamente: las 9 líneas
+   `assert.` del diff son todas de T-11); advertencia legítima preservada y
+   apuntando a la ley de implicación. Conteo: 209 antes, 209 después.
+3. **Frescura:** `producers.json` re-derivado por el productor canónico
+   (`--write`); leaf-diff completo = exactamente las 4 hojas de frescura
+   (censo 1664→1665 + digest); filas, listas, receipts y stats intactos.
+
+Verificación: `cascade-producers.test.mjs` **209/209** (PRE 207/2; N13 y
+T-21 verdes, corridas propias del DT y de Fable); `--check` OK matches the
+tree. Postaudit delta Fable: **ACCEPT**, memo
+`/private/tmp/c4-fix-fable-postaudit.md`, SHA-256
+`5b8af3d9cf04e46db0b3ba52c290b87c2b6ea43b9ef3def905c44b097f3bcdb2`.
+Write-set contenido: los 2 src de D1 y el productor con 0 diff.
+
+Con C2, C3 y C4 cerrados, **F4B 5/20 queda habilitado**. Disciplina
+operativa adoptada (mandato Fable): stage siempre por paths explícitos; el
+DT no escribe el ledger durante la corrida de aceptación de un writer.
+
 **F0 — CERRADO (2026-08-19).** Criterio de cierre cumplido:
 `ci-gates OK — 78 blocking gate(s) passed` (2 excluded visibles con razón y
 dueño: channel-liveness y lane-control-drills, ambos esperan a F2); `find src -type d -empty` vacío salvo el inbox

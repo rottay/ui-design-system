@@ -18,7 +18,7 @@
     "cssEdges": "574150a5adeda7dafd9521822da5e39f6a49a1dd056b41534ecdbaa5d22f4139",
     "cascadeRoots": "1bd553d4a5b788d5f6d3c4b9157effec297ac2cce504128787644019551fe624",
     "rootCatalog": "6a0e68de3789a5c7b5751582cd485d42b8d71861bc014b7be4a585c04a963e9a",
-    "srcTsx": "b88482dfee8593fc59e0042b5d6e137dce133c7ce7b931b67f7fcd9b579d6e9e",
+    "srcTsx": "54c6ddf4f45f0ec5fc601e0890c3e84c95c1e327a31d64d581034e0314f83c9d",
     "srcCompilers": "6ba454c27fa223147de2ae0077fd0a4f3d2b5d9758491e5ad62abc2e65aeb5d2",
     "artifacts": "dc5a4639ba4329dd2b2f9d905cccd71299788b0f22c06388f0ec743a24347521"
   },
@@ -96,7 +96,7 @@
     },
     "measuredCensus": {
       "scannedFiles": 1727,
-      "excludedFiles": 1664,
+      "excludedFiles": 1665,
       "styleSinks": 3291,
       "stampSites": 312,
       "distinctCustomProperties": 202,
@@ -113,8 +113,8 @@
       },
       "excludedFiles": {
         "authored": 1664,
-        "measured": 1664,
-        "delta": 0
+        "measured": 1665,
+        "delta": 1
       },
       "styleSinks": {
         "authored": 3283,

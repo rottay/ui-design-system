@@ -63,6 +63,11 @@ import {
   scanTsxSource,
   serialize,
 } from './cascade-producers.mjs';
+/* T-11 anchors the published receipt digests against a recomputation. This is
+ * the programme's own hash helper, the same createHash('sha256').digest('hex')
+ * `cascade-producers.mjs` hashes with -- not a second algorithm the drill
+ * declares for itself. */
+import { sha256Hex } from './cascade-governance.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const SCRIPT = join(HERE, 'cascade-producers.mjs');
@@ -1306,24 +1311,69 @@ test('T-10 the live tree joins WITHOUT conflict over its 66 duplicated coordinat
 
 test('T-11 NEGATIVE: altering or removing a receipt moves the receipt-bound digest', () => {
   const out = buildProducers();
+  /* WHY THIS TEST IS ANCHORED AND NOT SELF-REFERENTIAL. An earlier form of this
+   * drill compared two projections it declared LOCALLY and never touched the
+   * published digest at all: replacing the three `digests[*Receipts]` with
+   * hashes blind to sinkTags/relayKinds/evidence left every assertion passing,
+   * so the test did not prove its own name. The fix is the ANCHOR below --
+   * assert that the PUBLISHED digest IS the hash of this exact projection over
+   * these exact rows. A receipt-insensitive producer now fails here, on the
+   * anchor, before the negatives are even reached.
+   *
+   * The projections mirror `buildProducers`'s own (cascade-producers.mjs, the
+   * `digests` block) field for field, and `sha256Hex` is the same
+   * createHash('sha256').digest('hex') the producer hashes with. That the
+   * anchor holds at all is what makes the two negatives below evidence rather
+   * than arithmetic about a local variable. */
+  const identityOf = (rs) => sha256Hex(JSON.stringify(rs.map((r) => [r.plane, r.file, r.symbol, r.reason])));
+  const receiptOf = (rs) =>
+    sha256Hex(JSON.stringify(rs.map((r) => [r.file, r.ordinal, r.sinkTags, r.relayKinds, r.evidence])));
+
   for (const name of ['publicBoundary', 'privateRelay', 'closedProducer']) {
     const key = `${name}Receipts`;
+    const rows = out[name];
+    // an empty cohort would make every negative below vacuously true
+    assert.ok(rows.length > 0, `${name} must carry rows for this negative to mean anything`);
     assert.match(out.digests[key], /^[0-9a-f]{64}$/);
     assert.notEqual(out.digests[key], out.digests[name], 'the receipt digest must not equal the identity digest');
+
+    // ANCHOR: the two published digests ARE these two projections of these rows.
+    assert.equal(out.digests[name], identityOf(rows), `${name}: the published identity digest must BE this projection`);
+    assert.equal(out.digests[key], receiptOf(rows), `${key}: the published receipt digest must BE this projection`);
+
+    // NEGATIVE 1 -- removing the receipt from every row. Identity is untouched
+    // by construction, so a digest that still matched would be ignoring it.
+    const stripped = rows.map((r) => ({ ...r, evidence: null, sinkTags: [], relayKinds: [] }));
+    assert.equal(identityOf(stripped), out.digests[name], 'identity alone cannot see the receipt');
+    assert.notEqual(receiptOf(stripped), out.digests[key], 'removing every receipt MUST move the published digest');
+
+    // NEGATIVE 2 -- altering ONE row's evidence. The published digest has to be
+    // sensitive at single-row granularity, not merely to wholesale erasure.
+    const edited = rows.map((r, index) =>
+      index === 0 ? { ...r, evidence: { ...(r.evidence ?? {}), path: ['tampered'] } } : r,
+    );
+    assert.equal(identityOf(edited), out.digests[name], 'altering evidence must not move identity');
+    assert.notEqual(receiptOf(edited), out.digests[key], 'altering ONE receipt MUST move the published digest');
   }
-  // a digest that ignored the receipt could not distinguish these two
-  const rows = out.publicBoundary.slice(0, 3);
-  const identity = (rs) => JSON.stringify(rs.map((r) => [r.plane, r.file, r.symbol, r.reason]));
-  const withReceipt = (rs) => JSON.stringify(rs.map((r) => [r.file, r.ordinal, r.sinkTags, r.evidence]));
-  const stripped = rows.map((r) => ({ ...r, evidence: null, sinkTags: [] }));
-  assert.equal(identity(rows), identity(stripped), 'identity alone cannot see the receipt');
-  assert.notEqual(withReceipt(rows), withReceipt(stripped), 'the receipt-bound digest MUST see it');
 });
 
-test('T-12 the 352 are typed OPEN debt and lot B still does NOT open', () => {
+test('T-12 the typed OPEN backlog is drained and lot B opens, pinned by the IMPLICATION', () => {
   const out = buildProducers();
-  // unknownProvenance is empty, but that is NOT lot B opening: the same 352
-  // sites are now blocking under their own names.
+  /* THE NAME AND THESE COMMENTS ONCE CONTRADICTED THE ASSERTIONS BELOW. They
+   * were written when `unknownProvenance` had just been emptied by TYPING the
+   * 352 sites into seven named cohorts that were all still blocking, so "lot B
+   * does NOT open" was then true. Those cohorts have since been drained --
+   * `openBlocking` is 0 and every one of the seven is empty (T-16) -- and the
+   * assertions here were updated with them while the prose was not. The
+   * assertions are the measurement and were left untouched; only the narrative
+   * was wrong, and it is corrected here.
+   *
+   * THE WARNING THAT STILL STANDS, and the reason this test is shaped the way
+   * it is: an empty `unknownProvenance` ALONE never means resolved. Emptying it
+   * by typing rows into named cohorts moves debt, it does not discharge it.
+   * That is why the pin below is the CONJUNCTION -- empty unknowns AND zero
+   * open rows -- and not today's boolean. An open row reappearing under any of
+   * the seven names must shut lot B again, and this implication makes it. */
   assert.equal(out.stats.unknownProvenance, 0);
   assert.equal(out.unknownProvenance.length, 0);
   assert.equal(out.stats.openBlocking, 0);
@@ -1444,12 +1494,22 @@ test('T-15 relayKinds is published with a CLOSED vocabulary and survives multi-s
 });
 
 /* ===================================================================== *
- * T-FINAL-352 -- the last 352 rows become TYPED OPEN debt.
+ * T-FINAL-352 -- the last 352 rows became TYPED OPEN debt, and were then
+ * drained.
  *
- * `unknownProvenance` reaches [] and that is NOT progress on resolution: the
- * same 352 sites are still blocking, now under seven names with a reason and a
- * path each. The tests below exist to make sure nobody can read the empty list
- * as "solved", and that no row was lost on the way out.
+ * TWO STEPS, and the distinction is the whole point. FIRST, `unknownProvenance`
+ * reached [] by TYPING those 352 sites into seven named cohorts with a reason
+ * and a path each -- which was not progress on resolution at all: the same
+ * sites were still blocking, under better names. SECOND, later tranches
+ * actually drained those cohorts; `openBlocking` is now 0 and all seven are
+ * empty, which T-16 asserts one by one.
+ *
+ * This banner used to describe only the first step, and read as though the 352
+ * were still blocking. The tests below never did: they were updated with each
+ * drain. The warning that survives both steps is the one they were written for
+ * -- nobody may read an empty list as "solved" -- and it is enforced by pinning
+ * the CONJUNCTION (empty unknowns AND zero open rows) plus TOTAL conservation,
+ * so no row can be lost on the way out of any cohort.
  * ===================================================================== */
 
 test('T-16 unknownProvenance is EMPTY only because all 352 are typed and conserved', () => {
