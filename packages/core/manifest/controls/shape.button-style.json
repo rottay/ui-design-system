@@ -7,7 +7,7 @@
   "semanticOwner": {
     "owner": "design-system",
     "registryPath": "packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts",
-    "registryDigest": "7543b5262d4a58c1f80ed954a7177008f450be9bfb3c0554b7f3993fcacb6fc7"
+    "registryDigest": "5fde488353d69f2e8343f231c9e7e945295ddc8198bcfea2af4cb8ab2642dd5e"
   },
   "title": "Button silhouette",
   "valueType": "enum",

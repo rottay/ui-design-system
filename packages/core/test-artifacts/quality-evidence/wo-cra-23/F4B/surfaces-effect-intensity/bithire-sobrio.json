@@ -1948,14 +1948,15 @@
       }
     },
     "sourceFreshness": {
-      "declaredDigest": "3a3742881cce1f94d23e8b74bb375076836736eecf10fa75e937bb9e4cbf2dc5",
-      "observedDigest": "3a3742881cce1f94d23e8b74bb375076836736eecf10fa75e937bb9e4cbf2dc5",
-      "postMeasurementDigest": "3a3742881cce1f94d23e8b74bb375076836736eecf10fa75e937bb9e4cbf2dc5",
-      "preMeasurementDigest": "3a3742881cce1f94d23e8b74bb375076836736eecf10fa75e937bb9e4cbf2dc5",
+      "declaredDigest": "677d1281706a9996ff7c30be8a8280c5928b73407e273c4d7802b2bd37b7392d",
+      "observedDigest": "677d1281706a9996ff7c30be8a8280c5928b73407e273c4d7802b2bd37b7392d",
+      "postMeasurementDigest": "677d1281706a9996ff7c30be8a8280c5928b73407e273c4d7802b2bd37b7392d",
+      "preMeasurementDigest": "677d1281706a9996ff7c30be8a8280c5928b73407e273c4d7802b2bd37b7392d",
       "sourceFiles": [
         "packages/core/dist/build-stamp.json",
         "packages/core/dist/infrastructure/compilers/kernel/runtime/brand-theme/index.js",
         "packages/core/dist/server.js",
+        "packages/core/manifest/controls/shape.radius-scale.json",
         "packages/core/manifest/controls/surfaces.effect-intensity.json",
         "packages/core/manifest/families/primitive/display/card.json",
         "packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts",

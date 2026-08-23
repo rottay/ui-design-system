@@ -101,6 +101,24 @@
       "partiallyMechanised": []
     },
     {
+      "id": "border-width-style-fixed",
+      "assertion": "did-not-move",
+      "targetScope": "every-measured-target",
+      "phrases": ["border width and style remain fixed"],
+      "properties": [
+        "border-top-width",
+        "border-right-width",
+        "border-bottom-width",
+        "border-left-width",
+        "border-top-style",
+        "border-right-style",
+        "border-bottom-style",
+        "border-left-style"
+      ],
+      "meaning": "The stroke of the border and the corner of the border are two different channels of the shape axis. `border-fixed` deliberately bundles them, which is correct for an axis that owns NEITHER -- a rhythm stop that moved a corner would be reaching outside itself. It is unusable for the radius dial itself: binding it would assert that the very channel under test must not move. This entry is `border-fixed` minus the four radius longhands, so a radius stop still has to prove it left the stroke alone. Use it INSTEAD OF `border remains fixed`, never alongside it.",
+      "partiallyMechanised": []
+    },
+    {
       "id": "motion-fixed",
       "assertion": "did-not-move",
       "targetScope": "every-measured-target",

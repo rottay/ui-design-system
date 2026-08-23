@@ -5,12 +5,13 @@
   "scenarioId": "surfaces.effect-intensity/mate/rottay/static-and-db",
   "evidenceKind": "static-db-computed-parity",
   "commandOrTool": "node src/tooling/resolution-probe/public/cli/index.mjs causal",
-  "toolVersion": "resolution-probe@7edaade246fa",
+  "toolVersion": "resolution-probe@5535576df27b",
   "exitCode": 0,
   "sourceFiles": [
     "packages/core/dist/build-stamp.json",
     "packages/core/dist/infrastructure/compilers/kernel/runtime/brand-theme/index.js",
     "packages/core/dist/server.js",
+    "packages/core/manifest/controls/shape.radius-scale.json",
     "packages/core/manifest/controls/surfaces.effect-intensity.json",
     "packages/core/manifest/families/primitive/display/card.json",
     "packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts",
@@ -62,10 +63,10 @@
     "packages/core/src/ui/primitives/display/Card/engines/rustic/index.tsx",
     "packages/core/src/ui/primitives/display/Card/index.tsx"
   ],
-  "sourceDigest": "c0241cbf401ec459115dc8fe3a7745e4d33ecfc973da6d4c4c853f11016ee785",
+  "sourceDigest": "489e2b4d505d548f559296650552a995ab7f6d0de95bd4e4dfe03581140d1cb5",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/surfaces-effect-intensity/rottay-mate.json",
-  "artifactSha256": "30be038923d1ce030ce6b1b8a93b510c94d2ca3b87ff503d12293b0ab991ff3a",
-  "createdAt": "2026-08-23T07:24:27.748Z",
+  "artifactSha256": "57dccb81d2e853252a5a9e7b93dfc8535645b09e183ebd04ba37714f37ea20e3",
+  "createdAt": "2026-08-23T08:18:01.862Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

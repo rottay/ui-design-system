@@ -199,7 +199,13 @@ export const TENANT_CAPABILITY_REGISTRY = Object.freeze([
       bounds: { min: 0.75, max: 1.25 },
       defaultBehavior: '1 (vertical envelope may clamp tighter)',
       documentPath: 'appearance.general.shape.radiusScale',
-      brandThemePath: 'surfaces.borderRadius.*',
+      // The static door is the DIAL, not the ramp operands. `surfaces.borderRadius.*`
+      // sets `--ds-radius-{step}-base`, and when a scale is live the compiler emits
+      // that base as `calc(authored / scale)` precisely so the foundation's
+      // `calc(base * scale)` reproduces the authored value — it CANCELS this control
+      // rather than carrying it. Measured at every stop on all three verticals:
+      // test-artifacts/quality-evidence/wo-cra-23/F4B/shape-radius-scale/.
+      brandThemePath: 'surfaces.radiusScale',
       derivedChannels: ['--ds-radius-scale', '--ds-radius-md'],
       compat: 'additive, unset-to-rollback',
     },

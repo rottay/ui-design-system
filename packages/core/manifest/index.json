@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "generatedBy": "node packages/core/manifest/generator/index.mjs --sync",
   "authorityLaw": "Controls own semantics, groups own recipe vocabularies, families own applicability edges, and this index owns generated rollups.",
-  "inputsDigest": "9dacd2fbb1fb663157cb71ea391e2caca2786af2bc9a53fd333a1cb96a9a3b4e",
+  "inputsDigest": "ed6046c31a86a21ad24844f0dedb96fc50363af00a60b3e89367011f4441b3ba",
   "denominators": {
     "canonicalFamilies": 255,
     "activeStandardControls": 13,
@@ -278,13 +278,52 @@
       },
       {
         "controlId": "shape.radius-scale",
-        "declaredFamilies": 4,
-        "unknownCells": 251,
+        "declaredFamilies": 5,
+        "unknownCells": 250,
         "applicableFamilyIds": [],
-        "parts": [],
-        "propertyGroups": [],
-        "channels": [],
+        "parts": [
+          "root"
+        ],
+        "propertyGroups": [
+          "surface-radius"
+        ],
+        "channels": [
+          "--_ds-card-header-extra-radius",
+          "--_ds-card-header-icon-radius",
+          "--_ds-card-image-radius",
+          "--_ds-card-radius",
+          "--_ds-card-radius-lg",
+          "--_ds-card-radius-sm",
+          "--_ds-card-radius-xl",
+          "--_ds-card-skeleton-radius"
+        ],
         "families": [
+          {
+            "familyId": "primitive/display/card",
+            "layer": "primitive",
+            "disposition": "UNKNOWN",
+            "verificationState": "COMPUTED_VERIFIED",
+            "stableParts": [
+              "root"
+            ],
+            "propertyGroups": [
+              "surface-radius"
+            ],
+            "computedProperties": [
+              "border-bottom-right-radius",
+              "border-top-left-radius"
+            ],
+            "channels": [
+              "--_ds-card-header-extra-radius",
+              "--_ds-card-header-icon-radius",
+              "--_ds-card-image-radius",
+              "--_ds-card-radius",
+              "--_ds-card-radius-lg",
+              "--_ds-card-radius-sm",
+              "--_ds-card-radius-xl",
+              "--_ds-card-skeleton-radius"
+            ]
+          },
           {
             "familyId": "primitive/layout/flex",
             "layer": "primitive",
@@ -1338,102 +1377,102 @@
     {
       "controlId": "palette.seeds",
       "path": "manifest/controls/palette.seeds.json",
-      "digest": "0724dcf4383ea21fe3e9c3ca37c371c02c53b0a4f4ca79da73d148ac5b650672"
+      "digest": "81a6329df34a2574e21a7969c3c017caadb22093d9f1d43a56b5d4623bc095b0"
     },
     {
       "controlId": "typography.pairing",
       "path": "manifest/controls/typography.pairing.json",
-      "digest": "6fa4c317071aed56db067fc15d4441f55f4e6fb17606f45fb42c9aa0b030d795"
+      "digest": "ff800bb90039b0be865e43031dbf2b8c351939b06542f42c78e71ff79de25257"
     },
     {
       "controlId": "typography.families",
       "path": "manifest/controls/typography.families.json",
-      "digest": "0c9e66cb0161e5c2574b62a5a466d2b1c302d7fd1cb45c344492ab27193e48e0"
+      "digest": "7c71a4c36553943482d15c0cfe2c185260d85593000c5c79b58a57e81fa899de"
     },
     {
       "controlId": "typography.scale",
       "path": "manifest/controls/typography.scale.json",
-      "digest": "d567639ed7c4079fd3ef26a925ee60a7401ba8a0b0926dd11300ba2a08165a41"
+      "digest": "f4c1ba82cbbd36f860c8be8aa4f62d3dd752ce6be6c68a486e0701aee2a43095"
     },
     {
       "controlId": "shape.radius-scale",
       "path": "manifest/controls/shape.radius-scale.json",
-      "digest": "b5a23a31b1e9665f960517685baac7406e6bc35c47050783bdd5d1e0125b4840"
+      "digest": "28da3cb7e059a659c4d32d2cc9587ca841ec8501eb911b14f034689a8422f348"
     },
     {
       "controlId": "shape.button-style",
       "path": "manifest/controls/shape.button-style.json",
-      "digest": "eb0ced5f99a59d74d8d31928e730f2e826efd78a2b84b732d1a82d026823478f"
+      "digest": "5b374822de0901baaddcf8dcd90f796010b087d86a59715ffc025c080034b59f"
     },
     {
       "controlId": "density.mode",
       "path": "manifest/controls/density.mode.json",
-      "digest": "7ebdacf2858651cd3b0e092528fcc58404a746ffdacf1755be733b889781c86a"
+      "digest": "b6926706eeee6cee6d703824c9e3fa74d61fd67bae16b17dfd221adf91955c1c"
     },
     {
       "controlId": "spacing.rhythm",
       "path": "manifest/controls/spacing.rhythm.json",
-      "digest": "c36220c1769e5cc031b2bf5260138dbba559adf0384354562b8e13e922f01f52"
+      "digest": "b14165dce51d55f6d326c0627b124612bf8b3a53f87b50034bd04b91d7f8e1b4"
     },
     {
       "controlId": "motion.dial",
       "path": "manifest/controls/motion.dial.json",
-      "digest": "fcd1c63633ed331f60c3fcccb8a1c8b7aa96b94ae760eed72fb4a958847fba57"
+      "digest": "8b6599d11363bac8c6ff7afdab27f807c65e92c348ac90edf0d860b6d994fa06"
     },
     {
       "controlId": "surfaces.elevation-posture",
       "path": "manifest/controls/surfaces.elevation-posture.json",
-      "digest": "021949d667e47b33e04b0378777bc308058461abb48b4008633c0cc434f7c73f"
+      "digest": "a0cbd4d31e16d50c1d6c6dde5fce9945424e401dc021033ee2d436877d07be90"
     },
     {
       "controlId": "surfaces.effect-intensity",
       "path": "manifest/controls/surfaces.effect-intensity.json",
-      "digest": "c77042f768676891eeb907cd0ed1cd710fc5fa809bd13104b715a477e71746ed"
+      "digest": "1daea2acb86f2e823281cc0b6883dfa3fed8a794829ed6b0e3348ed6a863c2aa"
     },
     {
       "controlId": "navigation.sidebar-tone",
       "path": "manifest/controls/navigation.sidebar-tone.json",
-      "digest": "900d5b11c636eec7bac06128d09c53226e9bfdafc2c6cc07868890f7fdb23715"
+      "digest": "1097f768b8a6cde8aab34c76cbde33d6b5a040328c8ac73440e7fa5102589ccb"
     },
     {
       "controlId": "experience.profile",
       "path": "manifest/controls/experience.profile.json",
-      "digest": "2d737154747b0b900474d954ebc9679d3dfb92a27397c8af82fcc2ecf55f8c72"
+      "digest": "018ce0c461e8f9a416122f44f2e68e962058a7a79e610b1f0ee482b582638463"
     },
     {
       "controlId": "chrome.families",
       "path": "manifest/controls/chrome.families.json",
-      "digest": "5a89e2e93c1b9059b9cfea7d8f6f092e9ee0e0ec31417d256c43efb21b870bd1"
+      "digest": "4b5c75633df1d76e19a6251c0840678b50e07d16fa079abb7164ba0cd579b69d"
     },
     {
       "controlId": "chrome.anatomy",
       "path": "manifest/controls/chrome.anatomy.json",
-      "digest": "e452213e08ca24647974d43838609140ab8418db30896f96e143e14590474c1e"
+      "digest": "258871a47488085e858047a88c0194ba284db864fce049f0bb9feca0116e0f71"
     },
     {
       "controlId": "token-overrides",
       "path": "manifest/controls/token-overrides.json",
-      "digest": "07b12484f4e79ce612214b5e9bf9930ddd9bf995fe86cf3df57b6cfae88cc157"
+      "digest": "fcef414cd041f3247186fdf19f48be7986a97c1d608325015447bf2c6e1771a2"
     },
     {
       "controlId": "recipe-profile",
       "path": "manifest/controls/recipe-profile.json",
-      "digest": "71f60efa2b170fbdbc372f98d136e5c73a85cb5e3276d2595c3b6d7ac5065d60"
+      "digest": "5a90f7f4f0a3f4d2720132601bf53bcc1234e8c5e19f5219a24e6c2ec1d6809f"
     },
     {
       "controlId": "profiles.expressive",
       "path": "manifest/controls/profiles.expressive.json",
-      "digest": "88da1b0e4754fdbdbedee438f09bd77a239c74ab01578094f3588429d45ad334"
+      "digest": "83e08423dabc1637f980a696abcbb827aecb8bf7efa02893d50b127555f045db"
     },
     {
       "controlId": "profiles.icon",
       "path": "manifest/controls/profiles.icon.json",
-      "digest": "193c991d63beb7bd81101b05f98fe3456d2efc9ba08025d8549c089f8f8dcac1"
+      "digest": "d24df8f3ae3d8763d7bc5ac0715bc0b0d5bdbc1b1334a71b1e1af0f0e81abe9e"
     },
     {
       "controlId": "responsive.posture",
       "path": "manifest/controls/responsive.posture.json",
-      "digest": "762ce12dcd29d846785edac19176947322f760d88f3ee308dfef85523d8dbc15"
+      "digest": "70b70b7315ef943118db9cc31fc8695157853d645f2fa1539aab04c15062ef55"
     }
   ],
   "groups": [
@@ -2010,7 +2049,7 @@
     {
       "familyId": "primitive/display/card",
       "path": "manifest/families/primitive/display/card.json",
-      "digest": "3dbb738843079d834b8ba547daac14fac649eb00336c3882ac74172ec7e036c7",
+      "digest": "c3e4c346a9ceda4591a83fb5c8370c7c387f04b4f111c441320ecf15a39f87e3",
       "maximumClaim": "SOURCE_BOUND",
       "reviewVerdict": null
     },

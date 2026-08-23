@@ -2,7 +2,7 @@
   "arms": {
     "db-tenant-theme": {
       "applied": {
-        "--ds-effect-intensity": "0"
+        "--ds-radius-scale": "1.15"
       },
       "armId": "db-tenant-theme",
       "guards": {
@@ -32,11 +32,11 @@
         "rottay/dark/modern/both": {
           "clobbered": [],
           "introduced": [
-            "--ds-effect-intensity"
+            "--ds-radius-scale"
           ],
           "restoreOps": [
             {
-              "name": "--ds-effect-intensity",
+              "name": "--ds-radius-scale",
               "op": "remove"
             },
             {
@@ -48,11 +48,11 @@
         "rottay/light/modern/both": {
           "clobbered": [],
           "introduced": [
-            "--ds-effect-intensity"
+            "--ds-radius-scale"
           ],
           "restoreOps": [
             {
-              "name": "--ds-effect-intensity",
+              "name": "--ds-radius-scale",
               "op": "remove"
             },
             {
@@ -94,9 +94,8 @@
               "value": "rgb(24, 24, 27)"
             },
             "background-image": {
-              "from": "linear-gradient(oklch(0.210788 0.00782039 none / 0.06), oklch(0.210788 0.00782039 none / 0.06)), linear-gradient(rgba(255, 255, 255, 0.024) 0%, rgba(255, 255, 255, 0.004) 52%, rgba(0, 0, 0, 0.02) 100%)",
-              "moved": true,
-              "to": "linear-gradient(oklch(0.210788 0.00782039 none / 0.06), oklch(0.210788 0.00782039 none / 0.06)), linear-gradient(rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0) 52%, rgba(0, 0, 0, 0) 100%)"
+              "moved": false,
+              "value": "linear-gradient(oklch(0.210788 0.00782039 none / 0.06), oklch(0.210788 0.00782039 none / 0.06)), linear-gradient(rgba(255, 255, 255, 0.024) 0%, rgba(255, 255, 255, 0.004) 52%, rgba(0, 0, 0, 0.02) 100%)"
             },
             "block-size": {
               "moved": false,
@@ -106,13 +105,14 @@
               "moved": false,
               "value": "rgb(42, 42, 47)"
             },
-            "border-bottom-left-radius": {
-              "moved": false,
-              "value": "14px"
-            },
             "border-bottom-right-radius": {
+              "from": "14px",
+              "moved": true,
+              "to": "16.1px"
+            },
+            "border-bottom-style": {
               "moved": false,
-              "value": "14px"
+              "value": "solid"
             },
             "border-bottom-width": {
               "moved": false,
@@ -122,6 +122,10 @@
               "moved": false,
               "value": "rgb(42, 42, 47)"
             },
+            "border-left-style": {
+              "moved": false,
+              "value": "solid"
+            },
             "border-left-width": {
               "moved": false,
               "value": "0px"
@@ -129,6 +133,10 @@
             "border-right-color": {
               "moved": false,
               "value": "rgb(42, 42, 47)"
+            },
+            "border-right-style": {
+              "moved": false,
+              "value": "solid"
             },
             "border-right-width": {
               "moved": false,
@@ -139,12 +147,9 @@
               "value": "rgb(42, 42, 47)"
             },
             "border-top-left-radius": {
-              "moved": false,
-              "value": "14px"
-            },
-            "border-top-right-radius": {
-              "moved": false,
-              "value": "14px"
+              "from": "14px",
+              "moved": true,
+              "to": "16.1px"
             },
             "border-top-style": {
               "moved": false,
@@ -237,69 +242,78 @@
           },
           "token-readout/tokens": {
             "--ds-button-md-border-radius": {
-              "moved": false,
-              "value": "calc(10px * 1)"
+              "from": "calc(10px * 1)",
+              "moved": true,
+              "to": "calc(10px * 1.15)"
             },
             "--ds-button-md-radius": {
-              "moved": false,
-              "value": "calc(10px * 1)"
+              "from": "calc(10px * 1)",
+              "moved": true,
+              "to": "calc(10px * 1.15)"
             },
             "--ds-card-border-radius": {
-              "moved": false,
-              "value": "calc(14px * 1)"
+              "from": "calc(14px * 1)",
+              "moved": true,
+              "to": "calc(14px * 1.15)"
             },
             "--ds-card-radius": {
-              "moved": false,
-              "value": "calc(14px * 1)"
+              "from": "calc(14px * 1)",
+              "moved": true,
+              "to": "calc(14px * 1.15)"
             },
             "--ds-effect-intensity": {
-              "from": "1",
-              "moved": true,
-              "to": "0"
+              "moved": false,
+              "value": "1"
             },
             "--ds-font-size-xs": {
               "moved": false,
               "value": "calc(0.75rem * 1)"
             },
             "--ds-input-md-border-radius": {
-              "moved": false,
-              "value": "calc(10px * 1)"
+              "from": "calc(10px * 1)",
+              "moved": true,
+              "to": "calc(10px * 1.15)"
             },
             "--ds-letter-spacing-body": {
               "moved": false,
               "value": "0"
             },
             "--ds-radius-lg": {
-              "moved": false,
-              "value": "calc(14px * 1)"
+              "from": "calc(14px * 1)",
+              "moved": true,
+              "to": "calc(14px * 1.15)"
             },
             "--ds-radius-lg-base": {
               "moved": false,
               "value": "14px"
             },
             "--ds-radius-md": {
-              "moved": false,
-              "value": "calc(10px * 1)"
+              "from": "calc(10px * 1)",
+              "moved": true,
+              "to": "calc(10px * 1.15)"
             },
             "--ds-radius-md-base": {
               "moved": false,
               "value": "10px"
             },
             "--ds-radius-scale": {
-              "moved": false,
-              "value": "1"
+              "from": "1",
+              "moved": true,
+              "to": "1.15"
             },
             "--ds-radius-sm": {
-              "moved": false,
-              "value": "calc(6px * 1)"
+              "from": "calc(6px * 1)",
+              "moved": true,
+              "to": "calc(6px * 1.15)"
             },
             "--ds-radius-sm-base": {
               "moved": false,
               "value": "6px"
             },
             "--ds-radius-xl": {
-              "moved": false,
-              "value": "calc(18px * 1)"
+              "from": "calc(18px * 1)",
+              "moved": true,
+              "to": "calc(18px * 1.15)"
             },
             "--ds-radius-xl-base": {
               "moved": false,
@@ -357,13 +371,9 @@
               "moved": false,
               "value": "rgb(240, 240, 240)"
             },
-            "border-bottom-left-radius": {
+            "border-bottom-style": {
               "moved": false,
-              "value": "0px"
-            },
-            "border-bottom-right-radius": {
-              "moved": false,
-              "value": "0px"
+              "value": "solid"
             },
             "border-bottom-width": {
               "moved": false,
@@ -373,6 +383,10 @@
               "moved": false,
               "value": "rgb(240, 240, 240)"
             },
+            "border-left-style": {
+              "moved": false,
+              "value": "solid"
+            },
             "border-left-width": {
               "moved": false,
               "value": "0px"
@@ -381,6 +395,10 @@
               "moved": false,
               "value": "rgb(240, 240, 240)"
             },
+            "border-right-style": {
+              "moved": false,
+              "value": "solid"
+            },
             "border-right-width": {
               "moved": false,
               "value": "0px"
@@ -388,14 +406,6 @@
             "border-top-color": {
               "moved": false,
               "value": "rgb(240, 240, 240)"
-            },
-            "border-top-left-radius": {
-              "moved": false,
-              "value": "0px"
-            },
-            "border-top-right-radius": {
-              "moved": false,
-              "value": "0px"
             },
             "border-top-style": {
               "moved": false,
@@ -478,9 +488,8 @@
               "value": "rgb(255, 255, 255)"
             },
             "background-image": {
-              "from": "linear-gradient(oklch(0 0 none / 0), oklch(0 0 none / 0)), linear-gradient(rgba(255, 255, 255, 0.024) 0%, rgba(255, 255, 255, 0.004) 52%, rgba(0, 0, 0, 0.02) 100%)",
-              "moved": true,
-              "to": "linear-gradient(oklch(0 0 none / 0), oklch(0 0 none / 0)), linear-gradient(rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0) 52%, rgba(0, 0, 0, 0) 100%)"
+              "moved": false,
+              "value": "linear-gradient(oklch(0 0 none / 0), oklch(0 0 none / 0)), linear-gradient(rgba(255, 255, 255, 0.024) 0%, rgba(255, 255, 255, 0.004) 52%, rgba(0, 0, 0, 0.02) 100%)"
             },
             "block-size": {
               "moved": false,
@@ -490,13 +499,14 @@
               "moved": false,
               "value": "rgb(229, 229, 227)"
             },
-            "border-bottom-left-radius": {
-              "moved": false,
-              "value": "14px"
-            },
             "border-bottom-right-radius": {
+              "from": "14px",
+              "moved": true,
+              "to": "16.1px"
+            },
+            "border-bottom-style": {
               "moved": false,
-              "value": "14px"
+              "value": "solid"
             },
             "border-bottom-width": {
               "moved": false,
@@ -506,6 +516,10 @@
               "moved": false,
               "value": "rgb(229, 229, 227)"
             },
+            "border-left-style": {
+              "moved": false,
+              "value": "solid"
+            },
             "border-left-width": {
               "moved": false,
               "value": "0px"
@@ -513,6 +527,10 @@
             "border-right-color": {
               "moved": false,
               "value": "rgb(229, 229, 227)"
+            },
+            "border-right-style": {
+              "moved": false,
+              "value": "solid"
             },
             "border-right-width": {
               "moved": false,
@@ -523,12 +541,9 @@
               "value": "rgb(229, 229, 227)"
             },
             "border-top-left-radius": {
-              "moved": false,
-              "value": "14px"
-            },
-            "border-top-right-radius": {
-              "moved": false,
-              "value": "14px"
+              "from": "14px",
+              "moved": true,
+              "to": "16.1px"
             },
             "border-top-style": {
               "moved": false,
@@ -621,69 +636,78 @@
           },
           "token-readout/tokens": {
             "--ds-button-md-border-radius": {
-              "moved": false,
-              "value": "calc(10px * 1)"
+              "from": "calc(10px * 1)",
+              "moved": true,
+              "to": "calc(10px * 1.15)"
             },
             "--ds-button-md-radius": {
-              "moved": false,
-              "value": "calc(10px * 1)"
+              "from": "calc(10px * 1)",
+              "moved": true,
+              "to": "calc(10px * 1.15)"
             },
             "--ds-card-border-radius": {
-              "moved": false,
-              "value": "calc(14px * 1)"
+              "from": "calc(14px * 1)",
+              "moved": true,
+              "to": "calc(14px * 1.15)"
             },
             "--ds-card-radius": {
-              "moved": false,
-              "value": "calc(14px * 1)"
+              "from": "calc(14px * 1)",
+              "moved": true,
+              "to": "calc(14px * 1.15)"
             },
             "--ds-effect-intensity": {
-              "from": "1",
-              "moved": true,
-              "to": "0"
+              "moved": false,
+              "value": "1"
             },
             "--ds-font-size-xs": {
               "moved": false,
               "value": "calc(0.75rem * 1)"
             },
             "--ds-input-md-border-radius": {
-              "moved": false,
-              "value": "calc(10px * 1)"
+              "from": "calc(10px * 1)",
+              "moved": true,
+              "to": "calc(10px * 1.15)"
             },
             "--ds-letter-spacing-body": {
               "moved": false,
               "value": "0"
             },
             "--ds-radius-lg": {
-              "moved": false,
-              "value": "calc(14px * 1)"
+              "from": "calc(14px * 1)",
+              "moved": true,
+              "to": "calc(14px * 1.15)"
             },
             "--ds-radius-lg-base": {
               "moved": false,
               "value": "14px"
             },
             "--ds-radius-md": {
-              "moved": false,
-              "value": "calc(10px * 1)"
+              "from": "calc(10px * 1)",
+              "moved": true,
+              "to": "calc(10px * 1.15)"
             },
             "--ds-radius-md-base": {
               "moved": false,
               "value": "10px"
             },
             "--ds-radius-scale": {
-              "moved": false,
-              "value": "1"
+              "from": "1",
+              "moved": true,
+              "to": "1.15"
             },
             "--ds-radius-sm": {
-              "moved": false,
-              "value": "calc(6px * 1)"
+              "from": "calc(6px * 1)",
+              "moved": true,
+              "to": "calc(6px * 1.15)"
             },
             "--ds-radius-sm-base": {
               "moved": false,
               "value": "6px"
             },
             "--ds-radius-xl": {
-              "moved": false,
-              "value": "calc(18px * 1)"
+              "from": "calc(18px * 1)",
+              "moved": true,
+              "to": "calc(18px * 1.15)"
             },
             "--ds-radius-xl-base": {
               "moved": false,
@@ -741,13 +765,9 @@
               "moved": false,
               "value": "rgb(26, 26, 26)"
             },
-            "border-bottom-left-radius": {
+            "border-bottom-style": {
               "moved": false,
-              "value": "0px"
-            },
-            "border-bottom-right-radius": {
-              "moved": false,
-              "value": "0px"
+              "value": "solid"
             },
             "border-bottom-width": {
               "moved": false,
@@ -757,6 +777,10 @@
               "moved": false,
               "value": "rgb(26, 26, 26)"
             },
+            "border-left-style": {
+              "moved": false,
+              "value": "solid"
+            },
             "border-left-width": {
               "moved": false,
               "value": "0px"
@@ -765,6 +789,10 @@
               "moved": false,
               "value": "rgb(26, 26, 26)"
             },
+            "border-right-style": {
+              "moved": false,
+              "value": "solid"
+            },
             "border-right-width": {
               "moved": false,
               "value": "0px"
@@ -772,14 +800,6 @@
             "border-top-color": {
               "moved": false,
               "value": "rgb(26, 26, 26)"
-            },
-            "border-top-left-radius": {
-              "moved": false,
-              "value": "0px"
-            },
-            "border-top-right-radius": {
-              "moved": false,
-              "value": "0px"
             },
             "border-top-style": {
               "moved": false,
@@ -833,21 +853,22 @@
         }
       },
       "negativeControls": {
-        "checkedRows": 132,
-        "expectedRows": 132,
+        "checkedRows": 128,
+        "expectedRows": 128,
         "held": true,
         "meaning": "Every declared negative control was measured and none moved.",
-        "observedRows": 132,
+        "observedRows": 128,
         "violations": []
       },
       "position": "root-inline-style",
       "positionMeaning": "Written with setProperty on document.documentElement from the compiled TenantThemeArtifact.variables. This is the strongest position a tenant occupies, and it is ABOVE the static arm.",
       "provenance": {
         "declaredChannels": [
-          "--ds-effect-intensity"
+          "--ds-radius-scale",
+          "--ds-radius-md"
         ],
         "emittedChannels": [
-          "--ds-effect-intensity"
+          "--ds-radius-scale"
         ],
         "exportName": "compileTenantThemeConfig",
         "freshnessNote": "Compiled output read from dist/ only after dist-freshness-gate verified its build stamp against the current source and build-input fingerprint.",
@@ -855,8 +876,8 @@
         "input": {
           "compilerInput": {
             "appearance": {
-              "surfaces": {
-                "effectIntensity": 0
+              "shape": {
+                "radiusScale": 1.15
               }
             },
             "mode": "simple",
@@ -869,19 +890,21 @@
           "document": {
             "appearance": {
               "general": {
-                "surfaces": {
-                  "effectIntensity": 0
+                "shape": {
+                  "radiusScale": 1.15
                 }
               }
             }
           },
-          "ingressValue": 0,
-          "path": "appearance.general.surfaces.effectIntensity",
-          "stopId": "mate"
+          "ingressValue": 1.15,
+          "path": "appearance.general.shape.radiusScale",
+          "stopId": "amplio"
         },
         "module": "dist/server.js",
         "moduleSubpath": "@rottay/design-system/server",
-        "omittedChannels": [],
+        "omittedChannels": [
+          "--ds-radius-md"
+        ],
         "schemaVersion": 1,
         "sourceOfTruth": "src/infrastructure/compilers/composition/tenant-theme/index.ts"
       },
@@ -898,14 +921,14 @@
         "rows": []
       },
       "totals": {
-        "inertProperties": 184,
-        "movedProperties": 4,
+        "inertProperties": 164,
+        "movedProperties": 24,
         "scope": "across every (vertical x theme x fixture x property) row measured for this arm"
       }
     },
     "static-brand-theme": {
       "applied": {
-        "--ds-effect-intensity": "0"
+        "--ds-radius-scale": "1.15"
       },
       "armId": "static-brand-theme",
       "guards": {
@@ -967,9 +990,8 @@
               "value": "rgb(24, 24, 27)"
             },
             "background-image": {
-              "from": "linear-gradient(oklch(0.210788 0.00782039 none / 0.06), oklch(0.210788 0.00782039 none / 0.06)), linear-gradient(rgba(255, 255, 255, 0.024) 0%, rgba(255, 255, 255, 0.004) 52%, rgba(0, 0, 0, 0.02) 100%)",
-              "moved": true,
-              "to": "linear-gradient(oklch(0.210788 0.00782039 none / 0.06), oklch(0.210788 0.00782039 none / 0.06)), linear-gradient(rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0) 52%, rgba(0, 0, 0, 0) 100%)"
+              "moved": false,
+              "value": "linear-gradient(oklch(0.210788 0.00782039 none / 0.06), oklch(0.210788 0.00782039 none / 0.06)), linear-gradient(rgba(255, 255, 255, 0.024) 0%, rgba(255, 255, 255, 0.004) 52%, rgba(0, 0, 0, 0.02) 100%)"
             },
             "block-size": {
               "moved": false,
@@ -979,13 +1001,14 @@
               "moved": false,
               "value": "rgb(42, 42, 47)"
             },
-            "border-bottom-left-radius": {
-              "moved": false,
-              "value": "14px"
-            },
             "border-bottom-right-radius": {
+              "from": "14px",
+              "moved": true,
+              "to": "16.1px"
+            },
+            "border-bottom-style": {
               "moved": false,
-              "value": "14px"
+              "value": "solid"
             },
             "border-bottom-width": {
               "moved": false,
@@ -995,6 +1018,10 @@
               "moved": false,
               "value": "rgb(42, 42, 47)"
             },
+            "border-left-style": {
+              "moved": false,
+              "value": "solid"
+            },
             "border-left-width": {
               "moved": false,
               "value": "0px"
@@ -1002,6 +1029,10 @@
             "border-right-color": {
               "moved": false,
               "value": "rgb(42, 42, 47)"
+            },
+            "border-right-style": {
+              "moved": false,
+              "value": "solid"
             },
             "border-right-width": {
               "moved": false,
@@ -1012,12 +1043,9 @@
               "value": "rgb(42, 42, 47)"
             },
             "border-top-left-radius": {
-              "moved": false,
-              "value": "14px"
-            },
-            "border-top-right-radius": {
-              "moved": false,
-              "value": "14px"
+              "from": "14px",
+              "moved": true,
+              "to": "16.1px"
             },
             "border-top-style": {
               "moved": false,
@@ -1110,69 +1138,78 @@
           },
           "token-readout/tokens": {
             "--ds-button-md-border-radius": {
-              "moved": false,
-              "value": "calc(10px * 1)"
+              "from": "calc(10px * 1)",
+              "moved": true,
+              "to": "calc(10px * 1.15)"
             },
             "--ds-button-md-radius": {
-              "moved": false,
-              "value": "calc(10px * 1)"
+              "from": "calc(10px * 1)",
+              "moved": true,
+              "to": "calc(10px * 1.15)"
             },
             "--ds-card-border-radius": {
-              "moved": false,
-              "value": "calc(14px * 1)"
+              "from": "calc(14px * 1)",
+              "moved": true,
+              "to": "calc(14px * 1.15)"
             },
             "--ds-card-radius": {
-              "moved": false,
-              "value": "calc(14px * 1)"
+              "from": "calc(14px * 1)",
+              "moved": true,
+              "to": "calc(14px * 1.15)"
             },
             "--ds-effect-intensity": {
-              "from": "1",
-              "moved": true,
-              "to": "0"
+              "moved": false,
+              "value": "1"
             },
             "--ds-font-size-xs": {
               "moved": false,
               "value": "calc(0.75rem * 1)"
             },
             "--ds-input-md-border-radius": {
-              "moved": false,
-              "value": "calc(10px * 1)"
+              "from": "calc(10px * 1)",
+              "moved": true,
+              "to": "calc(10px * 1.15)"
             },
             "--ds-letter-spacing-body": {
               "moved": false,
               "value": "0"
             },
             "--ds-radius-lg": {
-              "moved": false,
-              "value": "calc(14px * 1)"
+              "from": "calc(14px * 1)",
+              "moved": true,
+              "to": "calc(14px * 1.15)"
             },
             "--ds-radius-lg-base": {
               "moved": false,
               "value": "14px"
             },
             "--ds-radius-md": {
-              "moved": false,
-              "value": "calc(10px * 1)"
+              "from": "calc(10px * 1)",
+              "moved": true,
+              "to": "calc(10px * 1.15)"
             },
             "--ds-radius-md-base": {
               "moved": false,
               "value": "10px"
             },
             "--ds-radius-scale": {
-              "moved": false,
-              "value": "1"
+              "from": "1",
+              "moved": true,
+              "to": "1.15"
             },
             "--ds-radius-sm": {
-              "moved": false,
-              "value": "calc(6px * 1)"
+              "from": "calc(6px * 1)",
+              "moved": true,
+              "to": "calc(6px * 1.15)"
             },
             "--ds-radius-sm-base": {
               "moved": false,
               "value": "6px"
             },
             "--ds-radius-xl": {
-              "moved": false,
-              "value": "calc(18px * 1)"
+              "from": "calc(18px * 1)",
+              "moved": true,
+              "to": "calc(18px * 1.15)"
             },
             "--ds-radius-xl-base": {
               "moved": false,
@@ -1230,13 +1267,9 @@
               "moved": false,
               "value": "rgb(240, 240, 240)"
             },
-            "border-bottom-left-radius": {
+            "border-bottom-style": {
               "moved": false,
-              "value": "0px"
-            },
-            "border-bottom-right-radius": {
-              "moved": false,
-              "value": "0px"
+              "value": "solid"
             },
             "border-bottom-width": {
               "moved": false,
@@ -1246,6 +1279,10 @@
               "moved": false,
               "value": "rgb(240, 240, 240)"
             },
+            "border-left-style": {
+              "moved": false,
+              "value": "solid"
+            },
             "border-left-width": {
               "moved": false,
               "value": "0px"
@@ -1254,6 +1291,10 @@
               "moved": false,
               "value": "rgb(240, 240, 240)"
             },
+            "border-right-style": {
+              "moved": false,
+              "value": "solid"
+            },
             "border-right-width": {
               "moved": false,
               "value": "0px"
@@ -1261,14 +1302,6 @@
             "border-top-color": {
               "moved": false,
               "value": "rgb(240, 240, 240)"
-            },
-            "border-top-left-radius": {
-              "moved": false,
-              "value": "0px"
-            },
-            "border-top-right-radius": {
-              "moved": false,
-              "value": "0px"
             },
             "border-top-style": {
               "moved": false,
@@ -1351,9 +1384,8 @@
               "value": "rgb(255, 255, 255)"
             },
             "background-image": {
-              "from": "linear-gradient(oklch(0 0 none / 0), oklch(0 0 none / 0)), linear-gradient(rgba(255, 255, 255, 0.024) 0%, rgba(255, 255, 255, 0.004) 52%, rgba(0, 0, 0, 0.02) 100%)",
-              "moved": true,
-              "to": "linear-gradient(oklch(0 0 none / 0), oklch(0 0 none / 0)), linear-gradient(rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0) 52%, rgba(0, 0, 0, 0) 100%)"
+              "moved": false,
+              "value": "linear-gradient(oklch(0 0 none / 0), oklch(0 0 none / 0)), linear-gradient(rgba(255, 255, 255, 0.024) 0%, rgba(255, 255, 255, 0.004) 52%, rgba(0, 0, 0, 0.02) 100%)"
             },
             "block-size": {
               "moved": false,
@@ -1363,13 +1395,14 @@
               "moved": false,
               "value": "rgb(229, 229, 227)"
             },
-            "border-bottom-left-radius": {
-              "moved": false,
-              "value": "14px"
-            },
             "border-bottom-right-radius": {
+              "from": "14px",
+              "moved": true,
+              "to": "16.1px"
+            },
+            "border-bottom-style": {
               "moved": false,
-              "value": "14px"
+              "value": "solid"
             },
             "border-bottom-width": {
               "moved": false,
@@ -1379,6 +1412,10 @@
               "moved": false,
               "value": "rgb(229, 229, 227)"
             },
+            "border-left-style": {
+              "moved": false,
+              "value": "solid"
+            },
             "border-left-width": {
               "moved": false,
               "value": "0px"
@@ -1386,6 +1423,10 @@
             "border-right-color": {
               "moved": false,
               "value": "rgb(229, 229, 227)"
+            },
+            "border-right-style": {
+              "moved": false,
+              "value": "solid"
             },
             "border-right-width": {
               "moved": false,
@@ -1396,12 +1437,9 @@
               "value": "rgb(229, 229, 227)"
             },
             "border-top-left-radius": {
-              "moved": false,
-              "value": "14px"
-            },
-            "border-top-right-radius": {
-              "moved": false,
-              "value": "14px"
+              "from": "14px",
+              "moved": true,
+              "to": "16.1px"
             },
             "border-top-style": {
               "moved": false,
@@ -1494,69 +1532,78 @@
           },
           "token-readout/tokens": {
             "--ds-button-md-border-radius": {
-              "moved": false,
-              "value": "calc(10px * 1)"
+              "from": "calc(10px * 1)",
+              "moved": true,
+              "to": "calc(10px * 1.15)"
             },
             "--ds-button-md-radius": {
-              "moved": false,
-              "value": "calc(10px * 1)"
+              "from": "calc(10px * 1)",
+              "moved": true,
+              "to": "calc(10px * 1.15)"
             },
             "--ds-card-border-radius": {
-              "moved": false,
-              "value": "calc(14px * 1)"
+              "from": "calc(14px * 1)",
+              "moved": true,
+              "to": "calc(14px * 1.15)"
             },
             "--ds-card-radius": {
-              "moved": false,
-              "value": "calc(14px * 1)"
+              "from": "calc(14px * 1)",
+              "moved": true,
+              "to": "calc(14px * 1.15)"
             },
             "--ds-effect-intensity": {
-              "from": "1",
-              "moved": true,
-              "to": "0"
+              "moved": false,
+              "value": "1"
             },
             "--ds-font-size-xs": {
               "moved": false,
               "value": "calc(0.75rem * 1)"
             },
             "--ds-input-md-border-radius": {
-              "moved": false,
-              "value": "calc(10px * 1)"
+              "from": "calc(10px * 1)",
+              "moved": true,
+              "to": "calc(10px * 1.15)"
             },
             "--ds-letter-spacing-body": {
               "moved": false,
               "value": "0"
             },
             "--ds-radius-lg": {
-              "moved": false,
-              "value": "calc(14px * 1)"
+              "from": "calc(14px * 1)",
+              "moved": true,
+              "to": "calc(14px * 1.15)"
             },
             "--ds-radius-lg-base": {
               "moved": false,
               "value": "14px"
             },
             "--ds-radius-md": {
-              "moved": false,
-              "value": "calc(10px * 1)"
+              "from": "calc(10px * 1)",
+              "moved": true,
+              "to": "calc(10px * 1.15)"
             },
             "--ds-radius-md-base": {
               "moved": false,
               "value": "10px"
             },
             "--ds-radius-scale": {
-              "moved": false,
-              "value": "1"
+              "from": "1",
+              "moved": true,
+              "to": "1.15"
             },
             "--ds-radius-sm": {
-              "moved": false,
-              "value": "calc(6px * 1)"
+              "from": "calc(6px * 1)",
+              "moved": true,
+              "to": "calc(6px * 1.15)"
             },
             "--ds-radius-sm-base": {
               "moved": false,
               "value": "6px"
             },
             "--ds-radius-xl": {
-              "moved": false,
-              "value": "calc(18px * 1)"
+              "from": "calc(18px * 1)",
+              "moved": true,
+              "to": "calc(18px * 1.15)"
             },
             "--ds-radius-xl-base": {
               "moved": false,
@@ -1614,13 +1661,9 @@
               "moved": false,
               "value": "rgb(26, 26, 26)"
             },
-            "border-bottom-left-radius": {
+            "border-bottom-style": {
               "moved": false,
-              "value": "0px"
-            },
-            "border-bottom-right-radius": {
-              "moved": false,
-              "value": "0px"
+              "value": "solid"
             },
             "border-bottom-width": {
               "moved": false,
@@ -1630,6 +1673,10 @@
               "moved": false,
               "value": "rgb(26, 26, 26)"
             },
+            "border-left-style": {
+              "moved": false,
+              "value": "solid"
+            },
             "border-left-width": {
               "moved": false,
               "value": "0px"
@@ -1638,6 +1685,10 @@
               "moved": false,
               "value": "rgb(26, 26, 26)"
             },
+            "border-right-style": {
+              "moved": false,
+              "value": "solid"
+            },
             "border-right-width": {
               "moved": false,
               "value": "0px"
@@ -1645,14 +1696,6 @@
             "border-top-color": {
               "moved": false,
               "value": "rgb(26, 26, 26)"
-            },
-            "border-top-left-radius": {
-              "moved": false,
-              "value": "0px"
-            },
-            "border-top-right-radius": {
-              "moved": false,
-              "value": "0px"
             },
             "border-top-style": {
               "moved": false,
@@ -1706,21 +1749,22 @@
         }
       },
       "negativeControls": {
-        "checkedRows": 132,
-        "expectedRows": 132,
+        "checkedRows": 128,
+        "expectedRows": 128,
         "held": true,
         "meaning": "Every declared negative control was measured and none moved.",
-        "observedRows": 132,
+        "observedRows": 128,
         "violations": []
       },
       "position": "tenant-scoped-stylesheet-block",
       "positionMeaning": "Appended to the measured bundle behind the same unlayered tenant selector the compiled artifact uses. This is where a code-owned vertical lands: below an inline root write, above the base layer.",
       "provenance": {
         "declaredChannels": [
-          "--ds-effect-intensity"
+          "--ds-radius-scale",
+          "--ds-radius-md"
         ],
         "emittedChannels": [
-          "--ds-effect-intensity"
+          "--ds-radius-scale"
         ],
         "exportName": "compileBrandTheme",
         "freshnessNote": "Compiled output read from dist/ only after dist-freshness-gate verified its build stamp against the current source and build-input fingerprint.",
@@ -1729,23 +1773,25 @@
           "compilerInput": {
             "brandTheme": {
               "surfaces": {
-                "effectIntensity": 0
+                "radiusScale": 1.15
               }
             },
             "tenantSlug": "rottay"
           },
           "document": {
             "surfaces": {
-              "effectIntensity": 0
+              "radiusScale": 1.15
             }
           },
-          "ingressValue": 0,
-          "path": "surfaces.effectIntensity",
-          "stopId": "mate"
+          "ingressValue": 1.15,
+          "path": "surfaces.radiusScale",
+          "stopId": "amplio"
         },
         "module": "dist/infrastructure/compilers/kernel/runtime/brand-theme/index.js",
         "moduleSubpath": null,
-        "omittedChannels": [],
+        "omittedChannels": [
+          "--ds-radius-md"
+        ],
         "sourceOfTruth": "src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts"
       },
       "restore": {
@@ -1761,28 +1807,28 @@
         "rows": []
       },
       "totals": {
-        "inertProperties": 184,
-        "movedProperties": 4,
+        "inertProperties": 164,
+        "movedProperties": 24,
         "scope": "across every (vertical x theme x fixture x property) row measured for this arm"
       }
     }
   },
   "artifactVersion": 1,
-  "controlId": "surfaces.effect-intensity",
+  "controlId": "shape.radius-scale",
   "declaredNegativeControls": {
-    "controlId": "surfaces.effect-intensity",
+    "controlId": "shape.radius-scale",
     "controlPhrases": [
       "control height remains fixed",
       "font metrics remain fixed",
       "color remains fixed",
-      "border remains fixed",
+      "border width and style remain fixed",
       "motion remains fixed"
     ],
     "effective": [
       "control height remains fixed",
       "font metrics remain fixed",
       "color remains fixed",
-      "border remains fixed",
+      "border width and style remain fixed",
       "motion remains fixed"
     ],
     "familyId": "primitive/display/card",
@@ -1790,7 +1836,7 @@
       "control height remains fixed",
       "font metrics remain fixed",
       "color remains fixed",
-      "border remains fixed",
+      "border width and style remain fixed",
       "motion remains fixed"
     ],
     "law": "The family list narrows the control list by being more specific about one family root. It never replaces it, so the effective set is the union and a silent family inherits the full control list."
@@ -1808,8 +1854,8 @@
   "instrument": "resolution-probe",
   "manifestAgreement": {
     "declared": {
-      "dbTenantThemePath": "appearance.general.surfaces.effectIntensity",
-      "staticBrandThemePath": "surfaces.effectIntensity"
+      "dbTenantThemePath": "appearance.general.shape.radiusScale",
+      "staticBrandThemePath": "surfaces.radiusScale"
     },
     "failures": [],
     "ok": true
@@ -1878,20 +1924,19 @@
       },
       {
         "assertion": "did-not-move",
-        "id": "border-fixed",
-        "meaning": "Border geometry belongs to the shape axis. Radius is included on purpose: a rhythm stop that moved a corner would be reaching a channel it does not own.",
+        "id": "border-width-style-fixed",
+        "meaning": "The stroke of the border and the corner of the border are two different channels of the shape axis. `border-fixed` deliberately bundles them, which is correct for an axis that owns NEITHER -- a rhythm stop that moved a corner would be reaching outside itself. It is unusable for the radius dial itself: binding it would assert that the very channel under test must not move. This entry is `border-fixed` minus the four radius longhands, so a radius stop still has to prove it left the stroke alone. Use it INSTEAD OF `border remains fixed`, never alongside it.",
         "partiallyMechanised": [],
-        "phrase": "border remains fixed",
+        "phrase": "border width and style remain fixed",
         "properties": [
           "border-top-width",
           "border-right-width",
           "border-bottom-width",
           "border-left-width",
           "border-top-style",
-          "border-top-left-radius",
-          "border-top-right-radius",
-          "border-bottom-left-radius",
-          "border-bottom-right-radius"
+          "border-right-style",
+          "border-bottom-style",
+          "border-left-style"
         ],
         "targetScope": "every-measured-target",
         "targets": null
@@ -1953,10 +1998,10 @@
       }
     },
     "sourceFreshness": {
-      "declaredDigest": "489e2b4d505d548f559296650552a995ab7f6d0de95bd4e4dfe03581140d1cb5",
-      "observedDigest": "489e2b4d505d548f559296650552a995ab7f6d0de95bd4e4dfe03581140d1cb5",
-      "postMeasurementDigest": "489e2b4d505d548f559296650552a995ab7f6d0de95bd4e4dfe03581140d1cb5",
-      "preMeasurementDigest": "489e2b4d505d548f559296650552a995ab7f6d0de95bd4e4dfe03581140d1cb5",
+      "declaredDigest": "62f72f12a5420e3bfe9564e8b3c9968ee37f0f270fb2fc46ef5807065e5b3415",
+      "observedDigest": "62f72f12a5420e3bfe9564e8b3c9968ee37f0f270fb2fc46ef5807065e5b3415",
+      "postMeasurementDigest": "62f72f12a5420e3bfe9564e8b3c9968ee37f0f270fb2fc46ef5807065e5b3415",
+      "preMeasurementDigest": "62f72f12a5420e3bfe9564e8b3c9968ee37f0f270fb2fc46ef5807065e5b3415",
       "sourceFiles": [
         "packages/core/dist/build-stamp.json",
         "packages/core/dist/infrastructure/compilers/kernel/runtime/brand-theme/index.js",
@@ -1965,7 +2010,7 @@
         "packages/core/manifest/controls/surfaces.effect-intensity.json",
         "packages/core/manifest/families/primitive/display/card.json",
         "packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts",
-        "packages/core/src/foundation/contracts/composition/tenants/themes/tenant-theme/index.ts",
+        "packages/core/src/foundation/contracts/composition/tenants/themes/index.ts",
         "packages/core/src/foundation/tokens/css/facade/artifacts/rottay/index.css",
         "packages/core/src/foundation/tokens/css/facade/entrypoints/base.css",
         "packages/core/src/foundation/tokens/css/foundation/animations/premium.css",
@@ -1982,7 +2027,6 @@
         "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/card.css",
         "packages/core/src/foundation/tokens/css/runtime/personality.css",
         "packages/core/src/infrastructure/compilers/composition/tenant-theme/index.ts",
-        "packages/core/src/infrastructure/compilers/composition/tenant-theme/tests/surfaces-effect-intensity-envelope.test.ts",
         "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
         "packages/core/src/tooling/resolution-probe/composition/diff/index.mjs",
         "packages/core/src/tooling/resolution-probe/composition/receipt/index.mjs",
@@ -2002,6 +2046,7 @@
         "packages/core/src/tooling/resolution-probe/runtime/browser/index.mjs",
         "packages/core/src/tooling/resolution-probe/runtime/bundle/index.mjs",
         "packages/core/src/tooling/resolution-probe/runtime/ingress/index.mjs",
+        "packages/core/src/tooling/resolution-probe/runtime/ingress/tests/index.test.mjs",
         "packages/core/src/tooling/resolution-probe/runtime/measure/index.mjs",
         "packages/core/src/ui/primitives/display/Card/compound/Body/index.tsx",
         "packages/core/src/ui/primitives/display/Card/compound/Footer/index.tsx",
@@ -2035,14 +2080,14 @@
       "static-brand-theme": {
         "rottay/dark/modern/both": {
           "baseline": "d69ab515a7374b6eba10b8d5533e7aa20ac350a35a9c88af5037769f80003085",
-          "mutation": "5534afb4590f7ea1501b8a94635a133a0fdc7deecc035243d0c2e5f7197c14a7",
+          "mutation": "de002f3d55d22c5e1e0c13792e7e8b7e13da2d9377ddf5384ec92b1fd2fd4191",
           "mutationDifferedFromBaseline": true,
           "removal": "d69ab515a7374b6eba10b8d5533e7aa20ac350a35a9c88af5037769f80003085",
           "removalIsByteIdenticalToBaseline": true
         },
         "rottay/light/modern/both": {
           "baseline": "d69ab515a7374b6eba10b8d5533e7aa20ac350a35a9c88af5037769f80003085",
-          "mutation": "5534afb4590f7ea1501b8a94635a133a0fdc7deecc035243d0c2e5f7197c14a7",
+          "mutation": "de002f3d55d22c5e1e0c13792e7e8b7e13da2d9377ddf5384ec92b1fd2fd4191",
           "mutationDifferedFromBaseline": true,
           "removal": "d69ab515a7374b6eba10b8d5533e7aa20ac350a35a9c88af5037769f80003085",
           "removalIsByteIdenticalToBaseline": true
@@ -2082,10 +2127,12 @@
           "meaning": "At least one control moved under the dial, so the harness demonstrably observes movement. Inert verdicts in this artifact are about the CSS, not the instrument.",
           "perControl": {
             "rottay/dark/modern/both/token-readout/tokens": [
-              "--ds-effect-intensity"
+              "--ds-radius-scale",
+              "--ds-radius-md"
             ],
             "rottay/light/modern/both/token-readout/tokens": [
-              "--ds-effect-intensity"
+              "--ds-radius-scale",
+              "--ds-radius-md"
             ]
           },
           "present": true,
@@ -2098,10 +2145,12 @@
           "meaning": "At least one control moved under the dial, so the harness demonstrably observes movement. Inert verdicts in this artifact are about the CSS, not the instrument.",
           "perControl": {
             "rottay/dark/modern/both/token-readout/tokens": [
-              "--ds-effect-intensity"
+              "--ds-radius-scale",
+              "--ds-radius-md"
             ],
             "rottay/light/modern/both/token-readout/tokens": [
-              "--ds-effect-intensity"
+              "--ds-radius-scale",
+              "--ds-radius-md"
             ]
           },
           "present": true,
@@ -2120,8 +2169,8 @@
     "voidsInertVerdicts": false
   },
   "stop": {
-    "id": "mate",
-    "value": 0
+    "id": "amplio",
+    "value": 1.15
   },
   "unmatched": [],
   "verdict": {

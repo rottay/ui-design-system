@@ -613,3 +613,82 @@ test('negative drill: a closed-enum stop outside the declared domain values is r
     /is not one of the closed-enum domain values/,
   );
 });
+
+/**
+ * REGRESSION FENCE — `shape.radius-scale` must keep a door that CARRIES it.
+ *
+ * The control shipped declaring `surfaces.borderRadius.*` as its static door.
+ * That is not merely a wildcard `buildIngressInput` cannot resolve; it is the
+ * COMPENSATION path. `compileBrandTheme` emits `borderRadius.{sm,md,lg,xl}` as
+ * `--ds-radius-{step}-base`, and when a scale is live it emits that base as
+ * `calc(authored / scale)` on purpose, so the foundation's
+ * `calc(base * scale)` reproduces the authored value. Pointing the control at
+ * it lowered a CONSTANT `--ds-radius-scale: 1` at every stop on all three
+ * verticals — and the empty-lowering guard did NOT fire, because the compiler
+ * emits that channel unconditionally as a default. The run would have reported
+ * a live control as inert.
+ *
+ * These two drills fence both halves of that defect: the path must stay a
+ * literal one `buildIngressInput` can walk, and it must never point back at a
+ * `borderRadius` slot. Measured evidence:
+ * test-artifacts/quality-evidence/wo-cra-23/F4B/shape-radius-scale/.
+ */
+const RADIUS_MANIFEST = readManifest(
+  resolve(CORE_ROOT, 'manifest/controls/shape.radius-scale.json'),
+);
+
+test('regression fence: the radius-scale static door is a literal path, never a wildcard or prose', () => {
+  const path = RADIUS_MANIFEST.ingress.staticBrandThemePath;
+  assert.equal(
+    path,
+    'surfaces.radiusScale',
+    'shape.radius-scale must lower through the bounded multiplier BrandSurfaces documents as ' +
+      'the canonical radius dial. Change the authority (capabilities/index.ts brandThemePath) ' +
+      'and regenerate; do not edit the generated manifest.',
+  );
+  assert.doesNotMatch(
+    path,
+    /[*{}( ]/u,
+    `buildIngressInput resolves a door by literal path.split('.'), so "${path}" would write a ` +
+      'key no compiler reads and the stop would never reach the channel.',
+  );
+  assert.doesNotMatch(
+    path,
+    /borderRadius/u,
+    'borderRadius.* sets the ramp OPERANDS and is divided by the live scale to cancel this ' +
+      'very dial. It is the anti-door for this control, not a door.',
+  );
+});
+
+test('regression fence: every stop of radius-scale reaches the channel, and distinctly', () => {
+  const stops = RADIUS_MANIFEST.calibration.normalizedStops;
+  assert.ok(stops.length >= 2, 'a dial needs at least two stops to be shown to move');
+  const seen = new Map();
+  for (const stop of stops) {
+    const built = buildIngressInput({
+      armId: 'static-brand-theme',
+      controlManifest: RADIUS_MANIFEST,
+      stopId: stop.id,
+    });
+    assert.equal(
+      built.document?.surfaces?.radiusScale,
+      stop.value,
+      `stop "${stop.id}" must land its NUMBER at surfaces.radiusScale`,
+    );
+    assert.equal(
+      Object.hasOwn(built.document.surfaces, 'borderRadius'),
+      false,
+      'the lowered document must not carry a borderRadius slot: authoring one alongside the ' +
+        'dial makes the compiler divide the base by the scale and the painted corner stops moving',
+    );
+    // The defect this fences was a CONSTANT lowering that still satisfied the
+    // empty-lowering guard, so distinctness is the assertion that catches it.
+    assert.equal(
+      seen.has(stop.value),
+      false,
+      `stops "${seen.get(stop.value)}" and "${stop.id}" lower the same value, so no run could ` +
+        'tell them apart',
+    );
+    seen.set(stop.value, stop.id);
+  }
+});

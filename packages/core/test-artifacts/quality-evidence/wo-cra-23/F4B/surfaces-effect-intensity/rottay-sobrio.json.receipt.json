@@ -5,12 +5,13 @@
   "scenarioId": "surfaces.effect-intensity/sobrio/rottay/static-and-db",
   "evidenceKind": "exact-restore",
   "commandOrTool": "node src/tooling/resolution-probe/public/cli/index.mjs causal",
-  "toolVersion": "resolution-probe@7edaade246fa",
+  "toolVersion": "resolution-probe@5535576df27b",
   "exitCode": 0,
   "sourceFiles": [
     "packages/core/dist/build-stamp.json",
     "packages/core/dist/infrastructure/compilers/kernel/runtime/brand-theme/index.js",
     "packages/core/dist/server.js",
+    "packages/core/manifest/controls/shape.radius-scale.json",
     "packages/core/manifest/controls/surfaces.effect-intensity.json",
     "packages/core/manifest/families/primitive/display/card.json",
     "packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts",
@@ -62,10 +63,10 @@
     "packages/core/src/ui/primitives/display/Card/engines/rustic/index.tsx",
     "packages/core/src/ui/primitives/display/Card/index.tsx"
   ],
-  "sourceDigest": "c0241cbf401ec459115dc8fe3a7745e4d33ecfc973da6d4c4c853f11016ee785",
+  "sourceDigest": "489e2b4d505d548f559296650552a995ab7f6d0de95bd4e4dfe03581140d1cb5",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/surfaces-effect-intensity/rottay-sobrio.json",
-  "artifactSha256": "8b6cd51f2b245e1e56874b930e6a06cfc6bf1c8f6d0d6620052f8b8228d5ebdc",
-  "createdAt": "2026-08-23T07:24:37.281Z",
+  "artifactSha256": "53032a5d21016ce8ac03e869addc039a8a751ab78ac0e5e7c70db1b163c5bac7",
+  "createdAt": "2026-08-23T08:18:04.980Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

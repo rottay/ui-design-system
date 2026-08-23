@@ -1196,7 +1196,7 @@ paso de esa cadena está autorizado por este checkpoint.
 | K5 | 100% implementación + postaudit + GAT/CI |
 | F4A-close | **14/14 CERRADO** (Lotes A/B/C; canon 4208/0/3969/53/0/divergent33 informativo; gates:ci 89+2) |
 | PRE_F4B | inventario mecánico `INVENTORY_READY` (Sonnet); diseño/implementación **NO aceptados** — 768 pseudo-raíces posicionales del ratchet, sólo 38 canónicas (730 no); 1563/5142 nodos alcanzan raíz canónica; el gate actual no prueba reachability real |
-| F4B | **2/20 controles** — `spacing.rhythm` y `surfaces.effect-intensity`, ambos en `COMPUTED_VERIFIED` (rank 3), ninguno `SIGHTED_ACCEPTED`; 8 escenarios `primitive/layout/{flex,grid,stack,space}` x `{tight,airy}` y 6 escenarios `primitive/display/card` x `{rottay,bithire,evnto}` x `{mate,sobrio}`, todos con receipts R2 válidos. Los 18 restantes siguen `UNKNOWN` |
+| F4B | **3/20 controles** — `spacing.rhythm`, `surfaces.effect-intensity` y `shape.radius-scale`, los tres en `COMPUTED_VERIFIED` (rank 3), ninguno `SIGHTED_ACCEPTED`; 8 escenarios `primitive/layout/{flex,grid,stack,space}` x `{tight,airy}`, 6 escenarios `primitive/display/card` x `{rottay,bithire,evnto}` x `{mate,sobrio}` y 6 escenarios `primitive/display/card` x `{rottay,bithire,evnto}` x `{sutil,amplio}`, todos con receipts válidos (R2 los dos primeros, R3 el tercero). Los 17 restantes siguen `UNKNOWN` |
 | F2 asimétrico | 0% |
 | F3/F4C/F5-F8 pendientes | 0% del tramo pendiente |
 | F9 | 0/5100 celdas aceptadas |
@@ -1361,6 +1361,112 @@ rechazados). El door estático acepta 1 en los tres.
 Toolchain: los 6 escenarios se corrieron en Node **v22.17.0** (el pineado);
 una corrida previa idéntica en v25.2.1 dio veredictos y conteos byte-iguales, lo
 que sirve además de cruce de reproducibilidad. `tsc --noEmit` limpio.
+
+**F4B — `shape.radius-scale` COMPUTED_VERIFIED (2026-08-23), 3/20.** Tercer
+control con evidencia causal de navegador; los asientos de `spacing.rhythm` y
+`surfaces.effect-intensity` quedan intactos. Base `5ce42e1b7`, `staged=0`, sin
+commit ni push. 6 escenarios `primitive/display/card` x `{rottay,bithire,evnto}`
+x `{sutil,amplio}`, cada uno midiendo **los dos ingress en una sola escena** y en
+los dos temas: 6 artifacts + 6 receipts (12 archivos) en
+`packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/shape-radius-scale/`.
+Ningún run `harness-suspect`; `ingressEquivalence` con 0 filas divergentes en los
+6; `restore.exact = true` y `negativeControls.held = true` en cada brazo.
+
+**El door declarado estaba invertido, y ése es el hallazgo del packet.** El
+control venía declarando `surfaces.borderRadius.*` como door estático. No era
+sólo un wildcard que `buildIngressInput` no puede caminar: `borderRadius.{sm,md,lg,xl}`
+baja a `--ds-radius-{step}-base`, y cuando hay escala viva `compileBrandTheme`
+emite esa base como `calc(authored / scale)` **a propósito**, para que el
+`calc(base * scale)` de `foundation/themes/default.css` reproduzca el valor
+autorado. Es la vía de **compensación** — el anti-door — y apuntar ahí bajaba un
+`--ds-radius-scale: 1` **constante** en los 4 stops y las 3 verticales. El guard
+de bajada vacía **no** disparaba, porque el compilador emite ese canal como
+default incondicional: la corrida habría reportado un control vivo como INERTE.
+Preflight y prueba de mutación quedan como evidencia durable en el mismo
+directorio (`preflight-ingress-refutation.{mjs,json}`, `drill-mutation-proof.{mjs,txt}`).
+
+Corregido en la autoridad, no en el generado: `capabilities/index.ts`
+`brandThemePath` -> `surfaces.radiusScale`, el campo que `BrandSurfaces` documenta
+como *"Bounded multiplier for the canonical radius ramp"*. Regeneración con el
+productor canónico (`manifest/generator/index.mjs --sync`): **21 archivos**, 19
+controles cambian **exclusivamente** `semanticOwner.registryDigest`,
+`shape.radius-scale` cambia además `ingress.staticBrandThemePath`, y
+`manifest/index.json` sólo sus digests derivados. **Cero deltas semánticos y cero
+deltas de familia** en la regeneración — condición de aceptación del DT, verificada
+campo por campo.
+
+Números medidos. Canal directo `--ds-radius-scale` sobre `token-readout`, en los
+dos brazos y las 6 celdas: rottay y evnto `1 -> 0.9` y `1 -> 1.15`; bithire
+`1.25 -> 0.9` y `1.25 -> 1.15`. Pintado en `card-modern-md/root`
+(`border-top-left-radius` y `border-bottom-right-radius`, idénticos en ambos
+brazos y ambos temas): rottay `14px -> 12.6px` y `14px -> 16.1px`; evnto
+`18px -> 16.2px` y `18px -> 20.7px`; bithire `10px -> 7.2px` y `10px -> 9.2px`.
+
+Notas honestas:
+
+1. **bithire es el fork que el README de modern nombraba, y esta corrida lo midió.**
+   Autora el par de compensación (`surfaces.borderRadius` junto a `radiusScale: 1.25`),
+   así que su base compilada sale como `calc(10px / 1.25) = 8px` y el 10px pintado
+   es esa base por su propio 1.25. El dial sigue **plenamente vivo** ahí
+   (`8px * 0.9 = 7.2px`, `8px * 1.15 = 9.2px`), pero mueve desde 1.25 y no desde 1.
+   Consecuencia práctica: su baseline está en el techo del dominio `{0.75,1.25}` y
+   por encima del sobre tenant `{0.8,1.2}`, de modo que un tenant sólo puede
+   **reducir** el radio de bithire, nunca aumentarlo.
+2. **`suave` (1) no lleva receipt positivo, por diseño.** 1 ES la identidad de la
+   rampa. Por el door DB ni siquiera es expresable en dos de tres verticales:
+   `compileTenantThemeConfig` no emite `--ds-radius-scale` para rottay ni evnto
+   (escribir el default del vertical es un no-op que el compilador elide) y el
+   arnés rechaza el brazo como bajada vacía. bithire **sí** emite `"1"` porque su
+   baseline es 1.25. Asimetría de los doors, no defecto.
+3. **`recto` (0.75) no lleva receipt en ningún brazo, por diseño.** Está bajo el
+   sobre tenant en las 3 verticales — el door DB lo **rechaza** con
+   `Value exceeds the <vertical> envelope`, rechazo real y no clamp — y es un stop
+   vertical-only. Forzar un receipt static-only publicaría una fila de paridad sin
+   contraparte. El rechazo queda probado en el artifact de preflight.
+4. **Negativo nuevo, y era obligatorio.** `border-fixed` empaqueta los cuatro
+   `border-*-radius` junto con anchos y estilos, así que ligarlo aquí habría
+   afirmado que el canal bajo prueba no debe moverse. Se agregó **una** entrada al
+   vocabulario, `border-width-style-fixed` (misma entrada menos los cuatro
+   longhands de radio), y es la que declara el control. `color`, `font-metrics`,
+   `motion` y `control-height` se reutilizan sin cambios.
+5. **Cerca de regresión focal.** Dos drills nuevos en
+   `runtime/ingress/tests/index.test.mjs` fijan que el door siga siendo una ruta
+   literal, que nunca vuelva a apuntar a `borderRadius`, y que los stops bajen
+   valores **distintos** — esta última es la que atrapa el modo de fallo real, un
+   lowering constante que igual satisface el guard de bajada vacía. Probadas por
+   mutación contra el manifest de HEAD: ambas fallan sobre el anti-door y pasan
+   sobre el corregido.
+6. **`anatomy.propertyGroups` de `primitive/display/card`** gana `surface-radius`.
+   No es una taxonomía inventada: el propio `propertyGroupsScopeNote` de la familia
+   decía que `surface-decoration` es *"deliberately NOT the base fill, the border or
+   the radius, which belong to groups a later calibration must name when it measures
+   them"*. Ésta es esa calibración. El fill base y el trazo del borde siguen sin
+   nombrar, así que la lista sigue siendo parcial por construcción.
+7. **Vector false-inert todavía abierto, fuera de este packet.** `lowerStop` falla
+   cerrado cuando un compilador no emite **ninguno** de los canales declarados, pero
+   no cuando emite uno en un default constante. Cualquier control cuyo canal
+   declarado tenga default incondicional puede cargar un brazo no vacío que no
+   codifica stop alguno. Reportado, no arreglado.
+8. **Los 6 receipts de `surfaces.effect-intensity` se reemitieron.** El repin de la
+   autoridad los volvió stale por construcción: su superficie de frescura de 54
+   archivos contiene tanto `capabilities/index.ts` como
+   `manifest/controls/surfaces.effect-intensity.json`, así que ninguna variante de
+   la Opción A los dejaba intactos. Se regeneraron los 6 escenarios (12 archivos)
+   contra el árbol final y los 12 validan. **Ningún receipt cerrado queda stale.**
+9. `program-check` se mantiene en **24** hallazgos: los mismos 24 de `spacing.rhythm`
+   que ya existían en `5ce42e1b7`. **0 nuevos.** Verificado por diff del conjunto
+   completo de fallos contra la línea base tomada antes de tocar nada.
+10. `disposition` de la celda sigue `UNKNOWN` **no por falta de medición**, misma
+    razón que el packet anterior; `SIGHTED_ACCEPTED` **no se reclama**.
+11. **Sin medir**: divergencia responsive (un solo viewport), cualquier consumidor
+    de `--ds-radius-scale` que no sea Card, y los pasos `sm/md/xl` y `full` de la
+    rampa (resuelven en `token-readout` pero ningún fixture pintado los consume).
+
+Toolchain de este packet: los 6 escenarios de `shape.radius-scale`, los 6
+reemitidos de `surfaces.effect-intensity`, el build y los focales se corrieron
+**sólo** en Node **v22.17.0** (el pineado). No se hizo cruce en otra versión, así
+que este packet no reclama el contraste de reproducibilidad que el asiento
+anterior sí tenía.
 
 **F0 — CERRADO (2026-08-19).** Criterio de cierre cumplido:
 `ci-gates OK — 78 blocking gate(s) passed` (2 excluded visibles con razón y
