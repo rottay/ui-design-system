@@ -492,7 +492,14 @@ export function scanClosedShape(shape, ctx, acc, depthGuard = 0, origin = "direc
   }
   if (shape.kind === "computedKey") {
     for (const b of shape.branches ?? []) scanClosedShape(b, ctx, acc, depthGuard + 1, "branch", causalSourcePartId, valuePosition);
-    if (shape.reason) acc.incomplete = true; // an unresolved computed key domain
+    /* An unresolved computed-key DOMAIN blocks the scan only where it could
+     * introduce a name. Reached in a VALUE position -- `{ width: map[k] }` --
+     * the lookup decides a value under a key that is already witnessed, so it
+     * can hide nothing; it is recorded like any other open value. */
+    if (shape.reason) {
+      if (valuePosition) acc.openLeafValues += 1;
+      else acc.incomplete = true;
+    }
     return;
   }
   if (shape.kind === "nonObject") {

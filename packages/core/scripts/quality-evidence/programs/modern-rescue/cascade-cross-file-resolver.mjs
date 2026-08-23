@@ -699,7 +699,17 @@ function resolveBinding(name, useNode, source, moduleImports) {
           const tdzOk = !isConstOrLet || crossedFunctionBoundary || declStart < useStart;
           if (ts.isIdentifier(decl.name) && decl.name.text === name) {
             if (!tdzOk) continue;
-            if (!decl.initializer) return { kind: "uninitializedLocal", declaredAt: `${source.fileName}:${source.getLineAndCharacterOfPosition(declStart).line + 1}` };
+            if (!decl.initializer) {
+              return {
+                kind: "uninitializedLocal",
+                declaredAt: `${source.fileName}:${source.getLineAndCharacterOfPosition(declStart).line + 1}`,
+                // T-LET-UNION: what the whole-value union prover needs to walk
+                name,
+                declNode: decl,
+                funcScope: current === source ? current : nearestFunctionOrSource(current),
+                source,
+              };
+            }
             const mutated = hasReassignmentOrMutation(current === source ? current : nearestFunctionOrSource(current), name);
             return {
               kind: "localConst",
@@ -764,7 +774,8 @@ function resolveImportTargetFile(moduleSpecifier, fromFileRel) {
   return null;
 }
 
-function findExportedDecl(targetSource, importedName, form) {
+function findExportedDecl(targetSource, importedName, form, starDepth = 0, starSeen = new Set()) {
+  const starTargets = [];
   for (const stmt of targetSource.statements) {
     const hasExportModifier = (stmt.modifiers ?? []).some((m) => m.kind === ts.SyntaxKind.ExportKeyword);
     if (ts.isVariableStatement(stmt) && hasExportModifier) {
@@ -787,6 +798,13 @@ function findExportedDecl(targetSource, importedName, form) {
         }
       }
     }
+    /* `export * from './x'` -- a barrel. The name is not listed anywhere, so the
+     * only way to find its owner is to look through each star target. Bounded by
+     * `starDepth` and by the visited set the caller threads, and it never
+     * invents: if no target declares the name, the lookup still fails. */
+    if (ts.isExportDeclaration(stmt) && stmt.moduleSpecifier && !stmt.exportClause) {
+      starTargets.push(ts.isStringLiteralLike(stmt.moduleSpecifier) ? stmt.moduleSpecifier.text : null);
+    }
     // local export list without a module specifier: `export { A as B };`
     if (ts.isExportDeclaration(stmt) && !stmt.moduleSpecifier && stmt.exportClause && ts.isNamedExports(stmt.exportClause)) {
       for (const el of stmt.exportClause.elements) {
@@ -795,6 +813,24 @@ function findExportedDecl(targetSource, importedName, form) {
           return findExportedDecl(targetSource, localName, form) ?? findLocalDecl(targetSource, localName);
         }
       }
+    }
+  }
+  // only after the direct forms fail: walk the barrels
+  if (starDepth < 4) {
+    for (const spec of starTargets) {
+      if (!spec) continue;
+      const targetFile = resolveImportTargetFile(spec, targetSource.fileName);
+      if (!targetFile || starSeen.has(targetFile)) continue;
+      starSeen.add(targetFile);
+      const entry = getSource(targetFile);
+      if (!entry) continue;
+      const hit = findExportedDecl(entry.source, importedName, form, starDepth + 1, starSeen);
+      /* A hit found through a barrel carries specifiers that are relative to the
+       * file that DECLARED them, not to the barrel the walk entered. Report that
+       * file so the caller resolves the next hop from the right directory --
+       * without it, `export { x } from './token-utils'` two barrels down is
+       * resolved against the top barrel and silently fails to resolve. */
+      if (hit) return { ...hit, declFile: hit.declFile ?? targetFile, declSource: hit.declSource ?? entry.source };
     }
   }
   return null;
@@ -816,6 +852,203 @@ function findLocalDecl(targetSource, name) {
     }
   }
   return null;
+}
+
+/* ------------- public style passthrough (T-PUBLIC-STYLE-PASSTHROUGH) --- */
+/**
+ * T-PUBLIC-STYLE-PASSTHROUGH -- a composed style object whose ONLY unresolved
+ * operand is the component's own inbound props.
+ *
+ * `{...tokens, ...style}`, `mergePersonalityStyle(props.style, resolved)`,
+ * `{...style, width, height}` -- in each the authored half is enumerable and the
+ * one thing this walk cannot see is the value the CALLER handed in. That is not
+ * authored debt: it is a boundary. Which boundary it is depends entirely on the
+ * SINK, and that question is answered by `classifyRelayBoundary`, unchanged --
+ * an intrinsic DOM element with a demonstrable public export path is a
+ * PUBLIC_BOUNDARY; anything else (a custom component, a third-party forwarder)
+ * is a PRIVATE_RELAY that grants nothing.
+ *
+ * Fail-closed: EVERY open sub-shape must be inbound-props, and everything else
+ * must be key-enumerable. A computed key, a dynamic sink, an unresolved import,
+ * an `openUnknown` from a mutation or an unproven call -- any of them refuses
+ * the proof, because none of them is the caller's object.
+ */
+const INBOUND_REST_REASONS = new Set([
+  "rest-parameter-substitution-not-implemented",
+  "rest-destructure-not-implemented",
+]);
+
+/** Is this open shape the component's own inbound props/param value? */
+function inboundPropsRelay(shape) {
+  if (!shape || typeof shape !== "object") return null;
+  if (shape.kind === "relay") {
+    const b = shape.binding;
+    if (!b) return null;
+    // a parameter (or a property destructured off one) is the caller's value
+    if (b.kind === "param" || b.kind === "destructuredLocal" || b.kind === "param-callee") return shape;
+    return null;
+  }
+  // the resolver could not substitute a rest parameter -- structurally the same
+  // thing: a value that arrived from the caller
+  if (shape.kind === "callArgsPending" && INBOUND_REST_REASONS.has(shape.reason)) return shape;
+  return null;
+}
+
+/**
+ * Walk a shape and return every open sub-shape, or null the moment one of them
+ * is NOT inbound props. Keys must stay enumerable everywhere.
+ */
+function publicStylePassthroughRelays(shape, depth = 0, seen = new WeakSet(), out = []) {
+  if (!shape || typeof shape !== "object" || depth > 40) return null;
+  if (seen.has(shape)) return null; // cycle -> fail closed
+  seen.add(shape);
+  switch (shape.kind) {
+    case "nonObject":
+      return out;
+    case "object":
+    case "array": {
+      for (const entry of shape.order ?? []) {
+        if (entry.kind !== "spread") {
+          // a computed/dynamic key can add a name nobody enumerated
+          if (entry.unresolvedKey || entry.key === null || entry.key === undefined) return null;
+        }
+        if (entry.kind === "spread") {
+          // ONLY a spread can carry the caller's keys into this object
+          if (!publicStylePassthroughRelays(entry.shape, depth + 1, seen, out)) return null;
+        }
+        /* A leaf VALUE is ignored outright. It cannot add a key, so it is
+         * neither a passthrough nor an obstacle -- and treating an unresolved
+         * leaf as "the caller's style object" is exactly how a helper parameter
+         * like `col.align` would be mistaken for a public style prop. */
+      }
+      for (const el of shape.elements ?? []) {
+        if (!publicStylePassthroughRelays(el.shape, depth + 1, seen, out)) return null;
+      }
+      return out;
+    }
+    case "branches": {
+      const arms = shape.branches ?? [];
+      if (!arms.length) return null;
+      for (const arm of arms) if (!publicStylePassthroughRelays(arm, depth + 1, seen, out)) return null;
+      return out;
+    }
+    case "computedKey":
+      return shape.closed === true ? out : null;
+    default: {
+      /* A relay this programme has ALREADY proven -- a sealed-import relay with a
+       * known key set, or a namespace-bounded one -- is not an obstacle to the
+       * passthrough question. Its contribution is characterised; it simply is not
+       * the caller's object, so it is accepted without being collected. */
+      if (shape.kind === "relay" && shape.binding &&
+          (shape.binding.kind === "sealed-import-relay" || shape.binding.kind === "custom-property-namespace-relay")) {
+        return out;
+      }
+      const inbound = inboundPropsRelay(shape);
+      if (!inbound) return null;
+      out.push(inbound);
+      return out;
+    }
+  }
+}
+
+/**
+ * The proof: at least one inbound-props operand, and nothing unresolved that is
+ * not one. Returns the relays (so the caller can reuse the FIRST one's binding
+ * for the existing boundary classification) or null.
+ */
+export function publicStylePassthroughProof(shape) {
+  const relays = publicStylePassthroughRelays(shape);
+  if (!relays || relays.length === 0) return null;
+  return relays;
+}
+
+
+/* ------------------------------- conditional let union (T-LET-UNION) --- */
+/**
+ * T-LET-UNION -- `let x; if (a) x = {…}; else x = {…}; use(x)`.
+ *
+ * A declaration-only `let` assigned ONLY whole values inside conditional arms of
+ * its own scope has a fully enumerable domain: `undefined` plus every
+ * right-hand side. Nothing about it is unknowable -- the resolver simply had no
+ * rule for it and returned `uninitialized-local-let`.
+ *
+ * Fail-closed on every one of the addendum's seven negatives:
+ *   1. an assignment outside the declaring scope (another helper, an effect);
+ *   2. any PROPERTY mutation (`x.k = …`, `Object.assign(x, …)`, `delete x.k`)
+ *      after or before a whole-value assignment -- the RHS set stops being the
+ *      whole story;
+ *   3. an RHS whose own key set is not enumerable (notably a spread of the
+ *      component's external `style`);
+ *   4. a computed key inside any RHS;
+ *   5. an alias, an escape into a call, a capture by a nested function, or a
+ *      store onto a ref -- anything that could read or write it elsewhere;
+ *   6. it resolves the VALUE only; carrying it to a `state.field` read still
+ *      needs the independently-proven single-setter `useState` route;
+ *   7. a compound assignment (`x ||= …`) is never a whole-value replacement.
+ */
+function resolveLetUnionShape(binding, ctx, path, depth) {
+  const { name, declNode, funcScope, source } = binding;
+  if (!name || !declNode || !funcScope || !source) return null;
+  if (declNode.initializer) return null; // declaration-only by construction
+  const declStmt = declNode.parent && declNode.parent.parent;
+  if (!declStmt || !ts.isVariableStatement(declStmt)) return null;
+  // `var` hoists across the scope; only `let` is ordered the way this walk reads
+  if ((declStmt.declarationList.flags & ts.NodeFlags.Let) === 0) return null;
+
+  const rhs = [];
+  let refused = false;
+  const walk = (node) => {
+    if (refused || !node) return;
+    if (ts.isIdentifier(node) && node.text === name) {
+      const parent = node.parent;
+      // the declaration itself is not a use
+      if (parent && ts.isVariableDeclaration(parent) && parent.name === node) return;
+      // whole-value assignment `x = <expr>` -- the ONLY admitted write
+      if (
+        parent && ts.isBinaryExpression(parent) && parent.left === node &&
+        parent.operatorToken.kind === ts.SyntaxKind.EqualsToken
+      ) {
+        if (mentionsName(parent.right, name)) { refused = true; return; }
+        rhs.push(parent.right);
+        return;
+      }
+      // a shorthand property (`{ x }`) is the single consuming read this rule expects
+      if (parent && ts.isShorthandPropertyAssignment(parent) && parent.name === node) return;
+      // a plain read as a value is fine; anything that could WRITE or ALIAS is not
+      if (parent && (ts.isPropertyAccessExpression(parent) || ts.isElementAccessExpression(parent)) && parent.expression === node) {
+        refused = true; // `x.k` -- a property read here means a property write may exist
+        return;
+      }
+      if (parent && ts.isCallExpression(parent) && parent.arguments.includes(node)) { refused = true; return; }
+      if (parent && ts.isSpreadAssignment(parent)) return; // `...x` at the sink is the read
+      if (parent && ts.isVariableDeclaration(parent) && parent.initializer === node) { refused = true; return; } // alias
+      if (parent && ts.isBinaryExpression(parent) && parent.right === node) { refused = true; return; } // alias
+      return;
+    }
+    ts.forEachChild(node, walk);
+  };
+  walk(funcScope);
+  if (refused || rhs.length === 0) return null;
+
+  const stepPath = [...path, { kind: "letUnion", declaredAt: binding.declaredAt }];
+  const arms = [{ kind: "nonObject", reason: "let-union-unassigned", path: stepPath }];
+  const receipts = [];
+  for (let i = 0; i < rhs.length; i += 1) {
+    const shape = resolveShape(rhs[i], freshCtx(ctx, { depth: depth + 1, path: [...stepPath, { kind: "letUnion-assignment", ordinal: i }] }));
+    // an RHS whose key set is not enumerable reopens exactly what this rule excludes
+    if (!keySetEnumerable(shape)) return null;
+    arms.push(shape);
+    receipts.push({
+      at: `${source.fileName}:${source.getLineAndCharacterOfPosition(rhs[i].getStart(source)).line + 1}`,
+      text: rhs[i].getText(source).slice(0, 100).replace(/\s+/g, " "),
+    });
+  }
+  return {
+    kind: "branches",
+    branches: arms,
+    path: stepPath,
+    letUnion: { binding: name, declaredAt: binding.declaredAt, assignmentCount: receipts.length, assignments: receipts },
+  };
 }
 
 /* ------------- internal-base mutation (T-INTERNAL-MUTATION) --- */
@@ -870,11 +1103,38 @@ function staticWritesOfStatement(stmt, name, source, conditional, conditionText,
   return false;
 }
 
-/** Collect the writes of one if/else arm; false if any statement is unmodelled. */
+/** Collect the writes of one if/else arm; false if any statement is unmodelled.
+ *
+ * A statement that never mentions the binding cannot change it -- a local
+ * `const` used to compute a value, a log, an early guard -- so it is skipped,
+ * exactly as the top-level walk already skips them. Nested `if`/`else` inside an
+ * arm recurses; anything else that DOES mention the binding is unproven. */
 function collectArmWrites(node, name, source, conditionText, out) {
   const statements = ts.isBlock(node) ? [...node.statements] : [node];
   for (const st of statements) {
-    if (!staticWritesOfStatement(st, name, source, true, conditionText, out)) return false;
+    if (!mentionsName(st, name)) continue;
+    if (staticWritesOfStatement(st, name, source, true, conditionText, out)) continue;
+    if (ts.isIfStatement(st)) {
+      if (!collectIfChainWrites(st, name, source, out, conditionText)) return false;
+      continue;
+    }
+    return false;
+  }
+  return true;
+}
+
+/** An `if / else if / else` chain, at any depth; false if anything is unproven. */
+function collectIfChainWrites(stmt, name, source, out, outerCondition = null) {
+  let node = stmt;
+  while (node) {
+    if (mentionsName(node.expression, name)) return false;
+    const own = node.expression.getText(source).slice(0, 120).replace(/\s+/g, " ");
+    const conditionText = outerCondition ? `${outerCondition} && ${own}` : own;
+    if (!collectArmWrites(node.thenStatement, name, source, conditionText, out)) return false;
+    const alt = node.elseStatement;
+    if (!alt) return true;
+    if (ts.isIfStatement(alt)) { node = alt; continue; }
+    return collectArmWrites(alt, name, source, `!(${conditionText})`, out);
   }
   return true;
 }
@@ -899,32 +1159,33 @@ function resolveInternalMutationShape(binding, ctx, path, depth) {
 
   const ops = [];
   let returned = false;
+  let conditionalReturn = false;
   for (let i = 0; i < statements.length; i += 1) {
     const stmt = statements[i];
     if (i === declStmtIndex) continue;
     if (returned) return null; // nothing may follow the return
     if (ts.isReturnStatement(stmt)) {
-      if (!stmt.expression || !ts.isIdentifier(stmt.expression) || stmt.expression.text !== name) return null;
-      returned = true;
-      continue;
+      const ret = stmt.expression ? unwrap(stmt.expression) : null;
+      if (!ret) return null;
+      if (ts.isIdentifier(ret) && ret.text === name) { returned = true; continue; }
+      /* `return keys.length > 0 ? style : undefined` -- the helper hands back the
+       * binding or nothing. Admitted only when ONE arm is exactly the binding and
+       * the other is a proven non-object, and the condition does not read the
+       * binding's contents in a way this walk models as a value. The `undefined`
+       * arm contributes no key, so the key set is unchanged. */
+      if (ts.isConditionalExpression(ret)) {
+        const t = unwrap(ret.whenTrue), f = unwrap(ret.whenFalse);
+        const isBinding = (x) => ts.isIdentifier(x) && x.text === name;
+        const isNothing = (x) => (ts.isIdentifier(x) && x.text === "undefined") || x.kind === ts.SyntaxKind.NullKeyword;
+        if ((isBinding(t) && isNothing(f)) || (isNothing(t) && isBinding(f))) { returned = true; conditionalReturn = true; continue; }
+      }
+      return null;
     }
     if (!mentionsName(stmt, name)) continue;
     if (staticWritesOfStatement(stmt, name, source, false, null, ops)) continue;
     // if / else-if / else, each arm a list of writes; the condition may not read X
     if (ts.isIfStatement(stmt)) {
-      let node = stmt;
-      let ok = true;
-      while (node) {
-        if (mentionsName(node.expression, name)) { ok = false; break; }
-        const conditionText = node.expression.getText(source).slice(0, 120).replace(/\s+/g, " ");
-        if (!collectArmWrites(node.thenStatement, name, source, conditionText, ops)) { ok = false; break; }
-        const alt = node.elseStatement;
-        if (!alt) break;
-        if (ts.isIfStatement(alt)) { node = alt; continue; }
-        if (!collectArmWrites(alt, name, source, `!(${conditionText})`, ops)) { ok = false; break; }
-        break;
-      }
-      if (!ok) return null;
+      if (!collectIfChainWrites(stmt, name, source, ops)) return null;
       continue;
     }
     return null; // any other statement mentioning X is unproven
@@ -946,8 +1207,15 @@ function resolveInternalMutationShape(binding, ctx, path, depth) {
   // the FRESH base, resolved as the ordinary object literal it is
   const baseShape = resolveShape(init, freshCtx(ctx, { depth: depth + 1, path: [...stepPath, { kind: "mutationBase" }] }));
   if (!baseShape || baseShape.kind !== "object") return null;
-  // INTERNAL: the base must not import keys this walk cannot enumerate
-  if (!keySetEnumerable(baseShape)) return null;
+  /* INTERNAL: the base must not import keys this walk cannot enumerate.
+   *
+   * ONE admitted exception, and it is not a weakening: a base that is the
+   * CALLER'S OWN object (`{ ...style }`) is not an unenumerable third party --
+   * it is a boundary, and the boundary rule classifies it by sink. Building the
+   * composite here lets that rule see it; refusing would strand the row as
+   * anonymous mutation debt while the real question (whose object is it?) has a
+   * proper answer. Anything else unenumerable still refuses. */
+  if (!keySetEnumerable(baseShape) && !publicStylePassthroughProof(baseShape)) return null;
 
   const order = [...baseShape.order];
   const receipts = [];
@@ -988,6 +1256,7 @@ function resolveInternalMutationShape(binding, ctx, path, depth) {
     internalMutation: {
       binding: name,
       declaredAt: binding.declaredAt,
+      conditionalReturn,
       baseKeyCount: baseShape.order.length,
       operationCount: receipts.length,
       operations: receipts,
@@ -1114,6 +1383,67 @@ function exhaustiveSetterArguments(setterName, source, declNode) {
   };
   walk(source);
   return escaped ? null : args;
+}
+
+/* ------------- publicly reachable generic writer (T-PUBLIC-WRITER) --- */
+/**
+ * T-PUBLIC-WRITER -- `element.style.setProperty(property, …)` where `property` is
+ * a PARAMETER of a function this package publishes.
+ *
+ * The in-repo call sites of such a function prove nothing about its domain: any
+ * consumer of the published package can call it with any property name,
+ * including a governed channel. So the honest classification is not ZERO --
+ * that would certify a silence the export cannot guarantee -- and not PRODUCER
+ * either, because no key set exists to attribute. It is a PUBLIC BOUNDARY: the
+ * caller supplies the name, exactly as the caller supplies a `style` object at
+ * a JSX boundary, and the row grants nothing.
+ *
+ * The proof is the EXPORT, and it is the whole proof:
+ *   - the name argument is a plain identifier;
+ *   - it binds to a PARAMETER (not a local, not a literal, not a loop variable
+ *     over a frozen constant -- that case is T-DYNAMIC-DOMAIN and closes ZERO);
+ *   - the function owning that parameter is reachable from a published
+ *     entrypoint, demonstrated by `isDeclarationPubliclyReachable`, whose hit is
+ *     published verbatim as the receipt.
+ *
+ * A private or non-exported writer is REFUSED and stays a pending dynamic sink.
+ * Elevating it would be strictly worse than leaving it open: it would claim a
+ * boundary that does not exist, and it would hide a domain that IS in principle
+ * enumerable from its own module's call sites.
+ *
+ * This closes the row's PROVENANCE, not its debt: the domain of names such a
+ * writer can stamp remains unenumerated, and the row stays non-consumable and
+ * non-tenant-safe. It is carried as explicit F5 debt.
+ */
+export function publicGenericWriterProof(callNode, source, fileRel) {
+  if (!ts.isCallExpression(callNode) || callNode.arguments.length < 1) return null;
+  const nameArg = unwrap(callNode.arguments[0]);
+  if (!ts.isIdentifier(nameArg)) return null;
+  const binding = resolveBinding(nameArg.text, nameArg, source, collectModuleImports(source));
+  // ONLY a parameter. A local const, a literal or a `for…of` variable is a
+  // different question with a different (and stricter) answer.
+  if (!binding || binding.kind !== "param") return null;
+  const ownerName = binding.ownerFunction;
+  if (!ownerName) return null;
+  const hit = isDeclarationPubliclyReachable(fileRel, ownerName);
+  if (!hit) return null; // private / not exported -> stays pending, never elevated
+  return {
+    exportEvidence: {
+      entrypoint: hit.entrypoint ?? null,
+      exportedAs: hit.exportedAs ?? null,
+      via: hit.via ?? "package-export",
+      hopChain: hit.hopChain ?? [],
+    },
+    receipt: {
+      writer: ownerName,
+      parameter: nameArg.text,
+      declaredAt: binding.declaredAt ?? null,
+      entrypoint: hit.entrypoint ?? null,
+      exportedAs: hit.exportedAs ?? null,
+      domainEnumerated: false,
+      residualDebt: "f5-generic-writer-name-domain",
+    },
+  };
 }
 
 /* --------------------- dynamic setProperty domain (T-DYNAMIC-DOMAIN) --- */
@@ -1498,7 +1828,7 @@ function sealedImportRelayProof(n, ctx, valueShape) {
 }
 
 /* --------------------------------------------------- domain enumeration --- */
-function enumerateKeyDomainByType(keyNode, useNode, source) {
+function enumerateKeyDomainByType(keyNode, useNode, source, { allowNullish = false } = {}) {
   if (!ts.isIdentifier(keyNode)) return null;
   const binding = resolveBinding(keyNode.text, useNode, source, new Map());
   if (!binding) return null;
@@ -1528,11 +1858,46 @@ function enumerateKeyDomainByType(keyNode, useNode, source) {
       cur = cur.parent;
     }
   }
+  /* A named alias is as enumerable as an inline union: follow ONE hop to its
+   * declaration (locally or through a named import) and read the union there.
+   * Anything that is not a plain union of string literals still refuses. */
+  if (typeNode && !ts.isUnionTypeNode(typeNode) && ts.isTypeReferenceNode(typeNode) && ts.isIdentifier(typeNode.typeName) && !typeNode.typeArguments) {
+    const aliasName = typeNode.typeName.text;
+    let aliasBody = null;
+    for (const stmt of source.statements) {
+      if (ts.isTypeAliasDeclaration(stmt) && stmt.name.text === aliasName && !stmt.typeParameters) aliasBody = stmt.type;
+    }
+    if (!aliasBody) {
+      const imported = collectModuleImports(source).get(aliasName);
+      if (imported && imported.form === "named") {
+        const targetFile = resolveImportTargetFile(imported.moduleSpecifier, source.fileName);
+        const entry = targetFile ? getSource(targetFile) : null;
+        if (entry) {
+          const wanted = imported.importedName ?? aliasName;
+          for (const stmt of entry.source.statements) {
+            if (ts.isTypeAliasDeclaration(stmt) && stmt.name.text === wanted && !stmt.typeParameters) aliasBody = stmt.type;
+          }
+        }
+      }
+    }
+    if (aliasBody) typeNode = aliasBody;
+  }
   if (!typeNode || !ts.isUnionTypeNode(typeNode)) return null;
   const literals = [];
   for (const member of typeNode.types) {
-    if (ts.isLiteralTypeNode(member) && ts.isStringLiteralLike(member.literal)) literals.push(member.literal.text);
-    else return null;
+    if (ts.isLiteralTypeNode(member) && ts.isStringLiteralLike(member.literal)) { literals.push(member.literal.text); continue; }
+    /* A nullish member of the union. For a computed property NAME it is not a
+     * reason to give up: JavaScript coerces it to the literal key "undefined" /
+     * "null", so the domain is still finite and still enumerable -- and neither
+     * coerced name is a custom property, so nothing can hide behind it. Only the
+     * computed-NAME caller opts in; index-access enumeration keeps refusing, so
+     * no row that closes today changes. */
+    if (allowNullish && (member.kind === ts.SyntaxKind.UndefinedKeyword || member.kind === ts.SyntaxKind.NullKeyword)) {
+      literals.push(member.kind === ts.SyntaxKind.UndefinedKeyword ? "undefined" : "null");
+      continue;
+    }
+    if (allowNullish && ts.isLiteralTypeNode(member) && member.literal.kind === ts.SyntaxKind.NullKeyword) { literals.push("null"); continue; }
+    return null;
   }
   return literals.length ? literals : null;
 }
@@ -1704,10 +2069,52 @@ export function resolveShape(node, ctx) {
         // string can never be proven not to name a governed channel at
         // runtime -- flag it so `entryIsClosed` refuses to close over it
         // regardless of how simple its value looks.
-        const unresolvedKey = key === null && ts.isComputedPropertyName(property.name);
+        let resolvedKey = key;
+        let keyDomain = null;
+        if (resolvedKey === null && ts.isComputedPropertyName(property.name)) {
+          /* T-COMPUTED-NAME: a computed PROPERTY NAME is not automatically
+           * unknowable. Two proofs, both fail-closed:
+           *   (1) the expression substitutes to a literal at this call site
+           *       (`buildPinStyle('right', …)` makes `[side]` exactly `right`);
+           *   (2) its declared type is a closed literal union, so the name
+           *       ranges over a finite, enumerable set.
+           * Anything else keeps `unresolvedKey` and the object stays open. */
+          const nameExpr = unwrap(property.name.expression);
+          const substituted = ts.isIdentifier(nameExpr) && substitution.has(nameExpr.text)
+            ? unwrap(substitution.get(nameExpr.text).node ?? nameExpr)
+            : nameExpr;
+          if (ts.isStringLiteralLike(substituted)) {
+            resolvedKey = substituted.text;
+          } else {
+            const domain = enumerateKeyDomainByType(nameExpr, property.name, source, { allowNullish: true });
+            if (domain && domain.length) keyDomain = domain;
+          }
+        }
+        const unresolvedKey = resolvedKey === null && keyDomain === null && ts.isComputedPropertyName(property.name);
         const valueNode = ts.isShorthandPropertyAssignment(property) ? property.name : property.initializer;
-        const valueShape = resolveShape(valueNode, freshCtx(ctx, { depth: depth + 1, path: [...path, { kind: "objectProperty", key: key ?? "(non-channel-key)" }] }));
-        order.push({ kind: "leaf", key, node: valueNode, source, fileRel, declNode: property, shape: valueShape, unresolvedKey });
+        const valueShape = resolveShape(valueNode, freshCtx(ctx, { depth: depth + 1, path: [...path, { kind: "objectProperty", key: resolvedKey ?? "(non-channel-key)" }] }));
+        if (keyDomain) {
+          // one CONDITIONAL member per enumerated name: the union of them is the
+          // exact key set this property can contribute, and no member is asserted
+          /* Each arm resolves its OWN value shape. Sharing one object across the
+           * arms would make the governance walk meet the same node twice and
+           * report a CYCLE -- a DAG is not a cycle, and a false positive there
+           * fails the whole row closed for no reason. */
+          const arms = keyDomain.map((member) => {
+            const armValue = resolveShape(valueNode, freshCtx(ctx, { depth: depth + 1, path: [...path, { kind: "objectProperty", key: member }] }));
+            return {
+              kind: "object",
+              order: [{ kind: "leaf", key: member, node: valueNode, source, fileRel, declNode: property, shape: armValue, unresolvedKey: false }],
+              closed: isShapeClosed(armValue),
+              path,
+              node: n,
+              fileRel,
+            };
+          });
+          order.push({ kind: "spread", node: property, shape: { kind: "branches", branches: arms, computedNameDomain: keyDomain, path } });
+          continue;
+        }
+        order.push({ kind: "leaf", key: resolvedKey, node: valueNode, source, fileRel, declNode: property, shape: valueShape, unresolvedKey });
       }
     }
     const closed = order.every(entryIsClosed);
@@ -1775,7 +2182,13 @@ export function resolveShape(node, ctx) {
       return relayShape;
     }
     if (binding.kind === "hoistedFunction") return { kind: "nonObject", reason: "identifier-is-a-function-value", path: [...path, { kind: "hoistedFunction", name: n.text }] };
-    if (binding.kind === "uninitializedLocal") return { kind: "openUnknown", reason: "uninitialized-local-let", path: [...path, { kind: "uninitializedLocal", declaredAt: binding.declaredAt }] };
+    if (binding.kind === "uninitializedLocal") {
+      // T-LET-UNION: the domain may still be `undefined` plus every whole-value
+      // assignment in the declaring scope; anything unproven falls through.
+      const letUnion = resolveLetUnionShape(binding, ctx, path, depth);
+      if (letUnion) return letUnion;
+      return { kind: "openUnknown", reason: "uninitialized-local-let", path: [...path, { kind: "uninitializedLocal", declaredAt: binding.declaredAt }] };
+    }
     if (binding.kind === "localConst") {
       if (binding.mutated) {
         // T-SEQUENTIAL-8: try the fine-grained, fail-closed pass first; any
@@ -2357,10 +2770,13 @@ function followImport(binding, localName, ctx, path, depth, callNode, callerCtx)
   const nextVisited = new Set([...visitedImports, visitKey]);
 
   if (exported.kind === "reExport") {
+    // resolve the next hop from the file that declared it (see `declFile`)
+    const hopFile = exported.declFile ?? targetFile;
+    const hopSource = exported.declSource ?? targetSrc.source;
     return followImport(
       { moduleSpecifier: exported.moduleSpecifier, importedName: exported.importedName, form: "named" },
       exported.importedName,
-      { ...ctx, fileRel: targetFile, source: targetSrc.source, visitedImports: nextVisited },
+      { ...ctx, fileRel: hopFile, source: hopSource, visitedImports: nextVisited },
       stepPath,
       depth + 1,
       callNode,
@@ -2368,7 +2784,9 @@ function followImport(binding, localName, ctx, path, depth, callNode, callerCtx)
     );
   }
 
-  const nextCtx = { ...ctx, source: targetSrc.source, fileRel: targetFile, visitedImports: nextVisited, depth: depth + 1, path: stepPath };
+  const declaringFile = exported.declFile ?? targetFile;
+  const declaringSource = exported.declSource ?? targetSrc.source;
+  const nextCtx = { ...ctx, source: declaringSource, fileRel: declaringFile, visitedImports: nextVisited, depth: depth + 1, path: stepPath };
   if (exported.kind === "namedFunction") {
     if (callNode) {
       const sub = buildSubstitution(exported.node, callNode, effectiveCallerCtx);
@@ -2391,7 +2809,15 @@ function followImport(binding, localName, ctx, path, depth, callNode, callerCtx)
  * is not "adjudication".
  */
 export function classifyRelayBoundary(binding, sinkTagName, fileRel) {
-  const isIntrinsicSink = typeof sinkTagName === "string" && /^[a-z]/.test(sinkTagName);
+  /* A JSX tag is INTRINSIC only when it is a bare lowercase identifier -- a real
+   * DOM/SVG element. `motion.div` (a `JsxMemberExpression` from the third-party
+   * `motion/react`) also begins with a lowercase letter, so the original
+   * `/^[a-z]/` test silently admitted any lowercase-namespaced third-party
+   * forwarder as an intrinsic sink and could hand it PUBLIC_BOUNDARY. A dot in
+   * the tag means the element is a property of some object this walk does not
+   * own; it is never intrinsic. */
+  const isIntrinsicSink =
+    typeof sinkTagName === "string" && /^[a-z][a-zA-Z0-9-]*$/.test(sinkTagName) && !sinkTagName.includes(".");
   const ownerFn = binding.ownerFunctionNode;
   let exported = false;
   let exportEvidence = null;
@@ -2496,8 +2922,18 @@ function keySetEnumerable(shape, depth = 0, seen = new WeakSet()) {
       // a branch tree with no arms enumerates nothing provable
       return arms.length > 0 && arms.every((b) => keySetEnumerable(b, depth + 1, seen));
     }
-    case "computedKey":
-      return shape.closed === true;
+    case "computedKey": {
+      if (shape.closed === true) return true;
+      /* `closed` on a computed lookup means "domain enumerated AND every member's
+       * VALUE resolved". For a KEY-SET question only the first half matters: if
+       * the domain was enumerated (no `reason` -- that field is set exactly when
+       * it was not) the union of the arms' key sets is known, whatever the values
+       * turn out to be. An unenumerated lookup still carries its reason and is
+       * still refused. */
+      if (shape.reason) return false;
+      const arms = shape.branches ?? [];
+      return arms.length > 0 && arms.every((b) => keySetEnumerable(b, depth + 1, seen));
+    }
     default:
       // relay, callArgsPending, dynamicSink, openUnknown
       return false;

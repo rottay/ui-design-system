@@ -14,7 +14,7 @@ import { repoRoot as findRepoRoot } from "../../../lib/repo-root/index.mjs";
 
 export const REPO_ABS = findRepoRoot(dirname(fileURLToPath(import.meta.url)));
 
-import { resolveShape, readProperty, isShapeClosed, keySetEnumerable, classifyRelayBoundary, dynamicSetPropertyDomain, getSource } from "./cascade-cross-file-resolver.mjs";
+import { resolveShape, readProperty, isShapeClosed, keySetEnumerable, classifyRelayBoundary, dynamicSetPropertyDomain, publicGenericWriterProof, publicStylePassthroughProof, getSource } from "./cascade-cross-file-resolver.mjs";
 import { governanceOutcome, governanceAnalysis, astPathFromSinkToPart, canonicalPreimageId, legacyPreimageIdWithSymbol, zeroEmissionSiteId, governedProducerSiteId, sourcePartId, decomposeImmediate, orderParts, digestText, canonicalJson, sortSet, digestOf, sha256Hex, utf8 } from "./cascade-governance.mjs";
 /**
  * v4 driver — READ-ONLY. Same verbatim sink-anchored walk as
@@ -331,6 +331,84 @@ function safeText(node) {
 }
 
 
+
+/**
+ * T-BRANCH-PRODUCER admission test.
+ *
+ * A conditional may be published as a producer ONLY when its emission is
+ * UNCONDITIONAL and DIRECT: every terminal arm stamps the same custom-property
+ * key set, written as its own literal leaves. That is a genuine producer -- the
+ * keys are stamped whichever way the branch goes, so naming them attributes
+ * nothing that is not always true.
+ *
+ * Everything else stays BRANCH_CONDITIONAL_AUTHORED, which is the honest state:
+ *   - a key in only SOME arms: whether it is stamped depends on the branch, so
+ *     the row asserts an emission it cannot promise;
+ *   - a key that arrives through a SPREAD: this walk did not author it here and
+ *     cannot say which arm owns it;
+ *   - an arm that is not a resolved object, or a tree whose terminals were not
+ *     all reached: not exhaustive, so not decidable at all.
+ */
+function unconditionalDirectEmission(shape, governance) {
+  const terminals = [];
+  const collect = (arm, depth) => {
+    if (!arm || depth > 40) return false;
+    if (arm.kind === "branches") {
+      const arms = arm.branches ?? [];
+      if (!arms.length) return false;
+      return arms.every((child) => collect(child, depth + 1));
+    }
+    if (arm.kind === "nonObject") return true; // contributes no key
+    if (arm.kind !== "object" && arm.kind !== "array") return false;
+    terminals.push(arm);
+    return true;
+  };
+  if (!collect(shape, 0)) return false;
+  if (!terminals.length) return false;
+
+  const CUSTOM = /^--/;
+  const directKeysOf = (arm) => {
+    const keys = new Set();
+    for (const entry of arm.order ?? []) {
+      // a spread means the key was authored somewhere this arm does not own
+      if (entry.kind === "spread") {
+        const nested = entry.shape;
+        if (nested && (nested.kind === "object" || nested.kind === "array")) {
+          for (const inner of nested.order ?? []) {
+            if (inner.kind !== "leaf") return null;
+            if (typeof inner.key === "string" && CUSTOM.test(inner.key)) return null;
+          }
+          continue;
+        }
+        return null;
+      }
+      if (typeof entry.key === "string" && CUSTOM.test(entry.key)) keys.add(entry.key);
+    }
+    return keys;
+  };
+
+  let reference = null;
+  for (const arm of terminals) {
+    const keys = directKeysOf(arm);
+    if (keys === null) return false; // a governed key could ride a spread
+    if (reference === null) { reference = keys; continue; }
+    if (keys.size !== reference.size) return false;
+    for (const k of keys) if (!reference.has(k)) return false;
+  }
+  if (!reference || reference.size === 0) return false;
+
+  // and the scan must have found EXACTLY those keys -- nothing extra from a
+  // depth this comparison did not walk
+  const scanned = [
+    ...(governance?.governedChannelKeys ?? []),
+    ...(governance?.internalSocketKeys ?? []),
+    ...(governance?.ungovernedCustomPropertyKeys ?? []),
+  ];
+  if (scanned.length !== reference.size) return false;
+  for (const k of scanned) if (!reference.has(k)) return false;
+  return true;
+}
+
 export function dispositionOf(shape, boundaryReceipt, ctx, sourceParts) {
   if (shape.kind === "relay" && boundaryReceipt && boundaryReceipt.candidate) return { disposition: "PUBLIC_BOUNDARY_CANDIDATE", governance: null };
   // blocker 4: a wrapper mechanism applied but the chain did not close --
@@ -413,6 +491,23 @@ export function dispositionOf(shape, boundaryReceipt, ctx, sourceParts) {
       if (armsExhaustivelyResolved) {
         const outcome = governanceOutcome(shape, ctx, sourceParts);
         if (outcome.disposition === "CLOSED_ZERO_GOVERNED_EMISSION_OBJECT") return outcome;
+        /* T-BRANCH-PRODUCER: a tree whose arms are ALL resolved and which DOES
+         * emit is a producer -- exactly what CLOSED_PRODUCER means: it stamps
+         * governed channels and NO cascade root claims it. Parking it as
+         * `BRANCH_CONDITIONAL_AUTHORED` asserted the emission without ever
+         * naming it. Publishing it as a producer attributes nothing new: the
+         * row still carries no root, no owner and no tenant reach; it simply
+         * stops pretending the arms were not enumerated.
+         *
+         * Only a COMPLETE scan qualifies -- an incomplete one still cannot
+         * certify either way and keeps the conditional bucket. */
+        if (
+          outcome.disposition === "CLOSED_PRODUCER" &&
+          outcome.governance?.customPropertyScanComplete &&
+          unconditionalDirectEmission(shape, outcome.governance)
+        ) {
+          return outcome;
+        }
         return { disposition: "BRANCH_CONDITIONAL_AUTHORED", governance: outcome.governance };
       }
 
@@ -632,6 +727,7 @@ export function classifyCrossFileRows() {
       let boundaryReceipt = null;
       let startExpr = null;
       let dynamicDomainReceipt = null;
+      let publicWriterReceipt = null;
       if (form === "dynamic-setProperty") {
         /* T-DYNAMIC-DOMAIN: the stamped name is not a literal, but it may still
          * range over a frozen same-module constant array. When it does, the set
@@ -643,7 +739,18 @@ export function classifyCrossFileRows() {
           shape = domain.shape;
           dynamicDomainReceipt = domain.receipt;
         } else {
-          shape = { kind: "dynamicSink", path: [{ kind: "terminal-at-sink", node: "setProperty-dynamic-name" }] };
+          /* T-PUBLIC-WRITER: the name is the CALLER'S, and the caller is anyone
+           * who imports this package. That is a boundary, not authored debt --
+           * and it is emphatically not a zero. A writer that is NOT publicly
+           * reachable is refused here and stays the pending dynamic sink it was. */
+          const publicWriter = publicGenericWriterProof(node, source, relFile);
+          if (publicWriter) {
+            shape = { kind: "relay", binding: { kind: "public-generic-writer" }, path: [{ kind: "terminal-at-sink", form }, { kind: "publicGenericWriter" }] };
+            boundaryReceipt = { candidate: true, kind: "PUBLIC_BOUNDARY_CANDIDATE", sinkTagName: null, exportEvidence: publicWriter.exportEvidence };
+            publicWriterReceipt = publicWriter.receipt;
+          } else {
+            shape = { kind: "dynamicSink", path: [{ kind: "terminal-at-sink", node: "setProperty-dynamic-name" }] };
+          }
         }
         // P0-4 point 2: this row has no `startExpr` in the normal sense (its
         // shape is hardcoded, never resolved) -- but it still needs its OWN
@@ -704,10 +811,44 @@ export function classifyCrossFileRows() {
         rawOrderedParts = rawOrderedParts.map((p, i) => ({ ...p, sourcePartId: sourceParts[i].sourcePartId }));
       }
 
+      /* T-PUBLIC-STYLE-PASSTHROUGH: a composite whose only unresolved operand is
+       * the caller's own object is a BOUNDARY question, not authored debt. The
+       * sink decides which one, through the SAME `classifyRelayBoundary` the
+       * direct-relay path uses -- an intrinsic DOM element with a public export
+       * path is a public boundary; a custom component or a third-party
+       * forwarder is a private relay. */
+      let passthroughRelays = null;
+      let passthroughBoundary = null;
+      if (form !== "dynamic-setProperty" && shape.kind !== "relay" && !isShapeClosed(shape)) {
+        passthroughRelays = publicStylePassthroughProof(shape);
+        if (passthroughRelays && !boundaryReceipt) {
+          /* Computed, NOT adopted yet. A row that another route decides -- a
+           * branch-relay inheritance, say -- must not carry a boundary receipt
+           * it never used: that would publish a sink kind for a row whose kinds
+           * legitimately live in its own receipt instead. */
+          passthroughBoundary = classifyRelayBoundary(passthroughRelays[0].binding ?? {}, sinkTagName, relFile);
+        }
+      }
+
       const govCtx = { sinkNode: startExpr, sourceFile: source, fileRel: relFile, line: line + 1, sinkTagName };
-      const { disposition, governance, branchRelayReceipt = null } = dispositionOf(
+      let { disposition, governance, branchRelayReceipt = null } = dispositionOf(
         shape, boundaryReceipt, govCtx, rawOrderedParts,
       );
+      let decidedByPassthrough = false;
+      /* A tree that INHERITED its disposition from its relay terminals has
+       * already been decided by a more specific route, with its own per-terminal
+       * receipt. The passthrough must not overwrite it -- doing so replaced that
+       * evidence with a single synthetic sink kind. */
+      const inheritedDecision = !!(branchRelayReceipt && branchRelayReceipt.inheritedFrom);
+      if (passthroughRelays && !inheritedDecision && !CLOSED_DISPOSITIONS.has(disposition)) {
+        disposition = passthroughBoundary && passthroughBoundary.candidate
+          ? "PUBLIC_BOUNDARY_CANDIDATE"
+          : "RELAY_PRIVATE_UNRESOLVED";
+        governance = null;
+        decidedByPassthrough = true;
+        // adopted only now that it is the route that actually decided the row
+        if (passthroughBoundary) boundaryReceipt = passthroughBoundary;
+      }
       // P0: enumerations reachable INSIDE this shape. Only meaningful when the
       // root is not itself a computed lookup (that one publishes its own
       // domain receipt).
@@ -773,8 +914,15 @@ export function classifyCrossFileRows() {
         // T-DYNAMIC-DOMAIN: present only on a dynamic sink whose name domain
         // was enumerated from a frozen same-module constant.
         dynamicDomain: dynamicDomainReceipt,
+        // T-PUBLIC-WRITER: present only on a generic writer this package
+        // publishes; carries the export proof and the F5 debt marker.
+        publicGenericWriter: publicWriterReceipt,
         namespaceRelays,
         internalMutations,
+        /* T-PUBLIC-STYLE-PASSTHROUGH: which route actually DECIDED this row. A
+         * composite can contain a nested sealed-import proof incidentally; the
+         * label must name what decided it, not the first proof found inside. */
+        decidedByPassthrough,
         sourceParts,
       });
     };
@@ -1192,6 +1340,10 @@ export function boundedReceiptOf(row) {
         exportedAs: evidence.exportedAs ?? null,
         via: evidence.via ?? null,
         hopChainDepth: evidence.hopChain?.length ?? 0,
+        /* T-PUBLIC-WRITER: a generic writer's boundary is its EXPORT, and its
+         * name domain stays unenumerated -- said out loud, with the debt marker,
+         * so the row can never read as a resolved emission. */
+        ...(row.publicGenericWriter ? { publicGenericWriter: row.publicGenericWriter } : {}),
         path,
       };
     }
@@ -1202,11 +1354,16 @@ export function boundedReceiptOf(row) {
         // sole upstream owner and the exact relayed key set. Present ONLY on a
         // row proven by that route; every relay published earlier gains no
         // field at all and stays byte-identical.
-        ...(row.sealedImportRelays?.length ? { sealedImportRelay: row.sealedImportRelays } : {}),
+        /* A row DECIDED by the public-style passthrough may still contain a
+         * nested sealed-import proof; publishing it under this field would say
+         * "this row is a sealed-import relay", which is not what decided it.
+         * The receipt carries the evidence of the deciding route only. */
+        ...(row.sealedImportRelays?.length && !row.decidedByPassthrough ? { sealedImportRelay: row.sealedImportRelays } : {}),
         /* T-NAMESPACE-RELAY: a namespace is a WEAKER guarantee than a key set,
          * and it is published as such -- a prefix, its declaring type and the
          * chain that reached it. No key, tenant reach or root is implied. */
-        ...(row.namespaceRelays?.length ? { namespaceRelay: row.namespaceRelays } : {}),
+        ...(row.namespaceRelays?.length && !row.decidedByPassthrough ? { namespaceRelay: row.namespaceRelays } : {}),
+        ...(row.decidedByPassthrough ? { stylePassthrough: true } : {}),
         path,
       };
     case "CLOSED_PRODUCER": {

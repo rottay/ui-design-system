@@ -605,6 +605,21 @@ export function privateRelayRow(file, site, entry) {
    *
    * Every relay published before this tranche has no such proof and keeps its
    * exact published form. */
+  /* T-PUBLIC-STYLE-PASSTHROUGH is checked FIRST: a composite decided by the
+   * caller's own object can contain a nested sealed-import proof incidentally,
+   * and labelling it `sealed-import-relay` would name a proof that did not
+   * decide the row (and would inflate that cohort's pinned count). */
+  if (entry.receipt?.stylePassthrough) {
+    const psRow = cohortRow({
+      file,
+      site,
+      entry,
+      reason: `public-style-passthrough:${site.form}`,
+      cause: "composition-whose-only-open-operand-is-the-callers-own-style-object",
+    });
+    psRow.resolvedVia = "public-style-passthrough";
+    return psRow;
+  }
   const proven = Array.isArray(entry.receipt?.sealedImportRelay) && entry.receipt.sealedImportRelay.length > 0;
   /* T-NAMESPACE-RELAY: proven by NAMESPACE, not by key set. It is a relay for a
    * weaker reason than a sealed key set, so it says so rather than borrowing
