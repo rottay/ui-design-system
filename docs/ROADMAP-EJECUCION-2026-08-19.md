@@ -1196,7 +1196,7 @@ paso de esa cadena está autorizado por este checkpoint.
 | K5 | 100% implementación + postaudit + GAT/CI |
 | F4A-close | **14/14 CERRADO** (Lotes A/B/C; canon 4208/0/3969/53/0/divergent33 informativo; gates:ci 89+2) |
 | PRE_F4B | inventario mecánico `INVENTORY_READY` (Sonnet); diseño/implementación **NO aceptados** — 768 pseudo-raíces posicionales del ratchet, sólo 38 canónicas (730 no); 1563/5142 nodos alcanzan raíz canónica; el gate actual no prueba reachability real |
-| F4B | **4/20 controles** — `spacing.rhythm`, `surfaces.effect-intensity`, `shape.radius-scale` y `experience.profile`, los cuatro en `COMPUTED_VERIFIED` (rank 3), **ninguno `SIGHTED_ACCEPTED`**; 8 escenarios `primitive/layout/{flex,grid,stack,space}` x `{tight,airy}`, 6 escenarios `primitive/display/card` x `{rottay,bithire,evnto}` x `{mate,sobrio}`, 6 escenarios `primitive/display/card` x `{rottay,bithire,evnto}` x `{sutil,amplio}` y 4 escenarios `primitive/display/card` x `{rottay,evnto}` x `{technical,editorial}` — **8+6+6+4 = 24 receipts, todos válidos y frescos**, con los `roundId` cronológicamente correctos: `spacing.rhythm` y `surfaces.effect-intensity` en **R2**, `shape.radius-scale` en **R3** y `experience.profile` en **R4** como cuarto packet. `experience.profile` planificaba 5 positivos y entrega 4: `bithire`x`editorial` no logró `static=DB` y **no lleva receipt**, y `bithire`x`technical` es `DESIGNED_NULL` porque el baseline del vertical ya ES ese perfil; ambos quedan como **2 artefactos medidos NO receipted**. Los 16 restantes siguen `UNKNOWN` |
+| F4B | **4/20 controles** — `spacing.rhythm`, `surfaces.effect-intensity`, `shape.radius-scale` y `experience.profile`, los cuatro en `COMPUTED_VERIFIED` (rank 3), **ninguno `SIGHTED_ACCEPTED`**; 8 escenarios `primitive/layout/{flex,grid,stack,space}` x `{tight,airy}`, 6 escenarios `primitive/display/card` x `{rottay,bithire,evnto}` x `{mate,sobrio}`, 6 escenarios `primitive/display/card` x `{rottay,bithire,evnto}` x `{sutil,amplio}` y 4 escenarios `primitive/display/card` x `{rottay,evnto}` x `{technical,editorial}` — **8+6+6+4 = 24 receipts, todos válidos y frescos bajo el validador v2** — las 8 celdas manifest de `spacing.rhythm` siguen rechazadas por `program-check` (BLOCKED heredado desde `56847146f`, asentado como heredado en los packets 2/3/4; corrección C2 pendiente, ver asiento 2026-08-23) —, con los `roundId` cronológicamente correctos: `spacing.rhythm` y `surfaces.effect-intensity` en **R2**, `shape.radius-scale` en **R3** y `experience.profile` en **R4** como cuarto packet. `experience.profile` planificaba 5 positivos y entrega 4: `bithire`x`editorial` no logró `static=DB` y **no lleva receipt**, y `bithire`x`technical` es `DESIGNED_NULL` porque el baseline del vertical ya ES ese perfil; ambos quedan como **2 artefactos medidos NO receipted**. Los 16 restantes siguen `UNKNOWN` |
 | F2 asimétrico | 0% |
 | F3/F4C/F5-F8 pendientes | 0% del tramo pendiente |
 | F9 | 0/5100 celdas aceptadas |
@@ -1639,8 +1639,11 @@ Notas honestas:
     asiento. Detectado comparando contra `48fa4f20a` antes de cerrar. Corregido por
     orden del DT: los 6 de `shape.radius-scale` reemitidos con **R3** (cierre previo
     restaurado) y los 4 de `experience.profile` con **R4** como cuarto packet;
-    `spacing.rhythm` y `surfaces.effect-intensity` **no** se reemitieron y quedan en
-    **R2**. Mismos escenarios, mismos binds, mismo árbol final. Revalidación posterior:
+    `spacing.rhythm` y `surfaces.effect-intensity` **no** se re-emitieron con
+    roundId nuevo y quedan en **R2**; a nivel archivo ambos SÍ fueron reescritos
+    dentro de `56fb593fd` (los 8 artifacts y 8 receipts de spacing-rhythm y los
+    receipts de effect-intensity llevan `createdAt` 2026-08-23T10:12Z/10:49Z).
+    Mismos escenarios, mismos binds, mismo árbol final. Revalidación posterior:
     **24/24 VALID+FRESH**. Ningún asiento anterior queda contradicho.
 
 Toolchain de este packet: los 4 escenarios de `experience.profile`, los 2
@@ -1649,6 +1652,80 @@ corrieron **sólo** en Node **v22.17.0** (el pineado; el `node` por defecto de l
 máquina es v25.2.1 y el PATH se fijó en cada invocación). No se hizo cruce en otra
 versión, así que este packet no reclama contraste de reproducibilidad.
 
+
+#### Asiento de autoridad y auditoría — 2026-08-23 (estado vigente)
+
+- HEAD al abrir este asiento: `56fb593fdc134cf17b5bc9842085e3ff2e798d26`; worktree limpio.
+- **DT vivo: Codex.** No hubo sucesión DT el 2026-08-23. Existe un handoff
+  PREPARADO a Kimi K3 (`/Users/daniel/Developer/Rottay/modern-rescue-kimi-dt-handoff-2026-08-23.md`,
+  SHA `088ddd360676439719a203271a0ff2a067314f3ed0a2d434b33a89a81b84e665`) que
+  NO tiene efecto de autoridad: la última orden explícita del owner fue dejar
+  un prompt sin transferir ni operar la sesión, y la autorización posterior a
+  Codex fue contactar a Kimi K3 únicamente para la re-auditoría. La sucesión
+  sólo la consuma una orden explícita del owner; cuando ocurra, el packet de
+  autoridad (AGENTS.md, CLAUDE.md, agent-orchestration.json, program-check.mjs,
+  README del programa, tenant-art-direction.json, rounds.json,
+  checkpoint.intent.json, fence SIGHTED_APPROVER) se ejecuta en UN packet con
+  procedimiento T-1 y con la fecha real de esa orden.
+- **Re-auditoría independiente Kimi K3 (owner override 2026-08-23, READ-ONLY):**
+  veredicto `ACCEPT_WITH_CORRECTIONS`.
+  Memo: `/private/tmp/modern-rescue-kimi3-independent-reaudit-2026-08-23.md`,
+  SHA `2b87b306e2b4d372533dd314f35d8e6c165e027e806eab4b16fecf391791a518`.
+  Prompt fresco: `/private/tmp/modern-rescue-kimi3-fresh-session-prompt-2026-08-23.md`,
+  SHA `c328f4254c1509c1894885028c1bd85f5d170f1f84ade0fcee8f6590953fbd62`.
+  Revisión Fable de sus correcciones:
+  `/private/tmp/modern-rescue-fable-review-kimi-corrections-2026-08-23.md`
+  (SHA registrado en su archivo `.ready`). Los tres persistidos en
+  `docs/evidence/2026-08/` por este asiento.
+- **Estado de gates en HEAD (medido, no heredado de memos):**
+  `program-check.mjs` = `BLOCKED`, 24 fallos, todos celdas `spacing.rhythm` de
+  `manifest/families/primitive/layout/{flex,grid,space,stack}.json`
+  (mechanism null; internalChannels vacío; evidenceIds `R2:…` fuera del
+  evidence root — los artifacts viven en
+  `test-artifacts/quality-evidence/wo-cra-23/F4B/spacing-rhythm/`; evidenceKind
+  sin computed-delta ni exact-restore). Heredado desde `56847146f` (25→24 en
+  `5ce42e1b7`, 0 nuevos después). `gat07:check` = STALE: sello vigente
+  `1c127bf0e` (2026-08-22) invalidado por la serie F4B (18 inputs sellados
+  modificados desde el sello). Drill `composition/receipt` 11/12 (rojo
+  heredado con ruling del dueño "fuera de alcance", asentado arriba en el
+  packet de effect-intensity).
+- **Regla vinculante nueva (C3):** cada packet F4B restante cierra con resello
+  `gat07:write` como paso obligatorio, antes de su commit.
+- **Correcciones que bloquean F4B 5/20 (orden):** C2 (program-check verde:
+  corregir las celdas o enmendar la ley del gate UNA sola vez con asiento,
+  unificando el vocabulary evidenceKind con los otros 3 controles), C3
+  (resello gat-07), C4 (abajo). C2 y el refresh de `checkpoint.intent.json`
+  (`currentWave` describe F4A como frente abierto; F4A cerró 2026-08-22) son
+  contratos máquina: se ejecutan como packets T-A con program-check corrido
+  antes y después, nunca como edits documentales.
+- **Deudas con dueño (C6):** `OPEN_VERTICAL_CASCADE_DEFECT`
+  (`manifest/controls/experience.profile.json:95`; bithire dark:
+  `artifacts/bithire/index.css:644` vs `:1496`) queda `OPEN_DT` — crear packet
+  propio: es propiedad del generador de artifacts verticales, no de
+  `experience.profile`. `OPEN_ARM_ASYMMETRY` (`experience.profile.json:103`)
+  queda `OPEN_OWNER` — decisión requerida antes de F2-asimétrico/F3.
+- **OPEN_OWNER adicionales:** resolución del `stash@{0}` pre-programa (toda
+  operación de stash está vetada sin orden explícita del owner); política de
+  backup de los 519 commits locales sin push; reapertura (o no) del fence
+  `SIGHTED_APPROVER` cuyo rojo tiene ruling previo del dueño.
+
+##### Brecha de escribanía PRE_F4B→F4B (C4) — declarada, no regularizada
+
+La condición vinculante de apertura del Lote B (asiento PRE_F4B, decisión 6c:
+`unknownProvenance == []` real MÁS doble postaudit — reauditoría independiente
+A4–A9 y postaudit Fable del diff completo) se cumplió sólo a medias. El drenado
+2.024→0 existe: **15 commits** `8d2985638..6cfdcc1a9` (2026-08-22, inclusive),
+todos con cuerpo vacío, que además tocaron **2 archivos de `packages/core/src/`**
+fuera del write-set mínimo declarado A4/A5/A6
+(`foundation/tokens/ts/runtime/personality/index.ts` y
+`infrastructure/runtime/theming/presentation/adapters/react/css-variables-bridge/index.tsx`).
+Ni esos commits, ni el ruling de apertura del Lote B, ni las dos auditorías
+exigidas tienen asiento en este ledger, y no se hallaron memos de postaudit en
+/tmp (sólo logs de corrida). **Remediación vinculante antes de F4B 5/20:** el
+DT agenda la doble postaudit retroactiva del diff `8d2985638~1..6cfdcc1a9`
+(incluidos los 2 archivos src) y asienta su resultado acá, o el owner dispensa
+la condición explícitamente y la dispensa se asienta. Esta declaración no
+inventa retroactivamente un ruling que no se registró.
 
 **F0 — CERRADO (2026-08-19).** Criterio de cierre cumplido:
 `ci-gates OK — 78 blocking gate(s) passed` (2 excluded visibles con razón y
