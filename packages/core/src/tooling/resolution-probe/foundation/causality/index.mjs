@@ -290,6 +290,12 @@ export function planInlinePhase({ memo, properties }) {
       ? { op: 'set', name, value: entry.value, priority: entry.priority ?? '' }
       : { op: 'remove', name };
   });
+  // Same law, applied to the attribute the write introduces: if the element
+  // carried no `style` attribute before, an exact restore leaves none behind.
+  // Ordered last so it runs after every declaration has been removed.
+  if (memo['#attribute'] && memo['#attribute'].present === false) {
+    restore.push({ op: 'remove-attribute', name: 'style' });
+  }
   return {
     write,
     restore,

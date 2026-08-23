@@ -6,8 +6,14 @@
  * compiled tenant artifact — an unlayered block behind
  * `:is(html[data-tenant='<slug>'], :where([data-ds-root][data-vertical='<v>']))`.
  * A customer writes it into a DB `TenantTheme` (`appearance.general.rhythm`),
- * which `compileAppearanceVariables` lowers into a flat variable map that the
- * provider applies as INLINE STYLE ON THE DOCUMENT ELEMENT.
+ * which `compileTenantThemeConfig` compiles into a `TenantThemeArtifact` whose
+ * `variables` map is applied as INLINE STYLE ON THE DOCUMENT ELEMENT.
+ *
+ * The DB door is `compileTenantThemeConfig` and only that;
+ * `RETIRED_DB_COMPILER_EXPORTS` makes rebinding to a retired lowering a
+ * load-time throw. Each retired spelling still lowers a stop to a plausible
+ * number, so a rebound arm goes GREEN while measuring a door no customer theme
+ * travels through.
  *
  * THOSE ARE TWO DIFFERENT POSITIONS IN THE CASCADE, and that is the whole
  * reason this unit exists. "Static and DB are equivalent" is a claim about the
@@ -73,14 +79,47 @@ export const INGRESS_ARMS = Object.freeze({
     manifestIngressKey: 'dbTenantThemePath',
     position: 'root-inline-style',
     positionMeaning:
-      'Written with setProperty on document.documentElement, which is exactly what the theming ' +
-      'provider does with compileAppearanceVariables().variables. This is the strongest ' +
-      'position a tenant occupies, and it is ABOVE the static arm.',
-    compilerModule: 'dist/infrastructure/compilers/kernel/runtime/appearance/index.js',
-    compilerSource: 'src/infrastructure/compilers/kernel/runtime/appearance/index.ts',
-    compilerExport: 'compileAppearanceVariables',
+      'Written with setProperty on document.documentElement from the compiled ' +
+      'TenantThemeArtifact.variables. This is the strongest position a tenant occupies, and it ' +
+      'is ABOVE the static arm.',
+    // A PUBLISHED entrypoint (`exports["./server"]`), never a deep path: a deep import can be
+    // tree-shaken out from under the harness without any gate noticing.
+    compilerModule: 'dist/server.js',
+    compilerModuleSubpath: '@rottay/design-system/server',
+    compilerSource: 'src/infrastructure/compilers/composition/tenant-theme/index.ts',
+    compilerExport: 'compileTenantThemeConfig',
   }),
 });
+
+/** DB compiler exports that are retired and must never be bound again. */
+export const RETIRED_DB_COMPILER_EXPORTS = Object.freeze([
+  'compileAppearanceVariables',
+  'appearanceGeneralToVariables',
+  'appearanceAdvancedToVariables',
+  'appearanceToVariables',
+]);
+
+/** Runs at module load: no code path reaches a browser without passing here. */
+export function assertNoRetiredCompilerBinding(arms) {
+  for (const spec of Object.values(arms)) {
+    if (RETIRED_DB_COMPILER_EXPORTS.includes(spec.compilerExport)) {
+      throw new Error(
+        `resolution-probe: ingress arm "${spec.id}" binds the RETIRED DB compiler ` +
+          `"${spec.compilerExport}". The productive DB door is compileTenantThemeConfig. ` +
+          'Rebinding to a retired lowering measures a legacy compat path and reports it as ' +
+          'static/DB parity.',
+      );
+    }
+    if (/compilers\/kernel\/runtime\/appearance\//.test(spec.compilerModule)) {
+      throw new Error(
+        `resolution-probe: ingress arm "${spec.id}" deep-imports the retired appearance ` +
+          `compiler module ("${spec.compilerModule}"). Bind a published entrypoint instead.`,
+      );
+    }
+  }
+}
+
+assertNoRetiredCompilerBinding(INGRESS_ARMS);
 
 export const INGRESS_ARM_IDS = Object.freeze(Object.keys(INGRESS_ARMS));
 
@@ -300,15 +339,18 @@ export function buildIngressInput({ armId, controlManifest, stopId, base = {} })
  * `appearance` field, or a static BrandTheme's own root). Neither compiler
  * accepts that larger document as its argument:
  *
- *   - `compileAppearanceVariables(appearance: TenantAppearance)`
- *     (`infrastructure/compilers/kernel/runtime/appearance/index.ts`)
- *     destructures `appearance.general` immediately, and `TenantAppearance`
- *     IS `{ general: TenantAppearanceGeneral, ... }` — so the compiler wants
- *     `document.appearance`, not `document`. Handing it the whole document
- *     (`{appearance:{general:{rhythm}}}`, exactly what `dbTenantThemePath`
- *     builds) makes `appearance.general` read `undefined.general` inside the
- *     compiler, which is this harness's OWN bug reported as a design-system
- *     defect.
+ *   - `compileTenantThemeConfig(input): TenantThemeArtifact` takes the
+ *     read/compile ENVELOPE (`TenantThemeSimpleDocument &
+ *     TenantThemeConfigIdentity`), not the JSONB payload. Two invariants the
+ *     manifest path cannot express:
+ *       (a) the config's `appearance` IS a flat `TenantAppearanceGeneral`,
+ *           whereas `dbTenantThemePath` (`appearance.general.rhythm`) names the
+ *           position in the NORMALIZED appearance the artifact reports back. So
+ *           the stop moves from `document.appearance.general` to the config's
+ *           `appearance`. Both shapes are real; the round trip is asserted by
+ *           the manifest-ingress parity drill rather than by this comment.
+ *       (b) identity is required and validated, and first-party slugs are
+ *           RESERVED — a DB arm must compile for a customer tenant.
  *   - `compileBrandTheme(input: BrandCompilerInput)`
  *     (`infrastructure/compilers/kernel/runtime/brand-theme/index.ts`)
  *     destructures `{ brandTheme, tenantSlug, ... }` immediately.
@@ -317,16 +359,28 @@ export function buildIngressInput({ armId, controlManifest, stopId, base = {} })
  *     `tenantSlug` is a required SIBLING field the manifest path does not
  *     carry at all, so the caller must supply it.
  */
-function toCompilerInput({ armId, document, tenantSlug }) {
+function toCompilerInput({ armId, document, tenantSlug, vertical, schemaVersion }) {
   if (armId === 'db-tenant-theme') {
-    if (!document || typeof document.appearance !== 'object' || document.appearance === null) {
+    const general = document?.appearance?.general;
+    if (!general || typeof general !== 'object') {
       throw new Error(
-        'resolution-probe: the db-tenant-theme document has no "appearance" object at its root ' +
-          '(dbTenantThemePath must read "appearance.<rest>"), so there is nothing to hand ' +
-          'compileAppearanceVariables — it destructures appearance.general immediately.',
+        'resolution-probe: the db-tenant-theme document has no "appearance.general" object ' +
+          '(dbTenantThemePath must read "appearance.general.<rest>"), so there is no ' +
+          'TenantAppearanceGeneral to put in the TenantThemeConfig.',
       );
     }
-    return document.appearance;
+    if (!Number.isInteger(schemaVersion)) {
+      throw new Error(
+        'resolution-probe: the db-tenant-theme arm needs TENANT_THEME_SCHEMA_VERSION from the ' +
+          'published module. Refusing to hardcode a contract literal in the harness.',
+      );
+    }
+    return {
+      schemaVersion,
+      mode: 'simple',
+      appearance: structuredClone(general),
+      ...dbTenantIdentity(vertical),
+    };
   }
   if (armId === 'static-brand-theme') {
     if (typeof tenantSlug !== 'string' || tenantSlug.length === 0) {
@@ -341,6 +395,38 @@ function toCompilerInput({ armId, document, tenantSlug }) {
   }
   throw new Error(`resolution-probe: unknown ingress arm: ${armId}`);
 }
+
+/**
+ * Identity columns for the DB arm's compile envelope.
+ *
+ * The slug must NOT be the first-party one: `assertTenantIdentityAllowed`
+ * rejects reserved slugs, because a first-party vertical is a code-owned STATIC
+ * identity and the DB door belongs to customer tenants. `verticalKey` stays the
+ * real vertical so the compile resolves the same code-owned envelope the static
+ * arm compiles against — that is what keeps the two arms comparable. The
+ * artifact's tenant-scoped `css`/`scopes` are unused here: the harness writes
+ * `variables` inline on the root, so the slug never reaches the measured scene.
+ */
+function dbTenantIdentity(vertical) {
+  if (!vertical) {
+    throw new Error(
+      'resolution-probe: the db-tenant-theme arm needs --vertical to resolve the code-owned ' +
+        'vertical envelope compileTenantThemeConfig validates against.',
+    );
+  }
+  const spec = VERTICALS[vertical];
+  if (!spec || spec.tenantSlug === null) {
+    throw new Error(
+      `resolution-probe: "${vertical}" is not a tenant-bearing vertical, so a DB arm has no ` +
+        'vertical envelope to compile against.',
+    );
+  }
+  const slug = `${DB_PROBE_TENANT_PREFIX}${vertical}`;
+  return { tenantId: slug, slug, verticalKey: vertical, rowVersion: 1 };
+}
+
+/** Deterministic, non-reserved customer-tenant slug prefix for the DB arm. */
+const DB_PROBE_TENANT_PREFIX = 'probe-tenant-';
 
 /** The tenant slug `compileBrandTheme` needs, from the SAME vocabulary `tenantArmSelector` reads. */
 function deriveTenantSlug(vertical) {
@@ -389,7 +475,13 @@ export function lowerStop({
 }) {
   const input = buildIngressInput({ armId, controlManifest, stopId, base });
   const tenantSlug = armId === 'static-brand-theme' ? deriveTenantSlug(vertical) : null;
-  const compilerInput = toCompilerInput({ armId, document: input.document, tenantSlug });
+  const compilerInput = toCompilerInput({
+    armId,
+    document: input.document,
+    tenantSlug,
+    vertical,
+    schemaVersion: provenance.schemaVersion,
+  });
   const compiled = compile(compilerInput);
   const emitted = compiled?.variables ?? compiled?.cssVariables ?? compiled;
   if (!emitted || typeof emitted !== 'object') {
@@ -473,13 +565,25 @@ export async function loadCompilerArms({
           'Refusing to fabricate the arm payload.',
       );
     }
+    // Read from the same published module that supplies the compiler, so the
+    // envelope the harness builds can never disagree with the contract version
+    // the compiler validates against.
+    const schemaVersion = module?.TENANT_THEME_SCHEMA_VERSION;
+    if (spec.id === 'db-tenant-theme' && !Number.isInteger(schemaVersion)) {
+      throw new Error(
+        `resolution-probe: ${spec.compilerModule} exports no TENANT_THEME_SCHEMA_VERSION, so the ` +
+          'DB arm cannot build a TenantThemeConfig without hardcoding a contract literal.',
+      );
+    }
     loaded[spec.id] = {
       armId: spec.id,
       compile: exported,
       provenance: {
         module: fromCoreRoot(absolute),
+        moduleSubpath: spec.compilerModuleSubpath ?? null,
         sourceOfTruth: spec.compilerSource,
         exportName: spec.compilerExport,
+        ...(spec.id === 'db-tenant-theme' ? { schemaVersion } : {}),
         freshnessProven: true,
         freshnessNote:
           'Compiled output read from dist/ only after dist-freshness-gate verified its build ' +

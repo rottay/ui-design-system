@@ -192,3 +192,38 @@ test('negative drill: writing a property whose prior inline state was never obse
 test('negative drill: an arm that writes nothing is not a mutation phase', () => {
   assert.throws(() => planInlinePhase({ memo: {}, properties: {} }), /writes no property/);
 });
+
+test('an introduced style ATTRIBUTE is removed by the restore, not left empty', () => {
+  const plan = planInlinePhase({
+    memo: { '--ds-rhythm-scale': { present: false, value: '' }, '#attribute': { present: false } },
+    properties: { '--ds-rhythm-scale': '1.2' },
+  });
+  const last = plan.restore.at(-1);
+  assert.deepEqual(last, { op: 'remove-attribute', name: 'style' });
+  // It must run AFTER the declaration removals, or the attribute would be
+  // re-created by the very ops meant to empty it.
+  assert.equal(plan.restore.filter((op) => op.op === 'remove-attribute').length, 1);
+  assert.equal(plan.restore[0].op, 'remove');
+});
+
+test('a PRE-EXISTING style attribute is never removed by the restore', () => {
+  const plan = planInlinePhase({
+    memo: { '--ds-rhythm-scale': { present: false, value: '' }, '#attribute': { present: true } },
+    properties: { '--ds-rhythm-scale': '1.2' },
+  });
+  assert.equal(
+    plan.restore.some((op) => op.op === 'remove-attribute'),
+    false,
+  );
+});
+
+test('a memo with no attribute observation plans no attribute op', () => {
+  const plan = planInlinePhase({
+    memo: { '--ds-rhythm-scale': { present: false, value: '' } },
+    properties: { '--ds-rhythm-scale': '1.2' },
+  });
+  assert.equal(
+    plan.restore.some((op) => op.op === 'remove-attribute'),
+    false,
+  );
+});

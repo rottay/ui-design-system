@@ -585,3 +585,124 @@ test('honesty check: the CSS-only claim is bounded against real inline style car
       'of deleting it',
   );
 });
+
+// ---------------------------------------------------------------------------
+// The four spacing.rhythm layout families, end to end.
+// ---------------------------------------------------------------------------
+
+/** The bind set a causal run must pass for one layout family. */
+export function layoutFamilyBindings(family) {
+  return {
+    'numeric-instance-gaps-exact': [`${family}-modern-numeric-gap/root`],
+    'control-height-fixed': ['button-modern-md/hitbox'],
+    'touch-target-fixed': ['button-modern-md/hitbox'],
+    'icon-size-fixed': ['button-modern-md/hitbox'],
+    [`${family}-root-non-spacing-geometry-unchanged`]: [`${family}-modern-preset-gap/root`],
+  };
+}
+
+const LAYOUT_FAMILIES = ['flex', 'grid', 'stack', 'space'];
+
+test('every spacing.rhythm family declares ONLY did-not-move negative controls', () => {
+  for (const family of LAYOUT_FAMILIES) {
+    const manifest = readManifest(
+      resolve(MANIFEST_ROOT, `families/primitive/layout/${family}.json`),
+    );
+    const cell = manifest.themeControls.find((entry) => entry.controlId === 'spacing.rhythm');
+    const declared = declaredPhrasesFor({
+      controlManifest: CONTROL_MANIFEST,
+      familyManifest: manifest,
+      controlId: 'spacing.rhythm',
+    });
+    const resolution = resolveNegativeControls({ phrases: declared.effective });
+    assert.deepEqual(
+      resolution.unresolved,
+      [],
+      `${family}: every negative control must resolve; a positive normalization claim belongs in stressCases`,
+    );
+    // The positives were MOVED, not deleted.
+    for (const phrase of cell.negativeControls) {
+      assert.equal(cell.stressCases.includes(phrase), false, `${family}: ${phrase} is duplicated`);
+    }
+    assert.ok(cell.stressCases.length > 0);
+  }
+});
+
+test('every spacing.rhythm family binds every declared-targets entry to a REAL roster target', () => {
+  for (const family of LAYOUT_FAMILIES) {
+    const manifest = readManifest(
+      resolve(MANIFEST_ROOT, `families/primitive/layout/${family}.json`),
+    );
+    const declared = declaredPhrasesFor({
+      controlManifest: CONTROL_MANIFEST,
+      familyManifest: manifest,
+      controlId: 'spacing.rhythm',
+    });
+    const bindings = layoutFamilyBindings(family);
+    // Every bound key must exist in the roster; invented targets fail here.
+    assertKnownTargetKeys(Object.values(bindings).flat());
+    const resolution = resolveNegativeControls({ phrases: declared.effective, bindings });
+    assert.deepEqual(resolution.unresolved, [], `${family}: unresolved phrases`);
+    assert.deepEqual(resolution.unbound, [], `${family}: unbound declared-targets entries`);
+    assert.equal(resolution.complete, true, `${family}: resolution incomplete`);
+    requireResolvedNegativeControls({ declared, resolution });
+  }
+});
+
+test('negative drill: dropping one binding fails closed rather than checking nothing', () => {
+  const manifest = readManifest(resolve(MANIFEST_ROOT, 'families/primitive/layout/flex.json'));
+  const declared = declaredPhrasesFor({
+    controlManifest: CONTROL_MANIFEST,
+    familyManifest: manifest,
+    controlId: 'spacing.rhythm',
+  });
+  const { 'control-height-fixed': _dropped, ...partial } = layoutFamilyBindings('flex');
+  const resolution = resolveNegativeControls({ phrases: declared.effective, bindings: partial });
+  assert.ok(resolution.unbound.some((entry) => entry.id === 'control-height-fixed'));
+  assert.equal(resolution.complete, false);
+});
+
+test('grid track templates are declared UNMECHANISED, not silently asserted', () => {
+  const entry = NEGATIVE_CONTROL_VOCABULARY.find(
+    (row) => row.id === 'grid-root-non-spacing-geometry-unchanged',
+  );
+  // getComputedStyle resolves these to USED track sizes, which flexible tracks
+  // in a fixed-width container must change when the gap changes. Asserting
+  // did-not-move on them turns the control's intended effect into a violation.
+  for (const property of ['grid-template-columns', 'grid-template-rows']) {
+    assert.equal(
+      entry.properties.includes(property),
+      false,
+      `${property} resolves to a used value and cannot carry a did-not-move claim`,
+    );
+  }
+  // The gap it leaves must be STATED, not hidden.
+  assert.ok(entry.partiallyMechanised.some((note) => /track templates/.test(note)));
+  // The rest of the entry still does real work.
+  assert.ok(entry.properties.includes('grid-auto-flow'));
+  assert.ok(entry.properties.includes('align-items'));
+});
+
+test('an evidence id is never collected as a source binding', () => {
+  // Regression: evidence is OUTPUT. When the control manifest carried receipt
+  // PATHS as evidence ids, the causal run tried to hash receipts that the run
+  // itself had not written yet, and every scenario died on a vanished file.
+  const control = readManifest(resolve(MANIFEST_ROOT, 'controls/spacing.rhythm.json'));
+  const ids = [
+    ...control.calibration.staticDbParityEvidenceIds,
+    ...control.calibration.exactRestoreEvidenceIds,
+  ];
+  assert.ok(ids.length > 0, 'the control must carry computed evidence ids');
+  for (const id of ids) {
+    assert.equal(id.startsWith('packages/'), false, `${id} is path-shaped and would be hashed`);
+    assert.match(id, /^R\d+:[^:]+:.+$/, `${id} must be round:family:scenario coordinates`);
+  }
+  for (const family of LAYOUT_FAMILIES) {
+    const manifest = readManifest(
+      resolve(MANIFEST_ROOT, `families/primitive/layout/${family}.json`),
+    );
+    const cell = manifest.themeControls.find((entry) => entry.controlId === 'spacing.rhythm');
+    assert.equal(cell.evidenceIds.length, 2, `${family} must cite both stops`);
+    for (const id of cell.evidenceIds) assert.ok(ids.includes(id), `${id} is not a control-level id`);
+  }
+});

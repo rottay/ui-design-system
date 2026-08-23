@@ -404,8 +404,8 @@
     {
       "controlId": "spacing.rhythm",
       "disposition": "UNKNOWN",
-      "verificationState": "SOURCE_BOUND",
-      "unknownReason": "COMPUTED_STATIC_DB_AND_RESTORE_EVIDENCE_MISSING",
+      "verificationState": "COMPUTED_VERIFIED",
+      "unknownReason": "DISPOSITION_SHAPE_AND_SIGHTED_ACCEPTANCE_PENDING. The computed evidence this row was waiting for now exists (see evidenceIds): both ingress doors measured on one scene, preset gap x0.85/x1.2 exact and monotonic, numeric gap unmoved, negative controls held, restore exact. disposition stays UNKNOWN for two reasons that are NOT missing measurement: the schema dispositionLaw for APPLICABLE requires separate staticSourceBindings/dbSourceBindings, which this cell shape does not carry (its sourceBindings is a flat array), and SIGHTED_ACCEPTED is not claimable from a computed run.",
       "applicabilityHypothesis": "APPLICABLE_CANDIDATE_FOR_SCALAR_AND_RESPONSIVE_PRESET_GAPS: scalar uniform and split preset axes multiply by tight=0.85 normal=1 airy=1.2 through data-gap-preset stamping; responsive preset axes multiply through a Modern-only opt-in in the generated breakpoint rule; numeric axes are exact in every engine.",
       "axisDispositions": [
         {
@@ -464,10 +464,6 @@
         "packages/core/manifest/controls/spacing.rhythm.json"
       ],
       "negativeControls": [
-        "gap=-8, NaN or Infinity normalizes to 0px and stamps no preset",
-        "gap=[numeric,preset] scales only the preset row axis",
-        "gap=[preset,numeric] scales only the preset column axis",
-        "gap=none remains zero",
         "direction wrap alignment width overflow font color border and motion remain unchanged"
       ],
       "stressCases": [
@@ -476,15 +472,22 @@
         "nested-flex-with-independent-gaps",
         "large-text",
         "responsive-gap-at-xs-and-md",
-        "mixed-preset-numeric-tuple"
+        "mixed-preset-numeric-tuple",
+        "gap=-8, NaN or Infinity normalizes to 0px and stamps no preset",
+        "gap=[numeric,preset] scales only the preset row axis",
+        "gap=[preset,numeric] scales only the preset column axis",
+        "gap=none remains zero"
       ],
       "restoreRequirements": [
         "Unset static and DB rhythm must restore factor 1 and byte-equivalent computed gap for the same source tree.",
         "No stale data attribute or instance channel may survive rerender from preset to numeric or unset.",
         "Responsive gap remediation must preserve consumer style precedence and exact numeric geometry."
       ],
-      "evidenceIds": [],
-      "nextAction": "PROVE_0_85_1_1_2_COMPUTED_GAPS_FOR_SCALAR_AND_RESPONSIVE_PRESET_AXES_STATIC_DB_NEGATIVES_AND_EXACT_RESTORE",
+      "evidenceIds": [
+        "R2:primitive/layout/flex:spacing.rhythm/tight/static-and-db",
+        "R2:primitive/layout/flex:spacing.rhythm/airy/static-and-db"
+      ],
+      "nextAction": "RESHAPE_SOURCE_BINDINGS_TO_SATISFY_DISPOSITION_LAW_THEN_OBTAIN_SIGHTED_ACCEPTANCE. The 0.85/1/1.2 computed proof for the scalar preset axis is DONE and receipted; the responsive-preset axis is not covered by these fixtures and remains unmeasured.",
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "reasons": [

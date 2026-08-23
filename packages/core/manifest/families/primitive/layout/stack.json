@@ -473,8 +473,8 @@
     {
       "controlId": "spacing.rhythm",
       "disposition": "UNKNOWN",
-      "verificationState": "SOURCE_BOUND",
-      "unknownReason": "COMPUTED_STATIC_DB_AND_RESTORE_EVIDENCE_MISSING",
+      "verificationState": "COMPUTED_VERIFIED",
+      "unknownReason": "DISPOSITION_SHAPE_AND_SIGHTED_ACCEPTANCE_PENDING. The computed evidence this row was waiting for now exists (see evidenceIds): both ingress doors measured on one scene, preset gap x0.85/x1.2 exact and monotonic, numeric gap unmoved, negative controls held, restore exact. disposition stays UNKNOWN for two reasons that are NOT missing measurement: the schema dispositionLaw for APPLICABLE requires separate staticSourceBindings/dbSourceBindings, which this cell shape does not carry (its sourceBindings is a flat array), and SIGHTED_ACCEPTED is not claimable from a computed run.",
       "applicabilityHypothesis": "APPLICABLE_CANDIDATE_FOR_DEFAULT_SCALAR_AND_RESPONSIVE_PRESET_SPACING: default, scalar and responsive presets multiply by tight=0.85 normal=1 airy=1.2 and divider centering follows the same result at every breakpoint. Numeric spacing is exact and unsafe values normalize to 0px through one contract-level resolver shared by all three engines.",
       "axisDispositions": [
         {
@@ -528,11 +528,8 @@
         "packages/core/manifest/controls/spacing.rhythm.json"
       ],
       "negativeControls": [
-        "spacing=none remains zero",
         "finite numeric spacing remains exact and never scales",
-        "negative, NaN and Infinity scalar and responsive gaps normalize to 0px and stamp no preset",
-        "direction reverse wrap alignment full-size divider thickness font color and motion remain unchanged",
-        "fragment flattening preserves numeric zero children and one divider between rendered members"
+        "direction reverse wrap alignment full-size divider thickness font color and motion remain unchanged"
       ],
       "stressCases": [
         "rtl-horizontal-and-reverse",
@@ -540,15 +537,21 @@
         "responsive-spacing-at-xs-and-md",
         "nested-stacks-with-independent-rhythm",
         "fragment-and-zero-children",
-        "large-text-horizontal-wrap"
+        "large-text-horizontal-wrap",
+        "spacing=none remains zero",
+        "negative, NaN and Infinity scalar and responsive gaps normalize to 0px and stamp no preset",
+        "fragment flattening preserves numeric zero children and one divider between rendered members"
       ],
       "restoreRequirements": [
         "Unset static and DB rhythm restores factor 1, the same data-spacing and byte-equivalent computed gap.",
         "Divider margins must restore from the same current-gap channel with no stale responsive axis flags.",
         "Switching preset to numeric, none or unset must clear stale custom properties and preserve consumer style precedence."
       ],
-      "evidenceIds": [],
-      "nextAction": "PROVE_0_85_1_1_2_COMPUTED_GAPS_FOR_DEFAULT_SCALAR_AND_RESPONSIVE_PRESETS_PLUS_DIVIDER_CENTERING_STATIC_DB_NEGATIVES_AND_EXACT_RESTORE",
+      "evidenceIds": [
+        "R2:primitive/layout/stack:spacing.rhythm/tight/static-and-db",
+        "R2:primitive/layout/stack:spacing.rhythm/airy/static-and-db"
+      ],
+      "nextAction": "RESHAPE_SOURCE_BINDINGS_TO_SATISFY_DISPOSITION_LAW_THEN_OBTAIN_SIGHTED_ACCEPTANCE. The 0.85/1/1.2 computed proof for the scalar preset axis is DONE and receipted; the responsive-preset axis is not covered by these fixtures and remains unmeasured.",
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "reasons": [

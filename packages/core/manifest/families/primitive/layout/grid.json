@@ -436,8 +436,8 @@
     {
       "controlId": "spacing.rhythm",
       "disposition": "UNKNOWN",
-      "verificationState": "SOURCE_BOUND",
-      "unknownReason": "COMPUTED_STATIC_DB_AND_RESTORE_EVIDENCE_MISSING",
+      "verificationState": "COMPUTED_VERIFIED",
+      "unknownReason": "DISPOSITION_SHAPE_AND_SIGHTED_ACCEPTANCE_PENDING. The computed evidence this row was waiting for now exists (see evidenceIds): both ingress doors measured on one scene, preset gap x0.85/x1.2 exact and monotonic, numeric gap unmoved, negative controls held, restore exact. disposition stays UNKNOWN for two reasons that are NOT missing measurement: the schema dispositionLaw for APPLICABLE requires separate staticSourceBindings/dbSourceBindings, which this cell shape does not carry (its sourceBindings is a flat array), and SIGHTED_ACCEPTED is not claimable from a computed run.",
       "applicabilityHypothesis": "APPLICABLE_CANDIDATE_FOR_MAIN_AND_PER_AXIS_PRESET_GAPS: main, column and row preset rungs each multiply by tight=0.85 normal=1 airy=1.2 through a Modern-scoped rule; numeric values remain exact instance geometry and stamp no preset.",
       "axisDispositions": [
         {
@@ -493,9 +493,7 @@
         "packages/core/manifest/controls/spacing.rhythm.json"
       ],
       "negativeControls": [
-        "gap=-8, NaN or Infinity normalizes to 0px and stamps no preset",
         "columnGap and rowGap numeric values remain exact and override main gap per CSS",
-        "gap=none remains zero",
         "track templates item spans auto-flow alignment font color border and motion remain unchanged"
       ],
       "stressCases": [
@@ -504,15 +502,20 @@
         "auto-fit-min-column-width",
         "main-gap-with-one-axis-override",
         "both-axis-overrides",
-        "large-text-and-long-token"
+        "large-text-and-long-token",
+        "gap=-8, NaN or Infinity normalizes to 0px and stamps no preset",
+        "gap=none remains zero"
       ],
       "restoreRequirements": [
         "Unset static and DB rhythm restores factor 1 and byte-equivalent main computed gap.",
         "Axis-remediation must clear stale preset channels when switching to numeric, none or unset.",
         "Track templates, item placement and consumer inline style must remain identical through control set and reset."
       ],
-      "evidenceIds": [],
-      "nextAction": "REMEDIATE_PRESET_ROW_COLUMN_GAP_RHYTHM_BYPASS_THEN_PROVE_0_85_1_1_2_STATIC_DB_NEGATIVES_AND_EXACT_RESTORE",
+      "evidenceIds": [
+        "R2:primitive/layout/grid:spacing.rhythm/tight/static-and-db",
+        "R2:primitive/layout/grid:spacing.rhythm/airy/static-and-db"
+      ],
+      "nextAction": "RESHAPE_SOURCE_BINDINGS_TO_SATISFY_DISPOSITION_LAW_THEN_OBTAIN_SIGHTED_ACCEPTANCE. The 0.85/1/1.2 computed proof for the scalar preset axis is DONE and receipted; the responsive-preset axis is not covered by these fixtures and remains unmeasured.",
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "reasons": [

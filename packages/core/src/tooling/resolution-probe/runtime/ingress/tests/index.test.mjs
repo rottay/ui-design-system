@@ -17,12 +17,14 @@
 import assert from 'node:assert/strict';
 import { resolve } from 'node:path';
 import { test } from 'node:test';
+import { pathToFileURL } from 'node:url';
 
 import { readManifest } from '../../../foundation/negative-controls/index.mjs';
 import { CORE_ROOT } from '../../../foundation/paths/index.mjs';
 import {
   assertArmProvenance,
   assertArmsMatchManifest,
+  assertNoRetiredCompilerBinding,
   buildIngressInput,
   composeDbArm,
   composeStaticArm,
@@ -30,6 +32,7 @@ import {
   INGRESS_ARMS,
   loadCompilerArms,
   lowerStop,
+  RETIRED_DB_COMPILER_EXPORTS,
   tenantArmSelector,
 } from '../index.mjs';
 
@@ -87,7 +90,7 @@ test('positive control: a static arm appends a tenant block and leaves the basel
 test('positive control: a DB arm carries no CSS, because it writes inline on the root', () => {
   const arm = composeDbArm({
     variables: { '--ds-rhythm-scale': '1.2' },
-    producedBy: { ...PRODUCED_BY, exportName: 'compileAppearanceVariables' },
+    producedBy: { ...PRODUCED_BY, exportName: 'compileTenantThemeConfig' },
   });
   assert.equal(arm.position, 'root-inline-style');
   const baseline = ':root { --ds-rhythm-scale: 1; }';
@@ -153,15 +156,17 @@ test('positive control: lowerStop keeps only the declared channels and records p
     armId: 'db-tenant-theme',
     controlManifest: CONTROL_MANIFEST,
     stopId: 'airy',
-    // A test double standing in for compileAppearanceVariables: the mechanics
+    // A test double standing in for compileTenantThemeConfig: the mechanics
     // under test are the extraction and the provenance, not the arithmetic.
     compile: () => ({ variables: { '--ds-rhythm-scale': '1.2', '--ds-unrelated': 'x' } }),
+    vertical: 'rottay',
+    provenance: { schemaVersion: 1 },
   });
   assert.deepEqual(lowered.variables, { '--ds-rhythm-scale': '1.2' });
   assert.deepEqual(lowered.producedBy.emittedChannels, ['--ds-rhythm-scale']);
   assert.deepEqual(lowered.producedBy.omittedChannels, ['--ds-rhythm-effective-scale']);
   assert.equal(lowered.producedBy.input.path, 'appearance.general.rhythm');
-  assert.equal(lowered.producedBy.exportName, 'compileAppearanceVariables');
+  assert.equal(lowered.producedBy.exportName, 'compileTenantThemeConfig');
 });
 
 test('negative drill: a compiler that emits NONE of the declared channels throws', () => {
@@ -180,9 +185,9 @@ test('negative drill: a compiler that emits NONE of the declared channels throws
 });
 
 test('positive control: lowerStop reshapes the document into the REAL compiler argument shape', () => {
-  // compileAppearanceVariables(appearance: TenantAppearance) destructures
-  // appearance.general immediately -- so the compiler must see {general:{...}},
-  // never the DB document's own {appearance:{general:{...}}} wrapper.
+  // compileTenantThemeConfig takes the read/compile ENVELOPE, so the stop moves
+  // from the manifest's normalized `appearance.general` position into the
+  // config's flat `appearance`, carrying the trusted identity columns.
   let dbSeen = null;
   lowerStop({
     armId: 'db-tenant-theme',
@@ -192,8 +197,21 @@ test('positive control: lowerStop reshapes the document into the REAL compiler a
       dbSeen = input;
       return { variables: { '--ds-rhythm-scale': '1.2' } };
     },
+    vertical: 'rottay',
+    provenance: { schemaVersion: 1 },
   });
-  assert.deepEqual(dbSeen, { general: { rhythm: 'airy' } });
+  assert.deepEqual(dbSeen, {
+    schemaVersion: 1,
+    mode: 'simple',
+    appearance: { rhythm: 'airy' },
+    tenantId: 'probe-tenant-rottay',
+    slug: 'probe-tenant-rottay',
+    verticalKey: 'rottay',
+    rowVersion: 1,
+  });
+  // The DB arm must never compile under a first-party slug: those are reserved
+  // code-owned STATIC identities and compileTenantThemeConfig rejects them.
+  assert.notEqual(dbSeen.slug, 'rottay');
 
   // compileBrandTheme(input: BrandCompilerInput) destructures
   // { brandTheme, tenantSlug } immediately -- so the compiler must see the
@@ -213,7 +231,7 @@ test('positive control: lowerStop reshapes the document into the REAL compiler a
   assert.deepEqual(staticSeen, { brandTheme: { surfaces: { rhythm: 'airy' } }, tenantSlug: 'rottay' });
 });
 
-test('negative drill: the db arm refuses a document with no "appearance" root', () => {
+test('negative drill: the db arm refuses a document with no "appearance.general"', () => {
   assert.throws(
     () =>
       lowerStop({
@@ -221,8 +239,38 @@ test('negative drill: the db arm refuses a document with no "appearance" root', 
         controlManifest: { ...CONTROL_MANIFEST, ingress: { dbTenantThemePath: 'general.rhythm' } },
         stopId: 'airy',
         compile: () => ({ variables: { '--ds-rhythm-scale': '1.2' } }),
+        vertical: 'rottay',
+        provenance: { schemaVersion: 1 },
       }),
-    /has no "appearance" object at its root/,
+    /has no "appearance\.general" object/,
+  );
+});
+
+test('negative drill: the db arm refuses to hardcode the contract version', () => {
+  assert.throws(
+    () =>
+      lowerStop({
+        armId: 'db-tenant-theme',
+        controlManifest: CONTROL_MANIFEST,
+        stopId: 'airy',
+        compile: () => ({ variables: { '--ds-rhythm-scale': '1.2' } }),
+        vertical: 'rottay',
+      }),
+    /TENANT_THEME_SCHEMA_VERSION/,
+  );
+});
+
+test('negative drill: the db arm refuses to compile with no vertical envelope', () => {
+  assert.throws(
+    () =>
+      lowerStop({
+        armId: 'db-tenant-theme',
+        controlManifest: CONTROL_MANIFEST,
+        stopId: 'airy',
+        compile: () => ({ variables: { '--ds-rhythm-scale': '1.2' } }),
+        provenance: { schemaVersion: 1 },
+      }),
+    /needs --vertical/,
   );
 });
 
@@ -244,7 +292,7 @@ test('negative drill: an arm whose lowered path disagrees with the manifest is r
     variables: { '--ds-rhythm-scale': '1.2' },
     producedBy: {
       module: 'dist/.../appearance/index.js',
-      exportName: 'compileAppearanceVariables',
+      exportName: 'compileTenantThemeConfig',
       input: { path: 'appearance.general.spacing' },
     },
   });
@@ -284,7 +332,8 @@ test('loadCompilerArms claims freshness only after the dist gate proves it', asy
   const loaded = await loadCompilerArms({
     importModule: async () => ({
       compileBrandTheme: () => ({}),
-      compileAppearanceVariables: () => ({}),
+      compileTenantThemeConfig: () => ({}),
+      TENANT_THEME_SCHEMA_VERSION: 1,
     }),
     assertFresh: () => ({ ok: true, failures: [] }),
   });
@@ -308,4 +357,113 @@ test('negative drill: manifest agreement rejects a forged compiler module or exp
   assert.equal(agreement.ok, false);
   assert.ok(agreement.failures.some((row) => /compiler module/.test(row.reason)));
   assert.ok(agreement.failures.some((row) => /compiler export/.test(row.reason)));
+});
+
+// ---------------------------------------------------------------------------
+// The productive DB door. These load the REAL published modules, so they are
+// the drills the previous binding could not have survived.
+// ---------------------------------------------------------------------------
+
+test('both arms resolve a callable export from a REAL module, not a test double', async () => {
+  const arms = await loadCompilerArms();
+  assert.equal(typeof arms['static-brand-theme'].compile, 'function');
+  assert.equal(typeof arms['db-tenant-theme'].compile, 'function');
+  assert.equal(arms['db-tenant-theme'].provenance.exportName, 'compileTenantThemeConfig');
+  // A PUBLISHED subpath, not a deep path a bundler may tree-shake.
+  assert.equal(arms['db-tenant-theme'].provenance.moduleSubpath, '@rottay/design-system/server');
+  assert.doesNotMatch(arms['db-tenant-theme'].provenance.module, /compilers\/kernel\/runtime\/appearance/);
+});
+
+test('negative drill: the DB arm may never be rebound to a retired compiler', () => {
+  assert.ok(RETIRED_DB_COMPILER_EXPORTS.includes('compileAppearanceVariables'));
+  assert.ok(RETIRED_DB_COMPILER_EXPORTS.includes('appearanceGeneralToVariables'));
+  assert.equal(
+    RETIRED_DB_COMPILER_EXPORTS.includes(INGRESS_ARMS['db-tenant-theme'].compilerExport),
+    false,
+  );
+  for (const retired of RETIRED_DB_COMPILER_EXPORTS) {
+    assert.throws(
+      () =>
+        assertNoRetiredCompilerBinding({
+          'db-tenant-theme': { ...INGRESS_ARMS['db-tenant-theme'], compilerExport: retired },
+        }),
+      /RETIRED DB compiler/,
+      `rebinding to ${retired} must throw`,
+    );
+  }
+  assert.throws(
+    () =>
+      assertNoRetiredCompilerBinding({
+        'db-tenant-theme': {
+          ...INGRESS_ARMS['db-tenant-theme'],
+          compilerModule: 'dist/infrastructure/compilers/kernel/runtime/appearance/index.js',
+        },
+      }),
+    /deep-imports the retired appearance compiler/,
+  );
+});
+
+test('the retired DB compiler is absent from every PUBLISHED entrypoint', async () => {
+  // Ruling 3: a deep .d.ts/JS divergence is non-blocking debt; a symbol that is
+  // genuinely public would be a different decision. This pins which world we are in.
+  const { createRequire } = await import('node:module');
+  const require_ = createRequire(resolve(CORE_ROOT, 'package.json'));
+  const exportsMap = require_('./package.json').exports;
+  for (const [subpath, entry] of Object.entries(exportsMap)) {
+    const target = typeof entry === 'string' ? entry : entry?.import;
+    if (typeof target !== 'string' || !target.endsWith('.js')) continue;
+    // Wildcard subpaths are patterns, not modules; they cannot be imported literally.
+    if (subpath.includes('*') || target.includes('*')) continue;
+    const module = await import(pathToFileURL(resolve(CORE_ROOT, target)).href);
+    for (const retired of RETIRED_DB_COMPILER_EXPORTS) {
+      assert.equal(
+        typeof module[retired],
+        'undefined',
+        `${retired} is public on "${subpath}" — that changes the ruling, so stop rather than bind it`,
+      );
+    }
+  }
+});
+
+test('the DB arm lowers every declared stop through the productive compiler', async () => {
+  const arms = await loadCompilerArms();
+  const factors = { tight: '0.85', normal: '1', airy: '1.2' };
+  for (const [stopId, expected] of Object.entries(factors)) {
+    const lowered = lowerStop({
+      armId: 'db-tenant-theme',
+      controlManifest: CONTROL_MANIFEST,
+      stopId,
+      compile: arms['db-tenant-theme'].compile,
+      provenance: arms['db-tenant-theme'].provenance,
+      vertical: 'rottay',
+    });
+    assert.equal(lowered.variables['--ds-rhythm-scale'], expected);
+  }
+});
+
+test('manifest-ingress parity: both arms lower the SAME stop to the SAME channel value', async () => {
+  const arms = await loadCompilerArms();
+  for (const stopId of ['tight', 'normal', 'airy']) {
+    const lowered = Object.fromEntries(
+      INGRESS_ARM_IDS.map((armId) => [
+        armId,
+        lowerStop({
+          armId,
+          controlManifest: CONTROL_MANIFEST,
+          stopId,
+          compile: arms[armId].compile,
+          provenance: arms[armId].provenance,
+          vertical: 'rottay',
+        }),
+      ]),
+    );
+    assert.deepEqual(
+      lowered['static-brand-theme'].variables,
+      lowered['db-tenant-theme'].variables,
+      `arms diverged at stop "${stopId}"`,
+    );
+    // Each arm really travelled its own manifest-declared door.
+    assert.equal(lowered['static-brand-theme'].producedBy.input.path, 'surfaces.rhythm');
+    assert.equal(lowered['db-tenant-theme'].producedBy.input.path, 'appearance.general.rhythm');
+  }
 });

@@ -526,7 +526,8 @@ export async function readRootAttributes(page) {
  */
 export async function readInlineMemo(page, names) {
   return page.evaluate((properties) => {
-    const style = document.documentElement.style;
+    const element = document.documentElement;
+    const style = element.style;
     const memo = {};
     for (const name of properties) {
       const value = style.getPropertyValue(name);
@@ -536,6 +537,11 @@ export async function readInlineMemo(page, names) {
         priority: style.getPropertyPriority(name),
       };
     }
+    // `removeProperty` empties the declarations but LEAVES `style=""` behind, and
+    // the root-attribute comparison reads presence, not content — so a document
+    // that had no style attribute does not get one back by removal alone. `#`
+    // cannot begin a CSS property name, so this cannot collide with a channel.
+    memo['#attribute'] = { present: element.hasAttribute('style') };
     return memo;
   }, names);
 }
@@ -543,10 +549,17 @@ export async function readInlineMemo(page, names) {
 /** Executes a plan. The page decides nothing; every decision was made in foundation/causality. */
 export async function applyInlineOps(page, ops) {
   await page.evaluate((operations) => {
-    const style = document.documentElement.style;
+    const element = document.documentElement;
+    const style = element.style;
     for (const op of operations) {
       if (op.op === 'remove') {
         style.removeProperty(op.name);
+        continue;
+      }
+      if (op.op === 'remove-attribute') {
+        // Only when the write left nothing behind: a declaration that survived
+        // is a restore defect the comparison must still see, not one to erase.
+        if (style.length === 0) element.removeAttribute(op.name);
         continue;
       }
       style.setProperty(op.name, op.value, op.priority || '');

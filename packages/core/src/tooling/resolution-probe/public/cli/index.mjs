@@ -17,7 +17,7 @@
  * @module Tooling/ResolutionProbe/Public/Cli
  */
 
-import { readFileSync, writeFileSync } from 'node:fs';
+import { existsSync, readFileSync, statSync, writeFileSync } from 'node:fs';
 import { relative, resolve } from 'node:path';
 
 import { diffArtifacts } from '../../composition/diff/index.mjs';
@@ -398,16 +398,64 @@ function summarise(artifact, options) {
  * declare rather than a second hardcoded list this file would have to keep
  * in sync by hand.
  */
+/**
+ * Whether a manifest `sourceBindings` string is a file the digest can hash.
+ *
+ * The manifests mix three kinds of `packages/`-prefixed string in the same
+ * fields, and only one of them is hashable:
+ *   - a FILE — hashed;
+ *   - a DIRECTORY — an owner pointer. Expanding it would put whole trees
+ *     (`src/ui/primitives` is 1313 files) into the freshness surface, so an
+ *     unrelated primitive edit would invalidate every receipt of this control;
+ *   - PROSE that happens to open with a path (evidence sentences). Always
+ *     contains whitespace, and is never a path.
+ *
+ * A path-shaped string that does not exist is NOT filtered: a binding naming a
+ * vanished file is exactly the staleness this digest exists to catch, so it
+ * throws rather than quietly shrinking the surface.
+ */
+/**
+ * Strips a manifest `sourceBindings` locator down to the path it names.
+ *
+ * The manifests point INTO files two ways — `path#symbol` and `path:1371-1451`
+ * — and both must reduce to the same hashable file. Returns null for a string
+ * that is not a `packages/` path at all.
+ */
+function normaliseBoundPath(value, evidenceRoot) {
+  const withoutSymbol = value.split('#')[0];
+  const withoutLines = withoutSymbol.replace(/:\d+(?:-\d+)?$/, '');
+  if (!withoutLines.startsWith('packages/')) return null;
+  // Evidence is OUTPUT. A receipt inside its own freshness surface cannot be
+  // hashed before it is written, so a path under the evidence root is never a
+  // source binding — however a manifest happens to spell an evidence id.
+  if (evidenceRoot && withoutLines.startsWith(`${evidenceRoot}/`)) return null;
+  return withoutLines;
+}
+
+function isDigestibleSourceFile(candidate) {
+  if (/\s/.test(candidate)) return false;
+  const absolute = resolve(REPOSITORY_ROOT, candidate);
+  if (!existsSync(absolute)) {
+    throw new Error(
+      `resolution-probe: source binding "${candidate}" does not exist. A binding that names a ` +
+        'vanished file cannot be hashed, and dropping it would shrink the freshness surface ' +
+        'silently.',
+    );
+  }
+  return statSync(absolute).isFile();
+}
+
 function causalFreshnessSourceFiles({
   controlManifest,
   familyManifest,
   manifestSourceFiles,
   bundleInputFiles,
 }) {
+  const evidenceRoot = loadProgramContracts().evidence.root;
   const collectBoundFiles = (value, found = []) => {
     if (typeof value === 'string') {
-      const file = value.split('#')[0];
-      if (file.startsWith('packages/')) found.push(file);
+      const file = normaliseBoundPath(value, evidenceRoot);
+      if (file !== null && isDigestibleSourceFile(file)) found.push(file);
       return found;
     }
     if (Array.isArray(value)) {
@@ -535,7 +583,10 @@ async function commandCausal(options) {
       controlManifest,
       stopId: options.stop,
       compile: loaded.compile,
-      vertical: armId === 'static-brand-theme' ? options.verticals[0] : undefined,
+      // Both arms need it: the static arm to build its tenant selector, the DB
+      // arm to resolve the code-owned vertical envelope its compiler validates
+      // against. Same vertical for both, which is what makes them comparable.
+      vertical: options.verticals[0],
       provenance: loaded.provenance,
     });
     return armId === 'static-brand-theme'

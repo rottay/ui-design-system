@@ -438,8 +438,8 @@
     {
       "controlId": "spacing.rhythm",
       "disposition": "UNKNOWN",
-      "verificationState": "SOURCE_BOUND",
-      "unknownReason": "COMPUTED_STATIC_DB_PARITY_AND_EXACT_RESTORE_EVIDENCE_MISSING",
+      "verificationState": "COMPUTED_VERIFIED",
+      "unknownReason": "DISPOSITION_SHAPE_AND_SIGHTED_ACCEPTANCE_PENDING. The computed evidence this row was waiting for now exists (see evidenceIds): both ingress doors measured on one scene, preset gap x0.85/x1.2 exact and monotonic, numeric gap unmoved, negative controls held, restore exact. disposition stays UNKNOWN for two reasons that are NOT missing measurement: the schema dispositionLaw for APPLICABLE requires separate staticSourceBindings/dbSourceBindings, which this cell shape does not carry (its sourceBindings is a flat array), and SIGHTED_ACCEPTED is not claimable from a computed run.",
       "applicabilityHypothesis": "APPLICABLE_CANDIDATE_FOR_PRESET_SIZE: sm/md/lg and small/middle/large multiply by tight=0.85 normal=1 airy=1.2 after density. Numeric and [horizontal,vertical] tuple sizes are exact and unsafe values normalize independently to 0px.",
       "axisDispositions": [
         {
@@ -484,11 +484,7 @@
         "packages/core/manifest/controls/spacing.rhythm.json"
       ],
       "negativeControls": [
-        "size=-8, NaN or Infinity becomes 0px",
-        "size=[-8,16] yields row-gap 16px and column-gap 0px without rhythm scaling",
-        "size=[8,NaN] yields row-gap 0px and column-gap 8px without rhythm scaling",
-        "direction wrap alignment separator count font color border and motion remain unchanged",
-        "fragment members and numeric zero children keep stable positions"
+        "direction wrap alignment separator count font color border and motion remain unchanged"
       ],
       "recordedNonDefects": [
         {
@@ -511,15 +507,22 @@
         "wrapped-tuple-gap",
         "nested-space-and-stack",
         "fragment-and-zero-children",
-        "large-text-baseline"
+        "large-text-baseline",
+        "size=-8, NaN or Infinity becomes 0px",
+        "size=[-8,16] yields row-gap 16px and column-gap 0px without rhythm scaling",
+        "size=[8,NaN] yields row-gap 0px and column-gap 8px without rhythm scaling",
+        "fragment members and numeric zero children keep stable positions"
       ],
       "restoreRequirements": [
         "Unset static and DB rhythm restores factor 1 and byte-equivalent computed gap for the same size spelling.",
         "Switching preset to numeric, tuple or unset replaces --ds-space-instance-gap without stale preset scaling.",
         "Canonical and legacy aliases must restore to identical computed values and preserve caller-authored style precedence."
       ],
-      "evidenceIds": [],
-      "nextAction": "PROVE_0_85_1_1_2_CANONICAL_LEGACY_PRESET_GAPS_STATIC_DB_NUMERIC_TUPLE_NEGATIVES_AND_EXACT_RESTORE",
+      "evidenceIds": [
+        "R2:primitive/layout/space:spacing.rhythm/tight/static-and-db",
+        "R2:primitive/layout/space:spacing.rhythm/airy/static-and-db"
+      ],
+      "nextAction": "RESHAPE_SOURCE_BINDINGS_TO_SATISFY_DISPOSITION_LAW_THEN_OBTAIN_SIGHTED_ACCEPTANCE. The 0.85/1/1.2 computed proof for the scalar preset axis is DONE and receipted; the responsive-preset axis is not covered by these fixtures and remains unmeasured.",
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "reasons": [

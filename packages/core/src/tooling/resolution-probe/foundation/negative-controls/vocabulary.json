@@ -150,8 +150,6 @@
         "track templates item spans auto-flow alignment font color border and motion remain unchanged"
       ],
       "properties": [
-        "grid-template-columns",
-        "grid-template-rows",
         "grid-auto-flow",
         "align-items",
         "justify-content",
@@ -163,7 +161,7 @@
         "transition-duration"
       ],
       "meaning": "The Grid family narrows the control-level claim onto its own root.",
-      "partiallyMechanised": ["item spans"]
+      "partiallyMechanised": ["item spans", "track templates: getComputedStyle resolves grid-template-columns/rows to USED track sizes rather than the authored template, and flexible tracks in a fixed-width container must absorb any gap change by arithmetic (measured repeat(2, minmax(0,1fr)) at 1280px: 632.5px tracks + 15px gap at normal, 631px tracks + 18px gap at airy, both exactly 1280). Asserting did-not-move on them reports the control's intended effect as a violation, for the same reason control height is not asserted on a layout container."]
     },
     {
       "id": "stack-root-non-spacing-geometry-unchanged",

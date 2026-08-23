@@ -41,7 +41,7 @@ node src/tooling/resolution-probe/public/cli/index.mjs dial \
 node src/tooling/resolution-probe/public/cli/index.mjs causal \
   --control-manifest manifest/controls/spacing.rhythm.json \
   --family-manifest manifest/families/primitive/layout/flex.json \
-  --stop airy --vertical platform \
+  --stop airy --vertical rottay \
   --bind control-height-fixed=button-modern-md/hitbox --out causal.json
 
 # what changed between two runs
@@ -233,13 +233,14 @@ proved.
 - **The CLI causal command now calls the compilers itself; running it against Chromium has
   not.** `causal` no longer accepts `--payload` — it calls `loadCompilerArms()` +
   `lowerStop()` and imports the compiled modules under `dist/` for real, so the arm's `variables`
-  and `producedBy` always come from `compileBrandTheme`/`compileAppearanceVariables`, never from a
+  and `producedBy` always come from `compileBrandTheme`/`compileTenantThemeConfig`, never from a
   JSON file a caller could have hand-written. `lowerStop` also reshapes the manifest-path-relative
   document into the argument shape each compiler function ACTUALLY takes, verified against
-  source: `compileAppearanceVariables(appearance: TenantAppearance)` destructures
-  `appearance.general` immediately, so it needs `document.appearance`, not the DB document's own
-  `{appearance:{general:{…}}}` wrapper the old harness handed it (that mismatch was the harness
-  reporting its own bug as a design-system defect); `compileBrandTheme(input: BrandCompilerInput)`
+  source: `compileTenantThemeConfig` takes the read/compile ENVELOPE
+  (`{schemaVersion, mode:'simple', appearance}` plus the trusted identity columns), so the stop
+  moves from the manifest's normalized `appearance.general` position into the config's flat
+  `appearance`, and the arm compiles for a CUSTOMER tenant because first-party slugs are reserved;
+  `compileBrandTheme(input: BrandCompilerInput)`
   destructures `{ brandTheme, tenantSlug }`, so it needs `{ brandTheme: document, tenantSlug }`,
   never the bare `BrandTheme` fragment. What remains unverified is only the browser half —
   `loadCompilerArms` records `freshnessProven: false` since `dist/` is a build product, and the
@@ -326,7 +327,7 @@ cascade**:
 | arm | door | lands as | compiler |
 |---|---|---|---|
 | `static-brand-theme` | `surfaces.rhythm` | a block behind `:is(html[data-tenant='…'], :where([data-ds-root][data-vertical='…']))` | `compileBrandTheme` |
-| `db-tenant-theme` | `appearance.general.rhythm` | `setProperty` on `document.documentElement` | `compileAppearanceVariables` |
+| `db-tenant-theme` | `appearance.general.rhythm` | `setProperty` on `document.documentElement` | `compileTenantThemeConfig` (via `@rottay/design-system/server`) |
 
 "Static and DB are equivalent" is a claim about the cascade, so it is settled by
 putting both on the SAME DOM in one run and diffing the two arms. Two separately

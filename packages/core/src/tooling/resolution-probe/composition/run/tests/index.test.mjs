@@ -204,8 +204,8 @@ const STATIC_ARM = composeStaticArm({
 const DB_ARM = composeDbArm({
   variables: { '--ds-rhythm-scale': '1.2' },
   producedBy: {
-    module: 'dist/infrastructure/compilers/kernel/runtime/appearance/index.js',
-    exportName: 'compileAppearanceVariables',
+    module: 'dist/server.js',
+    exportName: 'compileTenantThemeConfig',
     input: { path: 'appearance.general.rhythm', stopId: 'airy' },
   },
 });

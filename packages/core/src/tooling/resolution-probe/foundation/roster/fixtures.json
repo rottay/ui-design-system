@@ -33,7 +33,7 @@
       "id": "button-modern-md",
       "why": "The modern Button as the engine actually renders it. Until 2026-08-11 this fixture carried `.ds-btn`, a RUSTIC theme rule no component can produce (both engines render `rottay-button--{modern,rustic}`), so every reading attributed to 'the modern button' measured a rule that never paints. The token defect it exposed happened to be real, which is the dangerous case: a lying instrument that returns a true finding teaches you to trust it. Chain: border-radius <- --_ds-button-resolved-radius <- the size rule's precedence between --ds-button-md-radius and --ds-radius-md.",
       "requiresSelectors": [
-        ".rottay-button.rottay-button--modern[data-part='trigger']",
+        ".rottay-button.rottay-button--modern[data-variant]",
         "border-radius: var(--_ds-button-resolved-radius)",
         ".rottay-button.rottay-button--modern[data-size='md']:not([data-size-responsive])",
         "--_ds-button-resolved-radius: var("

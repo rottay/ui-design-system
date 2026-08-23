@@ -1196,7 +1196,7 @@ paso de esa cadena está autorizado por este checkpoint.
 | K5 | 100% implementación + postaudit + GAT/CI |
 | F4A-close | **14/14 CERRADO** (Lotes A/B/C; canon 4208/0/3969/53/0/divergent33 informativo; gates:ci 89+2) |
 | PRE_F4B | inventario mecánico `INVENTORY_READY` (Sonnet); diseño/implementación **NO aceptados** — 768 pseudo-raíces posicionales del ratchet, sólo 38 canónicas (730 no); 1563/5142 nodos alcanzan raíz canónica; el gate actual no prueba reachability real |
-| F4B | 0/20 controles — **bloqueado hasta que PRE_F4B entregue el gate falsable de cascade** |
+| F4B | **1/20 controles** — `spacing.rhythm` en `COMPUTED_VERIFIED` (rank 3), no `SIGHTED_ACCEPTED`; 8 escenarios `primitive/layout/{flex,grid,stack,space}` x `{tight,airy}` con receipts R2 válidos. Los 19 restantes siguen `UNKNOWN` |
 | F2 asimétrico | 0% |
 | F3/F4C/F5-F8 pendientes | 0% del tramo pendiente |
 | F9 | 0/5100 celdas aceptadas |
@@ -1217,6 +1217,43 @@ cascade.
 F1 permanece correctamente «gobernado», pero no se reinterpretará como
 certificación: el rollup `UNKNOWN` sólo baja con evidencia causal y F9 lo lleva
 a cero.
+
+**F4B — `spacing.rhythm` COMPUTED_VERIFIED (2026-08-23), 1/20.** Primer control
+con evidencia causal de navegador. Base `6cfdcc1a9`. 8 escenarios
+`primitive/layout/{flex,grid,stack,space}` x `{tight,airy}`, cada uno midiendo
+**los dos ingress en una sola escena**: preset gap `15px -> 12.75px` (tight,
+x0.85) y `15px -> 18px` (airy, x1.2), exactos y monótonos; el `numeric-gap`
+contraparte quedó en `8px` en las 16 filas de brazo; `--ds-rhythm-scale`
+`1 -> 0.85 / 1 -> 1.2` y `--ds-rhythm-effective-scale` con el mismo clamp en
+ambos brazos; `restore.exact = true` y `negativeControls.held = true` en todos
+los brazos; `ingressEquivalence` con 0 filas divergentes en los 8; ningún run
+`harness-suspect`. Receipts R2 en
+`packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/spacing-rhythm/`
+(8 artifacts + 8 receipts), los 8 válidos contra
+`scripts/quality-evidence/v2/receipts.mjs`.
+
+Para llegar ahí hubo que reparar cuatro defectos reales del arnés, todos
+encontrados por la propia corrida y ninguno enmascarado: (1) el brazo DB estaba
+atado a `compileAppearanceVariables`, símbolo ausente de todo entrypoint
+publicado y retirado del provider — el door productivo es
+`compileTenantThemeConfig`, ahora cargado desde el subpath publicado
+`@rottay/design-system/server`, con `RETIRED_DB_COMPILER_EXPORTS` que convierte
+un rebind en throw de carga; (2) el fixture `button-modern-md` exigía
+`[data-part='trigger']`, que `cb1e3645f` había rekeyed a `[data-variant]`, así
+que **todas las lecturas de Button venían siendo retenidas** y
+control-height/touch-target/icon-size quedaban sin medir en silencio; (3) el
+restore inline dejaba un `style=""` vacío que el baseline no tenía, por lo que
+el brazo DB no restauraba exacto; (4) el colector de freshness pasaba
+`sourceBindings` crudos a un hasher de archivos (un directorio reventaba con
+EISDIR y un locator `path:1371-1451` leía como archivo inexistente).
+
+`disposition` de las cuatro celdas sigue `UNKNOWN` **no por falta de medición**
+sino porque el `dispositionLaw` de `APPLICABLE` exige `staticSourceBindings` y
+`dbSourceBindings` separados, forma que estas celdas no tienen. `SIGHTED_ACCEPTED`
+no se reclama: no hay aceptación sighted. El eje `responsive-preset` no lo
+cubren estos fixtures y queda sin medir. Deuda no bloqueante registrada:
+`compileAppearanceVariables` sigue declarado en un `.d.ts` de `dist` sin existir
+en el JS — divergencia tipo/runtime, ajena a este control.
 
 **F0 — CERRADO (2026-08-19).** Criterio de cierre cumplido:
 `ci-gates OK — 78 blocking gate(s) passed` (2 excluded visibles con razón y

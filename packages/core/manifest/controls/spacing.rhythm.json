@@ -43,7 +43,7 @@
     "symbol": "var(--ds-rhythm-effective-scale"
   },
   "calibration": {
-    "assessmentState": "UNKNOWN",
+    "assessmentState": "COMPUTED_VERIFIED",
     "normalizedStops": [
       {
         "id": "tight",
@@ -67,8 +67,26 @@
       "computedMounts": "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives.css",
       "existingFivePlaneHarness": "packages/showroom/e2e/whitelabel/density-authority-matrix.spec.ts"
     },
-    "staticDbParityEvidenceIds": [],
-    "exactRestoreEvidenceIds": [],
+    "staticDbParityEvidenceIds": [
+      "R2:primitive/layout/flex:spacing.rhythm/tight/static-and-db",
+      "R2:primitive/layout/flex:spacing.rhythm/airy/static-and-db",
+      "R2:primitive/layout/grid:spacing.rhythm/tight/static-and-db",
+      "R2:primitive/layout/grid:spacing.rhythm/airy/static-and-db",
+      "R2:primitive/layout/stack:spacing.rhythm/tight/static-and-db",
+      "R2:primitive/layout/stack:spacing.rhythm/airy/static-and-db",
+      "R2:primitive/layout/space:spacing.rhythm/tight/static-and-db",
+      "R2:primitive/layout/space:spacing.rhythm/airy/static-and-db"
+    ],
+    "exactRestoreEvidenceIds": [
+      "R2:primitive/layout/flex:spacing.rhythm/tight/static-and-db",
+      "R2:primitive/layout/flex:spacing.rhythm/airy/static-and-db",
+      "R2:primitive/layout/grid:spacing.rhythm/tight/static-and-db",
+      "R2:primitive/layout/grid:spacing.rhythm/airy/static-and-db",
+      "R2:primitive/layout/stack:spacing.rhythm/tight/static-and-db",
+      "R2:primitive/layout/stack:spacing.rhythm/airy/static-and-db",
+      "R2:primitive/layout/space:spacing.rhythm/tight/static-and-db",
+      "R2:primitive/layout/space:spacing.rhythm/airy/static-and-db"
+    ],
     "negativeControls": [
       "numeric instance gaps remain exact",
       "control height remains fixed",
@@ -106,10 +124,7 @@
         "subsequentSourceState": "RETIRED_AT_SOURCE_COMPUTED_PROOF_PENDING"
       }
     ],
-    "openContractQuestions": [
-      "Confirm which existing harness the causal calibration generalizes. The calibration sourceBindings name packages/showroom/e2e/whitelabel/density-authority-matrix.spec.ts as the existing five-plane harness, while the causal baseline-mutation-removal work extends packages/core/src/tooling/resolution-probe instead. Both are existing instruments, so neither is a second authority harness, but only one may own this control's computed receipts.",
-      "Prove the computed 0.85/1/1.2 gap deltas, monotonicity and exact restore in a browser. Every result so far is authored-source and compiler-output evidence only."
-    ],
+    "openContractQuestions": [],
     "dischargedContractQuestions": [
       {
         "question": "Prove static and DB invalid-input behavior, not merely equal valid enum output.",
@@ -141,6 +156,22 @@
           "counterfactualUnchanged": "Classic and Rustic are byte-identical: neither engine ever published `--_ds-card-nest-radius`, so every retired site resolved to exactly the value it now states literally. No Classic or Rustic file was edited.",
           "openForSightedReview": "The retired visual intent -- a panel/well nested in a Card reading as RELATED to the card corner rather than as a second unrelated rounded rectangle -- is now unimplemented. It is recorded here rather than smuggled back through a radius. If the intent is still wanted it needs a mechanism that is not spacing.rhythm, and it needs sighted adjudication."
         }
+      },
+      {
+        "question": "Confirm which existing harness the causal calibration generalizes. The calibration sourceBindings name packages/showroom/e2e/whitelabel/density-authority-matrix.spec.ts as the existing five-plane harness, while the causal baseline-mutation-removal work extends packages/core/src/tooling/resolution-probe instead. Both are existing instruments, so neither is a second authority harness, but only one may own this control's computed receipts.",
+        "outcome": "Discharged in favour of packages/core/src/tooling/resolution-probe. It owns this control's computed receipts. The density-authority-matrix Playwright spec remains a valid instrument for its own lane and was NOT extended or replaced; no second harness was created.",
+        "evidence": "round R2 receipts under test-artifacts/quality-evidence/wo-cra-23/F4B/spacing-rhythm (8 artifacts + 8 receipts, round R2, all validated by scripts/quality-evidence/v2/receipts.mjs)"
+      },
+      {
+        "question": "Prove the computed 0.85/1/1.2 gap deltas, monotonicity and exact restore in a browser. Every result so far is authored-source and compiler-output evidence only.",
+        "outcome": "Discharged by a real Chromium run, not by source reading. 8 scenarios (primitive/layout/{flex,grid,stack,space} x {tight,airy}), each measuring BOTH ingress doors on ONE scene. Preset gap 15px -> 12.75px at tight (x0.85) and 15px -> 18px at airy (x1.2), exact and monotonic (12.75 < 15 < 18); the numeric-gap counterpart stayed 8px in all 16 arm-rows; --ds-rhythm-scale moved 1 -> 0.85 / 1 -> 1.2 and --ds-rhythm-effective-scale carried the same clamp on both arms. restore.exact = true and negativeControls.held = true on every arm of every scenario, and ingressEquivalence reported 0 differing rows in all 8. Every run is self-check harness-live; no run is harness-suspect.",
+        "evidence": "round R2 receipts under test-artifacts/quality-evidence/wo-cra-23/F4B/spacing-rhythm (8 artifacts + 8 receipts, round R2, producer claude-opus-5-f4b-lane)",
+        "measuredDefectsFound": [
+          "The DB ingress arm was bound to compileAppearanceVariables, a symbol absent from every published entrypoint and retired from the provider. The productive DB door is compileTenantThemeConfig; the arm now loads it from the published @rottay/design-system/server subpath and RETIRED_DB_COMPILER_EXPORTS makes a rebind a load-time throw.",
+          "roster fixture button-modern-md required the selector .rottay-button.rottay-button--modern[data-part='trigger'], which commit cb1e3645f rekeyed to [data-variant]. Every run since had WITHHELD all button readings, so control-height/touch-target/icon-size were silently unmeasured.",
+          "The inline restore left an empty style=\"\" attribute on documentElement that the baseline never had, so the DB arm could not restore exactly. planInlinePhase now observes the ATTRIBUTE before the write and removes it when it introduced it.",
+          "The causal freshness collector passed manifest sourceBindings straight to a file hasher, so a directory binding crashed the run (EISDIR) and a path:lineRange locator read as a vanished file. It now normalises path#symbol and path:1371-1451 alike, hashes only regular files, and still throws on a path-shaped binding that does not exist."
+        ]
       }
     ],
     "redTestClassificationsScopeNote": "Records the red tests THIS calibration lane actually observed while running its focal suites. It is not a repair queue, not a program-wide red-test registry, and not a second WO status -- the validator's own contract refuses that reading. Two facts are recorded because both are load-bearing: (1) five of the six failures the R1 cohort receipt attributed as INHERITED are GREEN when re-run against the current tree, so they must NOT be carried forward as red; (2) four failures in EmbeddedCssRecovery.contract.test.ts ARE red and are disjoint from every path this lane edited. Re-measured on the current working tree, base HEAD 68f258690f39100c91f981735b51bfb47dc16f09. Verified green on re-run and therefore deliberately NOT classified below: Spinner.modern-engine/Spinner tests (75 passed), premium-regression.test.ts, sidebar-group-channels.test.ts.",
@@ -186,7 +217,7 @@
         "notCausedByThisLane": "Disjoint from this packet's edit set."
       }
     ],
-    "nextAction": "CALIBRATE_COMPUTED_STATIC_DB_DELTAS_NEGATIVES_AND_EXACT_RESTORE_IN_A_BROWSER_THEN_OBTAIN_CODEX_SIGHTED_ACCEPTANCE"
+    "nextAction": "OBTAIN_CODEX_SIGHTED_ACCEPTANCE. The computed half is done and receipted; nothing further is measurable by this instrument. spacing.rhythm stays COMPUTED_VERIFIED (rank 3) until a sighted reviewer accepts it; SIGHTED_ACCEPTED is not claimable from a computed run."
   },
   "retiredAliases": []
 }
