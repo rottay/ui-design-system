@@ -355,6 +355,35 @@ A static arm is tenant-scoped, so a causal run carrying one takes exactly one
 matches nothing, and a block that matches nothing reads exactly like a control
 that reaches nothing.
 
+**The static arm composes its stop over the vertical's published baseline**
+(H-1, 2026-08-23). `loadStaticBaselines()` reads the three first-party
+`BrandTheme`s from `dist/index.js` — the published `exports["."]` entrypoint,
+the same class of import the DB arm uses for `./server`, never a deep path — and
+`lowerStop` compiles `{ …verticalTheme, …stopAtItsKeypath }`. The arm records
+which baseline it used in `producedBy.input.baseline = { source, digest }`, and
+a static arm that cannot name one fails `assertArmProvenance`.
+
+This is a change of MEANING, so it is dated. Until H-1 the arm compiled a
+one-field theme built from the ingress keypath alone. `compileBrandTheme` read
+that input correctly — its density seed is authored-preserving,
+`String(bt.surfaces?.densityScale ?? 1)` — but with no baseline present, every
+`??` default fired and all three verticals were measured as if they were rottay.
+The tell is **uniformity where production diverges**: `density.mode` collapsed
+bithire (0.9) and evnto (1.125) onto the rottay gap, and `experience.profile`
+reported one `--ds-letter-spacing-heading` for all three. The compiler was never
+wrong; the instrument was handing it a theme production does not ship, because
+in production `density` and `densityScale` travel in the SAME theme.
+
+The DB arm needs no equivalent and must not be given one:
+`compileTenantThemeConfig` resolves the vertical baseline itself, which is why
+it composed correctly all along. Passing `base` to it would apply the vertical
+twice, silently — so `lowerStop` throws instead.
+
+A stop lowered in **isolation** is still a meaningful question — it isolates the
+stop's own contribution from the vertical's — but it is not representable in
+production, so it must never carry a receipt from this arm. Keep it as an
+advisory, non-receipted run.
+
 ### Negative controls come from the manifest, not from here
 
 `manifest/controls/<id>.json#calibration.negativeControls` owns WHICH negative

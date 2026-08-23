@@ -45,6 +45,7 @@
  * @module Tooling/ResolutionProbe/Runtime/Ingress
  */
 
+import { createHash } from 'node:crypto';
 import { resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
 
@@ -69,6 +70,30 @@ export const INGRESS_ARMS = Object.freeze({
       'Appended to the measured bundle behind the same unlayered tenant selector the compiled ' +
       'artifact uses. This is where a code-owned vertical lands: below an inline root write, ' +
       'above the base layer.',
+    /* H-1, 2026-08-23 (V1). This arm COMPOSES the stop over the vertical's
+     * published baseline BrandTheme (`dist/index.js` -> `<vertical>BrandTheme`),
+     * it does not lower the stop alone.
+     *
+     * Before H-1 it compiled a ONE-FIELD theme built from the ingress keypath
+     * and nothing else. `compileBrandTheme` was behaving correctly on that
+     * input -- its density seed is authored-preserving,
+     * `String(bt.surfaces?.densityScale ?? 1)` -- but with no baseline to read,
+     * the `?? 1` branch fired and every vertical was measured as if its
+     * structural scale were 1. The signature was uniformity across verticals
+     * exactly where production diverges: density.mode collapsed bithire (0.9)
+     * and evnto (1.125) onto the rottay value, and experience.profile reported
+     * one letter-spacing for all three. The compiler was never wrong; the
+     * instrument was handing it a theme production does not ship.
+     *
+     * The DB arm needs no equivalent: `compileTenantThemeConfig` resolves the
+     * vertical's baseline itself, which is why it composed correctly all along
+     * and why passing `base` to it is a fail-closed error (see `lowerStop`).
+     *
+     * A stop lowered in ISOLATION remains a legitimate question -- it isolates
+     * the stop's own contribution -- but it is not representable in production
+     * and must never carry a receipt from this arm; keep it as an advisory,
+     * non-receipted run. */
+    composesOverVerticalBaseline: true,
     compilerModule: 'dist/infrastructure/compilers/kernel/runtime/brand-theme/index.js',
     compilerSource: 'src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts',
     compilerExport: 'compileBrandTheme',
@@ -158,6 +183,33 @@ export function assertArmProvenance(producedBy) {
           missing.join(', ') || 'producedBy'
         }). A payload the harness wrote itself proves only that the harness can multiply.`,
     );
+  }
+  /* H-1 (V1): the static arm composes its stop ON TOP OF the vertical's published
+   * baseline, so WHICH baseline it composed on is part of what the arm claims.
+   * A static arm that cannot name its baseline is not under-documented, it is
+   * unverifiable: the same stop over two different baselines paints two
+   * different scenes, and the reader has no way to tell which one was measured.
+   *
+   * This is fail-closed rather than best-effort on purpose. The defect H-1
+   * corrects was silent precisely because a missing baseline looked like no
+   * baseline at all -- the arm lowered a one-field theme and reported numbers
+   * that no vertical ships. */
+  if (producedBy.exportName === INGRESS_ARMS['static-brand-theme'].compilerExport) {
+    const baseline = producedBy.input?.baseline;
+    const bad =
+      !baseline ||
+      typeof baseline.source !== 'string' ||
+      baseline.source.length === 0 ||
+      typeof baseline.digest !== 'string' ||
+      baseline.digest.length === 0;
+    if (bad) {
+      throw new Error(
+        'resolution-probe: the static-brand-theme arm must record which vertical baseline it ' +
+          'composed its stop onto (producedBy.input.baseline = { source, digest }). Since H-1 ' +
+          'this arm compiles the stop OVER the vertical\'s published BrandTheme, so an arm with ' +
+          'no named baseline describes a scene nobody can reconstruct.',
+      );
+    }
   }
   return Object.freeze({ ...producedBy });
 }
@@ -573,9 +625,22 @@ export function lowerStop({
   stopId,
   compile,
   base = {},
+  baselineSource = null,
   provenance = {},
   vertical = null,
 }) {
+  /* H-1 (V5): the DB arm resolves its own baseline inside
+   * `compileTenantThemeConfig`. Handing it one HERE would apply the vertical
+   * twice, and the second application is invisible: the numbers stay plausible
+   * because they are still per-vertical, just composed twice. Fail closed
+   * instead of trusting every future caller to remember the asymmetry. */
+  if (armId === 'db-tenant-theme' && base && Object.keys(base).length > 0) {
+    throw new Error(
+      'resolution-probe: the db-tenant-theme arm must NOT be given a base. Its compiler ' +
+        'resolves the vertical baseline itself, so a base here composes the vertical twice and ' +
+        'the double application is silent. Only static-brand-theme takes a base.',
+    );
+  }
   const input = buildIngressInput({ armId, controlManifest, stopId, base });
   const tenantSlug = armId === 'static-brand-theme' ? deriveTenantSlug(vertical) : null;
   const compilerInput = toCompilerInput({
@@ -629,6 +694,13 @@ export function lowerStop({
         ingressValue: input.ingressValue,
         document: input.document,
         compilerInput,
+        /* H-1 (V1): WHICH baseline this stop was composed onto. `document` now
+         * carries the whole vertical theme, so diffing two runs by eye is not a
+         * practical way to answer that question -- the digest is. Absent (null)
+         * on the DB arm, which composes its baseline inside its own compiler
+         * and therefore has none to name here; `assertArmProvenance` requires
+         * it on the static arm and only there. */
+        baseline: baselineProvenance(armId, base, baselineSource),
       },
       declaredChannels: [...channels],
       emittedChannels: Object.keys(variables).sort(),
@@ -709,4 +781,75 @@ export async function loadCompilerArms({
 
 function defaultImport(absolutePath) {
   return import(pathToFileURL(absolutePath).href);
+}
+
+/**
+ * Which vertical baseline a static arm composed its stop onto (H-1, V1).
+ *
+ * `digest` uses plain `JSON.stringify`, not the programme's `canonicalJson`.
+ * Deliberate, and the reason is scope rather than laziness: the value being
+ * hashed is a frozen module export read from one build, so its key order is
+ * stable for the comparison this digest is for -- "is this the same baseline as
+ * the other run's" -- and reaching into
+ * `scripts/quality-evidence/programs/modern-rescue/cascade-governance.mjs`
+ * would couple the instrument to one programme's cascade module for a label.
+ * If this digest ever needs to be compared ACROSS tools, canonicalise it then.
+ */
+function baselineProvenance(armId, base, baselineSource) {
+  if (armId !== 'static-brand-theme') return null;
+  if (!base || Object.keys(base).length === 0) return null;
+  return Object.freeze({
+    source: typeof baselineSource === 'string' && baselineSource.length > 0 ? baselineSource : null,
+    digest: createHash('sha256').update(JSON.stringify(base)).digest('hex'),
+  });
+}
+
+/**
+ * The published BrandTheme of each first-party vertical, for the static arm to
+ * compose its stop onto (H-1).
+ *
+ * PUBLISHED ENTRYPOINT, never a deep path -- the same law the DB arm follows
+ * for `dist/server.js`. `package.json` `exports["."]` resolves to
+ * `dist/index.js`, which re-exports the three themes from
+ * `src/index.ts`. A deep import into the brand-theme tree could be tree-shaken
+ * out from under the harness with no gate noticing.
+ *
+ * SAME FRESHNESS LAW AS `loadCompilerArms` (V4): the baseline and the compiler
+ * must come from ONE verified `dist/`. A fresh compiler composing a stale
+ * baseline would be a new way to measure a tree nobody has -- the exact defect
+ * class H-1 exists to close.
+ */
+export async function loadStaticBaselines({
+  importModule = defaultImport,
+  assertFresh = () =>
+    assertDistFresh({
+      packageRoot: CORE_ROOT,
+      stampPath: resolve(CORE_ROOT, 'dist/build-stamp.json'),
+    }),
+} = {}) {
+  const freshness = assertFresh();
+  if (!freshness?.ok) {
+    throw new Error(
+      'resolution-probe: the vertical baselines are stale or their freshness is unproven:\n  ' +
+        `${(freshness?.failures ?? ['freshness check returned no proof']).join('\n  ')}`,
+    );
+  }
+  const MODULE = 'dist/index.js';
+  const module = await importModule(resolve(CORE_ROOT, MODULE));
+  const baselines = {};
+  // `none` is the tenant-less scope: it has no vertical and therefore no
+  // BrandTheme to compose onto. Every other roster entry must have one.
+  for (const vertical of Object.keys(VERTICALS).filter((id) => id !== 'none')) {
+    const exportName = `${vertical}BrandTheme`;
+    const theme = module?.[exportName];
+    if (!theme || typeof theme !== 'object') {
+      throw new Error(
+        `resolution-probe: ${MODULE} exports no BrandTheme for the "${vertical}" vertical ` +
+          `(expected ${exportName}). Refusing to fall back to an empty theme: an empty base is ` +
+          'exactly the one-field-theme defect H-1 corrects, and it fails silently.',
+      );
+    }
+    baselines[vertical] = Object.freeze({ theme, source: `${MODULE}#${exportName}` });
+  }
+  return Object.freeze(baselines);
 }

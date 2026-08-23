@@ -4,7 +4,7 @@
   "scope": "Phase-0 exact proof and minimal public-claim floor; not DS-IMP-060 completion",
   "reproducibility": {
     "classification": "deterministic same-input runs",
-    "authorityDigest": "7ca924f6e069c6b4982cbd8d9e4c213ae366be84ee6577a8229cae720fcc2202",
+    "authorityDigest": "1b15dad4cf8cf7a5c2dd6907cd10d788f50887f6d91bf14a0d67bedef1a83cee",
     "sourceHeadIsAuthority": false,
     "toolchain": {
       "node": {
@@ -1383,8 +1383,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 29689,
-        "sha256": "5fde488353d69f2e8343f231c9e7e945295ddc8198bcfea2af4cb8ab2642dd5e"
+        "bytes": 30534,
+        "sha256": "e043409e2e86d75ab2c2c388d4cc2bda0d9baf4acce698f8509114fb94ef0630"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/contracts/composition/tenants/index.ts",
@@ -15573,16 +15573,16 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 11540,
-        "sha256": "22e93f7c27c060a85919e738af6433a56d61467e8f13420a95d023ddb8978b64"
+        "bytes": 11676,
+        "sha256": "c264a9293449684fcc357153a020839d36a4e2cb699f18d577760dbee75bcb56"
       },
       {
         "path": "ui-design-system/packages/core/src/tooling/resolution-probe/foundation/roster/fixtures.json",
         "roles": [
           "audit-input"
         ],
-        "bytes": 24503,
-        "sha256": "209d220292eebb4ff6d722185019d8f2a3b43d3542e2c605e70e3ebcaeda05ed"
+        "bytes": 26043,
+        "sha256": "173a0385e0d0310752c75b714054362031b923e80aa6ffa3cd74680d6c98788b"
       },
       {
         "path": "ui-design-system/packages/core/src/tooling/resolution-probe/foundation/roster/tests/index.test.tsx",
@@ -40503,7 +40503,7 @@
         "sha256": "d2a99efed33922a4a699ea033538b677022ddaccf0cdbb25ece0a7295bdc4812"
       }
     ],
-    "digest": "7ca924f6e069c6b4982cbd8d9e4c213ae366be84ee6577a8229cae720fcc2202"
+    "digest": "1b15dad4cf8cf7a5c2dd6907cd10d788f50887f6d91bf14a0d67bedef1a83cee"
   },
   "paintAudit": {
     "output": "engine-token-audit --check OK (3326 counters; 3226 completed zeros locked exactly; 91 decrease-only ceilings; 2 positive exact invariants; 7 positive minimum floors)",
@@ -113884,8 +113884,8 @@
   "deterministicRuns": {
     "count": 2,
     "hashes": [
-      "a24805069cf45ee25cebde62e5feb635052dac3baa2260c996261467c636e6d4",
-      "a24805069cf45ee25cebde62e5feb635052dac3baa2260c996261467c636e6d4"
+      "ddec603696bc7c49ef03edcf05e36403c65454b7a556325b8c06027a31fa90ef",
+      "ddec603696bc7c49ef03edcf05e36403c65454b7a556325b8c06027a31fa90ef"
     ],
     "agree": true
   }

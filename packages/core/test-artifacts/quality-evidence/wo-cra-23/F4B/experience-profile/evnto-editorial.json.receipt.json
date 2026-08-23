@@ -5,7 +5,7 @@
   "scenarioId": "experience.profile/editorial/evnto/static-and-db",
   "evidenceKind": "exact-restore",
   "commandOrTool": "node src/tooling/resolution-probe/public/cli/index.mjs causal",
-  "toolVersion": "resolution-probe@ef75a323e403",
+  "toolVersion": "resolution-probe@61eb915d3608",
   "exitCode": 0,
   "sourceFiles": [
     "packages/core/dist/build-stamp.json",
@@ -65,10 +65,10 @@
     "packages/core/src/ui/primitives/display/Card/engines/rustic/index.tsx",
     "packages/core/src/ui/primitives/display/Card/index.tsx"
   ],
-  "sourceDigest": "ab525395e744d287f145b752732ffbb5249f7b061ae9d0bbbc32d8cfd63e983b",
+  "sourceDigest": "4fe4f012dfe859c413f953fa8640bcff21cd69a3980dbe660c1d37708f673637",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/experience-profile/evnto-editorial.json",
   "artifactSha256": "36c21ca71608e589e04cbea6eeae09f4f48b585d9322ebde604c547aa00ff0ab",
-  "createdAt": "2026-08-23T10:48:32.362Z",
+  "createdAt": "2026-08-23T19:13:20.088Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

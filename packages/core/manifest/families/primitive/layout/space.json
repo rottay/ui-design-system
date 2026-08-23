@@ -382,8 +382,8 @@
     {
       "controlId": "density.mode",
       "disposition": "UNKNOWN",
-      "verificationState": "SOURCE_BOUND",
-      "unknownReason": "COMPUTED_STATIC_DB_AND_RESTORE_PROOF_MISSING",
+      "verificationState": "COMPUTED_VERIFIED",
+      "unknownReason": "SIGHTED_ACCEPTANCE_PENDING. The computed evidence exists (see evidenceIds): both ingress doors on one scene, three verticals x two stops, both themes, all six harness-live with ingressEquivalence holding and restore exact. disposition stays UNKNOWN because SIGHTED_ACCEPTED is not claimable from a computed run.",
       "applicabilityHypothesis": "APPLICABLE_CANDIDATE_FOR_PRESET_SIZE: six canonical and legacy preset spellings multiply the instance channel by --ds-density-effective-scale; numeric and tuple sizes stay exact.",
       "outputBindings": [
         "data-size",
@@ -407,8 +407,15 @@
         "numeric and tuple size remain exact",
         "separator count direction wrap alignment and touch ownership remain unchanged"
       ],
-      "evidenceIds": [],
-      "nextAction": "PROVE_CANONICAL_AND_LEGACY_PRESETS_AT_DENSITY_STOPS_STATIC_DB_WITH_NUMERIC_NEGATIVES_AND_EXACT_RESET",
+      "evidenceIds": [
+        "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/density-mode/rottay-compact.json.receipt.json",
+        "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/density-mode/bithire-compact.json.receipt.json",
+        "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/density-mode/evnto-compact.json.receipt.json",
+        "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/density-mode/rottay-spacious.json.receipt.json",
+        "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/density-mode/bithire-spacious.json.receipt.json",
+        "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/density-mode/evnto-spacious.json.receipt.json"
+      ],
+      "nextAction": "OBTAIN_SIGHTED_ACCEPTANCE. The preset-size axis is proven at both stops on all three verticals through both doors; the legacy spellings and the separator part are inventoried, not proven (see unmeasuredScope on the control).",
       "targetBinding": {
         "uncoveredByDesign": {
           "Intencion del consumidor (API de instancia o gap de layout): adjudicacion sostenida - el gap lo declara la app, no el tema": [
@@ -417,6 +424,13 @@
         },
         "migratedToInternalChannels": true
       },
+      "mechanism": "THEME_CONTROL",
+      "stableParts": [
+        "root"
+      ],
+      "propertyGroups": [
+        "preset-and-exact-gap"
+      ],
       "internalChannels": [
         {
           "channelId": "--_ds-space-small-size",

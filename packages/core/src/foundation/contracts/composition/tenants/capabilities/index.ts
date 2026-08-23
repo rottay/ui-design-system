@@ -245,7 +245,18 @@ export const TENANT_CAPABILITY_REGISTRY = Object.freeze([
       enumValues: ['compact', 'normal', 'spacious'],
       defaultBehavior: 'normal (structural density scale is a separate channel)',
       documentPath: 'appearance.general.density',
-      brandThemePath: 'surfaces.density / surfaces.densityScale',
+      // The static door is the ENUM, and only the enum. This field once read
+      // `surfaces.density / surfaces.densityScale`, which is not a keypath at all:
+      // every walker here splits on `.`, so that string resolves to
+      // `surfaces["density / surfaces"].densityScale` and lands the stop where no
+      // compiler reads it. `surfaces.densityScale` is a SEPARATE axis — the vertical's
+      // structural multiplier, lowered on its own at brand-theme:715 — so naming it
+      // beside the enum did not widen the door, it broke it. The failure was silent by
+      // construction: `--ds-density-scale` is emitted unconditionally from the vars
+      // seed, so the arm stayed non-empty and the empty-lowering guard never fired
+      // while no stop was carried. Same anti-door shape as `surfaces.borderRadius`
+      // above, different mechanism.
+      brandThemePath: 'surfaces.density',
       derivedChannels: ['--ds-density-mode-factor', '--ds-density-scale'],
       compat:
         'additive; the three density vocabularies (contracts/tokens/schema) are recorded debt — unification is a breaking alignment owned by a future wave',

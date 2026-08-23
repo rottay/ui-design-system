@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "generatedBy": "node packages/core/manifest/generator/index.mjs --sync",
   "authorityLaw": "Controls own semantics, groups own recipe vocabularies, families own applicability edges, and this index owns generated rollups.",
-  "inputsDigest": "7588cdd09190233312aa01d9b02877f33b8b8095d14d1de7d0049536460572d7",
+  "inputsDigest": "d12e3ba8907453fcee644268efad2955bba2120ca325d65cdce332fe4a8283d8",
   "denominators": {
     "canonicalFamilies": 255,
     "activeStandardControls": 13,
@@ -422,8 +422,12 @@
         "declaredFamilies": 4,
         "unknownCells": 251,
         "applicableFamilyIds": [],
-        "parts": [],
-        "propertyGroups": [],
+        "parts": [
+          "root"
+        ],
+        "propertyGroups": [
+          "preset-and-exact-gap"
+        ],
         "channels": [
           "--_ds-space-small-size",
           "--_ds-stack-gap-current",
@@ -495,9 +499,13 @@
             "familyId": "primitive/layout/space",
             "layer": "primitive",
             "disposition": "UNKNOWN",
-            "verificationState": "SOURCE_BOUND",
-            "stableParts": [],
-            "propertyGroups": [],
+            "verificationState": "COMPUTED_VERIFIED",
+            "stableParts": [
+              "root"
+            ],
+            "propertyGroups": [
+              "preset-and-exact-gap"
+            ],
             "computedProperties": [
               "column-gap",
               "gap",
@@ -977,7 +985,7 @@
             "familyId": "primitive/display/card",
             "layer": "primitive",
             "disposition": "UNKNOWN",
-            "verificationState": "COMPUTED_VERIFIED",
+            "verificationState": "IMPLEMENTED",
             "stableParts": [
               "root",
               "title"
@@ -1404,102 +1412,102 @@
     {
       "controlId": "palette.seeds",
       "path": "manifest/controls/palette.seeds.json",
-      "digest": "81a6329df34a2574e21a7969c3c017caadb22093d9f1d43a56b5d4623bc095b0"
+      "digest": "de5ad3a089fb70613daa855ebb04031a0994f8572c7aa326b250fb5010f78ae5"
     },
     {
       "controlId": "typography.pairing",
       "path": "manifest/controls/typography.pairing.json",
-      "digest": "ff800bb90039b0be865e43031dbf2b8c351939b06542f42c78e71ff79de25257"
+      "digest": "97ff12f21fe416e2bc8e0ebd0aaf9ce98382ae701ac40d19bc28b939a725c548"
     },
     {
       "controlId": "typography.families",
       "path": "manifest/controls/typography.families.json",
-      "digest": "7c71a4c36553943482d15c0cfe2c185260d85593000c5c79b58a57e81fa899de"
+      "digest": "2cb275af61dbfe5306ebe780588c820e42d8816fcc2bac40e5be9d70e7b4cd27"
     },
     {
       "controlId": "typography.scale",
       "path": "manifest/controls/typography.scale.json",
-      "digest": "f4c1ba82cbbd36f860c8be8aa4f62d3dd752ce6be6c68a486e0701aee2a43095"
+      "digest": "08803cc4126221d22795d44ae1bba976bf1d3a0f692562fad99e79e285cc1066"
     },
     {
       "controlId": "shape.radius-scale",
       "path": "manifest/controls/shape.radius-scale.json",
-      "digest": "28da3cb7e059a659c4d32d2cc9587ca841ec8501eb911b14f034689a8422f348"
+      "digest": "30d9e2771ccbecfb2c713acb06e781b4fbe789e7e2dd5769bf49c1c4636c505a"
     },
     {
       "controlId": "shape.button-style",
       "path": "manifest/controls/shape.button-style.json",
-      "digest": "5b374822de0901baaddcf8dcd90f796010b087d86a59715ffc025c080034b59f"
+      "digest": "b67d7a5d8afc9ceaff0abbeb7b4ebca36471abf475461ca635b2ebf77ca287da"
     },
     {
       "controlId": "density.mode",
       "path": "manifest/controls/density.mode.json",
-      "digest": "b6926706eeee6cee6d703824c9e3fa74d61fd67bae16b17dfd221adf91955c1c"
+      "digest": "48fb7fc77caa19ad0530a92d7a3103301320b237c30b391bf81f5bc2a17a195e"
     },
     {
       "controlId": "spacing.rhythm",
       "path": "manifest/controls/spacing.rhythm.json",
-      "digest": "95d6c0988017a9707928d673ca9f12db8ba96d5120fe393475a0a172a05460f5"
+      "digest": "5b6954dce006db26cb6043b3ec87bcb7dbc036b6b14e7af5b89b11c4d994342c"
     },
     {
       "controlId": "motion.dial",
       "path": "manifest/controls/motion.dial.json",
-      "digest": "8b6599d11363bac8c6ff7afdab27f807c65e92c348ac90edf0d860b6d994fa06"
+      "digest": "3404fb8bb37c8fbdc791da499fb28c2e099ace107086c545d35a98a89986f1e5"
     },
     {
       "controlId": "surfaces.elevation-posture",
       "path": "manifest/controls/surfaces.elevation-posture.json",
-      "digest": "a0cbd4d31e16d50c1d6c6dde5fce9945424e401dc021033ee2d436877d07be90"
+      "digest": "6f24a8d7a54e8d74cf54cade92aa989722338f2a42a3d4840ac1940c63345286"
     },
     {
       "controlId": "surfaces.effect-intensity",
       "path": "manifest/controls/surfaces.effect-intensity.json",
-      "digest": "1daea2acb86f2e823281cc0b6883dfa3fed8a794829ed6b0e3348ed6a863c2aa"
+      "digest": "05f7b206dae90a37891907bfad3b27cb307eab8e2a860a37111ab39280cb506e"
     },
     {
       "controlId": "navigation.sidebar-tone",
       "path": "manifest/controls/navigation.sidebar-tone.json",
-      "digest": "1097f768b8a6cde8aab34c76cbde33d6b5a040328c8ac73440e7fa5102589ccb"
+      "digest": "556f52a632f36632e272516691357e6136a099f6795b3eddfecf257f780a2d1f"
     },
     {
       "controlId": "experience.profile",
       "path": "manifest/controls/experience.profile.json",
-      "digest": "868b28313a29ace23c69f2ce5e02ba5a7128132e1b7bdf4a878e7f907a052b38"
+      "digest": "3feaf3c24e152566c0e001128146b98f3424b5abfda44aa237710e5c3f822343"
     },
     {
       "controlId": "chrome.families",
       "path": "manifest/controls/chrome.families.json",
-      "digest": "4b5c75633df1d76e19a6251c0840678b50e07d16fa079abb7164ba0cd579b69d"
+      "digest": "f2632fe08d07f78bb691fc2e472afa67ef7b997111fe51053f6407cfc56c1b18"
     },
     {
       "controlId": "chrome.anatomy",
       "path": "manifest/controls/chrome.anatomy.json",
-      "digest": "258871a47488085e858047a88c0194ba284db864fce049f0bb9feca0116e0f71"
+      "digest": "1a6f4a60a5ce44d4d8854e1610197364e068abe8d8770de9b8be54287a55135f"
     },
     {
       "controlId": "token-overrides",
       "path": "manifest/controls/token-overrides.json",
-      "digest": "fcef414cd041f3247186fdf19f48be7986a97c1d608325015447bf2c6e1771a2"
+      "digest": "993189c3410c87eff0fb4a94a38f1d2bcde367c3573a70e922957c409ee080ed"
     },
     {
       "controlId": "recipe-profile",
       "path": "manifest/controls/recipe-profile.json",
-      "digest": "5a90f7f4f0a3f4d2720132601bf53bcc1234e8c5e19f5219a24e6c2ec1d6809f"
+      "digest": "e687dd887e3e317bbb68a55091c84486f36c282a199b0689b82e4fd5af293d43"
     },
     {
       "controlId": "profiles.expressive",
       "path": "manifest/controls/profiles.expressive.json",
-      "digest": "83e08423dabc1637f980a696abcbb827aecb8bf7efa02893d50b127555f045db"
+      "digest": "0c22e5052a2f809f0b2124f8d4d86ba21912269b26838f8ee285c0d3ea1fc118"
     },
     {
       "controlId": "profiles.icon",
       "path": "manifest/controls/profiles.icon.json",
-      "digest": "d24df8f3ae3d8763d7bc5ac0715bc0b0d5bdbc1b1334a71b1e1af0f0e81abe9e"
+      "digest": "1e6b9912291402a264dd7fce71bd94d6498e376a99348a7448f75f3af514aa45"
     },
     {
       "controlId": "responsive.posture",
       "path": "manifest/controls/responsive.posture.json",
-      "digest": "70b70b7315ef943118db9cc31fc8695157853d645f2fa1539aab04c15062ef55"
+      "digest": "8b5d95217b169f9454aafcec3e9f0d76ac20097c7d3d79e5d137ec345d640c96"
     }
   ],
   "groups": [
@@ -2076,7 +2084,7 @@
     {
       "familyId": "primitive/display/card",
       "path": "manifest/families/primitive/display/card.json",
-      "digest": "93be7a5f71dba423dedbf777bcf8bd952bce2ad7fb69bb131913ed206db1eedc",
+      "digest": "0839f7781e487177e7c8eb90c75aac65f8327a2ad700790727df690ca8b0f899",
       "maximumClaim": "SOURCE_BOUND",
       "reviewVerdict": null
     },
@@ -2608,7 +2616,7 @@
     {
       "familyId": "primitive/layout/space",
       "path": "manifest/families/primitive/layout/space.json",
-      "digest": "e9ba80dee1704575e04915dc705b6f0fc5c9c937da88c9733c07e3e2deb0c869",
+      "digest": "4b36e317a137d18623cec148e6c21e22466d1ff939e04b562e1b8ac918c66843",
       "maximumClaim": "SOURCE_BOUND",
       "reviewVerdict": null
     },

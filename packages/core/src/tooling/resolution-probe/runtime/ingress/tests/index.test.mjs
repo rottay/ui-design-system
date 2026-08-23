@@ -22,6 +22,7 @@ import { pathToFileURL } from 'node:url';
 
 import { readManifest } from '../../../foundation/negative-controls/index.mjs';
 import { CORE_ROOT } from '../../../foundation/paths/index.mjs';
+import { VERTICALS } from '../../../foundation/scope/index.mjs';
 import {
   assertArmProvenance,
   assertArmsMatchManifest,
@@ -32,6 +33,7 @@ import {
   INGRESS_ARM_IDS,
   INGRESS_ARMS,
   loadCompilerArms,
+  loadStaticBaselines,
   lowerStop,
   RETIRED_DB_COMPILER_EXPORTS,
   tenantArmSelector,
@@ -44,7 +46,14 @@ const CONTROL_MANIFEST = readManifest(
 const PRODUCED_BY = {
   module: 'dist/infrastructure/compilers/kernel/runtime/brand-theme/index.js',
   exportName: 'compileBrandTheme',
-  input: { path: 'surfaces.rhythm', stopId: 'airy' },
+  input: {
+    path: 'surfaces.rhythm',
+    stopId: 'airy',
+    // H-1 (V1): a static arm must name the vertical baseline it composed onto,
+    // so every static fixture in this file carries one. The drill that proves
+    // the requirement bites declares its own producedBy WITHOUT it.
+    baseline: { source: 'dist/index.js#rottayBrandTheme', digest: 'f'.repeat(64) },
+  },
 };
 
 test('the two arms are the two doors the manifest declares, and they land in different places', () => {
@@ -808,4 +817,359 @@ test('regression fence: every stop of radius-scale reaches the channel, and dist
     );
     seen.set(stop.value, stop.id);
   }
+});
+
+/* The SAME defect class, found a second time, on density.mode -- and this time
+ * before a run rather than after one.
+ *
+ * `capabilities/index.ts` declared `surfaces.density / surfaces.densityScale`.
+ * That is not a keypath: `buildIngressInput` walks a door with a literal
+ * `path.split('.')`, so the string resolved to
+ * `surfaces["density / surfaces"].densityScale` and wrote the stop where no
+ * compiler reads it. The static arm carried NO stop at all.
+ *
+ * And nothing would have said so. `--ds-density-scale` is emitted
+ * unconditionally from the compiler's vars seed (brand-theme/index.ts, the
+ * `"--ds-density-scale": String(bt.surfaces?.densityScale ?? 1)` line), so the
+ * arm stayed non-empty and the empty-lowering guard never fires -- the exact
+ * false-INERT vector shape.radius-scale reported and left open in its
+ * knownDefects. Two controls have now hit it, so it is fenced by name here.
+ *
+ * Note the asymmetry with radius-scale: there the anti-door CANCELLED the dial
+ * (the ramp operands are divided by the live scale). Here the anti-door simply
+ * misses -- `surfaces.densityScale` is a real, separate axis with its own
+ * lowering, it is just not this control's door. Both fences below are about the
+ * door being literal and being the ENUM's.
+ */
+const DENSITY_MANIFEST = readManifest(
+  resolve(CORE_ROOT, 'manifest/controls/density.mode.json'),
+);
+
+test('regression fence: the density.mode static door is a literal path, and it is the ENUM', () => {
+  const path = DENSITY_MANIFEST.ingress.staticBrandThemePath;
+  assert.equal(
+    path,
+    'surfaces.density',
+    'density.mode lowers through the enum BrandSurfaces documents. Change the authority ' +
+      '(capabilities/index.ts brandThemePath) and regenerate; do not edit the generated manifest.',
+  );
+  assert.doesNotMatch(
+    path,
+    /[*{}( /]/u,
+    `buildIngressInput resolves a door by literal path.split('.'), so "${path}" would write a ` +
+      'key no compiler reads and the stop would never reach the channel. The slash is fenced ' +
+      'explicitly: naming two alternates in one string is how this defect was written.',
+  );
+  assert.doesNotMatch(
+    path,
+    /densityScale/u,
+    'surfaces.densityScale is the vertical STRUCTURAL multiplier, lowered on its own into ' +
+      '--ds-density-scale. It is a different axis, not a spelling of this door.',
+  );
+});
+
+test('regression fence: every stop of density.mode reaches the channel, and distinctly', () => {
+  const stops = DENSITY_MANIFEST.calibration.normalizedStops;
+  assert.ok(stops.length >= 2, 'a dial needs at least two stops to be shown to move');
+  const seen = new Map();
+  for (const stop of stops) {
+    const built = buildIngressInput({
+      armId: 'static-brand-theme',
+      controlManifest: DENSITY_MANIFEST,
+      stopId: stop.id,
+    });
+    // A closed-enum tenant writes the NAME; `value` records the factor it resolves to.
+    assert.equal(
+      built.document?.surfaces?.density,
+      stop.id,
+      `stop "${stop.id}" must land its NAME at surfaces.density`,
+    );
+    assert.equal(
+      Object.hasOwn(built.document.surfaces, 'densityScale'),
+      false,
+      'the lowered document must not carry a densityScale slot: that is the structural axis ' +
+        'and authoring it here would mix two controls in one measurement',
+    );
+    assert.equal(
+      seen.has(stop.value),
+      false,
+      `stops "${seen.get(stop.value)}" and "${stop.id}" lower the same factor, so no run could ` +
+        'tell them apart',
+    );
+    seen.set(stop.value, stop.id);
+  }
+});
+
+/* ===================================================================== *
+ * H-1 — the static arm composes its stop OVER the vertical's baseline.
+ *
+ * Before H-1 it compiled a ONE-FIELD BrandTheme. `compileBrandTheme` read that
+ * input correctly; there was simply no baseline in it, so every
+ * `?? <default>` branch fired and all three verticals were measured as if they
+ * were rottay. The signature of the defect is UNIFORMITY WHERE PRODUCTION
+ * DIVERGES, and it is what these drills fence.
+ *
+ * The drills that need the real compilers are marked: they import `dist/` and
+ * therefore go red on a stale build, exactly like the arm drills above.
+ * ===================================================================== */
+
+const DENSITY_MANIFEST_H1 = readManifest(resolve(CORE_ROOT, 'manifest/controls/density.mode.json'));
+const FIRST_PARTY = Object.keys(VERTICALS).filter((id) => id !== 'none');
+
+/** Structural scale each vertical AUTHORS. If these move, the drills below say so. */
+const AUTHORED_DENSITY_SCALE = { rottay: '1', bithire: '0.9', evnto: '1.125' };
+
+test('H-1 drill 1: a base is COMPOSED into, not replaced by, the ingress keypath', () => {
+  // Pure: no compiler. The claim is about the document the harness builds.
+  const base = { surfaces: { densityScale: 0.9, borderRadius: { md: '10px' } }, palette: { seed: 'x' } };
+  const built = buildIngressInput({
+    armId: 'static-brand-theme',
+    controlManifest: DENSITY_MANIFEST_H1,
+    stopId: 'compact',
+    base,
+  });
+  assert.equal(built.document.surfaces.density, 'compact', 'the stop must land at its keypath');
+  assert.equal(built.document.surfaces.densityScale, 0.9, 'the SIBLING the stop does not own must survive');
+  assert.deepEqual(built.document.surfaces.borderRadius, { md: '10px' });
+  assert.deepEqual(built.document.palette, { seed: 'x' }, 'unrelated branches survive too');
+  assert.equal(base.surfaces.density, undefined, 'the caller\'s base must not be mutated');
+});
+
+test('H-1 drill 2 [needs dist]: no vertical collapses onto the rottay value any more', async () => {
+  const arms = await loadCompilerArms();
+  const baselines = await loadStaticBaselines();
+  for (const vertical of FIRST_PARTY) {
+    const lowered = lowerStop({
+      armId: 'static-brand-theme',
+      controlManifest: DENSITY_MANIFEST_H1,
+      stopId: 'compact',
+      compile: arms['static-brand-theme'].compile,
+      vertical,
+      base: baselines[vertical].theme,
+      baselineSource: baselines[vertical].source,
+    });
+    assert.equal(
+      lowered.variables['--ds-density-scale'],
+      AUTHORED_DENSITY_SCALE[vertical],
+      `${vertical} must lower its OWN structural scale, not a default`,
+    );
+    // The stop itself is carried either way; this is the channel that used to collapse.
+    assert.equal(lowered.variables['--ds-density-mode-factor'], '0.85');
+  }
+  const distinct = new Set(
+    FIRST_PARTY.map((v) => AUTHORED_DENSITY_SCALE[v]),
+  );
+  assert.equal(distinct.size, FIRST_PARTY.length, 'the three verticals must remain distinguishable');
+});
+
+/* Controls whose lowering is base-SENSITIVE by design. Everything else closed
+ * must be base-INVARIANT, and drill 3 proves it by iterating the manifest rather
+ * than a list, so a control added later is covered the day it closes. Adding an
+ * entry here is a deliberate, reviewable act; forgetting to add one is a red. */
+const BASE_SENSITIVE_BY_DESIGN = new Map([
+  [
+    'experience.profile',
+    'the vertical\'s AUTHORED typography outranks the profile (brand-theme: authored > profile > ' +
+      'seeds), so composing over the baseline changes --ds-letter-spacing-heading and, on bithire, ' +
+      '--ds-material-canvas-texture. Re-measured under H-1; drill 4 pins the change.',
+  ],
+  [
+    'density.mode',
+    'its declared --ds-density-scale IS the vertical structural scale, which only exists in the ' +
+      'baseline. That is the defect H-1 corrects; drill 2 pins the corrected values.',
+  ],
+]);
+
+test('H-1 drill 3 [needs dist]: every OTHER closed control lowers identically with and without a base', async () => {
+  const { readdirSync } = await import('node:fs');
+  const arms = await loadCompilerArms();
+  const baselines = await loadStaticBaselines();
+  const dir = resolve(CORE_ROOT, 'manifest/controls');
+  let checked = 0;
+  const covered = [];
+  for (const file of readdirSync(dir).filter((f) => f.endsWith('.json')).sort()) {
+    const manifest = readManifest(resolve(dir, file));
+    const id = manifest.controlId;
+    const stops = manifest.calibration?.normalizedStops ?? [];
+    // "Closed" = it has stops to lower AND a state that made it evidence-bearing.
+    const closed = stops.length > 0 && manifest.calibration?.assessmentState === 'COMPUTED_VERIFIED';
+    if (!closed || BASE_SENSITIVE_BY_DESIGN.has(id)) continue;
+    covered.push(id);
+    for (const stop of stops) {
+      for (const vertical of FIRST_PARTY) {
+        const run = (base, baselineSource) =>
+          lowerStop({
+            armId: 'static-brand-theme',
+            controlManifest: manifest,
+            stopId: stop.id,
+            compile: arms['static-brand-theme'].compile,
+            vertical,
+            base,
+            baselineSource,
+          });
+        let without;
+        try {
+          without = JSON.stringify(run({}, null).variables);
+        } catch {
+          // A stop that cannot lower without a baseline is not an invariance
+          // violation; it is the H-1 improvement. Nothing to compare.
+          continue;
+        }
+        const withBase = JSON.stringify(
+          run(baselines[vertical].theme, baselines[vertical].source).variables,
+        );
+        checked += 1;
+        assert.equal(
+          withBase,
+          without,
+          `${id}/${stop.id}/${vertical} changed under H-1 but is not declared base-sensitive. ` +
+            'Either the change is a regression, or it belongs in BASE_SENSITIVE_BY_DESIGN with a reason.',
+        );
+      }
+    }
+  }
+  assert.ok(checked > 0, `the invariance fence must actually check something; covered: ${covered.join(', ')}`);
+});
+
+test('H-1 drill 4 [needs dist]: experience.profile CHANGES, and diverges per vertical', async () => {
+  const arms = await loadCompilerArms();
+  const baselines = await loadStaticBaselines();
+  const manifest = readManifest(resolve(CORE_ROOT, 'manifest/controls/experience.profile.json'));
+  const stops = manifest.calibration.normalizedStops;
+  assert.ok(stops.length >= 1);
+  for (const stop of stops) {
+    const spacings = new Map();
+    for (const vertical of FIRST_PARTY) {
+      const run = (base, src) =>
+        lowerStop({
+          armId: 'static-brand-theme',
+          controlManifest: manifest,
+          stopId: stop.id,
+          compile: arms['static-brand-theme'].compile,
+          vertical,
+          base,
+          baselineSource: src,
+        }).variables;
+      const without = run({}, null);
+      const withBase = run(baselines[vertical].theme, baselines[vertical].source);
+      assert.notDeepEqual(
+        withBase,
+        without,
+        `${stop.id}/${vertical}: the change is DECLARED, so it must be observable`,
+      );
+      spacings.set(vertical, withBase['--ds-letter-spacing-heading']);
+    }
+    // The point of H-1: three verticals, three answers. Uniformity here would
+    // mean the baseline stopped reaching the compiler.
+    assert.equal(
+      new Set(spacings.values()).size,
+      FIRST_PARTY.length,
+      `${stop.id}: --ds-letter-spacing-heading must differ per vertical, got ${JSON.stringify([...spacings])}`,
+    );
+  }
+  // The second signal the design measured: bithire gains its own canvas texture.
+  const bithire = lowerStop({
+    armId: 'static-brand-theme',
+    controlManifest: manifest,
+    stopId: stops[0].id,
+    compile: arms['static-brand-theme'].compile,
+    vertical: 'bithire',
+    base: baselines.bithire.theme,
+    baselineSource: baselines.bithire.source,
+  }).variables;
+  assert.ok(
+    typeof bithire['--ds-material-canvas-texture'] === 'string' &&
+      bithire['--ds-material-canvas-texture'].length > 0,
+    'bithire must carry its authored canvas texture once the baseline is composed',
+  );
+});
+
+test('H-1 drill 5: the baseline loader fails CLOSED on a vertical it cannot supply', async () => {
+  await assert.rejects(
+    () =>
+      loadStaticBaselines({
+        assertFresh: () => ({ ok: true, failures: [] }),
+        importModule: async () => ({ rottayBrandTheme: { surfaces: {} } }),
+      }),
+    /exports no BrandTheme for the "bithire" vertical/,
+    'falling back to an empty theme IS the defect H-1 corrects, and it fails silently',
+  );
+});
+
+test('H-1 drill 6 (V4): the baseline obeys the SAME dist-freshness law as the compilers', async () => {
+  await assert.rejects(
+    () =>
+      loadStaticBaselines({
+        assertFresh: () => ({ ok: false, failures: ['dist is STALE: planted'] }),
+        importModule: async () => {
+          throw new Error('must not import from a stale dist');
+        },
+      }),
+    /baselines are stale or their freshness is unproven[\s\S]*planted/,
+    'a fresh compiler composing a stale baseline is a new way to measure a tree nobody has',
+  );
+});
+
+test('H-1 drill 7 (V5): handing the DB arm a base fails CLOSED', () => {
+  assert.throws(
+    () =>
+      lowerStop({
+        armId: 'db-tenant-theme',
+        controlManifest: CONTROL_MANIFEST,
+        stopId: 'airy',
+        compile: () => ({ variables: { '--ds-rhythm-scale': '1.2' } }),
+        vertical: 'rottay',
+        base: { surfaces: { densityScale: 0.9 } },
+        provenance: { schemaVersion: 1 },
+      }),
+    /must NOT be given a base/,
+    'its compiler resolves the vertical itself, so a base here composes the vertical twice',
+  );
+  // and the empty default is still accepted
+  assert.doesNotThrow(() =>
+    lowerStop({
+      armId: 'db-tenant-theme',
+      controlManifest: CONTROL_MANIFEST,
+      stopId: 'airy',
+      compile: () => ({ variables: { '--ds-rhythm-scale': '1.2' } }),
+      vertical: 'rottay',
+      provenance: { schemaVersion: 1 },
+    }),
+  );
+});
+
+test('H-1 drill 8 (V1): a static arm with no named baseline fails arm verification', () => {
+  const withoutBaseline = {
+    module: 'dist/infrastructure/compilers/kernel/runtime/brand-theme/index.js',
+    exportName: 'compileBrandTheme',
+    input: { path: 'surfaces.density', stopId: 'compact' },
+  };
+  assert.throws(
+    () => assertArmProvenance(withoutBaseline),
+    /must record which vertical baseline it composed/,
+  );
+  assert.throws(
+    () => composeStaticArm({ vertical: 'rottay', variables: { '--ds-x': '1' }, producedBy: withoutBaseline }),
+    /must record which vertical baseline it composed/,
+  );
+  // A DB arm has no baseline to name and must NOT be asked for one.
+  assert.doesNotThrow(() =>
+    composeDbArm({
+      variables: { '--ds-x': '1' },
+      producedBy: { ...withoutBaseline, exportName: 'compileTenantThemeConfig' },
+    }),
+  );
+  // And the static arm passes once it names one.
+  const lowered = lowerStop({
+    armId: 'static-brand-theme',
+    controlManifest: DENSITY_MANIFEST_H1,
+    stopId: 'compact',
+    compile: () => ({ variables: { '--ds-density-mode-factor': '0.85' } }),
+    vertical: 'rottay',
+    base: { surfaces: { densityScale: 1 } },
+    baselineSource: 'dist/index.js#rottayBrandTheme',
+  });
+  assert.equal(lowered.producedBy.input.baseline.source, 'dist/index.js#rottayBrandTheme');
+  assert.match(lowered.producedBy.input.baseline.digest, /^[0-9a-f]{64}$/);
+  assert.doesNotThrow(() => assertArmProvenance(lowered.producedBy));
 });

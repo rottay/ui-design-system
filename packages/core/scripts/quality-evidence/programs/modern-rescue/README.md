@@ -239,13 +239,13 @@ not rerun an implementation loop for every earlier assertion.
 
 <!-- lane-control:program-state v1 — DO NOT EDIT BY HAND. Rewrite it with:
      node packages/core/src/tooling/lane-control/public/program-state/index.mjs --write --intent <intent.json>
-     head=aaa96eef8 written=2026-08-23T16:04:23.044Z intent=150b10665e5919da render=ab56c7f91a1b623e -->
+     head=1a6bb5ce7 written=2026-08-23T19:23:32.929Z intent=f86d2f58794ec30e render=7330e15f341a1196 -->
 
 *Everything in this section is intent. Anything derivable is derived by command, not typed here.*
 
-**Current wave:** F4B — calibración causal de los 20 controles públicos: 4/20 COMPUTED_VERIFIED (spacing.rhythm, surfaces.effect-intensity, shape.radius-scale, experience.profile), 24 receipts válidos y frescos bajo el validador v2, ninguno SIGHTED_ACCEPTED, 16 controles UNKNOWN. Cola inmediata: C2 (program-check verde), C3 (resello GAT-07), C4 (postaudit retroactivo de la brecha PRE_F4B→F4B); después el control 5/20 — density.mode o responsive.posture según preflight medido — y F4B hasta 20/20.
+**Current wave:** F4B — calibración causal de los 20 controles públicos: 5/20 COMPUTED_VERIFIED (spacing.rhythm, surfaces.effect-intensity, shape.radius-scale, density.mode; experience.profile degradado a IMPLEMENTED — su re-medición pintada refutó la equivalencia de brazos bajo el instrumento corregido H-1; ninguno SIGHTED_ACCEPTED), 30 receipts válidos y frescos bajo validador v2, 15 controles UNKNOWN. Cola inmediata: H1/H3 (spacing.rhythm legislativo + terminalReach), fix estructural de lowerStop, F4B-6 responsive.posture (sonda DATA diferencial con guardia nueva y preaudit Fable).
 
-**Blocked on:** La sucesión DT Codex → Kimi K3 quedó consumada por orden explícita del owner del 2026-08-23 (packet T-1, docs/prompt-dt-fresh-session-2026-08-23.md); Codex queda como consultor técnico read-only de baja frecuencia y Fable 5 como único auditor independiente. Bloqueos inmediatos: C2 — 24 fallos spacing.rhythm de program-check sobre primitive/layout/{flex,grid,space,stack}; C3 — sello GAT-07 stale desde la serie F4B, con resello obligatorio al cierre de cada packet F4B; C4 — brecha de escribanía PRE_F4B→F4B (15 commits del 2026-08-22, rango asentado en el roadmap) pendiente de doble postaudit retroactivo antes de F4B 5/20. Deudas con dueño: OPEN_VERTICAL_CASCADE_DEFECT (OPEN_DT, packet propio del generador/cascada vertical), OPEN_ARM_ASYMMETRY (OPEN_OWNER, decisión antes de F2 asimétrico/F3), el stash pre-programa owner-gated.
+**Blocked on:** OPEN_ARM_ASYMMETRY — decisión de PRODUCTO del owner con prueba medida (asimetría real general de precedencia authored>perfil entre transportes; bloquea la re-verificación de experience.profile y sigue gating F2 asimétrico/F3). OPEN_VERTICAL_CASCADE_DEFECT — bithire dark, packet propio del generador/cascada vertical (OPEN_DT). El stash pre-programa sigue owner-gated. Gobernanza al día: T-1 sucesión consumada, program-check CONSTITUTION_READY, GAT-07 resellado, brecha C4 regularizada.
 
 Active packets:
 

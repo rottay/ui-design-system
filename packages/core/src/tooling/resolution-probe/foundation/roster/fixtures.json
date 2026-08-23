@@ -168,12 +168,14 @@
     {
       "id": "token-readout",
       "synthetic": true,
-      "why": "Not a component: a bare element inside the tenant scope whose custom properties are read directly. It answers 'what value does this token RESOLVE to for this tenant' without an intervening paint rule, which separates 'the token is wrong' from 'the component does not read it'. Extended 2026-08-11 with the rhythm pair -- --ds-rhythm-scale is the raw tenant input (enum stop or override), --ds-rhythm-effective-scale is the clamped 0.8..1.25 channel every consume site reads -- so a causal rhythm run has a direct-read control fixture on the SAME element as the radius readout, rather than needing a second synthetic fixture for a second control. Extended 2026-08-23 with --ds-effect-intensity, the single declared channel of surfaces.effect-intensity. It is a REGISTERED @property (syntax '<number>', initial-value 1), which is exactly why a direct read matters here: an invalid lowering is replaced by the initial value rather than dropped, so a broken ingress arm and a genuinely unreachable channel both paint the baseline. Reading the channel itself separates them. Extended 2026-08-23 with the five channels experience.profile declares that this readout did not already carry -- directControlFixtureIds requires ONE target to read EVERY declared channel, so a partial read gives the control no direct-read fixture and every causal run resolves harness-suspect. border-top-style is a HYDRATION WITNESS, not a channel: `color remains fixed` is every-measured-target, so it injects background-color into every target's plan, and on a bare div that longhand is legitimately at its initial value - which made the unhydrated guard fire on an element whose custom properties demonstrably moved. The DS base layer sets border-top-style to `solid` on every element, so it is decidable, non-initial, and not a channel any control can move.",
+      "why": "Not a component: a bare element inside the tenant scope whose custom properties are read directly. It answers 'what value does this token RESOLVE to for this tenant' without an intervening paint rule, which separates 'the token is wrong' from 'the component does not read it'. Extended 2026-08-11 with the rhythm pair -- --ds-rhythm-scale is the raw tenant input (enum stop or override), --ds-rhythm-effective-scale is the clamped 0.8..1.25 channel every consume site reads -- so a causal rhythm run has a direct-read control fixture on the SAME element as the radius readout, rather than needing a second synthetic fixture for a second control. Extended 2026-08-23 with --ds-effect-intensity, the single declared channel of surfaces.effect-intensity. It is a REGISTERED @property (syntax '<number>', initial-value 1), which is exactly why a direct read matters here: an invalid lowering is replaced by the initial value rather than dropped, so a broken ingress arm and a genuinely unreachable channel both paint the baseline. Reading the channel itself separates them. Extended 2026-08-23 with the five channels experience.profile declares that this readout did not already carry -- directControlFixtureIds requires ONE target to read EVERY declared channel, so a partial read gives the control no direct-read fixture and every causal run resolves harness-suspect. border-top-style is a HYDRATION WITNESS, not a channel: `color remains fixed` is every-measured-target, so it injects background-color into every target's plan, and on a bare div that longhand is legitimately at its initial value - which made the unhydrated guard fire on an element whose custom properties demonstrably moved. The DS base layer sets border-top-style to `solid` on every element, so it is decidable, non-initial, and not a channel any control can move. Extended 2026-08-23 with the density chain, for density.mode. The control declares TWO channels (--ds-density-mode-factor, --ds-density-scale) and directControlFixtureIds requires ONE target to read EVERY declared channel, so both are read here or the control has no direct-read fixture at all. The other two are what make the reading ATTRIBUTABLE rather than merely present: --ds-density-global-effective-scale is the tenant-level composition (scale x mode-factor, clamped 0.5..3) and --ds-density-effective-scale is the channel 71 real consumers read (global x local, clamped again). Without the intermediate, a reader cannot separate a tenant composition from a local posture. --ds-density-local-factor is deliberately NOT read: it is a component-posture channel never written at tenant scope, so on a bare div it would contribute an absent row and feed the unhydrated/absent-measurement guards rather than any claim. The reason this matters more here than for the other controls: --ds-density-scale is emitted UNCONDITIONALLY by the compiler (brand-theme/index.ts, the vars seed), so a lowering can be non-empty while encoding no stop -- exactly the false-INERT vector shape.radius-scale reported and left open. Reading the mode-factor DIRECTLY is what closes it.",
       "requiresSelectors": [
         "--ds-radius-md: calc(var(--ds-radius-md-base) * var(--ds-radius-scale, 1))",
         "--ds-rhythm-scale: 1",
         "--ds-rhythm-effective-scale: clamp(0.8, var(--ds-rhythm-scale, 1), 1.25)",
-        "@property --ds-effect-intensity"
+        "@property --ds-effect-intensity",
+        "--ds-density-global-effective-scale: clamp(",
+        "--ds-density-effective-scale: clamp("
       ],
       "html": "<div data-probe=\"token-readout\"></div>",
       "targets": [
@@ -211,7 +213,11 @@
             "--ds-edge-standard-width",
             "--ds-material-canvas-texture",
             "--ds-elevation-lift-strength",
-            "border-top-style"
+            "border-top-style",
+            "--ds-density-mode-factor",
+            "--ds-density-scale",
+            "--ds-density-global-effective-scale",
+            "--ds-density-effective-scale"
           ]
         }
       ]

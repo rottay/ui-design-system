@@ -1195,8 +1195,13 @@ paso de esa cadena está autorizado por este checkpoint.
 | K4 | 100%; implementación + postaudit Fable `ACCEPT` |
 | K5 | 100% implementación + postaudit + GAT/CI |
 | F4A-close | **14/14 CERRADO** (Lotes A/B/C; canon 4208/0/3969/53/0/divergent33 informativo; gates:ci 89+2) |
-| PRE_F4B | inventario mecánico `INVENTORY_READY` (Sonnet); diseño/implementación **NO aceptados** — 768 pseudo-raíces posicionales del ratchet, sólo 38 canónicas (730 no); 1563/5142 nodos alcanzan raíz canónica; el gate actual no prueba reachability real |
-| F4B | **4/20 controles** — `spacing.rhythm`, `surfaces.effect-intensity`, `shape.radius-scale` y `experience.profile`, los cuatro en `COMPUTED_VERIFIED` (rank 3), **ninguno `SIGHTED_ACCEPTED`**; 8 escenarios `primitive/layout/{flex,grid,stack,space}` x `{tight,airy}`, 6 escenarios `primitive/display/card` x `{rottay,bithire,evnto}` x `{mate,sobrio}`, 6 escenarios `primitive/display/card` x `{rottay,bithire,evnto}` x `{sutil,amplio}` y 4 escenarios `primitive/display/card` x `{rottay,evnto}` x `{technical,editorial}` — **8+6+6+4 = 24 receipts, todos válidos y frescos bajo el validador v2** — las 8 celdas manifest de `spacing.rhythm` siguen rechazadas por `program-check` (BLOCKED heredado desde `56847146f`, asentado como heredado en los packets 2/3/4; corrección C2 pendiente, ver asiento 2026-08-23) —, con los `roundId` cronológicamente correctos: `spacing.rhythm` y `surfaces.effect-intensity` en **R2**, `shape.radius-scale` en **R3** y `experience.profile` en **R4** como cuarto packet. `experience.profile` planificaba 5 positivos y entrega 4: `bithire`x`editorial` no logró `static=DB` y **no lleva receipt**, y `bithire`x`technical` es `DESIGNED_NULL` porque el baseline del vertical ya ES ese perfil; ambos quedan como **2 artefactos medidos NO receipted**. Los 16 restantes siguen `UNKNOWN` |
+| T-1 sucesión DT Codex → Kimi K3 | 100% CONSUMADA (2026-08-23, 3.ª sucesión de la cadena; Fable `ACCEPT`) |
+| C2 program-check verde | 100%; 24 fallos spacing.rhythm resueltos causalmente, ley intacta; `CONSTITUTION_READY`; Fable `ACCEPT` con follow-ups vinculantes (H1/H3) |
+| C3 resello GAT-07 | 100%; hash `a24805069cf4…`; regla adoptada: resello obligatorio al cierre de cada packet F4B |
+| C4 brecha PRE_F4B | 100% REGULARIZADA (doble postaudit Codex DEFECTS 5/5 + Fable REGULARIZA; T-11 anclado, T-12 narrativa, frescura producers.json; D1 aceptado con asiento) |
+| PRE_F4B | CERRADO por regularización C4 (ver asiento C4); inventario mecánico `INVENTORY_READY` histórico |
+| H-1 brazo estático con baseline | 100%; `base` del vertical publicado sólo en el brazo estático; preaudit Fable `ACCEPT` V1–V5; drills 47/47; los 20 receipts spacing/effect/radius invariantes |
+| F4B | **5/20 controles** — `spacing.rhythm`, `surfaces.effect-intensity`, `shape.radius-scale` y `density.mode` en `COMPUTED_VERIFIED` (rank 3), **ninguno `SIGHTED_ACCEPTED`**; `experience.profile` DEGRADADO a `IMPLEMENTED` (su re-medición pintada refutó la equivalencia de brazos bajo el instrumento corregido — asimetría real, `OPEN_ARM_ASYMMETRY` = decisión de PRODUCTO del owner con prueba; receipts R4 re-emitidos sólo por frescura). 30 receipts válidos y frescos bajo validador v2 (R2×14, R3×6, R4×4, R5×6). Escenarios: 8 layout × {tight,airy} + 6 card × {mate,sobrio} + 6 card × {sutil,amplio} + 4 card × {technical,editorial} (supersedidos en conclusión, no en números) + 6 space × {compact,spacious}. Los 15 restantes siguen `UNKNOWN`; `typography.scale` arrastra anti-door + semilla incondicional (anotado para su packet) |
 | F2 asimétrico | 0% |
 | F3/F4C/F5-F8 pendientes | 0% del tramo pendiente |
 | F9 | 0/5100 celdas aceptadas |
@@ -1967,6 +1972,122 @@ Write-set contenido: los 2 src de D1 y el productor con 0 diff.
 Con C2, C3 y C4 cerrados, **F4B 5/20 queda habilitado**. Disciplina
 operativa adoptada (mandato Fable): stage siempre por paths explícitos; el
 DT no escribe el ledger durante la corrida de aceptación de un writer.
+
+##### H-1 + F4B-5 density.mode + degradación honesta de experience.profile (2026-08-23)
+
+Packet consolidado en UN commit, exigido por la cadena de frescura del
+instrumento: H-1 stalea los 30 receipts, y el gate sólo vuelve a verde con
+todo re-emitido y re-medido contra el árbol final. Writer: Claude Opus
+(único writer). SOURCE_READY
+`/private/tmp/h1-density-experience-opus-source-ready.md`.
+
+**H-1 — el brazo estático compila SOBRE el baseline del vertical.**
+Defecto medido en F4B-5: `cli/index.mjs:581` llamaba `lowerStop` sin
+`base`, compilando un BrandTheme monocampo inexpedible en producción; el
+`?? 1` de la semilla disparaba y `--ds-density-scale` colapsaba a `1` en
+bithire/evnto (rottay inmune por casualidad). Precisión asentada (Fable):
+el compilador estaba bien; el instrumento le daba un theme que producción
+no despacha. Fix: `base` del vertical publicado sólo en el brazo estático
+(el DB resuelve su baseline dentro de `compileTenantThemeConfig` —
+asimetría estructural). **Preaudit Fable: ACCEPT con 5 correcciones
+vinculantes (V1–V5)**, memo
+`/private/tmp/h1-base-arm-fable-preaudit.md`, SHA
+`ac2cd7a1fffe0a8b4a5f855d517501a5a3ea5882b0cda522dc835ff1ba8f9cdf`:
+prosa fechada en `INGRESS_ARMS` + README, `producedBy.input.baseline`
+OBLIGATORIO (la verificación de arm falla sin él), drill 3 construido para
+crecer (itera controles cerrados desde el manifest), cargador bajo la ley
+de frescura de dist, guard anti-doble-aplicación al brazo DB. Cambio de
+significado del instrumento, acto fechado: la puerta estática mide "el
+stop compuesto sobre el theme autorado del vertical". Drills **47/47**;
+los 20 receipts spacing/effect/radius quedan **invariantes** (drill 3 los
+pinea; sus artifacts conservan bytes).
+
+**F4B-5 — `density.mode` COMPUTED_VERIFIED, 5/20.** 6 escenarios
+{rottay,bithire,evnto} × {compact,spacious}, ambos brazos sobre una escena,
+ambos temas. Pin por canal: `--ds-density-mode-factor` 0.85/1.15 en AMBOS
+brazos; el `--ds-density-scale` estático ya no colapsa (1 / 0.9 / 1.125).
+Pintado en `space-modern-preset-gap/root`: 15→12.75 / 13.5→11.475 /
+16.875→14.3438 (compact) y 15→17.25 / 13.5→15.525 / 16.875→19.4062
+(spacious) — **estático = DB en los seis**, ratio idéntico 0.85/1.15 con
+absolutos divergentes (multiplicador puro sobre escala estructural).
+Rhythm aislado (cero declaraciones en los 3 artifacts + lectura en ambas
+fases); gap numérico negativo intacto; restore exacto con asimetría
+declarada (bithire parte de un `1` de ORIGEN PERFIL, asentado). Celda
+`primitive/layout/space` COMPUTED_VERIFIED (mechanism THEME_CONTROL,
+stableParts [root], propertyGroups [preset-and-exact-gap]); control con
+listas particionadas desde el inicio, `measuredResult` honesto (UNA
+familia medida; el canal tiene 71 lectores), `unmeasuredScope` con la ley
+de `normal` (identidad, sin receipt — expresable, a diferencia de `suave`),
+`negativeControlsScopeNote` (control-height/touch-target/font-metrics/
+icon-size NO se declaran a nivel control: `menu.css:401`,
+`Input/engines/modern/index.tsx:170`), `sourceBindings` ×9, y 2
+`knownDefects` nuevos (vocabulario triple de density — deuda registrada
+breaking, no de este packet; tensión intención-vs-mecanismo en bithire —
+registrada como OPEN_DT para revisión de craft). Receipts nuevos R5 ×6.
+**Adjudicación DT previa:** fix del anti-door `capabilities/index.ts:248`
+→ `surfaces.density` (protocolo radius-scale: repin de 20 manifests, cero
+drift semántico fuera del path).
+
+**experience.profile — DEGRADADO honestamente (COMPUTED_VERIFIED →
+IMPLEMENTED).** Su re-medición pintada bajo el instrumento corregido
+**refuta, no renumera**: en los 6 casos el brazo estático queda INERTE
+para `--ds-letter-spacing-heading` mientras el DB lo mueve. Dos causas
+distintas: (a) rottay/evnto — el brazo compuesto emite exactamente el
+valor que el artifact ya autora (el perfil pierde contra el campo autorado
+dentro de `compileBrandTheme`, precedencia `brand-theme:758-773` —
+producción-verdadero); (b) bithire — el artifact declara el canal dos
+veces y el bloque dark de mayor especificidad gana
+(`OPEN_VERTICAL_CASCADE_DEFECT`, ortogonal, ABIERTA). La asimetría es REAL
+y general, no artefacto del instrumento ni rareza de bithire. Celda card →
+IMPLEMENTED con `verificationNote` (refutación + causa doble + pregunta
+owner-pendiente); control → IMPLEMENTED con `knownDefects[0]`
+`ARM_ASYMMETRY_REAL_NOT_ARTIFACT` (`OPEN_OWNER`, con la prueba);
+`measuredResult` preservado verbatim con `supersededStatus` (supersedida
+la conclusión, no los números); 4 receipts re-emitidos SÓLO por frescura
+(R4, artifacts byte-idénticos). **`OPEN_ARM_ASYMMETRY` queda como decisión
+de PRODUCTO del owner** con prueba nueva; el censo de canales perfil ×
+autorado vertical se corre con su respuesta. Las 6 mediciones nuevas
+(advisory) persisten en `docs/evidence/2026-08/h1-experience-advisory/`
+(10 archivos, INDEX actualizado, 10/10 MATCH).
+
+**Re-emisiones y gates:** 30/30 re-emitidos (R2×14, R3×6, R4×4, R5×6;
+**tres** campos movidos: `sourceDigest`, `createdAt` y `toolVersion` — la
+huella H-1 del instrumento, corrección F2 del postaudit), validador v2
+30/30 VALID+FRESH (corrida propia del DT); `manifest/index.json`
+regenerado (2002→2006 hojas: **4 altas** = parts/groups de density y
+**25 cambiadas** = los 7 declarados + los 18 digests de los controles
+repineados — delta verdadero citado, corrección F1 del postaudit, cero
+drift real);
+`program-check.mjs` = **CONSTITUTION_READY** (corrida propia del DT);
+`tsc --noEmit` limpio; build canónico post-H-1 verde. **Ley de
+procedimiento adoptada:** copia previa obligatoria antes de re-medir
+evidencia existente (sirvió: el runner sobrescribió los 4 artifacts de
+experience y se restauraron byte-idénticos desde la copia).
+
+**Consulta ejecutiva Codex (cierre de tanda de gobernanza), asentada:**
+(1) frescura por dependencia semántica — reforma de una vez ANTES de F9
+(kernel/guards compartidos invalidan todo; sólo el fixture/vocabulario/
+adapter usado invalida su escenario; preaudit + drills + default
+conservador); (2) fix estructural de `lowerStop` SÍ — debe cerrar antes
+del próximo packet dependiente (el pin por canal queda como redundancia);
+(3) responsive.posture por sonda DATA diferencial (adapter que exige delta
+exacto en `normalizedAppearance`, igualdad total de variables CSS, prueba
+el consumidor real, verifica restore y mutaciones) con guardia nueva +
+preaudit Fable. Quedan en la cola con ese orden.
+
+**Postaudit Fable del packet consolidado: `ACCEPT`** con 2 correcciones de
+asiento no bloqueantes (F1: delta verdadero del índice 4 altas + 25
+cambiadas — incorporado arriba; F2: `toolVersion` como tercer campo de
+frescura — incorporado arriba). Memo
+`/private/tmp/h1-density-experience-fable-postaudit.md`, SHA-256
+`8021cffeeeb25e9926487ec2712e4088976335d67d025f754a549ffe6f19b440`.
+Verificado por Fable: V1–V5 completas sin rebaje; density 6/6 pins con
+valores físicos inspeccionados; degradación de experience honesta y
+completa (measuredResult verbatim, refutación con doble causa sin fundir,
+`nextAction: AWAIT_OWNER_DECISION_ON_PROFILE_VS_AUTHORED_PRECEDENCE`);
+advisory 10/10 byte-idénticos; GAT-07 `ddec6036…` verificado; la
+hipótesis de su propio preaudit (artefacto del instrumento) quedó refutada
+por la medición — el flujo V2 funcionando. **F4B queda 5/20 honesto.**
 
 **F0 — CERRADO (2026-08-19).** Criterio de cierre cumplido:
 `ci-gates OK — 78 blocking gate(s) passed` (2 excluded visibles con razón y

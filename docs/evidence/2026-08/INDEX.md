@@ -96,3 +96,26 @@ Resultado: **63 filas** (MATCH = 62, MATCH(SHA en .ready, no inline) = 1). Archi
 | 1 | `modern-rescue-fable-review-kimi-corrections-2026-08-23.md` | `/private/tmp/modern-rescue-fable-review-kimi-corrections-2026-08-23.md` | `a73cca0d25cdf2acb1f43e1a816b14072950a062bb0da812168202c41c0b5c6f` | `MATCH(SHA en .ready, no inline)` |
 | 2 | `modern-rescue-kimi3-fresh-session-prompt-2026-08-23.md` | `/private/tmp/modern-rescue-kimi3-fresh-session-prompt-2026-08-23.md` | `c328f4254c1509c1894885028c1bd85f5d170f1f84ade0fcee8f6590953fbd62` | `MATCH` |
 | 3 | `modern-rescue-kimi3-independent-reaudit-2026-08-23.md` | `/private/tmp/modern-rescue-kimi3-independent-reaudit-2026-08-23.md` | `2b87b306e2b4d372533dd314f35d8e6c165e027e806eab4b16fecf391791a518` | `MATCH` |
+
+## Artefactos del 2026-08-23 (segundo lote): re-medicion advisory de experience.profile post-H-1
+
+Estos 10 archivos son la medicion pintada que REFUTO la equivalencia de brazos
+de `experience.profile` bajo el instrumento corregido (brazo estatico con
+baseline del vertical). No son receipts del programa: son evidencia advisory de
+la refutacion asentada en el roadmap (asiento H-1 + F4B-5) y en
+`manifest/controls/experience.profile.json#knownDefects`. Copia ejecutada por
+el DT desde `/private/tmp/h1-experience-advisory/` con verificacion hash por
+archivo (10/10 MATCH).
+
+| # | Archivo | Origen | SHA-256 recomputado | Estado |
+|---|---|---|---|---|
+| 1 | `h1-experience-advisory/bithire-editorial.json` | `/private/tmp/h1-experience-advisory/bithire-editorial.json` | `afeaabd27dc6432b857fbaf1c2b400a06d8a8e168642d4ebc50de38efbbdcdb9` | `MATCH` |
+| 2 | `h1-experience-advisory/bithire-technical.json` | `/private/tmp/h1-experience-advisory/bithire-technical.json` | `a0650656ce9e72253a9299e314b06bc1d6cab484f0152098a3fabf3a5629ba23` | `MATCH` |
+| 3 | `h1-experience-advisory/evnto-editorial.json` | `/private/tmp/h1-experience-advisory/evnto-editorial.json` | `f44a7dd89c1ec058ceac768cd9eaab7e8bae01d5b2350c6f794c5d3057741b7b` | `MATCH` |
+| 4 | `h1-experience-advisory/evnto-editorial.json.receipt.json` | `/private/tmp/h1-experience-advisory/evnto-editorial.json.receipt.json` | `db79cf45b07541dc51c5d70cc4234234f7367802ef9abb4412a8faebcd757f65` | `MATCH` |
+| 5 | `h1-experience-advisory/evnto-technical.json` | `/private/tmp/h1-experience-advisory/evnto-technical.json` | `dcbd3d1ff20a76f0f5df460bf0a56f3e79eb4f3f6f69f84592f2c669d9b441c3` | `MATCH` |
+| 6 | `h1-experience-advisory/evnto-technical.json.receipt.json` | `/private/tmp/h1-experience-advisory/evnto-technical.json.receipt.json` | `7f970539e49a613dcea1ae9ee9ddf054698717711947f1497e385e90eed86384` | `MATCH` |
+| 7 | `h1-experience-advisory/rottay-editorial.json` | `/private/tmp/h1-experience-advisory/rottay-editorial.json` | `d5bfb85ae131ad9645d809fb8f61f106984ef9640ea9cea97b9536f9565e3ca8` | `MATCH` |
+| 8 | `h1-experience-advisory/rottay-editorial.json.receipt.json` | `/private/tmp/h1-experience-advisory/rottay-editorial.json.receipt.json` | `c38c7f0185a09cadb2d959af18a9bc3a3434eb88e6a551345b61fc9530e7ce69` | `MATCH` |
+| 9 | `h1-experience-advisory/rottay-technical.json` | `/private/tmp/h1-experience-advisory/rottay-technical.json` | `6fbcd43e6d468bb2391f33b6463a8fd3f651d7a01f14b043c7be767f3aedc5df` | `MATCH` |
+| 10 | `h1-experience-advisory/rottay-technical.json.receipt.json` | `/private/tmp/h1-experience-advisory/rottay-technical.json.receipt.json` | `8e188ad6dba45d5c31258679d1ab62bf5977e1e73a3a932e4fe38e356c2dceaa` | `MATCH` |

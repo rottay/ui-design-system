@@ -16,7 +16,8 @@
         "numeric instance gaps remain exact",
         "numeric gaps remain exact",
         "columnGap and rowGap numeric values remain exact and override main gap per CSS",
-        "finite numeric spacing remains exact and never scales"
+        "finite numeric spacing remains exact and never scales",
+        "numeric and tuple size remain exact"
       ],
       "properties": ["gap", "column-gap", "row-gap"],
       "meaning": "A numeric gap is exact instance geometry. Rhythm is applied at the preset rungs, never at a consume site, so an instance that asked for 8px must still read 8px.",
@@ -207,7 +208,8 @@
       "assertion": "did-not-move",
       "targetScope": "declared-targets",
       "phrases": [
-        "direction wrap alignment separator count font color border and motion remain unchanged"
+        "direction wrap alignment separator count font color border and motion remain unchanged",
+        "separator count direction wrap alignment and touch ownership remain unchanged"
       ],
       "properties": [
         "flex-direction",

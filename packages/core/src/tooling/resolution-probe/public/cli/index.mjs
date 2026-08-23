@@ -39,6 +39,7 @@ import {
   INGRESS_ARM_IDS,
   INGRESS_ARMS,
   loadCompilerArms,
+  loadStaticBaselines,
   lowerStop,
 } from '../../runtime/ingress/index.mjs';
 
@@ -576,6 +577,8 @@ async function commandCausal(options) {
   // would only prove the harness can multiply and report that as proof the
   // compiler lowers the stop.
   const loadedArms = await loadCompilerArms();
+  // H-1: same verified dist as the compilers (V4), loaded once for the run.
+  const staticBaselines = await loadStaticBaselines();
   const arms = requestedArms.map((armId) => {
     const loaded = loadedArms[armId];
     const lowered = lowerStop({
@@ -588,6 +591,16 @@ async function commandCausal(options) {
       // against. Same vertical for both, which is what makes them comparable.
       vertical: options.verticals[0],
       provenance: loaded.provenance,
+      /* H-1: the static arm composes its stop over the vertical's PUBLISHED
+       * baseline, so it measures the theme production actually ships. The DB
+       * arm resolves its baseline inside its own compiler and fails closed if
+       * handed one here, which is why this is conditional rather than shared. */
+      ...(armId === 'static-brand-theme'
+        ? {
+            base: staticBaselines[options.verticals[0]].theme,
+            baselineSource: staticBaselines[options.verticals[0]].source,
+          }
+        : {}),
     });
     return armId === 'static-brand-theme'
       ? composeStaticArm({
