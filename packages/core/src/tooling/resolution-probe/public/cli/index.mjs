@@ -124,7 +124,8 @@ causal options
   --family-id <id>        see --round-id.
   --scenario-id <id>      see --round-id.
   --producer <name>       who/what ran this causal round; must not be the sighted approver.
-  --evidence-kind <kind>  receipt evidenceKind (default: computed-causal-run).
+  --evidence-kind <kind>  receipt evidenceKind (default: computed-causal-run; data-causal
+                          defaults to data-field-delta, the DATA terminal's proof role).
   --receipt-out <path>    where to write the receipt, RELATIVE to the evidence root (default:
                           <--out>.receipt.json).
   --evidence-root <dir>   absolute directory writeEvidence treats as the repo root for the receipt
@@ -664,7 +665,12 @@ async function commandDataCausal(options) {
         roundId: options.roundId,
         familyId: options.familyId,
         scenarioId: options.scenarioId,
-        evidenceKind: options.evidenceKind,
+        // A DATA run's role is `data-field-delta`, and the command says so rather
+        // than making every caller remember the flag. The generic default is
+        // only kept when the caller explicitly named a different kind, so
+        // `--evidence-kind` still overrides.
+        evidenceKind:
+          options.evidenceKind === 'computed-causal-run' ? 'data-field-delta' : options.evidenceKind,
         commandOrTool: 'node src/tooling/resolution-probe/public/cli/index.mjs data-causal',
         exitCode,
         measuredSourceFiles: dataFreshnessSourceFiles({

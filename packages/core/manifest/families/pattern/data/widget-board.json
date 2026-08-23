@@ -8759,14 +8759,14 @@
     {
       "controlId": "responsive.posture",
       "disposition": "UNKNOWN",
-      "verificationState": "SOURCE_BOUND",
-      "unknownReason": "SOURCE_BOUND IS THE CEILING THIS CELL CAN HONESTLY REACH, and the reason is a gap in the manifest vocabulary rather than a gap in the evidence. The evidence is real and receipted (see evidenceIds): three verticals x all three stops through the one reachable ingress door, every guard green, exact restore to undefined, and the solver response measured. But every rank above SOURCE_BOUND is defined in CSS terms -- manifest/rules/index.mjs requires non-empty computedProperties and internalChannels at IMPLEMENTED, and an evidenceKind drawn from EVIDENCE_PROOF_ROLES.COMPUTED_DELTA (computed-delta | computed-property-delta | static-db-computed-parity) at COMPUTED_VERIFIED. A DATA-terminal control has no computed CSS property, no internal channel and no CSS delta to name, so it could only climb by fabricating them. It does not. The family maximumClaim is SOURCE_BOUND independently, so nothing is lost here that the family could otherwise have claimed. Registered as an OPEN_DT knownDefect on the control.",
+      "verificationState": "COMPUTED_VERIFIED",
+      "unknownReason": "SIGHTED_ACCEPTANCE_PENDING. The DATA evidence is complete and receipted (see evidenceIds): three verticals x all three stops through the one reachable ingress door, every guard green, exact restore to undefined, and the solver response measured. disposition stays UNKNOWN because SIGHTED_ACCEPTED is not claimable from a run in which nothing was rendered -- and on a DATA terminal that limit bites harder than usual, since there is no painted channel a reviewer could have inspected instead. The cell reaches COMPUTED_VERIFIED through the ladder amendment's DATA branch, which demands its own complete conjunction (see dataTerminal) instead of the five CSS-shaped fields this control has none of.",
       "evidenceIds": [
         "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/responsive-posture/rottay.json.receipt.json",
         "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/responsive-posture/bithire.json.receipt.json",
         "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/responsive-posture/evnto.json.receipt.json"
       ],
-      "nextAction": "OBTAIN_SIGHTED_ACCEPTANCE. The span-resolution axis is proven on all three stops of all three verticals through the one reachable door. Whether the resulting geometry is good is sighted acceptance; the capacity-tier gap is registered as a measured knownDefect on the control, not as a pending measurement.",
+      "nextAction": "OBTAIN_SIGHTED_ACCEPTANCE. The span-resolution axis is proven on all three stops of all three verticals through the one reachable door, and the ladder now has the vocabulary to say so. Whether the resulting geometry is good is sighted acceptance; the capacity-tier gap stays a measured knownDefect on the control, not a pending measurement.",
       "targetBinding": {
         "status": "NO_CSS_CHANNEL",
         "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
@@ -8787,8 +8787,6 @@
       "applicabilityHypothesis": "APPLICABLE_FOR_SPAN_RESOLUTION, NOT FOR CAPACITY TIER. This board is the direct spanBias consumer: runtime/adaptive/react/index.ts:76 reads environment.posture.spanBias and :213 hands it to the solver. Its capacity TIER is a different authority and is not tenant-driven -- :147 buckets on hardcoded 639/839 literals that widget-board.css mirrors as container queries.",
       "outputBindings": [],
       "outputBindingsNote": "EMPTY BY DESIGN, not unfilled. This control emits no CSS custom property at any stop: declaredOutputs.channels is empty on the control and targetBinding.status is NO_CSS_CHANNEL on all 255 cells. The stop reaches this board as a JS prop through the adaptive-layout runtime, never through a socket, so an outputBinding here would be a fiction.",
-      "computedProperties": [],
-      "computedPropertiesNote": "Nothing was read from a browser: this cell is certified by a DATA-terminal probe (packages/core/src/tooling/resolution-probe/composition/data-run/), whose two halves are plain function calls on a compiled artifact. The observable that moved is the solver placement, recorded in the S3 witness of each receipt as colSpan/rowStart per item.",
       "sourceBindings": [
         "packages/core/src/ui/patterns/data/widget-board/runtime/adaptive/react/index.ts",
         "packages/core/src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts",
@@ -8801,7 +8799,38 @@
         "the three sibling fields of .advanced remain byte-identical"
       ],
       "stablePartsNote": "Bounded to what was measured. The stop changes how the solver spans cells inside the board grid; no other part of this family was exercised, and the wider anatomy stays inventoried rather than proven.",
-      "partsAndGroupsNote": "Deliberately undeclared. A cell may not name a part or property group its family anatomy does not own, and this family owns an EMPTY propertyGroups list. The observable this control moves is not a painted part at all -- it is the solver placement (colSpan/rowStart), recorded per item in the S3 witness of each receipt."
+      "partsAndGroupsNote": "Deliberately undeclared. A cell may not name a part or property group its family anatomy does not own, and this family owns an EMPTY propertyGroups list. The observable this control moves is not a painted part at all -- it is the solver placement (colSpan/rowStart), recorded per item in the S3 witness of each receipt.",
+      "mechanism": "THEME_CONTROL",
+      "dataTerminal": {
+        "terminalReason": "packages/core/src/foundation/tokens/ts/presentation/responsive-postures/index.ts:26 states literally \"DATA, NOT CSS: no channel is emitted for this axis\", and manifest/cascade/roots/responsive.posture.json declares rootChannel.channel null under the head-empty conjunction (headEmptyReason present; derivations, terminalReach and overlaps all empty), which validateCascadeRoot admits only complete. This cell takes the DATA branch because that root says so, not because it claims it.",
+        "fieldPath": "normalizedAppearance.advanced.responsivePosture",
+        "equalitySurface": [
+          "chrome",
+          "tokenOverrides",
+          "profiles",
+          "responsivePosture"
+        ],
+        "equalitySurfaceNote": "The CLOSED 4-field list of .advanced, and it CONTAINS the governed field on purpose: a surface that omitted it could not express equality-except-the-field, because no row would pin that the field itself moved.",
+        "behaviouralWitnesses": [
+          {
+            "id": "S2",
+            "question": "Does the consumer resolve the REQUESTED stop off the compiled artifact, not the default?"
+          },
+          {
+            "id": "PREDICTION",
+            "question": "Is the band width invariant across stops while the onset shifts?"
+          },
+          {
+            "id": "S3",
+            "question": "At identical width, cols and contracts, does varying ONLY spanBias produce a different geometry?"
+          },
+          {
+            "id": "TIER_NEGATIVE",
+            "question": "Does the board bucket stay CONSTANT across stops at widths where the tenant ladder demonstrably moves?"
+          }
+        ]
+      },
+      "observableNote": "Nothing was read from a browser and no CSS property was declared: this control emits none at any stop. The observable that moved is the solver placement, recorded per item as colSpan/rowStart in the S3 witness of each receipt."
     }
   ],
   "retiredThemeControls": [],

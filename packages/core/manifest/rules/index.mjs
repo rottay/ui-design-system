@@ -428,6 +428,16 @@ export const EVIDENCE_PROOF_ROLES = Object.freeze({
     'computed-property-delta',
     'static-db-computed-parity',
   ]),
+  /**
+   * DATA terminals prove their delta on a compiled ARTIFACT FIELD, never on a
+   * painted property. This is a class of its own and deliberately NOT a fourth
+   * member of COMPUTED_DELTA: that list is consumed at exactly one site (the CSS
+   * branch of the COMPUTED_VERIFIED gate), so widening it would let a CSS cell
+   * buy its computed-delta leg with a receipt from a run that never opened a
+   * browser. A separate class is consumed only inside the DATA branch, which is
+   * what keeps every existing CSS verdict byte-identical.
+   */
+  DATA_FIELD_DELTA: Object.freeze(['data-field-delta']),
   EXACT_RESTORE: Object.freeze(['exact-restore', 'restore-parity']),
   SIGHTED: Object.freeze(['sighted-acceptance', 'sighted-review']),
 });
@@ -893,6 +903,7 @@ export function validateCell(cell, options) {
     contracts,
     activeControlIds,
     familyIds,
+    dataTerminalControlIds,
     now,
   } = options;
   const errors = [];
@@ -901,6 +912,47 @@ export function validateCell(cell, options) {
   const state = cell?.verificationState;
   const rank = rankOf(state);
   let declared = [];
+
+  /**
+   * LADDER (DATA-terminal amendment). Second application of the mechanism the
+   * cascade head-null amendment established: the LAW is amended, never the
+   * marker. The ladder knew how to say "this cell paints X" but not "this
+   * control's terminal is a normalized datum", so it charged as a defect an axis
+   * that BY DESIGN lowers to no CSS channel -- IMPLEMENTED demands
+   * computedProperties + internalChannels, COMPUTED_VERIFIED demands a
+   * COMPUTED_DELTA receipt, and all five are CSS-shaped. That red was true but
+   * STRUCTURAL: the defect was in the law, not in the axis.
+   *
+   * The prohibition comes FIRST and is unchanged: fabricating a computed
+   * property, an internal channel or a CSS delta to buy the green stays
+   * forbidden outright. This branch does not relax a requirement; it closes a
+   * hole in what the law can express, and it demands a DIFFERENT complete
+   * conjunction in exchange.
+   *
+   * WHO MAY TAKE IT is not a field a cell can set. It is decided upstream by the
+   * control's cascade root declaring `rootChannel.channel: null` under the
+   * complete fail-closed conjunction validateCascadeRoot already enforces. That
+   * declaration is gated, cited and singular; re-deciding it here would create a
+   * second authority for the same fact. The ids arrive through the explicit
+   * context, like activeControlIds, because this module stays pure with respect
+   * to its context: reading manifest/cascade by path would pin the real tree and
+   * a drill could no longer grade a temporary fixture.
+   */
+  const isDataTerminal =
+    dataTerminalControlIds instanceof Set && dataTerminalControlIds.has(controlId);
+  const dataTerminal = cell?.dataTerminal;
+
+  // The reverse tooth: `dataTerminal` is not an escape hatch. A cell whose
+  // control DOES emit a governed channel may not declare one to slip past the
+  // CSS requirements, and saying so here is what stops the branch from becoming
+  // an opt-out.
+  if (dataTerminal !== undefined && !isDataTerminal) {
+    errors.push(
+      `${where} declares dataTerminal, but this control's cascade root declares a governed ` +
+        'channel head; only a control whose root declares channel null under the head-empty ' +
+        'conjunction has a DATA terminal',
+    );
+  }
 
   if (rank < 0) return { errors, declared };
 
@@ -932,8 +984,85 @@ export function validateCell(cell, options) {
     errors.push(...validateSourceBindings(cell.sourceBindings, { label: where, repositoryRoot }));
   }
 
+  // IMPLEMENTED, DATA branch — the conjunction that replaces the CSS five.
+  // COMPLETE and fail-closed, in the shape the cascade amendment fixed: an
+  // explicit declaration, a CITED reason (the tooth -- without it the branch
+  // reintroduces the mute hole through the back door, since "does not apply"
+  // with no source is indistinguishable from "nobody looked"), and the tails
+  // that would contradict the declaration proven empty.
+  if (rank >= ASSESSMENT_STATE_RANK.IMPLEMENTED && isDataTerminal) {
+    if (!dataTerminal || typeof dataTerminal !== 'object' || Array.isArray(dataTerminal)) {
+      errors.push(
+        `${where} ${state} on a DATA-terminal control requires dataTerminal ` +
+          '{ terminalReason, fieldPath, equalitySurface, behaviouralWitnesses }',
+      );
+    } else {
+      if (!isNonEmptyString(dataTerminal.terminalReason)) {
+        errors.push(
+          `${where} dataTerminal requires terminalReason citing the source that proves this ` +
+            'control reaches its consumer as a datum (the ladder sibling of headEmptyReason)',
+        );
+      }
+      const fieldPath = dataTerminal.fieldPath;
+      if (!isNonEmptyString(fieldPath) || fieldPath.split('.').filter(Boolean).length < 2) {
+        errors.push(
+          `${where} dataTerminal requires fieldPath naming the governed field on the compiled ` +
+            'artifact, container first (e.g. normalizedAppearance.advanced.responsivePosture)',
+        );
+      }
+      const surface = dataTerminal.equalitySurface;
+      if (!isNonEmptyArray(surface) || !surface.every((name) => isNonEmptyString(name))) {
+        errors.push(
+          `${where} dataTerminal requires a non-empty equalitySurface: the CLOSED sibling list ` +
+            'that must NOT move while the governed field does',
+        );
+      } else if (isNonEmptyString(fieldPath) && !surface.includes(fieldPath.split('.').pop())) {
+        // The field lives INSIDE its own closed surface. A surface that excluded
+        // it would make "equality except the field" unfalsifiable: nothing would
+        // pin that the field itself moved.
+        errors.push(
+          `${where} dataTerminal.equalitySurface must contain the governed field itself ` +
+            `(${JSON.stringify(fieldPath.split('.').pop())}); a surface that omits it cannot ` +
+            'express equality-except-the-field',
+        );
+      }
+      const witnesses = dataTerminal.behaviouralWitnesses;
+      if (!isNonEmptyArray(witnesses)) {
+        errors.push(
+          `${where} dataTerminal requires non-empty behaviouralWitnesses: a datum that arrives ` +
+            'and varies but reaches no consumer is not a control',
+        );
+      } else {
+        witnesses.forEach((witness, index) => {
+          for (const field of ['id', 'question']) {
+            if (!isNonEmptyString(witness?.[field])) {
+              errors.push(`${where} dataTerminal.behaviouralWitnesses[${index}] missing ${field}`);
+            }
+          }
+        });
+      }
+    }
+    if (!CELL_MECHANISMS.has(cell.mechanism)) {
+      errors.push(
+        `${where} ${state} requires mechanism in ${[...CELL_MECHANISMS].join(' | ')}, got ${JSON.stringify(cell.mechanism ?? null)}`,
+      );
+    }
+    // Anti-fabrication, the same prohibition the cascade amendment put first: a
+    // control whose root declares no channel head cannot own a channel edge
+    // here. A cell that declares one is contradicting the declaration it is
+    // standing on, which is exactly the fake channel bought to purchase a green.
+    for (const field of ['internalChannels', 'computedProperties']) {
+      if (isNonEmptyArray(cell[field])) {
+        errors.push(
+          `${where} declares ${field} for a DATA-terminal control, whose cascade root declares ` +
+            'channel null; a head that emits no channel cannot own one here either',
+        );
+      }
+    }
+  }
+
   // IMPLEMENTED — parts, groups, computed properties, a declared mechanism and live channels.
-  if (rank >= ASSESSMENT_STATE_RANK.IMPLEMENTED) {
+  if (rank >= ASSESSMENT_STATE_RANK.IMPLEMENTED && !isDataTerminal) {
     for (const field of ['stableParts', 'propertyGroups', 'computedProperties']) {
       if (!isNonEmptyArray(cell[field])) errors.push(`${where} ${state} requires non-empty ${field}`);
     }
@@ -989,14 +1118,32 @@ export function validateCell(cell, options) {
     if (!isNonEmptyArray(cell.evidenceIds)) {
       errors.push(`${where} ${state} requires non-empty evidenceIds`);
     }
-    if (!hasProofRole(receipts, 'COMPUTED_DELTA')) {
+    // The delta leg, in the terminal's own currency. Everything else at this
+    // rank -- negativeControls, evidenceIds, and the EXACT_RESTORE leg below --
+    // is shared: restore is restore whatever the terminal, and a DATA run's
+    // restore law is the stricter of the two (the field must be undefined
+    // again, not merely equal to the default).
+    const deltaRole = isDataTerminal ? 'DATA_FIELD_DELTA' : 'COMPUTED_DELTA';
+    if (!hasProofRole(receipts, deltaRole)) {
       errors.push(
-        `${where} ${state} requires a receipt whose evidenceKind proves computed deltas (${EVIDENCE_PROOF_ROLES.COMPUTED_DELTA.join(' | ')})`,
+        `${where} ${state} requires a receipt whose evidenceKind proves ${isDataTerminal ? 'a governed-field delta' : 'computed deltas'} (${EVIDENCE_PROOF_ROLES[deltaRole].join(' | ')})`,
       );
     }
-    if (!hasProofRole(receipts, 'EXACT_RESTORE')) {
+    // The restore leg. On the CSS branch it is unchanged, byte for byte. On the
+    // DATA branch a `data-field-delta` receipt ALSO satisfies it, and that is a
+    // measured mechanical chain rather than a courtesy: the DATA producer sets
+    // `verdict.pass` only when `restore.exact === true`, exitCode mirrors the
+    // verdict, and quality-evidence/v2/receipts.mjs refuses any receipt whose
+    // exitCode is non-zero. A data-field-delta receipt that exists at all has
+    // therefore already proven its own exact restore, inside the same artifact.
+    // Reading it as a second role beats splitting three artifacts that each
+    // prove both into an arbitrary "this one is the delta, that one the
+    // restore"; and because the widening lives INSIDE this branch, no CSS cell
+    // can reach it.
+    const restoreRoles = isDataTerminal ? ['EXACT_RESTORE', 'DATA_FIELD_DELTA'] : ['EXACT_RESTORE'];
+    if (!restoreRoles.some((role) => hasProofRole(receipts, role))) {
       errors.push(
-        `${where} ${state} requires a receipt whose evidenceKind proves exact restore (${EVIDENCE_PROOF_ROLES.EXACT_RESTORE.join(' | ')})`,
+        `${where} ${state} requires a receipt whose evidenceKind proves exact restore (${restoreRoles.flatMap((role) => EVIDENCE_PROOF_ROLES[role]).join(' | ')})`,
       );
     }
   }
@@ -1092,6 +1239,39 @@ export function validateSection(section, key, options) {
       now,
     });
     errors.push(...resolved.errors);
+  }
+  return errors;
+}
+
+/**
+ * A control's `calibration.assessmentState` may never exceed the strongest state its own cells
+ * reach.
+ *
+ * This is the exact mirror, one level up, of the law `validateMaximumClaim` already applies to a
+ * family. Without it the control segment was the only rank in the manifest that nothing compared
+ * against evidence: `validateControl` checks that the value is a member of the vocabulary and
+ * that SOURCE_BOUND+ carries sourceBindings, but never that any cell sustains the claim -- so a
+ * control could publish COMPUTED_VERIFIED while every family carrying it sat at SOURCE_BOUND, and
+ * the board would read green off a ladder standing on the floor.
+ *
+ * It runs as a post-pass rather than inside `validateControl` because the generator validates
+ * controls BEFORE it walks the families, so the cell ranks do not exist yet at that point. Same
+ * placement and same shape as `validateControlOrthogonality`.
+ */
+export function validateControlAssessmentCeiling({ calibrationStateByControl, bestCellStateByControl }) {
+  const errors = [];
+  for (const [controlId, claimed] of calibrationStateByControl ?? []) {
+    const claimRank = rankOf(claimed);
+    if (claimRank < 0) continue;
+    const reached = bestCellStateByControl?.get(controlId) ?? 'UNKNOWN';
+    const reachedRank = Math.max(rankOf(reached), 0);
+    if (claimRank > reachedRank) {
+      errors.push(
+        `manifest/controls/${controlId}.json: calibration.assessmentState ${claimed} exceeds the ` +
+          `strongest state any family cell reaches for it (${reached}); a control may not outrank ` +
+          'its own evidence',
+      );
+    }
   }
   return errors;
 }

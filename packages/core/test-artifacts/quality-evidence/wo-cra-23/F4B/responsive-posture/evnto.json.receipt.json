@@ -3,9 +3,9 @@
   "roundId": "R6",
   "familyId": "pattern/data/widget-board",
   "scenarioId": "responsive.posture/all-stops/evnto/db-data-terminal",
-  "evidenceKind": "exact-restore",
+  "evidenceKind": "data-field-delta",
   "commandOrTool": "node src/tooling/resolution-probe/public/cli/index.mjs data-causal",
-  "toolVersion": "resolution-probe@849c1702b335",
+  "toolVersion": "resolution-probe@29aa993d9632",
   "exitCode": 0,
   "sourceFiles": [
     "packages/core/dist/build-stamp.json",
@@ -45,10 +45,10 @@
     "packages/core/src/ui/patterns/runtime/adaptive-layout/runtime/index.ts",
     "packages/core/src/ui/surfaces/presentation/pages/data/dashboard/index.tsx"
   ],
-  "sourceDigest": "f197736b1e092c8ad62484136b079ad983b529da0164a17403f80682cb605506",
+  "sourceDigest": "1ae7f3c4cb3a751d911fcd5ad599af1d6c315d2625b5c6a8a3fda13e87b03557",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/responsive-posture/evnto.json",
   "artifactSha256": "f6266df1f7dc61a1accf49ef0866215eac666e8c98322923ebc38901fe4b78c1",
-  "createdAt": "2026-08-23T21:37:36.938Z",
+  "createdAt": "2026-08-23T23:05:31.367Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

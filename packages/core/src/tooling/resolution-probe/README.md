@@ -393,8 +393,20 @@ Negatives are written so both halves must hold: "the board did not move" alone
 would also pass with a dead ladder, so the witness additionally requires the
 ladder to move at the same widths.
 
-Receipting is unchanged — `buildReceipt` is payload-agnostic, so a DATA artifact
-is evidence like any other. The freshness surface differs, and deliberately:
+The receipt's `evidenceKind` is **`data-field-delta`**, which `data-causal`
+defaults to; `--evidence-kind` still overrides. It is a proof role of its own,
+never a fourth member of `COMPUTED_DELTA`, because that list is what a CSS cell
+reads to satisfy its computed-delta leg and a DATA receipt must not be able to
+buy it. Inside the DATA branch of the ladder one such receipt satisfies BOTH the
+delta and the restore leg, and that is mechanical rather than generous: this
+file sets `verdict.pass` only when `restore.exact` holds, `exitCode` mirrors the
+verdict, and `quality-evidence/v2/receipts.mjs` refuses any receipt whose
+`exitCode` is non-zero — so a `data-field-delta` receipt that exists at all has
+already proven its own exact restore, inside the same artifact.
+
+Receipting is otherwise unchanged — `buildReceipt` is payload-agnostic, so a DATA
+artifact is evidence like any other. The freshness surface differs, and
+deliberately:
 **no CSS.** This probe reads a compiled artifact, never a stylesheet, so bundle
 inputs would declare a dependency it does not have and make every receipt churn
 on paint changes it cannot see. What it does bind: the instrument tree, the

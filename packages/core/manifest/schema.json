@@ -162,6 +162,9 @@
       "RETIRED"
     ],
     "evidenceProofRoles": {
+      "DATA_FIELD_DELTA": [
+        "data-field-delta"
+      ],
       "COMPUTED_DELTA": [
         "computed-delta",
         "computed-property-delta",

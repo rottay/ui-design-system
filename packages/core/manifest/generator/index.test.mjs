@@ -29,6 +29,7 @@ import {
   resolveSourceBinding,
   validateCascadeRoot,
   validateCell,
+  validateControlAssessmentCeiling,
   validateControlOrthogonality,
   validateInternalChannelLaws,
   validateMaximumClaim,
@@ -1175,4 +1176,206 @@ test('a cascade root with a real derivation tail and no reason is accepted', () 
   const live = cascadeRootFixture({ variants: [NAMED_VARIANT], derivations: [NAMED_DERIVATION] });
   delete live.derivationsEmptyReason;
   assert.deepEqual(validateCascadeRoot(live, CASCADE_FIXTURE_CONTEXT), []);
+});
+
+
+// ---------------------------------------------------------------------------
+// L-1 — the DATA-terminal branch of the ladder
+//
+// Every drill grades a TEMPORARY fixture, which is exactly why the branch is
+// selected by a Set arriving through the explicit context instead of being read
+// off manifest/cascade by path: a drill can declare `density.mode` a DATA
+// terminal for the length of one assertion, and the real tree is never pinned.
+// ---------------------------------------------------------------------------
+
+const DATA_TERMINALS = new Set(['density.mode']);
+
+/** The complete conjunction, as the amendment demands it. */
+const DATA_TERMINAL_BLOCK = {
+  terminalReason:
+    'fixture: the cascade root declares rootChannel.channel null under the head-empty ' +
+    'conjunction, and the source it cites says the axis emits no governed channel',
+  fieldPath: 'normalizedAppearance.advanced.responsivePosture',
+  equalitySurface: ['chrome', 'tokenOverrides', 'profiles', 'responsivePosture'],
+  behaviouralWitnesses: [
+    { id: 'S2', question: 'Does the consumer resolve the REQUESTED stop off the compiled artifact?' },
+    { id: 'S3', question: 'Does the solver produce a different geometry per stop?' },
+  ],
+};
+
+function gradeDataCell(fixture, state, overrides = {}) {
+  const cell = {
+    controlId: 'density.mode',
+    disposition: 'UNKNOWN',
+    verificationState: state,
+    mechanism: 'THEME_CONTROL',
+    sourceBindings: [fixture.binding],
+    negativeControls: ['the board capacity tier does not move with the tenant stop'],
+    evidenceIds: fixture.evidenceIds,
+    dataTerminal: DATA_TERMINAL_BLOCK,
+    ...overrides,
+  };
+  return gradeCell(cell, {
+    contracts: fixture.contracts,
+    repositoryRoot: fixture.root,
+    dataTerminalControlIds: DATA_TERMINALS,
+  }).errors;
+}
+
+test('L-1 drill (a): a CSS cell may not take the DATA branch', () => {
+  // `dataTerminal` is not an escape hatch from the five CSS fields. Whether a
+  // control HAS a DATA terminal is decided by its cascade root, never by the
+  // cell claiming it.
+  const fixture = evidenceFixture({ delta: {}, restore: { evidenceKind: 'exact-restore' } });
+  const errors = gradeCell(
+    {
+      controlId: 'spacing.rhythm',
+      disposition: 'UNKNOWN',
+      verificationState: 'IMPLEMENTED',
+      mechanism: 'THEME_CONTROL',
+      sourceBindings: [fixture.binding],
+      stableParts: ['root'],
+      propertyGroups: ['gap'],
+      computedProperties: ['gap'],
+      internalChannels: [liveChannel({}, fixture.binding)],
+      dataTerminal: DATA_TERMINAL_BLOCK,
+    },
+    { contracts: fixture.contracts, repositoryRoot: fixture.root, dataTerminalControlIds: DATA_TERMINALS },
+  ).errors;
+  assertNames(errors, "cascade root declares a governed channel head");
+});
+
+test('L-1 drill (b): the DATA conjunction is COMPLETE — every pata is load-bearing', () => {
+  const fixture = evidenceFixture({ delta: { evidenceKind: 'data-field-delta' } });
+  // The healthy shape first, so the drill cannot pass by being red about
+  // something else.
+  assert.deepEqual(gradeDataCell(fixture, 'IMPLEMENTED'), []);
+
+  for (const field of ['terminalReason', 'fieldPath', 'equalitySurface', 'behaviouralWitnesses']) {
+    const block = { ...DATA_TERMINAL_BLOCK };
+    delete block[field];
+    assertNames(gradeDataCell(fixture, 'IMPLEMENTED', { dataTerminal: block }), 'dataTerminal');
+  }
+
+  // The block itself is required at IMPLEMENTED.
+  assertNames(
+    gradeDataCell(fixture, 'IMPLEMENTED', { dataTerminal: undefined }),
+    'requires dataTerminal',
+  );
+
+  // The field lives INSIDE its own closed surface: a surface that omits it makes
+  // equality-except-the-field unfalsifiable, because nothing pins that the field
+  // itself moved.
+  assertNames(
+    gradeDataCell(fixture, 'IMPLEMENTED', {
+      dataTerminal: { ...DATA_TERMINAL_BLOCK, equalitySurface: ['chrome', 'tokenOverrides'] },
+    }),
+    'must contain the governed field itself',
+  );
+
+  // A witness without a question is not a witness.
+  assertNames(
+    gradeDataCell(fixture, 'IMPLEMENTED', {
+      dataTerminal: { ...DATA_TERMINAL_BLOCK, behaviouralWitnesses: [{ id: 'S2' }] },
+    }),
+    'behaviouralWitnesses[0] missing question',
+  );
+
+  // Anti-fabrication: the prohibition the cascade amendment put first. A head
+  // that emits no channel cannot own one here either.
+  assertNames(
+    gradeDataCell(fixture, 'IMPLEMENTED', { computedProperties: ['gap'] }),
+    'declares computedProperties for a DATA-terminal control',
+  );
+});
+
+test('L-1 drill (c): a DATA cell rises to COMPUTED_VERIFIED on a data-field-delta receipt', () => {
+  const dataDelta = evidenceFixture({ delta: { evidenceKind: 'data-field-delta' } });
+  // One receipt carries BOTH legs here, and that is mechanical rather than
+  // generous: the producer sets verdict.pass only when restore.exact holds,
+  // exitCode mirrors the verdict, and v2 refuses a non-zero exitCode.
+  assert.deepEqual(gradeDataCell(dataDelta, 'COMPUTED_VERIFIED'), []);
+
+  // A CSS delta receipt does NOT satisfy the DATA leg...
+  const cssDelta = evidenceFixture({ delta: {}, restore: { evidenceKind: 'exact-restore' } });
+  assertNames(
+    gradeDataCell(cssDelta, 'COMPUTED_VERIFIED'),
+    'requires a receipt whose evidenceKind proves a governed-field delta',
+  );
+
+  // ...and the widening is confined to the DATA branch: a CSS cell may not buy
+  // its computed-delta leg with a receipt from a run that never opened a browser.
+  const onlyDataDelta = evidenceFixture({ delta: { evidenceKind: 'data-field-delta' } });
+  assertNames(
+    gradeAgainst(onlyDataDelta, 'COMPUTED_VERIFIED'),
+    'requires a receipt whose evidenceKind proves computed deltas',
+  );
+});
+
+test('L-1 drill (d): a CSS cell grades IDENTICALLY with and without the DATA context', () => {
+  // The retrospective-invariance claim, as a standing assertion rather than a
+  // one-off measurement: the branch is guarded by a Set membership test, so a
+  // control outside the Set can never reach it.
+  const fixture = evidenceFixture({ delta: {}, restore: { evidenceKind: 'exact-restore' } });
+  for (const state of ['SOURCE_BOUND', 'IMPLEMENTED', 'COMPUTED_VERIFIED']) {
+    const cell = {
+      controlId: 'spacing.rhythm',
+      disposition: 'UNKNOWN',
+      verificationState: state,
+      mechanism: 'THEME_CONTROL',
+      sourceBindings: [fixture.binding],
+      stableParts: ['root'],
+      propertyGroups: ['gap'],
+      computedProperties: ['gap'],
+      internalChannels: [liveChannel({}, fixture.binding)],
+      negativeControls: ['numeric gaps remain exact'],
+      evidenceIds: fixture.evidenceIds,
+    };
+    const without = gradeCell(cell, { contracts: fixture.contracts, repositoryRoot: fixture.root }).errors;
+    const with_ = gradeCell(cell, {
+      contracts: fixture.contracts,
+      repositoryRoot: fixture.root,
+      dataTerminalControlIds: DATA_TERMINALS,
+    }).errors;
+    assert.deepEqual(with_, without, `${state}: the amendment must not move a CSS verdict`);
+  }
+});
+
+test('L-1 drill (e): a data-field-delta from a FAILED run cannot buy the green', () => {
+  // The chain is end to end and no leg of it is new: a constant field trips the
+  // producer's data-constant guard, verdict.pass goes false, exitCode becomes 1,
+  // and quality-evidence/v2 refuses the receipt outright.
+  const failed = evidenceFixture({ delta: { evidenceKind: 'data-field-delta', exitCode: 1 } });
+  assertNames(gradeDataCell(failed, 'COMPUTED_VERIFIED'), 'is non-zero for a positive evidence kind');
+});
+
+test('L-1 drill (f): a control may not outrank its own evidence', () => {
+  const ceiling = (claimed, reached) =>
+    validateControlAssessmentCeiling({
+      calibrationStateByControl: new Map([['density.mode', claimed]]),
+      bestCellStateByControl: new Map([['density.mode', reached]]),
+    });
+  assertNames(
+    ceiling('COMPUTED_VERIFIED', 'SOURCE_BOUND'),
+    'calibration.assessmentState COMPUTED_VERIFIED exceeds the strongest state any family cell reaches',
+  );
+  // Equal is fine, and so is under-claiming: a control is allowed to be more
+  // modest than its cells, never less.
+  assert.deepEqual(ceiling('COMPUTED_VERIFIED', 'COMPUTED_VERIFIED'), []);
+  assert.deepEqual(ceiling('UNKNOWN', 'COMPUTED_VERIFIED'), []);
+  // A control with no cell at all reaches UNKNOWN, so any claim above it fails.
+  assert.deepEqual(
+    validateControlAssessmentCeiling({
+      calibrationStateByControl: new Map([['density.mode', 'UNKNOWN']]),
+      bestCellStateByControl: new Map(),
+    }),
+    [],
+  );
+  assertNames(
+    validateControlAssessmentCeiling({
+      calibrationStateByControl: new Map([['density.mode', 'IMPLEMENTED']]),
+      bestCellStateByControl: new Map(),
+    }),
+    'exceeds the strongest state any family cell reaches for it (UNKNOWN)',
+  );
 });

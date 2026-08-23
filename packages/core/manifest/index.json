@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "generatedBy": "node packages/core/manifest/generator/index.mjs --sync",
   "authorityLaw": "Controls own semantics, groups own recipe vocabularies, families own applicability edges, and this index owns generated rollups.",
-  "inputsDigest": "c73e89868bec2fcca0c04351562e47432f6332c44bb344905955903341caf0d8",
+  "inputsDigest": "566ddb4907108f739bba2ed5ca46177b483697d96bf55cc043b327f8cc4e554f",
   "denominators": {
     "canonicalFamilies": 255,
     "activeStandardControls": 13,
@@ -1362,7 +1362,7 @@
             "familyId": "pattern/data/widget-board",
             "layer": "pattern",
             "disposition": "UNKNOWN",
-            "verificationState": "SOURCE_BOUND",
+            "verificationState": "COMPUTED_VERIFIED",
             "stableParts": [],
             "propertyGroups": [],
             "computedProperties": [],
@@ -1517,7 +1517,7 @@
     {
       "controlId": "responsive.posture",
       "path": "manifest/controls/responsive.posture.json",
-      "digest": "ccf9c2fc85ee35ff497bac7cfdcc92efe852f1b6445316c7cae9d371f40f7aad"
+      "digest": "19831fb7cb6750d64a8f21d9171410a80663c9be590f2e20040c6c476c6792e0"
     }
   ],
   "groups": [
@@ -1856,7 +1856,7 @@
     {
       "familyId": "pattern/data/widget-board",
       "path": "manifest/families/pattern/data/widget-board.json",
-      "digest": "a105f6fbf4052e806d3a809962c0b163dc472b32d8466863b3e021a4bb8e977e",
+      "digest": "066c9236828710afd7a1776b5790c7e2b8456bd1fa9faa9c359110a65a36d334",
       "maximumClaim": "SOURCE_BOUND",
       "reviewVerdict": null
     },

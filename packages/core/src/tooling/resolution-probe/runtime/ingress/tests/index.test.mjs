@@ -15,7 +15,7 @@
  */
 
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
+import { readdirSync, readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { test } from 'node:test';
 import { pathToFileURL } from 'node:url';
@@ -967,6 +967,31 @@ test('H-1 drill 2 [needs dist]: no vertical collapses onto the rottay value any 
  * must be base-INVARIANT, and drill 3 proves it by iterating the manifest rather
  * than a list, so a control added later is covered the day it closes. Adding an
  * entry here is a deliberate, reviewable act; forgetting to add one is a red. */
+/**
+ * The controls whose terminal is a normalized datum, not a painted channel.
+ *
+ * Read from the SAME single authority the ladder amendment uses -- a cascade
+ * root declaring `rootChannel.channel: null`, admitted only under the complete
+ * head-empty conjunction. Not a hand-kept exclusion list: a list would have to
+ * be remembered, and the whole reason these fences iterate from the manifest is
+ * that a control closing later is covered the day it closes. Not
+ * `declaredOutputs.channels.length === 0` either, which LOOKS like the right
+ * predicate and is not: profiles.icon and chrome.anatomy both declare an empty
+ * channel list while their roots declare real heads (--ds-icon-stroke-width with
+ * 118 terminalReach edges; data-anatomy-card with 353), so that predicate would
+ * quietly route two painting controls into the "cannot paint" branch and green
+ * their under-declaration.
+ */
+function dataTerminalControlIds() {
+  const dir = resolve(CORE_ROOT, 'manifest/cascade/roots');
+  const ids = new Set();
+  for (const name of readdirSync(dir).filter((f) => f.endsWith('.json'))) {
+    const root = JSON.parse(readFileSync(resolve(dir, name), 'utf8'));
+    if (root?.rootChannel && root.rootChannel.channel === null) ids.add(root.rootId);
+  }
+  return ids;
+}
+
 const BASE_SENSITIVE_BY_DESIGN = new Map([
   [
     'experience.profile',
@@ -986,6 +1011,7 @@ test('H-1 drill 3 [needs dist]: every OTHER closed control lowers identically wi
   const arms = await loadCompilerArms();
   const baselines = await loadStaticBaselines();
   const dir = resolve(CORE_ROOT, 'manifest/controls');
+  const dataTerminals = dataTerminalControlIds();
   let checked = 0;
   const covered = [];
   for (const file of readdirSync(dir).filter((f) => f.endsWith('.json')).sort()) {
@@ -994,7 +1020,12 @@ test('H-1 drill 3 [needs dist]: every OTHER closed control lowers identically wi
     const stops = manifest.calibration?.normalizedStops ?? [];
     // "Closed" = it has stops to lower AND a state that made it evidence-bearing.
     const closed = stops.length > 0 && manifest.calibration?.assessmentState === 'COMPUTED_VERIFIED';
-    if (!closed || BASE_SENSITIVE_BY_DESIGN.has(id)) continue;
+    // A DATA terminal has no channel to compare with and without a baseline, so
+    // it is out of this fence's question entirely -- routed by the same single
+    // authority, never by a remembered list. Without this it would enter the
+    // loop the moment its state reached COMPUTED_VERIFIED and be swallowed whole
+    // by the catch below, which is a hole dressed as a pass.
+    if (!closed || BASE_SENSITIVE_BY_DESIGN.has(id) || dataTerminals.has(id)) continue;
     covered.push(id);
     for (const stop of stops) {
       for (const vertical of FIRST_PARTY) {
@@ -1012,8 +1043,21 @@ test('H-1 drill 3 [needs dist]: every OTHER closed control lowers identically wi
         try {
           without = JSON.stringify(run({}, null).variables);
         } catch {
-          // A stop that cannot lower without a baseline is not an invariance
-          // violation; it is the H-1 improvement. Nothing to compare.
+          // A stop whose lowering comes back EMPTY is not an invariance
+          // violation; it is the H-1 improvement, and there is nothing to
+          // compare.
+          //
+          // The reason is written as the MEASURED message, not the expected one:
+          // `lowerStop` has no "needs a baseline" throw at all, and this comment
+          // used to name one. What an H-1 case actually surfaces as is "emitted
+          // none of the declared channels".
+          //
+          // The catch stays WIDE by ruling. It is dead code today (measured: 30
+          // comparisons, 0 hits), and what closed the real hole was routing DATA
+          // terminals out of the selector above: before the amendment raised
+          // responsive.posture to COMPUTED_VERIFIED, nine combinations would have
+          // been swallowed here while the drill reported green. Narrowing to the
+          // message above stays available the day this stops being dead code.
           continue;
         }
         const withBase = JSON.stringify(
@@ -1283,7 +1327,10 @@ test('H-2 drill 4 [needs dist]: the predicate is EXISTS, not FOR-ALL', async () 
 test('H-2 drill 5 [needs dist]: every control that carries receipts passes, both arms', async () => {
   const { readdirSync } = await import('node:fs');
   const dir = resolve(CORE_ROOT, 'manifest/controls');
+  const dataTerminals = dataTerminalControlIds();
   let checked = 0;
+  let routed = 0;
+  let seenDataTerminals = 0;
   for (const file of readdirSync(dir).filter((f) => f.endsWith('.json')).sort()) {
     const manifest = readManifest(resolve(dir, file));
     // "Carries receipts" read from the manifest state, not a hardcoded list, so
@@ -1293,8 +1340,24 @@ test('H-2 drill 5 [needs dist]: every control that carries receipts passes, both
       ...(manifest.calibration?.exactRestoreEvidenceIds ?? []),
     ];
     if (evidence.length === 0) continue;
+    if (dataTerminals.has(manifest.controlId)) seenDataTerminals += 1;
     for (const armId of INGRESS_ARM_IDS) {
       for (const vertical of FIRST_PARTY) {
+        if (dataTerminals.has(manifest.controlId)) {
+          // NOT an exclusion. A DATA terminal is routed to the assertion that
+          // actually holds for it, so the fence keeps covering it: the CSS guard
+          // must REFUSE it, and refuse it for the structural reason. A silent
+          // `continue` would leave a hole exactly where the receipts are, and a
+          // hole is worse than the red it replaces -- it reads as coverage.
+          await assert.rejects(
+            () => discriminate(manifest, armId, vertical),
+            /declares no output channels/,
+            `${manifest.controlId}/${armId}/${vertical}: a channel-less control must be REFUSED by ` +
+              'the CSS guard, never silently passed',
+          );
+          routed += 1;
+          continue;
+        }
         const verdict = await discriminate(manifest, armId, vertical);
         assert.ok(
           verdict.outcome.startsWith('PASS'),
@@ -1305,6 +1368,13 @@ test('H-2 drill 5 [needs dist]: every control that carries receipts passes, both
     }
   }
   assert.ok(checked >= 12, `the invariance fence must cover the receipted catalogue; checked ${checked}`);
+  // Both counters are asserted. If the DATA leg ever silently stops selecting
+  // anything, this is what says so.
+  assert.equal(
+    routed,
+    seenDataTerminals * INGRESS_ARM_IDS.length * FIRST_PARTY.length,
+    'every receipted DATA terminal must be routed on every arm and vertical',
+  );
 });
 
 test('H-2 drill 6 [needs dist]: the verdict is PER ARM — typography.scale proves it', async () => {

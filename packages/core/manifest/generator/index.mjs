@@ -28,6 +28,7 @@ import {
   checkSourceInventoryCorrespondence,
   findForbiddenFamilyEdgeFields,
   validateCell,
+  validateControlAssessmentCeiling,
   validateControlOrthogonality,
   validateInternalChannelLaws,
   validateMaximumClaim,
@@ -176,6 +177,29 @@ function cascadeInputsDigest() {
     }
   }
   return jsonDigest(entries);
+}
+
+/**
+ * The controls whose terminal is a normalized datum rather than a painted channel.
+ *
+ * Read from the ONE place that already decides it: a cascade root declaring
+ * `rootChannel.channel: null`, which `validateCascadeRoot` admits only under the
+ * complete head-empty conjunction (a cited `headEmptyReason`, and empty
+ * `derivations`/`terminalReach`/`overlaps`). Deriving it here instead of adding
+ * a `terminalKind` field anywhere obeys the rule the cascade amendment wrote
+ * down: reuse the existing declaration first, invent a new one only afterwards.
+ * A second field would be a second authority for the same fact, and the two
+ * could disagree.
+ */
+function dataTerminalControlIds() {
+  const ids = new Set();
+  if (!existsSync(CASCADE_ROOTS_DIR)) return ids;
+  for (const name of readdirSync(CASCADE_ROOTS_DIR).sort()) {
+    if (!name.endsWith('.json')) continue;
+    const root = readJson(join(CASCADE_ROOTS_DIR, name));
+    if (root?.rootChannel && root.rootChannel.channel === null) ids.add(root.rootId);
+  }
+  return ids;
 }
 
 function sourceInputsDigest() {
@@ -598,6 +622,7 @@ function validateControl(value, expected, label, errors, context) {
   );
   if (context) {
     context.independentInvariantByControl.set(expected.id, value.independentSemanticInvariant ?? null);
+    context.calibrationStateByControl.set(expected.id, value.calibration?.assessmentState ?? null);
   }
   const consumer = value.productiveConsumerWitness?.consumer;
   const symbol = value.productiveConsumerWitness?.symbol;
@@ -638,9 +663,17 @@ function validateFamily(value, row, controlIds, label, errors, context) {
       contracts: context.contracts,
       activeControlIds: controlIds,
       familyIds: context.familyIds,
+      dataTerminalControlIds: context.dataTerminalControlIds,
       now: context.now,
     });
     errors.push(...graded.errors);
+    const seen = context.bestCellStateByControl.get(cell.controlId);
+    if (
+      seen === undefined ||
+      (ASSESSMENT_STATE_RANK[cell.verificationState] ?? -1) > (ASSESSMENT_STATE_RANK[seen] ?? -1)
+    ) {
+      context.bestCellStateByControl.set(cell.controlId, cell.verificationState);
+    }
     context.channelDeclarations.push(...graded.declared);
     if (cell.disposition === 'APPLICABLE') {
       const consumers = context.consumerSetsByControl.get(cell.controlId) ?? new Set();
@@ -728,6 +761,13 @@ export function validateCustomizationManifest() {
     channelDeclarations: [],
     consumerSetsByControl: new Map(),
     independentInvariantByControl: new Map(),
+    calibrationStateByControl: new Map(),
+    bestCellStateByControl: new Map(),
+    // Derived ONCE, from the cascade roots this generator already digests, and
+    // handed down like activeControlIds. rules/ never reads it off disk: that
+    // module stays pure with respect to its explicit context so a drill can
+    // grade a temporary fixture.
+    dataTerminalControlIds: dataTerminalControlIds(),
   };
 
   const controlRecords = controls.map((entry) => {
@@ -747,6 +787,12 @@ export function validateCustomizationManifest() {
     ...validateControlOrthogonality({
       consumerSetsByControl: context.consumerSetsByControl,
       independentInvariantByControl: context.independentInvariantByControl,
+    }),
+  );
+  errors.push(
+    ...validateControlAssessmentCeiling({
+      calibrationStateByControl: context.calibrationStateByControl,
+      bestCellStateByControl: context.bestCellStateByControl,
     }),
   );
   const groups = groupRecords();

@@ -2293,6 +2293,75 @@ con la corrección de su propio preaudit asentada (su Q4 asumía un cierre
 COMPUTED_VERIFIED inexistente para un terminal DATA: density llegó a rango
 3 porque PINTA; la diferencia es de vocabulario, no de evidencia).
 
+##### L-1 — la escalera aprende terminales DATA (enmienda de ley, 2026-08-23)
+
+`LADDER_VOCABULARY/data-terminal-controls` **CERRADO por enmienda de ley
+UNA vez** (el mecanismo del precedente cabeza-nula, segunda aplicación).
+`responsive.posture` queda **COMPUTED_VERIFIED honesto: F4B 6/20** (la
+puerta sighted es el único paso restante de ese control). Writer: Opus.
+Preaudit Fable: ACCEPT Y-1…Y-5. Postaudit Fable: **ACCEPT**, memo
+`/private/tmp/l1-ladder-fable-postaudit.md` (SHA en su `.ready`), con
+harness Y-1 reconstruido independientemente por el auditor y coincidente
+al error exacto.
+
+**La enmienda (bloques A–G en `manifest/rules/` + mirror en
+`schema.json`):** rol `data-field-delta` en **clase propia** (una celda
+CSS no puede comprar su pata de delta con un receipt sin browser);
+selector **derivado de la raíz de cascada** (`channel: null` bajo la
+conjunción head-empty — la única autoridad gateada; selecciona 1/20 hoy y
+deja fuera a `profiles.icon`/`chrome.anatomy`, que PINTAN); **diente
+inverso** (declarar `dataTerminal` con raíz de cabeza no nula es error);
+conjunción IMPLEMENTED completa: `terminalReason` (el diente, hermano de
+`headEmptyReason`), `fieldPath`, `equalitySurface` **que contiene el
+campo** (duro: una superficie que lo excluye vuelve indemostrable la
+igualdad-excepto-el-campo), `behaviouralWitnesses`, `mechanism` intacto,
+**anti-fabricación** (`internalChannels`/`computedProperties` vacíos —
+prohibido comprar el verde); CV rama DATA con restore por la **cadena
+mecánica** (verdict.pass solo si restore.exact; exitCode espejo;
+v2:139-140 rechaza exit≠0), no por reparto de roles; **techo duro de
+`assessmentState`** (`validateControlAssessmentCeiling`, espejo de
+`validateMaximumClaim` — un control no puede superar el rango que su
+mejor celda sostiene; radio medido 1/20 y la única violación la cura la
+propia enmienda; probado en vivo con mutación SIGHTED_ACCEPTED → FAIL y
+restore byte-exacto). Precisión asentada (Y-4 + F2 anterior): generator
+SÍ valida vocabulario y sourceBindings del control; rules valida
+assessmentState de secciones de familia; lo que faltaba era el techo.
+
+**Segundo cliente (Fable F1 de F4B-6, cerrado):** drill 5 de H-2 **RUTEA**
+(no excluye) con contadores asertados (30 PASS CSS + 6 REFUSED DATA —
+ninguna pata verde por vacía); drill 3 ruteado fuera del selector (su
+hueco de traspaso silencioso sólo se abría al subir el control);
+comentario del catch corregido (Y-2: razón real medida, código muerto
+declarado, angostado como opción futura). Ingress drills **56/56** de
+vuelta.
+
+**Evidencia:** las 3 sondas R6 **re-CORRIDAS** (nunca re-etiquetadas) con
+`--evidence-kind data-field-delta` (default nuevo del CLI, `causal`
+intacto); artifacts byte-idénticos (sonda determinista) y receipts con el
+kind nuevo emitido por corrida viva; 33/33 VALID+FRESH (30 re-emitidos
+por frescura, unión nunca reemplazo, artifacts intactos).
+
+**Invariancia Y-1 (re-medida en el árbol real por el writer Y por Fable
+con harness propio independiente, coincidentes):** 5100 celdas graduadas
+con ambos módulos, **1 veredicto cambiado** (la celda del terminal: 6
+errores bajo la ley vieja, 0 bajo la nueva), **0 fuera del terminal**; el
+drill (d) la vuelve aserción permanente.
+
+**Deudas asentadas:** sub-declaración de `profiles.icon` (reach **118**) y
+`chrome.anatomy` (reach **353**) — declaran `channels: []` y emiten
+cabezas reales; queda **OPEN_DT** con estos números para que nadie la
+"resuelva" por el selector equivocado (Y-3). Los 2 rojos preexistentes
+(test 1 sandbox CLOSURE_MEMBERS + A11) quedan para packet de triage
+aparte que arranca de la caracterización T-1 (Y-5). Suite constitucional:
+46/48 idéntica, L-1 no agregó ni quitó ninguno.
+
+**Gates:** generator 42/42; ingress 56/56; data-run 15/15;
+CONSTITUTION_READY (corridas propias del DT y de Fable); `tsc --noEmit`
+limpio. Desviaciones del writer, TODAS adjudicadas por Fable:
+`CLOSED_BY_LAW_AMENDMENT` (descriptivo, campo libre), default condicional
+de 2 líneas, drill (b) con 8 aserciones, especificador re-apuntado del
+método `git show`, edición+restore del cableado del techo.
+
 **F0 — CERRADO (2026-08-19).** Criterio de cierre cumplido:
 `ci-gates OK — 78 blocking gate(s) passed` (2 excluded visibles con razón y
 dueño: channel-liveness y lane-control-drills, ambos esperan a F2); `find src -type d -empty` vacío salvo el inbox
