@@ -25,6 +25,7 @@
     "packages/core/src/infrastructure/compilers/composition/tenant-theme/index.ts",
     "packages/core/src/infrastructure/compilers/kernel/foundation/css/chrome-variables/index.ts",
     "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
+    "packages/core/src/tooling/resolution-probe/composition/data-run/index.mjs",
     "packages/core/src/tooling/resolution-probe/composition/diff/index.mjs",
     "packages/core/src/tooling/resolution-probe/composition/receipt/index.mjs",
     "packages/core/src/tooling/resolution-probe/composition/run/index.mjs",
@@ -53,10 +54,10 @@
     "packages/core/src/ui/primitives/layout/Space/tests/Space.modern-fragment-children.test.tsx",
     "packages/core/src/ui/primitives/layout/Space/tests/Space.test.tsx"
   ],
-  "sourceDigest": "f797e11a674e53c1bf78aa422f87f5510a7490d3c08c0d6e167befb58ed3bf72",
+  "sourceDigest": "a3fb39d77426fc7ad97198c671642c765e83020935a21f8056616614d64ad7d2",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/density-mode/evnto-compact.json",
   "artifactSha256": "387fd0547bd1a74c9aab82da786d7df4cbf2bd651c96609ea4a2a07a8c3d00c0",
-  "createdAt": "2026-08-23T20:21:22.749Z",
+  "createdAt": "2026-08-23T21:34:13.000Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

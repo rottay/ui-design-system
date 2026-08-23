@@ -35,6 +35,7 @@
     "packages/core/src/infrastructure/compilers/composition/tenant-theme/index.ts",
     "packages/core/src/infrastructure/compilers/composition/tenant-theme/tests/surfaces-effect-intensity-envelope.test.ts",
     "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
+    "packages/core/src/tooling/resolution-probe/composition/data-run/index.mjs",
     "packages/core/src/tooling/resolution-probe/composition/diff/index.mjs",
     "packages/core/src/tooling/resolution-probe/composition/receipt/index.mjs",
     "packages/core/src/tooling/resolution-probe/composition/run/index.mjs",
@@ -64,10 +65,10 @@
     "packages/core/src/ui/primitives/display/Card/engines/rustic/index.tsx",
     "packages/core/src/ui/primitives/display/Card/index.tsx"
   ],
-  "sourceDigest": "4ecbe1c27d7b2721a472b31299c5780b71a36a4f43e25de916be9b6a55bb495f",
+  "sourceDigest": "924688316cb344070fdb565eb3c0f2cc53f3be6dfaf082f2937b388b37d1fdfa",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/surfaces-effect-intensity/evnto-mate.json",
   "artifactSha256": "bce6d7308c630f3bb7668b5a14b7b5930a9d1325dbf532223f132ba2f2e90885",
-  "createdAt": "2026-08-23T20:21:23.028Z",
+  "createdAt": "2026-08-23T21:34:13.000Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

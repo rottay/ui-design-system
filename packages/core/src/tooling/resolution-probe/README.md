@@ -319,6 +319,89 @@ baseline sheet during the mutation phase and report the control as inert. That
 is the most convincing false negative this harness could produce, so distinct
 URLs make each phase a distinct subresource and the cache cannot answer.
 
+### The DATA-terminal probe (F4B-6, 2026-08-23)
+
+Some controls paint nothing. `responsive.posture` travels
+document → schema → compiled artifact and reaches geometry through a JS solver,
+never through a CSS channel — its `declaredOutputs.channels` is empty and its
+own manifest says so. For those, `data-causal` is the instrument:
+
+```bash
+node src/tooling/resolution-probe/public/cli/index.mjs data-causal \
+  --control-manifest manifest/controls/responsive.posture.json \
+  --vertical rottay --out data.json
+```
+
+Three phases over DOCUMENTS instead of a DOM: compile with no stop, compile per
+stop, compile with the stop removed again. No bundle, no browser, no fixture —
+both halves are plain function calls on a compiled artifact, which makes this
+the only capability here that pays no Chromium cost.
+
+**The CSS instrument REFUSES these controls, and that refusal is load-bearing.**
+`lowerStop` and `assertStopDiscrimination` both throw on an empty
+`declaredOutputs.channels`, and the DB arm cannot even build an input when the
+control's keypath does not start at `appearance.general`. Running the CSS
+harness against a channel-less control and reporting "negative controls held"
+would be a verdict about nothing at all. So this is a sibling command, never a
+flag on `causal`.
+
+Four fail-closed guards, because none of the five CSS guards applies — every one
+of those is about a selector or property producing no reading, and there is no
+selector here:
+
+| guard | fires when |
+|---|---|
+| `data-absent` | a stop was requested and the field is `undefined` on the compiled output |
+| `data-constant` | two DIFFERENT requested stops read the SAME value — indistinguishable from an ingress that ignores the request |
+| `data-bypass` | an out-of-catalog id fails to produce BOTH a write-time throw AND a render-time fail-closed default. **Two layers, asserted separately**: conflating them misreports which one actually fails closed |
+| `data-restore` | after removal the field is still present. Stricter than the CSS byte law on purpose: the consumer branches on `!== undefined`, so a removal that leaves the DEFAULT VALUE behind takes the other branch of the resolver — identical value, different path |
+
+Below two witness stops the run is `data-not-decidable` and is refused, exactly
+as the CSS stop-discrimination guard refuses; an adjudicated
+`calibration.dataDiscriminationException { reason, adjudicatedBy }` is the only
+way past, and the list is born empty.
+
+The restore law is not re-implemented: a DATA observation is projected into the
+same `scope → target → property` shape `compareExact` already speaks, so exact
+restore and the row vocabulary are inherited verbatim. What the observation
+carries with it is its KIND — `readingKind: 'data'` — because a DATA field like
+`responsivePosture` does not start with `--` and name-shape inference would
+label it `computed-property`, a CSS verdict on something no browser painted. The
+kind is declared, never deduced, and comparing two observations of different
+kinds is refused.
+
+**THE LIMIT, and it is as real as H-2's: this probe proves the datum ARRIVES and
+VARIES, not that the resulting geometry is the right geometry.** That the field
+lands where the contract says, differs per stop, and disappears on removal is
+what it establishes. That a board laid out under `spanBias: 'min'` looks as it
+should is sighted acceptance, and no run in this directory can supply it.
+
+Between "the datum arrived" and "the geometry is good" there is a middle claim
+worth receipting: that the datum REACHED the solver. `data-causal` records it as
+**behavioural witnesses** — `{id, question, holds, detail}` measured by the
+caller, which is the only layer that knows what a posture is. The instrument
+stays domain-blind but refuses to report a pass while a declared witness is
+false, so a scenario cannot be run, come back red, and be quietly dropped from
+the verdict; a witness with a non-boolean `holds` throws rather than counting as
+a failure, because an unmeasured witness is a gap in the harness, not a defect
+in the control. The `responsive.posture` run declares four: the consumer
+resolving the requested stop off the real artifact, the ladder's falsifiable
+prediction (band width invariant, onsets shifted), the solver producing a
+different geometry from the same inputs under a different `spanBias`, and a
+NEGATIVE — that `WidgetBoard`'s capacity tier does NOT move with the stop.
+Negatives are written so both halves must hold: "the board did not move" alone
+would also pass with a dead ladder, so the witness additionally requires the
+ladder to move at the same widths.
+
+Receipting is unchanged — `buildReceipt` is payload-agnostic, so a DATA artifact
+is evidence like any other. The freshness surface differs, and deliberately:
+**no CSS.** This probe reads a compiled artifact, never a stylesheet, so bundle
+inputs would declare a dependency it does not have and make every receipt churn
+on paint changes it cannot see. What it does bind: the instrument tree, the
+manifest FILES it reads (not merely the paths they name — the calibration is
+part of what the receipt asserts), the compiled server entrypoint it calls, and
+the build stamp proving that entrypoint describes this tree.
+
 ### Two ingress doors, one scene
 
 A control has two doors, and they land in **different positions in the

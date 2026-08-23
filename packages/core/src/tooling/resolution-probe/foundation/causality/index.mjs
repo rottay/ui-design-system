@@ -54,8 +54,28 @@ export const RESTORE_LAW =
  * The distinction is kept in the comparison rows because the two carry
  * different weight: a custom property reads back as a substituted token stream
  * and is diagnostic, a painted longhand is a verdict. Both must restore.
+ *
+ * `readingKind` is the DISCRIMINATOR, and it is declared by the observation
+ * rather than guessed from the name (H-2/F4B-6, X-B). A DATA-terminal probe
+ * reads fields off a compiled artifact -- `responsivePosture`, `chrome` -- and
+ * not one of them starts with `--`, so name-shape inference would silently
+ * label every one of them `computed-property`: a CSS verdict on something no
+ * browser ever painted. The observation says what it is; this function does not
+ * deduce it. An unknown `readingKind` is a throw rather than a guess, because a
+ * mislabelled row is worse than a missing one -- it reads as evidence of a kind
+ * that was never gathered.
+ *
+ * @param {string} name
+ * @param {'css'|'data'} [readingKind]
  */
-export function propertyKind(name) {
+export function propertyKind(name, readingKind = 'css') {
+  if (readingKind === 'data') return 'data-field';
+  if (readingKind !== 'css') {
+    throw new Error(
+      `resolution-probe: unknown readingKind ${JSON.stringify(readingKind)}. The observation ` +
+        'declares its kind explicitly ("css" or "data"); it is never inferred from the name.',
+    );
+  }
   return String(name).startsWith('--') ? 'custom-property' : 'computed-property';
 }
 
@@ -83,6 +103,17 @@ export function compareExact({
   beforeLabel = 'baseline',
   afterLabel = 'removal',
 }) {
+  // X-B: the KIND of reading travels with the observation, so a DATA phase can
+  // never be labelled with a CSS vocabulary. Both phases must agree on it: a
+  // comparison across two different kinds is not a comparison.
+  const readingKind = before?.readingKind ?? after?.readingKind ?? 'css';
+  if ((before?.readingKind ?? 'css') !== (after?.readingKind ?? 'css')) {
+    throw new Error(
+      'resolution-probe: the two phases declare different readingKinds ' +
+        `(${String(before?.readingKind ?? 'css')} vs ${String(after?.readingKind ?? 'css')}). ` +
+        'Restore cannot be shown between observations of different kinds.',
+    );
+  }
   if (!before || !after) {
     throw new Error(
       'resolution-probe: compareExact needs both phase observations. A missing phase is not ' +
@@ -152,7 +183,7 @@ export function compareExact({
               scope,
               target,
               property,
-              propertyKind: propertyKind(property),
+              propertyKind: propertyKind(property, readingKind),
               presentIn: hasLeft ? beforeLabel : afterLabel,
               meaning:
                 'A property was read in one phase and not the other. An unread property is ' +
@@ -169,7 +200,7 @@ export function compareExact({
               scope,
               target,
               property,
-              propertyKind: propertyKind(property),
+              propertyKind: propertyKind(property, readingKind),
               before: leftValues[property],
               after: rightValues[property],
               meaning: 'Exact comparison, no tolerance.',

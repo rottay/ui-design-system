@@ -1,0 +1,34 @@
+{
+  "artifactVersion": 1,
+  "receipted": false,
+  "whyNotReceipted": "This artifact records a path production DOES NOT TAKE. Receipting it would enter it into the evidence chain as a certified arm of this control, and the whole point of the measurement is that the arm never runs for a first-party vertical. Same pattern as test-artifacts/quality-evidence/wo-cra-23/F4B/experience-profile/bithire-editorial.DIVERGENCE.json.",
+  "controlId": "responsive.posture",
+  "arm": "static-brand-theme",
+  "vertical": "bithire",
+  "question": "The control manifest declares ingress.staticBrandThemePath = \"responsive.posture\". Does a BrandTheme authored at that path reach the consumer in a first-party vertical render?",
+  "answer": "NO, and by TWO independent mechanisms. The registry entry loses brandTheme in the projection, and a copy that authors the path is refused by the projection outright.",
+  "cases": {
+    "A_registryEntryThroughTheProjection": {
+      "brandThemeOnRegistryEntry": true,
+      "brandThemeSurvivesProjection": false,
+      "resolvedPosture": "balanced"
+    },
+    "B_authoredCopyThroughTheProjection": {
+      "projectionRefused": "[design-system] Cannot project a non-code-owned tenant config.",
+      "resolvedIfProjectionSkipped": "expansive"
+    },
+    "C_resolverFallback": {
+      "resolverFallbackForNoInput": "balanced"
+    }
+  },
+  "chain": [
+    "packages/core/src/infrastructure/runtime/tenant/foundation/configuration/registry/index.ts:155-162 -- getCodeOwnedRuntimeConfig destructures brandTheme OUT of the runtime projection (`brandTheme: _brandTheme`), alongside tokenOverrides, appearance and personality. Case A measures the consequence.",
+    "packages/core/src/infrastructure/runtime/tenant/foundation/configuration/registry/index.ts:148-151 -- the same function REFUSES a config that is not the registry object itself, so a caller cannot author the path onto a copy and still get a projected config. Case B measures this, and it is the stronger of the two: the strip could be relaxed by adding a key, this cannot be reached at all.",
+    "packages/core/src/infrastructure/runtime/tenant/foundation/configuration/registry/index.ts:67-85 -- projectGovernedBehavior is the ONLY surviving side channel and carries exactly motion + expressive. The string \"responsive\" appears 0 times in the whole file.",
+    "packages/core/src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts:75-79 -- resolveActiveResponsivePosture reads config?.brandTheme?.responsive, undefined on every projected config.",
+    "packages/core/src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts:80 -- resolveResponsivePosture(undefined) returns the balanced ladder, so the static door fails closed SILENTLY rather than erroring. Case C pins the value it lands on."
+  ],
+  "measurementNote": "The projection is called directly rather than through a mounted provider. It is the SAME function the provider calls: bootstrap/facade/react/provider/index.tsx:986 is getCodeOwnedRuntimeConfig(normalizedConfig) and :1113 feeds its result to resolvedRuntimeConfig. Mounting React would put a renderer between the reader and the fact without changing which function decides it.",
+  "precision": "ALIVE AS CODE, REACHABLE BY CALLER CONFIG, UNREACHABLE IN A FIRST-PARTY VERTICAL RENDER. The read at react:75-79 is real: case B shows a caller that hands the consumer an UNPROJECTED config -- tenant preview, a test, a host building its own TenantConfig -- does get the authored posture. What no first-party vertical can do is reach it through the provider, because the provider projects first, and the projection both strips the key and refuses any config that is not the registry object.",
+  "consequence": "A static-arm scenario would have measured a path production does not take. That is the H-1 lesson, and it is worse here: with no CSS channel to read, nothing would have betrayed the substitution -- the run would have reported the balanced ladder as though it were the authored one, and every guard would have stayed green."
+}

@@ -27,6 +27,7 @@
     "packages/core/src/infrastructure/compilers/kernel/foundation/css/chrome-variables/index.ts",
     "packages/core/src/infrastructure/compilers/kernel/runtime/appearance/index.ts",
     "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
+    "packages/core/src/tooling/resolution-probe/composition/data-run/index.mjs",
     "packages/core/src/tooling/resolution-probe/composition/diff/index.mjs",
     "packages/core/src/tooling/resolution-probe/composition/receipt/index.mjs",
     "packages/core/src/tooling/resolution-probe/composition/run/index.mjs",
@@ -57,10 +58,10 @@
     "packages/core/src/ui/primitives/tests/EmbeddedCssRecovery.contract.test.ts",
     "packages/showroom/e2e/whitelabel/density-authority-matrix.spec.ts"
   ],
-  "sourceDigest": "c6044d5d9bd21f7eb4890db31d97d75d8b91064c2669949438abb4fd85665415",
+  "sourceDigest": "7764cbed1695dba8dfa46858bbb0ff60f52699a74301d14b243ed0f6c1ec0f29",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/spacing-rhythm/space-tight.json",
   "artifactSha256": "cdc703786e13504ea5856e63e60fa66337dacdcb428da99c7578992bc08969b7",
-  "createdAt": "2026-08-23T20:21:22.966Z",
+  "createdAt": "2026-08-23T21:34:13.000Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

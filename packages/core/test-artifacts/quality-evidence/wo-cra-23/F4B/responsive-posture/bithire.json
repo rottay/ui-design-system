@@ -1,0 +1,231 @@
+{
+  "artifactVersion": 1,
+  "controlId": "responsive.posture",
+  "vertical": "bithire",
+  "terminal": "DATA",
+  "question": "Does this control CAUSE the governed field to appear with the requested value, leave every declared sibling untouched, and disappear entirely when the tenant removes it?",
+  "limit": "This proves the datum ARRIVES and VARIES. It does not prove the resulting geometry is the right geometry: that is sighted acceptance.",
+  "fieldPath": "normalizedAppearance.advanced.responsivePosture",
+  "equalitySurface": [
+    "chrome",
+    "tokenOverrides",
+    "profiles",
+    "responsivePosture"
+  ],
+  "phases": [
+    "baseline",
+    "mutation",
+    "removal"
+  ],
+  "restoreLaw": "Restore is EXACT: every measured computed property, every measured CSS custom property and every root attribute must be byte-identical between the baseline and removal phases. There is no numeric tolerance and no ignored property. A single differing row makes the run restore.exact=false and the row is named.",
+  "stops": [
+    {
+      "stopId": "compact",
+      "value": "compact"
+    },
+    {
+      "stopId": "balanced",
+      "value": "balanced"
+    },
+    {
+      "stopId": "expansive",
+      "value": "expansive"
+    }
+  ],
+  "equalityExceptField": [
+    {
+      "stopId": "compact",
+      "fieldMoved": true,
+      "siblingsChecked": [
+        "chrome",
+        "tokenOverrides",
+        "profiles"
+      ],
+      "siblingsDiffering": [],
+      "holds": true
+    },
+    {
+      "stopId": "balanced",
+      "fieldMoved": true,
+      "siblingsChecked": [
+        "chrome",
+        "tokenOverrides",
+        "profiles"
+      ],
+      "siblingsDiffering": [],
+      "holds": true
+    },
+    {
+      "stopId": "expansive",
+      "fieldMoved": true,
+      "siblingsChecked": [
+        "chrome",
+        "tokenOverrides",
+        "profiles"
+      ],
+      "siblingsDiffering": [],
+      "holds": true
+    }
+  ],
+  "restore": {
+    "exact": true,
+    "comparedRows": 4,
+    "counts": {
+      "differingRows": 0,
+      "byKind": {},
+      "byPropertyKind": {}
+    },
+    "rows": [],
+    "law": "Restore is EXACT: every measured computed property, every measured CSS custom property and every root attribute must be byte-identical between the baseline and removal phases. There is no numeric tolerance and no ignored property. A single differing row makes the run restore.exact=false and the row is named."
+  },
+  "dataGuards": [],
+  "bypass": {
+    "requestedId": "not-a-posture",
+    "writeTime": {
+      "threw": true
+    },
+    "renderTime": {
+      "resolvedId": "balanced"
+    },
+    "expectedDefaultId": "balanced"
+  },
+  "behaviouralWitnesses": [
+    {
+      "id": "S2",
+      "question": "Does the consumer resolve the REQUESTED stop off the compiled artifact, not the default?",
+      "holds": true,
+      "detail": {
+        "rows": [
+          {
+            "stopId": "compact",
+            "resolvedId": "compact"
+          },
+          {
+            "stopId": "balanced",
+            "resolvedId": "balanced"
+          },
+          {
+            "stopId": "expansive",
+            "resolvedId": "expansive"
+          }
+        ],
+        "failClosedDefaultId": "balanced"
+      }
+    },
+    {
+      "id": "PREDICTION",
+      "question": "Is the band width invariant across stops while the onset shifts?",
+      "holds": true,
+      "detail": {
+        "bands": [
+          {
+            "stopId": "compact",
+            "compactMaxPx": 759,
+            "standardMaxPx": 959,
+            "spanBias": "min"
+          },
+          {
+            "stopId": "balanced",
+            "compactMaxPx": 639,
+            "standardMaxPx": 839,
+            "spanBias": "preferred"
+          },
+          {
+            "stopId": "expansive",
+            "compactMaxPx": 519,
+            "standardMaxPx": 719,
+            "spanBias": "max"
+          }
+        ],
+        "bandWidthPx": 200
+      }
+    },
+    {
+      "id": "S3",
+      "question": "At identical width, cols and contracts, does varying ONLY spanBias produce a different geometry?",
+      "holds": true,
+      "detail": {
+        "cols": 6,
+        "posture": "standard",
+        "rows": [
+          {
+            "stopId": "compact",
+            "spanBias": "min",
+            "geometry": "a:4@r1 b:1@r1 c:1@r1"
+          },
+          {
+            "stopId": "balanced",
+            "spanBias": "preferred",
+            "geometry": "a:2@r1 b:2@r1 c:2@r1"
+          },
+          {
+            "stopId": "expansive",
+            "spanBias": "max",
+            "geometry": "a:6@r1 b:6@r2 c:6@r3"
+          }
+        ]
+      }
+    },
+    {
+      "id": "TIER_NEGATIVE",
+      "question": "Does the board bucket stay CONSTANT across stops (it reads hardcoded literals) at widths where the tenant ladder demonstrably moves?",
+      "holds": true,
+      "detail": {
+        "widths": [
+          {
+            "px": 600,
+            "boardTiers": [
+              "single"
+            ],
+            "tenantTiers": [
+              "compact",
+              "compact",
+              "standard"
+            ]
+          },
+          {
+            "px": 750,
+            "boardTiers": [
+              "mid"
+            ],
+            "tenantTiers": [
+              "compact",
+              "standard",
+              "expanded"
+            ]
+          },
+          {
+            "px": 1000,
+            "boardTiers": [
+              "full"
+            ],
+            "tenantTiers": [
+              "expanded",
+              "expanded",
+              "expanded"
+            ]
+          }
+        ],
+        "boardLiteralsPx": [
+          639,
+          839
+        ]
+      }
+    }
+  ],
+  "exception": null,
+  "provenance": {
+    "module": "dist/server.js",
+    "moduleSubpath": "@rottay/design-system/server",
+    "exportName": "compileTenantThemeConfig",
+    "schemaVersion": 1,
+    "tenant": "probe-tenant-bithire"
+  },
+  "verdict": {
+    "pass": true,
+    "guardsHeld": true,
+    "restoreExact": true,
+    "equalityHeld": true,
+    "witnessesHeld": true
+  }
+}

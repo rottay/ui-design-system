@@ -34,6 +34,7 @@
     "packages/core/src/foundation/tokens/css/runtime/personality.css",
     "packages/core/src/infrastructure/compilers/composition/tenant-theme/index.ts",
     "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
+    "packages/core/src/tooling/resolution-probe/composition/data-run/index.mjs",
     "packages/core/src/tooling/resolution-probe/composition/diff/index.mjs",
     "packages/core/src/tooling/resolution-probe/composition/receipt/index.mjs",
     "packages/core/src/tooling/resolution-probe/composition/run/index.mjs",
@@ -64,10 +65,10 @@
     "packages/core/src/ui/primitives/display/Card/engines/rustic/index.tsx",
     "packages/core/src/ui/primitives/display/Card/index.tsx"
   ],
-  "sourceDigest": "dcfd856b116dc5cc8a6bc04681aeb451ab357ee7d545934b267ca24150f56553",
+  "sourceDigest": "b457a175fb5913ac04a2ae9fcd35dd3814bbb0e3346fe334b904311e44e9e2df",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/shape-radius-scale/bithire-amplio.json",
   "artifactSha256": "e535690a60784338b4c7d6ec1105c692466311fcc53586416a37fafa86dba4ed",
-  "createdAt": "2026-08-23T20:21:22.835Z",
+  "createdAt": "2026-08-23T21:34:13.000Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

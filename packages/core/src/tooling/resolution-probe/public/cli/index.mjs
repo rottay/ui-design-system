@@ -19,6 +19,7 @@
 
 import { existsSync, readFileSync, statSync, writeFileSync } from 'node:fs';
 import { relative, resolve } from 'node:path';
+import { pathToFileURL } from 'node:url';
 
 import { diffArtifacts } from '../../composition/diff/index.mjs';
 import {
@@ -29,12 +30,15 @@ import {
   writeEvidence,
 } from '../../composition/receipt/index.mjs';
 import { runCausalProbe, runProbe, serialiseArtifact } from '../../composition/run/index.mjs';
+import { buildDataCausalReport } from '../../composition/data-run/index.mjs';
 import { readManifest } from '../../foundation/negative-controls/index.mjs';
+import { CORE_ROOT } from '../../foundation/paths/index.mjs';
 import { assertKnownTargetKeys, FIXTURE_IDS } from '../../foundation/roster/index.mjs';
 import { SCOPE_KEYS, THEMES, VERTICAL_KEYS } from '../../foundation/scope/index.mjs';
 import { BUNDLE_MODES, resolveBundle } from '../../runtime/bundle/index.mjs';
 import {
   composeDbArm,
+  dbTenantIdentity,
   composeStaticArm,
   INGRESS_ARM_IDS,
   INGRESS_ARMS,
@@ -69,6 +73,8 @@ const USAGE = `resolution-probe — what the browser actually paints, per tenant
   node src/tooling/resolution-probe/public/cli/index.mjs dial   --set <--var=value> [options]
   node src/tooling/resolution-probe/public/cli/index.mjs causal --control-manifest <path> \\
                                                                --stop <id> [options]
+  node src/tooling/resolution-probe/public/cli/index.mjs data-causal --control-manifest <path> \\
+                                                               --vertical <k> [--bypass-id <id>]
   node src/tooling/resolution-probe/public/cli/index.mjs diff   <before.json> <after.json>
 
 Options
@@ -140,7 +146,7 @@ export async function main(argv) {
     return 0;
   }
   if (command === 'diff') return commandDiff(argv.slice(1));
-  if (command !== 'run' && command !== 'dial' && command !== 'causal') {
+  if (command !== 'run' && command !== 'dial' && command !== 'causal' && command !== 'data-causal') {
     process.stderr.write(`resolution-probe: unknown command "${command}"\n\n${USAGE}`);
     return 2;
   }
@@ -156,6 +162,7 @@ export async function main(argv) {
     process.stderr.write('resolution-probe: `dial` requires at least one --set --var=value\n');
     return 2;
   }
+  if (command === 'data-causal') return commandDataCausal(options);
   if (command === 'causal') return commandCausal(options);
 
   const artifact = await runProbe({
@@ -201,6 +208,7 @@ function parseOptions(argv) {
     evidenceKind: 'computed-causal-run',
     receiptOut: null,
     evidenceRoot: null,
+    bypassId: null,
   };
   for (let index = 0; index < argv.length; index += 1) {
     const flag = argv[index];
@@ -259,6 +267,9 @@ function parseOptions(argv) {
       }
       case '--control-manifest':
         options.controlManifest = next();
+        break;
+      case '--bypass-id':
+        options.bypassId = next();
         break;
       case '--family-manifest':
         options.familyManifest = next();
@@ -485,6 +496,363 @@ function causalFreshnessSourceFiles({
       ...compilerPaths,
       'packages/core/dist/build-stamp.json',
       ...bundleInputs,
+    ]),
+  ].sort();
+}
+
+/**
+ * The DATA-terminal causal run (F4B-6).
+ *
+ * A control whose terminal is DATA paints nothing, so there is no bundle, no
+ * browser and no fixture here -- three compiles of the same document with and
+ * without the stop, and a diff of the compiled artifact. The CSS `causal`
+ * command REFUSES such a control by construction (empty declaredOutputs), which
+ * is why this is a separate command and not a flag.
+ */
+async function commandDataCausal(options) {
+  const controlManifest = options.controlManifest
+    ? readManifest(resolve(process.cwd(), options.controlManifest))
+    : null;
+  if (!controlManifest) {
+    process.stderr.write('resolution-probe: data-causal needs --control-manifest\n');
+    return 2;
+  }
+  const vertical = options.verticals[0];
+  const stops = (controlManifest.calibration?.normalizedStops ?? []).map((stop) => stop.id);
+  if (stops.length === 0) {
+    process.stderr.write(
+      'resolution-probe: the control declares no normalized stops, so there is nothing to vary.\n',
+    );
+    return 2;
+  }
+
+  // Freshness first: loadCompilerArms proves dist/ describes this tree, and the
+  // DATA probe then binds the SAME published entrypoint the CSS DB arm binds.
+  const arms = await loadCompilerArms();
+  const { schemaVersion } = arms['db-tenant-theme'].provenance;
+  const identity = dbTenantIdentity(vertical);
+  const server = await import(
+    pathToFileURL(resolve(CORE_ROOT, INGRESS_ARMS['db-tenant-theme'].compilerModule)).href
+  );
+  // The canonical write path a tenant takes: a DOCUMENT is hydrated into a
+  // config (this is where write-time validation lives, which the bypass guard
+  // needs) and only then compiled.
+  // Advanced mode keeps an EXPLICIT policy gate: unlike a simple v1 document it
+  // does not resolve the vertical envelope from the trusted key, so the caller
+  // must name it. `responsivePosture` lives under `.advanced`, so this probe is
+  // always in advanced mode.
+  const verticalEnvelope = server.getTenantThemeVerticalEnvelope(vertical);
+  if (!verticalEnvelope) {
+    process.stderr.write(`resolution-probe: no vertical envelope for "${vertical}"\n`);
+    return 2;
+  }
+  const compile = (document) =>
+    server.compileTenantThemeConfig(server.hydrateTenantThemeConfig(document, identity), {
+      verticalEnvelope,
+    });
+
+  // The document the tenant writes. `visualFoundation.advanced.responsivePosture`
+  // is the path the control manifest declares; the siblings are present so the
+  // equality-except-the-field assertion has something real to hold constant.
+  const documentFor = (posture) => ({
+    schemaVersion,
+    mode: 'advanced',
+    visualFoundation: {
+      advanced: {
+        // The three siblings the equality surface holds constant. Chosen to be
+        // NON-COLOUR on purpose: an authored card colour trips the compiler's
+        // APCA contrast validation in dark mode, and a probe that cannot compile
+        // its own baseline proves nothing about the field it came to measure.
+        tokenOverrides: { '--ds-radius-md': '10px' },
+        chrome: { cardComponent: { anatomy: 'underline' } },
+        profiles: { edge: 'inset-double' },
+        ...(posture === undefined ? {} : { responsivePosture: posture }),
+      },
+    },
+  });
+
+  const compiled = (posture) => compile(documentFor(posture));
+  const baseline = compiled(undefined);
+  const removal = compiled(undefined);
+  const compiledStops = stops.map((stopId) => ({ stopId, artifact: compiled(stopId) }));
+
+  // The bypass guard needs BOTH paths, observed separately.
+  const main = await import(pathToFileURL(resolve(CORE_ROOT, 'dist/index.js')).href);
+  const { resolveActiveResponsivePosture, resolveResponsivePosture, resolveAdaptiveLayout } = main;
+
+  // MEASURED, never asserted: the fail-closed default is whatever the resolver
+  // answers when asked for nothing. Hardcoding 'balanced' here would make the
+  // bypass guard agree with a constant instead of with the resolver, and it
+  // would keep agreeing after somebody changed the resolver's default.
+  const failClosedDefaultId = resolveResponsivePosture(undefined)?.id ?? null;
+
+  let bypass = null;
+  if (options.bypassId) {
+    let threw = false;
+    try {
+      compile(documentFor(options.bypassId));
+    } catch {
+      threw = true;
+    }
+    const rendered = resolveActiveResponsivePosture({
+      appearance: { advanced: { responsivePosture: options.bypassId } },
+    });
+    bypass = {
+      requestedId: options.bypassId,
+      writeTime: { threw },
+      renderTime: { resolvedId: rendered?.id ?? null },
+      expectedDefaultId: failClosedDefaultId,
+    };
+  }
+
+  const behaviouralWitnesses = measurePostureBehaviour({
+    stops,
+    compiledStops,
+    failClosedDefaultId,
+    resolveActiveResponsivePosture,
+    resolveResponsivePosture,
+    resolveAdaptiveLayout,
+  });
+
+  const report = buildDataCausalReport({
+    controlId: controlManifest.controlId,
+    vertical,
+    fieldPath: ['normalizedAppearance', 'advanced', 'responsivePosture'],
+    equalitySurface: ['chrome', 'tokenOverrides', 'profiles', 'responsivePosture'],
+    stops: compiledStops,
+    baseline,
+    removal,
+    bypass,
+    behaviouralWitnesses,
+    exception: controlManifest.calibration?.dataDiscriminationException ?? null,
+    provenance: {
+      module: INGRESS_ARMS['db-tenant-theme'].compilerModule,
+      moduleSubpath: INGRESS_ARMS['db-tenant-theme'].compilerModuleSubpath,
+      exportName: INGRESS_ARMS['db-tenant-theme'].compilerExport,
+      schemaVersion,
+      tenant: identity.slug,
+    },
+  });
+
+  const serialised = `${JSON.stringify(report, null, 2)}\n`;
+  const exitCode = report.verdict.pass ? 0 : 1;
+
+  // Receipted through the SAME writeEvidence the CSS runs use: a DATA artifact
+  // is evidence like any other, and `buildReceipt` is payload-agnostic, so
+  // nothing about the receipt law changes for a terminal that paints nothing.
+  const wantsReceipt =
+    options.roundId !== null &&
+    options.familyId !== null &&
+    options.scenarioId !== null &&
+    options.producer !== null;
+  if (wantsReceipt) {
+    if (!options.out) {
+      process.stderr.write('resolution-probe: a receipted data-causal run needs --out\n');
+      return 2;
+    }
+    const root = options.evidenceRoot ?? REPOSITORY_ROOT;
+    const artifactPath = relative(root, resolve(process.cwd(), options.out)).split('\\').join('/');
+    const receiptPath = options.receiptOut
+      ? relative(root, resolve(process.cwd(), options.receiptOut)).split('\\').join('/')
+      : `${artifactPath}.receipt.json`;
+    const written = writeEvidence({
+      root,
+      artifactPath,
+      artifactBytes: serialised,
+      receiptPath,
+      receiptFields: {
+        roundId: options.roundId,
+        familyId: options.familyId,
+        scenarioId: options.scenarioId,
+        evidenceKind: options.evidenceKind,
+        commandOrTool: 'node src/tooling/resolution-probe/public/cli/index.mjs data-causal',
+        exitCode,
+        measuredSourceFiles: dataFreshnessSourceFiles({
+          controlManifest,
+          manifestSourceFiles: [
+            options.controlManifest,
+            ...(options.familyManifest ? [options.familyManifest] : []),
+          ].map((path) => relative(REPOSITORY_ROOT, resolve(process.cwd(), path)).split('\\').join('/')),
+        }),
+        negativeDrill: DEFAULT_CAUSAL_NEGATIVE_DRILL,
+        producer: options.producer,
+      },
+    });
+    if (!written.validation.valid) {
+      process.stderr.write(
+        `resolution-probe: the receipt this command just wrote does NOT validate; refusing to ` +
+          `report success:\n  ${written.validation.failures.join('\n  ')}\n`,
+      );
+      return 1;
+    }
+    return exitCode;
+  }
+
+  if (options.out) writeFileSync(options.out, serialised);
+  else process.stdout.write(serialised);
+  return exitCode;
+}
+
+/**
+ * S2, S3, the tier negative and the falsifiable prediction, measured.
+ *
+ * These live in the CLI and not in `composition/data-run/` on purpose: knowing
+ * that a posture has a `spanBias` and that a board buckets at 639/839 is domain
+ * knowledge, and the instrument is domain-blind by design. What the instrument
+ * owns is the LAW that a declared witness which came back red cannot be dropped
+ * from the verdict.
+ *
+ * Every witness is written so that BOTH answers are informative. A negative
+ * control that only asserted "the board tier did not move" would also hold if
+ * the tenant ladder were dead, so it additionally requires the ladder to move
+ * at a width where it should -- that is what makes it a control rather than a
+ * tautology.
+ */
+function measurePostureBehaviour({
+  stops,
+  compiledStops,
+  failClosedDefaultId,
+  resolveActiveResponsivePosture,
+  resolveResponsivePosture,
+  resolveAdaptiveLayout,
+}) {
+  const witnesses = [];
+  const ladder = Object.fromEntries(stops.map((id) => [id, resolveResponsivePosture(id)]));
+
+  // --- S2: the compiled artifact resolves to the stop that was requested -----
+  // Fed the REAL compiled artifact, shaped as the production read shapes it
+  // (`config.appearance` = normalizedAppearance), so this is the consumer's own
+  // question and not a paraphrase of it.
+  const s2 = compiledStops.map(({ stopId, artifact }) => ({
+    stopId,
+    resolvedId: resolveActiveResponsivePosture({ appearance: artifact?.normalizedAppearance })?.id ?? null,
+  }));
+  witnesses.push({
+    id: 'S2',
+    question: 'Does the consumer resolve the REQUESTED stop off the compiled artifact, not the default?',
+    holds: s2.every((row) => row.resolvedId === row.stopId),
+    detail: { rows: s2, failClosedDefaultId },
+  });
+
+  // --- prediction: band width invariant, onset shifted ----------------------
+  // Declared before the run in the control manifest. Stated as an equality on
+  // the BAND (standardMax - compactMax) plus a strict ordering of the onsets, so
+  // a ladder that widened one stop's band would break it even if every onset
+  // still moved.
+  const bands = stops.map((id) => ({
+    stopId: id,
+    compactMaxPx: ladder[id]?.thresholds?.compactMaxPx ?? null,
+    standardMaxPx: ladder[id]?.thresholds?.standardMaxPx ?? null,
+    spanBias: ladder[id]?.spanBias ?? null,
+  }));
+  const widths = bands.map((b) => b.standardMaxPx - b.compactMaxPx);
+  const onsets = bands.map((b) => b.compactMaxPx);
+  witnesses.push({
+    id: 'PREDICTION',
+    question: 'Is the band width invariant across stops while the onset shifts?',
+    holds:
+      new Set(widths).size === 1 &&
+      new Set(onsets).size === bands.length &&
+      bands.every((b) => typeof b.spanBias === 'string' && b.spanBias.length > 0),
+    detail: { bands, bandWidthPx: widths[0] ?? null },
+  });
+
+  // --- S3: same width, same cols, same contracts; only spanBias varies -------
+  // Three contracts whose min/preferred/max genuinely differ, because a contract
+  // with one possible span would produce one geometry under every bias and the
+  // scenario would pass while proving nothing.
+  const contract = (id) => ({
+    id,
+    accessibleTitle: id,
+    minSpan: { cols: 1 },
+    preferredSpan: { cols: 2 },
+    maxSpan: { cols: 6 },
+    blockPolicy: { mode: 'intrinsic' },
+    contentModes: [
+      { id: 'full', minSpan: { cols: 2 } },
+      { id: 'compact', minSpan: { cols: 1 } },
+    ],
+    priority: 'primary',
+  });
+  const contracts = ['a', 'b', 'c'].map(contract);
+  const geometry = (spanBias) =>
+    resolveAdaptiveLayout(contracts, [], { cols: 6, posture: 'standard', spanBias })
+      .placements.map((placement) => `${placement.itemId}:${placement.colSpan}@r${placement.rowStart}`)
+      .join(' ');
+  const s3 = stops.map((id) => ({ stopId: id, spanBias: ladder[id]?.spanBias ?? null, geometry: geometry(ladder[id]?.spanBias) }));
+  witnesses.push({
+    id: 'S3',
+    question: 'At identical width, cols and contracts, does varying ONLY spanBias produce a different geometry?',
+    holds: new Set(s3.map((row) => row.geometry)).size === new Set(s3.map((row) => row.spanBias)).size,
+    detail: { cols: 6, posture: 'standard', rows: s3 },
+  });
+
+  // --- negative: the board's tier is NOT the tenant ladder -------------------
+  // `useAdaptiveBoardLayout` buckets on hardcoded 639/839 literals, so the board
+  // answers the same thing under every stop. Recorded as a MEASURED gap, not as
+  // a pass: the control the programme certifies is spanBias, and this is the
+  // boundary of it.
+  const boardTier = (px) => (px <= 639 ? 'single' : px <= 839 ? 'mid' : 'full');
+  const tenantTier = (px, stopId) => {
+    const thresholds = ladder[stopId]?.thresholds ?? {};
+    if (px <= thresholds.compactMaxPx) return 'compact';
+    if (px <= thresholds.standardMaxPx) return 'standard';
+    return 'expanded';
+  };
+  const negative = [600, 750, 1000].map((px) => ({
+    px,
+    boardTiers: [...new Set(stops.map(() => boardTier(px)))],
+    tenantTiers: stops.map((id) => tenantTier(px, id)),
+  }));
+  witnesses.push({
+    id: 'TIER_NEGATIVE',
+    question:
+      'Does the board bucket stay CONSTANT across stops (it reads hardcoded literals) at widths where ' +
+      'the tenant ladder demonstrably moves?',
+    holds:
+      negative.every((row) => row.boardTiers.length === 1) &&
+      negative.some((row) => new Set(row.tenantTiers).size > 1),
+    detail: { widths: negative, boardLiteralsPx: [639, 839] },
+  });
+
+  return witnesses;
+}
+
+/**
+ * The freshness surface of a DATA receipt.
+ *
+ * NO CSS. This probe reads a compiled artifact, never a stylesheet, so putting
+ * bundle inputs in its digest would declare a dependency it does not have and
+ * make every receipt churn on paint changes it cannot see. What it DOES depend
+ * on: the instrument (walked by `ownedSourceFiles`), the manifests it reads,
+ * the compiled server entrypoint it calls, and the build stamp that proves that
+ * entrypoint describes this tree.
+ */
+function dataFreshnessSourceFiles({ controlManifest, manifestSourceFiles }) {
+  const evidenceRoot = loadProgramContracts().evidence.root;
+  const bound = [];
+  const walk = (value) => {
+    if (typeof value === 'string') {
+      const file = normaliseBoundPath(value, evidenceRoot);
+      if (file !== null && isDigestibleSourceFile(file)) bound.push(file);
+      return;
+    }
+    if (Array.isArray(value)) return void value.forEach(walk);
+    if (value && typeof value === 'object') Object.values(value).forEach(walk);
+  };
+  walk(controlManifest);
+  return [
+    ...new Set([
+      ...ownedSourceFiles(),
+      // The manifest FILES themselves, not only the paths they name: the
+      // calibration and the cell are part of what this receipt asserts, so
+      // editing one must stale it.
+      ...manifestSourceFiles,
+      ...bound,
+      `packages/core/${INGRESS_ARMS['db-tenant-theme'].compilerModule}`,
+      `packages/core/${INGRESS_ARMS['db-tenant-theme'].compilerSource}`,
+      'packages/core/dist/index.js',
+      'packages/core/dist/build-stamp.json',
     ]),
   ].sort();
 }

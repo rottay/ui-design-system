@@ -35,6 +35,7 @@
     "packages/core/src/infrastructure/compilers/composition/tenant-theme/index.ts",
     "packages/core/src/infrastructure/compilers/composition/tenant-theme/tests/surfaces-effect-intensity-envelope.test.ts",
     "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
+    "packages/core/src/tooling/resolution-probe/composition/data-run/index.mjs",
     "packages/core/src/tooling/resolution-probe/composition/diff/index.mjs",
     "packages/core/src/tooling/resolution-probe/composition/receipt/index.mjs",
     "packages/core/src/tooling/resolution-probe/composition/run/index.mjs",
@@ -64,10 +65,10 @@
     "packages/core/src/ui/primitives/display/Card/engines/rustic/index.tsx",
     "packages/core/src/ui/primitives/display/Card/index.tsx"
   ],
-  "sourceDigest": "67866c3d2e745c4d8302ede0ab7461bf711e38a8501d09130bcd32bfaee4e461",
+  "sourceDigest": "1ac2069e9143536f09dd5a16d982b70702e247a58f43538165856a8edd613ea6",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/surfaces-effect-intensity/bithire-sobrio.json",
   "artifactSha256": "49dc9374117f19cebbd3ce15c2f9f714cda616526cc2dfc1195ab7f1c3017396",
-  "createdAt": "2026-08-23T20:21:23.016Z",
+  "createdAt": "2026-08-23T21:34:13.000Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

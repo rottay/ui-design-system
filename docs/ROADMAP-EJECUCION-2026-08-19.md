@@ -2198,6 +2198,101 @@ mandato Fable): **el asiento del ledger se escribe ANTES de despachar el
 postaudit o DESPUÉS de recibirlo, nunca durante** — aplicada desde el
 próximo packet.
 
+##### F4B-6 — responsive.posture: primera instrumentación DATA del programa (2026-08-23)
+
+`responsive.posture` queda calibrado como el primer control con terminal
+DATA legítimo del programa, con instrumento hermano nuevo y evidencia R6 —
+y con la honestidad de rango que la ley de hoy puede sostener: **control
+`IMPLEMENTED`, celda `SOURCE_BOUND`**, por la brecha de vocabulario
+asentada abajo (enmienda de ley aprobada como packet propio L-1).
+
+**La sonda DATA (puro Node, sin Chromium — el instrumento más barato del
+programa):** `composition/data-run/` con `buildDataCausalReport()`, 4
+guards DATA nuevos (`data-absent`, `data-constant`, `data-bypass` con dos
+capas NO confladas — write-time throw vs render-time fail-closed,
+`data-restore` = `undefined` tras remoción, no igualdad), la ley
+`data-not-decidable` (<2 testigos = FAIL; excepción sólo adjudicada en
+`calibration`, X-D), `witnessesHeld` como pata del veredicto (un testigo
+sin medir tira; correr sin verificar no cuenta), y bypass registrado
+aunque no dispare. `propertyKind` gana `data-field` con discriminador
+EXPLÍCITO (nunca inferencia por forma del nombre; drills de
+no-contaminación bidireccional + rechazo cruzado, X-B). Límite verbatim en
+el README (X-E): la sonda prueba que el dato LLEGA Y VARÍA, no que la
+geometría resultante sea la correcta — la bondad del layout es aceptación
+sighted.
+
+**Puerta estática: medida y NO receiptada** (patrón bithire, artifact
+`static-door.STRUCTURALLY-UNREACHABLE.json`): la puerta es inalcanzable en
+el render de un vertical de primera parte por DOS mecanismos independientes
+verificados (el strip `registry/index.ts:155-162` y el rechazo de plano
+`:148-151` "Cannot project a non-code-owned tenant config"); viva como
+código, alcanzable por config de caller (tenant-preview). Receiptarla
+habría medido un camino que producción no toma (la clase de error que H-1
+corrigió, sin canal CSS que la delatara).
+
+**Escenarios (3 verticales × 3 stops, 3 receipts R6):** S1 — el campo
+lowerea el stop pedido (3 valores distintos) con restore exacto a
+`undefined` (0 filas diferentes); S2 — `resolveActiveResponsivePosture`
+sobre el artifact real resuelve el pedido (default medido `balanced`);
+S3 — 3 `spanBias` → 3 geometrías a misma entrada; predicción falsable
+EXACTA: banda 200px invariante, onset ±120px (compact 759/959/`min`,
+balanced 639/839/`preferred`, expansive 519/719/`max`); negativo del tier
+con las DOS mitades (board constante Y escalera demostrablemente viva a
+los mismos anchos); bypass con las dos capas asertadas por separado.
+Igualdad-excepto-campo sobre la superficie CERRADA de 4 campos de
+`.advanced`: 9 filas, hermanos idénticos.
+
+**Censo (X-A, medido en disco):** 255/255 celdas `NO_CSS_CHANNEL` (251
+`DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING` + 4 layout
+`PROVE_NOT_CHANGE` en SOURCE_BOUND); el packet cierra UNA
+(`pattern/data/widget-board`, consumidora directa de `spanBias`); **254
+intactas**. `measuredResult` declara: una familia medida, tres
+consumidoras conocidas sin medir.
+
+**Brecha de la ley del owner (registrada, no inventada):**
+`knownDefects OPEN_OWNER` — la simplificación móvil real de
+DashboardSurface la gobierna una señal `isMobile` de viewport
+(`dashboard/index.tsx:194,206`), no este control; el tier de WidgetBoard
+está hardcodeado a 639/839 con fijación razonada en fuente (CSS-co-authored,
+`:133-146`); la válvula hide/defer del solver sólo mira items `secondary` y
+todos los contratos del dashboard son `priority:'primary'` (`:286`) — el
+dial no alcanza ningún trigger de simplificación. El packet certifica el
+control que EXISTE (`spanBias` + bucket).
+
+**LADDER_VOCABULARY (OPEN_DT → packet L-1 aprobado):** la escalera exige 5
+campos de forma CSS (`rules:937,946,994+426-430`) y un terminal DATA no
+tiene ninguno por diseño; la única forma de forzar rango era fabricarlos —
+**no se fabricaron**. El roadmap F4B §7 ya declara que un control con
+terminal DATA "demuestran ese terminal y no inventan una variable para
+cumplir": la ley superior sí contempla DATA; `manifest/rules` no. Ruling
+DT: **enmendar la ley UNA sola vez** (rol `data-field-delta` + rama DATA:
+`fieldPath` + `equalitySurface` + testigos conductuales), packet propio
+con preaudit Fable. Segundo cliente del mismo packet (Fable F1): el drill
+5 de H-2 quedó rojo (**ingress 55/56**, no 56/56 — ningún packet
+intermedio puede citar 56/56) porque itera controles-con-receipts y el
+guard CSS se niega a un terminal DATA; el fix lo excluye con razón escrita
+o lo deriva al guard DATA. Regla de proceso adoptada (obligación Fable):
+un packet que toque evidencia o manifests de un control corre TAMBIÉN las
+suites del instrumento cuyo cerco itera desde el manifest. Precisión (F2):
+`calibration.assessmentState` del MANIFEST DE CONTROL no lo valida ninguna
+puerta (el de las SECCIONES de familia sí lo valida `rules:1071-1082,1112`)
+— el rango se reclama sólo cuando la puerta lo sostiene.
+
+**Gates:** 33/33 receipts VALID+FRESH (30 re-emitidos con superficie +1
+`composition/data-run` — `nothing_dropped` verificado — + 3 R6 nuevos);
+`CONSTITUTION_READY` (corridas propias del DT y de Fable); data-run drills
+15/15; ingress drills **55/56** (causa asentada arriba); `tsc --noEmit`
+limpio. Desviaciones del writer, TODAS aceptadas por Fable: export de
+`dbTenantIdentity` (una definición, dos llamadores — la clase W-C),
+`witnessesHeld`, bypass registrado, `manifestSourceFiles` en la frescura
+DATA (probada en vivo), superficie +1.
+
+**Postaudit Fable: ACCEPT**, memo
+`/private/tmp/f4b-6-data-probe-fable-postaudit.md` (SHA en su `.ready`) —
+con la corrección de su propio preaudit asentada (su Q4 asumía un cierre
+COMPUTED_VERIFIED inexistente para un terminal DATA: density llegó a rango
+3 porque PINTA; la diferencia es de vocabulario, no de evidencia).
+
 **F0 — CERRADO (2026-08-19).** Criterio de cierre cumplido:
 `ci-gates OK — 78 blocking gate(s) passed` (2 excluded visibles con razón y
 dueño: channel-liveness y lane-control-drills, ambos esperan a F2); `find src -type d -empty` vacío salvo el inbox

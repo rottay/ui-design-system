@@ -25,6 +25,7 @@
     "packages/core/src/infrastructure/compilers/composition/tenant-theme/tests/spacing-rhythm-static-db-parity.test.ts",
     "packages/core/src/infrastructure/compilers/kernel/runtime/appearance/index.ts",
     "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
+    "packages/core/src/tooling/resolution-probe/composition/data-run/index.mjs",
     "packages/core/src/tooling/resolution-probe/composition/diff/index.mjs",
     "packages/core/src/tooling/resolution-probe/composition/receipt/index.mjs",
     "packages/core/src/tooling/resolution-probe/composition/run/index.mjs",
@@ -58,10 +59,10 @@
     "packages/core/src/ui/primitives/tests/EmbeddedCssRecovery.contract.test.ts",
     "packages/showroom/e2e/whitelabel/density-authority-matrix.spec.ts"
   ],
-  "sourceDigest": "b6eb0390ed48af90dcf3f719f77d0ddd3868436d9522c01e53e2396bfa650512",
+  "sourceDigest": "58b888d1eb1cc3d2a3c9fdbfb960b03c3720fc5c381af263dbd796a742e048c7",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/spacing-rhythm/flex-airy.json",
   "artifactSha256": "debb17fe9c1366f898c82673d2f09779f0bb67be8ab87abbac5438ee51eb2cc7",
-  "createdAt": "2026-08-23T20:21:22.899Z",
+  "createdAt": "2026-08-23T21:34:13.000Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

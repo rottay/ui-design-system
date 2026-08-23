@@ -562,7 +562,12 @@ function toCompilerInput({ armId, document, tenantSlug, vertical, schemaVersion 
  * artifact's tenant-scoped `css`/`scopes` are unused here: the harness writes
  * `variables` inline on the root, so the slug never reaches the measured scene.
  */
-function dbTenantIdentity(vertical) {
+/* F4B-6: exported so the DATA probe compiles against the SAME probe tenant the
+ * CSS DB arm uses. Duplicating these four lines in the DATA runner would create
+ * a second authority for the probe identity, and the two instruments could then
+ * silently compile against different tenants -- the same class of defect W-C
+ * closed for the baseline tuple. One definition, two callers. */
+export function dbTenantIdentity(vertical) {
   if (!vertical) {
     throw new Error(
       'resolution-probe: the db-tenant-theme arm needs --vertical to resolve the code-owned ' +

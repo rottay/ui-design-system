@@ -8759,10 +8759,14 @@
     {
       "controlId": "responsive.posture",
       "disposition": "UNKNOWN",
-      "verificationState": "UNKNOWN",
-      "unknownReason": "NOT_ASSESSED",
-      "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "verificationState": "SOURCE_BOUND",
+      "unknownReason": "SOURCE_BOUND IS THE CEILING THIS CELL CAN HONESTLY REACH, and the reason is a gap in the manifest vocabulary rather than a gap in the evidence. The evidence is real and receipted (see evidenceIds): three verticals x all three stops through the one reachable ingress door, every guard green, exact restore to undefined, and the solver response measured. But every rank above SOURCE_BOUND is defined in CSS terms -- manifest/rules/index.mjs requires non-empty computedProperties and internalChannels at IMPLEMENTED, and an evidenceKind drawn from EVIDENCE_PROOF_ROLES.COMPUTED_DELTA (computed-delta | computed-property-delta | static-db-computed-parity) at COMPUTED_VERIFIED. A DATA-terminal control has no computed CSS property, no internal channel and no CSS delta to name, so it could only climb by fabricating them. It does not. The family maximumClaim is SOURCE_BOUND independently, so nothing is lost here that the family could otherwise have claimed. Registered as an OPEN_DT knownDefect on the control.",
+      "evidenceIds": [
+        "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/responsive-posture/rottay.json.receipt.json",
+        "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/responsive-posture/bithire.json.receipt.json",
+        "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/responsive-posture/evnto.json.receipt.json"
+      ],
+      "nextAction": "OBTAIN_SIGHTED_ACCEPTANCE. The span-resolution axis is proven on all three stops of all three verticals through the one reachable door. Whether the resulting geometry is good is sighted acceptance; the capacity-tier gap is registered as a measured knownDefect on the control, not as a pending measurement.",
       "targetBinding": {
         "status": "NO_CSS_CHANNEL",
         "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
@@ -8777,8 +8781,27 @@
             "--ds-spacing-4"
           ]
         },
-        "reviewedFrom": "anatomy"
-      }
+        "reviewedFrom": "anatomy",
+        "measuredBy": "F4B-6 DATA probe, roundId R6. The NO_CSS_CHANNEL status is CONFIRMED rather than superseded: the certification came from a sibling instrument precisely because there is no channel to read."
+      },
+      "applicabilityHypothesis": "APPLICABLE_FOR_SPAN_RESOLUTION, NOT FOR CAPACITY TIER. This board is the direct spanBias consumer: runtime/adaptive/react/index.ts:76 reads environment.posture.spanBias and :213 hands it to the solver. Its capacity TIER is a different authority and is not tenant-driven -- :147 buckets on hardcoded 639/839 literals that widget-board.css mirrors as container queries.",
+      "outputBindings": [],
+      "outputBindingsNote": "EMPTY BY DESIGN, not unfilled. This control emits no CSS custom property at any stop: declaredOutputs.channels is empty on the control and targetBinding.status is NO_CSS_CHANNEL on all 255 cells. The stop reaches this board as a JS prop through the adaptive-layout runtime, never through a socket, so an outputBinding here would be a fiction.",
+      "computedProperties": [],
+      "computedPropertiesNote": "Nothing was read from a browser: this cell is certified by a DATA-terminal probe (packages/core/src/tooling/resolution-probe/composition/data-run/), whose two halves are plain function calls on a compiled artifact. The observable that moved is the solver placement, recorded in the S3 witness of each receipt as colSpan/rowStart per item.",
+      "sourceBindings": [
+        "packages/core/src/ui/patterns/data/widget-board/runtime/adaptive/react/index.ts",
+        "packages/core/src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts",
+        "packages/core/src/ui/patterns/runtime/adaptive-layout/runtime/index.ts",
+        "packages/core/src/foundation/tokens/ts/presentation/responsive-postures/index.ts"
+      ],
+      "negativeControls": [
+        "the board capacity tier does not move with the tenant stop",
+        "no CSS custom property is emitted at any stop",
+        "the three sibling fields of .advanced remain byte-identical"
+      ],
+      "stablePartsNote": "Bounded to what was measured. The stop changes how the solver spans cells inside the board grid; no other part of this family was exercised, and the wider anatomy stays inventoried rather than proven.",
+      "partsAndGroupsNote": "Deliberately undeclared. A cell may not name a part or property group its family anatomy does not own, and this family owns an EMPTY propertyGroups list. The observable this control moves is not a painted part at all -- it is the solver placement (colSpan/rowStart), recorded per item in the S3 witness of each receipt."
     }
   ],
   "retiredThemeControls": [],
