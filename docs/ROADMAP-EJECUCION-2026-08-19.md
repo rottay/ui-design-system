@@ -2089,6 +2089,46 @@ advisory 10/10 byte-idénticos; GAT-07 `ddec6036…` verificado; la
 hipótesis de su propio preaudit (artefacto del instrumento) quedó refutada
 por la medición — el flujo V2 funcionando. **F4B queda 5/20 honesto.**
 
+##### H1/H3 — spacing.rhythm íntegro: legislación negative-controls + terminalReach 92=92 (2026-08-23)
+
+Follow-ups vinculantes del ACCEPT C2, cerrados en UN packet atómico (writer
+Opus; SOURCE_READY `/private/tmp/h1h3-spacing-opus-source-ready.md`):
+
+1. **Test #20 re-legislado UNA vez** (`negative-controls/tests`): la forma
+   nueva es "todo evidence id vive bajo el evidence root y resuelve a un
+   receipt válido; las listas del control están particionadas por rol". La
+   protección causal («evidence is OUTPUT, nunca un source binding
+   hasheado») se preserva en su forma REAL: por RUTA, no por proxy de forma
+   — `normaliseBoundPath` (`cli/index.mjs:429-432`) descarta todo path bajo
+   el evidence root "however a manifest happens to spell an evidence id",
+   así que el defecto histórico es hoy estructuralmente imposible
+   (verificado en fuente + observación: 30 receipts, 0 rutas del root en
+   `sourceFiles`). El drill muerde si los ids salen del root (inmediato) o
+   si el guard del runner se rompe (en la siguiente re-emisión — latencia
+   asimétrica asentada como hallazgo-nota Fable; opción barata NO
+   vinculante: drillear `normaliseBoundPath` directo vía seam). 19/20 →
+   **20/20**.
+2. **terminalReach 92 = 92** (`cascade/roots/spacing.rhythm.json`, +4 filas
+   `PRESCRIPCION` uniforme con las 88 previas) + **4 edges `--_ds-`**
+   (`--_ds-grid-column-gap`, `--_ds-grid-row-gap`,
+   `--_ds-stack-divider-gap-block`, `--_ds-stack-divider-gap-inline`) con
+   fuente verificada línea por línea, `LIVE`, ∈ `outputBindings`
+   preexistentes (cero canales inventados), `fallbackAuthority: null` con
+   las dos razones distintas (grid lee sin fallback; stack = recomputación
+   aritmética con guard `0px`, no cadena de valor — criterio F3). El 93.º
+   edge (`--_ds-stack-gap-current`) es scratch-marked y el cross-check
+   inverso lo saltea — el conteo ingenuo 93 no descuadra; censo Fable
+   confirma 92 no-scratch = 92 filas.
+3. **Listas del control particionadas** (defecto H3 cerrado): tight ×4 en
+   `staticDbParityEvidenceIds`, airy ×4 en `exactRestoreEvidenceIds`,
+   solape 0; celdas ⊆ set del control.
+
+Verificación: `CONSTITUTION_READY` (corrida DT); test #20 20/20; validador
+30/30 VALID+FRESH (re-emisión por frescura del contacto con manifests;
+artifacts byte-idénticos; roundIds preservados). Postaudit Fable:
+**ACCEPT**, memo `/private/tmp/h1h3-spacing-fable-postaudit.md`
+(SHA en su `.ready`), con la nota de latencia asentada arriba.
+
 **F0 — CERRADO (2026-08-19).** Criterio de cierre cumplido:
 `ci-gates OK — 78 blocking gate(s) passed` (2 excluded visibles con razón y
 dueño: channel-liveness y lane-control-drills, ambos esperan a F2); `find src -type d -empty` vacío salvo el inbox

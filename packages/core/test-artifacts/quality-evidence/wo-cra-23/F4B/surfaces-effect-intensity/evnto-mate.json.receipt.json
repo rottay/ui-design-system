@@ -67,7 +67,7 @@
   "sourceDigest": "5df830f9564c5c33cf8c0ec86ca70cafbdfac4e3774f640630115f204e962690",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/surfaces-effect-intensity/evnto-mate.json",
   "artifactSha256": "bce6d7308c630f3bb7668b5a14b7b5930a9d1325dbf532223f132ba2f2e90885",
-  "createdAt": "2026-08-23T19:13:20.250Z",
+  "createdAt": "2026-08-23T19:44:57.651Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

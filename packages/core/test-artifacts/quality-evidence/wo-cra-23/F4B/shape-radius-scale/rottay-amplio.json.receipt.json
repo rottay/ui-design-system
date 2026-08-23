@@ -67,7 +67,7 @@
   "sourceDigest": "e5dd6857d21d1bb12bce49dfbfef7820936b6d15c76dd03268385e162514c80c",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/shape-radius-scale/rottay-amplio.json",
   "artifactSha256": "17454f1907ae7bb90f706f6d630d9cabe90755135f11072beba27426f5da3096",
-  "createdAt": "2026-08-23T19:13:20.157Z",
+  "createdAt": "2026-08-23T19:44:57.552Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

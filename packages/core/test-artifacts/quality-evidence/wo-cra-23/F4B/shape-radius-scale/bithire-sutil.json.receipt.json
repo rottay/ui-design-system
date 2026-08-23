@@ -67,7 +67,7 @@
   "sourceDigest": "86db90d298ccad91902706a3aedfb3a96388c455888dc961912ff80edef91fa1",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/shape-radius-scale/bithire-sutil.json",
   "artifactSha256": "5f2da0f62f75f68eaa8aabe485aef5192d4f157c3a938f2cfe406fc3e895efe3",
-  "createdAt": "2026-08-23T19:13:20.131Z",
+  "createdAt": "2026-08-23T19:44:57.526Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

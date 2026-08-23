@@ -67,7 +67,7 @@
   "sourceDigest": "5df830f9564c5c33cf8c0ec86ca70cafbdfac4e3774f640630115f204e962690",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/surfaces-effect-intensity/evnto-sobrio.json",
   "artifactSha256": "6eea7202154313a4794d790aba8337644f3c1f62696695a835d7bc5ac975a632",
-  "createdAt": "2026-08-23T19:13:20.258Z",
+  "createdAt": "2026-08-23T19:44:57.659Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

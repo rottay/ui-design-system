@@ -67,7 +67,7 @@
   "sourceDigest": "35401ba066b7d65badee4f49d24257305218bb3874c1c0fa4c876cef5768f6b1",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/surfaces-effect-intensity/rottay-mate.json",
   "artifactSha256": "3ccb4046a7fb59c5be073c78419fa09886de8a3665ab994ddd093fde50a5d7d1",
-  "createdAt": "2026-08-23T19:13:20.265Z",
+  "createdAt": "2026-08-23T19:44:57.667Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

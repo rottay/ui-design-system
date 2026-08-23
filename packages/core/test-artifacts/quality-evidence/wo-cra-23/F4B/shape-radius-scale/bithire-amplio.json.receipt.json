@@ -67,7 +67,7 @@
   "sourceDigest": "86db90d298ccad91902706a3aedfb3a96388c455888dc961912ff80edef91fa1",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/shape-radius-scale/bithire-amplio.json",
   "artifactSha256": "e535690a60784338b4c7d6ec1105c692466311fcc53586416a37fafa86dba4ed",
-  "createdAt": "2026-08-23T19:13:20.122Z",
+  "createdAt": "2026-08-23T19:44:57.518Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

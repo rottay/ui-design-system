@@ -68,7 +68,7 @@
   "sourceDigest": "4fe4f012dfe859c413f953fa8640bcff21cd69a3980dbe660c1d37708f673637",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/experience-profile/evnto-technical.json",
   "artifactSha256": "a03aa0c5871bf9e99df9ba8d4e99e5e5d9e359a87c3822ad21853ded214ab045",
-  "createdAt": "2026-08-23T19:13:20.096Z",
+  "createdAt": "2026-08-23T19:44:57.489Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

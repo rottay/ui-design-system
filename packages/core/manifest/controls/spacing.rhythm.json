@@ -68,24 +68,16 @@
       "existingFivePlaneHarness": "packages/showroom/e2e/whitelabel/density-authority-matrix.spec.ts"
     },
     "staticDbParityEvidenceIds": [
-      "R2:primitive/layout/flex:spacing.rhythm/tight/static-and-db",
-      "R2:primitive/layout/flex:spacing.rhythm/airy/static-and-db",
-      "R2:primitive/layout/grid:spacing.rhythm/tight/static-and-db",
-      "R2:primitive/layout/grid:spacing.rhythm/airy/static-and-db",
-      "R2:primitive/layout/stack:spacing.rhythm/tight/static-and-db",
-      "R2:primitive/layout/stack:spacing.rhythm/airy/static-and-db",
-      "R2:primitive/layout/space:spacing.rhythm/tight/static-and-db",
-      "R2:primitive/layout/space:spacing.rhythm/airy/static-and-db"
+      "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/spacing-rhythm/flex-tight.json.receipt.json",
+      "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/spacing-rhythm/grid-tight.json.receipt.json",
+      "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/spacing-rhythm/space-tight.json.receipt.json",
+      "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/spacing-rhythm/stack-tight.json.receipt.json"
     ],
     "exactRestoreEvidenceIds": [
-      "R2:primitive/layout/flex:spacing.rhythm/tight/static-and-db",
-      "R2:primitive/layout/flex:spacing.rhythm/airy/static-and-db",
-      "R2:primitive/layout/grid:spacing.rhythm/tight/static-and-db",
-      "R2:primitive/layout/grid:spacing.rhythm/airy/static-and-db",
-      "R2:primitive/layout/stack:spacing.rhythm/tight/static-and-db",
-      "R2:primitive/layout/stack:spacing.rhythm/airy/static-and-db",
-      "R2:primitive/layout/space:spacing.rhythm/tight/static-and-db",
-      "R2:primitive/layout/space:spacing.rhythm/airy/static-and-db"
+      "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/spacing-rhythm/flex-airy.json.receipt.json",
+      "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/spacing-rhythm/grid-airy.json.receipt.json",
+      "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/spacing-rhythm/space-airy.json.receipt.json",
+      "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/spacing-rhythm/stack-airy.json.receipt.json"
     ],
     "negativeControls": [
       "numeric instance gaps remain exact",

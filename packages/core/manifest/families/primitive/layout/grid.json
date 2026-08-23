@@ -528,6 +528,38 @@
       },
       "internalChannels": [
         {
+          "channelId": "--_ds-grid-column-gap",
+          "semanticOwner": "spacing.rhythm",
+          "producer": "packages/core/src/ui/primitives/layout/Grid/engines/modern/index.tsx",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/layout/grid"
+          ],
+          "sourceBindings": [
+            "packages/core/src/ui/primitives/layout/Grid/engines/modern/index.tsx",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-grid-row-gap",
+          "semanticOwner": "spacing.rhythm",
+          "producer": "packages/core/src/ui/primitives/layout/Grid/engines/modern/index.tsx",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/layout/grid"
+          ],
+          "sourceBindings": [
+            "packages/core/src/ui/primitives/layout/Grid/engines/modern/index.tsx",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
           "channelId": "--ds-grid-gap",
           "semanticOwner": "spacing.rhythm",
           "producer": "packages/core/src/ui/primitives/layout/Grid/engines/modern/index.tsx",

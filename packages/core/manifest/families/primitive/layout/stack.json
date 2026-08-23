@@ -581,15 +581,29 @@
       },
       "internalChannels": [
         {
-          "channelId": "--ds-stack-gap",
+          "channelId": "--_ds-stack-divider-gap-block",
           "semanticOwner": "spacing.rhythm",
-          "producer": "packages/core/src/ui/primitives/layout/Stack/runtime/presentation/index.ts",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/layout/stack"
           ],
           "sourceBindings": [
-            "packages/core/src/ui/primitives/layout/Stack/runtime/presentation/index.ts",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-stack-divider-gap-inline",
+          "semanticOwner": "spacing.rhythm",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/layout/stack"
+          ],
+          "sourceBindings": [
             "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives.css"
           ],
           "replacementDisposition": {
@@ -621,6 +635,22 @@
           ],
           "sourceBindings": [
             "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--ds-stack-gap",
+          "semanticOwner": "spacing.rhythm",
+          "producer": "packages/core/src/ui/primitives/layout/Stack/runtime/presentation/index.ts",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/layout/stack"
+          ],
+          "sourceBindings": [
+            "packages/core/src/ui/primitives/layout/Stack/runtime/presentation/index.ts",
             "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives.css"
           ],
           "replacementDisposition": {

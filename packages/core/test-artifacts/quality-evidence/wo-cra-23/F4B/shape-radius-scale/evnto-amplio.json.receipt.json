@@ -67,7 +67,7 @@
   "sourceDigest": "ce0abe2c38dbcd913a66561b3e522fa96cebe5caa58f1c2a0d924df861cd72a9",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/shape-radius-scale/evnto-amplio.json",
   "artifactSha256": "3cbf23f963c1ce88d8c2e6c50c1051caa36c28db2fe00addea7a7061435efcfb",
-  "createdAt": "2026-08-23T19:13:20.139Z",
+  "createdAt": "2026-08-23T19:44:57.535Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

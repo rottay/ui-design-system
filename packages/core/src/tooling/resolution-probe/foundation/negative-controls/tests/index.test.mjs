@@ -683,20 +683,66 @@ test('grid track templates are declared UNMECHANISED, not silently asserted', ()
   assert.ok(entry.properties.includes('align-items'));
 });
 
-test('an evidence id is never collected as a source binding', () => {
-  // Regression: evidence is OUTPUT. When the control manifest carried receipt
-  // PATHS as evidence ids, the causal run tried to hash receipts that the run
-  // itself had not written yet, and every scenario died on a vanished file.
+test('an evidence id RESOLVES to a receipt, and is never collected as a source binding', () => {
+  /* RE-LEGISLATED 2026-08-23 (H1/H3, follow-up of the C2 postaudit F1).
+   *
+   * This drill used to require evidence ids to be `R2:family:scenario`
+   * COORDINATES and to reject anything path-shaped, because when the manifest
+   * first carried receipt PATHS the causal run tried to hash receipts the run
+   * had not written yet and every scenario died on a vanished file. That defect
+   * was real. The FORM this drill demanded was never the protection, though --
+   * it was a proxy for it, and it collided head-on with program-check, which
+   * resolves an evidence id by opening the receipt it names
+   * (`manifest/rules/index.mjs` resolveEvidenceReceipt: the id must sit under
+   * the evidence root and parse as a receipt document). Two laws, one field,
+   * opposite demands: the C2 packet could only satisfy one, and #20 stayed red.
+   *
+   * The conflict is resolved ONCE, here, in favour of resolvability -- because
+   * the protection no longer depends on the spelling. It is enforced by PATH in
+   * the runner: `causalFreshnessSourceFiles` walks the whole manifest collecting
+   * source bindings, and `normaliseBoundPath` drops every path under the
+   * evidence root before anything is hashed, "however a manifest happens to
+   * spell an evidence id" (public/cli/index.mjs). A receipt can no longer enter
+   * its own freshness surface no matter what shape its id takes.
+   *
+   * So the drill keeps BOTH halves, and asserts each against what actually
+   * enforces it: ids must resolve (new form), and evidence must never be hashed
+   * (the original protection, now pinned twice -- by construction and by
+   * observation over the emitted receipts). */
   const control = readManifest(resolve(MANIFEST_ROOT, 'controls/spacing.rhythm.json'));
+  const evidenceRoot = JSON.parse(
+    readFileSync(
+      resolve(CORE_ROOT, 'scripts/quality-evidence/programs/modern-rescue/evidence-contract.json'),
+      'utf8',
+    ),
+  ).root;
   const ids = [
     ...control.calibration.staticDbParityEvidenceIds,
     ...control.calibration.exactRestoreEvidenceIds,
   ];
   assert.ok(ids.length > 0, 'the control must carry computed evidence ids');
+
+  // (1) NEW FORM: every id is a path under the evidence root that opens as a receipt.
   for (const id of ids) {
-    assert.equal(id.startsWith('packages/'), false, `${id} is path-shaped and would be hashed`);
-    assert.match(id, /^R\d+:[^:]+:.+$/, `${id} must be round:family:scenario coordinates`);
+    assert.ok(
+      id.startsWith(`${evidenceRoot}/`),
+      `${id} must sit under the evidence root so program-check can resolve it`,
+    );
+    const absolute = resolve(CORE_ROOT, '..', '..', id);
+    assert.ok(existsSync(absolute), `${id} names no receipt on disk`);
+    const receipt = JSON.parse(readFileSync(absolute, 'utf8'));
+    assert.equal(typeof receipt.roundId, 'string', `${id} is not a receipt document`);
+    assert.equal(typeof receipt.artifactSha256, 'string', `${id} carries no artifact hash`);
   }
+
+  // (2) The control's two lists are PARTITIONED by proof role, not duplicated.
+  const parity = new Set(control.calibration.staticDbParityEvidenceIds);
+  const restore = new Set(control.calibration.exactRestoreEvidenceIds);
+  for (const id of parity) {
+    assert.equal(restore.has(id), false, `${id} cannot carry both proof roles`);
+  }
+
+  // (3) Every family cell cites both of its stops, from the control-level set.
   for (const family of LAYOUT_FAMILIES) {
     const manifest = readManifest(
       resolve(MANIFEST_ROOT, `families/primitive/layout/${family}.json`),
@@ -705,4 +751,31 @@ test('an evidence id is never collected as a source binding', () => {
     assert.equal(cell.evidenceIds.length, 2, `${family} must cite both stops`);
     for (const id of cell.evidenceIds) assert.ok(ids.includes(id), `${id} is not a control-level id`);
   }
+
+  // (4) THE ORIGINAL PROTECTION, by construction: because every id lives under
+  // the evidence root, `normaliseBoundPath`'s evidence-root branch necessarily
+  // fires for it. Moving an id outside that root -- the change that would put a
+  // receipt back inside its own freshness surface -- reddens assertion (1).
+  // (5) THE SAME PROTECTION, by observation: no emitted receipt hashes anything
+  // under the evidence root. This is what goes red if the guard is ever removed.
+  const evidenceDir = resolve(CORE_ROOT, 'test-artifacts/quality-evidence/wo-cra-23/F4B');
+  let inspected = 0;
+  for (const group of readdirSync(evidenceDir)) {
+    for (const file of readdirSync(resolve(evidenceDir, group))) {
+      if (!file.endsWith('.receipt.json')) continue;
+      const receipt = JSON.parse(readFileSync(resolve(evidenceDir, group, file), 'utf8'));
+      inspected += 1;
+      const hashedEvidence = receipt.sourceFiles.filter((path) =>
+        path.startsWith(`${evidenceRoot}/`),
+      );
+      assert.deepEqual(
+        hashedEvidence,
+        [],
+        `${group}/${file} hashes its own evidence root: ${hashedEvidence.join(', ')}. ` +
+          'Evidence is OUTPUT; a receipt inside its own freshness surface cannot be hashed ' +
+          'before it is written.',
+      );
+    }
+  }
+  assert.ok(inspected > 0, 'the observational half must actually inspect receipts');
 });

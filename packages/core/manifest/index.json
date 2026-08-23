@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "generatedBy": "node packages/core/manifest/generator/index.mjs --sync",
   "authorityLaw": "Controls own semantics, groups own recipe vocabularies, families own applicability edges, and this index owns generated rollups.",
-  "inputsDigest": "d12e3ba8907453fcee644268efad2955bba2120ca325d65cdce332fe4a8283d8",
+  "inputsDigest": "d5ad53dda70e17a4d10091219a16d14dcf22a262a41bd488993405bc76ec90dd",
   "denominators": {
     "canonicalFamilies": 255,
     "activeStandardControls": 13,
@@ -1447,7 +1447,7 @@
     {
       "controlId": "spacing.rhythm",
       "path": "manifest/controls/spacing.rhythm.json",
-      "digest": "5b6954dce006db26cb6043b3ec87bcb7dbc036b6b14e7af5b89b11c4d994342c"
+      "digest": "81683b56e45fc3ddce32038ea5f7aed54b3b128962767aa1f14ff42fd3694a8a"
     },
     {
       "controlId": "motion.dial",
@@ -2560,7 +2560,7 @@
     {
       "familyId": "primitive/layout/grid",
       "path": "manifest/families/primitive/layout/grid.json",
-      "digest": "4248c99b921574d5bae1e32823455dccbf8e1370f7d80dc5b8bff8ee6c26d7c7",
+      "digest": "4764b402db9b169b9eacf28e7b5f3de1657ce5311cd0e27bcc396c36a14c4996",
       "maximumClaim": "SOURCE_BOUND",
       "reviewVerdict": null
     },
@@ -2630,7 +2630,7 @@
     {
       "familyId": "primitive/layout/stack",
       "path": "manifest/families/primitive/layout/stack.json",
-      "digest": "318e1972dd62f13cc4accb10677a49f4e995edb4e984977ebd7553295ec4ac80",
+      "digest": "c230791dbdc9b981753d9fccab66806a5de83fe6da374307c6b3da3a4f9f652d",
       "maximumClaim": "SOURCE_BOUND",
       "reviewVerdict": null
     },

@@ -67,7 +67,7 @@
   "sourceDigest": "e5dd6857d21d1bb12bce49dfbfef7820936b6d15c76dd03268385e162514c80c",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/shape-radius-scale/rottay-sutil.json",
   "artifactSha256": "0008055cd59d0d6cbc174407213e95e0d7c2a5ef264f266330b8b65aea0e8fd0",
-  "createdAt": "2026-08-23T19:13:20.165Z",
+  "createdAt": "2026-08-23T19:44:57.561Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

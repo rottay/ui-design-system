@@ -185,6 +185,26 @@
       "state": "PRESCRIPCION"
     },
     {
+      "channelId": "--_ds-grid-column-gap",
+      "familyId": "primitive/layout/grid",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-grid-row-gap",
+      "familyId": "primitive/layout/grid",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-stack-divider-gap-block",
+      "familyId": "primitive/layout/stack",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-stack-divider-gap-inline",
+      "familyId": "primitive/layout/stack",
+      "state": "PRESCRIPCION"
+    },
+    {
       "channelId": "--_ds-dashboard-insights-grid-gap",
       "familyId": "structure/dashboard/dashboard-insights",
       "state": "PRESCRIPCION"
