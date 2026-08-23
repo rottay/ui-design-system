@@ -247,8 +247,10 @@ function destructuringTargetsName(pattern, name) {
  * target), or destructuring-assignment write that targets `name` or a
  * property of `name`, anywhere in the same function scope (not crossing into
  * nested function bodies). */
-function hasReassignmentOrMutation(funcScope, name) {
+function hasReassignmentOrMutation(funcScope, name, seen = new Set()) {
   let found = false;
+  if (seen.has(name) || seen.size > 8) return false; // alias cycle / depth guard
+  seen.add(name);
   const walk = (node) => {
     if (found) return;
     if (isFunctionLike(node) && node !== funcScope) return;
@@ -269,6 +271,63 @@ function hasReassignmentOrMutation(funcScope, name) {
           found = true;
           return;
         }
+      }
+    }
+    /* `Object.assign(X, …)` and `delete X.k` MUTATE X as surely as `X.k = v`.
+     * The coarse detector never modelled either, so a helper whose only
+     * mutation was an `Object.assign` from an unresolved source resolved to its
+     * bare initializer and could certify as a ZERO while unknown keys were
+     * merged into it. Both are mutations; both make the binding unproven until
+     * a fine-grained pass proves the composition. */
+    if (
+      ts.isCallExpression(node) &&
+      ts.isPropertyAccessExpression(node.expression) &&
+      ts.isIdentifier(node.expression.expression) &&
+      node.expression.expression.text === "Object" &&
+      ["assign", "defineProperty", "defineProperties", "setPrototypeOf"].includes(node.expression.name.text) &&
+      node.arguments.length > 0 &&
+      targetsName(node.arguments[0], name)
+    ) {
+      found = true;
+      return;
+    }
+    if (ts.isDeleteExpression(node) && (ts.isPropertyAccessExpression(node.expression) || ts.isElementAccessExpression(node.expression)) && targetsName(node.expression.expression, name)) {
+      found = true;
+      return;
+    }
+    /* ALIAS ESCAPE. `const alias = X;` (or `alias = X;`) hands out the SAME
+     * object: every later `alias.k = v` mutates X, while the detector -- which
+     * only looks for writes whose target expression is X itself -- sees
+     * nothing, so X resolved to its bare initializer and could certify as a
+     * ZERO with keys added behind it.
+     *
+     * Deliberately NARROW: only the binding used as the WHOLE initializer or
+     * the WHOLE right-hand side aliases it. `{ ...X }` and `X.foo` are copies
+     * and reads, not aliases, and must keep resolving exactly as before. */
+    if (
+      ts.isVariableDeclaration(node) &&
+      node.initializer &&
+      ts.isIdentifier(unwrap(node.initializer)) &&
+      unwrap(node.initializer).text === name &&
+      ts.isIdentifier(node.name)
+    ) {
+      // an alias only matters when the ALIAS is itself mutated; a read-only
+      // second name for the same object changes nothing and must keep resolving
+      if (hasReassignmentOrMutation(funcScope, node.name.text, seen)) {
+        found = true;
+        return;
+      }
+    }
+    if (
+      ts.isBinaryExpression(node) &&
+      node.operatorToken.kind === ts.SyntaxKind.EqualsToken &&
+      ts.isIdentifier(unwrap(node.right)) &&
+      unwrap(node.right).text === name &&
+      ts.isIdentifier(node.left)
+    ) {
+      if (hasReassignmentOrMutation(funcScope, node.left.text, seen)) {
+        found = true;
+        return;
       }
     }
     if (ts.isPrefixUnaryExpression(node) || ts.isPostfixUnaryExpression(node)) {
@@ -665,6 +724,13 @@ function resolveBinding(name, useNode, source, moduleImports) {
                 return {
                   kind: "destructuredLocal",
                   sourceExpr: decl.initializer,
+                  // T-USE-STATE: an ARRAY pattern binds by POSITION, not by
+                  // name; a tuple-returning hook can only be read through the
+                  // positional index and the pattern itself.
+                  fromArrayPattern: ts.isArrayBindingPattern(decl.name),
+                  arrayIndex: ts.isArrayBindingPattern(decl.name) ? decl.name.elements.indexOf(el) : null,
+                  bindingPattern: decl.name,
+                  declSource: source,
                   key: el.propertyName && ts.isIdentifier(el.propertyName) ? el.propertyName.text : name,
                   defaultInit: el.initializer ?? null,
                   isRest: !!el.dotDotDotToken,
@@ -750,6 +816,419 @@ function findLocalDecl(targetSource, name) {
     }
   }
   return null;
+}
+
+/* ------------- internal-base mutation (T-INTERNAL-MUTATION) --- */
+/**
+ * T-INTERNAL-MUTATION -- resolve a helper that declares a FRESH INTERNAL object
+ * and then composes it by mutation before returning it.
+ *
+ * `const base = {…}; if (c) base.k = v; Object.assign(base, other); return base;`
+ * is the procedural spelling of a spread composition this resolver already
+ * models. T-SEQUENTIAL-8 proves the narrow `const X = {}` form; this proves the
+ * same idiom over a NON-EMPTY base, with `Object.assign` and with else-arms.
+ *
+ * The base must be FRESH and INTERNAL: an object literal declared here whose own
+ * key set is enumerable. A base spread from a caller-supplied `style` prop is
+ * refused by exactly that test -- an unresolved spread is not key-enumerable --
+ * which is what keeps this rule away from the unbounded-passthrough question.
+ *
+ * Fail-closed on: an alias or any escape of the binding (passed to a call other
+ * than as `Object.assign`'s target, returned early, closed over, read into
+ * another declarator), a computed/dynamic write key, `delete`, a compound
+ * assignment, `Object.assign` from a source whose key set is not enumerable, a
+ * write whose value mentions the binding, a condition that mentions it, more
+ * than one `return`, a return that is not the bare binding, any statement after
+ * it, and any statement shape this walk does not model.
+ */
+function staticWritesOfStatement(stmt, name, source, conditional, conditionText, out) {
+  // `X.key = expr;`
+  if (ts.isExpressionStatement(stmt)) {
+    const e = stmt.expression;
+    if (ts.isBinaryExpression(e) && e.operatorToken.kind === ts.SyntaxKind.EqualsToken) {
+      const key = staticWriteTargetOf(e.left, name, source);
+      if (key === null) return false;
+      if (mentionsName(e.right, name)) return false;
+      out.push({ kind: "write", key, valueNode: e.right, statement: stmt, conditional, conditionText });
+      return true;
+    }
+    // `Object.assign(X, source)` -- the ONLY admitted call over the binding
+    if (
+      ts.isCallExpression(e) &&
+      ts.isPropertyAccessExpression(e.expression) &&
+      ts.isIdentifier(e.expression.expression) && e.expression.expression.text === "Object" &&
+      e.expression.name.text === "assign" &&
+      e.arguments.length === 2 &&
+      ts.isIdentifier(e.arguments[0]) && e.arguments[0].text === name &&
+      !mentionsName(e.arguments[1], name)
+    ) {
+      out.push({ kind: "assign", sourceNode: e.arguments[1], statement: stmt, conditional, conditionText });
+      return true;
+    }
+    return false;
+  }
+  return false;
+}
+
+/** Collect the writes of one if/else arm; false if any statement is unmodelled. */
+function collectArmWrites(node, name, source, conditionText, out) {
+  const statements = ts.isBlock(node) ? [...node.statements] : [node];
+  for (const st of statements) {
+    if (!staticWritesOfStatement(st, name, source, true, conditionText, out)) return false;
+  }
+  return true;
+}
+
+function resolveInternalMutationShape(binding, ctx, path, depth) {
+  const { name, declNode, funcScope, source } = binding;
+  if (!name || !declNode || !funcScope || !source) return null;
+  const init = declNode.initializer;
+  // FRESH: an object literal written right here. Not a call, not an identifier.
+  if (!init || !ts.isObjectLiteralExpression(init)) return null;
+
+  const body = ts.isSourceFile(funcScope) ? funcScope : funcScope.body;
+  if (!body || !ts.isBlock(body)) return null;
+  const statements = [...body.statements];
+  const declStmtIndex = statements.findIndex((st) => st === declNode.parent?.parent);
+  if (declStmtIndex < 0) return null;
+  const declStmt = statements[declStmtIndex];
+  if (!ts.isVariableStatement(declStmt)) return null;
+  if ((declStmt.declarationList.flags & (ts.NodeFlags.Const | ts.NodeFlags.Let)) === 0) return null;
+  const declSiblings = declStmt.declarationList.declarations;
+  if (declSiblings.length !== 1 || declSiblings[0] !== declNode) return null;
+
+  const ops = [];
+  let returned = false;
+  for (let i = 0; i < statements.length; i += 1) {
+    const stmt = statements[i];
+    if (i === declStmtIndex) continue;
+    if (returned) return null; // nothing may follow the return
+    if (ts.isReturnStatement(stmt)) {
+      if (!stmt.expression || !ts.isIdentifier(stmt.expression) || stmt.expression.text !== name) return null;
+      returned = true;
+      continue;
+    }
+    if (!mentionsName(stmt, name)) continue;
+    if (staticWritesOfStatement(stmt, name, source, false, null, ops)) continue;
+    // if / else-if / else, each arm a list of writes; the condition may not read X
+    if (ts.isIfStatement(stmt)) {
+      let node = stmt;
+      let ok = true;
+      while (node) {
+        if (mentionsName(node.expression, name)) { ok = false; break; }
+        const conditionText = node.expression.getText(source).slice(0, 120).replace(/\s+/g, " ");
+        if (!collectArmWrites(node.thenStatement, name, source, conditionText, ops)) { ok = false; break; }
+        const alt = node.elseStatement;
+        if (!alt) break;
+        if (ts.isIfStatement(alt)) { node = alt; continue; }
+        if (!collectArmWrites(alt, name, source, `!(${conditionText})`, ops)) { ok = false; break; }
+        break;
+      }
+      if (!ok) return null;
+      continue;
+    }
+    return null; // any other statement mentioning X is unproven
+  }
+  if (!returned || ops.length === 0) return null;
+
+  // exactly one return in the whole scope, and no escape of the binding
+  let returnCount = 0;
+  const countReturns = (n) => {
+    if (!n) return;
+    if (isFunctionLike(n) && n !== funcScope) return;
+    if (ts.isReturnStatement(n)) returnCount += 1;
+    ts.forEachChild(n, countReturns);
+  };
+  countReturns(body);
+  if (returnCount !== 1) return null;
+
+  const stepPath = [...path, { kind: "internalMutation", declaredAt: binding.declaredAt }];
+  // the FRESH base, resolved as the ordinary object literal it is
+  const baseShape = resolveShape(init, freshCtx(ctx, { depth: depth + 1, path: [...stepPath, { kind: "mutationBase" }] }));
+  if (!baseShape || baseShape.kind !== "object") return null;
+  // INTERNAL: the base must not import keys this walk cannot enumerate
+  if (!keySetEnumerable(baseShape)) return null;
+
+  const order = [...baseShape.order];
+  const receipts = [];
+  for (const op of ops) {
+    const at = `${source.fileName}:${source.getLineAndCharacterOfPosition(op.statement.getStart(source)).line + 1}`;
+    if (op.kind === "assign") {
+      const src = resolveShape(op.sourceNode, freshCtx(ctx, { depth: depth + 1, path: [...stepPath, { kind: "objectAssignSource" }] }));
+      // an Object.assign from an open source would import unknown keys
+      if (!keySetEnumerable(src)) return null;
+      receipts.push({ kind: "assign", at, conditional: op.conditional, condition: op.conditionText });
+      order.push({
+        kind: "spread",
+        node: op.statement,
+        shape: op.conditional
+          ? { kind: "branches", branches: [src, { kind: "object", order: [], closed: true, path: stepPath, node: init, fileRel: source.fileName }], path: stepPath }
+          : src,
+      });
+      continue;
+    }
+    const valueShape = resolveShape(op.valueNode, freshCtx(ctx, { depth: depth + 1, path: [...stepPath, { kind: "objectProperty", key: op.key }] }));
+    receipts.push({ kind: "write", key: op.key, at, conditional: op.conditional, condition: op.conditionText });
+    if (!op.conditional) {
+      order.push({ kind: "leaf", key: op.key, node: op.valueNode, source, fileRel: source.fileName, declNode: op.statement, shape: valueShape, unresolvedKey: false });
+      continue;
+    }
+    const present = { kind: "object", order: [{ kind: "leaf", key: op.key, node: op.valueNode, source, fileRel: source.fileName, declNode: op.statement, shape: valueShape, unresolvedKey: false }], closed: isShapeClosed(valueShape), path: stepPath, node: init, fileRel: source.fileName };
+    const absent = { kind: "object", order: [], closed: true, path: stepPath, node: init, fileRel: source.fileName };
+    order.push({ kind: "spread", node: op.statement, shape: { kind: "branches", branches: [present, absent], path: stepPath } });
+  }
+
+  return {
+    kind: "object",
+    order,
+    closed: order.every(entryIsClosed),
+    path: stepPath,
+    node: init,
+    fileRel: source.fileName,
+    internalMutation: {
+      binding: name,
+      declaredAt: binding.declaredAt,
+      baseKeyCount: baseShape.order.length,
+      operationCount: receipts.length,
+      operations: receipts,
+    },
+  };
+}
+
+/* ------------- custom-property namespace relay (T-NAMESPACE-RELAY) --- */
+/**
+ * T-NAMESPACE-RELAY -- a value whose declared type bounds it to a custom-property
+ * NAMESPACE rather than to a key set.
+ *
+ * `DsPortalVariableStyle = CSSProperties & Partial<Record<`--ds-${string}`, string>>`
+ * is the canonical shape: a live snapshot whose keys are decided at runtime by
+ * reading the DOM, bounded by construction to one prefix. Such a value has no
+ * enumerable key set, so it can never be a ZERO (that would certify silence it
+ * has not got) and never a PRODUCER (there is no key set to attribute). It is a
+ * RELAY: a passthrough this walk names, bounds and refuses to enumerate.
+ *
+ * The proof is the TYPE, not a name: the declared type must mention a
+ * template-literal type whose head begins with `--`. Nothing else qualifies, and
+ * nothing about tenant reach, roots or keys is ever inferred from it.
+ */
+function customPropertyNamespaceOfType(typeNode, source, depth = 0, seen = new Set()) {
+  if (!typeNode || depth > 6) return null;
+  let found = null;
+  const walk = (node) => {
+    if (found || !node) return;
+    // `--ds-${string}` -- the head carries the literal prefix
+    if (ts.isTemplateLiteralTypeNode(node) && node.head && typeof node.head.text === "string" && node.head.text.startsWith("--")) {
+      found = node.head.text;
+      return;
+    }
+    ts.forEachChild(node, walk);
+  };
+  walk(typeNode);
+  if (found) return { namespace: found, declaredIn: source.fileName };
+  // follow ONE bare type reference hop, locally or through a named import
+  let node = typeNode;
+  while (ts.isParenthesizedTypeNode(node)) node = node.type;
+  if (!ts.isTypeReferenceNode(node) || !ts.isIdentifier(node.typeName)) return null;
+  const name = node.typeName.text;
+  const key = `${source.fileName}::${name}`;
+  if (seen.has(key)) return null;
+  seen.add(key);
+  for (const stmt of source.statements) {
+    if ((ts.isTypeAliasDeclaration(stmt) || ts.isInterfaceDeclaration(stmt)) && stmt.name.text === name) {
+      const body = ts.isTypeAliasDeclaration(stmt) ? stmt.type : stmt;
+      const hit = customPropertyNamespaceOfType(body, source, depth + 1, seen);
+      return hit ? { ...hit, typeName: name } : null;
+    }
+  }
+  const imported = collectModuleImports(source).get(name);
+  if (!imported || imported.form !== "named") return null;
+  const targetFile = resolveImportTargetFile(imported.moduleSpecifier, source.fileName);
+  if (!targetFile) return null;
+  const entry = getSource(targetFile);
+  if (!entry) return null;
+  const wanted = imported.importedName ?? name;
+  for (const stmt of entry.source.statements) {
+    if ((ts.isTypeAliasDeclaration(stmt) || ts.isInterfaceDeclaration(stmt)) && stmt.name.text === wanted) {
+      const body = ts.isTypeAliasDeclaration(stmt) ? stmt.type : stmt;
+      const hit = customPropertyNamespaceOfType(body, entry.source, depth + 1, seen);
+      return hit ? { ...hit, typeName: wanted } : null;
+    }
+  }
+  return null;
+}
+
+/* ---------------------------- React useState resolution (T-USE-STATE) --- */
+/**
+ * T-USE-STATE -- resolve `const [v, setV] = useState<T>(init)` when the hook is
+ * the CANONICAL React one and the whole state domain is first-party.
+ *
+ * The resolver stops at `external-npm-package` the moment it sees the callee
+ * imported from `react`, without looking at the type argument or the initial
+ * value -- both first-party and both right there in the file. The state a
+ * component can ever hold is exactly `init` plus every value handed to its own
+ * setter, so when all of those resolve, the domain is decidable.
+ *
+ * Fail-closed on everything else: a `useState` that is not a named import from
+ * exactly `react`; a non-array binding pattern; a positional index other than
+ * the state slot; a setter referenced anywhere except as the callee of a direct
+ * one-argument call (passed as a value, aliased, or curried); a functional
+ * update (`setV(prev => …)`), whose result depends on the previous state; and
+ * any argument this walk cannot resolve.
+ */
+function canonicalUseStateCall(sourceExpr, source) {
+  const call = unwrap(sourceExpr);
+  if (!ts.isCallExpression(call)) return null;
+  const callee = unwrap(call.expression);
+  if (!ts.isIdentifier(callee) || callee.text !== "useState") return null;
+  const imported = collectModuleImports(source).get(callee.text);
+  // the canonical hook: a NAMED import of `useState` from exactly `react`
+  if (!imported || imported.form !== "named") return null;
+  if (imported.moduleSpecifier !== "react") return null;
+  if ((imported.importedName ?? callee.text) !== "useState") return null;
+  return call;
+}
+
+/** Every direct `setter(arg)` call in the file, or null if the setter escapes. */
+function exhaustiveSetterArguments(setterName, source, declNode) {
+  const args = [];
+  let escaped = false;
+  const walk = (n) => {
+    if (escaped || !n) return;
+    if (ts.isIdentifier(n) && n.text === setterName) {
+      const parent = n.parent;
+      // the binding element that declares it is not a use
+      if (parent && ts.isBindingElement(parent) && parent.name === n) return;
+      // the ONLY admitted use is as the callee of a direct call
+      if (parent && ts.isCallExpression(parent) && parent.expression === n) {
+        if (parent.arguments.length !== 1) { escaped = true; return; }
+        const arg = unwrap(parent.arguments[0]);
+        // a functional update reads the PREVIOUS state -- not resolvable here
+        if (ts.isArrowFunction(arg) || ts.isFunctionExpression(arg)) { escaped = true; return; }
+        args.push(arg);
+        return;
+      }
+      escaped = true;
+      return;
+    }
+    ts.forEachChild(n, walk);
+  };
+  walk(source);
+  return escaped ? null : args;
+}
+
+/* --------------------- dynamic setProperty domain (T-DYNAMIC-DOMAIN) --- */
+/**
+ * T-DYNAMIC-DOMAIN -- a `style.setProperty(name, value)` whose NAME is a
+ * `for…of` variable over a frozen, finite, same-module constant array.
+ *
+ * `dynamic-setProperty` is published unresolved because the stamped property is
+ * not a literal at the sink. When the name ranges over an `as const` array
+ * declared in the SAME module, the set of names it can ever stamp IS statically
+ * enumerable, so the sink is decidable without inventing anything.
+ *
+ * Fail-closed on everything else: a non-identifier name, a name that is not a
+ * `for…of` const binding, an iterable that is not a same-module `const`, an
+ * array without `as const`, a container that is reassigned or mutated anywhere
+ * in the module, a non-string element, a spread of anything but another array
+ * proven by this same predicate, and the depth guard.
+ *
+ * **Any element beginning with `--` refuses the whole domain.** Such an array
+ * would make the sink a real custom-property producer whose attribution this
+ * predicate cannot supply, and admitting it would certify an emission as
+ * silent. The refusal is unconditional -- it is not a namespace filter, it is
+ * a hard stop.
+ */
+function constStringArrayElements(name, source, depth = 0, seen = new Set()) {
+  if (depth > 4) return null;
+  const key = `${source.fileName}::${name}`;
+  if (seen.has(key)) return null; // cycle -> fail closed
+  seen.add(key);
+  let decl = null;
+  for (const stmt of source.statements) {
+    if (!ts.isVariableStatement(stmt)) continue;
+    if ((stmt.declarationList.flags & ts.NodeFlags.Const) === 0) continue;
+    for (const d of stmt.declarationList.declarations) {
+      if (ts.isIdentifier(d.name) && d.name.text === name && d.initializer) decl = d;
+    }
+  }
+  if (!decl) return null;
+  // the binding must never be reassigned or mutated anywhere in the module
+  if (hasReassignmentOrMutation(source, name)) return null;
+  let init = decl.initializer;
+  // only an `as const` array literal is admitted: a plain array is mutable
+  if (!ts.isAsExpression(init)) return null;
+  if (!(ts.isTypeReferenceNode(init.type) && ts.isIdentifier(init.type.typeName) && init.type.typeName.text === "const")) return null;
+  init = init.expression;
+  if (!ts.isArrayLiteralExpression(init)) return null;
+  const out = [];
+  for (const el of init.elements) {
+    if (ts.isSpreadElement(el)) {
+      if (!ts.isIdentifier(el.expression)) return null;
+      const nested = constStringArrayElements(el.expression.text, source, depth + 1, seen);
+      if (!nested) return null;
+      out.push(...nested);
+      continue;
+    }
+    if (!ts.isStringLiteralLike(el)) return null;
+    out.push({ text: el.text, node: el });
+  }
+  if (!out.length) return null;
+  // a custom property in the domain makes this a real producer -- hard stop
+  if (out.some((e) => e.text.startsWith("--"))) return null;
+  return out;
+}
+
+/** The `for…of` const binding a name identifier comes from, or null. */
+function forOfConstIterableOf(identifier, source) {
+  let current = identifier.parent;
+  while (current && !ts.isSourceFile(current)) {
+    if (ts.isForOfStatement(current)) {
+      const init = current.initializer;
+      if (!ts.isVariableDeclarationList(init)) return null;
+      if ((init.flags & ts.NodeFlags.Const) === 0) return null;
+      if (init.declarations.length !== 1) return null;
+      const d = init.declarations[0];
+      if (!ts.isIdentifier(d.name) || d.name.text !== identifier.text) return null;
+      return current.expression;
+    }
+    current = current.parent;
+  }
+  return null;
+}
+
+/**
+ * Resolve a dynamic `setProperty` sink to the closed set of property names it
+ * can stamp, as a synthetic object shape whose leaves are exactly those names.
+ * Returns null when anything is unproven.
+ */
+export function dynamicSetPropertyDomain(callNode, source, fileRel) {
+  if (!ts.isCallExpression(callNode) || callNode.arguments.length < 1) return null;
+  const nameArg = unwrap(callNode.arguments[0]);
+  if (!ts.isIdentifier(nameArg)) return null;
+  const iterable = forOfConstIterableOf(nameArg, source);
+  if (!iterable || !ts.isIdentifier(iterable)) return null;
+  const elements = constStringArrayElements(iterable.text, source);
+  if (!elements) return null;
+  const order = elements.map((e) => ({
+    kind: "leaf",
+    key: e.text,
+    node: e.node,
+    source,
+    fileRel,
+    declNode: e.node,
+    // the VALUE is whatever the caller computes; it can never add a key
+    shape: { kind: "nonObject", reason: "set-property-value", path: [] },
+    unresolvedKey: false,
+  }));
+  return {
+    shape: { kind: "object", order, closed: true, path: [{ kind: "terminal-at-sink", form: "dynamic-setProperty" }, { kind: "dynamicDomain", name: iterable.text }], node: callNode, fileRel },
+    receipt: {
+      container: iterable.text,
+      containerAt: `${fileRel}:${source.getLineAndCharacterOfPosition(iterable.getStart(source)).line + 1}`,
+      names: elements.map((e) => e.text),
+      nameCount: elements.length,
+    },
+  };
 }
 
 /* ------------------------------- sealed imported relay (T-SEALED-RELAY) --- */
@@ -951,7 +1430,30 @@ function sealedImportRelayProof(n, ctx, valueShape) {
   const member = outer.members.find((m) => m.name === property);
   if (!member || !member.typeNode) return null;
   const relayed = resolveSealedTypeDecl(member.typeNode, outer.declSource);
-  if (!relayed) return null;
+  if (!relayed) {
+    /* T-NAMESPACE-RELAY: the property is not key-enumerable, but its declared
+     * type may still bound it to a custom-property NAMESPACE. That is a relay
+     * too -- the same chain, a weaker (and honestly weaker) guarantee: a prefix
+     * instead of a key set. Nothing is enumerated and nothing is attributed. */
+    const ns = customPropertyNamespaceOfType(member.typeNode, outer.declSource);
+    if (!ns) return null;
+    return {
+      namespaceProof: {
+        origin: "imported-call-property",
+        localBinding: objectIdent.text,
+        localDeclaredAt: binding.declaredAt ?? null,
+        importedCallee: callee.text,
+        moduleSpecifier: calleeBinding.moduleSpecifier,
+        importedName: calleeBinding.importedName ?? callee.text,
+        exportFile: resolvedExport.file,
+        exportedFunction: fnNode.name ? fnNode.name.text : null,
+        returnType: outer.declName,
+        property,
+        typeName: ns.typeName ?? null,
+        namespace: ns.namespace,
+      },
+    };
+  }
   const declaredKeys = relayed.members.map((m) => m.name);
 
   // uniqueness + re-derivation: ONE object literal, and its static key set is
@@ -1280,6 +1782,9 @@ export function resolveShape(node, ctx) {
         // unproven form falls straight through to the existing bail-out.
         const sequential = resolveStaticSequentialAssignmentShape(binding, ctx, path, depth);
         if (sequential) return sequential;
+        // T-INTERNAL-MUTATION: the same idiom over a NON-EMPTY fresh base.
+        const mutated = resolveInternalMutationShape(binding, ctx, path, depth);
+        if (mutated) return mutated;
         return { kind: "openUnknown", reason: "reassignment-or-mutation-present", path: [...path, { kind: "localConst-mutated", declaredAt: binding.declaredAt }] };
       }
       return resolveShape(binding.node, freshCtx(ctx, { depth: depth + 1, path: [...path, { kind: "localConst", declaredAt: binding.declaredAt }] }));
@@ -1287,6 +1792,54 @@ export function resolveShape(node, ctx) {
     if (binding.kind === "destructuredLocal") {
       if (binding.isRest) return { kind: "callArgsPending", reason: "rest-destructure-not-implemented", path: [...path, { kind: "destructuredLocal-rest", declaredAt: binding.declaredAt }] };
       if (binding.mutated) return { kind: "openUnknown", reason: "reassignment-or-mutation-present", path: [...path, { kind: "destructuredLocal-mutated", declaredAt: binding.declaredAt }] };
+      /* T-USE-STATE / T-NAMESPACE-RELAY: `const [v, setV] = useState<T>(init)`.
+       * Read positionally -- slot 0 is the state, and it is the only slot a
+       * style sink can consume. */
+      if (binding.fromArrayPattern && binding.arrayIndex === 0) {
+        const useStateCall = canonicalUseStateCall(binding.sourceExpr, source);
+        if (useStateCall) {
+          const typeArg = useStateCall.typeArguments && useStateCall.typeArguments.length === 1 ? useStateCall.typeArguments[0] : null;
+          const stepPath = [...path, { kind: "useState", declaredAt: binding.declaredAt }];
+          /* The type bounds the value to a custom-property NAMESPACE: it has no
+           * enumerable key set, so it is a relay -- never a zero, never a
+           * producer. Checked BEFORE the value domain, because no amount of
+           * resolving initial values can make such a state enumerable. */
+          const namespace = typeArg ? customPropertyNamespaceOfType(typeArg, source) : null;
+          if (namespace) {
+            return {
+              kind: "relay",
+              binding: { kind: "custom-property-namespace-relay" },
+              namespaceRelay: {
+                origin: "use-state-type-argument",
+                typeText: typeArg.getText(source).slice(0, 120),
+                typeName: namespace.typeName ?? null,
+                namespace: namespace.namespace,
+                declaredAt: binding.declaredAt ?? null,
+              },
+              path: stepPath,
+            };
+          }
+          const setterEl = binding.bindingPattern && binding.bindingPattern.elements[1];
+          const setterName = setterEl && ts.isBindingElement(setterEl) && ts.isIdentifier(setterEl.name) ? setterEl.name.text : null;
+          const setterArgs = setterName ? exhaustiveSetterArguments(setterName, binding.declSource ?? source, binding.bindingPattern) : null;
+          // no setter name, or a setter that escapes, leaves the domain unproven
+          if (setterName && setterArgs) {
+            const initArg = useStateCall.arguments.length ? useStateCall.arguments[0] : null;
+            const arms = [];
+            arms.push(
+              initArg
+                ? resolveShape(initArg, freshCtx(ctx, { depth: depth + 1, path: [...stepPath, { kind: "useState-initial" }] }))
+                : { kind: "nonObject", reason: "useState-no-initial-value", path: stepPath },
+            );
+            for (let i = 0; i < setterArgs.length; i += 1) {
+              arms.push(resolveShape(setterArgs[i], freshCtx(ctx, { depth: depth + 1, path: [...stepPath, { kind: "useState-setter", ordinal: i }] })));
+            }
+            // tagged so a property read THROUGH the state machine is not
+            // mistaken for an authored conditional (see the read guard below)
+            return { kind: "branches", branches: arms, fromUseState: true, path: stepPath };
+          }
+        }
+      }
       const srcShape = resolveShape(binding.sourceExpr, freshCtx(ctx, { depth: depth + 1, path: [...path, { kind: "destructuredLocal-source", key: binding.key, declaredAt: binding.declaredAt }] }));
       const lookup = readProperty(srcShape, binding.key);
       if (lookup.status === "found") {
@@ -1326,6 +1879,14 @@ export function resolveShape(node, ctx) {
        * resolved moves. */
       if (!isShapeClosed(read)) {
         const proof = sealedImportRelayProof(n, ctx, read);
+        if (proof && proof.namespaceProof) {
+          return {
+            kind: "relay",
+            binding: { kind: "custom-property-namespace-relay" },
+            namespaceRelay: proof.namespaceProof,
+            path: [...(read.path ?? path), { kind: "namespaceRelay", name: proof.namespaceProof.property }],
+          };
+        }
         if (proof) {
           return {
             kind: "relay",
@@ -1336,6 +1897,15 @@ export function resolveShape(node, ctx) {
             path: [...(read.path ?? path), { kind: "sealedImportRelay", name: proof.property }],
           };
         }
+      }
+      /* T-USE-STATE -- LAST resort, after every relay proof has been offered.
+       * Reading a PROPERTY off a resolved state machine whose value did not
+       * resolve is an unknown, not an authored conditional: the branch
+       * structure belongs to the state machine, not to the expression at the
+       * sink, so publishing it as a composite branch would describe code nobody
+       * wrote. The row stays exactly as blocked as it was. */
+      if (objShape.fromUseState && !isShapeClosed(read) && !keySetEnumerable(read)) {
+        return { kind: "openUnknown", reason: "use-state-property-value-unresolved", path: [...path, { kind: "useState-propertyRead", key: literalKey }] };
       }
       return read;
     }

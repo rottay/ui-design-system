@@ -14,7 +14,7 @@ import { repoRoot as findRepoRoot } from "../../../lib/repo-root/index.mjs";
 
 export const REPO_ABS = findRepoRoot(dirname(fileURLToPath(import.meta.url)));
 
-import { resolveShape, readProperty, isShapeClosed, keySetEnumerable, classifyRelayBoundary, getSource } from "./cascade-cross-file-resolver.mjs";
+import { resolveShape, readProperty, isShapeClosed, keySetEnumerable, classifyRelayBoundary, dynamicSetPropertyDomain, getSource } from "./cascade-cross-file-resolver.mjs";
 import { governanceOutcome, governanceAnalysis, astPathFromSinkToPart, canonicalPreimageId, legacyPreimageIdWithSymbol, zeroEmissionSiteId, governedProducerSiteId, sourcePartId, decomposeImmediate, orderParts, digestText, canonicalJson, sortSet, digestOf, sha256Hex, utf8 } from "./cascade-governance.mjs";
 /**
  * v4 driver — READ-ONLY. Same verbatim sink-anchored walk as
@@ -631,8 +631,20 @@ export function classifyCrossFileRows() {
       let shape;
       let boundaryReceipt = null;
       let startExpr = null;
+      let dynamicDomainReceipt = null;
       if (form === "dynamic-setProperty") {
-        shape = { kind: "dynamicSink", path: [{ kind: "terminal-at-sink", node: "setProperty-dynamic-name" }] };
+        /* T-DYNAMIC-DOMAIN: the stamped name is not a literal, but it may still
+         * range over a frozen same-module constant array. When it does, the set
+         * of names is enumerable and the sink is decidable; when anything is
+         * unproven -- including a single `--` entry in the domain -- it stays
+         * the unresolved dynamic sink it has always been. */
+        const domain = dynamicSetPropertyDomain(node, source, relFile);
+        if (domain) {
+          shape = domain.shape;
+          dynamicDomainReceipt = domain.receipt;
+        } else {
+          shape = { kind: "dynamicSink", path: [{ kind: "terminal-at-sink", node: "setProperty-dynamic-name" }] };
+        }
         // P0-4 point 2: this row has no `startExpr` in the normal sense (its
         // shape is hardcoded, never resolved) -- but it still needs its OWN
         // sourcePart so it isn't one of the "4 rows with zero sourceParts" the
@@ -710,6 +722,9 @@ export function classifyCrossFileRows() {
       // T-SEALED-RELAY: the sealed-import proofs that justified this row's
       // relay disposition.
       const sealedImportRelays = normalizeSealedImportRelays(collectSealedImportRelays(shape));
+      // T-NAMESPACE-RELAY / T-INTERNAL-MUTATION: same idea, other routes.
+      const namespaceRelays = normalizeTaggedProofs(collectTaggedProofs(shape, "namespaceRelay"));
+      const internalMutations = normalizeTaggedProofs(collectTaggedProofs(shape, "internalMutation"));
 
       if (governance && disposition === "CLOSED_ZERO_GOVERNED_EMISSION_OBJECT") {
         governance.zeroEmissionSiteId = zeroEmissionSiteId(canonicalId, "");
@@ -755,6 +770,11 @@ export function classifyCrossFileRows() {
         // T-SEALED-RELAY: non-empty only on rows whose relay disposition rests
         // on a sealed-import proof. Absent everywhere else.
         sealedImportRelays,
+        // T-DYNAMIC-DOMAIN: present only on a dynamic sink whose name domain
+        // was enumerated from a frozen same-module constant.
+        dynamicDomain: dynamicDomainReceipt,
+        namespaceRelays,
+        internalMutations,
         sourceParts,
       });
     };
@@ -974,6 +994,32 @@ function collectSealedImportRelays(shape, visited = new WeakSet(), depth = 0, ou
   return out;
 }
 
+/** T-NAMESPACE-RELAY / T-INTERNAL-MUTATION: carry the proofs out to the row. */
+function collectTaggedProofs(shape, field, visited = new WeakSet(), depth = 0, out = []) {
+  if (!shape || typeof shape !== "object" || depth > 80) return out;
+  if (visited.has(shape)) return out;
+  visited.add(shape);
+  if (shape[field]) out.push({ ...shape[field] });
+  if (shape.viaComputedDomain) collectTaggedProofs(shape.viaComputedDomain, field, visited, depth + 1, out);
+  for (const entry of shape.order ?? []) collectTaggedProofs(entry.shape, field, visited, depth + 1, out);
+  for (const el of shape.elements ?? []) collectTaggedProofs(el.shape, field, visited, depth + 1, out);
+  for (const b of shape.branches ?? []) collectTaggedProofs(b, field, visited, depth + 1, out);
+  return out;
+}
+
+/** Stable order + exact-identity dedup for a tagged-proof list. */
+function normalizeTaggedProofs(list) {
+  const seen = new Set();
+  const unique = [];
+  for (const item of list) {
+    const identity = JSON.stringify(item);
+    if (seen.has(identity)) continue;
+    seen.add(identity);
+    unique.push(item);
+  }
+  return unique.sort((a, b) => (JSON.stringify(a) < JSON.stringify(b) ? -1 : 1));
+}
+
 /** Stable order + exact-identity dedup for the sealed-relay list. */
 function normalizeSealedImportRelays(list) {
   const seen = new Set();
@@ -1157,6 +1203,10 @@ export function boundedReceiptOf(row) {
         // row proven by that route; every relay published earlier gains no
         // field at all and stays byte-identical.
         ...(row.sealedImportRelays?.length ? { sealedImportRelay: row.sealedImportRelays } : {}),
+        /* T-NAMESPACE-RELAY: a namespace is a WEAKER guarantee than a key set,
+         * and it is published as such -- a prefix, its declaring type and the
+         * chain that reached it. No key, tenant reach or root is implied. */
+        ...(row.namespaceRelays?.length ? { namespaceRelay: row.namespaceRelays } : {}),
         path,
       };
     case "CLOSED_PRODUCER": {
@@ -1234,6 +1284,29 @@ export function boundedReceiptOf(row) {
       /* T-STATIC-KEYSET: a ZERO that rests on admitting open VALUES must not
        * present itself as a fully resolved shape. It publishes the admission
        * and the (empty) custom-property union that justifies the verdict. */
+      if (row.dynamicDomain) {
+        return {
+          resolvedVia: "dynamic-property-domain",
+          dynamicDomain: row.dynamicDomain,
+          customPropertyScanComplete: row.governance?.customPropertyScanComplete ?? null,
+          governedChannelKeys: [...(row.governance?.governedChannelKeys ?? [])].sort(),
+          internalSocketKeys: [...(row.governance?.internalSocketKeys ?? [])].sort(),
+          ungovernedCustomPropertyKeys: [...(row.governance?.ungovernedCustomPropertyKeys ?? [])].sort(),
+          path,
+        };
+      }
+      if (row.internalMutations?.length) {
+        return {
+          resolvedVia: "internal-base-mutation",
+          internalMutation: row.internalMutations,
+          openLeafValues: row.governance?.openLeafValues ?? 0,
+          customPropertyScanComplete: row.governance?.customPropertyScanComplete ?? null,
+          governedChannelKeys: [...(row.governance?.governedChannelKeys ?? [])].sort(),
+          internalSocketKeys: [...(row.governance?.internalSocketKeys ?? [])].sort(),
+          ungovernedCustomPropertyKeys: [...(row.governance?.ungovernedCustomPropertyKeys ?? [])].sort(),
+          path,
+        };
+      }
       if (row.governance?.openLeafValues) {
         return {
           resolvedVia: "static-key-set",

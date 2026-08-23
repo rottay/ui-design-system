@@ -606,6 +606,21 @@ export function privateRelayRow(file, site, entry) {
    * Every relay published before this tranche has no such proof and keeps its
    * exact published form. */
   const proven = Array.isArray(entry.receipt?.sealedImportRelay) && entry.receipt.sealedImportRelay.length > 0;
+  /* T-NAMESPACE-RELAY: proven by NAMESPACE, not by key set. It is a relay for a
+   * weaker reason than a sealed key set, so it says so rather than borrowing
+   * the sealed label. */
+  const namespaceProven = Array.isArray(entry.receipt?.namespaceRelay) && entry.receipt.namespaceRelay.length > 0;
+  if (namespaceProven) {
+    const nsRow = cohortRow({
+      file,
+      site,
+      entry,
+      reason: `custom-property-namespace-relay:${site.form}`,
+      cause: "namespace-bounded-passthrough-whose-key-set-is-not-statically-enumerable",
+    });
+    nsRow.resolvedVia = "custom-property-namespace-relay";
+    return nsRow;
+  }
   const row = cohortRow({
     file,
     site,
@@ -1088,7 +1103,11 @@ export function buildProducers({
             // route, and labelling such a row "branch-union" would put two
             // contradictory provenance claims in the same row. A row that
             // closed by any earlier route is untouched.
-            entry.receipt.resolvedVia === "static-key-set"
+            entry.receipt.resolvedVia === "dynamic-property-domain"
+              ? "dynamic-property-domain"
+            : entry.receipt.resolvedVia === "internal-base-mutation"
+              ? "internal-base-mutation"
+            : entry.receipt.resolvedVia === "static-key-set"
               ? "static-key-set"
               : entry.receipt.domainKind
                 ? "computed-domain-enumeration"
