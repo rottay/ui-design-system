@@ -419,11 +419,17 @@ describe("TenantThemeConfig v1 server contract", () => {
     expect(TENANT_THEME_CONFIG_SCHEMA_DIGEST).not.toBe(
       "sha256-d8871d06009115f98da1afef5c32ce961b387d7078d6092f331d090e35355a7f"
     );
+    // F4A-6/K3 re-anchor (class R-1): the schema PUBLISHES referenceTokens and
+    // gained --ds-color-text-page. This is an AMPLIATION of the closed field
+    // set, not a narrowing -- no field was withdrawn, no existing field
+    // changed type or format, same law as the sentinel note above this one.
+    // Both pins re-derived from the tree and verified directly against the
+    // published digests (dist/server.js) before writing, not copied blind.
     expect(TENANT_THEME_DOCUMENT_SCHEMA_DIGEST).toBe(
-      "sha256-f3f55fa2ae71d264f9211d713eed00265578273a6ea11d4f74a63606f2e6e202"
+      "sha256-9b9d5b8d32a90805d9a52998d9e94b2fa586491063a19055d94b713a8b53a739"
     );
     expect(TENANT_THEME_CONFIG_SCHEMA_DIGEST).toBe(
-      "sha256-73eef2348a5fa534c6ed4f2b58e3be4fb7dfd0527d57f82f6de8b3d0b8e3f9cb"
+      "sha256-e893268074cc59e4acdeaf27a0986d71104c98df67c12bf643031ed615caa952"
     );
     expect(Object.isFrozen(TENANT_THEME_CONFIG_SCHEMA)).toBe(true);
     expect(Object.isFrozen(TENANT_THEME_CONFIG_SCHEMA.documents.simple)).toBe(
