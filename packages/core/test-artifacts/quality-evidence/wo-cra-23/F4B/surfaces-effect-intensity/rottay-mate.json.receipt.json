@@ -65,10 +65,10 @@
     "packages/core/src/ui/primitives/display/Card/engines/rustic/index.tsx",
     "packages/core/src/ui/primitives/display/Card/index.tsx"
   ],
-  "sourceDigest": "299d2f10cdc414992222deeb8853636a4f4d8893ddf90329009801838005c2ee",
+  "sourceDigest": "112010126152cf1c9af451c205d920780cf8780c2ae03ad67d1cad4731964dcd",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/surfaces-effect-intensity/rottay-mate.json",
   "artifactSha256": "3ccb4046a7fb59c5be073c78419fa09886de8a3665ab994ddd093fde50a5d7d1",
-  "createdAt": "2026-08-24T02:46:55.000Z",
+  "createdAt": "2026-08-24T04:16:38.000Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

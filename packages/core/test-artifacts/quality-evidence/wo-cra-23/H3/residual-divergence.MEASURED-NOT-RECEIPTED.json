@@ -1,0 +1,864 @@
+{
+  "artifactVersion": 1,
+  "receipted": false,
+  "whyNotReceipted": "The residual is an OPEN finding, not a certified result. Receipting it would enter a non-equivalent run into the evidence chain of typography.scale, which is exactly the false green the criterion exists to prevent. Measured-and-not-receipted, same pattern as F4B/experience-profile/bithire-editorial.DIVERGENCE.json and the H-3 isolation artifact beside this one.",
+  "phase": "H-3a — residual divergence AFTER the stale-read fix",
+  "control": "typography.scale",
+  "stop": "compacta",
+  "scope": "rottay / light / modern / both selector arms",
+  "servingModel": "UNCHANGED. Both arms serve exactly as they did before H-3a: the static arm as a tenant-scoped stylesheet block, the DB arm as root-inline-style. Phase (a) of H-3 (serving the compiled artifact) is NOT adopted, so nothing here can be attributed to a change of serving.",
+  "progression": {
+    "beforeFix": {
+      "rows": 27,
+      "source": "run with the pre-H-3a readAll"
+    },
+    "afterStabilityLoop": {
+      "rows": 16,
+      "source": "readAll accepts on two agreements"
+    },
+    "afterHardening": {
+      "rows": 16,
+      "source": "plus an explicit style invalidation between readings"
+    },
+    "reading": "27 -> 16 -> 16. The stale-read fix removed eleven rows and then hardening removed NONE. That is the measurement that rules staleness out as the cause of what remains: a lagging read gets better when the reader waits for the page under provocation, and these did not."
+  },
+  "firstOrderNowAgrees": {
+    "target": "card-modern-md/root",
+    "property": "font-size",
+    "before": {
+      "static": "15px -> 14.1px",
+      "db": "moved: false, 15px"
+    },
+    "after": {
+      "static": "15px -> 14.1px",
+      "db": "15px -> 14.1px"
+    },
+    "meaning": "The first hop of the chain is now byte-identical across arms."
+  },
+  "residualSignature": {
+    "notStaleness": "A lagging read shows one arm reporting the PREVIOUS phase. These sixteen show both arms SETTLING, on different values. Hardening the stability law did not move them.",
+    "chainAppliedOnceVersusTwice": {
+      "target": "card-modern-md/title",
+      "property": "font-size",
+      "db": "13.125px -> 12.3375px",
+      "static": "13.125px -> 11.5972px",
+      "arithmetic": "12.3375 = 13.125 x 0.94 (the dial applied ONCE); 11.5972 = 13.125 x 0.94^2 (applied TWICE). The DB arm resolves one hop of the chain, the static arm two."
+    },
+    "stillFullyInert": {
+      "targets": [
+        "flex-modern-preset-gap/root",
+        "grid-modern-preset-gap/root",
+        "stack-modern-preset-gap/root"
+      ],
+      "properties": [
+        "gap",
+        "column-gap",
+        "row-gap"
+      ],
+      "observed": "static 15px -> 14.1px; db moved: false, 15px",
+      "note": "Three preset-gap roots across three gap longhands. space-modern-preset-gap is NOT among them, which is itself part of the signature and is not explained here."
+    },
+    "alsoPresent": {
+      "target": "button-modern-md/hitbox",
+      "properties": [
+        "height",
+        "inline-size",
+        "width",
+        "@rect-inline-size"
+      ],
+      "observed": "db 71.5469px -> 69.8281px against static 71.5469px -> 65.6406px — the same once-versus-twice shape as the title"
+    }
+  },
+  "attribution": "NONE. The mechanism is NOT named. Two earlier attributions in this ledger were measured wrong (the artifact-shadowing class, then the scope reading), so this one stays a measured open finding until something can be shown rather than argued. Tracked as nextAction H3B_RESIDUAL_SECOND_ORDER_DIVERGENCE on the control.",
+  "census": {
+    "afterHardening": {
+      "byProperty": {
+        "column-gap": 3,
+        "gap": 3,
+        "row-gap": 3,
+        "height": 2,
+        "@rect-inline-size": 1,
+        "inline-size": 1,
+        "width": 1,
+        "font-size": 1,
+        "letter-spacing": 1
+      },
+      "byTarget": {
+        "button-modern-md/hitbox": 3,
+        "flex-modern-preset-gap/root": 3,
+        "grid-modern-preset-gap/root": 3,
+        "stack-modern-preset-gap/root": 3,
+        "card-modern-md/title": 2,
+        "skeleton-card-line/line": 1,
+        "skeleton-form-action/action": 1
+      }
+    },
+    "beforeFix": {
+      "byProperty": {
+        "font-size": 4,
+        "column-gap": 4,
+        "gap": 4,
+        "row-gap": 4,
+        "height": 3,
+        "@rect-block-size": 1,
+        "@rect-inline-size": 1,
+        "block-size": 1,
+        "inline-size": 1,
+        "min-block-size": 1,
+        "min-height": 1,
+        "width": 1,
+        "letter-spacing": 1
+      },
+      "byTarget": {
+        "button-modern-md/hitbox": 8,
+        "flex-modern-preset-gap/root": 3,
+        "grid-modern-preset-gap/root": 3,
+        "space-modern-preset-gap/root": 3,
+        "stack-modern-preset-gap/root": 3,
+        "card-modern-md/title": 2,
+        "button-modern-md/root": 1,
+        "card-modern-md/root": 1,
+        "input-modern-md/root": 1,
+        "skeleton-card-line/line": 1,
+        "skeleton-form-action/action": 1
+      }
+    }
+  },
+  "rows": {
+    "afterHardening": [
+      {
+        "scope": "rottay/light/modern/both",
+        "target": "button-modern-md/hitbox",
+        "property": "@rect-inline-size",
+        "static": {
+          "moved": true,
+          "from": "71.546875",
+          "to": "65.640625",
+          "value": null
+        },
+        "db": {
+          "moved": true,
+          "from": "71.546875",
+          "to": "69.828125",
+          "value": null
+        }
+      },
+      {
+        "scope": "rottay/light/modern/both",
+        "target": "button-modern-md/hitbox",
+        "property": "inline-size",
+        "static": {
+          "moved": true,
+          "from": "71.5469px",
+          "to": "65.6406px",
+          "value": null
+        },
+        "db": {
+          "moved": true,
+          "from": "71.5469px",
+          "to": "69.8281px",
+          "value": null
+        }
+      },
+      {
+        "scope": "rottay/light/modern/both",
+        "target": "button-modern-md/hitbox",
+        "property": "width",
+        "static": {
+          "moved": true,
+          "from": "71.5469px",
+          "to": "65.6406px",
+          "value": null
+        },
+        "db": {
+          "moved": true,
+          "from": "71.5469px",
+          "to": "69.8281px",
+          "value": null
+        }
+      },
+      {
+        "scope": "rottay/light/modern/both",
+        "target": "card-modern-md/title",
+        "property": "font-size",
+        "static": {
+          "moved": true,
+          "from": "13.125px",
+          "to": "11.5972px",
+          "value": null
+        },
+        "db": {
+          "moved": true,
+          "from": "13.125px",
+          "to": "12.3375px",
+          "value": null
+        }
+      },
+      {
+        "scope": "rottay/light/modern/both",
+        "target": "card-modern-md/title",
+        "property": "letter-spacing",
+        "static": {
+          "moved": true,
+          "from": "-0.196875px",
+          "to": "-0.173959px",
+          "value": null
+        },
+        "db": {
+          "moved": true,
+          "from": "-0.196875px",
+          "to": "-0.185062px",
+          "value": null
+        }
+      },
+      {
+        "scope": "rottay/light/modern/both",
+        "target": "flex-modern-preset-gap/root",
+        "property": "column-gap",
+        "static": {
+          "moved": true,
+          "from": "15px",
+          "to": "14.1px",
+          "value": null
+        },
+        "db": {
+          "moved": false,
+          "from": null,
+          "to": null,
+          "value": "15px"
+        }
+      },
+      {
+        "scope": "rottay/light/modern/both",
+        "target": "flex-modern-preset-gap/root",
+        "property": "gap",
+        "static": {
+          "moved": true,
+          "from": "15px",
+          "to": "14.1px",
+          "value": null
+        },
+        "db": {
+          "moved": false,
+          "from": null,
+          "to": null,
+          "value": "15px"
+        }
+      },
+      {
+        "scope": "rottay/light/modern/both",
+        "target": "flex-modern-preset-gap/root",
+        "property": "row-gap",
+        "static": {
+          "moved": true,
+          "from": "15px",
+          "to": "14.1px",
+          "value": null
+        },
+        "db": {
+          "moved": false,
+          "from": null,
+          "to": null,
+          "value": "15px"
+        }
+      },
+      {
+        "scope": "rottay/light/modern/both",
+        "target": "grid-modern-preset-gap/root",
+        "property": "column-gap",
+        "static": {
+          "moved": true,
+          "from": "15px",
+          "to": "14.1px",
+          "value": null
+        },
+        "db": {
+          "moved": false,
+          "from": null,
+          "to": null,
+          "value": "15px"
+        }
+      },
+      {
+        "scope": "rottay/light/modern/both",
+        "target": "grid-modern-preset-gap/root",
+        "property": "gap",
+        "static": {
+          "moved": true,
+          "from": "15px",
+          "to": "14.1px",
+          "value": null
+        },
+        "db": {
+          "moved": false,
+          "from": null,
+          "to": null,
+          "value": "15px"
+        }
+      },
+      {
+        "scope": "rottay/light/modern/both",
+        "target": "grid-modern-preset-gap/root",
+        "property": "row-gap",
+        "static": {
+          "moved": true,
+          "from": "15px",
+          "to": "14.1px",
+          "value": null
+        },
+        "db": {
+          "moved": false,
+          "from": null,
+          "to": null,
+          "value": "15px"
+        }
+      },
+      {
+        "scope": "rottay/light/modern/both",
+        "target": "skeleton-card-line/line",
+        "property": "height",
+        "static": {
+          "moved": true,
+          "from": "13.125px",
+          "to": "12.3281px",
+          "value": null
+        },
+        "db": {
+          "moved": false,
+          "from": null,
+          "to": null,
+          "value": "13.125px"
+        }
+      },
+      {
+        "scope": "rottay/light/modern/both",
+        "target": "skeleton-form-action/action",
+        "property": "height",
+        "static": {
+          "moved": true,
+          "from": "35.625px",
+          "to": "33.4844px",
+          "value": null
+        },
+        "db": {
+          "moved": false,
+          "from": null,
+          "to": null,
+          "value": "35.625px"
+        }
+      },
+      {
+        "scope": "rottay/light/modern/both",
+        "target": "stack-modern-preset-gap/root",
+        "property": "column-gap",
+        "static": {
+          "moved": true,
+          "from": "15px",
+          "to": "14.1px",
+          "value": null
+        },
+        "db": {
+          "moved": false,
+          "from": null,
+          "to": null,
+          "value": "15px"
+        }
+      },
+      {
+        "scope": "rottay/light/modern/both",
+        "target": "stack-modern-preset-gap/root",
+        "property": "gap",
+        "static": {
+          "moved": true,
+          "from": "15px",
+          "to": "14.1px",
+          "value": null
+        },
+        "db": {
+          "moved": false,
+          "from": null,
+          "to": null,
+          "value": "15px"
+        }
+      },
+      {
+        "scope": "rottay/light/modern/both",
+        "target": "stack-modern-preset-gap/root",
+        "property": "row-gap",
+        "static": {
+          "moved": true,
+          "from": "15px",
+          "to": "14.1px",
+          "value": null
+        },
+        "db": {
+          "moved": false,
+          "from": null,
+          "to": null,
+          "value": "15px"
+        }
+      }
+    ],
+    "beforeFix": [
+      {
+        "scope": "rottay/light/modern/both",
+        "target": "button-modern-md/hitbox",
+        "property": "@rect-block-size",
+        "static": {
+          "moved": true,
+          "from": "33.75",
+          "to": "31.71875",
+          "value": null
+        },
+        "db": {
+          "moved": false,
+          "from": null,
+          "to": null,
+          "value": "33.75"
+        }
+      },
+      {
+        "scope": "rottay/light/modern/both",
+        "target": "button-modern-md/hitbox",
+        "property": "@rect-inline-size",
+        "static": {
+          "moved": true,
+          "from": "71.546875",
+          "to": "65.640625",
+          "value": null
+        },
+        "db": {
+          "moved": false,
+          "from": null,
+          "to": null,
+          "value": "71.546875"
+        }
+      },
+      {
+        "scope": "rottay/light/modern/both",
+        "target": "button-modern-md/hitbox",
+        "property": "block-size",
+        "static": {
+          "moved": true,
+          "from": "33.75px",
+          "to": "31.7188px",
+          "value": null
+        },
+        "db": {
+          "moved": false,
+          "from": null,
+          "to": null,
+          "value": "33.75px"
+        }
+      },
+      {
+        "scope": "rottay/light/modern/both",
+        "target": "button-modern-md/hitbox",
+        "property": "height",
+        "static": {
+          "moved": true,
+          "from": "33.75px",
+          "to": "31.7188px",
+          "value": null
+        },
+        "db": {
+          "moved": false,
+          "from": null,
+          "to": null,
+          "value": "33.75px"
+        }
+      },
+      {
+        "scope": "rottay/light/modern/both",
+        "target": "button-modern-md/hitbox",
+        "property": "inline-size",
+        "static": {
+          "moved": true,
+          "from": "71.5469px",
+          "to": "65.6406px",
+          "value": null
+        },
+        "db": {
+          "moved": false,
+          "from": null,
+          "to": null,
+          "value": "71.5469px"
+        }
+      },
+      {
+        "scope": "rottay/light/modern/both",
+        "target": "button-modern-md/hitbox",
+        "property": "min-block-size",
+        "static": {
+          "moved": true,
+          "from": "33.75px",
+          "to": "31.725px",
+          "value": null
+        },
+        "db": {
+          "moved": false,
+          "from": null,
+          "to": null,
+          "value": "33.75px"
+        }
+      },
+      {
+        "scope": "rottay/light/modern/both",
+        "target": "button-modern-md/hitbox",
+        "property": "min-height",
+        "static": {
+          "moved": true,
+          "from": "33.75px",
+          "to": "31.725px",
+          "value": null
+        },
+        "db": {
+          "moved": false,
+          "from": null,
+          "to": null,
+          "value": "33.75px"
+        }
+      },
+      {
+        "scope": "rottay/light/modern/both",
+        "target": "button-modern-md/hitbox",
+        "property": "width",
+        "static": {
+          "moved": true,
+          "from": "71.5469px",
+          "to": "65.6406px",
+          "value": null
+        },
+        "db": {
+          "moved": false,
+          "from": null,
+          "to": null,
+          "value": "71.5469px"
+        }
+      },
+      {
+        "scope": "rottay/light/modern/both",
+        "target": "button-modern-md/root",
+        "property": "font-size",
+        "static": {
+          "moved": true,
+          "from": "13.125px",
+          "to": "11.5972px",
+          "value": null
+        },
+        "db": {
+          "moved": true,
+          "from": "13.125px",
+          "to": "12.3375px",
+          "value": null
+        }
+      },
+      {
+        "scope": "rottay/light/modern/both",
+        "target": "card-modern-md/root",
+        "property": "font-size",
+        "static": {
+          "moved": true,
+          "from": "15px",
+          "to": "14.1px",
+          "value": null
+        },
+        "db": {
+          "moved": false,
+          "from": null,
+          "to": null,
+          "value": "15px"
+        }
+      },
+      {
+        "scope": "rottay/light/modern/both",
+        "target": "card-modern-md/title",
+        "property": "font-size",
+        "static": {
+          "moved": true,
+          "from": "13.125px",
+          "to": "11.5972px",
+          "value": null
+        },
+        "db": {
+          "moved": false,
+          "from": null,
+          "to": null,
+          "value": "13.125px"
+        }
+      },
+      {
+        "scope": "rottay/light/modern/both",
+        "target": "card-modern-md/title",
+        "property": "letter-spacing",
+        "static": {
+          "moved": true,
+          "from": "-0.196875px",
+          "to": "-0.173959px",
+          "value": null
+        },
+        "db": {
+          "moved": false,
+          "from": null,
+          "to": null,
+          "value": "-0.196875px"
+        }
+      },
+      {
+        "scope": "rottay/light/modern/both",
+        "target": "flex-modern-preset-gap/root",
+        "property": "column-gap",
+        "static": {
+          "moved": true,
+          "from": "15px",
+          "to": "14.1px",
+          "value": null
+        },
+        "db": {
+          "moved": false,
+          "from": null,
+          "to": null,
+          "value": "15px"
+        }
+      },
+      {
+        "scope": "rottay/light/modern/both",
+        "target": "flex-modern-preset-gap/root",
+        "property": "gap",
+        "static": {
+          "moved": true,
+          "from": "15px",
+          "to": "14.1px",
+          "value": null
+        },
+        "db": {
+          "moved": false,
+          "from": null,
+          "to": null,
+          "value": "15px"
+        }
+      },
+      {
+        "scope": "rottay/light/modern/both",
+        "target": "flex-modern-preset-gap/root",
+        "property": "row-gap",
+        "static": {
+          "moved": true,
+          "from": "15px",
+          "to": "14.1px",
+          "value": null
+        },
+        "db": {
+          "moved": false,
+          "from": null,
+          "to": null,
+          "value": "15px"
+        }
+      },
+      {
+        "scope": "rottay/light/modern/both",
+        "target": "grid-modern-preset-gap/root",
+        "property": "column-gap",
+        "static": {
+          "moved": true,
+          "from": "15px",
+          "to": "14.1px",
+          "value": null
+        },
+        "db": {
+          "moved": false,
+          "from": null,
+          "to": null,
+          "value": "15px"
+        }
+      },
+      {
+        "scope": "rottay/light/modern/both",
+        "target": "grid-modern-preset-gap/root",
+        "property": "gap",
+        "static": {
+          "moved": true,
+          "from": "15px",
+          "to": "14.1px",
+          "value": null
+        },
+        "db": {
+          "moved": false,
+          "from": null,
+          "to": null,
+          "value": "15px"
+        }
+      },
+      {
+        "scope": "rottay/light/modern/both",
+        "target": "grid-modern-preset-gap/root",
+        "property": "row-gap",
+        "static": {
+          "moved": true,
+          "from": "15px",
+          "to": "14.1px",
+          "value": null
+        },
+        "db": {
+          "moved": false,
+          "from": null,
+          "to": null,
+          "value": "15px"
+        }
+      },
+      {
+        "scope": "rottay/light/modern/both",
+        "target": "input-modern-md/root",
+        "property": "font-size",
+        "static": {
+          "moved": true,
+          "from": "13.125px",
+          "to": "11.5972px",
+          "value": null
+        },
+        "db": {
+          "moved": true,
+          "from": "13.125px",
+          "to": "12.3375px",
+          "value": null
+        }
+      },
+      {
+        "scope": "rottay/light/modern/both",
+        "target": "skeleton-card-line/line",
+        "property": "height",
+        "static": {
+          "moved": true,
+          "from": "13.125px",
+          "to": "12.3281px",
+          "value": null
+        },
+        "db": {
+          "moved": false,
+          "from": null,
+          "to": null,
+          "value": "13.125px"
+        }
+      },
+      {
+        "scope": "rottay/light/modern/both",
+        "target": "skeleton-form-action/action",
+        "property": "height",
+        "static": {
+          "moved": true,
+          "from": "35.625px",
+          "to": "33.4844px",
+          "value": null
+        },
+        "db": {
+          "moved": false,
+          "from": null,
+          "to": null,
+          "value": "35.625px"
+        }
+      },
+      {
+        "scope": "rottay/light/modern/both",
+        "target": "space-modern-preset-gap/root",
+        "property": "column-gap",
+        "static": {
+          "moved": true,
+          "from": "15px",
+          "to": "14.1px",
+          "value": null
+        },
+        "db": {
+          "moved": false,
+          "from": null,
+          "to": null,
+          "value": "15px"
+        }
+      },
+      {
+        "scope": "rottay/light/modern/both",
+        "target": "space-modern-preset-gap/root",
+        "property": "gap",
+        "static": {
+          "moved": true,
+          "from": "15px",
+          "to": "14.1px",
+          "value": null
+        },
+        "db": {
+          "moved": false,
+          "from": null,
+          "to": null,
+          "value": "15px"
+        }
+      },
+      {
+        "scope": "rottay/light/modern/both",
+        "target": "space-modern-preset-gap/root",
+        "property": "row-gap",
+        "static": {
+          "moved": true,
+          "from": "15px",
+          "to": "14.1px",
+          "value": null
+        },
+        "db": {
+          "moved": false,
+          "from": null,
+          "to": null,
+          "value": "15px"
+        }
+      },
+      {
+        "scope": "rottay/light/modern/both",
+        "target": "stack-modern-preset-gap/root",
+        "property": "column-gap",
+        "static": {
+          "moved": true,
+          "from": "15px",
+          "to": "14.1px",
+          "value": null
+        },
+        "db": {
+          "moved": false,
+          "from": null,
+          "to": null,
+          "value": "15px"
+        }
+      },
+      {
+        "scope": "rottay/light/modern/both",
+        "target": "stack-modern-preset-gap/root",
+        "property": "gap",
+        "static": {
+          "moved": true,
+          "from": "15px",
+          "to": "14.1px",
+          "value": null
+        },
+        "db": {
+          "moved": false,
+          "from": null,
+          "to": null,
+          "value": "15px"
+        }
+      },
+      {
+        "scope": "rottay/light/modern/both",
+        "target": "stack-modern-preset-gap/root",
+        "property": "row-gap",
+        "static": {
+          "moved": true,
+          "from": "15px",
+          "to": "14.1px",
+          "value": null
+        },
+        "db": {
+          "moved": false,
+          "from": null,
+          "to": null,
+          "value": "15px"
+        }
+      }
+    ]
+  }
+}

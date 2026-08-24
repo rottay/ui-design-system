@@ -2566,6 +2566,82 @@ declare en el scope `[data-ds-root]` (incluida la lección ya apuntada: la
 sonda tampoco aplica `modeBlocks`). Tras H-3, typography.scale re-corre y
 emite sus receipts R8.
 
+##### H-3/H-3a — la clase se refuta; el defecto real del instrumento se arregla; residuo a H3B (2026-08-24)
+
+Cadena completa de corrección, con las tres partes del registro (writer,
+DT, Fable): **la clase `DB_ARM_SCOPE_SHADOWING` no existe** — se supersede
+por `DB_ARM_STALE_DEPENDENT_READ`, el defecto real del instrumento, ya
+arreglado. `typography.scale` sigue `UNKNOWN` honesto con un residuo de
+segundo orden a H3B. Writer: Opus. Preaudit Fable H-3: ACCEPT con AA-1…AA-5
+(incluida la corrección simétrica del ledger: writer + DT + el endoso de
+Fable). Postaudit Fable H-3a: **ACCEPT condicionado a F1** (satisfecha),
+memo `/private/tmp/h3a-stale-read-fable-postaudit.md` (SHA en su `.ready`).
+
+**La refutación (H-3 diseño, verificada por Fable con evidencia propia):**
+la premisa heredada de F4B-7 era falsa por cuatro vías — la escena de la
+sonda pone `data-tenant`, `data-ds-root` y `data-vertical` en `html` (no
+hay descendiente); sólo hay 3 declaraciones del canal, todas en raíz;
+**4 de los 6 controles cerrados declaran su canal en el scope culpado y
+cerraron con equivalencia**; y una escena sintética prueba que inline y
+bloque propagan idéntico. La anomalía sobreviviente, en su forma estrecha
+verificada: mismos brazos moviendo el canal, y los dependientes calc
+recomputan para uno y no para el otro.
+
+**Fase (1) — la causa, medida (artifact durable
+`test-artifacts/quality-evidence/wo-cra-23/H3/isolation.MEASURED-NOT-RECEIPTED.json`):**
+las lecturas del brazo DB van **desfasadas exactamente UNA FASE** para las
+propiedades dependientes (la custom property siempre al día; los
+dependientes muestran la fase anterior). El flush existente + el settle
+de 2 rAF no alcanzan con el roster completo — y el árbol ya documentaba
+ese modo de falla en `measure/index.mjs`. Run 1 prueba que el mecanismo
+CSS está sano (inline mueve todo a los valores exactos del brazo
+estático, sin flush).
+
+**El fix (`readUntilStable` + `invalidateStyle`, extraído drillable-sin-browser):**
+leer, provocar invalidación explícita de estilo (poner/quitar atributo en
+el documentElement — no `offsetHeight`, que fuerza layout pero no
+re-derivación), y aceptar sólo tras **DOS lecturas consecutivas idénticas**
+(una meseta intermedia no acepta), **tirando** si la página nunca se
+asienta — "una página inestable es un hallazgo, no una medición". Drills
+4/4: aceptación tras el segundo acuerdo con conteo de invalidaciones; el
+negativo que TIRA sin devolver la última respuesta; la meseta explícita;
+el presupuesto como techo.
+
+**Invariancia obligatoria (medida, no asumida):** 36 escenarios CSS, 26.212
+claves por intersección, **0 valores movidos, 0 patas de veredicto
+cambiadas**; los 39 receipts sólo re-emitidos por frescura (artifacts
+byte-idénticos). Nota de método honesta del writer: su primera comparación
+dio 1556 movidas y era su error de conjunto (roster completo vs listas
+acotadas); restringida a la intersección, 0.
+
+**El residuo — 16 filas, NO staleness** (endureció la ley y no se movieron;
+artifact durable F1
+`H3/residual-divergence.MEASURED-NOT-RECEIPTED.json`): `card-modern-md/title`
+DB **12.3375px** (0.94×1) vs estático **11.5972px** (0.94²); cuatro
+`*-preset-gap/root` que DB no mueve. Opus correctamente NO lo atribuyó a
+ningún mecanismo sin poder mostrarlo (tercera disciplina consecutiva:
+F4B-7 §3, la clase, y ahora nombrar sin medir). `nextAction:
+H3B_RESIDUAL_SECOND_ORDER_DIVERGENCE`. **Pista falsable registrada COMO
+pista (Fable, no causa):** la raíz rem ya porta type-scale una vez ("todo
+rem ya lleva type-scale; una rampa nombrada 16px vale 15px" — conocimiento
+documentado del asiento auditor); una cadena rem-derivado × type-scale
+aplicaría el factor dos veces cuando la raíz se re-deriva (artifact
+completo servido) y una cuando no (inline que mueve la custom property
+sin re-derivar la raíz). H3B la MIDE, no la asume.
+
+**Fase (a) (serving productivo): EN PAUSA** — adoptarla como cura de
+síntoma habría sido "verde por desaparición"; queda para decidirse por
+fidelidad con el camino inline ya sano.
+
+**Regla ampliada (Fable §6, vinculante para los tres asientos):** el
+inventario de suites del instrumento — **TODAS las carpetas `tests/` bajo
+`resolution-probe/`** — se corre completo en la verificación de cualquier
+packet que toque el instrumento, no sólo ingress y data-run. Tercera
+instancia del patrón: `composition/run/tests/index.test.mjs` está **ROJO
+desde H-1** (su fixture arma un brazo estático sin baseline y muere en la
+ley de provenance; el archivo predata `83c1a84f5`), sin que nadie la
+corriera. Va a su packet propio (T-3), no tratada acá.
+
 **F0 — CERRADO (2026-08-19).** Criterio de cierre cumplido:
 `ci-gates OK — 78 blocking gate(s) passed` (2 excluded visibles con razón y
 dueño: channel-liveness y lane-control-drills, ambos esperan a F2); `find src -type d -empty` vacío salvo el inbox

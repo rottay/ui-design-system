@@ -269,7 +269,100 @@ function unmatchedRows(validations) {
     }));
 }
 
+/**
+ * How many separate round trips a reading may take before it must agree with
+ * itself. Two consecutive identical reads is the stability condition; the extra
+ * budget is for a document that needs more than one recalculation to settle.
+ */
+const READ_STABILITY_ATTEMPTS = 8;
+
+/** Consecutive identical readings required before a measurement is accepted. */
+const READ_STABILITY_AGREEMENTS = 2;
+
+/**
+ * Provokes a full style recalculation, the way a fresh navigation does.
+ *
+ * `offsetHeight` forces layout from whatever style state is current; it cannot
+ * force style to be re-derived. Setting and removing an attribute on the
+ * document element dirties the whole subtree's style, so the next read cannot
+ * be served from a partially updated cascade.
+ */
+async function invalidateStyle(page) {
+  await page.evaluate(() => {
+    const element = document.documentElement;
+    element.setAttribute('data-ds-probe-invalidate', '1');
+    void element.offsetHeight;
+    element.removeAttribute('data-ds-probe-invalidate');
+    void element.offsetHeight;
+  });
+}
+
+/**
+ * Reads every declared property of every planned target, and does NOT trust the
+ * first answer.
+ *
+ * H-3a. The in-page flush below is necessary and was not sufficient. Measured on
+ * the full roster: after an inline write on the document element the DEPENDENT
+ * computed properties came back one phase behind -- the mutation read returned
+ * the baseline values, the removal read returned the mutation values -- while
+ * the custom property itself was always current. A run built on that reports a
+ * live control as inert, which is the worst thing this harness can say.
+ *
+ * The cure is a DECIDABLE CONDITION, not a longer wait: read, then read again in
+ * a SEPARATE round trip, and accept only when two consecutive reads agree. A
+ * fixed sleep would be a guess that gets shorter than the document one day; two
+ * agreeing reads is a statement about the page. If it never agrees, this throws
+ * rather than returning the last answer -- an unstable document is a finding,
+ * not a measurement.
+ */
 async function readAll(page, plan) {
+  return readUntilStable(
+    () => readAllOnce(page, plan),
+    () => invalidateStyle(page),
+  );
+}
+
+/**
+ * Accepts a reading only once it agrees with itself under provocation.
+ *
+ * Separated from the page so the LAW is drillable without a browser: what is
+ * under test is which answers this refuses, and a drill that needed Chromium to
+ * ask that would be testing Chromium.
+ *
+ * @param {() => Promise<unknown>} read       takes one reading
+ * @param {() => Promise<void>} invalidate    provokes a full recalculation between readings
+ */
+export async function readUntilStable(read, invalidate, options = {}) {
+  const attempts = options.attempts ?? READ_STABILITY_ATTEMPTS;
+  const required = options.agreements ?? READ_STABILITY_AGREEMENTS;
+  let previous = null;
+  let agreements = 0;
+  for (let attempt = 1; attempt <= attempts; attempt += 1) {
+    const current = await read();
+    if (previous !== null && JSON.stringify(previous) === JSON.stringify(current)) {
+      agreements += 1;
+      // TWO agreements, not one. A single repeat is not enough: the page
+      // settles in STAGES, and a chain whose second hop has not recalculated
+      // yet reads identically twice on the intermediate plateau -- measured as
+      // a card title at one application of the dial (x0.94) where the settled
+      // answer is two (x0.94 squared). Every agreement is separated by a full
+      // style invalidation below, so agreeing twice means the page stopped
+      // changing under provocation, not that it was polled too fast.
+      if (agreements >= required) return current;
+    } else {
+      agreements = 0;
+    }
+    previous = current;
+    await invalidate();
+  }
+  throw new Error(
+    `resolution-probe: the measured document never produced two consecutive identical readings in ` +
+      `${READ_STABILITY_ATTEMPTS} round trips. The page is still recalculating, so no reading here ` +
+      'describes a settled state.',
+  );
+}
+
+async function readAllOnce(page, plan) {
   return page.evaluate((rows) => {
     // FORCE A STYLE/LAYOUT FLUSH BEFORE READING. This is not defensive
     // padding. Writing a custom property on the document element and calling

@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "generatedBy": "node packages/core/manifest/generator/index.mjs --sync",
   "authorityLaw": "Controls own semantics, groups own recipe vocabularies, families own applicability edges, and this index owns generated rollups.",
-  "inputsDigest": "115a9e4251f5bb195a3ef25a9652d86a172bce3db9d3e262fd7087117d6c1287",
+  "inputsDigest": "5566b8df900343f9f51c47853bea952ecc49dedc3de886cd37ec403ba8276faa",
   "denominators": {
     "canonicalFamilies": 255,
     "activeStandardControls": 13,
@@ -1437,7 +1437,7 @@
     {
       "controlId": "typography.scale",
       "path": "manifest/controls/typography.scale.json",
-      "digest": "f812880d7e6c0a16e0eff7c27a5ef576cfa47fe06bc9df51e41cfb78e70709f1"
+      "digest": "14c8b227d6001cfe3ccddacd533b9638d63a51335618148b833d84a6d2b6821f"
     },
     {
       "controlId": "shape.radius-scale",

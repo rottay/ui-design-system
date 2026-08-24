@@ -1,0 +1,193 @@
+{
+  "artifactVersion": 1,
+  "receipted": false,
+  "whyNotReceipted": "Diagnostic isolation, not a control measurement. It certifies no stop of any control; it identifies a defect IN THE INSTRUMENT. Receipting it would put an instrument diagnosis into the control evidence chain. Same measured-and-not-receipted pattern as F4B/experience-profile/bithire-editorial.DIVERGENCE.json.",
+  "phase": "H-3 phase (1) -- isolate the residual cause",
+  "question": "F4B-7 measured 54/11/54 painted rows where the static arm moved and the DB arm did not, while BOTH arms moved --ds-type-scale from 1 to 0.94. Which link breaks?",
+  "finding": "THE DB ARM READINGS LAG EXACTLY ONE PHASE for DEPENDENT computed properties. Run 2, the probe own measure path, full 14-fixture roster: at the MUTATION phase (scale 0.94) the card still reports the BASELINE 15px / 13.125px; at the REMOVAL phase (scale back to 1) it reports the MUTATION values 14.1px / 11.5972px. The custom property itself is always current. The static arm is in phase, because each of its phases is a fresh page load with no pending recalculation to miss.",
+  "thereforeF4B7WasMisdiagnosed": "The F4B-7 divergence is an INSTRUMENT ARTIFACT, not a cascade defect. DB_ARM_SCOPE_SHADOWING as I named it does not exist: the H-3 design already measured that four closed controls declare their channel in the same artifact scope and closed clean, and run 1 here shows the inline write propagates perfectly on the real bundle -- with no flush at all, the card moves 15px -> 14.1px and the title 13.125px -> 11.5972px, exactly the values the static arm produced.",
+  "alreadyDocumentedInTheTree": "runtime/measure/index.mjs, inside readAll, carries a comment describing this exact failure mode: writing a custom property on the document element and calling getComputedStyle in the next CDP round trip returns the STALE value on a document of this size -- the descendant reads the property back at the new value while the dependent property still reports its pre-dial value. The existing offsetHeight flush, plus a two-rAF settle, is NOT sufficient at full roster size (14 fixtures).",
+  "openQuestion": "BLAST RADIUS, unassessed. If the inline arm can lag, earlier DB-arm readings of DEPENDENT properties may be affected too. Those controls closed with ingressEquivalence holding, which a systematic one-phase lag would not allow, so the trigger is not universal. What decides it is a re-measurement, not an argument.",
+  "runs": {
+    "run1_mechanism": {
+      "artifactVersion": 1,
+      "phase": "H-3 phase (1) isolation",
+      "vertical": "rottay",
+      "theme": "light",
+      "bundle": {
+        "mode": "fresh",
+        "sha256": null,
+        "length": 5344245
+      },
+      "fixtures": [
+        "card-modern-md",
+        "token-readout"
+      ],
+      "question": "After setProperty on documentElement, does --ds-type-scale -> --ds-font-size-* -> font-size recompute?",
+      "steps": [
+        {
+          "step": "1 baseline (live page)",
+          "scaleOnHtml": "1",
+          "rampBaseOnHtml": "calc(0.9375rem * 1)",
+          "scaleOnReadout": "1",
+          "cardFontSize": "15px",
+          "titleFontSize": "13.125px",
+          "found": {
+            "card": true,
+            "title": true,
+            "readout": true
+          }
+        },
+        {
+          "step": "2 after setProperty, no flush",
+          "scaleOnHtml": "0.94",
+          "rampBaseOnHtml": "calc(0.9375rem * 0.94)",
+          "scaleOnReadout": "0.94",
+          "cardFontSize": "14.1px",
+          "titleFontSize": "11.5972px",
+          "found": {
+            "card": true,
+            "title": true,
+            "readout": true
+          }
+        },
+        {
+          "step": "3 after forced reflow",
+          "scaleOnHtml": "0.94",
+          "rampBaseOnHtml": "calc(0.9375rem * 0.94)",
+          "scaleOnReadout": "0.94",
+          "cardFontSize": "14.1px",
+          "titleFontSize": "11.5972px",
+          "found": {
+            "card": true,
+            "title": true,
+            "readout": true
+          }
+        },
+        {
+          "step": "4 after two rAFs",
+          "scaleOnHtml": "0.94",
+          "rampBaseOnHtml": "calc(0.9375rem * 0.94)",
+          "scaleOnReadout": "0.94",
+          "cardFontSize": "14.1px",
+          "titleFontSize": "11.5972px",
+          "found": {
+            "card": true,
+            "title": true,
+            "readout": true
+          }
+        },
+        {
+          "step": "5 after removing the inline write",
+          "scaleOnHtml": "1",
+          "rampBaseOnHtml": "calc(0.9375rem * 1)",
+          "scaleOnReadout": "1",
+          "cardFontSize": "15px",
+          "titleFontSize": "13.125px",
+          "found": {
+            "card": true,
+            "title": true,
+            "readout": true
+          }
+        },
+        {
+          "step": "6 after appended stylesheet block",
+          "scaleOnHtml": "0.94",
+          "rampBaseOnHtml": "calc(0.9375rem * 0.94)",
+          "scaleOnReadout": "0.94",
+          "cardFontSize": "14.1px",
+          "titleFontSize": "11.5972px",
+          "found": {
+            "card": true,
+            "title": true,
+            "readout": true
+          }
+        },
+        {
+          "step": "7 fresh load, baseline + block",
+          "scaleOnHtml": "0.94",
+          "rampBaseOnHtml": "calc(0.9375rem * 0.94)",
+          "scaleOnReadout": "0.94",
+          "cardFontSize": "14.1px",
+          "titleFontSize": "11.5972px",
+          "found": {
+            "card": true,
+            "title": true,
+            "readout": true
+          }
+        }
+      ]
+    },
+    "run2_probePath": {
+      "artifactVersion": 1,
+      "phase": "H-3 phase (1) run 2",
+      "vertical": "rottay",
+      "theme": "light",
+      "arms": {
+        "db-tenant-theme": {
+          "position": "root-inline-style",
+          "variables": {
+            "--ds-type-scale": "0.94"
+          },
+          "inline": {
+            "write": [
+              {
+                "op": "set",
+                "name": "--ds-type-scale",
+                "value": "0.94",
+                "priority": ""
+              }
+            ],
+            "memo": {
+              "--ds-type-scale": {
+                "present": false,
+                "value": "",
+                "priority": ""
+              },
+              "#attribute": {
+                "present": false
+              }
+            }
+          },
+          "baseline": {
+            "scale": "1",
+            "cardFont": "15px",
+            "titleFont": "13.125px"
+          },
+          "mutation": {
+            "scale": "0.94",
+            "cardFont": "15px",
+            "titleFont": "13.125px"
+          },
+          "removal": {
+            "scale": "1",
+            "cardFont": "14.1px",
+            "titleFont": "11.5972px"
+          }
+        },
+        "static-brand-theme": {
+          "position": "tenant-scoped-stylesheet-block",
+          "variables": {
+            "--ds-type-scale": "0.94"
+          },
+          "inline": null,
+          "baseline": {
+            "scale": "1",
+            "cardFont": "15px",
+            "titleFont": "13.125px"
+          },
+          "mutation": {
+            "scale": "0.94",
+            "cardFont": "14.1px",
+            "titleFont": "11.5972px"
+          },
+          "removal": {
+            "scale": "1",
+            "cardFont": "15px",
+            "titleFont": "13.125px"
+          }
+        }
+      }
+    }
+  }
+}
