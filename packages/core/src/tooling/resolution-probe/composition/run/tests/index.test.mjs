@@ -24,7 +24,7 @@ import { test } from 'node:test';
 import { readManifest } from '../../../foundation/negative-controls/index.mjs';
 import { CORE_ROOT } from '../../../foundation/paths/index.mjs';
 import { assertKnownTargetKeys } from '../../../foundation/roster/index.mjs';
-import { composeDbArm, composeStaticArm } from '../../../runtime/ingress/index.mjs';
+import { composeDbArm, composeStaticArm, lowerStop } from '../../../runtime/ingress/index.mjs';
 import {
   buildCausalReport,
   buildMovements,
@@ -191,14 +191,55 @@ function observationFor({ removalValues = null } = {}) {
   };
 }
 
+/* T-3 — AGED_EXPECTATION, re-legislated. The H-1 law is NOT touched.
+ *
+ * This file was written at `56847146f`, before H-1 (`83c1a84f5`) made the
+ * static arm's BASELINE part of what the arm claims. It hand-authored a
+ * `producedBy` in the pre-H-1 shape -- module, export, `{ path, stopId }` --
+ * and from H-1 onward `composeStaticArm` refused it AT MODULE LOAD, so the
+ * whole suite read 0/1 for reasons that had nothing to do with any drill in it.
+ *
+ * What aged is the FIXTURE, not an assertion: nothing here ever tested the
+ * provenance law. The refusal itself is drilled where it belongs, in
+ * `runtime/ingress/tests` ("H-1 drill 8 (V1)"), which covers
+ * `assertArmProvenance`, `composeStaticArm`, the DB arm's exemption and the
+ * positive case. A second copy of it here would be two tests of one guard, so
+ * there is none -- see the artifact drill at the end of this file for the half
+ * H-1 left unfenced.
+ *
+ * The arm is now LOWERED rather than hand-written. That is the point: only the
+ * production lowering can produce an honest baseline digest, and a fixture that
+ * hand-authors one is asserting a hash of nothing. `compile` is a stub, so this
+ * still opens no browser and reads no `dist/`.
+ *
+ * The DB arm below is deliberately left hand-authored: it has no baseline to
+ * name (`assertArmProvenance` exempts it, by H-1 V5), so nothing about its
+ * shape aged, and routing it through `lowerStop` would drag
+ * TENANT_THEME_SCHEMA_VERSION and the tenant-identity envelope into a suite
+ * whose whole value is that it needs neither.
+ */
+/* A STAND-IN baseline, not rottay's published theme -- this suite fabricates
+ * every reading it uses and must not start implying what a vertical authors.
+ * What has to be real is the SHAPE and the digest, and both are produced by the
+ * same lowering a real run uses. The source string names where a real one would
+ * come from, which is what the H-1 record is for. */
+const STATIC_BASELINE = Object.freeze({ surfaces: { rhythm: 'normal' } });
+const STATIC_BASELINE_SOURCE = 'dist/index.js#rottayBrandTheme';
+
+const STATIC_LOWERED = lowerStop({
+  armId: 'static-brand-theme',
+  controlManifest: CONTROL_MANIFEST,
+  stopId: 'airy',
+  compile: () => ({ variables: { '--ds-rhythm-scale': '1.2' } }),
+  vertical: 'rottay',
+  base: structuredClone(STATIC_BASELINE),
+  baselineSource: STATIC_BASELINE_SOURCE,
+});
+
 const STATIC_ARM = composeStaticArm({
   vertical: 'rottay',
-  variables: { '--ds-rhythm-scale': '1.2' },
-  producedBy: {
-    module: 'dist/infrastructure/compilers/kernel/runtime/brand-theme/index.js',
-    exportName: 'compileBrandTheme',
-    input: { path: 'surfaces.rhythm', stopId: 'airy' },
-  },
+  variables: STATIC_LOWERED.variables,
+  producedBy: STATIC_LOWERED.producedBy,
 });
 
 const DB_ARM = composeDbArm({
@@ -206,7 +247,11 @@ const DB_ARM = composeDbArm({
   producedBy: {
     module: 'dist/server.js',
     exportName: 'compileTenantThemeConfig',
-    input: { path: 'appearance.general.rhythm', stopId: 'airy' },
+    // `baseline: null` is the shape `lowerStop` really produces for this arm
+    // (H-1 V5: it resolves the vertical inside its own compiler, so it has
+    // none to name). Spelled out rather than omitted so the drill below can
+    // assert the ABSENCE as the law states it instead of as `undefined`.
+    input: { path: 'appearance.general.rhythm', stopId: 'airy', baseline: null },
   },
 });
 
@@ -510,4 +555,54 @@ test('buildMovements is one definition of "moved", shared by the dial and causal
   assert.equal(inert, 1);
   assert.deepEqual(movements.s['t/root'].a, { moved: true, from: '1px', to: '3px' });
   assert.deepEqual(movements.s['t/root'].b, { moved: false, value: '2px' });
+});
+
+/**
+ * The half H-1 left unfenced, and it belongs to THIS module.
+ *
+ * H-1 made the static arm name the baseline it composed onto, and
+ * `runtime/ingress` drills that an arm which cannot is refused. But the law
+ * exists so that "a reader can reconstruct the scene", and what a reader
+ * actually holds is the ARTIFACT -- so the law is only really closed if the
+ * baseline survives report assembly. Nothing asserted that. A `buildCausalReport`
+ * that dropped `provenance` would satisfy every ingress drill and still leave
+ * every artifact unreconstructable.
+ */
+test('H-1 (T-3): the ARTIFACT names the baseline the static arm composed onto', () => {
+  const result = report();
+
+  const staticBaseline = result.arms['static-brand-theme'].provenance.input.baseline;
+  assert.equal(staticBaseline.source, STATIC_BASELINE_SOURCE);
+  assert.match(staticBaseline.digest, /^[0-9a-f]{64}$/);
+  // And it is a digest OF THAT BASELINE, not a placeholder that merely has the
+  // right shape: the same bytes hash to the same value, a different baseline
+  // does not. Recomputed here through the production lowering rather than
+  // reimplemented, so this cannot drift from how the arm computes it.
+  const same = lowerStop({
+    armId: 'static-brand-theme',
+    controlManifest: CONTROL_MANIFEST,
+    stopId: 'airy',
+    compile: () => ({ variables: { '--ds-rhythm-scale': '1.2' } }),
+    vertical: 'rottay',
+    base: structuredClone(STATIC_BASELINE),
+    baselineSource: STATIC_BASELINE_SOURCE,
+  });
+  const other = lowerStop({
+    armId: 'static-brand-theme',
+    controlManifest: CONTROL_MANIFEST,
+    stopId: 'airy',
+    compile: () => ({ variables: { '--ds-rhythm-scale': '1.2' } }),
+    vertical: 'rottay',
+    base: { surfaces: { rhythm: 'normal' }, typography: { scale: 1.06 } },
+    baselineSource: STATIC_BASELINE_SOURCE,
+  });
+  assert.equal(same.producedBy.input.baseline.digest, staticBaseline.digest);
+  assert.notEqual(
+    other.producedBy.input.baseline.digest,
+    staticBaseline.digest,
+    'two different baselines must not report the same digest, or the record answers nothing',
+  );
+
+  // The DB arm names none, and that absence is the law rather than an omission.
+  assert.equal(result.arms['db-tenant-theme'].provenance.input.baseline, null);
 });

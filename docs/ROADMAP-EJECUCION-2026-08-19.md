@@ -2735,6 +2735,42 @@ composition/run 0/1 — T-3 — y composition/receipt 11/12 — owner-gated).
 Postaudit Fable: **ACCEPT**, memo
 `/private/tmp/h3c-fresh-delivery-fable-postaudit.md` (SHA en su `.ready`).
 
+##### T-3 — composition/run/tests re-legislada (tercer cerco envejecido cerrado) (2026-08-24)
+
+La suite `composition/run/tests` (roja desde H-1 — su fixture armaba el
+brazo estático con la forma pre-H-1 y moría en la ley de provenance antes
+de correr un solo drill) pasa de **0/1 a 20/20**. Writer: Opus. Postaudit
+Fable: **ACCEPT**, memo `/private/tmp/t3-run-tests-fable-postaudit.md`
+(SHA en su `.ready`).
+
+**Diagnóstico exacto:** lo envejecido era el FIXTURE, no las aserciones
+(los 19 drills estaban sanos; ninguno llegaba a correr). Re-legislación:
+el brazo se BAJA con `lowerStop` (baseline STAND-IN marcada como tal,
+digest honesto de la bajada real — un 64-hex escrito a mano aseveraría el
+hash de nada) y el brazo DB queda a mano a propósito (eximido por H-1 V5)
+con `baseline: null` explícito — la forma que `lowerStop` realmente
+produce. Sin drill de refusal duplicado (ya cubierta en ingress H-1 drill
+8; la decisión quedó escrita en el archivo).
+
+**Bonus que cierra un hueco real de H-1:** el drill nuevo — el ARTIFACT
+nombra la baseline del brazo estático (source + digest 64-hex recomputado
+vía `lowerStop`: same-hashea-igual, other-hashea-distinto, sin
+reimplementar el hash). Antes de este packet, `input.baseline` sólo se
+asertaba en ingress (verificado por grep en ambos árboles):
+`buildCausalReport` podía dejar de propagar `provenance` y pasar todos
+los drills de ingress dejando cada artifact irreconstruible. El mutante
+plantado (reporte emite null para todos) deja 19/1 siendo éste el único
+rojo — el cerco muerde.
+
+**Ley de H-1 intacta y probada por dos asientos independientes:** 2
+contrafácticos del writer (baselineSource null; base {}) tirando con el
+mensaje exacto; Fable los reprodujo además en memoria. Tablero del
+instrumento: **8/9 suites verdes**; la única roja es el fence
+owner-gated. De las cuatro instancias del patrón de cerco envejecido
+quedan cerradas tres (drills 12/43 en F4B-7, ésta en T-3); la única
+abierta es el hueco vivo `SIGHTED_APPROVER` (juicio y recomendación al
+owner asentados en H3C §5).
+
 **F0 — CERRADO (2026-08-19).** Criterio de cierre cumplido:
 `ci-gates OK — 78 blocking gate(s) passed` (2 excluded visibles con razón y
 dueño: channel-liveness y lane-control-drills, ambos esperan a F2); `find src -type d -empty` vacío salvo el inbox
