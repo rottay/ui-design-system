@@ -3314,6 +3314,67 @@ brand-studio; verificar que cada uno resuelve a un campo real en ambas
 puertas; reportar mismatches; tocar sólo con mismatch concreto. Si el owner
 confirma un sitio específico, el packet se repunta ahí.
 
+**Respuesta al owner sobre la directiva (2026-08-24, censo ejecutado):
+CENSUS-CLEAN.** Sonnet corrió la enumeración mecánica exhaustiva (read-only,
+HEAD `4609a0a82`): los 18 usos de density/typeScale en capabilities/index.ts y
+todos los equivalentes en tenant-theme, hooks-manifest, brand-studio, ambos
+manifests y migrate-v1 **resuelven a campos reales en su tipo destino**; cero
+keypaths rotos; cero cruces funcionales density↔typeScale en toda la cadena
+(documento → BrandTheme → posture → canal CSS → consumidor React);
+`readTypeScale()` lee exactamente el canal que los compiladores emiten
+(`--ds-type-scale`, mismo nombre y contrato). **No hay keypath que arreglar**:
+la directiva queda respondida con censo completo — el defecto de esa familia
+(`typography (ramp channels)` prose) ya había sido corregido en F4B-7 y el
+propio código lo documenta. Único hallazgo tangencial: la divergencia de
+vocabulario de 4 enumeraciones de density, ya adjudicada `OPEN_DT`
+(VOCABULARY/density del manifest). El packet de verificación queda CERRADO
+sin escrituras. Si el owner vio un sitio específico distinto, se reabre con
+ese sitio.
+
+**B-2 — preaudit Fable: ACCEPT con DOS correcciones vinculantes (W-A, W-B),
+ambas adjudicadas e integradas al brief de implementación.**
+- **W-A (doc del contrato):** `compileTheme.tenantAuthoredPaths`
+  (`brand-theme/index.ts:2116-2121`) envejece en dos cláusulas tras B-2 —
+  "collected from the patch (`collectPatchAuthoredPaths`)" (B-2 NOMBRA, no
+  colecta) y "Supplied only for the tenant leg of a DB compile" (aparece un
+  segundo proveedor). Se enmienda en el mismo packet con el patrón de cláusula
+  envejecida M-1/H-3(a). Costos nombrados y aceptados: rebuild de `dist`
+  (dist-freshness-gate) + re-derivación de `producers.json` + la re-emisión
+  de 46 ya presupuestada.
+- **W-B (identidad × autoría, MEDIDO por Fable):** el stop de identidad NO
+  "no escribe nada" — desde F4B-8 RESUELVE el valor del baseline y LO ESCRIBE
+  en `input.path`; declarar autoría ahí mueve 7 canales y rompe la
+  byte-identidad de bithire (medido con y sin bandera). **RULING DT
+  (adjudicado una vez): el stop de identidad NO declara autoría** — es un
+  claim del brazo estático sobre lo que el vertical shipea, no un acto de
+  autoría del tenant; coherente con la ley F4B-8 y con que el brazo DB ya lo
+  refusa. Va escrito en el código con su razón + drill 7 (identidad +
+  palette.seeds/primary sigue byte-idéntica).
+- **Correcciones de cifra (asentadas):** `CONSULTED_PROVENANCE_FIELDS` = **19**
+  paths, no 20 (5 palette + 5 buttonPrimary + 2 input + 7 sidebar).
+  **`navigation.sidebar-tone` es el próximo intersector ya visible**: su
+  puerta (`chrome.sidebar.*`) expande a los 7 paths consultados del sitio
+  sidebar — el drill 6 lo atrapará cuando ese control se calibre; anotado
+  acá para que no sea sorpresa (y su ingress path es wildcard no caminable:
+  mismo balde de corrección que button-style/families/anatomy).
+- El veredicto del gate (NO-EXISTE) sostuvo bajo los greps de refutación
+  propios de Fable (un solo call site productivo de `resolveTheme(base,
+  patch)`; cero `tenantAuthoredPaths` en los tres llamadores productivos de
+  `compileBrandTheme`; ninguna app llama `compileBrandTheme`).
+
+**OPEN_DT nuevo (vía latente, no viva — registrada del veredicto del gate):**
+`applyHostileBrandTheme` (`brand-studio/index.tsx:357`, compile en `:1515`) y
+el mecanismo genérico `emit` (`:1492-1499`): clonar `value`, mutar campos,
+compilar SIN provenance. Hoy no es viva (su único montaje con baseline de
+vertical es un fixture de tortura con `onChange` no-op; el patch lo escribe
+el DS como sonda de contraste, no un tenant). El día que una app monte
+`PatternBrandStudio` sembrado con la baseline de su vertical y cablee
+`onChange` a estado, el segundo render compila `baseline + edición del
+tenant` sin provenance — la rama de defecto de producto que el gate vino a
+descartar. **Disposición:** packet propio sobre `buildSurfaceVariables`
+cuando el frente de customización del studio esté en agenda (F3/F4C); no
+bloquea B-2 ni F4B.
+
 **F0 — CERRADO (2026-08-19).** Criterio de cierre cumplido:
 `ci-gates OK — 78 blocking gate(s) passed` (2 excluded visibles con razón y
 dueño: channel-liveness y lane-control-drills, ambos esperan a F2); `find src -type d -empty` vacío salvo el inbox
