@@ -20,7 +20,11 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 
-import { readUntilStable } from '../index.mjs';
+import {
+  deliverInlineOnFreshDocument,
+  FRESH_DELIVERY_MARKER,
+  readUntilStable,
+} from '../index.mjs';
 
 /** A reader that yields the given answers in order, then repeats the last. */
 function scriptedReader(answers) {
@@ -87,4 +91,124 @@ test('H-3a drill 4: the attempt budget is a ceiling, not a target', async () => 
     () => readUntilStable(scriptedReader([{ ok: true }]).read, async () => {}, { attempts: 1 }),
     /never produced two consecutive identical readings/,
   );
+});
+
+// ---------------------------------------------------------------------------
+// H3C — the DB arm's write is DELIVERED to a document that has computed nothing
+//
+// What a browser then does with that document is measured, not drilled:
+// test-artifacts/quality-evidence/wo-cra-23/H3/residual-isolation.MEASURED-NOT-RECEIPTED.json
+// compares the three deliveries on one scene and one bundle, and the six
+// typography.scale scenarios show the divergence gone. A drill that launched
+// Chromium to re-ask that would be testing Chromium.
+//
+// What IS a rule, and therefore belongs here: the delivery only fires for the
+// document that asked for it, it writes exactly the planned ops and nothing
+// else, and when the document element does not exist yet the write is deferred
+// rather than dropped. These run the SAME function the page runs -- a second
+// copy of it in a test could pass while the shipped one drifted.
+// ---------------------------------------------------------------------------
+
+/** The smallest document the delivery can tell apart from a real one. */
+function fakeDocument({ withElement = true } = {}) {
+  const declarations = [];
+  const listeners = [];
+  const style = {
+    setProperty: (name, value, priority) => declarations.push({ name, value, priority }),
+    removeProperty: (name) => declarations.push({ name, removed: true }),
+  };
+  return {
+    documentElement: withElement ? { style } : null,
+    addEventListener: (type, handler, options) => listeners.push({ type, handler, options }),
+    declarations: () => declarations,
+    listeners: () => listeners,
+    // Lets a test hand the element over the way a parser does, then fire.
+    attach: (target) => {
+      target.documentElement = { style };
+    },
+  };
+}
+
+/** Installs fake browser globals for one call and always puts them back. */
+async function inDocument({ search, document: fake }, run) {
+  const priorLocation = globalThis.location;
+  const priorDocument = globalThis.document;
+  globalThis.location = { search };
+  globalThis.document = fake;
+  try {
+    return await run();
+  } finally {
+    globalThis.location = priorLocation;
+    globalThis.document = priorDocument;
+  }
+}
+
+test('H3C drill 4: the delivery fires ONLY for the document that carries the marker', async () => {
+  // The removal phase is a navigation without the marker. If this ever fired
+  // unconditionally, removal would silently re-apply the mutation and the
+  // restore comparison -- the harness's own honesty check -- would compare the
+  // mutated page against itself and always pass.
+  const fake = fakeDocument();
+  await inDocument({ search: '?phase=removal', document: fake }, () =>
+    deliverInlineOnFreshDocument({
+      marker: FRESH_DELIVERY_MARKER,
+      ops: [{ op: 'set', name: '--ds-type-scale', value: '0.94', priority: '' }],
+    }),
+  );
+  assert.deepEqual(fake.declarations(), [], 'a document without the marker is left untouched');
+  assert.deepEqual(fake.listeners(), [], 'and nothing is queued for later either');
+});
+
+test('H3C drill 5: the marked document gets exactly the planned write, priority included', async () => {
+  const fake = fakeDocument();
+  await inDocument({ search: `?phase=mutation&${FRESH_DELIVERY_MARKER}`, document: fake }, () =>
+    deliverInlineOnFreshDocument({
+      marker: FRESH_DELIVERY_MARKER,
+      ops: [
+        { op: 'set', name: '--ds-type-scale', value: '0.94', priority: '' },
+        { op: 'set', name: '--ds-rhythm-scale', value: '0.85', priority: 'important' },
+        { op: 'remove', name: '--ds-stale', value: undefined, priority: '' },
+        // The memo's attribute op belongs to the live-mutation restore, which a
+        // fresh document does not need and must not act on: there is no `style`
+        // attribute to take away from a document that never had one.
+        { op: 'remove-attribute', name: 'style' },
+      ],
+    }),
+  );
+  assert.deepEqual(fake.declarations(), [
+    { name: '--ds-type-scale', value: '0.94', priority: '' },
+    { name: '--ds-rhythm-scale', value: '0.85', priority: 'important' },
+    { name: '--ds-stale', removed: true },
+  ]);
+});
+
+test('H3C drill 6: with no document element yet the write is DEFERRED, never dropped', async () => {
+  // This is the ordering the whole packet rests on. An init script runs when
+  // the document is created, which is before the parser has made
+  // documentElement; dropping the write there would put it back after the page
+  // had already computed -- the live mutation, reintroduced by accident.
+  const fake = fakeDocument({ withElement: false });
+  await inDocument({ search: `?phase=mutation&${FRESH_DELIVERY_MARKER}`, document: fake }, () => {
+    deliverInlineOnFreshDocument({
+      marker: FRESH_DELIVERY_MARKER,
+      ops: [{ op: 'set', name: '--ds-type-scale', value: '1.06', priority: '' }],
+    });
+    assert.deepEqual(fake.declarations(), [], 'nothing can be written yet');
+    assert.equal(fake.listeners().length, 1);
+    const [queued] = fake.listeners();
+    assert.equal(queued.type, 'DOMContentLoaded');
+    assert.deepEqual(
+      queued.options,
+      { once: true },
+      'a write that could run twice is a write nobody can reason about',
+    );
+
+    // The parser hands over the element, then the event fires -- still before
+    // anything has been read out of the document.
+    fake.attach(fake);
+    queued.handler();
+  });
+  assert.deepEqual(fake.declarations(), [
+    { name: '--ds-type-scale', value: '1.06', priority: '' },
+  ]);
 });

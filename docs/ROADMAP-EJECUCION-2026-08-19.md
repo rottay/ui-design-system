@@ -2642,6 +2642,99 @@ desde H-1** (su fixture arma un brazo estático sin baseline y muere en la
 ley de provenance; el archivo predata `83c1a84f5`), sin que nadie la
 corriera. Va a su packet propio (T-3), no tratada acá.
 
+##### H3B/H3C — typography.scale CIERRA (F4B 7/20): la divergencia era la entrega, no la cascada (2026-08-24)
+
+**La cadena causal más documentada del programa** (Fable), medida tramo
+por tramo antes de diseñar el siguiente: F4B-7 (54/11/54 — la puerta
+estática empieza a bajar el stop) → H-3a (27→16 — el atraso de fase,
+curado) → endurecimiento (16→16 — nada: descarta staleness) → **H3C
+(16→0 en las seis, light Y dark — el momento de la escritura)**.
+`typography.scale` queda **COMPUTED_VERIFIED** (control + celda de card),
+con **0 filas divergentes con el modelo de servido intacto** y los pins
+que lo hacen probatorio (drill 1: posición `root-inline-style`
+preservada — la fase (a) no entró por la puerta de atrás; drill 2:
+baseline verbatim en las 3 fases).
+
+**La causa raíz (aislada en H3B con artifact durable):** una escritura
+inline aplicada a una página VIVA deja algunos elementos computados
+contra la raíz vieja (root actualizado, descendiente con el calc sobre la
+raíz vieja) — recalculo PARCIAL y ESTABLE, invisible para una ley de
+estabilidad porque concuerda consigo mismo. La MISMA escritura instalada
+ANTES del primer paint coincide exacto con el brazo estático. La forma
+H3C: `deliverInlineOnFreshDocument({marker, ops})` — entrega fresca
+navegando la fase como el brazo estático siempre navegó, con la posición
+`root-inline-style` CONSERVADA y restore más fuerte (navegación sin el
+marcador: nunca queda declaración inline). La ley de lectura de H-3a se
+CONSERVA (correcta para el atraso que curó). El mecanismo del residuo
+queda corroborado por el conocimiento documentado del auditor (la raíz
+rem porta type-scale una vez — `default.css:607`).
+
+**El cierre:** control `COMPUTED_VERIFIED` con `fixChain` completa,
+`residualSignature` CONSERVADA (title 12.3375 = 0.94×1 vs 11.5972 =
+0.94²; TRES preset-gap roots — el conteo de cuatro fue error propio
+corregido desde H3B y asentado explícitamente: un residuo que desaparece
+sin su acta no se distingue de uno nunca medido),
+`DB_ARM_STALE_DEPENDENT_READ` → **CLOSED**, `productionReading`
+honestamente ABIERTA (H3C arregló el CUÁNDO, no el QUÉ modela el brazo —
+la fase (a) se decide por fidelidad, sin urgencia de cura). Celda de card
+con taxonomía parcial declarada (parts/props = exactamente lo medido;
+`line-height` ausente porque no se movió; `taxonomyPrecisionNote` para el
+grupo impreciso). Negativos: tres a every-measured-target sostenidos, con
+las dos ausencias deliberadas y medidas (font-metrics = lo que el control
+mueve; control-height = la raíz rem deriva del dial, legítimo en ambos
+brazos). 6 receipts nuevos con **`roundId: R7`** (ruling DT: NO se declara
+R8 — `program-check.mjs:1647` pinea el set a exactamente R0..R7 e
+inflarlo por packet es el modelo errado; la convención cronológica vive
+en los asientos; los receipts se emiten por el productor canónico, nunca
+a mano). **45/45 receipts VALID+FRESH.**
+
+**Invariancia obligatoria:** 36 escenarios, 27.076 claves por
+intersección, **0 valores movidos, 0 patas cambiadas, 0 claves
+perdidas** (las +1.776 claves nuevas explicadas y medidas: vocabulario de
+negativos y roster ganados después de esas rondas). Cero artifacts
+previos tocados; los 39 re-emitidos sólo por frescura. **Forma canónica
+adoptada (desviación 9 del writer, verificada por Fable):** la superficie
+de frescura se RECALCULA, no se une — el receipt R7-light de experience
+ganó `typography.scale.json` (+1: el binding nuevo de la celda de card
+entró; la unión lo habría dejado fuera en silencio). Y `toolVersion` NO
+se tocó en los 39 (los artifacts los produjo el instrumento viejo; decir
+lo contrario mentiría sobre quién midió).
+
+**Corrección de escribanía propia (desviación 1, asentada como modelo):**
+el primer receipt `rottay-compacta` de la sesión previa estaba
+`pass=false/harness-suspect` por un digest truncado a 16 hex y el resume
+decía lo contrario — reportar la contradicción de un resume propio es la
+escribanía en su mejor forma; curado por la re-corrida R7.
+
+**El cuarto cerco envejecido es un HUECO VIVO (juicio Fable §5,
+completo):** `v2/receipts.mjs:7` sigue `SIGHTED_APPROVER = 'Codex (DT)'`
+por igualdad exacta, y desde la sucesión 2026-08-23 el aprobador vivo es
+`Kimi K3 (DT)` — **la puerta valida hoy un receipt producido por el
+aprobador real, el conflicto exacto que la regla existe para impedir. Un
+guard de autoridad fail-open no es deuda cosmética.** (a) Censo
+compensatorio corrido: los producers de todos los receipts son
+`{claude-opus-5-f4b-lane}` — el hueco está ABIERTO, NO explotado; cero
+violaciones ocurridas. (b) La premisa del ruling del owner del 08-22 ("la
+constante era correcta entonces") ya no existe: Fable recomienda al owner
+**autorizar YA el micro-packet** — una línea + drill: derivar el
+aprobador de la autoridad VIVA (por rol o constante derivada del
+rubric/constitución, jamás otro nombre propio — la forma que T-1 ya
+prescribió) + actualizar el drill del fence. Cierra el cuarto cerco Y el
+hueco de una vez. (c) **Control compensatorio vinculante desde ya:** cada
+postaudit verifica el campo `producer` de todo receipt nuevo contra el
+aprobador vivo (45/45 limpios en éste). (d) El writer hizo exactamente lo
+correcto al no tocarlo (identidad del aprobador = adjudicación DT/owner).
+**Queda OPEN_OWNER con la recomendación formal arriba.**
+
+**Regla de suites confirmada en su forma ampliada:** las 9 suites del
+instrumento corridas una por una por Fable (data-run 15/15, causality
+17/17, guards 12/12, negative-controls 20/20, public/drills 18/18,
+ingress 59/59, measure 7/7; las DOS rojas preexistentes confirmadas:
+composition/run 0/1 — T-3 — y composition/receipt 11/12 — owner-gated).
+
+Postaudit Fable: **ACCEPT**, memo
+`/private/tmp/h3c-fresh-delivery-fable-postaudit.md` (SHA en su `.ready`).
+
 **F0 — CERRADO (2026-08-19).** Criterio de cierre cumplido:
 `ci-gates OK — 78 blocking gate(s) passed` (2 excluded visibles con razón y
 dueño: channel-liveness y lane-control-drills, ambos esperan a F2); `find src -type d -empty` vacío salvo el inbox

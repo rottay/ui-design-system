@@ -14,6 +14,7 @@
     "packages/core/manifest/controls/experience.profile.json",
     "packages/core/manifest/controls/shape.radius-scale.json",
     "packages/core/manifest/controls/surfaces.effect-intensity.json",
+    "packages/core/manifest/controls/typography.scale.json",
     "packages/core/manifest/families/primitive/display/card.json",
     "packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts",
     "packages/core/src/foundation/contracts/composition/tenants/themes/tenant-theme/index.ts",
@@ -65,10 +66,10 @@
     "packages/core/src/ui/primitives/display/Card/engines/rustic/index.tsx",
     "packages/core/src/ui/primitives/display/Card/index.tsx"
   ],
-  "sourceDigest": "289f7ddad3ba4a213d6f9931a79377f88956ae5b814b699a573c96c84029096f",
+  "sourceDigest": "9e32cb7b71f9f94dfaaca80924d03728f7934b9bdef17935a925a272562516f0",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/surfaces-effect-intensity/evnto-mate.json",
   "artifactSha256": "bce6d7308c630f3bb7668b5a14b7b5930a9d1325dbf532223f132ba2f2e90885",
-  "createdAt": "2026-08-24T04:16:38.000Z",
+  "createdAt": "2026-08-24T05:51:30.000Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

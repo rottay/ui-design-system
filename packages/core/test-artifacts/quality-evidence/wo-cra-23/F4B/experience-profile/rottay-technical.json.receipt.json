@@ -14,6 +14,7 @@
     "packages/core/manifest/controls/experience.profile.json",
     "packages/core/manifest/controls/shape.radius-scale.json",
     "packages/core/manifest/controls/surfaces.effect-intensity.json",
+    "packages/core/manifest/controls/typography.scale.json",
     "packages/core/manifest/families/primitive/display/card.json",
     "packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts",
     "packages/core/src/foundation/tokens/css/facade/artifacts/rottay/index.css",
@@ -66,10 +67,10 @@
     "packages/core/src/ui/primitives/display/Card/engines/rustic/index.tsx",
     "packages/core/src/ui/primitives/display/Card/index.tsx"
   ],
-  "sourceDigest": "3106bac5f6eb9b0854fbd4bfbe8f2587f409cb8471228c7c724d63bc2a32d1e8",
+  "sourceDigest": "a67b834d7e21405b23d9b9b1be89e5dcfde5fd7c0a3227c1111a377b91e46c62",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/experience-profile/rottay-technical.json",
   "artifactSha256": "50c800a49c272cba0608280a9e6ece9a1e20b1b09aa6ace1c6fc5c01c85e95d1",
-  "createdAt": "2026-08-24T04:16:38.000Z",
+  "createdAt": "2026-08-24T05:51:30.000Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

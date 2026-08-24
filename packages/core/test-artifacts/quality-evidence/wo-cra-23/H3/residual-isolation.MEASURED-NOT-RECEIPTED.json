@@ -1,0 +1,248 @@
+{
+  "artifactVersion": 1,
+  "receipted": false,
+  "whyNotReceipted": "Isolation, not certification. It explains a residual; it certifies no stop. Same measured-and-not-receipted pattern as the two artifacts beside it.",
+  "phase": "H3B -- isolate the second-order residual of typography.scale",
+  "conclusion": "AN INLINE WRITE APPLIED TO A LIVE PAGE LEAVES SOME ELEMENTS COMPUTED AGAINST THE OLD ROOT. The same write applied BEFORE FIRST PAINT agrees with the stylesheet arm exactly. The residual is therefore a property of live mutation, not of the cascade, not of the serving model, and not of the design system.",
+  "decisiveComparison": {
+    "note": "Three modes, one scene, one bundle, the SAME single declaration --ds-type-scale: 0.94. Only the delivery differs.",
+    "stylesheet-fresh (what the static arm does)": {
+      "root": "14.1px",
+      "scale": "0.94",
+      "card": "14.1px",
+      "title": "11.5972px",
+      "flexGap": "14.1px",
+      "spaceGap": "14.1px"
+    },
+    "inline-live (what the DB arm does today)": {
+      "root": "14.1px",
+      "scale": "0.94",
+      "card": "14.1px",
+      "title": "11.5972px",
+      "flexGap": "14.1px",
+      "spaceGap": "14.6796px"
+    },
+    "inline-fresh (same position, applied before first paint)": {
+      "root": "14.1px",
+      "scale": "0.94",
+      "card": "14.1px",
+      "title": "11.5972px",
+      "flexGap": "14.1px",
+      "spaceGap": "14.1px"
+    },
+    "reading": "Every value agrees across the three modes except space-modern-preset-gap: 14.1px on both fresh modes and 14.6796px on the live one. Delivering the inline write on a fresh page removes the divergence WITHOUT changing the arm position."
+  },
+  "fableHint": {
+    "status": "MECHANISM CONFIRMED, EXPLANATION REFUTED",
+    "confirmed": "The rem root IS type-scale derived: runtime/engines/classic/theme.css:22 sets html[data-tenant] { font-size: var(--ds-font-size-base) } and --ds-font-size-base is calc(0.9375rem * var(--ds-type-scale,1)). Root computes 15px at scale 1 and 14.1px at 0.94, which is why gaps and titles move at all.",
+    "refuted": "The hint predicted the root re-derives on the static arm and NOT on the inline arm. Measured: the root moves to 14.1px on BOTH arms, in the probe run too (card-modern-md/root reads 15px -> 14.1px on the DB arm after H-3a). So a root that fails to re-derive is not the explanation."
+  },
+  "whatTheResidualActuallyIs": {
+    "shape": "PARTIAL AND STABLE recalculation, not a phase lag. In the probe run the DB arm reads card-modern-md/root at 14.1px (it picked up the new root) while card-modern-md/title reads 12.3375px = 13.125 x 0.94, which is the title calc applied to the OLD 15px root. One element updated, its descendant did not, in the same reading.",
+    "whyStableDefeatedTheH3aLaw": "The H-3a stability law accepts a reading that agrees with itself under provocation. This state DOES agree with itself: measured here across two explicit invalidations, the values never changed. A stability law cannot detect a page that has stopped recalculating in the wrong place.",
+    "invalidationIsNotTheCulprit": {
+      "static": {
+        "baseline": {
+          "rootFontSize": "15px",
+          "rootTypeScale": "1",
+          "rootFontSizeBase": "calc(0.9375rem * 1)",
+          "cardFontSize": "15px",
+          "titleFontSize": "13.125px",
+          "flexGap": "15px",
+          "spaceGap": "15px"
+        },
+        "mutation": {
+          "rootFontSize": "14.1px",
+          "rootTypeScale": "0.94",
+          "rootFontSizeBase": "calc(0.9375rem * 0.94)",
+          "cardFontSize": "14.1px",
+          "titleFontSize": "11.5972px",
+          "flexGap": "14.1px",
+          "spaceGap": "14.1px"
+        },
+        "afterInvalidate1": {
+          "rootFontSize": "14.1px",
+          "rootTypeScale": "0.94",
+          "rootFontSizeBase": "calc(0.9375rem * 0.94)",
+          "cardFontSize": "14.1px",
+          "titleFontSize": "11.5972px",
+          "flexGap": "14.1px",
+          "spaceGap": "14.1px"
+        },
+        "afterInvalidate2": {
+          "rootFontSize": "14.1px",
+          "rootTypeScale": "0.94",
+          "rootFontSizeBase": "calc(0.9375rem * 0.94)",
+          "cardFontSize": "14.1px",
+          "titleFontSize": "11.5972px",
+          "flexGap": "14.1px",
+          "spaceGap": "14.1px"
+        }
+      },
+      "db": {
+        "baseline": {
+          "rootFontSize": "15px",
+          "rootTypeScale": "1",
+          "rootFontSizeBase": "calc(0.9375rem * 1)",
+          "cardFontSize": "15px",
+          "titleFontSize": "13.125px",
+          "flexGap": "15px",
+          "spaceGap": "15px"
+        },
+        "mutation": {
+          "rootFontSize": "14.1px",
+          "rootTypeScale": "0.94",
+          "rootFontSizeBase": "calc(0.9375rem * 0.94)",
+          "cardFontSize": "14.1px",
+          "titleFontSize": "11.5972px",
+          "flexGap": "14.1px",
+          "spaceGap": "14.6246px"
+        },
+        "afterInvalidate1": {
+          "rootFontSize": "14.1px",
+          "rootTypeScale": "0.94",
+          "rootFontSizeBase": "calc(0.9375rem * 0.94)",
+          "cardFontSize": "14.1px",
+          "titleFontSize": "11.5972px",
+          "flexGap": "14.1px",
+          "spaceGap": "14.6246px"
+        },
+        "afterInvalidate2": {
+          "rootFontSize": "14.1px",
+          "rootTypeScale": "0.94",
+          "rootFontSizeBase": "calc(0.9375rem * 0.94)",
+          "cardFontSize": "14.1px",
+          "titleFontSize": "11.5972px",
+          "flexGap": "14.1px",
+          "spaceGap": "14.6246px"
+        }
+      }
+    }
+  },
+  "progression": {
+    "preFix": 27,
+    "postLoop": 16,
+    "hardened": 16
+  },
+  "answerToTheBriefQuestion4": "(b), a missing application on the DB arm -- and located: it is the LIVE MUTATION, not the arm position and not the serving model. This matters for scope: phase (a) of H-3 (serving the compiled artifact) is NOT required to fix it, so phase (a) stays a fidelity decision and does not come back through the back door as a symptom cure.",
+  "proposedClosure": "Deliver the DB arm inline write on a FRESH page -- the write is installed before first paint and the phase is navigated, exactly as the static arm already navigates per phase. The arm keeps its production-preview position (root inline style); what changes is that nothing is computed twice. Falsifiable: typography.scale must go to ZERO divergent rows with the serving model unchanged, and the 36 stored scenarios must stay invariant by value.",
+  "radius": "Every control measured through the DB arm whose witness is a rem-derived or root-inherited property is exposed to this, which is why five closed controls were unaffected: their painted witnesses did not depend on the root font-size. The invariance re-run of H-3a (36 scenarios, 26212 shared keys, zero moved) is the measured evidence that they were not.",
+  "runs": {
+    "rootPerArmPerPhase": {
+      "artifactVersion": 1,
+      "phase": "H3B root-rem isolation",
+      "vertical": "rottay",
+      "theme": "light",
+      "fixtures": 14,
+      "arms": {
+        "static": {
+          "baseline": {
+            "rootFontSize": "15px",
+            "rootTypeScale": "1",
+            "rootFontSizeBase": "calc(0.9375rem * 1)",
+            "cardFontSize": "15px",
+            "titleFontSize": "13.125px",
+            "flexGap": "15px",
+            "spaceGap": "15px"
+          },
+          "mutation": {
+            "rootFontSize": "14.1px",
+            "rootTypeScale": "0.94",
+            "rootFontSizeBase": "calc(0.9375rem * 0.94)",
+            "cardFontSize": "14.1px",
+            "titleFontSize": "11.5972px",
+            "flexGap": "14.1px",
+            "spaceGap": "14.1px"
+          },
+          "afterInvalidate1": {
+            "rootFontSize": "14.1px",
+            "rootTypeScale": "0.94",
+            "rootFontSizeBase": "calc(0.9375rem * 0.94)",
+            "cardFontSize": "14.1px",
+            "titleFontSize": "11.5972px",
+            "flexGap": "14.1px",
+            "spaceGap": "14.1px"
+          },
+          "afterInvalidate2": {
+            "rootFontSize": "14.1px",
+            "rootTypeScale": "0.94",
+            "rootFontSizeBase": "calc(0.9375rem * 0.94)",
+            "cardFontSize": "14.1px",
+            "titleFontSize": "11.5972px",
+            "flexGap": "14.1px",
+            "spaceGap": "14.1px"
+          }
+        },
+        "db": {
+          "baseline": {
+            "rootFontSize": "15px",
+            "rootTypeScale": "1",
+            "rootFontSizeBase": "calc(0.9375rem * 1)",
+            "cardFontSize": "15px",
+            "titleFontSize": "13.125px",
+            "flexGap": "15px",
+            "spaceGap": "15px"
+          },
+          "mutation": {
+            "rootFontSize": "14.1px",
+            "rootTypeScale": "0.94",
+            "rootFontSizeBase": "calc(0.9375rem * 0.94)",
+            "cardFontSize": "14.1px",
+            "titleFontSize": "11.5972px",
+            "flexGap": "14.1px",
+            "spaceGap": "14.6246px"
+          },
+          "afterInvalidate1": {
+            "rootFontSize": "14.1px",
+            "rootTypeScale": "0.94",
+            "rootFontSizeBase": "calc(0.9375rem * 0.94)",
+            "cardFontSize": "14.1px",
+            "titleFontSize": "11.5972px",
+            "flexGap": "14.1px",
+            "spaceGap": "14.6246px"
+          },
+          "afterInvalidate2": {
+            "rootFontSize": "14.1px",
+            "rootTypeScale": "0.94",
+            "rootFontSizeBase": "calc(0.9375rem * 0.94)",
+            "cardFontSize": "14.1px",
+            "titleFontSize": "11.5972px",
+            "flexGap": "14.1px",
+            "spaceGap": "14.6246px"
+          }
+        }
+      }
+    },
+    "deliveryComparison": {
+      "artifactVersion": 1,
+      "phase": "H3B live-mutation vs fresh-page inline",
+      "vertical": "rottay",
+      "modes": {
+        "stylesheet-fresh": {
+          "root": "14.1px",
+          "scale": "0.94",
+          "card": "14.1px",
+          "title": "11.5972px",
+          "flexGap": "14.1px",
+          "spaceGap": "14.1px"
+        },
+        "inline-live": {
+          "root": "14.1px",
+          "scale": "0.94",
+          "card": "14.1px",
+          "title": "11.5972px",
+          "flexGap": "14.1px",
+          "spaceGap": "14.6796px"
+        },
+        "inline-fresh": {
+          "root": "14.1px",
+          "scale": "0.94",
+          "card": "14.1px",
+          "title": "11.5972px",
+          "flexGap": "14.1px",
+          "spaceGap": "14.1px"
+        }
+      }
+    }
+  }
+}

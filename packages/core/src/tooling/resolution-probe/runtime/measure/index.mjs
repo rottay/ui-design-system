@@ -85,6 +85,54 @@ const PAGE_URL = `${PROBE_ORIGIN}/probe.html`;
 const CSS_URL = `${PROBE_ORIGIN}/bundle.css`;
 
 /**
+ * The query marker that tells a freshly created document to carry the inline
+ * write. It travels in the URL rather than in the harness's memory because the
+ * decision has to be readable INSIDE the document, before anything is painted,
+ * and a navigation is the only thing the document sees.
+ */
+export const FRESH_DELIVERY_MARKER = 'inline=1';
+
+/** Recorded on the arm so an artifact states WHEN its write landed, not only where. */
+export const FRESH_DELIVERY = 'fresh-page';
+
+/**
+ * The inline write, installed on a document that has not computed anything yet.
+ *
+ * SERIALIZED INTO THE PAGE by `addInitScript`, so it may reference nothing from
+ * this module: everything it needs arrives in its single argument, including
+ * the marker. It is exported and kept whole for one reason — a drill can run
+ * THIS function, the one the browser runs, against a fake document, instead of
+ * a second copy that could drift from it.
+ *
+ * `document.documentElement` is null when a document is first created, so the
+ * write is deferred to `DOMContentLoaded` in that case. That is still before
+ * any style is resolved: what must not happen is a write landing after some
+ * element has already computed against the old root, which is precisely the
+ * defect this delivery exists to remove.
+ *
+ * @param {{marker: string, ops: Array<{op: string, name: string, value?: string, priority?: string}>}} input
+ */
+export function deliverInlineOnFreshDocument({ marker, ops }) {
+  if (!location.search.includes(marker)) return;
+  const apply = () => {
+    const style = document.documentElement.style;
+    for (const op of ops) {
+      if (op.op === 'remove') {
+        style.removeProperty(op.name);
+        continue;
+      }
+      // A fresh document has no `style` attribute to take away, so the memo's
+      // attribute op has nothing to do here. It stays in the recorded plan
+      // because a reader still has to see what the page carried before the run.
+      if (op.op === 'remove-attribute') continue;
+      style.setProperty(op.name, op.value, op.priority || '');
+    }
+  };
+  if (document.documentElement) apply();
+  else document.addEventListener('DOMContentLoaded', apply, { once: true });
+}
+
+/**
  * The applied-sheet canary.
  *
  * FIRST BUILD OF THIS HARNESS INJECTED THE STYLESHEET WITH `addStyleTag` and
@@ -444,13 +492,16 @@ async function applyDial(page, plan, dial, dialTarget) {
  * THE TWO ARMS REMOVE DIFFERENTLY, BECAUSE THEY LAND DIFFERENTLY.
  *
  *   root-inline-style   The provider's position. The mutation is applied with
- *                       setProperty on the document element of the SAME page,
- *                       and removal replays a plan built from an inline memo
- *                       taken BEFORE the write — so a preexisting inline
- *                       declaration comes back byte-identical with its
- *                       priority, and a property the harness introduced is
- *                       removed rather than zeroed to a "default" that only
- *                       happens to match today.
+ *                       setProperty on the document element — but on a document
+ *                       that has computed NOTHING yet (H3C): the write is
+ *                       installed before first paint and the phase is navigated,
+ *                       exactly as the stylesheet arm already navigates. So
+ *                       removal does not replay an unwrite at all; it is a
+ *                       navigation without the marker, and the page simply never
+ *                       carries the declaration. The memo and the restore plan
+ *                       are still built and recorded — a preexisting inline
+ *                       declaration and its priority have to be readable by
+ *                       anyone checking the run — but nothing executes them.
  *
  *   tenant-scoped-      The compiled artifact's position. A stylesheet cannot
  *   stylesheet-block    be un-declared inside a live document the way an
@@ -565,12 +616,45 @@ export async function measureCausalScope({
             'wrote" from "delete what was already there".',
         );
       }
-      inline = { memo, ...planFromMemo(memo) };
-      await applyInlineOps(page, inline.write);
-      await settle(page);
+      inline = { memo, ...planFromMemo(memo), delivery: FRESH_DELIVERY };
+
+      /* H3C: THE WRITE IS DELIVERED ON A FRESH PAGE, NOT ONTO A LIVE ONE.
+       *
+       * The position is unchanged and deliberately so: this is still an inline
+       * write on the document element, which is where the provider lands. What
+       * changed is WHEN. Mutating a live page left some elements computed
+       * against the old root -- the document element picked up the new value
+       * while a descendant's calc still resolved against the previous root
+       * font-size, in the SAME reading. That state is stable, so it agrees with
+       * itself and the H-3a stability law cannot see it; the law is kept
+       * because the phase lag it does catch is real and separate.
+       *
+       * Installing the write before first paint makes every element compute
+       * once, exactly as the static arm gets for free by navigating per phase.
+       * Isolation evidence, all three modes on one scene and one bundle:
+       * test-artifacts/quality-evidence/wo-cra-23/H3/residual-isolation.MEASURED-NOT-RECEIPTED.json
+       *
+       * The SERVING MODEL IS UNTOUCHED: `mutateCss` for this arm returns the
+       * baseline verbatim, so all three phases are served the same bytes. If a
+       * divergence disappears under this change it cannot be attributed to a
+       * different stylesheet, which is what makes the fix falsifiable.
+       */
+      await page.addInitScript(deliverInlineOnFreshDocument, {
+        marker: FRESH_DELIVERY_MARKER,
+        ops: inline.write,
+      });
+
+      await page.goto(`${pageUrlFor('mutation')}&${FRESH_DELIVERY_MARKER}`, { waitUntil: 'load' });
+      await assertStylesheetApplied(page, scope);
       const mutation = await observe();
-      await applyInlineOps(page, inline.restore);
-      await settle(page);
+
+      /* Removal is a navigation WITHOUT the marker, so the harness writes
+       * nothing at all rather than unwriting what it wrote. That is a stronger
+       * restore than replaying the memo -- there is no inline declaration left
+       * to be wrong about -- and the memo above is still recorded, because a
+       * reader must be able to see what the page carried before the run. */
+      await page.goto(pageUrlFor('removal'), { waitUntil: 'load' });
+      await assertStylesheetApplied(page, scope);
       const removal = await observe();
       phases = { baseline, mutation, removal };
     } else {
@@ -639,27 +723,6 @@ export async function readInlineMemo(page, names) {
   }, names);
 }
 
-/** Executes a plan. The page decides nothing; every decision was made in foundation/causality. */
-export async function applyInlineOps(page, ops) {
-  await page.evaluate((operations) => {
-    const element = document.documentElement;
-    const style = element.style;
-    for (const op of operations) {
-      if (op.op === 'remove') {
-        style.removeProperty(op.name);
-        continue;
-      }
-      if (op.op === 'remove-attribute') {
-        // Only when the write left nothing behind: a declaration that survived
-        // is a restore defect the comparison must still see, not one to erase.
-        if (style.length === 0) element.removeAttribute(op.name);
-        continue;
-      }
-      style.setProperty(op.name, op.value, op.priority || '');
-    }
-  }, ops);
-}
-
 /** The layer canary tokens, read on every measured element rather than on the root. */
 export async function readTargetCanaries(page, plan, canaries) {
   return page.evaluate(
@@ -679,15 +742,6 @@ export async function readTargetCanaries(page, plan, canaries) {
       return output;
     },
     { rows: plan, properties: canaries },
-  );
-}
-
-function settle(page) {
-  return page.evaluate(
-    () =>
-      new Promise((resolve) => {
-        requestAnimationFrame(() => requestAnimationFrame(() => resolve(null)));
-      }),
   );
 }
 

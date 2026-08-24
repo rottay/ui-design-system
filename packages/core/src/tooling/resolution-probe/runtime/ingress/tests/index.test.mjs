@@ -1566,3 +1566,86 @@ test('H-2 drill 9 (W-C): the guard stands on the ARM\'s baseline, and proves it'
     /only the static arm takes a baseline/,
   );
 });
+
+// ---------------------------------------------------------------------------
+// H3C — the DB arm delivers its write on a FRESH page
+//
+// These assert the CONTRACT of the arm, not the browser. What a browser does
+// with a live mutation is measured in
+// test-artifacts/quality-evidence/wo-cra-23/H3/residual-isolation.MEASURED-NOT-RECEIPTED.json;
+// what belongs in a drill is that the arm kept its position and its restore law
+// while changing only WHEN the write lands.
+// ---------------------------------------------------------------------------
+
+test('H3C drill 1: the DB arm keeps the root-inline-style POSITION', async () => {
+  // The whole point of H3C is that it is NOT a serving change in disguise. If
+  // this ever reads `tenant-artifact-stylesheet`, phase (a) was adopted by the
+  // back door and the packet that adopts it must say so.
+  const arms = await loadCompilerArms();
+  const lowered = lowerStop({
+    armId: 'db-tenant-theme',
+    controlManifest: TYPO_H2,
+    stopId: 'compacta',
+    compile: arms['db-tenant-theme'].compile,
+    vertical: 'rottay',
+    provenance: arms['db-tenant-theme'].provenance,
+  });
+  const arm = composeDbArm({ variables: lowered.variables, producedBy: lowered.producedBy });
+  assert.equal(arm.position, 'root-inline-style');
+  // ...and it still carries no CSS of its own: the serving model is what makes
+  // a zero-divergence result attributable to delivery rather than to a
+  // different stylesheet.
+  const baseline = '/* baseline */';
+  assert.equal(arm.mutateCss(baseline), baseline, 'the DB arm must not mutate the served CSS');
+});
+
+test('H3C drill 2: every phase of the DB arm is served the SAME bytes', async () => {
+  // The falsifiability condition, asserted rather than trusted. Both arms are
+  // compared on one scene; if the DB arm ever served different CSS per phase,
+  // "0 divergent rows" would stop being evidence about delivery.
+  const arms = await loadCompilerArms();
+  const lowered = lowerStop({
+    armId: 'db-tenant-theme',
+    controlManifest: TYPO_H2,
+    stopId: 'amplia',
+    compile: arms['db-tenant-theme'].compile,
+    vertical: 'bithire',
+    provenance: arms['db-tenant-theme'].provenance,
+  });
+  const arm = composeDbArm({ variables: lowered.variables, producedBy: lowered.producedBy });
+  const css = 'html { color: red }';
+  for (const phase of ['baseline', 'mutation', 'removal']) {
+    assert.equal(arm.mutateCss(css), css, `phase ${phase} must be served the baseline verbatim`);
+  }
+});
+
+test('H3C drill 3: the inline plan still names what it introduced, so restore stays decidable', async () => {
+  // Fresh delivery removes the NEED to unwrite -- a navigation without the
+  // marker carries no inline declaration at all -- but the memo and the plan
+  // are still recorded. A run whose restore could not be described would be a
+  // run nobody can check, whatever it measured.
+  const { planInlinePhase } = await import('../../../foundation/causality/index.mjs');
+  const plan = planInlinePhase({
+    memo: { '--ds-type-scale': { present: false }, '#attribute': { present: false } },
+    properties: { '--ds-type-scale': '0.94' },
+  });
+  assert.deepEqual(plan.write, [
+    { op: 'set', name: '--ds-type-scale', value: '0.94', priority: '' },
+  ]);
+  assert.ok(
+    plan.restore.some((op) => op.op === 'remove' && op.name === '--ds-type-scale'),
+    'a property the harness introduced is removed, never zeroed to a default',
+  );
+  // And the element that carried no `style` attribute gets none back.
+  assert.ok(plan.restore.some((op) => op.op === 'remove-attribute' && op.name === 'style'));
+
+  // The other half of the law, which fresh delivery must not erase: a
+  // PREEXISTING inline declaration comes back byte-identical with its priority.
+  const withPrior = planInlinePhase({
+    memo: { '--ds-type-scale': { present: true, value: '1.02', priority: 'important' } },
+    properties: { '--ds-type-scale': '0.94' },
+  });
+  assert.deepEqual(withPrior.restore, [
+    { op: 'set', name: '--ds-type-scale', value: '1.02', priority: 'important' },
+  ]);
+});

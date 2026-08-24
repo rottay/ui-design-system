@@ -14,6 +14,7 @@
     "packages/core/manifest/controls/experience.profile.json",
     "packages/core/manifest/controls/shape.radius-scale.json",
     "packages/core/manifest/controls/surfaces.effect-intensity.json",
+    "packages/core/manifest/controls/typography.scale.json",
     "packages/core/manifest/families/primitive/display/card.json",
     "packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts",
     "packages/core/src/foundation/tokens/css/facade/artifacts/evnto/index.css",
@@ -66,10 +67,10 @@
     "packages/core/src/ui/primitives/display/Card/engines/rustic/index.tsx",
     "packages/core/src/ui/primitives/display/Card/index.tsx"
   ],
-  "sourceDigest": "07a9072c1a8851f0ac915a2c1283d39799cb96eee51ab4aa89cf3f44fd7a7cfa",
+  "sourceDigest": "2b38b62a91da83b08cda617b8f3c56e086cc9175350c76451aa52e0dbd03e6cb",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/experience-profile/evnto-technical.json",
   "artifactSha256": "a03aa0c5871bf9e99df9ba8d4e99e5e5d9e359a87c3822ad21853ded214ab045",
-  "createdAt": "2026-08-24T04:16:38.000Z",
+  "createdAt": "2026-08-24T05:51:30.000Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

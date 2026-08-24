@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "generatedBy": "node packages/core/manifest/generator/index.mjs --sync",
   "authorityLaw": "Controls own semantics, groups own recipe vocabularies, families own applicability edges, and this index owns generated rollups.",
-  "inputsDigest": "5566b8df900343f9f51c47853bea952ecc49dedc3de886cd37ec403ba8276faa",
+  "inputsDigest": "ff47ec3656124b3630d506ec335f38c4dac928d9bd1865c96105636b183ea4b1",
   "denominators": {
     "canonicalFamilies": 255,
     "activeStandardControls": 13,
@@ -227,13 +227,56 @@
       },
       {
         "controlId": "typography.scale",
-        "declaredFamilies": 4,
-        "unknownCells": 251,
+        "declaredFamilies": 5,
+        "unknownCells": 250,
         "applicableFamilyIds": [],
-        "parts": [],
-        "propertyGroups": [],
-        "channels": [],
+        "parts": [
+          "root",
+          "title"
+        ],
+        "propertyGroups": [
+          "surface-decoration"
+        ],
+        "channels": [
+          "--_ds-card-body-font-size",
+          "--_ds-card-body-font-size-sm",
+          "--_ds-card-body-line-height",
+          "--_ds-card-header-eyebrow-size",
+          "--_ds-card-subtitle-font-size",
+          "--_ds-card-title-font-size",
+          "--_ds-card-title-font-size-lg",
+          "--_ds-card-title-font-size-sm",
+          "--_ds-card-title-line-height"
+        ],
         "families": [
+          {
+            "familyId": "primitive/display/card",
+            "layer": "primitive",
+            "disposition": "UNKNOWN",
+            "verificationState": "COMPUTED_VERIFIED",
+            "stableParts": [
+              "root",
+              "title"
+            ],
+            "propertyGroups": [
+              "surface-decoration"
+            ],
+            "computedProperties": [
+              "font-size",
+              "letter-spacing"
+            ],
+            "channels": [
+              "--_ds-card-body-font-size",
+              "--_ds-card-body-font-size-sm",
+              "--_ds-card-body-line-height",
+              "--_ds-card-header-eyebrow-size",
+              "--_ds-card-subtitle-font-size",
+              "--_ds-card-title-font-size",
+              "--_ds-card-title-font-size-lg",
+              "--_ds-card-title-font-size-sm",
+              "--_ds-card-title-line-height"
+            ]
+          },
           {
             "familyId": "primitive/layout/flex",
             "layer": "primitive",
@@ -1437,7 +1480,7 @@
     {
       "controlId": "typography.scale",
       "path": "manifest/controls/typography.scale.json",
-      "digest": "14c8b227d6001cfe3ccddacd533b9638d63a51335618148b833d84a6d2b6821f"
+      "digest": "fbf7943db059dc91c24e516212b265dbf273349c5de95d3b8220b47f23bc5fcb"
     },
     {
       "controlId": "shape.radius-scale",
@@ -2094,7 +2137,7 @@
     {
       "familyId": "primitive/display/card",
       "path": "manifest/families/primitive/display/card.json",
-      "digest": "de5cf06c1b9e6cd5c0a226947ca1ad663a129d31c5668e33ac01382cbc2b7131",
+      "digest": "cb77183a71127c09b719802dc0c283e248e7847cc72fe6a827b9bb7e8af95ce1",
       "maximumClaim": "SOURCE_BOUND",
       "reviewVerdict": null
     },

@@ -15451,10 +15451,17 @@
     {
       "controlId": "typography.scale",
       "disposition": "UNKNOWN",
-      "verificationState": "UNKNOWN",
-      "unknownReason": "NOT_ASSESSED",
-      "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "verificationState": "COMPUTED_VERIFIED",
+      "unknownReason": "SHAPE_AND_SIGHTED_ACCEPTANCE_PENDING. The computed evidence exists (see evidenceIds): both ingress doors measured on one scene, three verticals, both themes, the full 14-fixture roster, with ZERO divergent rows between the arms, restore exact and the negative controls held. disposition stays UNKNOWN for reasons that are NOT missing measurement: the schema dispositionLaw for APPLICABLE requires separate staticSourceBindings/dbSourceBindings plus states and stressCases, which this cell shape does not carry, and SIGHTED_ACCEPTED is not claimable from a computed run.",
+      "evidenceIds": [
+        "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/typography-scale/rottay-compacta.json.receipt.json",
+        "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/typography-scale/bithire-compacta.json.receipt.json",
+        "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/typography-scale/evnto-compacta.json.receipt.json",
+        "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/typography-scale/rottay-amplia.json.receipt.json",
+        "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/typography-scale/bithire-amplia.json.receipt.json",
+        "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/typography-scale/evnto-amplia.json.receipt.json"
+      ],
+      "nextAction": "OBTAIN_SIGHTED_ACCEPTANCE",
       "targetBinding": {
         "uncoveredByDesign": {
           "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
@@ -15608,7 +15615,34 @@
             "state": "LIVE"
           }
         }
-      ]
+      ],
+      "mechanism": "THEME_CONTROL",
+      "stableParts": [
+        "root",
+        "title"
+      ],
+      "propertyGroups": [
+        "surface-decoration"
+      ],
+      "computedProperties": [
+        "font-size",
+        "letter-spacing"
+      ],
+      "taxonomyPrecisionNote": "PARTIAL AND SAID SO. stableParts, computedProperties and the negative controls are exactly what the six runs measured moving on this family -- card-modern-md/root moves font-size (15px -> 14.1px at compacta, both arms) and card-modern-md/title moves font-size and letter-spacing (13.125px -> 11.5972px, -0.196875px -> -0.173959px). line-height is NOT listed because it did not move in the measured run, and a property named here that no run moved would be a claim, not a taxonomy. propertyGroups is the imprecise field: anatomy.propertyGroups owns only \"surface-decoration\" and \"surface-radius\" for this family, neither of which is a typographic group, so the cell uses surface-decoration the way experience.profile already does for letter-spacing. Naming the group honestly would mean extending anatomy.propertyGroups, which is a source-bound change to the anatomy section and belongs to whoever re-derives it, not to this packet.",
+      "sourceBindings": [
+        "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
+        "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css",
+        "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card.css",
+        "packages/core/src/foundation/tokens/css/presentation/components/card.css",
+        "packages/core/src/foundation/tokens/css/presentation/components/skin/card-compounds.css",
+        "packages/core/manifest/controls/typography.scale.json"
+      ],
+      "negativeControls": [
+        "color remains fixed",
+        "border width and style remain fixed",
+        "motion remains fixed"
+      ],
+      "negativeControlsScopeNote": "Bound at every-measured-target scope, so all fourteen fixtures are checked rather than a chosen few. \"font metrics remain fixed\" is deliberately absent: it names what this control MOVES. \"control height remains fixed\" is absent for a measured reason and not a cautious one -- the rem root derives from this dial, so every rem-sized control follows it on BOTH arms in step, and asserting otherwise would call the dial working a violation. \"border remains fixed\" is replaced by \"border width and style remain fixed\" because the first bundles the four border radius longhands, which belong to shape.radius-scale."
     },
     {
       "controlId": "shape.radius-scale",

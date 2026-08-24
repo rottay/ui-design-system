@@ -436,6 +436,11 @@ export function buildCausalReport({
         entry.inline
           ? {
               clobbered: entry.inline.clobbered ?? [],
+              // WHEN the write landed, not only where. Without it `restoreOps`
+              // below reads as a replayed unwrite, which under fresh delivery
+              // it is not: the plan is recorded, the removal phase is a
+              // navigation that never carries the write in the first place.
+              delivery: entry.inline.delivery ?? null,
               introduced: entry.inline.introduced ?? [],
               restoreOps: entry.inline.restore ?? [],
             }
