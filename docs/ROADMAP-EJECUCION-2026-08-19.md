@@ -3688,6 +3688,68 @@ como packets futuros obligatorios, NO de F4B):**
    `effectiveTheme` (hoy CSS y los objetos públicos pueden representar dos
    estilos distintos).
 
+**F4B-9 — shape.button-style: keypath corregido, control cerrado en
+SOURCE_BOUND (2026-08-24, Sonnet; postaudit pendiente al asentar).** El fix es
+la clase F4B-7 tercera vez probada: `brandThemePath` era prosa
+(`chrome.controls.button* (radius channels)`) → `surfaces.buttonStyle`
+(campo real, `brand-theme:786` + `themes:597`), con el comentario patrón y una
+precisión nueva: este canal NO tiene seed incondicional, así que una corrida
+por la puerta rota habría fallado RUIDOSO, no en silencio. El registryDigest
+de los 20 manifests se re-derivó (mecánico, verificado digest-only campo por
+campo). 4 receipts R7 (rottay+evnto × sharp/pill, paridad byte-exacta, restore
+exact, H-2 decidable en ambos brazos). **El packet destapó DOS defectos de
+producto reales, ambos OPEN_DT:** (1) `DECLARED_CHANNEL_DOES_NOT_PAINT` —
+`--ds-radius-button` se emite y se mueve limpio, pero `button.css` NUNCA lo
+lee: pinta vía `--ds-button-{xs..xl}-radius`, que el branch de buttonStyle no
+escribe. El dial mueve un canal que nada pinta (medido en browser: 32 filas,
+`border-top-left-radius` jamás se movió). El fix es compilador/CSS (packet
+propio, F4C/vertical). (2) `CHANNEL_SHADOWED_BY_AUTHORED_CHROME_LEAF` — bithire
+autora `chrome.controls.buttonGeometry.radius: '9px'` incondicionalmente y
+`chromeToVariables` lo esparce DESPUÉS del branch de buttonStyle: el canal
+queda fijo sin importar el stop → su brazo estático no puede discriminar (el
+guard lanza exactamente eso); el brazo DB sí discrimina, pero un brazo solo
+nunca pasa (`pass` exige ≥2 brazos por diseño). Pregunta de producto
+registrada: ¿debería el dial del tenant ganarle a la hoja autorada de bithire?
+(opción B dice sí; el arreglo es de orden/hoja, packet propio). **El control
+cierra en SOURCE_BOUND, no COMPUTED_VERIFIED, por honestidad de la escalera:**
+la celda de button no puede reclamar `computedProperties` con nada pintado
+movido (el generador mismo rechazó COMPUTED_VERIFIED) — el compilador está
+verificado en aislamiento, pero la escalera certifica consecuencia PINTADA.
+`stopDiscriminationException` usada por primera vez en producción: **RATIFICADA
+por el DT** (`adjudicatedBy: Kimi K3 (DT)` — propuesta por el ejecutor con el
+hecho medido tres veces; es un hecho, no una decisión de diseño). `soft`:
+medido no-discriminante en rottay/evnto (computa idéntico al fallback de
+foundation — sin receipt, con ley escrita). Identity: NO declarado (ningún
+vertical autora el field literal; `resolveIdentityValue` habría fallado
+fail-closed — "an identity that has to be invented is not an identity").
+Extensión de harness precedentada ×4 (una propiedad en token-readout).
+Desviaciones adjudicadas: los 19 manifests digest-only + `producers.json`
+digest-only (ripples mecánicos del registry edit) + `fixtures.json` (la
+extensión) + `button.json` (celda, `unknownReason` + evidenceIds; `disposition`
+y `verificationState` quedan UNKNOWN; NO se autoró `propertyGroups` — habría
+sido falso). **Colateral: 12 rojos APCA preexistentes** (tenant-theme-compiler
+×9, capability-reachability ×2, theme-iso ×2) con el mismo error
+(`dark --ds-card-title-color Lc 10.8 against --ds-card-bg`) — investigación
+separada DESPACHADA a Opus por directiva del owner (¿regresión real de a11y en
+dark, o pins rancios clase R-1?; alta confianza de que es K1/F4A-6 llegando a
+dist por primera vez).
+
+**F4B-9 — CIERRE (2026-08-24): postaudit Fable REJECT local de secuencia →
+corrección mecánica → ACCEPT final.** El REJECT no fue de contenido: mi propia
+ratificación (15:31:42, el string `adjudicatedBy`) movió el digest del manifest
+del control DESPUÉS de la secuencia de cierre (15:21:49) — los 4 receipts
+nuevos lo llevan en `sourceFiles` y quedaron stale junto al índice (4/56
+INVALID + program-check REFUSA; los 52 viejos intactos). Corrección: re-emisión
+de los 4 (artifacts byte-idénticos antes/después, verificado) → index →
+CONSTITUTION_READY → 56/56 VALID. **Lección de vara asentada (Fable): toda
+edición de manifest posterior a la verificación — incluida la ratificación de
+un string — re-corre `re-emitir → index → program-check → validar` ANTES de
+despachar al auditor.** De ahora en más, mis ratificaciones van ANTES del
+cierre de secuencia del implementador, o la secuencia se re-corre. ACCEPT
+final de Fable: `shape.button-style` cierra en SOURCE_BOUND con sus dos
+defectos OPEN_DT registrados. F4B sigue 8/20 COMPUTED_VERIFIED + 1
+SOURCE_BOUND con evidencia sellada.
+
 **F0 — CERRADO (2026-08-19).** Criterio de cierre cumplido:
 `ci-gates OK — 78 blocking gate(s) passed` (2 excluded visibles con razón y
 dueño: channel-liveness y lane-control-drills, ambos esperan a F2); `find src -type d -empty` vacío salvo el inbox

@@ -7,7 +7,7 @@
   "semanticOwner": {
     "owner": "design-system",
     "registryPath": "packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts",
-    "registryDigest": "88622b9370257a8793f8bfdadfcf408edef6b12289afb9deea7c0425a7328301"
+    "registryDigest": "1c0d6459c6d744ad8acdbd87045a58c01c7365964e823b0627d3029c32b72eda"
   },
   "title": "Button silhouette",
   "valueType": "enum",
@@ -22,7 +22,7 @@
     "defaultBehavior": "vertical baseline silhouette"
   },
   "ingress": {
-    "staticBrandThemePath": "chrome.controls.button* (radius channels)",
+    "staticBrandThemePath": "surfaces.buttonStyle",
     "dbTenantThemePath": "appearance.general.shape.buttonStyle"
   },
   "declaredOutputs": {
@@ -39,12 +39,88 @@
     "symbol": "var(--ds-button-md-radius"
   },
   "calibration": {
-    "assessmentState": "UNKNOWN",
-    "normalizedStops": [],
-    "staticDbParityEvidenceIds": [],
-    "exactRestoreEvidenceIds": [],
-    "negativeControls": [],
-    "nextAction": "CALIBRATE_LOWERERS_COMPUTED_DELTAS_NEGATIVES_AND_EXACT_RESTORE"
+    "assessmentState": "SOURCE_BOUND",
+    "assessmentStateNote": "Capped at SOURCE_BOUND (rank 1), not COMPUTED_VERIFIED (rank 3) or IMPLEMENTED (rank 2), by the family-cell ceiling rule: a control may not outrank the strongest verificationState any of its family cells honestly reaches. `primitive/inputs/button` -- this control's ONLY productive family -- cannot claim IMPLEMENTED+ because that rank requires non-empty stableParts/propertyGroups/computedProperties naming a painted delta on the family's own anatomy, and nothing was observed moving there (see knownDefects/DECLARED_CHANNEL_DOES_NOT_PAINT); claiming them would assert a painted delta this family does not have. This is not a weaker claim about the compiler mechanism itself: the compiler IS computed-verified in isolation, with byte-identical static/DB parity, 0 divergent ingress rows and exact restore on every receipted scenario (see measuredResult and the 4 receipts). The cap is honest about what the ladder rank is actually for -- a verified PAINTED consequence somewhere in the system -- which this control does not yet have.",
+    "normalizedStops": [
+      {
+        "id": "sharp",
+        "value": "sharp"
+      },
+      {
+        "id": "soft",
+        "value": "soft",
+        "law": "DEFAULT/NO-OP on rottay and evnto, deliberately unreceipted. Neither vertical authors surfaces.buttonStyle or an experience profile, so their baseline --ds-radius-button (via the DS foundation seed, borders.css:27) and the compiled value of the literal enum 'soft' (BUTTON_STYLE_RADIUS.soft = var(--ds-radius-md, 8px), appearance-posture.ts:51) are the SAME string family and resolve identically in the browser -- measured: moved=0 on both arms, both verticals. Not a broken door: assertStopDiscrimination and the browser reading agree exactly. bithire was not tested at this stop for the same reason sharp/pill were not: its static arm has no discrimination to test (see knownDefects/CHANNEL_SHADOWED_BY_AUTHORED_CHROME_LEAF)."
+      },
+      {
+        "id": "pill",
+        "value": "pill"
+      }
+    ],
+    "identityNote": "No identity stop is declared, and this is a measured omission, not an oversight (F4B-8/W-A: identity is whatever the static arm's own baseline already authors at the ingress keypath). None of the three first-party verticals authors `surfaces.buttonStyle` literally -- confirmed by exhaustive grep of all three brand-theme sources, zero matches. `resolveIdentityValue` throws fail-closed on an absent baseline value by design (`an identity that has to be invented is not an identity`); an identity stop here would have to invent one. `defaultBehavior: vertical baseline silhouette` does not mean a literal field is authored: absent this field, the channel falls through to the DS foundation seed (`foundation/base/borders.css:27`, `--ds-radius-button: var(--ds-radius-md)`) or, for bithire only, to an unrelated authored chrome leaf (see knownDefects).",
+    "stopDiscriminationException": {
+      "armId": "static-brand-theme",
+      "reason": "bithire ONLY: chrome.controls.buttonGeometry.radius: '9px' is authored unconditionally in bithire's own BrandTheme and chromeToVariables spreads it onto vars AFTER the buttonStyle posture branch (brand-theme.ts:2020, {...paletteVars, ...chromeVars}), so --ds-radius-button lowers the SAME constant (calc(9px / bithire's radiusScale * ...)) across all 3 declared stops on this arm -- tool-measured verbatim: assertStopDiscrimination itself throws this exact refusal when run un-excepted (packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/shape-button-style/ carries no bithire receipt for this reason). rottay and evnto are UNAFFECTED: this exception is consulted only on the failure branches (witnesses<2 or discriminating=0), so it does not touch their already-passing PASS verdict. See knownDefects/CHANNEL_SHADOWED_BY_AUTHORED_CHROME_LEAF for the full chain.",
+      "adjudicatedBy": "Kimi K3 (DT), 2026-08-24 — RATIFIED. Proposed by the F4B-9 packet executor with the fact measured three times (source, the guard's own verbatim refusal, a DB-only run); ratified as a statement of measured fact, not as a design decision about whether a tenant override should someday win over bithire's authored leaf — that adjudication (same class as shape.radius-scale's own bithire compensation note) is explicitly NOT made here and is tracked as knownDefects/CHANNEL_SHADOWED_BY_AUTHORED_CHROME_LEAF (OPEN_DT)."
+    },
+    "staticDbParityEvidenceIds": [
+      "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/shape-button-style/rottay-sharp.json.receipt.json",
+      "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/shape-button-style/evnto-sharp.json.receipt.json"
+    ],
+    "exactRestoreEvidenceIds": [
+      "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/shape-button-style/rottay-pill.json.receipt.json",
+      "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/shape-button-style/evnto-pill.json.receipt.json"
+    ],
+    "negativeControls": [
+      "control height remains fixed",
+      "touch target remains fixed",
+      "font metrics remain fixed",
+      "color remains fixed",
+      "border width and style remain fixed",
+      "motion remains fixed"
+    ],
+    "negativeControlsScopeNote": "shape.button-style owns the CORNER of the button and nothing else, so the negative set is the rest of button-modern-md/hitbox: its box (control height remains fixed, touch target remains fixed -- both bound to button-modern-md/hitbox, a real control-bearing target unlike shape.radius-scale's card root, so both are declarable here), its type, its colour, its border STROKE and its motion. \"border remains fixed\" is deliberately NOT declared, same law as shape.radius-scale: it bundles the four border-*-radius longhands with the widths/styles, so binding it would assert the very channel under test must not move. Replaced by \"border width and style remain fixed\" (border-width-style-fixed), reused unchanged from shape.radius-scale's own vocabulary entry.",
+    "nextAction": "ADJUDICATE_CHANNEL_WIRING_THEN_DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+    "sourceBindings": [
+      "packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts",
+      "packages/core/src/infrastructure/compilers/kernel/foundation/css/appearance-posture/index.ts",
+      "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
+      "packages/core/src/infrastructure/compilers/composition/tenant-theme/index.ts",
+      "packages/core/src/infrastructure/compilers/kernel/foundation/css/chrome-variables/index.ts",
+      "packages/core/src/foundation/kernel/geometry/radius-dial/index.ts",
+      "packages/core/src/foundation/tokens/css/foundation/base/borders.css",
+      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+      "packages/core/src/tooling/resolution-probe/foundation/roster/fixtures.json"
+    ],
+    "measuredResult": {
+      "instrument": "packages/core/src/tooling/resolution-probe (causal command), Chromium, --bundle fresh, Node 22.17.0.",
+      "authorityFix": "ONE ingress field. capabilities/index.ts's brandThemePath read `chrome.controls.button* (radius channels)`, prose with a parenthetical: every walker here splits on `.`, so it resolved to `chrome['controls']['button* (radius channels)']` and landed the stop where nothing reads it -- the exact F4B-7 class, confirmed against source before editing (brand-theme:786 reads `bt.surfaces?.buttonStyle`; BrandSurfaces.buttonStyle at themes/index.ts:597). Fixed to `surfaces.buttonStyle`. The manifest is generated from that registry (generator/index.mjs --sync); regeneration touched all 20 control manifests' semanticOwner.registryDigest plus manifest/index.json's derived digests and NOTHING ELSE semantic -- verified field by field against the pre-edit tree.",
+      "harnessExtension": "--ds-radius-button carried no direct-read fixture: directControlFixtureIds requires a fixture target whose declared properties include every channel the control declares, and token-readout's tokens target did not track this one (only its sibling --ds-button-md-radius/--ds-button-md-border-radius did, from an earlier control's extension). Every prior F4B control needed the identical step (rhythm 2026-08-11, effect-intensity/experience.profile/density.mode all 2026-08-23, per fixtures.json's own dated 'Extended...' provenance trail) -- this is that same precedented, one-property addition, not a new mechanism. Without it every causal run for this control resolves harness-suspect regardless of keypath correctness, which is exactly what the first trial run (pre-extension) measured.",
+      "directChannel": "--ds-radius-button read directly on token-readout moved on BOTH arms, both verticals, both stops, both modes (light/dark), with byte-identical applied values between arms: rottay/evnto sharp -> `calc(2px * var(--ds-radius-scale, 1))`; sharp/pill baselines calc(10px * 1) [rottay] / calc(14px * 1) [evnto] -> calc(2px * 1) / calc(9999px * 1) respectively. ingressEquivalence.equivalent = true, 0 differing rows, on all 4 receipted scenarios.",
+      "paintedHalf": "DOES NOT MOVE, and this is the finding that matters most in this packet. button-modern-md/root's own `border-top-left-radius` -- the actual painted corner -- stayed at 10px (rottay) / 14px (evnto) in EVERY scenario, EVERY stop, EVERY arm: moved=false throughout. Traced to source and confirmed structurally, not just observationally: `button.css:73,364` reads `var(--ds-button-md-radius, var(--ds-radius-md))` for the resolved paint radius -- never `--ds-radius-button`. The buttonStyle posture branch (appearance-posture.ts:145-154) writes ONLY `--ds-radius-button`, never the five `--ds-button-{xs,sm,md,lg,xl}-radius` siblings button.css actually reads. Repo-wide grep of `--ds-radius-button` (excluding tests/generated) finds exactly 3 producers (this posture branch; chrome-variables.ts:1742 for an authored chrome leaf; borders.css:27's unconditional foundation seed) and exactly 2 non-registry readers: a dead JS token-mirror export (`foundation/base/borders/index.ts:35`, zero importers repo-wide) and an unrelated framework-bridge projection variable (`framework-token-projection.css:43`, feeds some OTHER framework's --radius-field, not this DS's own Button). The control's OWN registry evidence already named the real paint channel correctly (`evidence.symbol: 'var(--ds-button-md-radius'`) while `derivedChannels` named the disconnected one -- the mismatch predates this packet and this packet did not correct it (see knownDefects/DECLARED_CHANNEL_DOES_NOT_PAINT; out of the one-line authorized fix).",
+      "verticalBaselines": "rottay and evnto do not author `surfaces.buttonStyle` or an `experienceProfile` at all, so their baseline `--ds-radius-button` is whatever the DS foundation seed resolves (`var(--ds-radius-md)`: 10px on rottay, 14px on evnto -- each vertical's own radius-md, measured, not assumed). bithire authors `experienceProfile: 'rottay/bithire-technical@1'`, which resolves a geometry-derived buttonStyle field default distinct from its OWN authored `chrome.controls.buttonGeometry.radius: '9px'` leaf -- but the leaf always wins on the static arm regardless (see knownDefects).",
+      "restore": "restore.exact = true on all 4 receipted scenarios, 1040 compared rows each, zero differing rows -- byte-identical baseline/removal on every measured computed property, custom property and root attribute.",
+      "negativeWitness": "All 6 declared negative controls resolved (declaredPhrasesFor) and held (assertNegativeControlsHeld) on every receipted scenario: color, font metrics, motion, border width/style, and (bound to button-modern-md/hitbox) control height and touch target."
+    },
+    "unmeasuredScope": [
+      "bithire has ZERO receipts for this control -- not a partial-coverage gap, a structural one. Its static arm throws at `assertStopDiscrimination` before any browser measurement: bithire's own `chrome.controls.buttonGeometry.radius: '9px'` (chrome-variables.ts:1742, folded through applyRadiusDial) is written UNCONDITIONALLY by chromeToVariables and spread onto `vars` AFTER the buttonStyle posture branch (brand-theme.ts:2020, `{...paletteVars, ...chromeVars}`), so `--ds-radius-button` is pinned to `calc(9px / bithire's radiusScale * ...)` regardless of any surfaces.buttonStyle stop -- measured tool-thrown message quoted verbatim in knownDefects. bithire's DB arm alone DOES discriminate (compileTenantThemeConfig never reads BrandTheme.chrome) -- measured moved=2 on a naked db-only run -- but a single-arm causal run can never reach verdict.pass=true by this harness's own explicit design (`ingressEquivalenceHeld` requires `comparable`, which requires >=2 arms; composition/run/index.mjs:509-516's own comment: 'a claim that was never tested is not a claim that held'), so NO receipt -- of any evidenceKind -- is producible for bithire through this control via this instrument. H-2's >=2-witness bar is met by rottay+evnto instead.",
+      "The `soft` stop is measured non-discriminating on rottay/evnto (see normalizedStops[1].law) and untested on bithire (moot: no arm reaches a browser measurement for bithire at all).",
+      "Only `primitive/inputs/button`'s button-modern-md fixture was measured. --ds-radius-button's only OTHER reader in the whole CSS tree (framework-token-projection.css's --radius-field bridge) was not exercised.",
+      "Responsive divergence (one viewport, 1280x800 dpr1) and the `xs/sm/lg/xl` button sizes were not measured -- moot given the paintedHalf finding: none of the five per-size channels this control would need to reach are written by this dial at all, at any size."
+    ],
+    "knownDefects": [
+      {
+        "familyId": "DECLARED_CHANNEL_DOES_NOT_PAINT",
+        "finding": "shape.button-style's declared channel, --ds-radius-button, is correctly and cleanly EMITTED by both compilers (this packet's own receipts prove it: clean discrimination, 0 differing ingress rows, exact restore) but is NOT the channel `button.css` reads to paint the button's corner. `button.css:73,364` resolves the corner from `var(--ds-button-md-radius, var(--ds-radius-md))` -- a sibling channel the buttonStyle posture branch never writes. Measured directly in the browser on every one of the 4 receipted scenarios: token-readout's --ds-radius-button moves every time; button-modern-md/root's own border-top-left-radius never does. The control's own registry `evidence.symbol` already names the real paint channel (`--ds-button-md-radius`) correctly; only `derivedChannels` names the wrong one. Fixing this needs a compiler change (either the posture branch also writes the five --ds-button-{size}-radius siblings, or button.css falls back through --ds-radius-button) which the F4B-9 write-set explicitly excludes ('NO se toca: compiladores').",
+        "disposition": "OPEN_DT",
+        "remediation": "Not touched here: this is a compiler/CSS wiring gap, not a keypath, and is outside the authorized one-line registry fix. The dial's OWN mechanism is computed-verified (it does exactly what the compiler code says it does) but currently paints nothing a sighted reviewer could see move on any vertical -- this is why the control is capped at IMPLEMENTED rather than COMPUTED_VERIFIED (see assessmentStateNote) and why nextAction routes to adjudicating this wiring gap before a family binding, rather than straight to sighted acceptance of a dial with no visible effect."
+      },
+      {
+        "familyId": "CHANNEL_SHADOWED_BY_AUTHORED_CHROME_LEAF",
+        "finding": "On bithire ONLY, the static arm's --ds-radius-button is permanently pinned by bithire's own `chrome.controls.buttonGeometry.radius: '9px'` (compiled artifact: `--ds-radius-button: calc(9px / 1.25 * var(--ds-radius-scale, 1))`, facade/artifacts/bithire/index.css:809), because chromeToVariables spreads onto `vars` AFTER the buttonStyle posture branch and the shape.button-style ingress patch never touches `chrome.controls.buttonGeometry.radius`. Tool-measured, not inferred: `node .../causal --stop sharp --vertical bithire` throws `resolution-probe: Error: resolution-probe: static-brand-theme encodes NO stop for shape.button-style: every declared channel (--ds-radius-button) lowers a constant across 3 witness stops (sharp, soft, pill). A non-empty arm carrying a constant default is the false-INERT vector; it is not a measurement.` -- the harness's own assertStopDiscrimination guard, working exactly as designed. Same anti-door SHAPE as shape.radius-scale's borderRadius-vs-radiusScale compensation path, different mechanism (an unconditional authored leaf spread last, not a calc-cancellation formula).",
+        "disposition": "OPEN_DT",
+        "remediation": "Not touched here: adjudicating whether bithire's authored 9px leaf should defer to a tenant's surfaces.buttonStyle selection is a product/design decision (does a tenant override win over the vertical's own hand-tuned button corner?), owned by a future wave, same class as shape.radius-scale's own bithire compensation note."
+      }
+    ]
   },
   "retiredAliases": []
 }

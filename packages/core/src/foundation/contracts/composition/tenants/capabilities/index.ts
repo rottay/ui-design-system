@@ -235,7 +235,21 @@ export const TENANT_CAPABILITY_REGISTRY = Object.freeze([
       enumValues: ['sharp', 'soft', 'pill'],
       defaultBehavior: 'vertical baseline silhouette',
       documentPath: 'appearance.general.shape.buttonStyle',
-      brandThemePath: 'chrome.controls.button* (radius channels)',
+      // The static door is the FIELD the compiler reads, not a description of
+      // where it paints. This once read `chrome.controls.button* (radius
+      // channels)`, which is prose with a parenthetical, not a keypath: every
+      // walker here splits on `.`, so it resolved to
+      // `chrome["controls"]["button* (radius channels)"]` and landed the stop
+      // where nothing reads it. `BrandSurfaces.buttonStyle` is the real field
+      // (themes/index.ts:597) and `brand-theme:786` hands it to the posture
+      // lowering, whose buttonStyle branch writes `--ds-radius-button` only
+      // `if (posture.buttonStyle)` (appearance-posture:145-154) — unlike
+      // `typography.scale`/`density.mode`, this channel carries no
+      // unconditional seed, so a live run through the broken door would have
+      // failed LOUD (the empty-lowering guard, not a silent pass). No stop had
+      // been authored yet; the F4B-9 preflight census caught the prose door by
+      // reading the walker and registry source directly.
+      brandThemePath: 'surfaces.buttonStyle',
       derivedChannels: ['--ds-radius-button'],
       compat: 'additive, unset-to-rollback',
     },

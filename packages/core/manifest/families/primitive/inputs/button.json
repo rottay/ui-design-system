@@ -13903,9 +13903,14 @@
       "controlId": "shape.button-style",
       "disposition": "UNKNOWN",
       "verificationState": "UNKNOWN",
-      "unknownReason": "NOT_ASSESSED",
-      "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "unknownReason": "NOT_ASSESSED_ON_THIS_FAMILY. The control's ingress keypath is fixed and SOURCE_BOUND (F4B-9, capabilities/index.ts brandThemePath prose -> `surfaces.buttonStyle`, same class as F4B-7): receipted on rottay and evnto, both arms, sharp/pill, clean stop discrimination, 0 divergent ingressEquivalence rows, exact restore (see the control's own calibration.measuredResult and evidenceIds below). bithire has NO receipt: its static arm is permanently shadowed by its own authored `chrome.controls.buttonGeometry.radius` leaf (assertStopDiscrimination throws, tool-measured), and its DB arm alone can never reach a receiptable verdict by this harness's design. NOT raised to IMPLEMENTED on this family: that rank requires non-empty stableParts/propertyGroups/computedProperties describing a painted delta on this family's own anatomy, and this family is the productive witness that NONE exists -- root's own border-top-left-radius was measured NOT moving in all 4 receipted scenarios, every stop, every arm. button.css reads --ds-button-md-radius (falling back to --ds-radius-md), never --ds-radius-button; the posture branch this control's dial runs through never writes that sibling channel. Claiming a stable part or property group here would assert a painted delta this family does not have. See the control's own knownDefects/DECLARED_CHANNEL_DOES_NOT_PAINT.",
+      "evidenceIds": [
+        "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/shape-button-style/rottay-sharp.json.receipt.json",
+        "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/shape-button-style/rottay-pill.json.receipt.json",
+        "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/shape-button-style/evnto-sharp.json.receipt.json",
+        "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/shape-button-style/evnto-pill.json.receipt.json"
+      ],
+      "nextAction": "ADJUDICATE_CHANNEL_WIRING_THEN_DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "internalChannels": [
         {
           "channelId": "--_ds-button-xs-radius",

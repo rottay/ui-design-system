@@ -5,7 +5,7 @@
   "scenarioId": "typography.scale/compacta/evnto/static-and-db",
   "evidenceKind": "static-db-computed-parity",
   "commandOrTool": "node src/tooling/resolution-probe/public/cli/index.mjs causal",
-  "toolVersion": "resolution-probe@9a6d455ac48d",
+  "toolVersion": "resolution-probe@fa9e6d1c136b",
   "exitCode": 0,
   "sourceFiles": [
     "packages/core/dist/build-stamp.json",
@@ -66,10 +66,10 @@
     "packages/core/src/ui/primitives/display/Card/engines/rustic/index.tsx",
     "packages/core/src/ui/primitives/display/Card/index.tsx"
   ],
-  "sourceDigest": "0051effa048f2162dbd48cd745008ea0f70b123d8e9323f9e302ccf0dbc4a983",
+  "sourceDigest": "15ddb93e60618ec094ed557b455ec9fe69e745907883d210382b71816c42e00c",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/typography-scale/evnto-compacta.json",
   "artifactSha256": "6fcfa241d012e5576658360c9b3f6302fe2a2009d52f50763a6ec546eae42a6c",
-  "createdAt": "2026-08-24T17:54:19.081Z",
+  "createdAt": "2026-08-24T19:21:41.606Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

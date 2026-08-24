@@ -4,7 +4,7 @@
   "scope": "Phase-0 exact proof and minimal public-claim floor; not DS-IMP-060 completion",
   "reproducibility": {
     "classification": "deterministic same-input runs",
-    "authorityDigest": "aee67c285e7b2c7113cdf184333dc341efcb43de4895a3f30bb30feff019973f",
+    "authorityDigest": "3005a48255ca0844e40ca2aeb677062b199492881c291f44b94da03793e8ede2",
     "sourceHeadIsAuthority": false,
     "toolchain": {
       "node": {
@@ -1383,8 +1383,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 31298,
-        "sha256": "88622b9370257a8793f8bfdadfcf408edef6b12289afb9deea7c0425a7328301"
+        "bytes": 32315,
+        "sha256": "1c0d6459c6d744ad8acdbd87045a58c01c7365964e823b0627d3029c32b72eda"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/contracts/composition/tenants/index.ts",
@@ -15581,8 +15581,8 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 26230,
-        "sha256": "b058a14c6b7d23e0a06aea07f0440963d9715347332e64977c025cebfd3795e6"
+        "bytes": 27104,
+        "sha256": "7e93c60fce027092a6527e33e4befcb2b6a7758f2385bb7f7670a32895de6b67"
       },
       {
         "path": "ui-design-system/packages/core/src/tooling/resolution-probe/foundation/roster/tests/index.test.tsx",
@@ -40511,7 +40511,7 @@
         "sha256": "d2a99efed33922a4a699ea033538b677022ddaccf0cdbb25ece0a7295bdc4812"
       }
     ],
-    "digest": "aee67c285e7b2c7113cdf184333dc341efcb43de4895a3f30bb30feff019973f"
+    "digest": "3005a48255ca0844e40ca2aeb677062b199492881c291f44b94da03793e8ede2"
   },
   "paintAudit": {
     "output": "engine-token-audit --check OK (3326 counters; 3226 completed zeros locked exactly; 91 decrease-only ceilings; 2 positive exact invariants; 7 positive minimum floors)",
@@ -113892,8 +113892,8 @@
   "deterministicRuns": {
     "count": 2,
     "hashes": [
-      "7dc21c233ff29bb98000a45ffcb48a0dd37ad635a900d47614b8afbb2ee3e4d4",
-      "7dc21c233ff29bb98000a45ffcb48a0dd37ad635a900d47614b8afbb2ee3e4d4"
+      "6eacb400a66e60f504cee0cd9ed919e2f7d1a0bd1da4883d2e80168ab869ba8a",
+      "6eacb400a66e60f504cee0cd9ed919e2f7d1a0bd1da4883d2e80168ab869ba8a"
     ],
     "agree": true
   }

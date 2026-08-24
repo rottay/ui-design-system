@@ -2,7 +2,7 @@
   "schemaVersion": 2,
   "roundId": "R7",
   "familyId": "primitive/inputs/button",
-  "scenarioId": "palette.seeds/indigo/bithire/static-and-db",
+  "scenarioId": "shape.button-style/pill/evnto/static-and-db",
   "evidenceKind": "exact-restore",
   "commandOrTool": "node src/tooling/resolution-probe/public/cli/index.mjs causal",
   "toolVersion": "resolution-probe@fa9e6d1c136b",
@@ -11,13 +11,11 @@
     "packages/core/dist/build-stamp.json",
     "packages/core/dist/infrastructure/compilers/kernel/runtime/brand-theme/index.js",
     "packages/core/dist/server.js",
-    "packages/core/manifest/controls/palette.seeds.json",
+    "packages/core/manifest/controls/shape.button-style.json",
     "packages/core/manifest/families/primitive/inputs/button.json",
     "packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts",
-    "packages/core/src/foundation/contracts/composition/tenants/themes/index.ts",
-    "packages/core/src/foundation/kernel/color/oklch/index.ts",
-    "packages/core/src/foundation/kernel/color/oklch/ramp/index.ts",
     "packages/core/src/foundation/tokens/css/facade/artifacts/bithire/index.css",
+    "packages/core/src/foundation/tokens/css/facade/artifacts/evnto/index.css",
     "packages/core/src/foundation/tokens/css/facade/entrypoints/base.css",
     "packages/core/src/foundation/tokens/css/foundation/responsive/button.css",
     "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
@@ -62,14 +60,14 @@
     "packages/core/styles/index.css",
     "packages/core/styles/rottay.css"
   ],
-  "sourceDigest": "b2c65e6265ae7d928410f9a571422cd4b34a7526e7fc9a6000ca919535b6583f",
-  "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/palette-seeds/bithire-indigo.json",
-  "artifactSha256": "a720ea1b69ecd258b9b2e8d5cd39a279e404bf62c24b0e467cdf2ecba70e62f5",
-  "createdAt": "2026-08-24T19:21:41.010Z",
+  "sourceDigest": "97e98c8f539e1b0cfc443813b1a65804197ee4f1ac22ce562370c5203f5f3d1d",
+  "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/shape-button-style/evnto-pill.json",
+  "artifactSha256": "ffc14b0021ee3ac6e059a669570fdb5b593fdd3978f7dc15ad3b2278d5113004",
+  "createdAt": "2026-08-24T19:40:41.026Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,
     "proof": "node --test src/tooling/resolution-probe/foundation/causality/tests/index.test.mjs src/tooling/resolution-probe/foundation/guards/tests/index.test.mjs src/tooling/resolution-probe/foundation/negative-controls/tests/index.test.mjs src/tooling/resolution-probe/composition/run/tests/index.test.mjs"
   },
-  "producer": "claude-opus-5-f4b-lane"
+  "producer": "claude-sonnet-5-f4b9-lane"
 }

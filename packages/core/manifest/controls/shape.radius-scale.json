@@ -7,7 +7,7 @@
   "semanticOwner": {
     "owner": "design-system",
     "registryPath": "packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts",
-    "registryDigest": "88622b9370257a8793f8bfdadfcf408edef6b12289afb9deea7c0425a7328301"
+    "registryDigest": "1c0d6459c6d744ad8acdbd87045a58c01c7365964e823b0627d3029c32b72eda"
   },
   "title": "Radius scale dial",
   "valueType": "scale",
