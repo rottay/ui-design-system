@@ -46,6 +46,25 @@ const CLOSURE_MEMBERS = [
   "packages/core/hooks-manifest.json",
   "packages/core/tokens/controls/README.md",
   "packages/core/src",
+  // T-2: the evidence tree. Without it NO F4B receipt exists inside the
+  // sandbox, so every cell that names one fails to resolve it and test 1
+  // reported 56 error lines -- an artefact of the copy boundary, not of the
+  // manifest under test. The sandbox is a CLOSURE: a check that reads receipts
+  // needs the receipts in it.
+  "packages/core/test-artifacts",
+  // ...and the four build outputs those receipts DECLARE as their own source.
+  // Measured, not guessed: all 39 receipts name build-stamp.json and server.js,
+  // 36 name the compiled brand-theme and 3 name index.js, and nothing else of
+  // dist is referenced. With the receipts present but these absent the errors
+  // merely changed shape -- from "does not exist" to "source digest is stale"
+  // -- which is the same copy-boundary artefact wearing a different message.
+  // Listed one by one rather than as `packages/core/dist`: the whole tree is
+  // 67M against ~140K for these four, and naming them keeps the sandbox's
+  // dependency on build output legible instead of wholesale.
+  "packages/core/dist/build-stamp.json",
+  "packages/core/dist/server.js",
+  "packages/core/dist/index.js",
+  "packages/core/dist/infrastructure/compilers/kernel/runtime/brand-theme/index.js",
   "packages/showroom/src",
   "packages/showroom/e2e/whitelabel/density-authority-matrix.spec.ts",
 ];

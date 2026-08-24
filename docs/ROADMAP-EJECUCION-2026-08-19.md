@@ -2460,6 +2460,51 @@ validación de rangos del patch merece su propia puerta.
 **`motion.dial` queda `UNKNOWN` honesto** (limitación preexistente del
 harness: `domain.kind: "scale"`; medido por compilador, no forzado).
 
+##### T-2 — triage: frescura de producers.json + CLOSURE_MEMBERS; tablero 48/48 (2026-08-23)
+
+Los **dos rojos preexistentes de la suite constitucional quedan cerrados**,
+cada uno por su causa verdadera. `program-check.test.mjs` pasa de 46/48 a
+**48/48 — completamente verde por primera vez en la historia del asiento**
+(Fable: "el piso más limpio que este asiento ha auditado"). Writer: Opus.
+Postaudit Fable: **ACCEPT**, memo `/private/tmp/t2-triage-fable-postaudit.md`
+(SHA en su `.ready`), con análisis multiset independiente del auditor
+coincidente al detalle.
+
+1. **A11 (frescura de producers.json):** el inventario commiteado quedó
+   stale por la serie F4B (58.195 hojas cambiadas, medición del writer —
+   la clasificación es idéntica al diagnóstico Codex de 57.731; el número
+   propio se reporta en vez del ajeno). Inspección ANTES de re-derivar:
+   **todas menos 492 hojas son POSICIONALES** (deriva de ordinal/línea tras
+   B-1 en `brand-theme/index.ts`); `producerSites` bajo (file, symbol,
+   ownerId, plane) = multiset EXACTO (cero reclasificaciones);
+   `channelEmissions` bajo identidad sin ordinal = multiset EXACTO. Stats
+   invariantes byte a byte: unknown=0, openBlocking=0, conflicts=0,
+   lotBOpen=true, cohortes 69/627/534/728/66, producerSites 4872,
+   channelEmissions 10313, distinctChannels 4585. Cero filas unknown
+   nuevas, cero conflictos de ownership (las condiciones de STOP no se
+   dieron). Re-derivado por el productor canónico; `--check` OK;
+   `cascade-producers.test.mjs` 209/209 (N13 y T-21 verdes — T-21 sólo
+   dentro del packet).
+2. **Test 1 (sandbox CLOSURE_MEMBERS):** el fix nombrado en T-1 (añadir
+   `packages/core/test-artifacts`) resultó necesario pero NO suficiente —
+   con los receipts presentes y sus fuentes ausentes, el error sólo cambió
+   de forma (56 → 39 → 0). Las 5 entradas finales: `test-artifacts` + los 4
+   build outputs nombrados UNO POR UNO (dist/build-stamp.json, server.js,
+   brand-theme/index.js, index.js — 67M del árbol entero vs ~140K;
+   dependencia legible; guard D-4 intacto). Aislamiento preservado: 48/48.
+
+**Observación de cobertura asentada como OPEN_DT:**
+`expressive-profiles/expansion/index.ts:151-155` escribe 5 canales `--ds-*`
+gobernados en un literal y el archivo no aparece en NINGUNA lista del
+inventario de productores (causa leída: el plano `ts-compilers` se asigna
+POR NOMBRE a una lista cerrada, `:93`). ¿Frontera deliberada o hueco de
+cobertura? — decisión posterior, con los datos del postaudit Fable §3.
+
+**Estado del tablero tras T-2:** `program-check.test.mjs` 48/48;
+`program-check.mjs` CONSTITUTION_READY; receipts 39/39 VALID+FRESH;
+`cascade-producers --check` OK. Sin un solo rojo conocido fuera de las
+deudas adjudicadas con dueño.
+
 **F0 — CERRADO (2026-08-19).** Criterio de cierre cumplido:
 `ci-gates OK — 78 blocking gate(s) passed` (2 excluded visibles con razón y
 dueño: channel-liveness y lane-control-drills, ambos esperan a F2); `find src -type d -empty` vacío salvo el inbox
