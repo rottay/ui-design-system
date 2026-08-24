@@ -29,6 +29,7 @@ import {
   assertNoRetiredCompilerBinding,
   buildIngressInput,
   composeDbArm,
+  dbTenantIdentity,
   ingressPathMembers,
   resolveIngressMember,
   composeStaticArm,
@@ -100,19 +101,29 @@ test('positive control: a static arm appends a tenant block and leaves the basel
   );
 });
 
-test('positive control: a DB arm carries no CSS, because it writes inline on the root', () => {
+test('positive control: the DB arm SERVES the compiled artifact, scoped like production', () => {
+  /* AGED EXPECTATION, re-legislated in H-3 phase (a). This asserted the arm
+   * carried no CSS "because it writes inline on the root" -- true until phase
+   * (a), and false in two places at once (the position AND the untouched CSS).
+   * What aged is the transport, not the law: the arm must still be attributable
+   * to its compiler and must still leave the baseline byte-identical. */
   const arm = composeDbArm({
+    vertical: 'rottay',
     variables: { '--ds-rhythm-scale': '1.2' },
     producedBy: { ...PRODUCED_BY, exportName: 'compileTenantThemeConfig' },
   });
-  assert.equal(arm.position, 'root-inline-style');
+  assert.equal(arm.position, 'tenant-artifact-stylesheet');
+  assert.equal(arm.selector, tenantArmSelector('rottay'), 're-scoped onto the scene, not the probe slug');
   const baseline = ':root { --ds-rhythm-scale: 1; }';
-  assert.equal(arm.mutateCss(baseline), baseline);
+  const mutated = arm.mutateCss(baseline);
+  assert.notEqual(mutated, baseline, 'the arm now carries CSS');
+  assert.ok(mutated.startsWith(baseline), 'and it APPENDS: the baseline bytes are never rewritten');
+  assert.ok(mutated.includes('--ds-rhythm-scale: 1.2;'));
 });
 
 test('negative drill: a payload with NO compiler binding is refused', () => {
   assert.throws(
-    () => composeDbArm({ variables: { '--ds-rhythm-scale': '1.2' } }),
+    () => composeDbArm({ vertical: 'rottay', variables: { '--ds-rhythm-scale': '1.2' } }),
     /needs a producedBy binding/,
     'a variable map the harness wrote itself proves only that the harness can multiply',
   );
@@ -129,7 +140,7 @@ test('negative drill: an EMPTY lowering is a finding, not an arm', () => {
 test('negative drill: an arm may carry custom properties only', () => {
   assert.throws(
     () =>
-      composeDbArm({ variables: { 'font-size': '12px' }, producedBy: PRODUCED_BY }),
+      composeDbArm({ vertical: 'rottay', variables: { 'font-size': '12px' }, producedBy: PRODUCED_BY }),
     /custom properties only/,
   );
 });
@@ -332,6 +343,7 @@ test('negative drill: the static arm refuses to compile with no tenantSlug', () 
 
 test('negative drill: an arm whose lowered path disagrees with the manifest is reported', () => {
   const arm = composeDbArm({
+    vertical: 'rottay',
     variables: { '--ds-rhythm-scale': '1.2' },
     producedBy: {
       module: 'dist/.../appearance/index.js',
@@ -389,6 +401,7 @@ test('loadCompilerArms claims freshness only after the dist gate proves it', asy
 
 test('negative drill: manifest agreement rejects a forged compiler module or export', () => {
   const arm = composeDbArm({
+    vertical: 'rottay',
     variables: { '--ds-rhythm-scale': '1.2' },
     producedBy: {
       module: 'dist/fake/compiler.js',
@@ -1246,6 +1259,7 @@ test('H-1 drill 8 (V1): a static arm with no named baseline fails arm verificati
   // A DB arm has no baseline to name and must NOT be asked for one.
   assert.doesNotThrow(() =>
     composeDbArm({
+      vertical: 'rottay',
       variables: { '--ds-x': '1' },
       producedBy: { ...withoutBaseline, exportName: 'compileTenantThemeConfig' },
     }),
@@ -1582,10 +1596,16 @@ test('H-2 drill 9 (W-C): the guard stands on the ARM\'s baseline, and proves it'
 // while changing only WHEN the write lands.
 // ---------------------------------------------------------------------------
 
-test('H3C drill 1: the DB arm keeps the root-inline-style POSITION', async () => {
-  // The whole point of H3C is that it is NOT a serving change in disguise. If
-  // this ever reads `tenant-artifact-stylesheet`, phase (a) was adopted by the
-  // back door and the packet that adopts it must say so.
+test('H3C drill 1 [re-legislated by H-3 phase (a)]: the position changed BY THE FRONT DOOR', async () => {
+  /* AGED EXPECTATION, and the good kind: this drill did its job.
+   *
+   * It read "the DB arm keeps root-inline-style", and its comment said that if
+   * it ever read `tenant-artifact-stylesheet`, phase (a) had been adopted by the
+   * back door and the packet adopting it must say so. Phase (a) was adopted, by
+   * the FRONT door, with a design, a preaudit and this packet -- so the fence
+   * is satisfied by being inverted, not removed. What it now guards is the
+   * reverse: a silent slide BACK to inline would mean the artifact position was
+   * abandoned without an acta. */
   const arms = await loadCompilerArms();
   const lowered = lowerStop({
     armId: 'db-tenant-theme',
@@ -1595,19 +1615,29 @@ test('H3C drill 1: the DB arm keeps the root-inline-style POSITION', async () =>
     vertical: 'rottay',
     provenance: arms['db-tenant-theme'].provenance,
   });
-  const arm = composeDbArm({ variables: lowered.variables, producedBy: lowered.producedBy });
-  assert.equal(arm.position, 'root-inline-style');
-  // ...and it still carries no CSS of its own: the serving model is what makes
-  // a zero-divergence result attributable to delivery rather than to a
-  // different stylesheet.
-  const baseline = '/* baseline */';
-  assert.equal(arm.mutateCss(baseline), baseline, 'the DB arm must not mutate the served CSS');
+  const arm = composeDbArm({
+    vertical: 'rottay',
+    variables: lowered.variables,
+    producedBy: lowered.producedBy,
+    modeVariables: lowered.modeVariables,
+    themeModeSelector: arms['db-tenant-theme'].themeModeSelector,
+  });
+  assert.equal(arm.position, 'tenant-artifact-stylesheet');
+  assert.equal(
+    INGRESS_ARMS['db-tenant-theme'].position,
+    'tenant-artifact-stylesheet',
+    'the contract and the composed arm must agree on the position',
+  );
 });
 
-test('H3C drill 2: every phase of the DB arm is served the SAME bytes', async () => {
-  // The falsifiability condition, asserted rather than trusted. Both arms are
-  // compared on one scene; if the DB arm ever served different CSS per phase,
-  // "0 divergent rows" would stop being evidence about delivery.
+test('H3C drill 2 [re-legislated]: the BASELINE bytes are identical in every phase', async () => {
+  /* AGED EXPECTATION. Under H3C the DB arm served the baseline verbatim in all
+   * three phases, and that was the falsifiability condition: a zero-divergence
+   * result could not be blamed on a different stylesheet. Phase (a) makes the
+   * arm carry CSS, so `mutateCss(css) === css` is no longer true -- but the
+   * condition it protected survives in the form the STATIC arm has always used:
+   * the arm APPENDS, so the baseline prefix is byte-identical in every phase and
+   * the removal phase re-serves that string untouched. */
   const arms = await loadCompilerArms();
   const lowered = lowerStop({
     armId: 'db-tenant-theme',
@@ -1617,11 +1647,24 @@ test('H3C drill 2: every phase of the DB arm is served the SAME bytes', async ()
     vertical: 'bithire',
     provenance: arms['db-tenant-theme'].provenance,
   });
-  const arm = composeDbArm({ variables: lowered.variables, producedBy: lowered.producedBy });
+  const arm = composeDbArm({
+    vertical: 'bithire',
+    variables: lowered.variables,
+    producedBy: lowered.producedBy,
+    modeVariables: lowered.modeVariables,
+    themeModeSelector: arms['db-tenant-theme'].themeModeSelector,
+  });
   const css = 'html { color: red }';
+  const mutated = arm.mutateCss(css);
   for (const phase of ['baseline', 'mutation', 'removal']) {
-    assert.equal(arm.mutateCss(css), css, `phase ${phase} must be served the baseline verbatim`);
+    assert.equal(
+      mutated.slice(0, css.length),
+      css,
+      `phase ${phase} must see the baseline bytes unchanged`,
+    );
   }
+  // Removal is the baseline itself, not a re-composition of it.
+  assert.equal(css, 'html { color: red }');
 });
 
 test('H3C drill 3: the inline plan still names what it introduced, so restore stays decidable', async () => {
@@ -2091,4 +2134,239 @@ test('M-1 drill 7 [needs dist]: the mode block must carry the OVERLAY, never the
   // And the real lowering is the correct one: the extraction reads the compiled
   // mode block, so this cannot pass by both sides being the same.
   assert.notDeepEqual(lowered.modeVariables.dark, lowered.variables);
+});
+
+/* ===================================================================== *
+ * H-3 PHASE (a) — the DB arm serves the compiled artifact.
+ *
+ * M-1 fixed the static arm and, in doing so, proved which arm was lying: the
+ * compilers AGREE in the non-default mode, and the inline DB write was the only
+ * thing that made them look like they disagreed. These drills fence the new
+ * transport and, above all, the two ways of getting it wrong -- flattening the
+ * deltas into the base, and spelling the mode grammar in the harness.
+ * ===================================================================== */
+
+const H3A2_PALETTE = readManifest(resolve(CORE_ROOT, 'manifest/controls/palette.seeds.json'));
+
+/** Both arms, lowered for the same stop on the same vertical, from dist. */
+async function h3a2Arms(vertical, stopId = 'primary/crimson') {
+  const arms = await loadCompilerArms();
+  const baselines = await loadStaticBaselines();
+  const lowerFor = (armId, extra) =>
+    lowerStop({
+      armId,
+      controlManifest: H3A2_PALETTE,
+      stopId,
+      compile: arms[armId].compile,
+      vertical,
+      provenance: arms[armId].provenance,
+      ...extra,
+    });
+  return {
+    arms,
+    staticLowered: lowerFor('static-brand-theme', {
+      base: baselines[vertical].theme,
+      baselineSource: baselines[vertical].source,
+    }),
+    dbLowered: lowerFor('db-tenant-theme', {}),
+  };
+}
+
+test('H-3(a) drill 1 [needs dist]: the DB arm emits 1+n blocks, re-scoped to the SCENE', async () => {
+  const { arms, dbLowered } = await h3a2Arms('bithire');
+  const arm = composeDbArm({
+    vertical: 'bithire',
+    variables: dbLowered.variables,
+    producedBy: dbLowered.producedBy,
+    modeVariables: dbLowered.modeVariables,
+    themeModeSelector: arms['db-tenant-theme'].themeModeSelector,
+  });
+  assert.equal(arm.selector, tenantArmSelector('bithire'));
+  assert.deepEqual(Object.keys(arm.modeSelectors), ['dark']);
+  assert.equal((arm.cssBlock.match(/\{/g) ?? []).length, 2);
+  // Re-scoped, NEVER the artifact's own probe-tenant selector: the scene cannot
+  // carry that slug, which is the measured reason the arm used to write inline.
+  assert.equal(arm.cssBlock.includes('probe-tenant-'), false);
+});
+
+test('H-3(a) drill 2 [needs dist]: the extraction reads the DB shape, named per arm', async () => {
+  // M-1 read only `modeBlocks`; the DB compiler returns `modeDeltas`. Before
+  // this packet `db.modeVariables` was `{}` while its compiler had produced a
+  // full dark delta -- measured, and the reason the DB half survived M-1.
+  const { staticLowered, dbLowered } = await h3a2Arms('bithire');
+  assert.ok(Object.keys(staticLowered.modeVariables.dark ?? {}).length > 0, 'static reads modeBlocks');
+  assert.ok(Object.keys(dbLowered.modeVariables.dark ?? {}).length > 0, 'db reads modeDeltas');
+  // And a compiler that returns the OTHER arm's shape yields nothing rather than
+  // being accepted by a `??` chain that would take whatever was there.
+  const arms = await loadCompilerArms();
+  const wrongShape = lowerStop({
+    armId: 'db-tenant-theme',
+    controlManifest: H3A2_PALETTE,
+    stopId: 'primary/crimson',
+    compile: () => ({
+      variables: { '--ds-color-primary': '#DC2626' },
+      modeBlocks: [{ mode: 'dark', cssVariables: { '--ds-color-primary': '#000000' } }],
+    }),
+    vertical: 'bithire',
+    provenance: arms['db-tenant-theme'].provenance,
+  });
+  assert.deepEqual(wrongShape.modeVariables, {}, 'the DB arm does not read modeBlocks');
+});
+
+test('H-3(a) drill 3 [needs dist]: the two arms carry the SAME dark values', async () => {
+  // The measurement the whole packet rests on, asserted against both real
+  // compilers rather than against literals.
+  const { staticLowered, dbLowered } = await h3a2Arms('bithire');
+  const s = staticLowered.modeVariables.dark;
+  const d = dbLowered.modeVariables.dark;
+  assert.deepEqual(Object.keys(d).sort(), Object.keys(s).sort());
+  for (const channel of Object.keys(d)) {
+    assert.equal(d[channel], s[channel], `${channel} must agree across arms in dark`);
+  }
+  // ...and the dark value is NOT the stop: the vertical overlay governs its mode.
+  assert.notEqual(d['--ds-color-primary'], staticLowered.variables['--ds-color-primary']);
+});
+
+test('H-3(a) drill 4: restore is the static arm law — append only', () => {
+  const arm = composeDbArm({
+    vertical: 'bithire',
+    variables: { '--ds-x': '1' },
+    producedBy: { ...PRODUCED_BY, exportName: 'compileTenantThemeConfig' },
+    modeVariables: { dark: { '--ds-x': '2' } },
+    themeModeSelector: (base, mode) => `${base}[data-theme='${mode}']`,
+  });
+  const baseline = '/* baseline */\nhtml { color: red }';
+  const mutated = arm.mutateCss(baseline);
+  assert.equal(mutated.slice(0, baseline.length), baseline);
+  assert.equal((mutated.slice(baseline.length).match(/\{/g) ?? []).length, 2);
+});
+
+test('H-3(a) drill 5 [needs dist]: the H-1 baseline law is untouched by the move', async () => {
+  const { dbLowered } = await h3a2Arms('bithire');
+  // V5: the DB arm takes no base, so it names no baseline. Changing its position
+  // must not have quietly given it one.
+  assert.equal(dbLowered.producedBy.input.baseline, null);
+  assert.doesNotThrow(() => assertArmProvenance(dbLowered.producedBy));
+});
+
+test('H-3(a) drill 6: the inline path is NOT retired', async () => {
+  // The acta, in code. The position the branch models is real (the provider
+  // preview), the `dial` command still writes inline through measureScope, and
+  // the H3C law stays under test.
+  const measure = await import('../../measure/index.mjs');
+  assert.equal(typeof measure.deliverInlineOnFreshDocument, 'function');
+  assert.equal(measure.FRESH_DELIVERY_MARKER, 'inline=1');
+  const source = readFileSync(
+    resolve(CORE_ROOT, 'src/tooling/resolution-probe/runtime/measure/index.mjs'),
+    'utf8',
+  );
+  assert.ok(source.includes("arm.position === 'root-inline-style'"), 'the branch is still there');
+  assert.ok(source.includes('NO CAUSAL ARM TAKES THIS BRANCH TODAY, AND IT STAYS'), 'and it says why');
+});
+
+test('H-3(a) drill 7 [needs dist]: an arm with no mode delta yields exactly one block', async () => {
+  // typography.scale has no declared channel in any mode block (the M-1 fence
+  // table), so its DB arm must be a single block -- and an empty delta must not
+  // emit an empty rule.
+  const arms = await loadCompilerArms();
+  const lowered = lowerStop({
+    armId: 'db-tenant-theme',
+    controlManifest: TYPO_H2,
+    stopId: 'compacta',
+    compile: arms['db-tenant-theme'].compile,
+    vertical: 'bithire',
+    provenance: arms['db-tenant-theme'].provenance,
+  });
+  const arm = composeDbArm({
+    vertical: 'bithire',
+    variables: lowered.variables,
+    producedBy: lowered.producedBy,
+    modeVariables: lowered.modeVariables,
+    themeModeSelector: arms['db-tenant-theme'].themeModeSelector,
+  });
+  assert.deepEqual(arm.modeSelectors, {});
+  assert.equal((arm.cssBlock.match(/\{/g) ?? []).length, 1);
+});
+
+test('H-3(a) drill 8 [needs dist]: FLATTENING the deltas into the base must not pass', async () => {
+  /* THE ERROR THIS EXISTS FOR, and it is the mirror of M-1's drill 7. Merging
+   * `modeDeltas` into the base map instead of scoping them makes "dark agree" by
+   * ERASING the distinction between modes: the dark value would then paint in
+   * BOTH modes. It compiles, it emits one tidy block, and it would make this
+   * packet look like a success. */
+  const { arms, dbLowered } = await h3a2Arms('bithire');
+  const correct = composeDbArm({
+    vertical: 'bithire',
+    variables: dbLowered.variables,
+    producedBy: dbLowered.producedBy,
+    modeVariables: dbLowered.modeVariables,
+    themeModeSelector: arms['db-tenant-theme'].themeModeSelector,
+  });
+  const flattened = composeDbArm({
+    vertical: 'bithire',
+    variables: { ...dbLowered.variables, ...dbLowered.modeVariables.dark },
+    producedBy: dbLowered.producedBy,
+    modeVariables: {},
+    themeModeSelector: arms['db-tenant-theme'].themeModeSelector,
+  });
+  assert.notEqual(correct.cssBlock, flattened.cssBlock);
+  // The base scope must carry the STOP, never the mode's value.
+  assert.equal(correct.variables['--ds-color-primary'], '#DC2626');
+  assert.equal(flattened.variables['--ds-color-primary'], dbLowered.modeVariables.dark['--ds-color-primary']);
+  assert.equal((correct.cssBlock.match(/\{/g) ?? []).length, 2, 'two scopes');
+  assert.equal((flattened.cssBlock.match(/\{/g) ?? []).length, 1, 'the flattened one has lost a scope');
+});
+
+test('H-3(a) drill 9 [needs dist]: the mode grammar has a NAMED source and is never spelled here', async () => {
+  // W-A. The tenant-theme module does not export the grammar; the arm borrows
+  // brand-theme's, and the lender is recorded rather than assumed.
+  const arms = await loadCompilerArms();
+  const brandTheme = INGRESS_ARMS['static-brand-theme'].compilerModule;
+  for (const id of INGRESS_ARM_IDS) {
+    assert.equal(typeof arms[id].themeModeSelector, 'function', `${id} has a grammar`);
+    assert.equal(arms[id].themeModeSelectorSource, brandTheme, `${id} records where it came from`);
+  }
+  // Both arms therefore produce the SAME mode selector for the same scope.
+  const selector = tenantArmSelector('bithire');
+  assert.equal(
+    arms['static-brand-theme'].themeModeSelector(selector, 'dark'),
+    arms['db-tenant-theme'].themeModeSelector(selector, 'dark'),
+  );
+  // And an arm that lowered modes with no grammar REFUSES.
+  const { dbLowered } = await h3a2Arms('bithire');
+  assert.throws(
+    () =>
+      composeDbArm({
+        vertical: 'bithire',
+        variables: dbLowered.variables,
+        producedBy: dbLowered.producedBy,
+        modeVariables: dbLowered.modeVariables,
+        themeModeSelector: null,
+      }),
+    /was handed no themeModeSelector/,
+  );
+});
+
+test('H-3(a) drill 10 [needs dist]: no probe artifact carries a prefers-color-scheme rule TODAY', async () => {
+  /* Fable note 1. `renderArtifactCss` adds an `@media (prefers-color-scheme: dark)`
+   * rule when the tenant's `backgroundMode` is `auto`, and the probe scene sets
+   * `colorScheme` by context, so such a rule WOULD apply. No probe envelope
+   * produces one today -- asserted here rather than assumed, so the day one
+   * does, this drill names the obligation instead of the arm silently serving
+   * less than production. */
+  const arms = await loadCompilerArms();
+  const db = arms['db-tenant-theme'];
+  for (const vertical of ['rottay', 'bithire', 'evnto']) {
+    const compiled = db.compile({
+      schemaVersion: db.provenance.schemaVersion,
+      mode: 'simple',
+      appearance: { palette: { primary: '#DC2626' } },
+      ...dbTenantIdentity(vertical),
+    });
+    assert.equal(
+      /@media[^{]*prefers-color-scheme/.test(compiled.css ?? ''),
+      false,
+      `${vertical}: a prefers-color-scheme rule appeared; the arm must now serve it too`,
+    );
+  }
 });

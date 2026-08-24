@@ -243,6 +243,7 @@ const STATIC_ARM = composeStaticArm({
 });
 
 const DB_ARM = composeDbArm({
+  vertical: 'rottay',
   variables: { '--ds-rhythm-scale': '1.2' },
   producedBy: {
     module: 'dist/server.js',
@@ -285,12 +286,26 @@ test('positive control: a healthy three-phase run passes and says why', () => {
 });
 
 test('positive control: the two ingress doors are compared on ONE scene', () => {
+  /* AGED EXPECTATION, re-legislated in H-3 phase (a). This asserted the two arms
+   * must land in DIFFERENT cascade positions "or the comparison is vacuous".
+   * That premise was wrong, and phase (a) is what made it visible: the positions
+   * were never what the comparison isolates -- the COMPILERS are. Different
+   * positions actively confounded the result, which is how an inline DB arm
+   * spent five packets reporting a mode scope no production path serves.
+   *
+   * Both arms are stylesheet arms now, at the same scopes, carrying the same
+   * declared channels. The comparison is vacuous if they share a COMPILER, and
+   * that is what this now asserts. */
   const result = report();
   assert.deepEqual(result.ingressEquivalence.arms, ['static-brand-theme', 'db-tenant-theme']);
   assert.notEqual(
-    result.arms['static-brand-theme'].position,
-    result.arms['db-tenant-theme'].position,
-    'the doors must land in different cascade positions or the comparison is vacuous',
+    result.arms['static-brand-theme'].provenance.exportName,
+    result.arms['db-tenant-theme'].provenance.exportName,
+    'the doors must be lowered by different compilers or the comparison is vacuous',
+  );
+  assert.notEqual(
+    result.arms['static-brand-theme'].provenance.module,
+    result.arms['db-tenant-theme'].provenance.module,
   );
   assert.match(result.ingressEquivalence.meaning, /same DOM/);
 });

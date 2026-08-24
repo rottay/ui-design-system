@@ -607,6 +607,20 @@ export async function measureCausalScope({
 
     let phases;
     let inline = null;
+    /* H-3 PHASE (a) — NO CAUSAL ARM TAKES THIS BRANCH TODAY, AND IT STAYS.
+     *
+     * The DB arm was the only `root-inline-style` arm, and phase (a) moved it to
+     * the compiled artifact's own position, so both causal arms are stylesheet
+     * arms now and fall through to the `else` below.
+     *
+     * It is kept rather than deleted, and this is the acta. The position it
+     * describes is REAL -- it is what the provider preview performs -- and
+     * whether the preview can express mode deltas at all has never been
+     * measured; deleting the branch would turn an unmeasured fidelity question
+     * into a silent answer. The `dial` command also still writes inline, through
+     * `measureScope`/`dialTarget` rather than through `arm.position`, and the
+     * H3C fresh-delivery drills exercise `deliverInlineOnFreshDocument`
+     * directly, so the law below stays under test either way. */
     if (arm.position === 'root-inline-style') {
       const memo = await readInlineMemo(page, Object.keys(arm.variables));
       if (typeof planFromMemo !== 'function') {

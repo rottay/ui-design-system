@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "generatedBy": "node packages/core/manifest/generator/index.mjs --sync",
   "authorityLaw": "Controls own semantics, groups own recipe vocabularies, families own applicability edges, and this index owns generated rollups.",
-  "inputsDigest": "260c845733baca37e72835cb45fbee07d64802c174b427f46cd6d087e2861bd3",
+  "inputsDigest": "20fbbedc9137472541cf29efc1693bd7a83c5472ccf709be5d7a2117299923c8",
   "denominators": {
     "canonicalFamilies": 255,
     "activeStandardControls": 13,
@@ -1465,7 +1465,7 @@
     {
       "controlId": "palette.seeds",
       "path": "manifest/controls/palette.seeds.json",
-      "digest": "1a6674ac8af8d34185fa5566c196893e02851829cab48ab5a884afcc10a12a54"
+      "digest": "8f392d0ac56d3af440c3b043f690f670e7fcc38ce8834221444f8dd07557525c"
     },
     {
       "controlId": "typography.pairing",

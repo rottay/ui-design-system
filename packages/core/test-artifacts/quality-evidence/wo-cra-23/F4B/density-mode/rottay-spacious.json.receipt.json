@@ -58,10 +58,10 @@
     "packages/core/src/ui/primitives/layout/Space/tests/Space.modern-fragment-children.test.tsx",
     "packages/core/src/ui/primitives/layout/Space/tests/Space.test.tsx"
   ],
-  "sourceDigest": "ea9126c37b275855d459ba19c60996fdbaac91abbdae98e56de93f9c6c431bb4",
+  "sourceDigest": "402be3015b3cebd24133153e46853cbfe4acaa6a7f2425c3a4f17441b974010b",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/density-mode/rottay-spacious.json",
   "artifactSha256": "e713b9cf1a9f6e313bc35ed86988e38e2b01899acfb787d6af283d46031c0f96",
-  "createdAt": "2026-08-24T11:17:36.000Z",
+  "createdAt": "2026-08-24T12:18:45.000Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

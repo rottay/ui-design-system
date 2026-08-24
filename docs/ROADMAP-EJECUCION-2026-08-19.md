@@ -3083,6 +3083,89 @@ pattern-matchee.
 necesario del único call site productivo de `composeStaticArm`; verificada
 por Fable como cableado, no lógica).
 
+##### H-3 fase (a) — el brazo DB sirve los modeDeltas; la mitad oscura de la divergencia CERRADA (2026-08-24)
+
+El acompañante del brazo DB para M-1: el brazo DB deja el inline y sirve
+el compilado como stylesheet — bloque base + uno por `modeDelta`,
+re-escopado a `tenantArmSelector(vertical)` componiendo desde los mapas
+extraídos (NUNCA parseando `artifact.css`: su selector lleva un slug que
+la escena no puede portar, medido). Los dos brazos comparten el mismo
+compositor (`composeArmCss`), así que difieren en una sola cosa — el
+compilador — y la equivalencia lo aísla en vez de confundirlo con la
+posición. Restore hereda la ley del estático (append-only; removal
+re-sirve el baseline byte-idéntico). Writer: Opus. Preaudit Fable: ACCEPT
+con W-A/W-B/W-C. Postaudit Fable: **ACCEPT con una condición de commit**
+(el puntero de supersesión del artifact durable — ejecutado en este
+commit como addendum a la compañía ya existente), memo
+`/private/tmp/h3a2-db-modeblocks-fable-postaudit.md` (SHA en su `.ready`).
+
+**W-A (la fuente de la gramática, que estaba VACÍA):** el módulo dist de
+tenant-theme no exporta `themeModeSelector` (la usa por dentro). Opción
+(a) elegida: el brazo DB toma prestada la gramática de brand-theme — cero
+cambio de compilador, su exportador la declara compartida ("Shared
+explicit-mode selector grammar for static AND DB artifact renderers"),
+misma gate de frescura, y el prestamista registrado en
+`themeModeSelectorSource` por brazo. La negativa vive en `composeArmCss`
+(TIRA si un brazo bajó bloques de modo sin gramática — ahí se distingue
+"corrida con scopes sin gramática" de "fixture sin modos"; un throw al
+cargar habría matado nueve drills de mecánica). Jamás deletreada en el
+harness.
+
+**La extracción que se olvidaba (la mitad DB que sobrevivió a M-1):**
+`lowerStop` leía sólo `modeBlocks` (`{mode, cssVariables}`) y el
+compilador DB devuelve `modeDeltas` (`{mode, variables}`) — ahora se leen
+las dos formas, por nombre y por brazo, nunca `??` encadenado.
+
+**Invariancia en DOS partes (el cerco del riesgo dominante):** 42
+escenarios CSS, 37.108 claves por intersección — modo DEFAULT 18.952 con
+**0 movidas** (bajar de inline a bloque podía apagar canales que se
+movían por fuerza del inline; la condición STOP no disparó) y modo
+NO-DEFAULT 18.156 con **0 movidas**. Conclusión comprada por esa corrida:
+ningún canal de los seis controles cerrados dependía de la fuerza del
+inline. 45/45 receipts tras la re-emisión (sólo frescura).
+
+**La mitad oscura de la divergencia, CERRADA (superando la predicción):**
+palette.seeds bithire 10→3 (las 7 filas dark DESAPARECIERON; las 3
+restantes son la clase chrome light `--ds-button-primary-bg` hex horneado
+vs alias — de la bajada de chrome, que esta fase declaró no tocar);
+palette.seeds evnto 5→0 `pass=true`; `experience.profile` bithire dark 0
+filas — **el residuo R7 que B-1 abrió está cerrado** (su re-cierre formal
+es del packet del defecto). **W-C superada con mecánica verificada, no
+suerte:** ni `--ds-material-canvas-texture` ni
+`--ds-color-text-on-primary` se volvieron fila — Fable midió que en las
+tres candidatas el valor dark con-stop es byte-idéntico al del baseline:
+"un canal que ningún brazo MUEVE se lee idéntico en los dos; el silencio
+mutuo ES coincidencia", nombrada como UNA clase en el manifest
+(`predictedResidueThatDidNotMaterialise`) para que una aparición futura
+se reconozca como esta clase y no como algo nuevo.
+
+**Drills (84/84):** 10 nuevos (re-escopado sin `probe-tenant-`; extracción
+por forma nombrada; los dos brazos con los mismos valores dark contra los
+dos compiladores reales — y el valor dark NO es el stop: el overlay
+gobierna su modo; restore append-only; H-1 baseline intacta; el camino
+inline NO retirado con su acta escrita; un control sin delta da
+exactamente un bloque y un delta vacío no emite regla vacía; el negativo
+espejo — aplanar los deltas en la base pone el valor dark donde pintaría
+en AMBOS modos — TIRA; la gramática con fuente registrada y compose sin
+ella TIRA; y tu nota 1 Fable: ningún artifact lleva
+`@media (prefers-color-scheme)` hoy, asertado) + **4 re-legislaciones**
+AGED_EXPECTATION (W-B pedía 3; el writer encontró la cuarta — H3C drill 2
+— y la vara de Fable quedó refinada: cuando un packet cambia un
+TRANSPORTE, el barrido corre por los dos ejes, el nombre de la posición Y
+las aserciones de conducta del transporte).
+
+**El acta de la rama inline:** conservada con su razón escrita en el
+código — la posición es real (el provider preview; borrarla convertiría
+una pregunta de fidelidad abierta en respuesta silenciosa; el comando
+`dial` la sigue usando por otro camino). **Sigue abierta y sin medir la
+pregunta de si el provider preview puede expresar deltas de modo.**
+
+**Lo que queda de palette.seeds:** las 3 filas light de chrome
+(`--ds-button-primary-bg`) — ni instrumento ni cascada: es de la bajada
+de chrome, con su clase propia. El defecto
+`MODE_BLOCK_SPECIFICITY_OUTRANKS_THE_STATIC_ARM` pasó a `CLOSED` con
+`resolvedBy: H-3 fase (a)`.
+
 **F0 — CERRADO (2026-08-19).** Criterio de cierre cumplido:
 `ci-gates OK — 78 blocking gate(s) passed` (2 excluded visibles con razón y
 dueño: channel-liveness y lane-control-drills, ambos esperan a F2); `find src -type d -empty` vacío salvo el inbox

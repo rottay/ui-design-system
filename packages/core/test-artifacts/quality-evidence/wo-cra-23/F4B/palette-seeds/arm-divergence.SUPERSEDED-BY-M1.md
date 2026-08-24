@@ -34,3 +34,18 @@ knownDefects[0]` (classNote + supersededBy + owner + nextAction),
 `docs/ROADMAP-EJECUCION-2026-08-19.md`. The measured facts in the original
 artifact (specificity, lines, selectors) remain true; what was refuted is
 the attribution, not the fact.
+
+## Addendum (H-3 phase (a), 2026-08-24)
+
+The instrument half is now RESOLVED: the probe's DB arm serves
+`modeDeltas` as re-scoped blocks (`composeArmCss`, shared with the static
+arm, grammar borrowed from brand-theme and registered in
+`themeModeSelectorSource`). The dark half of the divergence is closed:
+palette.seeds bithire 10→3 (the 7 dark rows disappeared; the remaining 3
+are the light chrome class `--ds-button-primary-bg`, owned by the chrome
+lowering), evnto 5→0, and the experience.profile bithire dark residual
+(R7) is at 0 rows. What remains open by design: whether a tenant seed
+should move the non-default mode (product question for the owner), and
+whether the provider preview can express mode deltas (deliberately
+unmeasured; the inline path is preserved with its act in
+`runtime/measure/index.mjs`).

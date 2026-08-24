@@ -68,8 +68,11 @@ export const INGRESS_ARMS = Object.freeze({
     position: 'tenant-scoped-stylesheet-block',
     positionMeaning:
       'Appended to the measured bundle behind the same unlayered tenant selector the compiled ' +
-      'artifact uses. This is where a code-owned vertical lands: below an inline root write, ' +
-      'above the base layer.',
+      'artifact uses, plus one block per compiled mode at the compiler\'s own mode grammar ' +
+      '(M-1). This is where a code-owned vertical lands: above the base layer, and above the ' +
+      'vertical artifact by source order at equal specificity. AGED CLAUSE REMOVED IN H-3 PHASE ' +
+      '(a): this used to say "below an inline root write", which described the DB arm as it was ' +
+      'then. Both arms are stylesheet arms now, so nothing sits above this one.',
     /* H-1, 2026-08-23 (V1). This arm COMPOSES the stop over the vertical's
      * published baseline BrandTheme (`dist/index.js` -> `<vertical>BrandTheme`),
      * it does not lower the stop alone.
@@ -102,11 +105,15 @@ export const INGRESS_ARMS = Object.freeze({
     id: 'db-tenant-theme',
     door: 'db',
     manifestIngressKey: 'dbTenantThemePath',
-    position: 'root-inline-style',
+    position: 'tenant-artifact-stylesheet',
     positionMeaning:
-      'Written with setProperty on document.documentElement from the compiled ' +
-      'TenantThemeArtifact.variables. This is the strongest position a tenant occupies, and it ' +
-      'is ABOVE the static arm.',
+      'The compiled TenantThemeArtifact, served the way production serves it: a base rule plus ' +
+      'one rule per modeDelta, re-scoped from the artifact\'s probe-tenant selector onto the ' +
+      "scene's own (H-3 phase (a)). It used to be a root inline write, and that was a " +
+      'measurement defect, not a position: inline beats every mode block, so the arm reported ' +
+      'the tenant BASE value in a mode where production serves the vertical\'s own. The provider ' +
+      'preview does write inline; whether the preview can express mode deltas at all is a ' +
+      'separate, unmeasured product question.',
     // A PUBLISHED entrypoint (`exports["./server"]`), never a deep path: a deep import can be
     // tree-shaken out from under the harness without any gate noticing.
     compilerModule: 'dist/server.js',
@@ -243,6 +250,58 @@ function assertVariables(variables) {
  * restore comparison is between two loads of byte-identical bytes — the
  * stylesheet-level analogue of restoring a preexisting inline value.
  */
+/**
+ * The CSS an arm serves: one block per scope its compiler writes.
+ *
+ * SHARED BY BOTH ARMS SINCE H-3 PHASE (a), and that is the point rather than a
+ * convenience. The two arms now differ in exactly one thing -- which compiler
+ * produced the values -- so an equivalence result isolates the COMPILER instead
+ * of confounding it with a cascade position. Two composers would let the halves
+ * drift and quietly reintroduce the confound.
+ *
+ * SPECIFICITY IS NEVER RAISED. The mode block is emitted at the compiler's own
+ * grammar; nothing is duplicated or `:is()`-stacked to win a comparison. A block
+ * that won without modelling anything would be building around the guard.
+ *
+ * @param {{armId: string, selector: string, exportName: string, variables: object,
+ *          modeVariables: object, themeModeSelector: ((base: string, mode: string) => string)|null}} input
+ */
+function composeArmCss({ armId, selector, exportName, variables, modeVariables, themeModeSelector }) {
+  const declare = (map) =>
+    Object.keys(map)
+      .sort()
+      .map((name) => `  ${name}: ${map[name]};`)
+      .join('\n');
+  // An EMPTY mode delta is not a scope: `selector[data-theme=dark] { }` would
+  // claim the arm speaks there when it says nothing.
+  const modes = Object.keys(modeVariables ?? {})
+    .filter((mode) => Object.keys(modeVariables[mode] ?? {}).length > 0)
+    .sort();
+  if (modes.length > 0 && typeof themeModeSelector !== 'function') {
+    throw new Error(
+      `resolution-probe: the ${armId} arm lowered mode blocks but was handed no ` +
+        'themeModeSelector. The mode grammar belongs to the COMPILER (brand-theme exports it as ' +
+        'the "shared explicit-mode selector grammar for static and DB artifact renderers"), and ' +
+        'spelling it in the harness would keep matching a grammar the compiler had already left.',
+    );
+  }
+  const modeSelectors = Object.fromEntries(modes.map((mode) => [mode, themeModeSelector(selector, mode)]));
+  const cssBlock = [
+    '',
+    `/* resolution-probe ingress arm: ${armId} (${exportName}) */`,
+    `${selector} {\n${declare(variables)}\n}`,
+    ...modes.map((mode) => `${modeSelectors[mode]} {\n${declare(modeVariables[mode])}\n}`),
+    '',
+  ].join('\n');
+  return {
+    cssBlock,
+    modeSelectors: Object.freeze(modeSelectors),
+    modeVariables: Object.freeze(
+      Object.fromEntries(modes.map((mode) => [mode, Object.freeze({ ...modeVariables[mode] })])),
+    ),
+  };
+}
+
 export function composeStaticArm({
   vertical,
   variables,
@@ -250,52 +309,18 @@ export function composeStaticArm({
   modeVariables = {},
   themeModeSelector = null,
 }) {
-  const names = assertVariables(variables);
+  assertVariables(variables);
   const provenance = assertArmProvenance(producedBy);
   const selector = tenantArmSelector(vertical);
-  const declare = (map) =>
-    Object.keys(map)
-      .sort()
-      .map((name) => `  ${name}: ${map[name]};`)
-      .join('\n');
 
-  /* M-1 — ONE BLOCK PER SCOPE THE COMPILER WRITES, not one block total.
-   *
-   * `compileBrandTheme` emits a base block plus one block per authored
-   * non-default mode, and the mode block carries one attribute more, so in that
-   * mode it outranks the base. An arm that appends only the base block is
-   * therefore INERT in the non-default mode -- not because the control is
-   * inert, but because the arm never spoke in the scope that governs there.
-   *
-   * The mode blocks carry the DELTA the compiler put in them, which is often
-   * empty for a given control: the five closed controls have no declared
-   * channel in any mode block, so their arm CSS is byte-identical to before
-   * this change. That is measured, and it is the invariance fence.
-   *
-   * SPECIFICITY IS NOT RAISED. The mode block is emitted at the compiler's own
-   * mode grammar; nothing is duplicated or `:is()`-stacked to win a comparison.
-   * A block that won without modelling anything would be building around the
-   * guard, not through it. */
-  const modes = Object.keys(modeVariables)
-    .filter((mode) => Object.keys(modeVariables[mode] ?? {}).length > 0)
-    .sort();
-  if (modes.length > 0 && typeof themeModeSelector !== 'function') {
-    throw new Error(
-      'resolution-probe: the static arm lowered mode blocks but was handed no themeModeSelector. ' +
-        'The mode grammar is the COMPILER\'s (it exports `themeModeSelector` for exactly this), ' +
-        'and spelling it here would keep matching a grammar the compiler had already left.',
-    );
-  }
-  const blocks = [
-    `${selector} {\n${declare(variables)}\n}`,
-    ...modes.map((mode) => `${themeModeSelector(selector, mode)} {\n${declare(modeVariables[mode])}\n}`),
-  ];
-  const cssBlock = [
-    '',
-    `/* resolution-probe ingress arm: static-brand-theme (${provenance.exportName}) */`,
-    ...blocks,
-    '',
-  ].join('\n');
+  const composed = composeArmCss({
+    armId: 'static-brand-theme',
+    selector,
+    exportName: provenance.exportName,
+    variables,
+    modeVariables,
+    themeModeSelector,
+  });
 
   return Object.freeze({
     armId: 'static-brand-theme',
@@ -304,37 +329,64 @@ export function composeStaticArm({
     positionMeaning: INGRESS_ARMS['static-brand-theme'].positionMeaning,
     selector,
     /** The scopes this arm actually writes: the base, plus one per compiled mode. */
-    modeSelectors: Object.freeze(
-      Object.fromEntries(modes.map((mode) => [mode, themeModeSelector(selector, mode)])),
-    ),
+    modeSelectors: composed.modeSelectors,
     variables: Object.freeze({ ...variables }),
-    modeVariables: Object.freeze(
-      Object.fromEntries(modes.map((mode) => [mode, Object.freeze({ ...modeVariables[mode] })])),
-    ),
-    cssBlock,
+    modeVariables: composed.modeVariables,
+    cssBlock: composed.cssBlock,
     /** Mutation-phase CSS. Removal re-serves the baseline string unchanged. */
-    mutateCss: (baselineCss) => `${baselineCss}\n${cssBlock}`,
+    mutateCss: (baselineCss) => `${baselineCss}\n${composed.cssBlock}`,
     provenance,
   });
 }
 
 /**
- * The DB arm: a root inline write, which is what the provider performs.
+ * The DB arm: the compiled tenant artifact, served the way production serves it.
  *
- * It carries no CSS. Its removal is planned by `foundation/causality` from an
- * inline memo taken before the write, so a preexisting inline declaration comes
- * back byte-identical instead of being deleted.
+ * H-3 PHASE (a). It used to write `variables` INLINE on the document element,
+ * and that was the measurement defect M-1 isolated: production embeds
+ * `artifact.css` in a `<style>` (`emitTenantThemeArtifactForSsr`), which is a
+ * base rule plus one rule per `modeDelta` under the compiler's mode grammar --
+ * so an inline write beats every mode block and reported the tenant's BASE
+ * value in a mode where production serves the vertical's own. No production
+ * path produces that reading.
+ *
+ * IT RE-SCOPES RATHER THAN SERVING `artifact.css` VERBATIM, and the reason is
+ * measured: the artifact is scoped to
+ * `…[data-tenant="probe-tenant-<vertical>"]`, a slug the scene cannot carry
+ * (`assertTenantIdentityAllowed` rejects the reserved first-party slugs, and the
+ * scene must carry the real one or the vertical artifact stops applying). So the
+ * arm COMPOSES from the extracted maps onto the scene's own tenant selector --
+ * never by parsing the artifact's CSS, which would be a second, weaker copy of
+ * the compiler's own structure.
+ *
+ * ITS RESTORE IS NOW THE STATIC ARM'S, and that is stronger than what it
+ * replaces: the baseline string is never rewritten, so the removal phase
+ * re-serves the identical bytes instead of replaying an inline memo.
  */
-export function composeDbArm({ variables, producedBy }) {
+export function composeDbArm({ vertical, variables, producedBy, modeVariables = {}, themeModeSelector = null }) {
   assertVariables(variables);
   const provenance = assertArmProvenance(producedBy);
+  const selector = tenantArmSelector(vertical);
+  const composed = composeArmCss({
+    armId: 'db-tenant-theme',
+    selector,
+    exportName: provenance.exportName,
+    variables,
+    modeVariables,
+    themeModeSelector,
+  });
   return Object.freeze({
     armId: 'db-tenant-theme',
+    vertical,
     position: INGRESS_ARMS['db-tenant-theme'].position,
     positionMeaning: INGRESS_ARMS['db-tenant-theme'].positionMeaning,
+    selector,
+    modeSelectors: composed.modeSelectors,
     variables: Object.freeze({ ...variables }),
-    /** Removal restores the memo; it never writes a "default" back. */
-    mutateCss: (baselineCss) => baselineCss,
+    modeVariables: composed.modeVariables,
+    cssBlock: composed.cssBlock,
+    /** Mutation-phase CSS. Removal re-serves the baseline string unchanged. */
+    mutateCss: (baselineCss) => `${baselineCss}\n${composed.cssBlock}`,
     provenance,
   });
 }
@@ -965,12 +1017,27 @@ export function lowerStop({
    *
    * Only the DECLARED channels are kept, exactly as for the base map: this is
    * the same extraction, once per compiled mode. */
+  /* H-3 PHASE (a): the TWO compilers spell their mode scopes differently, and
+   * this reads BOTH -- by name, per arm, never by a `??` chain that would accept
+   * whatever happened to be there.
+   *
+   *   static-brand-theme  compileBrandTheme        -> modeBlocks[{mode, cssVariables}]
+   *   db-tenant-theme     compileTenantThemeConfig -> modeDeltas[{mode, variables}]
+   *
+   * M-1 read only the first, so the DB arm's `modeVariables` was `{}` even
+   * though its compiler had produced a full dark delta -- measured, and the
+   * reason the DB half of the dark divergence survived M-1. */
+  const MODE_SCOPE_SHAPES = {
+    'static-brand-theme': { collection: 'modeBlocks', values: 'cssVariables' },
+    'db-tenant-theme': { collection: 'modeDeltas', values: 'variables' },
+  };
+  const shape = MODE_SCOPE_SHAPES[armId];
   const modeVariables = {};
-  for (const block of compiled?.modeBlocks ?? []) {
+  for (const block of compiled?.[shape.collection] ?? []) {
     const perMode = {};
     for (const channel of channels) {
-      if (Object.hasOwn(block.cssVariables ?? {}, channel)) {
-        perMode[channel] = String(block.cssVariables[channel]);
+      if (Object.hasOwn(block[shape.values] ?? {}, channel)) {
+        perMode[channel] = String(block[shape.values][channel]);
       }
     }
     modeVariables[block.mode] = perMode;
@@ -1074,13 +1141,10 @@ export async function loadCompilerArms({
       armId: spec.id,
       compile: exported,
       /* M-1: the compiler's OWN mode-selector grammar, handed out with the arm.
-       * Imported, never reconstructed: `themeModeSelector` is exported for
-       * exactly this reason ("Shared explicit-mode selector grammar for static
-       * and DB artifact renderers"), and a probe that spelled `[data-theme=...]`
-       * itself would keep matching a grammar the compiler had already left. It
-       * rides on the arm because that is what the dist-freshness gate above has
-       * already proven fresh. */
+       * Imported, never reconstructed, and it rides on the arm because that is
+       * what the dist-freshness gate above has already proven fresh. */
       themeModeSelector: module?.themeModeSelector ?? null,
+      themeModeSelectorSource: module?.themeModeSelector ? spec.compilerModule : null,
       provenance: {
         module: fromCoreRoot(absolute),
         moduleSubpath: spec.compilerModuleSubpath ?? null,
@@ -1093,6 +1157,34 @@ export async function loadCompilerArms({
           'stamp against the current source and build-input fingerprint.',
       },
     };
+  }
+  /* W-A (H-3 phase (a)): ONE named source for the mode grammar.
+   *
+   * MEASURED: the tenant-theme dist module does NOT export `themeModeSelector`
+   * -- it calls it internally, from brand-theme, inside `renderArtifactCss`. So
+   * the DB arm has no grammar of its own to hand out, and the DB arm now needs
+   * one.
+   *
+   * It BORROWS the brand-theme export rather than the harness spelling
+   * `[data-theme='<mode>']`, and the exporter itself declares that legitimate:
+   * "Shared explicit-mode selector grammar for static AND DB artifact
+   * renderers". Both modules are behind the same dist-freshness gate, so the
+   * borrow proves as fresh as the compile. The lender is RECORDED on the
+   * borrower (`themeModeSelectorSource`) so a reader never has to guess whose
+   * grammar an arm used, and it fails closed if no arm exports one at all --
+   * a harness with no grammar must refuse, not invent. */
+  const lender = Object.values(loaded).find((arm) => typeof arm.themeModeSelector === 'function');
+  /* No lender is not an error HERE. An arm needs the grammar only if it actually
+   * lowered mode blocks, and `composeArmCss` refuses at exactly that point --
+   * which is the fail-closed W-A asks for, placed where it can distinguish "this
+   * run has mode scopes and no grammar" from "this fixture never had one". A
+   * throw at load time would punish every mechanics drill that injects a
+   * compiler double, and those doubles produce no modes. */
+  for (const arm of Object.values(loaded)) {
+    if (!lender) break;
+    if (typeof arm.themeModeSelector === 'function') continue;
+    arm.themeModeSelector = lender.themeModeSelector;
+    arm.themeModeSelectorSource = lender.themeModeSelectorSource;
   }
   return loaded;
 }

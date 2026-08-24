@@ -1007,7 +1007,16 @@ async function commandCausal(options) {
           modeVariables: lowered.modeVariables,
           themeModeSelector: loaded.themeModeSelector,
         })
-      : composeDbArm({ variables: lowered.variables, producedBy });
+      : composeDbArm({
+          // H-3 phase (a): the DB arm serves the compiled artifact's shape --
+          // base plus one block per modeDelta -- so it needs the scene's
+          // vertical to re-scope onto, and the same compiler grammar.
+          vertical: options.verticals[0],
+          variables: lowered.variables,
+          producedBy,
+          modeVariables: lowered.modeVariables,
+          themeModeSelector: loaded.themeModeSelector,
+        });
   });
 
   // The stale-source guard (foundation/guards#detectStaleSource), wired so a
