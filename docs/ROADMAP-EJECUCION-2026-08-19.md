@@ -2839,6 +2839,54 @@ proceso adoptada (recomendación Fable, vinculante): todo packet que toque
 el tablero de cascade oscila por goteo. Triage T-4 en curso con el molde
 de T-2 (inspección ANTES de re-derivar).
 
+##### T-4 — producers.json re-derivado; la clase T-2 medida y la regla refinada (2026-08-24)
+
+El rojo de cascade-producers (207/209, señalado por el owner) queda
+cerrado con el molde de T-2: **inspección ANTES de re-derivar**, y la
+re-derivación salió exactamente como la fase 1 la predijo. Writer: Opus.
+Postaudit Fable: **ACCEPT**, memo `/private/tmp/t4-rederive-fable-postaudit.md`
+(SHA en su `.ready`).
+
+**La deriva:** UNA hoja de las ~216k (`inputsDigest.srcTsx`), causada 100%
+por `capabilities/index.ts` (el fix de autoridad de F4B-7), probada por
+contrafáctico (rebobinar ese archivo reproduce el digest commiteado
+exacto) y corroborada por Fable por vía independiente
+(`git diff --name-only dee266528..HEAD` sobre `.ts/.tsx` de src da
+exactamente un archivo). Stats invariantes byte a byte (unknown=0,
+openBlocking=0, conflicts=0, lotBOpen=true, cohortes 69/627/534/728/66,
+producerSites 4872, channelEmissions 10313, distinctChannels 4585, los 13
+digests, el scannedFileList de 1727). Cero filas en cualquier colección,
+cero STOPs. El diff final: una línea, escrita por el productor canónico,
+con pureza probada (`serialize(buildProducers()) === disco`).
+
+**Nota de proceso CORREGIDA (la conclusión que sobrevive al packet):**
+`producers.json` NO digiere la superficie de receipts de F4B en absoluto
+(grep propio: 0 menciones; sus entradas son exactamente seis:
+cssEdges/cascadeRoots/rootCatalog/srcTsx/srcCompilers/artifacts; los
+`digests.*Receipts` son los receipts del CLASIFICADOR de filas — colisión
+de nombre ya anclada en C4-fix). Frecuencia medida sobre 20 commits: 14
+tocaron receipts F4B SIN staleo; sólo los 4 que tocaron `.ts/.tsx`
+escaneado estalearon. **Este rojo no es evidencia para la reforma de
+frescura semántica** — construir ley sobre un diagnóstico equivocado era
+el riesgo, y la fase 1 lo nombró. Tampoco se narrowea el digest a
+"archivos que aportaron filas": el digest existe para atrapar lo que las
+filas no expresan; narrowearlo convierte la frescura en tautología (Fable
+coincide plenamente).
+
+**Regla refinada (Fable §3, adoptada):** el disparador exacto es
+`.ts/.tsx` bajo los roots escaneados FUERA de tests — packet que toque
+`.ts/.tsx` de `packages/core/src` (fuera de tests) ⇒
+`cascade-producers --check` en su verificación. (Detalle medido:
+`tsxCandidates` toma `.ts` además de `.tsx`; el nombre `srcTsx` engaña.)
+
+**Tablero tras T-4:** 209/209 cascade (N13 y T-21 verdes — el rojo era
+transportado, no propio), 48/48 constitucional, 9/9 instrumento,
+45/45 receipts, CONSTITUTION_READY. **Packet siguiente autorizado por el
+owner:** el `--check` parlante — que nombre la hoja movida y su clase
+(fila vs inputsDigest, y cuál entrada), la forma que la fase 1 ya
+prototipó en su leaf-diff; habría convertido este triage en un minuto de
+lectura.
+
 **F0 — CERRADO (2026-08-19).** Criterio de cierre cumplido:
 `ci-gates OK — 78 blocking gate(s) passed` (2 excluded visibles con razón y
 dueño: channel-liveness y lane-control-drills, ambos esperan a F2); `find src -type d -empty` vacío salvo el inbox
