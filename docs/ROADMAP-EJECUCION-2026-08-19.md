@@ -3750,6 +3750,52 @@ final de Fable: `shape.button-style` cierra en SOURCE_BOUND con sus dos
 defectos OPEN_DT registrados. F4B sigue 8/20 COMPUTED_VERIFIED + 1
 SOURCE_BOUND con evidencia sellada.
 
+**APCA — los "12 rojos" MEDIDOS (Opus, 2026-08-24, A/B en copia aislada con
+corrección de método declarada): NO son 12 APCA: son 10 + 2 de otra clase, y
+la hipótesis inicial (K1) quedó REFUTADA.**
+1. **Los 10 APCA (mismo par, mismo Lc 10.8: `dark --ds-card-title-color` /
+   `--ds-card-body-color` contra `--ds-card-bg`) = REGRESIÓN-PRODUCTO real en
+   dark mode. Atribución: `cf61da8bb` ("F2.4 ola 3 — H1+H2 drenados",
+   2026-08-20)** — nadie lo había mirado. Su diff eliminó el overlay dark del
+   card de bithire (`bg: "#151d2b"`) y recableó la base a
+   `var(--ds-surface-card)`. **Fue cero-delta para el vertical solo y NO
+   cero-delta para el tenant:** el overlay outrankeaba cualquier ground
+   autorado por un tenant en dark (lo blindaba); sin él, el ground del tenant
+   gobierna los dos modos → tinta clara sobre fondo claro → ilegible. El gate
+   reporta correctamente. El write-set F4B-9 quedó EXONERADO por A/B.
+2. **El espejo T0 (1) = REGRESIÓN-PRODUCTO de autoría incompleta, `3393f70d4`
+   (F4A-6):** `textPageColor` se autoró en el cuerpo de los 3 (simétrico) y en
+   el overlay de sólo 2 (rottay-light, bithire-dark; evnto-dark quedó como
+   placeholder-comentario). Colisión de leyes: T0 (mismo conjunto exacto de
+   keypaths en los 3 temas) vs la ley F4A-7 de placeholders (ausencia
+   documentada como comentario). **Adjudicación DT:** T0 manda para claves de
+   overlay que afectan render — se autoran los slots faltantes con el valor
+   que la tinta del modo requiera (la medición de alcance pedida por el owner
+   dice cuáles y con qué valor); la ley de placeholders queda para ausencias
+   que NO cambian render.
+3. **Los centinelas de schema (2) = PIN-RANCIO clase R-1, ya adjudicado en su
+   día:** F4A-6 agregó `--ds-color-text-page` a `TENANT_THEME_REFERENCE_TOKENS`
+   → los dos digests se movieron por construcción, y el propio commit eligió
+   deliberadamente romper 9 tests; el re-anclaje nunca se hizo. Fix mecánico
+   (Sonnet, micro-packet propio): los 2 pines nuevos ya medidos en dos builds
+   + la nota de protocolo ("AMPLIACIÓN de un token de referencia, no
+   narrowing").
+**¿Por qué nadie los vio?** No es agujero de gates: las 3 suites NO están en
+`gates:ci` pero SÍ en el `test:ci` de CI — y HEAD está **549 commits por
+delante de origin/main, sin push nunca**. CI no vio este árbol. **Backlog
+latente de rojos de CI**: se mide ahora con un `test:ci` local completo
+(despachado, background). **Adjudicación DT:** `test:ci` completo local pasa
+a ser gate de fase (al cerrar cada frente), para no descubrir el backlog el
+día del push. **Quinta instancia de `ASYMMETRIC_VALIDATION_BETWEEN_DOORS`
+confirmada:** la puerta estática compila el par exacto que la DB rechaza —
+alimenta la medición de la decisión de producto #2 (piso APCA compartido).
+**El fix del card (regresión 10×APCA) queda ordenado por el owner** ("medí si
+rottay y evnto también perdieron el pin dark del card" — medición en curso):
+dirección preferida = restituir el blindaje por modo (que el overlay dark
+DECLARE el canal) en los verticales que la medición marque; las alternativas
+(compiler deriva la tinta del ground; o aceptar el rojo como contrato y
+arreglar fixtures) quedan registradas con sus costos en el memo.
+
 **F0 — CERRADO (2026-08-19).** Criterio de cierre cumplido:
 `ci-gates OK — 78 blocking gate(s) passed` (2 excluded visibles con razón y
 dueño: channel-liveness y lane-control-drills, ambos esperan a F2); `find src -type d -empty` vacío salvo el inbox
