@@ -48,7 +48,7 @@
   "sourceDigest": "d9a34cac0e4a7658138761268ae6c1889defba8c5c00cc9470c8f31461675cab",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/responsive-posture/evnto.json",
   "artifactSha256": "f6266df1f7dc61a1accf49ef0866215eac666e8c98322923ebc38901fe4b78c1",
-  "createdAt": "2026-08-24T12:18:45.000Z",
+  "createdAt": "2026-08-24T12:51:26.000Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

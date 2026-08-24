@@ -61,7 +61,7 @@
   "sourceDigest": "6a59c21b49d65762728e0e6d3e46306b83ad9b25729588c0f71e6cff1a12c953",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/density-mode/bithire-spacious.json",
   "artifactSha256": "55ab7e5eb75b758c2760171ee6ca81fbd666de6ce8d4051b5f65fad99e56fb01",
-  "createdAt": "2026-08-24T12:18:45.000Z",
+  "createdAt": "2026-08-24T12:51:26.000Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

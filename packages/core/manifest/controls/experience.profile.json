@@ -57,7 +57,8 @@
       "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/experience-profile/evnto-technical.json.receipt.json",
       "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/experience-profile/rottay-technical.R7-light.json.receipt.json",
       "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/experience-profile/bithire-technical.R7-light.json.receipt.json",
-      "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/experience-profile/evnto-technical.R7-light.json.receipt.json"
+      "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/experience-profile/evnto-technical.R7-light.json.receipt.json",
+      "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/experience-profile/bithire-editorial.R7-dark-closed.json.receipt.json"
     ],
     "exactRestoreEvidenceIds": [
       "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/experience-profile/rottay-editorial.json.receipt.json",
@@ -108,7 +109,10 @@
         "sourceState": "OPEN_VERTICAL_CASCADE_DEFECT",
         "evidence": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/experience-profile/bithire-editorial.DIVERGENCE.json and packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/experience-profile/bithire-technical.DESIGNED-NULL.json",
         "remediation": "CLOSED for every scope this instrument can decide, by B-1 (owner option B). The product question this defect was waiting on -- may a profile selection move a channel the vertical authors -- was answered by the owner: the tenant prevails over the vertical baseline on exposed channels, technical and accessibility invariants protected. Cause (a) rottay/evnto is resolved: the static transport now has the two-floor ingestion, so the profile no longer loses to the vertical's authored field when the selection comes from the tenant. Cause (b) bithire dark is NOT this control's and is tracked as OPEN_VERTICAL_CASCADE_DEFECT. The pre-H-1 receipts are still not withdrawn and their numbers still not rewritten; the six R7 artifacts are additional evidence beside them, under new file names, never overwriting the historical record.",
-        "disposition": "CLOSED_BY_B1_FOR_DECIDABLE_SCOPES"
+        "disposition": "CLOSED",
+        "resolvedBy": "M-1 (the static arm learns the mode scopes) + H-3 phase (a) (the DB arm serves modeDeltas)",
+        "resolutionMeasured": "RE-MEASURED under the fixed instrument, bithire, light AND dark, full roster: 0 divergent rows, pass=true, restore exact on both arms, negative controls held, both arms harness-live. The R7 dark residue is closed. The cause was never the vertical artifact: its two declarations are the correct output of compileModeBlocks, and what was wrong was that neither arm spoke in the mode scope -- the static arm because it wrote only the base block, the DB arm because it discarded compiled modeDeltas and wrote inline above every block.",
+        "resolutionEvidence": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/experience-profile/bithire-editorial.R7-dark-closed.json.receipt.json"
       },
       {
         "familyId": "VERTICAL_CASCADE/bithire",
@@ -116,7 +120,9 @@
         "sourceCensusRequired": false,
         "sourceState": "OPEN_ARM_ASYMMETRY",
         "boundedBy": "The asymmetry is bounded to channels a vertical authors. rottay and evnto author neither channel and both arms agree there, which is why their four scenarios are byte-identical across doors.",
-        "remediation": "Owner adjudication: decide whether the static door should also lose to an authored vertical channel (making the doors symmetric) or whether the DB door should stop losing (making the control uniformly stronger). Either way it is a compiler decision above this packet."
+        "remediation": "Owner adjudication: decide whether the static door should also lose to an authored vertical channel (making the doors symmetric) or whether the DB door should stop losing (making the control uniformly stronger). Either way it is a compiler decision above this packet.",
+        "disposition": "NOT_REPRODUCIBLE_UNDER_THE_FIXED_INSTRUMENT",
+        "reMeasured": "The DIVERGENCE this row named is gone: 0 rows in light on the same scenario. The underlying compiler fact it cites is UNCHANGED and stays named -- the DB arm still omits two of the five declared channels on bithire/editorial (--ds-edge-standard-width and --ds-material-canvas-texture, measured again in this pass). It stopped being a divergence because neither arm MOVES those channels in this scene: the static arm writes the value the baseline already carries, and mutual silence reads identically on both arms. A future scenario in which the static arm does move one of them would surface this row again, which is why the omission is not being declared resolved."
       },
       {
         "familyId": "DESIGNED_NULL/bithire-technical",

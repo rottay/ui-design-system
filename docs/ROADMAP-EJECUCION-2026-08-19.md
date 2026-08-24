@@ -3166,6 +3166,96 @@ de chrome, con su clase propia. El defecto
 `MODE_BLOCK_SPECIFICITY_OUTRANKS_THE_STATIC_ARM` pasó a `CLOSED` con
 `resolvedBy: H-3 fase (a)`.
 
+##### Packet del defecto — la clase chrome MEDIDA (es una bandera de provenance); residuo R7 CERRADO; palette.seeds abierto hacia B-2 (2026-08-24)
+
+La medición que cambia la adjudicación, hecha primero como manda la
+disciplina. Writer: Opus. Postaudit Fable: **ACCEPT**, memo
+`/private/tmp/defect-chrome-palette-fable-postaudit.md` (SHA en su `.ready`).
+
+**El experimento decisivo (reproducido exacto por Fable):** mismo
+compilador, misma entrada, una sola variable —
+`compileBrandTheme({brandTheme: bithire, tenantPatch: {palette:{primaryColor:'#DC2626'}}, tenantSlug: 'bithire'})`
+→ `--ds-button-primary-bg = "#3A6FB0"`; la MISMA llamada +
+`tenantAuthoredPaths: {'palette.primaryColor'}` →
+`var(--ds-color-primary)`, **byte-idéntico al valor del brazo DB**. **La
+bandera de provenance explica la divergencia entera.** Refutadas las
+otras dos ramas: (a) defecto de compilador — un solo lowering
+(`applyTenantSeedDerivations` definida una vez, dos call sites compartidos
+por `compileBrandTheme`/`compileTheme` en el mismo archivo); (b)
+divergencia de baseline — la misma fuente
+(`FIRST_PARTY_THEMES.bithire = brandThemeToTheme(bithireBrandTheme)`).
+
+**La clase (`CHROME_SEED_PROVENANCE_ASYMMETRY`):** brecha de fidelidad de
+la sonda — el brazo DB tiene razón, el estático tiene razón sobre un
+compile first-party, y la sonda modela algo intermedio (baja el patch de
+tenant de B-1 SIN pasar la autoría). La ley del compilador citada y
+verificada línea por línea: "a tenant that sets its primary colour and
+nothing else must get a sidebar, a focus ring and a link colour that are
+ITS brand, not the vertical's… **a BASELINE_LEAF cannot beat a
+TENANT_DERIVED value**" + "Every static first-party compile takes this
+path" + las 3 guardas (sin provenance no toca; un leaf del TENANT gana al
+seed — `--ds-button-primary-bg` está en `SEED_SHADOWING_FIELDS`; un valor
+que no hornea color propio se deja intacto — por eso rottay y evnto, que
+usan alias, son UNAFFECTED con y sin bandera, verificado conductualmente
+por Fable). **Dato para B-2 (medido por Fable):** la bandera mueve **7
+canales** en bithire (button-bg, bg-hover, input-border/shadow-focus,
+border-focus, link, link-hover) — la familia entera de derivación, y el
+presupuesto de invariancia de B-2 va sobre ella, no sólo sobre las 3
+filas visibles. La supersesión de `COMPILERS_DISAGREE_ON_BUTTON_PRIMARY_BG`
+ejecutada de manual: finding original preservado, `SUPERSEDED` +
+`supersededBy` + "it was WRONG rather than incomplete". El puntero del
+artifact durable de F4B-8 existe como compañía con addendum
+(`arm-divergence.SUPERSEDED-BY-M1.md`, desde M-1 — la forma sancionada
+por la ley de snapshots inmutables).
+
+**El residuo R7 de `experience.profile` bithire dark: CERRADO
+formalmente.** Receipt R7 nuevo (`static-db-computed-parity`,
+`primitive/display/card`, escenario
+`experience.profile/editorial/bithire/static-and-db/light-and-dark`,
+`pass=true`, `harness-live`, 0 filas divergentes, restore exacto,
+negativos held) — validado 46/46 VALID+FRESH. En el manifest: la fila
+DARK → `CLOSED` con `resolvedBy` (M-1 + H-3 fase (a)) y
+`resolutionEvidence` al receipt. Y la fila LIGHT
+(`--ds-material-canvas-texture`) →
+`NOT_REPRODUCIBLE_UNDER_THE_FIXED_INSTRUMENT`: **la divergencia se fue,
+el hecho de compilador que citaba NO** — el brazo DB sigue omitiendo 2 de
+los 5 canales declarados en bithire/editorial (`--ds-edge-standard-width`
+y `--ds-material-canvas-texture`, re-medido por Fable: `undefined` en
+base y en delta dark). Dejó de ser divergencia por silencio-que-lee-
+idéntico (la clase H-3(a)); **la omisión NO se declara resuelta** porque
+un escenario futuro donde el estático sí lo mueva la levantaría de nuevo.
+
+**`palette.seeds` NO cierra — y la razón es correcta.** bithire: 3 filas
+light idénticas con los dos stops (del eje, no del color) — la clase
+chrome de arriba, con remedio pendiente (B-2). evnto: 0 filas ×2,
+`pass=true`. rottay: refutado por el guard, forma re-verificada bajo el
+instrumento fijado (`stillTrueUnderTheFixedInstrument`). Cerrar con la
+evidencia de un solo vertical afirmaría una equivalencia que hoy no
+existe y que está por cambiar. `assessmentState: UNKNOWN` con
+`nextAction: B-2`; celda de button no escrita; 0 receipts del control.
+
+**Hallazgo de proceso asentado (Fable: real y la decisión correcta):**
+**emitir un receipt no es sólo registrar una medición — ENLISTA al
+control en un gate** (el drill H-2 "every control that carries receipts
+passes, both arms", y palette.seeds no puede pasar en rottay: su brazo DB
+baja cero testigos y la discriminación no es decidible por debajo de
+dos). Los 2 receipts de evnto fueron emitidos y **RETIRADOS** (borrado
+enumerado, sin comodines) y persistidos como
+`evnto-{crimson,indigo}.MEASURED-NOT-RECEIPTED.json` (corridas completas,
+`pass=true`, `harness-live`, restore exacto) — la evidencia que B-2 va a
+citar. **La salida nombrada es una adjudicación del DT**:
+`calibration.stopDiscriminationException {armId, reason, adjudicatedBy}`
+— la evalúo como ruling aparte cuando el packet que la necesite llegue
+(no es de este packet).
+
+**Precisión de la re-emisión (Fable P3, asentada):** 28 receipts
+re-emitidos por frescura real (sus superficies contenían los archivos
+tocados) + 17 con sólo `createdAt` nuevo (legítimamente no stale —
+cruce receipt por receipt, cero anomalías en ambas direcciones).
+
+**Cola:** diseño B-2 (el brazo estático lleva la autoría del patch) →
+preaudit → implementación → palette.seeds cierra.
+
 **F0 — CERRADO (2026-08-19).** Criterio de cierre cumplido:
 `ci-gates OK — 78 blocking gate(s) passed` (2 excluded visibles con razón y
 dueño: channel-liveness y lane-control-drills, ambos esperan a F2); `find src -type d -empty` vacío salvo el inbox

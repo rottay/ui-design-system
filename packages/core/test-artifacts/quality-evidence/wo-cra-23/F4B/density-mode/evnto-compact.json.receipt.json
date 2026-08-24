@@ -61,7 +61,7 @@
   "sourceDigest": "fbb5b4603225f0e1442b47c2902c9fb11982ee961d3c6596876e578c642a648b",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/density-mode/evnto-compact.json",
   "artifactSha256": "387fd0547bd1a74c9aab82da786d7df4cbf2bd651c96609ea4a2a07a8c3d00c0",
-  "createdAt": "2026-08-24T12:18:45.000Z",
+  "createdAt": "2026-08-24T12:51:26.000Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

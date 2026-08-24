@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "generatedBy": "node packages/core/manifest/generator/index.mjs --sync",
   "authorityLaw": "Controls own semantics, groups own recipe vocabularies, families own applicability edges, and this index owns generated rollups.",
-  "inputsDigest": "20fbbedc9137472541cf29efc1693bd7a83c5472ccf709be5d7a2117299923c8",
+  "inputsDigest": "14b343b174bf763036ad354c1625cee0cfc53378f06de670748f4e027188cf64",
   "denominators": {
     "canonicalFamilies": 255,
     "activeStandardControls": 13,
@@ -1465,7 +1465,7 @@
     {
       "controlId": "palette.seeds",
       "path": "manifest/controls/palette.seeds.json",
-      "digest": "8f392d0ac56d3af440c3b043f690f670e7fcc38ce8834221444f8dd07557525c"
+      "digest": "a4e6d5951142c880b9e0be58b6f9b082310e0b953f5a13a1d18668c453fbf323"
     },
     {
       "controlId": "typography.pairing",
@@ -1525,7 +1525,7 @@
     {
       "controlId": "experience.profile",
       "path": "manifest/controls/experience.profile.json",
-      "digest": "ef5590d52dabdbf6968e3cbcac988d53c59d27b1adaa8c97a98efc5b15620a06"
+      "digest": "843244028bb44950732edaf5bf663a9fe5946066788b1165a06a053288509754"
     },
     {
       "controlId": "chrome.families",

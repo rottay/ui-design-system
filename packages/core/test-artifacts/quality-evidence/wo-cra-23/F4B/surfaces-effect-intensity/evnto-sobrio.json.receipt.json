@@ -66,10 +66,10 @@
     "packages/core/src/ui/primitives/display/Card/engines/rustic/index.tsx",
     "packages/core/src/ui/primitives/display/Card/index.tsx"
   ],
-  "sourceDigest": "ab6fb1b77ae8a9c008396ce6bdcd1f49a66be582853cd44e8766358c406dc68d",
+  "sourceDigest": "91aabbbb57e6fe9d929a61130a3220db07c77392306b2d9b215777ead01f9a6b",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/surfaces-effect-intensity/evnto-sobrio.json",
   "artifactSha256": "6eea7202154313a4794d790aba8337644f3c1f62696695a835d7bc5ac975a632",
-  "createdAt": "2026-08-24T12:18:45.000Z",
+  "createdAt": "2026-08-24T12:51:26.000Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,
