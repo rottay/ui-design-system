@@ -239,7 +239,37 @@ test('positive control: lowerStop reshapes the document into the REAL compiler a
       return { variables: { '--ds-rhythm-scale': '1.2' } };
     },
   });
-  assert.deepEqual(staticSeen, { brandTheme: { surfaces: { rhythm: 'airy' } }, tenantSlug: 'rottay' });
+  // AGED_EXPECTATION, re-adjudicated F4B-7. This asserted the FLAT shape
+  // `{ brandTheme: { surfaces: { rhythm: 'airy' } } }`, which Z-1 of B-1
+  // retired: the static arm now hands the compiler the two floors SEPARATELY,
+  // because a flattened object cannot tell a tenant's stop from the vertical's
+  // own baseline authoring. The drill's PURPOSE is unchanged -- the lowering
+  // reshapes the document into the real compiler argument -- and it is asserted
+  // over the shape that exists now: the stop rides `tenantPatch`, the baseline
+  // rides `brandTheme`, and here there is no baseline to ride.
+  assert.deepEqual(staticSeen, {
+    brandTheme: {},
+    tenantPatch: { surfaces: { rhythm: 'airy' } },
+    tenantSlug: 'rottay',
+  });
+
+  // ...and with a baseline, the two floors stay APART. This is the half the old
+  // flat assertion could not express at all.
+  let composedSeen = null;
+  lowerStop({
+    armId: 'static-brand-theme',
+    controlManifest: CONTROL_MANIFEST,
+    stopId: 'airy',
+    vertical: 'rottay',
+    base: { typography: { scale: 1.02 } },
+    baselineSource: { path: 'fixture', digest: 'f'.repeat(64) },
+    compile: (input) => {
+      composedSeen = input;
+      return { variables: { '--ds-rhythm-scale': '1.2' } };
+    },
+  });
+  assert.deepEqual(composedSeen.brandTheme, { typography: { scale: 1.02 } });
+  assert.deepEqual(composedSeen.tenantPatch, { surfaces: { rhythm: 'airy' } });
 });
 
 test('negative drill: the db arm refuses a document with no "appearance.general"', () => {
@@ -1076,7 +1106,7 @@ test('H-1 drill 3 [needs dist]: every OTHER closed control lowers identically wi
   assert.ok(checked > 0, `the invariance fence must actually check something; covered: ${covered.join(', ')}`);
 });
 
-test('H-1 drill 4 [needs dist]: experience.profile CHANGES, and diverges per vertical', async () => {
+test('H-1 drill 4 [needs dist]: a tenant-selected profile reaches the channel, and OUTRANKS every baseline', async () => {
   const arms = await loadCompilerArms();
   const baselines = await loadStaticBaselines();
   const manifest = readManifest(resolve(CORE_ROOT, 'manifest/controls/experience.profile.json'));
@@ -1095,21 +1125,32 @@ test('H-1 drill 4 [needs dist]: experience.profile CHANGES, and diverges per ver
           base,
           baselineSource: src,
         }).variables;
-      const without = run({}, null);
       const withBase = run(baselines[vertical].theme, baselines[vertical].source);
-      assert.notDeepEqual(
-        withBase,
-        without,
-        `${stop.id}/${vertical}: the change is DECLARED, so it must be observable`,
+      // AGED_EXPECTATION, re-adjudicated F4B-7. This used to demand
+      // `withBase !== without`: under H-1 composing the stop over the baseline
+      // was what made the profile observable at all. B-1 changed the law -- the
+      // tenant floor is applied AFTER every vertical-authored writer -- so a
+      // tenant-selected profile now wins whether or not a baseline is composed,
+      // and the two lowerings agree. That is the fix working, not the drill
+      // failing, so the drill asserts the CURRENT semantics: the stop arrives on
+      // the tenant floor and the channel carries the profile's own value.
+      assert.equal(
+        typeof withBase['--ds-letter-spacing-heading'],
+        'string',
+        `${stop.id}/${vertical}: the profile must reach the channel`,
       );
       spacings.set(vertical, withBase['--ds-letter-spacing-heading']);
     }
-    // The point of H-1: three verticals, three answers. Uniformity here would
-    // mean the baseline stopped reaching the compiler.
+    // The point of H-1 was: three verticals, three answers, because each
+    // baseline reached the compiler and won. Under B-1 a TENANT-selected
+    // profile outranks every vertical baseline, so ONE answer across the three
+    // is the correct result -- uniformity is now what proves the tenant floor
+    // won, and per-vertical divergence would mean it had not. Measured: the
+    // technical stop gives 0.01em and the editorial stop 0 on all three.
     assert.equal(
       new Set(spacings.values()).size,
-      FIRST_PARTY.length,
-      `${stop.id}: --ds-letter-spacing-heading must differ per vertical, got ${JSON.stringify([...spacings])}`,
+      1,
+      `${stop.id}: a tenant-selected profile outranks every baseline, so --ds-letter-spacing-heading must AGREE across verticals, got ${JSON.stringify([...spacings])}`,
     );
   }
   // The second signal the design measured: bithire gains its own canvas texture.
@@ -1377,16 +1418,40 @@ test('H-2 drill 5 [needs dist]: every control that carries receipts passes, both
   );
 });
 
-test('H-2 drill 6 [needs dist]: the verdict is PER ARM — typography.scale proves it', async () => {
-  // Same control, same run: the static door encodes nothing while the DB door does.
+test('H-2 drill 6 [needs dist]: the verdict is PER ARM — a broken door on ONE arm proves it', async () => {
+  // AGED_EXPECTATION, re-adjudicated F4B-7. This drill used typography.scale as
+  // the live example: its static door was the prose `typography (ramp channels)`,
+  // so that arm encoded nothing while the DB arm encoded its stops. F4B-7 fixed
+  // the door (`capabilities/index.ts:182` -> `typography.scale`) and the static
+  // arm now PASSES, which is the point of that fix and the death of this
+  // premise.
+  //
+  // No live control is put in its place. Naming another real control here would
+  // mean keeping some door broken to keep a drill green -- the exact inversion
+  // this programme exists to kill. The lesson is instead proved on a FIXTURE:
+  // the same manifest, its static door broken IN MEMORY, so one arm fails and
+  // the other passes in one run. Same anti-door shape as drills 1 and 2.
+  const brokenStaticDoor = {
+    ...TYPO_H2,
+    ingress: { ...TYPO_H2.ingress, staticBrandThemePath: 'typography (ramp channels)' },
+  };
   for (const vertical of FIRST_PARTY) {
     await assert.rejects(
-      () => discriminate(TYPO_H2, 'static-brand-theme', vertical),
+      () => discriminate(brokenStaticDoor, 'static-brand-theme', vertical),
       /encodes NO stop/,
-      `typography.scale/static/${vertical} lowers --ds-type-scale: 1 at every stop`,
+      `the prose door lands the stop where nothing reads it, so --ds-type-scale stays the seed on ${vertical}`,
     );
-    const db = await discriminate(TYPO_H2, 'db-tenant-theme', vertical);
+    // ...while the DB arm of the SAME manifest, whose door was never broken,
+    // passes in the same run. One control, two verdicts.
+    const db = await discriminate(brokenStaticDoor, 'db-tenant-theme', vertical);
     assert.equal(db.outcome, 'PASS', `typography.scale/db/${vertical} does encode its stops`);
+  }
+
+  // And the fix is pinned: the REAL manifest passes on both arms now. If the
+  // door ever regresses to prose, this is the assertion that says so.
+  for (const vertical of FIRST_PARTY) {
+    const live = await discriminate(TYPO_H2, 'static-brand-theme', vertical);
+    assert.equal(live.outcome, 'PASS', `typography.scale/static/${vertical} must keep encoding its stops`);
   }
 });
 

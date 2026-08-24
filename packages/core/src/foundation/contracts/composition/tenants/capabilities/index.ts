@@ -179,7 +179,17 @@ export const TENANT_CAPABILITY_REGISTRY = Object.freeze([
       bounds: { min: 0.9, max: 1.1 },
       defaultBehavior: '1 (vertical envelope may clamp tighter)',
       documentPath: 'appearance.general.typography.scale',
-      brandThemePath: 'typography (ramp channels)',
+      // The static door is the FIELD the compiler reads, not a description of
+      // what it feeds. This once read `typography (ramp channels)`, which is
+      // prose: every walker here splits on `.`, so it resolved to
+      // `typography["(ramp channels)"]` and landed the stop where nothing reads
+      // it. `BrandTheme.typography.scale` is the real field (themes/index.ts:568)
+      // and `brand-theme:774-791` hands it to the posture lowering, whose
+      // typeScale branch writes `--ds-type-scale` unconditionally. Silent by
+      // construction, exactly like `surfaces.density` below: the seed at
+      // brand-theme:713 emits `--ds-type-scale: 1` whatever happens, so the arm
+      // stayed non-empty and only H-2's stop-discrimination guard caught it.
+      brandThemePath: 'typography.scale',
       derivedChannels: ['--ds-type-scale'],
       compat: 'additive, unset-to-rollback',
     },

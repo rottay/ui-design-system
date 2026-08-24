@@ -2505,6 +2505,67 @@ cobertura? — decisión posterior, con los datos del postaudit Fable §3.
 `cascade-producers --check` OK. Sin un solo rojo conocido fuera de las
 deudas adjudicadas con dueño.
 
+##### F4B-7 — typography.scale: cierre parcial honesto + clase DB_ARM_SCOPE_SHADOWING (2026-08-23)
+
+El control **no cierra** — y esa es la adjudicación, no una falla: la mitad
+de autoridad queda probada y commiteada, y el defecto que impide la
+equivalencia queda registrado como CLASE con su packet propio (H-3).
+Writer: Opus. Postaudit Fable: **ACCEPT**, memo
+`/private/tmp/f4b-7-typography-fable-postaudit.md` (SHA en su `.ready`).
+
+**Lo que SÍ cierra:** el fix de autoridad (`capabilities/index.ts:182`,
+`'typography (ramp channels)'` → `'typography.scale'`, protocolo
+density.mode, repin de 20 manifests). Guard H-2: static **FAIL 0/1 → PASS
+1/1** en los 3 verticales (doble medición: el FAIL que Fable midió con
+sonda propia en el preaudit H-2, el PASS que midió hoy con la misma
+sonda). `--ds-type-scale` = 0.94/1.06 exactos en ambos brazos; T3
+`{0.92,1.08}` verificado en fuente dentro de `{0.9,1.1}` sobre el piso
+a11y `0.9`; ningún vertical autora el campo; `normal`=1 como ELIDE en DB
+(patrón radius, medido); 3 artifacts de producción byte-idénticos (la
+línea corrige una puerta que ningún lowering atravesaba).
+
+**La clase nueva, `DB_ARM_SCOPE_SHADOWING` (registrada, no cerrada):** el
+artifact del vertical declara canales en el scope
+`:where([data-ds-root][data-vertical])`; una declaración en el ancestro
+más cercano gana SIEMPRE sobre el valor heredado de un inline en `html` —
+el brazo DB de la sonda (que modela la vía PREVIEW/provider-side) no puede
+mover ningún canal que el artifact declare en ese scope (medido: 54/11/54
+filas divergentes en rottay/bithire/evnto). **La vía productiva NO tiene
+este defecto** (ley CLAUDE.md textual: producción compila en servidor y
+embebe el artifact exacto con los valores resueltos del tenant; el
+provider no emite una capa competidora). Es una limitación del MODELO del
+brazo DB para toda la clase de canales que el artifact hornea en ese
+scope. Instancia hermana registrada bajo `OPEN_VERTICAL_CASCADE_DEFECT`.
+El control queda `UNKNOWN` con `knownDefects` + evidencia +
+`nextAction: H3_DB_ARM_PRODUCTION_SERVING`; la celda de card y los 6
+receipts R8 correctamente NO emitidos ("nombrarían una evidencia que no
+existe").
+
+**Drills 12/43/53 re-adjudicados como `AGED_EXPECTATION`** (sin debilitar):
+12 — expectativa nueva sobre la forma B-1 (stop en `tenantPatch`, baseline
+en `brandTheme`); 43 — inversión: la UNIFORMIDAD entre verticales ahora
+prueba que el piso del tenant ganó (el renombre era obligatorio: dejar un
+título que afirmaba divergencia habría sido el defecto D3 de C4 otra vez);
+53 — la lección "veredicto POR BRAZO" se preserva por FIXTURE sintético
+anti-door MÁS el pin del manifest real pasando 3/3 (mejora del writer
+sobre el ruling, aceptada). Suite de ingress: 53/56 → **56/56**.
+
+**Miss de proceso, asentado completo (TRES partes):** los drills 12/43
+quedaron rojos desde B-1 y nadie corrió la suite de ingress — ni el writer
+en B-1, ni el DT en su verificación, **ni el postaudit de Fable** (que
+corrió brand-compiler y db-row-canary pero no la suite del instrumento
+pese a su propio binding Z-1). Regla reforzada y vinculante para los tres
+asientos: todo packet/postaudit cuyo write-set toque
+`src/tooling/resolution-probe/**` corre la suite de ingress y la de
+data-run, sin excepción.
+
+**Cola:** H-3 (diseño → preaudit Fable → implementación) — el brazo DB de
+la sonda sirve como producción (artifact compilado del tenant), cerrando
+la clase para typography.scale y todo control cuyo canal el artifact
+declare en el scope `[data-ds-root]` (incluida la lección ya apuntada: la
+sonda tampoco aplica `modeBlocks`). Tras H-3, typography.scale re-corre y
+emite sus receipts R8.
+
 **F0 — CERRADO (2026-08-19).** Criterio de cierre cumplido:
 `ci-gates OK — 78 blocking gate(s) passed` (2 excluded visibles con razón y
 dueño: channel-liveness y lane-control-drills, ambos esperan a F2); `find src -type d -empty` vacío salvo el inbox

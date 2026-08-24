@@ -7,7 +7,7 @@
   "semanticOwner": {
     "owner": "design-system",
     "registryPath": "packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts",
-    "registryDigest": "e043409e2e86d75ab2c2c388d4cc2bda0d9baf4acce698f8509114fb94ef0630"
+    "registryDigest": "88622b9370257a8793f8bfdadfcf408edef6b12289afb9deea7c0425a7328301"
   },
   "title": "Type scale dial",
   "valueType": "scale",
@@ -21,7 +21,7 @@
     "defaultBehavior": "1 (vertical envelope may clamp tighter)"
   },
   "ingress": {
-    "staticBrandThemePath": "typography (ramp channels)",
+    "staticBrandThemePath": "typography.scale",
     "dbTenantThemePath": "appearance.general.typography.scale"
   },
   "declaredOutputs": {
@@ -56,8 +56,41 @@
     "staticDbParityEvidenceIds": [],
     "exactRestoreEvidenceIds": [],
     "negativeControls": [],
-    "nextAction": "CALIBRATE_LOWERERS_COMPUTED_DELTAS_NEGATIVES_AND_EXACT_RESTORE",
-    "boundsNote": "las tres paradas viven dentro de bounds {0.9,1.1} y del techo vinculante tenant T3 {0.92,1.08}: validas en todos los mundos"
+    "nextAction": "H3_DB_ARM_PRODUCTION_SERVING",
+    "boundsNote": "las tres paradas viven dentro de bounds {0.9,1.1} y del techo vinculante tenant T3 {0.92,1.08}: validas en todos los mundos",
+    "assessmentStateNote": "UNKNOWN on purpose, and NOT for lack of a measurement. The authority fix landed and is proven (see measuredResult): the static door was prose, it is now the keypath the compiler reads, and the H-2 stop-discrimination guard went from FAIL 0/1 to PASS 1/1 on all three verticals. What is missing is the ARM-EQUIVALENCE half, and it is blocked by DB_ARM_SCOPE_SHADOWING below -- a limitation of how the probe models the DB door, not a defect this control can fix. Claiming a rank on a control whose two doors were never shown to agree would be the ladder standing on the floor.",
+    "sourceBindings": [
+      "packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts",
+      "packages/core/src/foundation/contracts/composition/tenants/themes/tenant-theme/index.ts",
+      "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
+      "packages/core/src/infrastructure/compilers/kernel/foundation/css/appearance-posture/index.ts",
+      "packages/core/src/infrastructure/compilers/composition/tenant-theme/index.ts",
+      "packages/core/src/foundation/tokens/css/foundation/themes/default.css"
+    ],
+    "measuredResult": {
+      "instrument": "packages/core/src/tooling/resolution-probe, Chromium, --bundle fresh, Node 22.17.0. The authority half only; the equivalence half is blocked (see knownDefects).",
+      "authorityFix": "ONE line. capabilities/index.ts:182 read `typography (ramp channels)`, which is prose: every walker splits on `.`, so it resolved to `typography[\"(ramp channels)\"]` and landed the stop where nothing reads it. The real field is BrandTheme.typography.scale (themes/index.ts:568), handed to the posture lowering at brand-theme:774-791. Silent by construction, exactly like the `surfaces.density` anti-door: the seed at brand-theme:713 emits `--ds-type-scale: 1` unconditionally, so the arm never looked empty and only the stop-discrimination guard caught it. manifest ingress is derived from the registry (generator/index.mjs:246), so --sync propagated the fix and repinned the 20 registryDigests.",
+      "guardBeforeAfter": "BEFORE: static-brand-theme THROWS \"encodes NO stop\" on rottay, bithire and evnto; DB PASS on all three. AFTER: static PASS with discriminating [\"--ds-type-scale\"] on all three; DB unchanged. 0/1 -> 1/1.",
+      "directChannel": "Both arms, all three verticals: compacta -> 0.94 exact, amplia -> 1.06 exact. No per-vertical variation, and that is measured rather than assumed: NONE of the three verticals authors typography.scale (all three read undefined on their published baseline), so the baseline is the seed 1 everywhere.",
+      "identityStop": "`normal` = 1 is the ramp identity and carries no receipt, like radius `suave` and density `normal`. Which of the two precedents it follows was MEASURED, not assumed: the DB arm ELIDES it (the delta is empty, so the arm emits none of the declared channels) while the static arm emits `1` because it compiles the whole theme. That is the radius shape, not the density one.",
+      "envelopeT3": "Verified against source rather than trusted from the boundsNote. Global schema bound TENANT_THEME_TYPE_SCALE_BOUNDS {0.9,1.1} (tenant-theme/index.ts:508-511) is the clamp the posture lowering applies (appearance-posture:122-133). The vertical envelope is {0.92,1.08} on ALL THREE verticals (composition/tenant-theme/index.ts:133,151,171). The a11y floor is typeScaleMin 0.9 (expressive-profiles:232). 0.94 and 1.06 sit inside all three.",
+      "paintedHalf": "The static arm moves the painted ramp exactly as predicted -- font-size, gaps and control heights all shift, because the ramp is calc(var(--ds-font-size-*-base) * var(--ds-type-scale,1)) at themes/default.css. The DB arm moves NOTHING painted, which is DB_ARM_SCOPE_SHADOWING and not a property of this control.",
+      "productionUnchanged": "The three compiled artifacts are byte-identical after the fix. The line corrects a door no lowering was walking; it does not change what a vertical compiles."
+    },
+    "unmeasuredScope": [
+      "ARM EQUIVALENCE IS NOT CLAIMED. The painted run diverges on 54 rows (rottay), 11 (bithire) and 54 (evnto). No receipt is emitted and no rank is claimed on top of it.",
+      "ONE family would have been measured, primitive/display/card. Its cell is NOT written: it would have to name evidence that does not exist.",
+      "The declared channel is one, --ds-type-scale, but its fan-out is the whole foundational font-size ramp plus every calc that reads it. Nothing here claims that fan-out was audited."
+    ],
+    "knownDefects": [
+      {
+        "familyId": "DB_ARM_SCOPE_SHADOWING",
+        "finding": "The probe DB arm cannot move any channel the vertical artifact declares in the [data-ds-root] scope, and --ds-type-scale is one. Measured, with the mechanism: the DB arm applies its delta as root-inline-style on document.documentElement, while the artifact declares `--ds-type-scale: 1` (artifacts/rottay/index.css:1168, and once in each of the other two) behind `:is(html[data-tenant=<slug>], :where([data-ds-root][data-vertical=<v>]))`. The second arm of that selector matches a DESCENDANT of html, and a declaration on the NEAREST ancestor beats an inherited value from an inline write further up -- specificity never enters it. So the ramp calc never recomputes for the DB arm. The static arm appends behind the SAME selector and later, so it wins, and the painted result diverges: 54 rows on rottay, 11 on bithire, 54 on evnto, over font-size, the four *-preset-gap roots, button-modern-md/hitbox and card-modern-md/title. In the painted run BOTH arms do move --ds-type-scale from 1 to 0.94, which is what proves the door fix is not the cause.",
+        "disposition": "OPEN_DT",
+        "productionReading": "DT ruling: this is not a priori a production defect. The productive DB path compiles on the server and embeds the artifact for SSR, and the client hydrates that exact artifact with visualAuthority=compiled-artifact -- so the served artifact carries the tenant RESOLVED values in the artifact scope itself and paints correctly. The probe DB arm models the PREVIEW path (provider-side emission, inline on html), which is the compatibility path. The gap is therefore in what the arm MODELS, and it will hit every control whose channel the artifact bakes into that scope, not only this one.",
+        "remediation": "Packet H-3: make the probe DB arm apply its delta the way production serves it -- serving the compiled tenant artifact, or writing at the [data-ds-root] scope instead of inline on html; the exact form is H-3 design work, decided by measuring how SSR embeds the artifact. After H-3 this control re-runs and emits its R8 receipts. Registered as a sibling instance of OPEN_VERTICAL_CASCADE_DEFECT: same class, artifact outranking the DB arm position; the bithire dark double declaration is the other instance."
+      }
+    ]
   },
   "retiredAliases": []
 }
