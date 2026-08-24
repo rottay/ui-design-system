@@ -3834,6 +3834,48 @@ arreglar fixtures) quedan registradas con sus costos en el memo.
   son clase drenaje (D-1); ~59 a clasificar (PIN-RANCIO / FIXTURE /
   REGRESIÓN / FLAKE-INFRA).
 
+**E-1 IMPLEMENTADO (Opus, 2026-08-24) — el piso del tenant llega por la puerta
+DB; adjudicaciones DT:**
+- **Fix:** `compileTheme` acepta y reenvía `tenantPatch` (con doc de contrato:
+  quién lo pasa, por qué, `absent = identity`); la llamada DB pasa una
+  **proyección exportada** `tenantPostureFloors(patch)` — desviación del
+  ruling ACEPTADA: `envelope.patch` no asigna por tipos (ThemePatch hace
+  opcionales las hojas que BrandTheme requiere; `tsc` lo rechazó dos veces),
+  y un `as` habría sido el narrowing silencioso que el programa rechaza. La
+  proyección cruza sólo los 6 paths escalares que el piso lee; `motion` NO
+  se proyecta (envuelto — es el defecto inverso, packet de motion.dial;
+  comportamiento preservado exactamente) y `expressive.*` tampoco (ya
+  expandida arriba). Exportada a propósito: una autoridad, dos lectores
+  (G1 de provenance-acceptance la importa — no hay copia privada). Reproduce
+  la predicción EXACTA: rottay/flat y /elevated 0→3 vars cada uno (los
+  valores del brazo estático); soft 0 (preset vacío, correcto).
+- **Adjudicación (a) — la fila `typePairing=editorial|bithire`:** consecuencia
+  CORRECTA del mismo fix (la selección tipográfica del tenant ahora gobierna
+  los dos modos; el overlay dark de bithire sobrevivía sólo en dark — la
+  misma clase de defecto, un modo más allá). Acotada: 1 fila, 1 vertical, 1
+  canal, 1 bloque; las otras 27 filas del barrido idénticas. Opción B
+  aplicada.
+- **Adjudicación (b) — la escalera vs el tenant:** la ley vigente es opción
+  B: la selección de postura del tenant PREVALECE sobre la escalera autorada
+  en AMBAS puertas. El comentario "an authored ladder is the ceiling it
+  states outright" (`brand-theme:978`) describe la precedencia pre-opción-B:
+  queda VIEJO y se re-asienta en este packet (cláusula envejecida
+  M-1/H-3(a)): las dos puertas ahora coinciden — el overlay light de rottay
+  deja de emitir los 3 canales porque, con el piso aplicado en ambos, los
+  valores coinciden (herencia, no duplicación).
+- **Techo de bytes de subpath públicos: AUTORIZADO por el DT** (precedente
+  B-1: incremento único al valor medido, sin aire, decrease-only desde el
+  nuevo ancla, nota en `_note`). El fix cuesta ~98 B de código puro y el
+  techo no lo absorbe (medido irreducible +90 B aun con el doc borrado).
+  Anclas a los valores medidos finales tras el re-asiento del comentario.
+- **Verificaciones:** tsc limpio; conteos 1192/1231/468 idénticos; suites de
+  los 2 compiladores con baseline aislado: 30 rojos preexistentes, CERO
+  regresiones; provenance-acceptance 23/23 (G1 actualizado + drill G3 nuevo);
+  56/56 VALID; producers.json aditivo (2 digests, sin filas); program-check
+  bloqueado sólo por el index.json de la lane de Sonnet (se limpia solo al
+  cerrar ella).
+- **Empaquetado confirmado:** todo esto commitea dentro de F4B-10.
+
 **F0 — CERRADO (2026-08-19).** Criterio de cierre cumplido:
 `ci-gates OK — 78 blocking gate(s) passed` (2 excluded visibles con razón y
 dueño: channel-liveness y lane-control-drills, ambos esperan a F2); `find src -type d -empty` vacío salvo el inbox
