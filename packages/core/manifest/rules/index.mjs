@@ -16,9 +16,9 @@
 import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 
-import { SIGHTED_APPROVER, validateReceipt } from '../../scripts/quality-evidence/v2/receipts.mjs';
+import { sightedApprovers, validateReceipt } from '../../scripts/quality-evidence/v2/receipts.mjs';
 
-export { SIGHTED_APPROVER };
+export { sightedApprovers };
 
 // ---------------------------------------------------------------------------
 // Closed vocabularies (mirrored in schema.json#vocabulary)
@@ -1156,10 +1156,22 @@ export function validateCell(cell, options) {
       errors.push(
         `${where} ${state} requires a sighted receipt (${EVIDENCE_PROOF_ROLES.SIGHTED.join(' | ')})`,
       );
-    } else if (!sighted.some((receipt) => receipt.producer !== SIGHTED_APPROVER)) {
-      errors.push(
-        `${where} ${state} requires a sighted receipt whose producer is not ${SIGHTED_APPROVER}`,
-      );
+    } else {
+      /* The forbidden set is DERIVED from the live seat, never a name pinned
+       * here. Fails closed for the same reason the receipt validator does: an
+       * authority nobody can read makes segregation unprovable, and an
+       * unprovable segregation must not grade as a satisfied one. */
+      let approvers = null;
+      try {
+        approvers = sightedApprovers(contracts);
+      } catch (error) {
+        errors.push(`${where} ${state} cannot be graded: ${error.message}`);
+      }
+      if (approvers !== null && !sighted.some((receipt) => !approvers.includes(receipt.producer))) {
+        errors.push(
+          `${where} ${state} requires a sighted receipt whose producer is not ${approvers.join(' | ')}`,
+        );
+      }
     }
   }
 

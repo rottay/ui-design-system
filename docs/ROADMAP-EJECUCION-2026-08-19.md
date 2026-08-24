@@ -2771,6 +2771,74 @@ quedan cerradas tres (drills 12/43 en F4B-7, ésta en T-3); la única
 abierta es el hueco vivo `SIGHTED_APPROVER` (juicio y recomendación al
 owner asentados en H3C §5).
 
+##### Fence SIGHTED_APPROVER — derivado de la autoridad viva; el hueco vivo CERRADO (2026-08-24)
+
+La saga completa, cerrada **con la forma prescrita** (Fable): C2 la halló
+como rojo heredado con ruling del dueño; T-1 la marcó doblemente stale y
+prescribió la forma ("derivar del asiento por rol o constante derivada,
+jamás otro nombre propio"); B-1 la marcó triple; H3C la elevó a hueco
+vivo con censo compensatorio y recomendación al owner; T-3 la dejó como
+el único rojo del tablero. **Autorización del owner registrada** ("Ahora
+arreglá el fence SIGHTED_APPROVER: leelo contra agent-orchestration.json").
+Writer: Opus. Postaudit Fable: **ACCEPT**, memo
+`/private/tmp/sighted-approver-fable-postaudit.md`, SHA-256
+`f856c7c43fda6e665c63e6d5119855dcf29e9f2578b137fc9ef44326091cea3c`.
+
+**La forma (mejor de lo prescrito, dice el auditor):**
+`v2/receipts.mjs` ya no tiene `SIGHTED_APPROVER = 'Codex (DT)'`. Exporta
+`sightedApprovers(contracts)` — el conjunto prohibido se DERIVA por
+corrida de las dos autoridades vivas
+(`agent-orchestration.json#doubleAccept.coordinator` y
+`quality-rubric.json#eligibility.finalSightedAuthority`; lo pineado son
+las RUTAS, nunca los valores) — e `isSightedApprover(producer, contracts)`
+normalizado por espacios y caja. **Falla cerrada e incondicional**: la
+resolución TIRA si la autoridad no se puede leer, y corre incondicional en
+`validateReceipt` — una autoridad ilegible enrojece TODOS los receipts en
+vez de chequear nada en silencio (la inversión exacta del modo en que
+fallaba la constante). Cero nombres propios funcionales en código (el
+único hit es el comentario histórico que narra por qué repinear un nombre
+reconstruye el defecto una sucesión más tarde). Si el owner mueve el
+asiento, **el fence lo sigue sin tocar código**.
+
+**El hueco vivo, cerrado y ejercitado por el propio auditor:** el
+aprobador vivo RECHAZADO en sus dos formas y en disfraces
+(`" kimi k3 "`, `"KIMI K3 (DT)"`); `Codex`, `Codex (DT)`, `Fable 5` y el
+producer real `claude-opus-5-f4b-lane` pasan con premisas declaradas
+(AGED_EXPECTATION honesto: si el asiento se mueve sobre alguno, el drill
+enrojece diciendo que su premisa cayó). 7 drills (a–g) + el octavo que
+ancla la derivación al contrato (no a un literal del test); 3 mutantes
+detectados por los drills correctos (resolutor vacío sólo por g;
+una-sola-autoridad por derivación+b+g; nombres re-pineados por f+g — el
+que impide reconstruir el defecto borrado).
+
+**Expansión del write-set por consumo (legítima y obligatoria):** la
+constante tenía TRES consumidores, no uno — `manifest/rules/index.mjs:1166`
+(la pata SIGHTED_ACCEPTED de la escalera) ahora deriva con la misma falla
+cerrada, y el fixture del generador usa `STUB_SIGHTED_SEAT` derivando DEL
+CONTRATO (la escalera sigue el contrato, no un nombre en fuente). Dejar
+la constante viva junto a la función habría creado dos autoridades para
+la misma regla.
+
+**Adjudicación pendiente propia (asentada, no construida):** la clase
+"el auditor produce la evidencia que audita" (`Fable 5` pasa el fence
+porque no es el aprobador) — es OTRA segregación y merece su propia
+decisión, fuera de este fence.
+
+**Tablero tras el fix:** **9/9 suites del instrumento VERDES por primera
+vez** (composition/receipt 17/17, rojo desde C2, cerrado; generator 42/42;
+validador 45/45 — que además EJERCITA la derivación en vivo al ser
+incondicional). Cuatro instancias del patrón de cerco envejecido, TODAS
+cerradas. Ningún guard de autoridad del programa compara contra un nombre
+que una sucesión pueda dejar mentiroso.
+
+**Reincidencia cascade (asentada con la regla):** `cascade-producers
+--check` volvió a rojo (207/209) porque F4B-7 tocó `capabilities/index.ts`
+(.ts, dentro del censo srcTsx) — la clase T-2 reincidente. **Regla de
+proceso adoptada (recomendación Fable, vinculante): todo packet que toque
+`src/**/*.ts(x)` corre `cascade-producers --check` en su verificación**, o
+el tablero de cascade oscila por goteo. Triage T-4 en curso con el molde
+de T-2 (inspección ANTES de re-derivar).
+
 **F0 — CERRADO (2026-08-19).** Criterio de cierre cumplido:
 `ci-gates OK — 78 blocking gate(s) passed` (2 excluded visibles con razón y
 dueño: channel-liveness y lane-control-drills, ambos esperan a F2); `find src -type d -empty` vacío salvo el inbox

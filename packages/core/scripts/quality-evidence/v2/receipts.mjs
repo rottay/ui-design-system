@@ -4,7 +4,70 @@ import path from 'node:path';
 
 import { REPOSITORY_ROOT, getFamily, getRound, loadProgramContracts } from './contracts.mjs';
 
-export const SIGHTED_APPROVER = 'Codex (DT)';
+/**
+ * The two live authorities that name whoever holds the sighted seat.
+ *
+ * Kept as PATHS rather than as values: what is pinned here is where to look,
+ * never who is there. A seat change is then a contract edit, and this file
+ * does not move.
+ */
+const SIGHTED_AUTHORITY_SOURCES = Object.freeze([
+  Object.freeze({
+    where: 'agent-orchestration.json#doubleAccept.coordinator',
+    read: (contracts) => contracts?.orchestration?.doubleAccept?.coordinator,
+  }),
+  Object.freeze({
+    where: 'quality-rubric.json#eligibility.finalSightedAuthority',
+    read: (contracts) => contracts?.rubric?.eligibility?.finalSightedAuthority,
+  }),
+]);
+
+/** Whitespace and case must not be a way past the fence. */
+function normaliseActor(value) {
+  return String(value).trim().toLowerCase();
+}
+
+/**
+ * WHO MAY NOT PRODUCE THE EVIDENCE THEY APPROVE — derived per call, never pinned.
+ *
+ * THE DEFECT THIS REPLACES: this module used to hold
+ * `SIGHTED_APPROVER = 'Codex (DT)'`. Two things were wrong with it at once, and
+ * the second is why a second literal would not have been a fix. First, the seat
+ * moved — the owner's order of 2026-08-23 put Kimi K3 in the DT chair and left
+ * Codex a read-only consultant — so the fence compared against a name that no
+ * longer approved anything, and a receipt produced by the REAL approver passed.
+ * Second, and worse, nothing could have caught that: a literal cannot go stale
+ * loudly. So the rule now READS the live authorities instead of remembering
+ * them, and the only way to change the forbidden set is to change the seat.
+ *
+ * FAILS CLOSED. An authority this cannot read is not "no approver"; it is an
+ * unprovable segregation, so the resolution throws and every caller must treat
+ * that as a refusal rather than as an empty set.
+ *
+ * @param {object} contracts as returned by `loadProgramContracts`
+ * @returns {readonly string[]} the distinct forbidden producer names, verbatim
+ */
+export function sightedApprovers(contracts) {
+  const read = SIGHTED_AUTHORITY_SOURCES.map((source) => ({
+    where: source.where,
+    value: source.read(contracts),
+  }));
+  const unresolved = read.filter((entry) => !isNonEmptyString(entry.value));
+  if (unresolved.length > 0) {
+    throw new Error(
+      'the sighted-approver set cannot be derived from the live authorities ' +
+        `(${unresolved.map((entry) => entry.where).join(', ')}). A fence that cannot name who ` +
+        'holds the seat must refuse, never fall back to a remembered name.',
+    );
+  }
+  return Object.freeze([...new Set(read.map((entry) => entry.value.trim()))]);
+}
+
+/** Is this producer one of the live sighted approvers? Case- and space-insensitive. */
+export function isSightedApprover(producer, contracts) {
+  const forbidden = sightedApprovers(contracts).map(normaliseActor);
+  return forbidden.includes(normaliseActor(producer));
+}
 
 export function sha256OfFile(absolutePath) {
   return crypto.createHash('sha256').update(fs.readFileSync(absolutePath)).digest('hex');
@@ -115,8 +178,23 @@ export function validateReceipt(receipt, options = {}) {
     }
   }
 
-  if (isNonEmptyString(receipt?.producer) && receipt.producer === SIGHTED_APPROVER) {
-    failures.push('producer must not be the sighted approver');
+  /* Segregation of duties, against the LIVE seat. Derived unconditionally so an
+   * authority this cannot read reddens every receipt instead of quietly
+   * checking nothing — the failure mode the pinned constant had. */
+  let sightedSet = null;
+  try {
+    sightedSet = sightedApprovers(contracts);
+  } catch (error) {
+    failures.push(`sighted-approver segregation cannot be checked: ${error.message}`);
+  }
+  if (
+    sightedSet !== null &&
+    isNonEmptyString(receipt?.producer) &&
+    sightedSet.map(normaliseActor).includes(normaliseActor(receipt.producer))
+  ) {
+    failures.push(
+      `producer must not be the sighted approver (live seat: ${sightedSet.join(' | ')})`,
+    );
   }
 
   const drill = receipt?.negativeDrill;

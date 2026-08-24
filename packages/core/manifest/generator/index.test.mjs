@@ -7,7 +7,8 @@ import { dirname, join } from 'node:path';
 import test from 'node:test';
 import { fileURLToPath } from 'node:url';
 
-import { computeSourceDigest, SIGHTED_APPROVER } from '../../scripts/quality-evidence/v2/receipts.mjs';
+import { loadProgramContracts } from '../../scripts/quality-evidence/v2/contracts.mjs';
+import { computeSourceDigest, sightedApprovers } from '../../scripts/quality-evidence/v2/receipts.mjs';
 import {
   certifyCustomizationManifest,
   validateCustomizationManifest,
@@ -179,13 +180,30 @@ const REAL_BINDING = 'packages/core/scripts/quality-evidence/programs/modern-res
 const ACTIVE_CONTROL_IDS = ['spacing.rhythm', 'density.mode'];
 const FAMILY_IDS = new Set(['primitive/layout/flex', 'primitive/layout/grid']);
 
+/**
+ * A STUB SEAT for the synthetic contracts these drills grade against.
+ *
+ * The sighted-approver fence is DERIVED from the live authorities
+ * (`agent-orchestration.json#doubleAccept.coordinator` and
+ * `quality-rubric.json#eligibility.finalSightedAuthority`) and fails closed when
+ * it cannot read them — so a fabricated contracts object that names no seat must
+ * refuse every receipt, which is correct and is exactly what these fixtures used
+ * to trip. Naming a seat here keeps each drill about its own subject, and it
+ * makes the SIGHTED_ACCEPTED drill below prove the derivation follows the
+ * CONTRACT rather than any name written in source.
+ */
+const STUB_SIGHTED_SEAT = Object.freeze({
+  orchestration: { doubleAccept: { coordinator: 'Fixture Coordinator' } },
+  rubric: { eligibility: { finalSightedAuthority: 'Fixture Coordinator (DT)' } },
+});
+
 function gradeCell(cell, overrides = {}) {
   return validateCell(cell, {
     label: 'fixture.json',
     familyId: 'primitive/layout/flex',
     anatomy: ANATOMY,
     repositoryRoot: REPOSITORY_ROOT,
-    contracts: { evidence: EVIDENCE_CONTRACT, rounds: { rounds: [] }, inventory: { rows: [] } },
+    contracts: { evidence: EVIDENCE_CONTRACT, rounds: { rounds: [] }, inventory: { rows: [] }, ...STUB_SIGHTED_SEAT },
     activeControlIds: ACTIVE_CONTROL_IDS,
     familyIds: FAMILY_IDS,
     now: new Date(),
@@ -236,6 +254,7 @@ function evidenceFixture(receipts) {
     evidence: { root: evidenceRoot, receiptRequiredFields: EVIDENCE_CONTRACT.receiptRequiredFields },
     rounds: { rounds: [{ id: 'R2' }] },
     inventory: { rows: [{ id: 'primitive/layout/flex' }, { id: 'primitive/layout/grid' }] },
+    ...STUB_SIGHTED_SEAT,
   };
   const evidenceIds = [];
   for (const [name, overrides] of Object.entries(receipts)) {
@@ -508,7 +527,7 @@ test('a section at SOURCE_BOUND or above must carry resolving sourceBindings', (
     label: 'fixture.json',
     familyId: 'primitive/layout/flex',
     repositoryRoot: REPOSITORY_ROOT,
-    contracts: { evidence: EVIDENCE_CONTRACT, rounds: { rounds: [] }, inventory: { rows: [] } },
+    contracts: { evidence: EVIDENCE_CONTRACT, rounds: { rounds: [] }, inventory: { rows: [] }, ...STUB_SIGHTED_SEAT },
     now: new Date(),
   };
   assertNames(
@@ -786,10 +805,20 @@ test('SIGHTED_ACCEPTED needs a sighted receipt the sighted approver did not prod
       sighted: { evidenceKind: 'sighted-acceptance', producer },
     });
 
-  assertNames(
-    gradeAgainst(build(SIGHTED_APPROVER), 'SIGHTED_ACCEPTED'),
-    'producer must not be the sighted approver',
-  );
+  // Derived from the FIXTURE's own contract, so this drill follows the contract
+  // instead of any name written in source: both authorities are read, and the
+  // day a seat moves the forbidden set moves with it.
+  const seated = sightedApprovers(build('lane-a').contracts);
+  assert.deepEqual(seated, ['Fixture Coordinator', 'Fixture Coordinator (DT)']);
+  for (const approver of seated) {
+    assertNames(
+      gradeAgainst(build(approver), 'SIGHTED_ACCEPTED'),
+      'producer must not be the sighted approver',
+    );
+  }
+  // And the live programme derivation resolves too -- the fence in the shipped
+  // tree is not merely well-formed in a fixture.
+  assert.ok(sightedApprovers(loadProgramContracts()).length >= 1);
   assert.deepEqual(gradeAgainst(build('lane-a'), 'SIGHTED_ACCEPTED'), []);
 
   const noSighted = evidenceFixture({ computed: {}, restored: { evidenceKind: 'exact-restore' } });
