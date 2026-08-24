@@ -2362,6 +2362,104 @@ limpio. Desviaciones del writer, TODAS adjudicadas por Fable:
 de 2 líneas, drill (b) con 8 aserciones, especificador re-apuntado del
 método `git show`, edición+restore del cableado del techo.
 
+##### B-1 — OPCIÓN B del owner implementada: el tenant prevalece sobre el baseline vertical (2026-08-23)
+
+La decisión de producto del owner (`OPEN_ARM_ASYMMETRY` → opción B) queda
+implementada como **ley de precedencia vigente**: `override explícito del
+tenant > perfil/config del tenant > theme del vertical > defaults del DS`,
+sobre toda la superficie pública de customización, con invariantes
+técnicos/accesibilidad protegidos, y **static ≡ DB exacto** bajo criterio
+ejecutable escrito. `experience.profile` **vuelve a COMPUTED_VERIFIED** y
+`OPEN_ARM_ASYMMETRY` **cierra con la ley nueva, no con excepción** —
+`CLOSED_BY_B1_FOR_DECIDABLE_SCOPES`. Writer: Opus. Preaudit Fable: ACCEPT
+Z-1…Z-6. Postaudit Fable: **ACCEPT**, memo
+`/private/tmp/b1-option-b-fable-postaudit.md` (SHA en su `.ready`), con la
+verificación conductual central corrida por el propio auditor con el
+instrumento real.
+
+**El defecto raíz (medido):** el brazo DB ya implementaba la opción B (el
+perfil entra al patch del tenant y se resuelve sobre el baseline,
+`tenant-theme/index.ts:1885-1893` + cadena `:1904-1948`); el estático se
+salteaba esa ingestion. El fix: **el transporte estático gana la MISMA
+ingestión** — `tenantPatch?: Partial<BrandTheme>` (ausente ⇒ identidad,
+garantía de API), `mergeBrandThemeFloors` (merge profundo con guarda de
+propiedad propia — exigida por el gate de grafo de módulos en el build
+completo), `resolveTenantPosture` (`??` = override explícito > perfil del
+tenant; **compuerta estructural**: el perfil aporta SSI la selección vino
+de ESE patch; la selección del baseline NUNCA promueve — por eso bithire,
+que selecciona su propio perfil Y autora los campos, no regresa), y el
+assign final **después del último escritor autorado** dominando los pasos
+5 y 7 a la vez. **Evolución de forma registrada como decisión** (Fable
+obs. 1): diseño (no tocar el lowering) → ruling B2 (compuerta en pasos 5
+Y 7) → **forma final (un solo sitio)**, mejor que ambas: una compuerta por
+campo habría tenido que enumerar los canales de cada bloque autorado, y
+habría perdido exactamente `--ds-letter-spacing-heading`.
+
+**Historia del proceso (Fable: "el proceso funcionando"):** el packet se
+bloqueó honestamente al medir — implementar el ítem 1 habría roto la ley
+static≡DB (el canal vive en DOS vocabularios con valores distintos:
+`headingTracking` del eje vs `headingLs` del pairing — signo opuesto en
+technical; el DB emite el pairing, el eje nunca sobrevive en producción).
+Rulings DT (`/private/tmp/b1-rulings-dt.md`): **canónico = PAIRING**
+(`headingLs`); B3 (la nota `expansion:86-89` que documentaba la
+divergencia como intencional) **DEROGADA por orden explícita del owner**,
+re-escrita como "REPEALED (owner order, option B)" — el acid test
+localizado no requirió cambio (la divergencia vivía en el comentario);
+B4 (escritor del paso 3) retirado **por estructura** (`expansion:421`
+deriva `typePairing` de `axes.type` incondicionalmente — muerto en todo
+caso presente y futuro; `EXPERIENCE_PROFILES` son 2 perfiles, no 34);
+criterio B1 = **valores computados sobre la cascada real** (estático =
+tema compilado; DB = base del vertical + delta inline del tenant), con
+ausentes resueltos por cascada, medido con el brazo pintado — escrito en
+el manifest ANTES de medirse (Z-2).
+
+**Medición:** estático MUEVE `--ds-letter-spacing-heading` en los 3
+verticales (era 6/6 inerte); static ≡ DB en 22/22 lecturas de canal; 6
+casos pintados light `equivalent: true`, 0 filas diferentes, harness-live
+en los 6; la escalera completa del owner demostrada en un canal (bithire
+`--ds-motion-intensity`: `0.55` vertical → `0.7` perfil tenant → `0.8`
+override explícito). Receipts **R7 ×6** (technical→parity,
+editorial→restore; digest por vertical — la trampa de F4B-6 reincidente
+esquivada; nombres propios `.R7-light.json` junto al registro histórico
+pre-H-1, que NO se sobrescribió por orden del manifest). **39/39**
+receipts VALID+FRESH (33 re-emitidos por frescura del cambio de
+compilador).
+
+**Regresión cero, por tres vías:** 3 artifacts de producción
+byte-idénticos (ausencia de patch ⇒ identidad); drill 1 bithire (sin
+override: `-0.025em` y `0.55` intactos — el único vertical donde una
+compuerta ingenua regresiona, por eso obligatorio Z-3); delta de suites
+cero (33/1114 con y sin el cambio, método copia byte-exacta con sha
+verificado). mP6 verde con su negativo intacto (Z-6).
+
+**Residuo dark asentado contra `OPEN_VERTICAL_CASCADE_DEFECT`** (packet
+propio del generador/cascada vertical — no de este control): causa
+verificada (artifact bithire `:644` vs `:1496`, doble declaración con el
+bloque dark de mayor especificidad) + **hueco de instrumento apuntado**:
+la sonda no aplica `modeBlocks`, así que ese packet probablemente necesita
+tocar el instrumento antes de medir su propio arreglo (la lección Z-1
+propagada). Progreso medible del brazo pintado: 3 filas de divergencia
+antes de B-1, 2 después (la de scope light cerró). El artifact
+`bithire-editorial.RESIDUAL-DARK-SCOPE.json` queda medido SIN receipt
+(patrón establecido); el receipt inválido fue borrado por el writer.
+
+**Presupuestos de bytes (ruling DT):** 4 techos de entrypoint subidos a
+los valores medidos exactos (+1087/+3409/+2813/+1732), con nota escrita y
+el precedente A1 — incremento único para el fix del owner; los techos
+siguen decrease-only desde el nuevo ancla y ya están condenados a morir en
+F6. El gate de grafo de módulos (activado en el build completo, no en el
+de medición) se resolvió recortando prosa (+4123→+3923), sin volver a
+subir techos.
+
+**Notas para el futuro (Fable obs. 2, asentadas):** los clamps sobre el
+ganador quedan cubiertos por drill 4 ejecutable y por el camino
+(expansión sanitiza); el override explícito del transporte estático es
+first-party/bounded hoy — si algún día acepta input de tenant real, la
+validación de rangos del patch merece su propia puerta.
+
+**`motion.dial` queda `UNKNOWN` honesto** (limitación preexistente del
+harness: `domain.kind: "scale"`; medido por compilador, no forzado).
+
 **F0 — CERRADO (2026-08-19).** Criterio de cierre cumplido:
 `ci-gates OK — 78 blocking gate(s) passed` (2 excluded visibles con razón y
 dueño: channel-liveness y lane-control-drills, ambos esperan a F2); `find src -type d -empty` vacío salvo el inbox

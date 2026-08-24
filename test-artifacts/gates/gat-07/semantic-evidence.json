@@ -4,7 +4,7 @@
   "scope": "Phase-0 exact proof and minimal public-claim floor; not DS-IMP-060 completion",
   "reproducibility": {
     "classification": "deterministic same-input runs",
-    "authorityDigest": "1b15dad4cf8cf7a5c2dd6907cd10d788f50887f6d91bf14a0d67bedef1a83cee",
+    "authorityDigest": "0633d88a56009dcc4bf30dded9e16211fe99469e1e4b36f0406c2b85c192464a",
     "sourceHeadIsAuthority": false,
     "toolchain": {
       "node": {
@@ -7590,8 +7590,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 17980,
-        "sha256": "2ff5ca0a7c475ea3a8b71640ba70d470c87e5389f6ec8b3bd8c7e3382b3a1647"
+        "bytes": 18448,
+        "sha256": "34b29f7a22985f6fa09ab35e6026b8790a6244355fb09cd9ddffbd944b19a82b"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/tokens/ts/presentation/expressive-profiles/expansion/tests/expansion.test.ts",
@@ -7608,8 +7608,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 17329,
-        "sha256": "00d2ac7da95bbd36634f7dd6e298bdaee43d6e1e8bfc65c0c840d05c0f967771"
+        "bytes": 17670,
+        "sha256": "be1a3af299b650cc72f0f4381b74e17c719cda0915b690f2d3bae8a0f13c0915"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/tokens/ts/presentation/expressive-profiles/tests/expressive-profiles.test.ts",
@@ -12498,16 +12498,16 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 86348,
-        "sha256": "a65ba0a2f1c56445dc0fccd6576c4deb6f29e0ade20f8ffe75d6d405e3b575ec"
+        "bytes": 90252,
+        "sha256": "32a852832946aad04334b17e0bf9c2e97e1a2d32ab94c42529365ef7f57d4f98"
       },
       {
         "path": "ui-design-system/packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/tests/brand-compiler.test.ts",
         "roles": [
           "audit-input"
         ],
-        "bytes": 29712,
-        "sha256": "8634f3be7a0d35b81b7ba972eac89f9bb0a3b232e58d2492ead7b6697f447e76"
+        "bytes": 34152,
+        "sha256": "e40af47d85e69248da82e4199ef842572bf59f49375d59bcba08a4acf4bb1bfc"
       },
       {
         "path": "ui-design-system/packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/tests/brand-themes-normal-form.test.ts",
@@ -40503,7 +40503,7 @@
         "sha256": "d2a99efed33922a4a699ea033538b677022ddaccf0cdbb25ece0a7295bdc4812"
       }
     ],
-    "digest": "1b15dad4cf8cf7a5c2dd6907cd10d788f50887f6d91bf14a0d67bedef1a83cee"
+    "digest": "0633d88a56009dcc4bf30dded9e16211fe99469e1e4b36f0406c2b85c192464a"
   },
   "paintAudit": {
     "output": "engine-token-audit --check OK (3326 counters; 3226 completed zeros locked exactly; 91 decrease-only ceilings; 2 positive exact invariants; 7 positive minimum floors)",
@@ -113884,8 +113884,8 @@
   "deterministicRuns": {
     "count": 2,
     "hashes": [
-      "ddec603696bc7c49ef03edcf05e36403c65454b7a556325b8c06027a31fa90ef",
-      "ddec603696bc7c49ef03edcf05e36403c65454b7a556325b8c06027a31fa90ef"
+      "51cc03515eb04421d9149dab5437e0fee97ee8394fb0b3b21f1262de6cab488c",
+      "51cc03515eb04421d9149dab5437e0fee97ee8394fb0b3b21f1262de6cab488c"
     ],
     "agree": true
   }

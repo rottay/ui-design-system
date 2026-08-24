@@ -381,7 +381,25 @@ export function buildIngressInput({ armId, controlManifest, stopId, base = {} })
     cursor = cursor[segment];
   }
   cursor[segments.at(-1)] = ingressValue;
-  return { path, document, stopId, ingressValue };
+
+  /* B-1: the stop, written at the same path into an EMPTY object.
+   *
+   * This IS the tenant patch of the scenario, and it is the whole reason the
+   * static arm can now be measured at all. Before B-1 the arm handed the
+   * compiler `document` -- baseline and stop already flattened into one object
+   * -- so no lowering could tell a tenant's deliberate selection from the
+   * vertical's own baseline authoring, and the vertical always won. Handing the
+   * two floors over separately is what lets the compiler apply the owner's law;
+   * `document` stays for the provenance record, so a reader can still see the
+   * merged shape that used to be the only thing that existed. */
+  const patch = {};
+  let patchCursor = patch;
+  for (const segment of segments.slice(0, -1)) {
+    patchCursor[segment] = {};
+    patchCursor = patchCursor[segment];
+  }
+  patchCursor[segments.at(-1)] = ingressValue;
+  return { path, document, patch, stopId, ingressValue };
 }
 
 /**
@@ -514,7 +532,7 @@ function ingressValueForStop({ controlManifest, stop }) {
  *     `tenantSlug` is a required SIBLING field the manifest path does not
  *     carry at all, so the caller must supply it.
  */
-function toCompilerInput({ armId, document, tenantSlug, vertical, schemaVersion }) {
+function toCompilerInput({ armId, document, base, patch, tenantSlug, vertical, schemaVersion }) {
   if (armId === 'db-tenant-theme') {
     const general = document?.appearance?.general;
     if (!general || typeof general !== 'object') {
@@ -545,6 +563,18 @@ function toCompilerInput({ armId, document, tenantSlug, vertical, schemaVersion 
           'the selector, so an arm with no vertical to lower for has nowhere to compile FOR. ' +
           'Pass `vertical` to lowerStop().',
       );
+    }
+    /* B-1: the two floors, delivered SEPARATELY.
+     *
+     * `brandTheme` is the vertical baseline exactly as H-1 loaded it (its
+     * provenance law is unchanged: `assertArmProvenance` still demands the
+     * source and digest of that baseline, and this reshape does not touch
+     * them). `tenantPatch` is the scenario's tenant floor. `compileBrandTheme`
+     * treats an absent patch as identity, so a caller that lowers with no base
+     * -- the H-1 "without a baseline" comparison, for one -- gets exactly the
+     * bytes it got before. */
+    if (patch && Object.keys(patch).length > 0) {
+      return { brandTheme: base ?? {}, tenantPatch: patch, tenantSlug };
     }
     return { brandTheme: document, tenantSlug };
   }
@@ -651,6 +681,8 @@ export function lowerStop({
   const compilerInput = toCompilerInput({
     armId,
     document: input.document,
+    base,
+    patch: input.patch,
     tenantSlug,
     vertical,
     schemaVersion: provenance.schemaVersion,

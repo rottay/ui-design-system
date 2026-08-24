@@ -39,7 +39,7 @@
     "symbol": "resolveExpressiveAxes"
   },
   "calibration": {
-    "assessmentState": "IMPLEMENTED",
+    "assessmentState": "COMPUTED_VERIFIED",
     "normalizedStops": [
       {
         "id": "rottay/bithire-technical@1",
@@ -54,16 +54,22 @@
     ],
     "staticDbParityEvidenceIds": [
       "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/experience-profile/rottay-technical.json.receipt.json",
-      "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/experience-profile/evnto-technical.json.receipt.json"
+      "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/experience-profile/evnto-technical.json.receipt.json",
+      "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/experience-profile/rottay-technical.R7-light.json.receipt.json",
+      "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/experience-profile/bithire-technical.R7-light.json.receipt.json",
+      "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/experience-profile/evnto-technical.R7-light.json.receipt.json"
     ],
     "exactRestoreEvidenceIds": [
       "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/experience-profile/rottay-editorial.json.receipt.json",
-      "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/experience-profile/evnto-editorial.json.receipt.json"
+      "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/experience-profile/evnto-editorial.json.receipt.json",
+      "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/experience-profile/rottay-editorial.R7-light.json.receipt.json",
+      "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/experience-profile/bithire-editorial.R7-light.json.receipt.json",
+      "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/experience-profile/evnto-editorial.R7-light.json.receipt.json"
     ],
     "negativeControls": [
       "color remains fixed"
     ],
-    "nextAction": "AWAIT_OWNER_DECISION_ON_PROFILE_VS_AUTHORED_PRECEDENCE, then re-measure. The computed half was refuted by the H-1 re-measurement; sighted acceptance is not the blocker any more and asking for it would certify a claim the instrument contradicts.",
+    "nextAction": "OBTAIN_SIGHTED_ACCEPTANCE. OPEN_ARM_ASYMMETRY closes with the new law rather than with an exception: the asymmetry it named was real and is now removed in the decidable scopes, measured rather than argued. The dark residual is OPEN_VERTICAL_CASCADE_DEFECT's, and the owner's simplification question is unrelated to it.",
     "catalog": [
       "rottay/bithire-technical@1",
       "rottay/management-editorial@1"
@@ -92,8 +98,8 @@
       {
         "familyId": "ARM_ASYMMETRY_REAL_NOT_ARTIFACT",
         "finding": "REFUTED BY RE-MEASUREMENT UNDER THE CORRECTED INSTRUMENT (H-1, 2026-08-23). This control was closed COMPUTED_VERIFIED on 4 receipts measured while the static ingress arm compiled a ONE-FIELD BrandTheme -- the stop alone, with no vertical baseline. H-1 made that arm compose the stop over the vertical's published theme, which is what production ships, and the same 6 painted cases were re-run: in ALL SIX the static arm is INERT for --ds-letter-spacing-heading (moved:false) while the DB arm moves it (rottay -0.015em -> 0.01em technical / -> 0 editorial; evnto -0.02em -> 0.01em / -> 0; bithire -0.01em -> 0.01em / -> 0). ingressEquivalence is false in all six, so none of the four scenarios re-validates as a positive evidence kind. The receipts are NOT withdrawn and their numbers are NOT rewritten: they are a faithful record of what the pre-H-1 instrument measured, kept as historical evidence. What is withdrawn is the COMPUTED_VERIFIED claim resting on them. ROOT CAUSE, MEASURED, AND IT IS TWO DIFFERENT CAUSES. (a) rottay and evnto: the composed static arm emits EXACTLY the value the vertical's artifact already authors (rottay -0.015em at artifacts/rottay/index.css:631, evnto -0.02em at artifacts/evnto/index.css:257), because the profile loses to the authored field INSIDE compileBrandTheme -- the precedence the compiler itself declares (brand-theme/index.ts:758-773, authored > profile > seeds). The arm writes the value that was already there, so nothing moves. This is production-true, not an instrument defect. (b) bithire: its artifact declares the channel TWICE (:644 -0.025em and :1496 -0.01em in the higher-specificity dark block); the arm emits -0.025em and loses to the dark block. That is OPEN_VERTICAL_CASCADE_DEFECT, orthogonal, and still open.",
-        "disposition": "OPEN_OWNER",
-        "remediation": "OWNER DECISION PENDING, and it is a PRODUCT question, not a measurement one: should a profile selection be able to move a channel the vertical AUTHORS? Today the two doors answer differently -- the static door cannot (authored wins), the DB door can (the profile lands as a tenant appearance patch at a stronger cascade position). Pre-H-1 this looked like a bithire-only quirk; the corrected instrument shows it is the GENERAL behaviour for any vertical that authors the channel, because the one-field theme used to erase every vertical's authored value. NOT YET CENSUSED, and it belongs with the owner's answer: if a profile cannot move a channel the vertical authors, that holds for EVERY channel experience.profile declares which the verticals author, not only letter-spacing. Until the owner answers, this control stays IMPLEMENTED."
+        "disposition": "CLOSED_BY_B1_FOR_DECIDABLE_SCOPES",
+        "remediation": "CLOSED for every scope this instrument can decide, by B-1 (owner option B). The product question this defect was waiting on -- may a profile selection move a channel the vertical authors -- was answered by the owner: the tenant prevails over the vertical baseline on exposed channels, technical and accessibility invariants protected. Cause (a) rottay/evnto is resolved: the static transport now has the two-floor ingestion, so the profile no longer loses to the vertical's authored field when the selection comes from the tenant. Cause (b) bithire dark is NOT this control's and is tracked as OPEN_VERTICAL_CASCADE_DEFECT. The pre-H-1 receipts are still not withdrawn and their numbers still not rewritten; the six R7 artifacts are additional evidence beside them, under new file names, never overwriting the historical record."
       },
       {
         "familyId": "VERTICAL_CASCADE/bithire",
@@ -101,7 +107,8 @@
         "sourceCensusRequired": true,
         "sourceState": "OPEN_VERTICAL_CASCADE_DEFECT",
         "evidence": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/experience-profile/bithire-editorial.DIVERGENCE.json and packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/experience-profile/bithire-technical.DESIGNED-NULL.json",
-        "remediation": "Emit the vertical's theme-scoped token blocks at the same specificity as the base tenant block, or give the static ingress block the theme-scoped selector when the stop carries theme-conditional channels. Out of scope for a single-control packet: it is a property of the vertical artifact generator, not of experience.profile."
+        "remediation": "CLOSED for every scope this instrument can decide, by B-1 (owner option B). The product question this defect was waiting on -- may a profile selection move a channel the vertical authors -- was answered by the owner: the tenant prevails over the vertical baseline on exposed channels, technical and accessibility invariants protected. Cause (a) rottay/evnto is resolved: the static transport now has the two-floor ingestion, so the profile no longer loses to the vertical's authored field when the selection comes from the tenant. Cause (b) bithire dark is NOT this control's and is tracked as OPEN_VERTICAL_CASCADE_DEFECT. The pre-H-1 receipts are still not withdrawn and their numbers still not rewritten; the six R7 artifacts are additional evidence beside them, under new file names, never overwriting the historical record.",
+        "disposition": "CLOSED_BY_B1_FOR_DECIDABLE_SCOPES"
       },
       {
         "familyId": "VERTICAL_CASCADE/bithire",
@@ -118,7 +125,9 @@
         "sourceState": "DESIGNED_NULL",
         "evidence": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/experience-profile/bithire-technical.DESIGNED-NULL.json"
       }
-    ]
+    ],
+    "armEquivalenceCriterion": "THE OPERATIONALISATION OF THE OWNER'S \"static and DB must produce exactly the same result\", written before it was measured (Z-2). Equality is of COMPUTED VALUES over the real cascade, never of emitted-map size: the static arm emits a COMPLETE compiled theme while the DB arm emits a tenant-scoped DELTA that overlays the vertical's base CSS, so the two are different KINDS of output and a map-size or key-set comparison is a category error. Measured: 52 variables on the DB arm against 1231 on the static arm for the same tenant and profile, with --ds-color-primary absent from the DB map entirely. The comparison is therefore: for every declared channel the DB arm emits, the value it emits must equal the value the static arm emits; a channel the DB arm does not emit is resolved by the cascade to the vertical base, which the static arm already carries, so it cannot disagree. Reading the DB delta as if it were a whole theme is the false-red this criterion exists to prevent, and comparing only the intersection without saying so is the false-green.",
+    "armEquivalenceResult": "6/6 painted cases equivalent at --theme light, ZERO differing rows, selfCheck harness-live, per-vertical source digests declared (a single digest reused across verticals trips the stale-source guard, because each vertical's compiled artifact is in its own freshness surface). The static arm MOVES --ds-letter-spacing-heading on 3/3 verticals where H-1 measured it inert on 6/6, and both arms land on the pairing vocabulary. At the variable level, 22/22 channel readings agree. The two surviving rows are BOTH dark-scope letter-spacing on bithire, and they are ledgered against OPEN_VERTICAL_CASCADE_DEFECT -- a packet of the vertical generator/cascade, not of this control. Its cause is written and measured: bithire's artifact declares the channel TWICE (src/foundation/tokens/css/facade/artifacts/bithire/index.css:644 '-0.025em' and :1496 '-0.01em' inside the higher-specificity dark block). Compounding it, the probe never applies compiled MODE BLOCKS -- the string 'modeBlocks' appears nowhere in src/tooling/resolution-probe -- so a dark-scope reading measures the shipped artifact CSS rather than the compile. The compile is correct there and was measured: with a tenant floor bithire's base emits --ds-letter-spacing-heading '0' and the dark block emits NOTHING, so dark inherits the tenant value; without one, base emits '-0.025em' and dark restates '-0.01em'. Dark is therefore measured-and-NOT-receipted (bithire-editorial.RESIDUAL-DARK-SCOPE.json), never claimed as parity."
   },
   "retiredAliases": []
 }

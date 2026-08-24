@@ -52,7 +52,10 @@ import {
   expressiveTypeRoleOverlay,
 } from "@/foundation/tokens/ts/presentation/expressive-profiles/expansion";
 import type { ExpressiveTypeRoleOverlay } from "@/foundation/tokens/ts/presentation/expressive-profiles/expansion";
-import { appearancePostureToVariables } from "../../foundation/css/appearance-posture";
+import {
+  appearancePostureToVariables,
+  type AppearancePostureFields,
+} from "../../foundation/css/appearance-posture";
 import type { TenantTokenOverrides } from "@/foundation/contracts/composition/tenants";
 import type {
   PartialPersonalityTokens,
@@ -689,7 +692,8 @@ function omitUndefined<T extends object>(source: T | undefined): Partial<T> {
  */
 function brandThemeToCssVariables(
   bt: BrandTheme,
-  surface: RampSurface = brandThemeRampSurface(bt)
+  surface: RampSurface = brandThemeRampSurface(bt),
+  tenantPosture?: AppearancePostureFields
 ): Record<string, string> {
   // C1b expressive expansion — resolved HERE (not in compileBrandTheme) so
   // compileModeBlocks, which re-invokes this function per authored mode
@@ -758,7 +762,10 @@ function brandThemeToCssVariables(
   // Profile channels land OVER the neutral structural seeds and UNDER every
   // authored write below: each authored field emits only when present, so
   // the later assignments restore exactly the "authored wins over profile"
-  // precedence without a second writer per channel. The `--ds-type-{role}-*`
+  // precedence without a second writer per channel.
+  //
+  // SCOPE (option B): this and every writer below decide precedence WITHIN the
+  // VERTICAL floor. Between floors it is `tenantPosture`, applied LAST. The `--ds-type-{role}-*`
   // rows seeded here are intentionally restated by the semantic-typography
   // emitter at the end of this function, which receives the same table as a
   // role overlay — one owner, identical values.
@@ -1066,6 +1073,13 @@ function brandThemeToCssVariables(
     expressiveTypeRoleOverlay(expressiveAxes)
   );
   setMotionVariables(vars, bt);
+  // THE TENANT FLOOR (option B): tenant override > tenant profile > vertical
+  // theme > DS defaults. Applied last rather than gated per field: a per-field
+  // gate must enumerate every authored writer, and would miss the one that
+  // started this packet. Absent => identity.
+  if (tenantPosture) {
+    Object.assign(vars, appearancePostureToVariables(tenantPosture));
+  }
   return vars;
 }
 
@@ -1680,7 +1694,10 @@ function keepTenantBaseSidebarLeaves(
 function compileModeBlocks(
   bt: BrandTheme,
   baseVars: Record<string, string>,
-  authoredPaths: TenantAuthoredPaths | undefined
+  authoredPaths: TenantAuthoredPaths | undefined,
+  // The overlay re-runs the whole lowering: without this a moved channel would
+  // revert inside `data-mode="dark"`.
+  tenantPosture?: AppearancePostureFields
 ): CompiledBrandModeBlock[] {
   const modes = bt.modes;
   if (!modes) return [];
@@ -1701,7 +1718,7 @@ function compileModeBlocks(
     const merged = applyModeOverlay(bt, overlay);
     const modePrefix = `modes.${mode}.`;
     const modeVars = {
-      ...brandThemeToCssVariables(merged, mode),
+      ...brandThemeToCssVariables(merged, mode, tenantPosture),
       ...brandThemeToChromeVariables(merged, mode, authoredPaths, modePrefix),
     };
     // The seed this block compiles from is `merged.palette.primaryColor`. It is
@@ -1888,7 +1905,70 @@ export {
  */
 type BrandCompilerProvenanceInput = BrandCompilerInput & {
   tenantAuthoredPaths?: TenantAuthoredPaths;
+  /**
+   * The TENANT floor, separate from the vertical baseline in `brandTheme`: the
+   * ingestion step the DB transport already has at
+   * `composition/tenant-theme:1900-1948`. ABSENT => IDENTITY.
+   */
+  tenantPatch?: Partial<BrandTheme>;
 };
+
+/**
+ * Deep-merges the tenant floor over the vertical baseline, mirroring
+ * `resolveTheme` (`iso:908-918`). NOT a shallow spread: that drops every
+ * sibling leaf of any object the tenant touched.
+ */
+function mergeBrandThemeFloors(base: unknown, patch: unknown): unknown {
+  const plain = (v: unknown): v is Record<string, unknown> =>
+    !!v && typeof v === "object" && !Array.isArray(v);
+  if (!plain(base) || !plain(patch)) return patch === undefined ? base : patch;
+  // Own keys only: the tenant floor is untrusted.
+  const own = (o: Record<string, unknown>, k: string) =>
+    Object.prototype.hasOwnProperty.call(o, k);
+  const out: Record<string, unknown> = { ...base };
+  for (const [k, v] of Object.entries(patch)) {
+    if (v === undefined) continue;
+    out[k] = mergeBrandThemeFloors(own(base, k) ? base[k] : undefined, v);
+  }
+  return out;
+}
+
+/**
+ * The tenant floor's posture: explicit tenant field, else the tenant's own
+ * profile default (the `??` chain is the owner's law, and the default-only
+ * shape `withExpressiveFieldDefaults` uses on the DB arm).
+ *
+ * THE STRUCTURAL GATE: the profile contributes only when the selection came
+ * from THIS patch, so a vertical selecting one in its baseline never reaches
+ * here. That is why bithire cannot regress.
+ */
+function resolveTenantPosture(
+  patch: Partial<BrandTheme>
+): AppearancePostureFields | undefined {
+  const selection = patch.expressive?.experienceProfile;
+  const profile = selection
+    ? expandExpressiveProfiles(
+        resolveExpressiveAxes(
+          selection,
+          sanitizeExpressiveOverrides(patch.expressive?.profiles)
+        )
+      ).fieldDefaults
+    : undefined;
+  const posture: AppearancePostureFields = {
+    typePairing: patch.typography?.typePairing ?? profile?.typePairing,
+    typeScale: patch.typography?.scale,
+    buttonStyle: patch.surfaces?.buttonStyle ?? profile?.buttonStyle,
+    radiusScale: patch.surfaces?.radiusScale ?? profile?.radiusScale,
+    density: patch.surfaces?.density ?? profile?.density,
+    motion: patch.motion ?? profile?.motion,
+    elevation: patch.surfaces?.elevation ?? profile?.elevation,
+  };
+  // Empty must stay INDISTINGUISHABLE from absent, or `absent => identity`
+  // becomes `almost identity`.
+  return Object.values(posture).some((v) => v !== undefined)
+    ? posture
+    : undefined;
+}
 
 export const compileBrandTheme: CompileBrandTheme = (
   input: BrandCompilerProvenanceInput
@@ -1899,6 +1979,7 @@ export const compileBrandTheme: CompileBrandTheme = (
     verticalPersonality,
     verticalTokenOverrides,
     tenantAuthoredPaths,
+    tenantPatch,
   } = input;
 
   // Merge personality: vertical baseline -> brandTheme
@@ -1915,10 +1996,24 @@ export const compileBrandTheme: CompileBrandTheme = (
     btOverrides
   );
 
+  // The two floors. `effectiveTheme` is what every reader below sees;
+  // `tenantPosture` is lowered LAST inside `brandThemeToCssVariables`, so it
+  // outranks every vertical-authored writer.
+  const effectiveTheme = tenantPatch
+    ? (mergeBrandThemeFloors(brandTheme, tenantPatch) as BrandTheme)
+    : brandTheme;
+  const tenantPosture = tenantPatch
+    ? resolveTenantPosture(tenantPatch)
+    : undefined;
+
   // CSS variables from palette + typography + surfaces + chrome
-  const paletteVars = brandThemeToCssVariables(brandTheme);
+  const paletteVars = brandThemeToCssVariables(
+    effectiveTheme,
+    undefined,
+    tenantPosture
+  );
   const chromeVars = brandThemeToChromeVariables(
-    brandTheme,
+    effectiveTheme,
     undefined,
     tenantAuthoredPaths
   );
@@ -1927,7 +2022,7 @@ export const compileBrandTheme: CompileBrandTheme = (
   // there is no overlay above this block to restate it.
   applyTenantSeedDerivations(
     cssVariables,
-    brandTheme.palette?.primaryColor,
+    effectiveTheme.palette?.primaryColor,
     tenantAuthoredPaths === undefined
       ? undefined
       : {
@@ -1940,8 +2035,8 @@ export const compileBrandTheme: CompileBrandTheme = (
   // DS-S001: governed recipe-profile selection. Fail-closed — an unknown id,
   // malformed id or foreign schema version compiles to engine defaults.
   const recipeProfileValidation = validateRecipeProfileSelection(
-    brandTheme.recipes?.profile,
-    brandTheme.recipes?.schemaVersion
+    effectiveTheme.recipes?.profile,
+    effectiveTheme.recipes?.schemaVersion
   );
   const recipeProfile = recipeProfileValidation.ok
     ? recipeProfileValidation.profile?.id
@@ -1956,8 +2051,8 @@ export const compileBrandTheme: CompileBrandTheme = (
   // like the recipe channel above. Same fail-closed posture: invalid ids
   // compile to baseline identity with no marker.
   const experienceProfileValidation = validateExperienceProfileSelection(
-    brandTheme.expressive?.experienceProfile,
-    brandTheme.expressive?.schemaVersion
+    effectiveTheme.expressive?.experienceProfile,
+    effectiveTheme.expressive?.schemaVersion
   );
   const experienceProfile = experienceProfileValidation.ok
     ? experienceProfileValidation.profile?.id
@@ -1970,11 +2065,12 @@ export const compileBrandTheme: CompileBrandTheme = (
 
   // The declared mode of the values above; the non-default modes are compiled
   // from the typed `modes` overlays into their own blocks below.
-  const colorScheme = brandTheme.appearance?.defaultMode;
+  const colorScheme = effectiveTheme.appearance?.defaultMode;
   const modeBlocks = compileModeBlocks(
-    brandTheme,
+    effectiveTheme,
     cssVariables,
-    tenantAuthoredPaths
+    tenantAuthoredPaths,
+    tenantPosture
   );
   for (const block of modeBlocks) {
     // A mode may restyle type; it may not drop the mandatory fallback while
@@ -1995,7 +2091,7 @@ export const compileBrandTheme: CompileBrandTheme = (
 
   // Engine bridge passthrough
   const engineBridge: Partial<Record<EngineName, Record<string, unknown>>> =
-    brandTheme.engineBridge ?? {};
+    effectiveTheme.engineBridge ?? {};
 
   return {
     cssVariables,

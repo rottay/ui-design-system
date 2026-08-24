@@ -687,3 +687,88 @@ describe("parity: compileBrandTheme with vertical baselines and real first-party
     expect(bithireBrandTheme.surfaces!.densityScale).not.toBe(evntoVertical.tokenOverrides?.densityScale);
   });
 });
+
+// ---------------------------------------------------------------------------
+// B-1 — option B: the tenant floor outranks the vertical baseline
+//
+// Every drill uses bithire, and that is the packet's law rather than a habit:
+// bithire is the ONLY first-party vertical whose baseline selects an experience
+// profile AND authors the fields that profile would move. rottay and evnto
+// select no profile, so a drill written on them would pass with the gate
+// removed. Values are asserted, never object identity -- `resolveTenantPosture`
+// returns undefined when it promotes nothing, and an identity check could not
+// tell that apart from a promotion that happened to land the same value.
+// ---------------------------------------------------------------------------
+
+describe("B-1 option B: tenant floor vs vertical baseline", () => {
+  const EDITORIAL = "rottay/management-editorial@1";
+  const TECHNICAL = "rottay/bithire-technical@1";
+  const lower = (tenantPatch?: Partial<BrandTheme>) =>
+    compileBrandTheme({
+      brandTheme: bithireBrandTheme,
+      tenantSlug: "b1-drill",
+      ...(tenantPatch ? { tenantPatch } : {}),
+    } as Parameters<typeof compileBrandTheme>[0]).cssVariables;
+
+  it("drill 1: with NO tenant floor the vertical's authoring still wins", () => {
+    const vars = lower();
+    // bithire authors both, and its baseline selects TECHNICAL. Before B-1 the
+    // authored fields won here; they must still win, because the profile that
+    // competes with them is the vertical's own, not a tenant's.
+    expect(vars["--ds-letter-spacing-heading"]).toBe("-0.025em");
+    expect(vars["--ds-motion-intensity"]).toBe("0.55");
+  });
+
+  it("drill 3: the vertical's OWN profile selection never promotes", () => {
+    // Restating bithire's own selection as a tenant patch is a no-op the packet
+    // must NOT be measured on (it would be a vacuous green), so this asserts the
+    // other half: passing a patch that selects the SAME profile the baseline
+    // already selects still lets the tenant floor win, because the selection now
+    // arrives on the tenant floor.
+    const sameProfile = lower({ expressive: { experienceProfile: TECHNICAL } });
+    expect(sameProfile["--ds-letter-spacing-heading"]).toBe("0.01em");
+    // ...while the baseline's own identical selection does not:
+    expect(lower()["--ds-letter-spacing-heading"]).toBe("-0.025em");
+  });
+
+  it("drill 2 + Z-4: a tenant profile wins, and the promotion is VISIBLE", () => {
+    const vars = lower({ expressive: { experienceProfile: EDITORIAL } });
+    // The canonical vocabulary is the PAIRING (owner ruling): editorial's
+    // headingLs is `0`. The retired `headingTracking` for that axis was `0em`.
+    expect(vars["--ds-letter-spacing-heading"]).toBe("0");
+    // Z-4: the promotion EXECUTED. `typePairing` is a field the tenant never
+    // wrote -- it can only be here because the profile's field default was
+    // promoted into the tenant floor, which is exactly the step this packet
+    // adds. A run where the promotion silently did nothing cannot reach these.
+    expect(vars["--ds-font-family-heading"]).toContain("editorial");
+    expect(vars["--ds-line-height-display"]).toBeDefined();
+  });
+
+  it("drill 4: clamps apply to the WINNER, and winning buys nothing past them", () => {
+    // motionIntensityMax is 1. A tenant asking for more still lands on 1: the
+    // floor decides WHICH value competes, never whether the floor holds.
+    const vars = lower({ motion: { intensity: 4 } as BrandTheme["motion"] });
+    expect(Number(vars["--ds-motion-intensity"])).toBeLessThanOrEqual(1);
+  });
+
+  it("drill 5: STRUCTURAL_WIDTH channels are untouched by the tenant floor", () => {
+    const before = lower();
+    const after = lower({ expressive: { experienceProfile: EDITORIAL } });
+    for (const channel of [
+      "--ds-sidebar-width",
+      "--ds-sidebar-collapsed-width",
+      "--ds-listing-grid-min-card-width",
+    ]) {
+      expect(after[channel]).toBe(before[channel]);
+    }
+  });
+
+  it("drill 9: an EMPTY tenant floor is indistinguishable from none", () => {
+    // The negative that keeps `absent => identity` honest. A patch that names
+    // nothing the posture reads must not perturb a single variable, or the
+    // API-shaped guarantee degrades into "almost identity".
+    const none = lower();
+    const empty = lower({ id: "tenant" } as Partial<BrandTheme>);
+    expect(empty).toEqual(none);
+  });
+});

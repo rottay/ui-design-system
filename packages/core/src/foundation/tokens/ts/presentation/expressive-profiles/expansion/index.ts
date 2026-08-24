@@ -84,10 +84,12 @@ const TYPE_PROFILE_ROWS: Record<
   NonNullable<ExpressiveAxes['type']>,
   TypeProfileRow
 > = {
-  // Display tracking values stay var()-wrapped over the per-context channel:
-  // a vertical's authored `--ds-letter-spacing-display` keeps winning through
-  // the chain, while a DB tenant (which has no per-context authoring surface)
-  // lands on the profile fallback — the divergence the acid test measures.
+  // Display tracking stays var()-wrapped so an UNTOUCHED per-context authoring
+  // survives. REPEALED (owner order, option B): this used to add "a vertical's
+  // authored value keeps winning while a DB tenant lands on the profile
+  // fallback — the divergence the acid test measures". That static-vs-DB
+  // asymmetry is what option B abolishes; the law is now tenant override >
+  // tenant profile > vertical theme > DS defaults, both transports equal.
   technical: {
     headingTracking: '-0.015em',
     roles: {
@@ -141,7 +143,11 @@ function typeProfileVariables(
 ): Record<string, string> {
   const row = TYPE_PROFILE_ROWS[type];
   const variables: Record<string, string> = {
-    '--ds-letter-spacing-heading': row.headingTracking,
+    // `--ds-letter-spacing-heading` is NOT written here: that write was
+    // UNCONDITIONALLY dead, because the same `axes.type` also produces
+    // `fieldDefaults.typePairing` (:421) whose lowering writes the channel
+    // later. The two disagree (technical `-0.015em` vs the pairing's `0.01em`),
+    // so the dead writer was a second authority. The pairing is canonical.
     '--ds-table-header-letter-spacing': row.tableHeader.letterSpacing,
     '--ds-table-header-text-transform': row.tableHeader.textTransform,
     '--ds-select-group-text-transform': row.overlineTransform,

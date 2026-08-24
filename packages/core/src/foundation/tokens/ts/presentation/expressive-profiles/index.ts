@@ -241,10 +241,16 @@ export const EXPRESSIVE_A11Y_FLOORS = Object.freeze({
 /**
  * Per-PROFILE envelopes (C2): a selected experience narrows what dials may
  * do ON TOP of it, so an explicit override can bend a posture but never
- * break it. Envelopes CLAMP — they never reorder precedence: explicit DB >
- * authored static > profile composition > canon default still holds, with
- * every layer clamped into (profile envelope ∩ vertical envelope ∩ global
- * bounds ∩ a11y floors).
+ * break it.
+ *
+ * Envelopes CLAMP — they never reorder precedence. The order is the owner's and
+ * is stated by FLOOR, not by transport: explicit tenant override > tenant
+ * profile/config > vertical theme > DS defaults, every layer clamped into
+ * (profile envelope ∩ vertical envelope ∩ global bounds ∩ a11y floors). The
+ * clamp applies to the WINNER, so winning a floor never buys a value past a
+ * floor. This previously read "explicit DB > authored static > profile
+ * composition > canon default", which named TRANSPORTS and was the one
+ * precedence the static arm did not implement.
  */
 export interface ExpressiveProfileEnvelope {
   readonly radiusScale: { readonly min: number; readonly max: number };

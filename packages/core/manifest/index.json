@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "generatedBy": "node packages/core/manifest/generator/index.mjs --sync",
   "authorityLaw": "Controls own semantics, groups own recipe vocabularies, families own applicability edges, and this index owns generated rollups.",
-  "inputsDigest": "566ddb4907108f739bba2ed5ca46177b483697d96bf55cc043b327f8cc4e554f",
+  "inputsDigest": "a2a0f635f35ac424b9a3445502f7b33643e91adc16770cc717e30641ac8a91b5",
   "denominators": {
     "canonicalFamilies": 255,
     "activeStandardControls": 13,
@@ -985,7 +985,7 @@
             "familyId": "primitive/display/card",
             "layer": "primitive",
             "disposition": "UNKNOWN",
-            "verificationState": "IMPLEMENTED",
+            "verificationState": "COMPUTED_VERIFIED",
             "stableParts": [
               "root",
               "title"
@@ -1482,7 +1482,7 @@
     {
       "controlId": "experience.profile",
       "path": "manifest/controls/experience.profile.json",
-      "digest": "3feaf3c24e152566c0e001128146b98f3424b5abfda44aa237710e5c3f822343"
+      "digest": "287959f4fd270d7d7e5f2435abd610cfeff28d3bdaf8a51f63cfd93b72b20ed3"
     },
     {
       "controlId": "chrome.families",
@@ -2094,7 +2094,7 @@
     {
       "familyId": "primitive/display/card",
       "path": "manifest/families/primitive/display/card.json",
-      "digest": "0839f7781e487177e7c8eb90c75aac65f8327a2ad700790727df690ca8b0f899",
+      "digest": "de5cf06c1b9e6cd5c0a226947ca1ad663a129d31c5668e33ac01382cbc2b7131",
       "maximumClaim": "SOURCE_BOUND",
       "reviewVerdict": null
     },
