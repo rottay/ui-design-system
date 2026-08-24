@@ -217,7 +217,12 @@
             "--ds-density-mode-factor",
             "--ds-density-scale",
             "--ds-density-global-effective-scale",
-            "--ds-density-effective-scale"
+            "--ds-density-effective-scale",
+            "--ds-color-primary",
+            "--ds-color-primary-500",
+            "--ds-button-primary-bg",
+            "--ds-chart-series-1",
+            "--ds-color-text-on-primary"
           ]
         }
       ]

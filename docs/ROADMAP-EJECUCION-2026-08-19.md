@@ -2928,6 +2928,76 @@ deep-equal); (P3) la línea de totales es posicional y puede sobredeclarar
 (agregar "positional" o totales por identidad) + un JSDoc muerto
 (`scannedSetDelta`) — cosméticos para el próximo toque.
 
+##### F4B-8 — palette.seeds: capacidad LANDED, control abierto con las dos adjudicaciones (2026-08-24)
+
+El control de mayor alcance del frente queda con su capacidad de harness
+COMPLETA y su cierre diferido por causas de otros dueños — **el criterio
+funcionando, no un fracaso del packet** (Fable). Writer: Opus. Preaudit
+Fable: ACCEPT (W-A/W-B). Postaudit Fable: **ACCEPT**, memo
+`/private/tmp/f4b-8-palette-seeds-fable-postaudit.md` (SHA en su `.ready`).
+
+**Capacidad landed (8 drills, suite 67/67):** rama `color-set` (exige hex
+con fail-closed — el seed inválido se vuelve gris y MUEVE: `rebeccapurple`
+deriva rampa acromática distinta del seed válido, medido; la restricción
+es del harness, no del producto, declarada en `knownDefects`); puerta
+brace-set RESUELTA por el rol del stop (cero cambios de registro/esquema/
+generador; `declaredPath` preservado; `assertArmsMatchManifest` de
+igualdad exacta a PERTENENCIA con el no-miembro y el SET entero siguiendo
+en falla); **W-A** — el stop de identidad resuelto contra el baseline del
+propio brazo, fail-closed (sin baseline o baseline que autora otros
+roles), y refusado en el brazo DB ("an identity stop is a static-arm
+claim" — la primera identidad dependiente del vertical del programa).
+`token-readout` 35→40 con los CINCO canales declarados (alias incluido —
+el `every()` de `directControlFixtureIds` satisfecho). Un drill
+preexistente re-legislado (AGED_EXPECTATION: color-set salió de la lista
+de kinds no soportados; la ley del refuse intacta).
+
+**Paso 0 APCA (corrido primero, 21 compiles):** `#DC2626` y `#4F46E5`
+compilan 3/3; los 3 grounds TIRAN (text-primary Lc 0.0; text-muted/
+disabled bajo piso) — **el suelo NO es escribible solo** (mover el ground
+sin los foregrounds deja los foregrounds bajo el piso gobernado y el
+brazo DB tira en compile-time); el rol `background` no se declara stop
+(descalificado por medición, no por forma).
+
+**Por qué no cierra (0/6 escenarios con equivalencia, 0 receipts, celda
+no escrita):** dos causas de otros dueños, ambas medidas contra el
+artifact durable (`F4B/palette-seeds/arm-divergence.MEASURED-NOT-RECEIPTED.json`):
+
+1. **Especificidad del bloque de modo — SEGUNDA instancia medida de
+   `OPEN_VERTICAL_CASCADE_DEFECT`:** bithire declara `--ds-color-primary`
+   dos veces (`:323` bloque base `:13` y `:1371` bajo el mismo selector +
+   `[data-theme='dark']`/`.dark` bloque `:1250`) — un atributo más, gana
+   por especificidad sin importar el orden (7 filas dark en bithire, 4 en
+   evnto, que también declara dos veces; rottay tiene la variante `.light`
+   `:1211` porque su superficie es dark). Necesita el instrumento
+   modeBlocks (M-1) antes de medir su arreglo.
+2. **Desacuerdo de compiladores en button-bg (3 filas light en bithire):**
+   el overlay DB de bithire trae `--ds-button-primary-bg:
+   "var(--ds-color-primary)"` mientras el estático hornea `#3A6FB0`
+   (`chrome.controls.buttonPrimary.bg`); en evnto el overlay OMITE el
+   canal (diff-por-valores contra una base que ya trae el alias → cero
+   filas light, reproducido por Fable).
+
+**Correcciones de etapa de diseño (asentadas, y una también del auditor):**
+rottay NO es DESIGNED_NULL con los dos brazos igualmente inertes — el
+estático mueve 12 canales y el DB emite CERO para paleta (rechazado por
+el guard "emitted none of the declared channels", comportamiento correcto;
+inercia ESPECÍFICA de paleta: la misma puerta emite delta para density y
+typography en rottay). La predicción P7 del preaudit (medida sólo del
+brazo estático, con el DB declarado no-medido) quedó refutada y bien
+asentada como `designStageCorrection`. Secondary/accent sin escenario
+causal: los 5 canales declarados son de primary — ensanchar
+`declaredOutputs.channels` es cambio de registro, **decisión pendiente
+separada**. La identidad es ley del brazo estático solamente (en DB,
+escribir el valor del vertical emite delta y hasta tira APCA).
+
+**Cola que esto habilita:** M-1 (modeBlocks en la sonda) →
+`OPEN_VERTICAL_CASCADE_DEFECT` (el defecto de especificidad del generador
+de artifacts verticales) → palette.seeds re-corre casi solo (stops,
+negativos, testigos y soporte ya escritos y drilleados). La re-emisión de
+los 45 fue quirúrgica (sólo `sourceDigest`/`createdAt`; artifacts
+intactos).
+
 **F0 — CERRADO (2026-08-19).** Criterio de cierre cumplido:
 `ci-gates OK — 78 blocking gate(s) passed` (2 excluded visibles con razón y
 dueño: channel-liveness y lane-control-drills, ambos esperan a F2); `find src -type d -empty` vacío salvo el inbox

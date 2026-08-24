@@ -148,6 +148,9 @@ assertNoRetiredCompilerBinding(INGRESS_ARMS);
 
 export const INGRESS_ARM_IDS = Object.freeze(Object.keys(INGRESS_ARMS));
 
+/** The only colour shape the ramp derivation reads correctly. Mirrors `isHexColor` in the compiler. */
+const HEX_COLOR = /^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/;
+
 /**
  * The tenant selector the generated artifacts emit, rebuilt from the scope
  * vocabulary rather than pasted.
@@ -313,12 +316,30 @@ export function assertArmsMatchManifest({ controlManifest, arms }) {
       });
       continue;
     }
-    if (arm.provenance?.input?.path !== undefined && arm.provenance.input.path !== path) {
-      failures.push({
-        armId: arm.armId,
-        reason:
-          `the arm lowered "${arm.provenance.input.path}" but the manifest declares "${path}"`,
-      });
+    /* MEMBERSHIP, not equality — and only membership.
+     *
+     * A declared door may be a SET (`palette.{primaryColor,...}`), in which case
+     * the arm lowers exactly one member and records THAT as its path. Exact
+     * equality would fail every brace-set run on a correct arm. Widening it to
+     * membership is the whole change: a path that is not a member is still a
+     * failure, and a declared set this harness cannot enumerate is a failure
+     * too rather than a reason to skip the check. */
+    if (arm.provenance?.input?.path !== undefined) {
+      let members;
+      try {
+        members = ingressPathMembers(path);
+      } catch (error) {
+        failures.push({ armId: arm.armId, reason: error.message });
+        members = null;
+      }
+      if (members !== null && !members.includes(arm.provenance.input.path)) {
+        failures.push({
+          armId: arm.armId,
+          reason:
+            `the arm lowered "${arm.provenance.input.path}" but the manifest declares "${path}"` +
+            (members.length > 1 ? ` (members: ${members.join(', ')})` : ''),
+        });
+      }
     }
     if (arm.provenance?.module !== spec.compilerModule) {
       failures.push({
@@ -353,6 +374,93 @@ export function assertArmsMatchManifest({ controlManifest, arms }) {
  * @param {{armId: string, controlManifest: object, stopId: string, base?: object}} input
  * @returns {{path: string, document: object, stopId: string}}
  */
+/**
+ * A declared ingress path is either ONE keypath or a SET of them.
+ *
+ * `palette.{primaryColor,secondaryColor,accentColor,backgroundColor}` names four
+ * real, all-valid fields — not a wildcard and not prose. That is a different
+ * class from the `density.mode` slash-join, where one half was simply wrong:
+ * here every member is a door a tenant can write, and a run writes exactly one.
+ *
+ * So the set is RESOLVED, never expanded: the stop names its role and the role
+ * selects the member. That keeps "one control, one static door, one DB door" —
+ * the door IS the set — and it keeps the registry, the schema and the generator
+ * out of it entirely, since `ingress` is derived from two scalar strings there.
+ *
+ * @param {string} declared the manifest's ingress path, with or without a brace set
+ * @returns {readonly string[]} the members, in declaration order; `[declared]` when there is no set
+ */
+export function ingressPathMembers(declared) {
+  const open = declared.indexOf('{');
+  const close = declared.indexOf('}');
+  if (open === -1 && close === -1) return Object.freeze([declared]);
+  if (open === -1 || close === -1 || close < open || declared.indexOf('{', open + 1) !== -1) {
+    throw new Error(
+      `resolution-probe: the ingress path "${declared}" has an unbalanced or nested brace set. ` +
+        'A door this harness cannot enumerate is a door it must not guess at.',
+    );
+  }
+  const prefix = declared.slice(0, open);
+  const suffix = declared.slice(close + 1);
+  const members = declared
+    .slice(open + 1, close)
+    .split(',')
+    .map((entry) => entry.trim())
+    .filter((entry) => entry.length > 0);
+  if (members.length === 0) {
+    throw new Error(
+      `resolution-probe: the ingress path "${declared}" declares an EMPTY brace set, so it names ` +
+        'no door at all.',
+    );
+  }
+  return Object.freeze(members.map((member) => `${prefix}${member}${suffix}`));
+}
+
+/**
+ * Which member of a declared set a ROLE selects.
+ *
+ * The two doors spell the same role differently — `palette.primaryColor` on the
+ * static side, `appearance.general.palette.primary` on the DB side — so the
+ * match is on the final segment with a trailing `Color` removed, and it must be
+ * UNIQUE. Two candidates is not a tie to break on a convention; it is a door
+ * this harness cannot attribute, and it fails closed.
+ *
+ * @param {string} declared the manifest's ingress path
+ * @param {string} role     the role the stop names
+ */
+export function resolveIngressMember(declared, role) {
+  const members = ingressPathMembers(declared);
+  if (members.length === 1 && members[0] === declared) return declared;
+  if (typeof role !== 'string' || role.length === 0) {
+    throw new Error(
+      `resolution-probe: the ingress path "${declared}" is a SET of ${members.length} doors, so a ` +
+        'stop must name which role it writes. A stop with no role cannot select a member, and ' +
+        'picking one for it would measure a door nobody declared.',
+    );
+  }
+  const matches = members.filter((member) => {
+    const last = member.split('.').at(-1);
+    return last === role || last.replace(/Color$/, '') === role;
+  });
+  if (matches.length !== 1) {
+    throw new Error(
+      `resolution-probe: role "${role}" selects ${matches.length} members of the ingress set ` +
+        `"${declared}" (${members.join(', ')}). Exactly one is required.`,
+    );
+  }
+  return matches[0];
+}
+
+/** Read a dotted keypath out of a document; `undefined` when any hop is absent. */
+function readKeypath(document, path) {
+  let cursor = document;
+  for (const segment of path.split('.')) {
+    if (cursor === null || typeof cursor !== 'object') return undefined;
+    cursor = cursor[segment];
+  }
+  return cursor;
+}
+
 export function buildIngressInput({ armId, controlManifest, stopId, base = {} }) {
   const spec = INGRESS_ARMS[armId];
   if (!spec) throw new Error(`resolution-probe: unknown ingress arm: ${armId}`);
@@ -371,9 +479,33 @@ export function buildIngressInput({ armId, controlManifest, stopId, base = {} })
         `Declared: ${stops.map((entry) => entry.id).join(', ') || 'none'}.`,
     );
   }
-  const ingressValue = ingressValueForStop({ controlManifest, stop });
+  /* The door may be a SET; the stop's role selects the member this run writes.
+   * Everything downstream — the document, the patch, the recorded provenance
+   * path — is about that ONE member, which is what makes "the other roles did
+   * not move" a claim about a door rather than about a wish. */
+  const resolvedPath = resolveIngressMember(path, stop.role);
 
-  const segments = path.split('.');
+  /* W-A — the IDENTITY stop, and the first identity in this programme that
+   * depends on the vertical.
+   *
+   * `radius suave` and `density normal` are constant enum ids, so their
+   * identity is a literal in the manifest. A colour identity is not: it is
+   * "whatever THIS vertical already authors", which differs per vertical
+   * (#3A6FB0 / #171717 / #FFFFFF, measured). So an identity stop declares no
+   * value and is resolved HERE, against the arm's own baseline document.
+   *
+   * FAIL-CLOSED, and this is the half that matters: an arm with no baseline
+   * cannot resolve an identity, and inventing one — the vertical's value read
+   * from somewhere else, or the DS default — would silently measure a
+   * DIFFERENT scene than the one the stop names. The DB arm takes no base by
+   * law (H-1 V5), so an identity stop is a static-arm claim and says so
+   * instead of quietly becoming something else.
+   */
+  const ingressValue = stop.identity === true
+    ? resolveIdentityValue({ controlManifest, stop, base, resolvedPath, armId })
+    : ingressValueForStop({ controlManifest, stop });
+
+  const segments = resolvedPath.split('.');
   const document = structuredClone(base);
   let cursor = document;
   for (const segment of segments.slice(0, -1)) {
@@ -399,7 +531,7 @@ export function buildIngressInput({ armId, controlManifest, stopId, base = {} })
     patchCursor = patchCursor[segment];
   }
   patchCursor[segments.at(-1)] = ingressValue;
-  return { path, document, patch, stopId, ingressValue };
+  return { path: resolvedPath, declaredPath: path, document, patch, stopId, ingressValue };
 }
 
 /**
@@ -496,11 +628,67 @@ function ingressValueForStop({ controlManifest, stop }) {
     }
     return stop.id;
   }
+  if (kind === 'color-set') {
+    /* A tenant writes the COLOR at the role's keypath. Which keypath is
+     * `resolveIngressMember`'s job; this decides only WHAT is written.
+     *
+     * HEX ONLY, AND THIS IS THE GUARD THE CONTROL EXISTS FOR. Measured on
+     * `deriveTenantColorRamps` at HEAD: a non-hex seed does NOT throw and does
+     * not produce NaN. `hexToRgbFloat` runs `parseInt(value, 16)`, which is NaN
+     * for any non-hex, and `NaN >> 16 & 255` is 0 in JS -- so the seed silently
+     * becomes BLACK and derives a perfectly plausible GREY ramp. `rebeccapurple`
+     * and `rgb(59, 130, 246)` are both valid CSS colours and both collapse this
+     * way.
+     *
+     * That is the worst shape a false green can take here: the channel MOVES, so
+     * a probe asking "did it move?" answers yes and certifies as live a control
+     * that is throwing the tenant's colour away. The `bounded` branch above
+     * refuses a stop name in a numeric field for exactly this reason; this is
+     * the same law for the same failure.
+     *
+     * IT IS A HARNESS RESTRICTION, NOT A PRODUCT ONE. The DB compiler accepts
+     * functional colour syntax; what this branch refuses to do is LOWER a value
+     * whose downstream meaning it cannot predict on both arms. Recorded in the
+     * control manifest rather than left as an implied product law.
+     */
+    if (typeof stop.value !== 'string' || !HEX_COLOR.test(stop.value)) {
+      throw new Error(
+        `resolution-probe: ${controlId} has a color-set domain, so a tenant writes a COLOUR at ` +
+          `the ingress path — but stop "${stop.id}" declares ${JSON.stringify(stop.value)}, which ` +
+          'is not a hex colour (#rgb or #rrggbb). A non-hex seed does not fail: the ramp ' +
+          'derivation reads it as black and emits a grey ramp, so the channel MOVES and the run ' +
+          'would report a live control while the tenant colour was discarded.',
+      );
+    }
+    return stop.value;
+  }
   throw new Error(
     `resolution-probe: ${controlId} declares domain kind "${kind ?? 'none'}", and this harness ` +
-      'only knows how to write a closed-enum stop id, a bounded stop value, or a profile-id ' +
-      'registry id at an ingress path. Refusing to lower a stop on a remembered convention.',
+      'only knows how to write a closed-enum stop id, a bounded stop value, a profile-id ' +
+      'registry id, or a color-set hex colour at an ingress path. Refusing to lower a stop on a ' +
+      'remembered convention.',
   );
+}
+
+/**
+ * W-A — the value an IDENTITY stop writes: the one the arm's own baseline
+ * already authors at this door.
+ *
+ * @param {{controlManifest: object, stop: object, base: object, resolvedPath: string, armId: string}} input
+ */
+function resolveIdentityValue({ controlManifest, stop, base, resolvedPath, armId }) {
+  const controlId = controlManifest?.controlId ?? 'unknown control';
+  const authored = readKeypath(base ?? {}, resolvedPath);
+  if (authored === undefined || authored === null || authored === '') {
+    throw new Error(
+      `resolution-probe: stop "${stop.id}" of ${controlId} is an IDENTITY stop, so its value is ` +
+        `whatever the arm's own baseline authors at "${resolvedPath}" — and the ${armId} baseline ` +
+        'authors nothing there. An identity that has to be invented is not an identity: it would ' +
+        'measure a scene the vertical does not ship. (The db-tenant-theme arm takes no baseline ' +
+        'by law, so an identity stop is a static-arm claim.)',
+    );
+  }
+  return authored;
 }
 
 /**

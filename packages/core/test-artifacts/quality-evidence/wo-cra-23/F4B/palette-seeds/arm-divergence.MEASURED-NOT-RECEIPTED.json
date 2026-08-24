@@ -1,0 +1,591 @@
+{
+  "artifactVersion": 1,
+  "receipted": false,
+  "whyNotReceipted": "Arm equivalence does NOT hold. Receipting a non-equivalent run would enter it into the evidence chain of palette.seeds, which is exactly the false green the criterion exists to prevent. Same pattern as F4B/experience-profile/bithire-editorial.DIVERGENCE.json and the H3 isolation artifacts.",
+  "phase": "F4B-8 — palette.seeds: the color-set branch lands; the CONTROL does not close",
+  "control": "palette.seeds",
+  "harnessCapability": "LANDED. domain kind color-set is lowerable (hex, fail-closed), the brace-set door resolves by the stop role, and an identity stop resolves against the arm own baseline (W-A). 8 drills green. What blocks the control is not the harness.",
+  "step0Apca": {
+    "method": "Every candidate stop compiled through the productive DB door (compileTenantThemeConfig via loadCompilerArms + dbTenantIdentity), in the three verticals, BEFORE any stop was authored.",
+    "finding": "The background role is NOT independently writable: every candidate throws TenantThemeValidationError in 3/3 verticals. A ground change without a paired foreground change leaves the default foregrounds under the governed APCA floor.",
+    "measurements": [
+      {
+        "stop": "background #123456",
+        "result": "THROWS 3/3",
+        "reason": "light --ds-color-text-primary has APCA Lc 0.0 against --ds-color-bg-primary"
+      },
+      {
+        "stop": "background #0B0B0C",
+        "result": "THROWS 3/3",
+        "reason": "same shape"
+      },
+      {
+        "stop": "background #F7F7F5",
+        "result": "THROWS 3/3",
+        "reason": "light --ds-color-text-muted / -disabled below the floor (Lc 48.2 / 50.2 / 36.2)"
+      },
+      {
+        "stop": "primary/secondary/accent #DC2626",
+        "result": "COMPILES 3/3"
+      },
+      {
+        "stop": "primary #4F46E5",
+        "result": "COMPILES 3/3"
+      }
+    ]
+  },
+  "rottay": {
+    "verdict": "REFUSED BY THE GUARD, not by the writer",
+    "measured": "The DB arm emits ZERO variables for every palette-seed write that compiles (measured directly: #DC2626, #4F46E5, #3A6FB0 all -> 0 vars; #22C55E and #A0A0A5 throw on APCA). The same door emits 1 var for density=compact and 1 for typography.scale=0.94, so the DB door works on rottay generally: the inertia is palette-specific.",
+    "harnessOutcome": "lowerStop refuses: \"db-tenant-theme lowered primary/crimson through appearance.general.palette.primary and emitted none of the declared channels. That is the finding; it is not an arm.\"",
+    "correction": "This REFUTES the design-stage prediction that rottay would be a DESIGNED_NULL with both arms equally inert. The static arm moves 12 channels on rottay while the DB arm emits none: the arms are not equally inert, they diverge."
+  },
+  "scenarios": {
+    "bithire-crimson": {
+      "verdict": {
+        "ingressEquivalenceHeld": false,
+        "manifestAgreement": true,
+        "negativeControlsHeld": true,
+        "pass": false,
+        "restoreExactEverywhere": true,
+        "selfCheck": "harness-live"
+      },
+      "divergentRows": 10,
+      "staticMoved": 4,
+      "dbMoved": 14,
+      "restoreExact": {
+        "static": true,
+        "db": true
+      },
+      "negativesHeld": true,
+      "applied": {
+        "static": {
+          "--ds-button-primary-bg": "#3A6FB0",
+          "--ds-chart-series-1": "#B33831",
+          "--ds-color-primary": "#DC2626",
+          "--ds-color-primary-500": "#C80012",
+          "--ds-color-text-on-primary": "#ffffff"
+        },
+        "db": {
+          "--ds-button-primary-bg": "var(--ds-color-primary)",
+          "--ds-chart-series-1": "#B33831",
+          "--ds-color-primary": "#DC2626",
+          "--ds-color-primary-500": "#C80012"
+        }
+      },
+      "rows": [
+        {
+          "scope": "bithire/dark/modern/both",
+          "target": "button-modern-md/root",
+          "property": "background-color",
+          "static": {
+            "moved": false,
+            "value": "rgb(26, 127, 224)"
+          },
+          "db": {
+            "from": "rgb(26, 127, 224)",
+            "moved": true,
+            "to": "rgb(220, 38, 38)"
+          }
+        },
+        {
+          "scope": "bithire/dark/modern/both",
+          "target": "button-modern-md/root",
+          "property": "border-top-color",
+          "static": {
+            "moved": false,
+            "value": "rgb(26, 127, 224)"
+          },
+          "db": {
+            "from": "rgb(26, 127, 224)",
+            "moved": true,
+            "to": "rgb(220, 38, 38)"
+          }
+        },
+        {
+          "scope": "bithire/dark/modern/both",
+          "target": "token-readout/tokens",
+          "property": "--ds-button-primary-bg",
+          "static": {
+            "moved": false,
+            "value": "#1a7fe0"
+          },
+          "db": {
+            "from": "#1a7fe0",
+            "moved": true,
+            "to": "rgb(220, 38, 38)"
+          }
+        },
+        {
+          "scope": "bithire/dark/modern/both",
+          "target": "token-readout/tokens",
+          "property": "--ds-chart-series-1",
+          "static": {
+            "moved": false,
+            "value": "#459BF7"
+          },
+          "db": {
+            "from": "#459BF7",
+            "moved": true,
+            "to": "#B33831"
+          }
+        },
+        {
+          "scope": "bithire/dark/modern/both",
+          "target": "token-readout/tokens",
+          "property": "--ds-color-primary",
+          "static": {
+            "moved": false,
+            "value": "rgb(30, 132, 230)"
+          },
+          "db": {
+            "from": "rgb(30, 132, 230)",
+            "moved": true,
+            "to": "rgb(220, 38, 38)"
+          }
+        },
+        {
+          "scope": "bithire/dark/modern/both",
+          "target": "token-readout/tokens",
+          "property": "--ds-color-primary-500",
+          "static": {
+            "moved": false,
+            "value": "#1e84e6"
+          },
+          "db": {
+            "from": "#1e84e6",
+            "moved": true,
+            "to": "#C80012"
+          }
+        },
+        {
+          "scope": "bithire/dark/modern/both",
+          "target": "token-readout/tokens",
+          "property": "--ds-material-canvas-texture",
+          "static": {
+            "moved": false,
+            "value": "radial-gradient(circle at 88% 4%, color-mix(in srgb, rgb(30, 132, 230) 14%, transparent), transparent 30%)"
+          },
+          "db": {
+            "from": "radial-gradient(circle at 88% 4%, color-mix(in srgb, rgb(30, 132, 230) 14%, transparent), transparent 30%)",
+            "moved": true,
+            "to": "radial-gradient(circle at 88% 4%, color-mix(in srgb, rgb(220, 38, 38) 14%, transparent), transparent 30%)"
+          }
+        },
+        {
+          "scope": "bithire/light/modern/both",
+          "target": "button-modern-md/root",
+          "property": "background-color",
+          "static": {
+            "moved": false,
+            "value": "rgb(58, 111, 176)"
+          },
+          "db": {
+            "from": "rgb(58, 111, 176)",
+            "moved": true,
+            "to": "rgb(220, 38, 38)"
+          }
+        },
+        {
+          "scope": "bithire/light/modern/both",
+          "target": "button-modern-md/root",
+          "property": "border-top-color",
+          "static": {
+            "moved": false,
+            "value": "rgb(58, 111, 176)"
+          },
+          "db": {
+            "from": "rgb(58, 111, 176)",
+            "moved": true,
+            "to": "rgb(220, 38, 38)"
+          }
+        },
+        {
+          "scope": "bithire/light/modern/both",
+          "target": "token-readout/tokens",
+          "property": "--ds-button-primary-bg",
+          "static": {
+            "moved": false,
+            "value": "#3A6FB0"
+          },
+          "db": {
+            "from": "#3A6FB0",
+            "moved": true,
+            "to": "rgb(220, 38, 38)"
+          }
+        }
+      ]
+    },
+    "bithire-indigo": {
+      "verdict": {
+        "ingressEquivalenceHeld": false,
+        "manifestAgreement": true,
+        "negativeControlsHeld": true,
+        "pass": false,
+        "restoreExactEverywhere": true,
+        "selfCheck": "harness-live"
+      },
+      "divergentRows": 10,
+      "staticMoved": 4,
+      "dbMoved": 14,
+      "restoreExact": {
+        "static": true,
+        "db": true
+      },
+      "negativesHeld": true,
+      "applied": {
+        "static": {
+          "--ds-button-primary-bg": "#3A6FB0",
+          "--ds-chart-series-1": "#555AC2",
+          "--ds-color-primary": "#4F46E5",
+          "--ds-color-primary-500": "#524BE8",
+          "--ds-color-text-on-primary": "#ffffff"
+        },
+        "db": {
+          "--ds-button-primary-bg": "var(--ds-color-primary)",
+          "--ds-chart-series-1": "#555AC2",
+          "--ds-color-primary": "#4F46E5",
+          "--ds-color-primary-500": "#524BE8"
+        }
+      },
+      "rows": [
+        {
+          "scope": "bithire/dark/modern/both",
+          "target": "button-modern-md/root",
+          "property": "background-color",
+          "static": {
+            "moved": false,
+            "value": "rgb(26, 127, 224)"
+          },
+          "db": {
+            "from": "rgb(26, 127, 224)",
+            "moved": true,
+            "to": "rgb(79, 70, 229)"
+          }
+        },
+        {
+          "scope": "bithire/dark/modern/both",
+          "target": "button-modern-md/root",
+          "property": "border-top-color",
+          "static": {
+            "moved": false,
+            "value": "rgb(26, 127, 224)"
+          },
+          "db": {
+            "from": "rgb(26, 127, 224)",
+            "moved": true,
+            "to": "rgb(79, 70, 229)"
+          }
+        },
+        {
+          "scope": "bithire/dark/modern/both",
+          "target": "token-readout/tokens",
+          "property": "--ds-button-primary-bg",
+          "static": {
+            "moved": false,
+            "value": "#1a7fe0"
+          },
+          "db": {
+            "from": "#1a7fe0",
+            "moved": true,
+            "to": "rgb(79, 70, 229)"
+          }
+        },
+        {
+          "scope": "bithire/dark/modern/both",
+          "target": "token-readout/tokens",
+          "property": "--ds-chart-series-1",
+          "static": {
+            "moved": false,
+            "value": "#459BF7"
+          },
+          "db": {
+            "from": "#459BF7",
+            "moved": true,
+            "to": "#555AC2"
+          }
+        },
+        {
+          "scope": "bithire/dark/modern/both",
+          "target": "token-readout/tokens",
+          "property": "--ds-color-primary",
+          "static": {
+            "moved": false,
+            "value": "rgb(30, 132, 230)"
+          },
+          "db": {
+            "from": "rgb(30, 132, 230)",
+            "moved": true,
+            "to": "rgb(79, 70, 229)"
+          }
+        },
+        {
+          "scope": "bithire/dark/modern/both",
+          "target": "token-readout/tokens",
+          "property": "--ds-color-primary-500",
+          "static": {
+            "moved": false,
+            "value": "#1e84e6"
+          },
+          "db": {
+            "from": "#1e84e6",
+            "moved": true,
+            "to": "#524BE8"
+          }
+        },
+        {
+          "scope": "bithire/dark/modern/both",
+          "target": "token-readout/tokens",
+          "property": "--ds-material-canvas-texture",
+          "static": {
+            "moved": false,
+            "value": "radial-gradient(circle at 88% 4%, color-mix(in srgb, rgb(30, 132, 230) 14%, transparent), transparent 30%)"
+          },
+          "db": {
+            "from": "radial-gradient(circle at 88% 4%, color-mix(in srgb, rgb(30, 132, 230) 14%, transparent), transparent 30%)",
+            "moved": true,
+            "to": "radial-gradient(circle at 88% 4%, color-mix(in srgb, rgb(79, 70, 229) 14%, transparent), transparent 30%)"
+          }
+        },
+        {
+          "scope": "bithire/light/modern/both",
+          "target": "button-modern-md/root",
+          "property": "background-color",
+          "static": {
+            "moved": false,
+            "value": "rgb(58, 111, 176)"
+          },
+          "db": {
+            "from": "rgb(58, 111, 176)",
+            "moved": true,
+            "to": "rgb(79, 70, 229)"
+          }
+        },
+        {
+          "scope": "bithire/light/modern/both",
+          "target": "button-modern-md/root",
+          "property": "border-top-color",
+          "static": {
+            "moved": false,
+            "value": "rgb(58, 111, 176)"
+          },
+          "db": {
+            "from": "rgb(58, 111, 176)",
+            "moved": true,
+            "to": "rgb(79, 70, 229)"
+          }
+        },
+        {
+          "scope": "bithire/light/modern/both",
+          "target": "token-readout/tokens",
+          "property": "--ds-button-primary-bg",
+          "static": {
+            "moved": false,
+            "value": "#3A6FB0"
+          },
+          "db": {
+            "from": "#3A6FB0",
+            "moved": true,
+            "to": "rgb(79, 70, 229)"
+          }
+        }
+      ]
+    },
+    "evnto-crimson": {
+      "verdict": {
+        "ingressEquivalenceHeld": false,
+        "manifestAgreement": true,
+        "negativeControlsHeld": true,
+        "pass": false,
+        "restoreExactEverywhere": true,
+        "selfCheck": "harness-live"
+      },
+      "divergentRows": 4,
+      "staticMoved": 6,
+      "dbMoved": 10,
+      "restoreExact": {
+        "static": true,
+        "db": true
+      },
+      "negativesHeld": true,
+      "applied": {
+        "static": {
+          "--ds-button-primary-bg": "var(--ds-color-primary)",
+          "--ds-chart-series-1": "#B33831",
+          "--ds-color-primary": "#DC2626",
+          "--ds-color-primary-500": "#CA0615",
+          "--ds-color-text-on-primary": "#ffffff"
+        },
+        "db": {
+          "--ds-chart-series-1": "#B33831",
+          "--ds-color-primary": "#DC2626",
+          "--ds-color-primary-500": "#CA0615"
+        }
+      },
+      "rows": [
+        {
+          "scope": "evnto/dark/modern/both",
+          "target": "button-modern-md/root",
+          "property": "background-color",
+          "static": {
+            "moved": false,
+            "value": "rgb(232, 232, 224)"
+          },
+          "db": {
+            "from": "rgb(232, 232, 224)",
+            "moved": true,
+            "to": "rgb(220, 38, 38)"
+          }
+        },
+        {
+          "scope": "evnto/dark/modern/both",
+          "target": "token-readout/tokens",
+          "property": "--ds-button-primary-bg",
+          "static": {
+            "moved": false,
+            "value": "rgb(232, 232, 224)"
+          },
+          "db": {
+            "from": "rgb(232, 232, 224)",
+            "moved": true,
+            "to": "rgb(220, 38, 38)"
+          }
+        },
+        {
+          "scope": "evnto/dark/modern/both",
+          "target": "token-readout/tokens",
+          "property": "--ds-chart-series-1",
+          "static": {
+            "moved": false,
+            "value": "#9F9C58"
+          },
+          "db": {
+            "from": "#9F9C58",
+            "moved": true,
+            "to": "#B33831"
+          }
+        },
+        {
+          "scope": "evnto/dark/modern/both",
+          "target": "token-readout/tokens",
+          "property": "--ds-color-primary",
+          "static": {
+            "moved": false,
+            "value": "rgb(232, 232, 224)"
+          },
+          "db": {
+            "from": "rgb(232, 232, 224)",
+            "moved": true,
+            "to": "rgb(220, 38, 38)"
+          }
+        }
+      ]
+    },
+    "evnto-indigo": {
+      "verdict": {
+        "ingressEquivalenceHeld": false,
+        "manifestAgreement": true,
+        "negativeControlsHeld": true,
+        "pass": false,
+        "restoreExactEverywhere": true,
+        "selfCheck": "harness-live"
+      },
+      "divergentRows": 4,
+      "staticMoved": 6,
+      "dbMoved": 10,
+      "restoreExact": {
+        "static": true,
+        "db": true
+      },
+      "negativesHeld": true,
+      "applied": {
+        "static": {
+          "--ds-button-primary-bg": "var(--ds-color-primary)",
+          "--ds-chart-series-1": "#555AC2",
+          "--ds-color-primary": "#4F46E5",
+          "--ds-color-primary-500": "#534DEA",
+          "--ds-color-text-on-primary": "#ffffff"
+        },
+        "db": {
+          "--ds-chart-series-1": "#555AC2",
+          "--ds-color-primary": "#4F46E5",
+          "--ds-color-primary-500": "#534DEA"
+        }
+      },
+      "rows": [
+        {
+          "scope": "evnto/dark/modern/both",
+          "target": "button-modern-md/root",
+          "property": "background-color",
+          "static": {
+            "moved": false,
+            "value": "rgb(232, 232, 224)"
+          },
+          "db": {
+            "from": "rgb(232, 232, 224)",
+            "moved": true,
+            "to": "rgb(79, 70, 229)"
+          }
+        },
+        {
+          "scope": "evnto/dark/modern/both",
+          "target": "token-readout/tokens",
+          "property": "--ds-button-primary-bg",
+          "static": {
+            "moved": false,
+            "value": "rgb(232, 232, 224)"
+          },
+          "db": {
+            "from": "rgb(232, 232, 224)",
+            "moved": true,
+            "to": "rgb(79, 70, 229)"
+          }
+        },
+        {
+          "scope": "evnto/dark/modern/both",
+          "target": "token-readout/tokens",
+          "property": "--ds-chart-series-1",
+          "static": {
+            "moved": false,
+            "value": "#9F9C58"
+          },
+          "db": {
+            "from": "#9F9C58",
+            "moved": true,
+            "to": "#555AC2"
+          }
+        },
+        {
+          "scope": "evnto/dark/modern/both",
+          "target": "token-readout/tokens",
+          "property": "--ds-color-primary",
+          "static": {
+            "moved": false,
+            "value": "rgb(232, 232, 224)"
+          },
+          "db": {
+            "from": "rgb(232, 232, 224)",
+            "moved": true,
+            "to": "rgb(79, 70, 229)"
+          }
+        }
+      ]
+    }
+  },
+  "divergenceClasses": [
+    {
+      "id": "MODE_BLOCK_SPECIFICITY",
+      "where": "every dark row in both verticals (bithire 7, evnto 4)",
+      "measured": "Each vertical artifact declares --ds-color-primary TWICE: once at :is(html[data-tenant=X], :where([data-ds-root][data-vertical=X])) and once at that SAME selector plus [data-theme=dark] (rottay: .light). The mode block carries one extra attribute, so it outranks the static arm block by SPECIFICITY regardless of source order — the static arm appends after the bundle and still loses. The DB arm writes inline on the document element and is not outranked.",
+      "consequence": "The static arm is structurally inert, in dark, for every channel the artifact re-declares per mode. This is an instance of the already-registered OPEN_VERTICAL_CASCADE_DEFECT class (the bithire dark double declaration is the sibling instance), not a new class."
+    },
+    {
+      "id": "COMPILERS_DISAGREE_ON_BUTTON_PRIMARY_BG",
+      "where": "the three bithire LIGHT rows",
+      "measured": "The two compilers emit DIFFERENT values for --ds-button-primary-bg on bithire: the static arm lowers the baked chrome hex #3A6FB0 (bithire authors chrome.controls.buttonPrimary.bg), the DB arm lowers the alias var(--ds-color-primary). The alias tracks the seed; the baked hex does not.",
+      "consequence": "On evnto both arms emit the alias, so evnto has no light divergence. The channel is in declaredOutputs and was already flagged at design time as unusable as a witness; this measures WHY."
+    }
+  ],
+  "whatHolds": "Restore is EXACT on both arms in every scenario, the negative controls held, and both arms are demonstrably live (harness-live) on bithire and evnto. What fails is equivalence, and only equivalence.",
+  "reproduction": "node src/tooling/resolution-probe/public/cli/index.mjs causal --control-manifest manifest/controls/palette.seeds.json --family-manifest manifest/families/primitive/inputs/button.json --stop primary/crimson --vertical bithire --theme light --theme dark --bundle fresh --source-digest <observed>"
+}

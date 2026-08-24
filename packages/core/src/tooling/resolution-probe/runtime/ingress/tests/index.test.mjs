@@ -29,6 +29,8 @@ import {
   assertNoRetiredCompilerBinding,
   buildIngressInput,
   composeDbArm,
+  ingressPathMembers,
+  resolveIngressMember,
   composeStaticArm,
   INGRESS_ARM_IDS,
   INGRESS_ARMS,
@@ -739,10 +741,13 @@ function ingressValueForStopViaBuild({ controlManifest, stop }) {
 }
 
 test('negative drill: a domain kind this harness cannot write fails closed', () => {
-  // `profile-id` is deliberately ABSENT from this list — it is now a supported
-  // third shape, drilled positively above. Every other unsupported kind must
-  // still refuse rather than fall back to writing the stop id.
-  for (const kind of ['token-map', 'color-set', 'scale', undefined]) {
+  // `profile-id` and, since F4B-8, `color-set` are deliberately ABSENT from this
+  // list — both are supported shapes, drilled positively elsewhere. AGED
+  // EXPECTATION, re-legislated rather than weakened: what the drill defends is
+  // that an UNKNOWN kind refuses instead of falling back to writing the stop id,
+  // and `color-set` stopped being unknown. Every kind still outside the four
+  // must refuse.
+  for (const kind of ['token-map', 'scale', 'chrome-map', undefined]) {
     assert.throws(
       () =>
         buildIngressInput({
@@ -750,7 +755,7 @@ test('negative drill: a domain kind this harness cannot write fails closed', () 
           controlManifest: { ...BOUNDED_CONTROL_MANIFEST, domain: { kind } },
           stopId: 'sobrio',
         }),
-      /only knows how to write a closed-enum stop id, a bounded stop value, or a profile-id/,
+      /a profile-id registry id, or a color-set hex colour/,
       `domain kind ${String(kind)} must fail closed rather than write the stop id`,
     );
   }
@@ -1648,4 +1653,231 @@ test('H3C drill 3: the inline plan still names what it introduced, so restore st
   assert.deepEqual(withPrior.restore, [
     { op: 'set', name: '--ds-type-scale', value: '1.02', priority: 'important' },
   ]);
+});
+
+/* ===================================================================== *
+ * F4B-8 — palette.seeds: the color-set domain and the brace-set door.
+ *
+ * Two shapes this harness had never been asked for, and they are independent:
+ * a door that names FOUR real fields, and a domain kind the value writer had no
+ * branch for. Each of these drills is about ONE of them; the pair only meets in
+ * `buildIngressInput`.
+ *
+ * The compiler measurements below run against `dist/` deliberately. What they
+ * fence is not the harness but the LAW the harness is calibrating against — a
+ * seed moves ten channels, a ground moves seven roles, a non-hex seed goes grey
+ * — and a drill that restated those numbers from memory would go stale the
+ * first time the ramp math changed.
+ * ===================================================================== */
+
+const PALETTE_MANIFEST = readManifest(resolve(CORE_ROOT, 'manifest/controls/palette.seeds.json'));
+const STATIC_SET = 'palette.{primaryColor,secondaryColor,accentColor,backgroundColor}';
+const DB_SET = 'appearance.general.palette.{primary,secondary,accent,background}';
+
+/** A color-set manifest with the stops a drill needs, over the real doors. */
+const colorSetManifest = (stops) => ({
+  controlId: 'palette.seeds',
+  domain: { kind: 'color-set', enumValues: [], bounds: null },
+  ingress: { staticBrandThemePath: STATIC_SET, dbTenantThemePath: DB_SET },
+  declaredOutputs: { channels: ['--ds-color-primary'] },
+  calibration: { normalizedStops: stops },
+});
+
+test('F4B-8 drill 1: a color-set stop writes its HEX at the keypath its ROLE selects', () => {
+  const manifest = colorSetManifest([{ id: 'primary/crimson', role: 'primary', value: '#DC2626' }]);
+  const staticInput = buildIngressInput({
+    armId: 'static-brand-theme',
+    controlManifest: manifest,
+    stopId: 'primary/crimson',
+  });
+  assert.equal(staticInput.path, 'palette.primaryColor');
+  assert.equal(staticInput.declaredPath, STATIC_SET, 'the SET is still recorded, not lost');
+  assert.equal(staticInput.ingressValue, '#DC2626');
+  assert.deepEqual(staticInput.patch, { palette: { primaryColor: '#DC2626' } });
+
+  // The same stop, the OTHER door: same role, different spelling, one member.
+  const dbInput = buildIngressInput({
+    armId: 'db-tenant-theme',
+    controlManifest: manifest,
+    stopId: 'primary/crimson',
+  });
+  assert.equal(dbInput.path, 'appearance.general.palette.primary');
+  assert.deepEqual(dbInput.patch, { appearance: { general: { palette: { primary: '#DC2626' } } } });
+});
+
+test('F4B-8 drill 2: the set is RESOLVED, never expanded — one run writes one member', () => {
+  assert.deepEqual(ingressPathMembers(STATIC_SET), [
+    'palette.primaryColor',
+    'palette.secondaryColor',
+    'palette.accentColor',
+    'palette.backgroundColor',
+  ]);
+  assert.deepEqual(ingressPathMembers('typography.scale'), ['typography.scale']);
+  for (const [role, member] of [
+    ['primary', 'palette.primaryColor'],
+    ['secondary', 'palette.secondaryColor'],
+    ['accent', 'palette.accentColor'],
+    ['background', 'palette.backgroundColor'],
+  ]) {
+    assert.equal(resolveIngressMember(STATIC_SET, role), member);
+  }
+  // A stop with NO role cannot select a member, and the harness must not pick one.
+  assert.throws(() => resolveIngressMember(STATIC_SET, undefined), /a stop must name which role/);
+  assert.throws(() => resolveIngressMember(STATIC_SET, 'tertiary'), /selects 0 members/);
+  // A set this harness cannot enumerate fails closed rather than being skipped.
+  assert.throws(() => ingressPathMembers('palette.{a,b'), /unbalanced or nested brace set/);
+  assert.throws(() => ingressPathMembers('palette.{}'), /EMPTY brace set/);
+});
+
+test('F4B-8 drill 3: THE ANTI-DOOR — a non-hex seed is refused, and the measurement says why', async () => {
+  const manifest = colorSetManifest([
+    { id: 'primary/named', role: 'primary', value: 'rebeccapurple' },
+    { id: 'primary/functional', role: 'primary', value: 'rgb(220, 38, 38)' },
+    { id: 'primary/garbage', role: 'primary', value: 'not-a-color' },
+    { id: 'primary/ok', role: 'primary', value: '#DC2626' },
+  ]);
+  for (const stopId of ['primary/named', 'primary/functional', 'primary/garbage']) {
+    assert.throws(
+      () => buildIngressInput({ armId: 'static-brand-theme', controlManifest: manifest, stopId }),
+      /is not a hex colour/,
+      `${stopId} must be refused`,
+    );
+  }
+  assert.doesNotThrow(() =>
+    buildIngressInput({ armId: 'static-brand-theme', controlManifest: manifest, stopId: 'primary/ok' }),
+  );
+
+  /* And the reason, measured rather than asserted: the refused values do not
+   * fail downstream — they go GREY and the channel MOVES, which is what makes
+   * the guard load-bearing instead of fussy. The exact grey depends on the
+   * ground, so this asserts the CLASS (achromatic, and different from the valid
+   * seed's ramp), never a pinned hex. */
+  const { deriveTenantColorRamps } = await import(`${CORE_ROOT}/dist/index.js`);
+  const palette = { primaryColor: '#DC2626', backgroundColor: '#FFFFFF' };
+  const good = deriveTenantColorRamps(palette, 'light')['--ds-color-primary-500'];
+  for (const seed of ['rebeccapurple', 'rgb(220, 38, 38)', 'not-a-color']) {
+    const grey = deriveTenantColorRamps({ ...palette, primaryColor: seed }, 'light')['--ds-color-primary-500'];
+    assert.notEqual(grey, good, `"${seed}" must not derive the valid seed's ramp`);
+    const [, r, g, b] = /^#(..)(..)(..)$/.exec(grey) ?? [];
+    assert.equal(r, g, `"${seed}" derives an achromatic step (r=g), got ${grey}`);
+    assert.equal(g, b, `"${seed}" derives an achromatic step (g=b), got ${grey}`);
+  }
+});
+
+test('F4B-8 drill 4: manifest agreement accepts a MEMBER and still refuses a non-member', () => {
+  const armLike = (path) => ({
+    armId: 'static-brand-theme',
+    provenance: {
+      module: INGRESS_ARMS['static-brand-theme'].compilerModule,
+      exportName: INGRESS_ARMS['static-brand-theme'].compilerExport,
+      input: { path },
+    },
+  });
+  const check = (path) =>
+    assertArmsMatchManifest({ controlManifest: PALETTE_MANIFEST, arms: [armLike(path)] });
+  for (const member of ingressPathMembers(PALETTE_MANIFEST.ingress.staticBrandThemePath)) {
+    assert.equal(check(member).ok, true, `${member} is a declared member`);
+  }
+  // The half that makes the widening safe: not-a-member is still a failure.
+  const bad = check('palette.tertiaryColor');
+  assert.equal(bad.ok, false);
+  assert.match(bad.failures[0].reason, /but the manifest declares/);
+  assert.match(bad.failures[0].reason, /members: /);
+  // And the whole SET is not itself a member: an arm that never resolved fails.
+  assert.equal(check(PALETTE_MANIFEST.ingress.staticBrandThemePath).ok, false);
+});
+
+test('F4B-8 drill 5: each role seed moves its OWN ten steps and CROSSES ZERO', async () => {
+  const { deriveTenantColorRamps } = await import(`${CORE_ROOT}/dist/index.js`);
+  // The palette is fixed here (n3): the counts below are properties of THIS
+  // palette, not of the derivation in general.
+  const palette = {
+    primaryColor: '#3B82F6', secondaryColor: '#8B5CF6', accentColor: '#F59E0B',
+    backgroundColor: '#FFFFFF', successColor: '#16A34A', warningColor: '#F59E0B',
+    errorColor: '#DC2626', infoColor: '#0EA5E9',
+  };
+  const before = deriveTenantColorRamps(palette, 'light');
+  for (const [field, role] of [['primaryColor', 'primary'], ['secondaryColor', 'secondary'], ['accentColor', 'accent']]) {
+    const after = deriveTenantColorRamps({ ...palette, [field]: '#DC2626' }, 'light');
+    const moved = Object.keys(before).filter((key) => before[key] !== after[key]);
+    const own = moved.filter((key) => key.startsWith(`--ds-color-${role}-`));
+    assert.equal(own.length, 10, `${role} must move its ten steps`);
+    assert.equal(
+      moved.length - own.length,
+      0,
+      `${role} must cross ZERO into another role; crossed: ${moved.filter((k) => !own.includes(k)).join(', ')}`,
+    );
+  }
+});
+
+test('F4B-8 drill 6: the GROUND is not a fourth seed — it moves every role and no seed', async () => {
+  const { deriveTenantColorRamps } = await import(`${CORE_ROOT}/dist/index.js`);
+  const palette = {
+    primaryColor: '#3B82F6', secondaryColor: '#8B5CF6', accentColor: '#F59E0B',
+    backgroundColor: '#FFFFFF', successColor: '#16A34A', warningColor: '#F59E0B',
+    errorColor: '#DC2626', infoColor: '#0EA5E9',
+  };
+  const seededRoles = ['primary', 'secondary', 'accent', 'success', 'warning', 'error', 'info'];
+  const before = deriveTenantColorRamps(palette, 'light');
+  const after = deriveTenantColorRamps({ ...palette, backgroundColor: '#123456' }, 'light');
+  const moved = Object.keys(before).filter((key) => before[key] !== after[key]);
+  const touched = new Set(moved.map((key) => key.replace('--ds-color-', '').replace(/-\d+$/, '')));
+  assert.deepEqual([...touched].sort(), [...seededRoles].sort(), 'the ground reaches every seeded role');
+  // Derived, not pinned (n3): nine of ten steps per role move; the far endpoint
+  // is fixed by the ramp law and does not track the ground.
+  assert.equal(moved.length, 9 * seededRoles.length);
+  // And the seeds themselves are untouched: this is a ground change, not a reseed.
+  for (const field of ['primaryColor', 'secondaryColor', 'accentColor']) {
+    assert.equal(palette[field], { ...palette, backgroundColor: '#123456' }[field]);
+  }
+});
+
+test('W-A drill 7: an IDENTITY stop resolves against the arm own baseline, per vertical', async () => {
+  const manifest = colorSetManifest([{ id: 'primary/identity', role: 'primary', identity: true }]);
+  const { rottayBrandTheme, bithireBrandTheme, evntoBrandTheme } = await import(`${CORE_ROOT}/dist/index.js`);
+  // The first identity in this programme that DIFFERS BY VERTICAL: radius
+  // `suave` and density `normal` are constant enum ids; a colour identity is
+  // "whatever this vertical already authors".
+  for (const theme of [rottayBrandTheme, bithireBrandTheme, evntoBrandTheme]) {
+    const input = buildIngressInput({
+      armId: 'static-brand-theme',
+      controlManifest: manifest,
+      stopId: 'primary/identity',
+      base: theme,
+    });
+    assert.equal(input.ingressValue, theme.palette.primaryColor);
+    assert.deepEqual(input.patch, { palette: { primaryColor: theme.palette.primaryColor } });
+  }
+  const distinct = new Set([
+    rottayBrandTheme.palette.primaryColor,
+    bithireBrandTheme.palette.primaryColor,
+    evntoBrandTheme.palette.primaryColor,
+  ]);
+  assert.equal(distinct.size, 3, 'the three identities really are three different values');
+});
+
+test('W-A drill 8: an identity with NO baseline to read fails CLOSED, on either arm', () => {
+  const manifest = colorSetManifest([{ id: 'primary/identity', role: 'primary', identity: true }]);
+  // No base at all.
+  assert.throws(
+    () => buildIngressInput({ armId: 'static-brand-theme', controlManifest: manifest, stopId: 'primary/identity' }),
+    /authors nothing there/,
+  );
+  // A baseline that authors OTHER roles but not this one.
+  assert.throws(
+    () =>
+      buildIngressInput({
+        armId: 'static-brand-theme',
+        controlManifest: manifest,
+        stopId: 'primary/identity',
+        base: { palette: { secondaryColor: '#315F86' } },
+      }),
+    /authors nothing there/,
+  );
+  // The DB arm takes no baseline by law (H-1 V5), so an identity stop is a
+  // static-arm claim and refuses rather than inventing the vertical's value.
+  assert.throws(
+    () => buildIngressInput({ armId: 'db-tenant-theme', controlManifest: manifest, stopId: 'primary/identity' }),
+    /identity stop is a static-arm claim/,
+  );
 });
