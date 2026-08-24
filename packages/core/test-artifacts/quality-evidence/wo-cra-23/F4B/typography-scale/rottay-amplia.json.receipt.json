@@ -66,10 +66,10 @@
     "packages/core/src/ui/primitives/display/Card/engines/rustic/index.tsx",
     "packages/core/src/ui/primitives/display/Card/index.tsx"
   ],
-  "sourceDigest": "8c18e02da765ac9b0c604c052a9d52916eb4fe867f484098c7d4071799c27ba0",
+  "sourceDigest": "d530414d561573f254c3c6c6d7322d46704dce17e95fcfae86c874085a10ab3d",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/typography-scale/rottay-amplia.json",
   "artifactSha256": "5fae6d365b189a1cbfc9d6170839a9a3e00205a1dfd1ee268a10af4fb1b188ad",
-  "createdAt": "2026-08-24T14:08:38.844Z",
+  "createdAt": "2026-08-24T17:54:19.081Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

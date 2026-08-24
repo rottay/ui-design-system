@@ -3560,7 +3560,133 @@ alias); (B) los dos pines de conteo: rottay 1191→**1192**, evnto 467→**468**
 recompilados desde `dist/` fresco = 1192/1231/468 exactos; atribución K1 y
 F4A-6/K3 confirmadas por `git show`. **Verificación DT propia:** 2 rojos
 antes, **22/22 verde** después, write-set de 1 archivo. Cero lógica de
-producto tocada. Commit propio tras postaudit focal.
+producto tocada. **Commit `068e4c357`** (postaudit Fable ACCEPT; la fila ES
+la conducta correcta: diff-de-valores, literal ≠ alias aunque hoy pinten
+igual).
+
+**R-2 — ensanche de guards de modo + rottay deja de ser un rechazo
+(implementación Opus, 2026-08-24; preaudit ACCEPT con W-A/W-B/W-C).**
+Instrumento: el chequeo de vacuidad de `lowerStop` baja DESPUÉS de la
+extracción de `modeVariables` y se calcula sobre la UNIÓN `variables ∪ ⋃
+modeVariables[mode]` (mensaje nombrando scopes); `assertVariables` acepta
+base vacío si `modeVariables` no lo está; el ensanche es MONÓTONO (sólo
+admite lo que antes rechazaba — todo brazo receipteado toma el camino
+idéntico, cercado por drill 7). Scope-matched (W-A): `backgroundMode =
+defaultMode del vertical`, leído del **BrandTheme publicado en dist**
+(`<vertical>BrandTheme.appearance.defaultMode` vía `loadStaticBaselines()`),
+fail-closed, nunca literal por vertical; `producedBy.input.modeScope` lo
+nombra. 7 drills nuevos (suite 224/0 + roster 19/19). **6/6 corridas causales
+verdes: rottay pasó de "corrida rechazada" a brazo equivalente con 0 filas
+divergentes** (warm-sand y pale-mint, static=db, restore exact, negativos
+held); bithire/evnto re-verificados sin cambio bajo el código R-2 (W-B).
+**El STOP medido y su ruling:** bajo scope-matched el piso de contraste se
+evalúa contra la tinta on-primary del modo default de cada vertical — casi
+negra en rottay (dark), blanca en bithire/evnto (light) — así que rottay sólo
+admite seeds claros y los otros dos sólo oscuros: **barrido de 216 seeds,
+CERO comunes a los tres, conjuntos exactamente complementarios** (79
+rottay-only, 122 bithire+evnto-only, 15 en ninguno, 0 mixtos). **RULING DT
+(formaliza la directiva del owner "roster por vertical aprobado"): el roster
+de stops es POR VERTICAL** — 2 admisibles por vertical de un set declarado de
+4 + identity, cada exclusión publicada con su Lc (crimson/indigo en rottay:
+32.2/23.2; warm-sand/pale-mint en bithire/evnto: −23.9/−16.1; el mensaje real
+es el par de botón, citado textual en drill 5). El dominio declarado NO queda
+recortado: `calibration.stopAdmissibilityByVertical` lo carga medido. H-2
+DECIDIBLE en los 6 brazos (`--ds-color-primary` + `--ds-chart-series-1`
+discriminan en todos). Los 3 declarados que no pueden testificar, asentados:
+`-500` (rampas autoradas de rottay), button-bg (alias constante en
+rottay/evnto), text-on-primary (hoja autorada en los 3). **Adjudicaciones DT
+de las 3 desviaciones medidas:** (a) dist rebuild SÍ aplicaba (los `.mjs` de
+la sonda son build inputs — mi brief estaba mal; rebuild con 0 archivos
+trackeados movidos); (b) **el sello de scope se acota a documentos que YA
+escriben nodo de paleta** — escribir `backgroundMode` en un documento sin
+paleta MATERIALIZA uno con 10 keypaths fantasma-autorados (medido: 24/36
+compilaciones DB receipteadas habrían cambiado de VALOR), asentado como
+`NON_PALETTE_DOCUMENTS_MUST_NOT_MATERIALISE_A_PALETTE_NODE` (drill 4); la
+regla sigue uniforme (nunca literal por vertical); (c) la evidencia de W-A
+estaba mal (`FIRST_PARTY_THEMES.rottay.appearance.defaultMode` vale `"dark"`,
+no `undefined`) pero la prescripción era correcta por la razón fuerte
+(`FIRST_PARTY_THEMES` no se exporta del entrypoint publicado; deep import
+rechazado — drill 3). `public/cli/index.mjs` entra al write-set declarado (21
+líneas de cableado del defaultMode). W-C cumplida: el finding queda
+SUPERSEDED con su texto histórico + `stillTrue...Correction` (re-verificó el
+guard, no la bajada). `assertStopDiscrimination` NO se ensancha (correcto
+bajo scope-matched; el vector latente "stops que vivan sólo en un mode block"
+queda nombrado, inalcanzable hoy). Nota de vara de Fable (su §3, asentada por
+honestidad estructural): su reproducción de F4B-8 compartía la ceguera del
+guard (leyó sólo `variables`, nunca `modeDeltas`) — regla nueva de su vara:
+enumerar TODAS las proyecciones de la salida al reproducir un compilador.
+**Emisión (6 receipts R7 + celda + COMPUTED_VERIFIED) despachada; postaudit y
+commit siguen.**
+
+**R-2 — CIERRE (2026-08-24): postaudit Fable REJECT local → corrección focal
+de 4 textos → ACCEPT final.** El REJECT fue exactamente la clase que este
+programa existe para impedir: el manifest de cierre contradiciéndose a sí
+mismo — `unmeasuredScope[0]` con texto de fase 1 contra los 6 evidence IDs
+del mismo archivo; `r2CausalRuns` citando los artifacts borrados con la razón
+obsoleta; `knownDefects[...].productHalf` y el comentario de
+`verticalDefaultMode` portando la evidencia que el drill 3 del propio packet
+había refutado ("the obvious place is empty... undefined (measured)" — falso:
+vale `'dark'`; lo ausente es el EXPORT del entrypoint). Cuatro ediciones de
+texto, cero lógica, y una nota de honestidad del implementador (su primera
+versión del fix introdujo una falsedad NUEVA — "nothing is measured on either
+arm" — detectada releyendo antes de correr: la clase de caza que vale). Tras
+el fix: re-emisión de frescura de los 52 (un comentario stalea dist por hash
+de insumos; rebuild con 0 trackeados movidos), 52/52 VALID,
+CONSTITUTION_READY, 227/0, 22/22, 46 receipts viejos sólo frescura —
+verificación DT propia. **ACCEPT de Fable: `palette.seeds` →
+COMPUTED_VERIFIED. F4B pasa a 8/20.** El claim queda acotado por ley:
+equivalencia para stops admisibles por vertical bajo `modeScope` explícito =
+modo default; las puertas NO son simétricas en validación (static baja 5
+testigos, DB 2 — la huella del piso APCA que una tiene y la otra no);
+`disposition` de la celda queda UNKNOWN (SIGHTED no reclamado); las dos
+preguntas de producto quedan obligatorias y abiertas (roadmap: decisiones de
+producto del owner, abajo). Alerta de path del DT cerrada en el acto
+(`--out` se resuelve contra cwd en ambos modos — 12 archivos con prefijo
+duplicado, regenerados no movidos porque el JSON horneaba el path mentiroso;
+árbol duplicado borrado enumerado). H-1 drill 3 enlistó el control al cerrar
+y falló: medido `BASE_SENSITIVE_BY_DESIGN` (no regresión), entrada con la
+razón medida. Desviación `program-check.test.mjs` (CLOSURE_MEMBERS +=
+`packages/core/styles`, medida) aceptada: los 6 receipts son los primeros en
+atar un family manifest y el sandbox del test los hasheaba 'MISSING'.
+
+**Auditoría externa Codex (a pedido del owner, 2026-08-24) — adjudicada.**
+Tomo 1, rechazo 1, el resto ya estaba adjudicado. **TOMO (y entra en R-2
+antes del postaudit, ratificado por el owner):** el helper de exclusiones de
+`lowerStop` (`ingress/index.mjs:1330`) captura CUALQUIER error y lo publica
+como exclusión legítima — un `TypeError` accidental sería indistinguible de
+"el envelope rechaza el stop". Se endurece en R-2: sólo las clases conocidas
+(elisión de default del compilador, rechazo del envelope, throw APCA con su
+mensaje, domain-kind no soportado) publican; cualquier otro error re-lanza
+fail-closed; drill: un error inesperado TIRA y no se publica; los registros
+de exclusión de las 6 corridas quedan asertados idénticos pre/post (son todos
+de clase conocida). Los 6 receipts se sellan con el discriminador YA
+endurecido. **Claim acotado (ley de escritura):** "equivalencia verificada
+para stops admisibles por vertical, bajo `modeScope` explícito igual al modo
+default" — nunca "las dos puertas son equivalentes". **Rechazado con
+evidencia:** "mantener palette.seeds UNKNOWN" — el owner aprobó el roster;
+F4B certifica la cadena causal medida, no la perfección del producto; las
+preguntas de producto quedan asentadas con puntero, obligatorias y abiertas.
+Ya adjudicados: gates rojos mid-packet (transitorio), `cli/index.mjs` (el
+brief encargaba el document builder; 21 líneas de cableado, declarado), el
+nextAction contradictorio (se resuelve en la emisión). Nota de método
+asentada: cada packet de instrumento futuro justifica por qué no es runtime
+(criterio del owner vía Codex).
+
+**Decisiones de PRODUCTO del owner (2026-08-24, respondidas — registradas
+como packets futuros obligatorios, NO de F4B):**
+1. **Enrutado v1:** SÍ — un seed sin `backgroundMode` va al **modo
+   efectivo/default del vertical**. Migración VERSIONADA: los documentos v1
+   existentes que deban conservar `light` quedan explicitados como `light`;
+   la semántica nueva usa el default vertical. (Hoy: un tenant rottay que
+   sólo marca su paleta no ve su marca por defecto.)
+2. **APCA compartido:** SÍ — ambas puertas comparten la misma política.
+   Primero MEDIR los themes actuales (¿algún par autorado queda bajo el piso
+   y rompería builds first-party?), después llevar la validación a UNA
+   autoridad compartida, no duplicada.
+3. **Contrato público opción B:** SÍ, dentro de F5 — `tenantPatch` como API
+   real; CSS, `personality` y `tokenOverrides` derivados TODOS del mismo
+   `effectiveTheme` (hoy CSS y los objetos públicos pueden representar dos
+   estilos distintos).
 
 **F0 — CERRADO (2026-08-19).** Criterio de cierre cumplido:
 `ci-gates OK — 78 blocking gate(s) passed` (2 excluded visibles con razón y

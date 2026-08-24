@@ -46,6 +46,7 @@ import {
   assertStopDiscrimination,
   loadStaticBaselines,
   lowerStop,
+  verticalDefaultMode,
 } from '../../runtime/ingress/index.mjs';
 
 /**
@@ -954,6 +955,21 @@ async function commandCausal(options) {
   const loadedArms = await loadCompilerArms();
   // H-1: same verified dist as the compilers (V4), loaded once for the run.
   const staticBaselines = await loadStaticBaselines();
+  /* R-2 (W-A): the vertical's own default mode, read from the PUBLISHED
+   * BrandTheme that `loadStaticBaselines()` just loaded under the freshness
+   * law. It is the field `FIRST_PARTY_THEMES` does not project, and the DB arm
+   * needs it to declare the mode scope its document is measured in. Resolved
+   * once per run so both the arm and the discrimination guard stand in the same
+   * scope; fail-closed inside `verticalDefaultMode`.
+   *
+   * A tenant-less scope (`none`) has no BrandTheme and therefore no default
+   * mode; it resolves to `null` here rather than throwing, so the existing
+   * refusal for such a run stays where it already is. A document that actually
+   * NEEDS the scope still fails closed at the stamp. */
+  const runBaseline = staticBaselines[options.verticals[0]] ?? null;
+  const runDefaultMode = runBaseline
+    ? verticalDefaultMode(runBaseline, options.verticals[0])
+    : null;
   const arms = requestedArms.map((armId) => {
     const loaded = loadedArms[armId];
     const lowered = lowerStop({
@@ -966,6 +982,9 @@ async function commandCausal(options) {
       // against. Same vertical for both, which is what makes them comparable.
       vertical: options.verticals[0],
       provenance: loaded.provenance,
+      // R-2: the mode scope the DB document declares (ignored by the static arm,
+      // which writes the theme body and therefore the default mode by construction).
+      defaultMode: runDefaultMode,
       /* H-1: the static arm composes its stop over the vertical's PUBLISHED
        * baseline, so it measures the theme production actually ships. The DB
        * arm resolves its baseline inside its own compiler and fails closed if
@@ -994,6 +1013,8 @@ async function commandCausal(options) {
       provenance: loaded.provenance,
       baseline: armId === 'static-brand-theme' ? staticBaselines[options.verticals[0]] : null,
       armBaselineDigest: lowered.producedBy.input.baseline?.digest ?? null,
+      // R-2: same scope as the arm it certifies.
+      defaultMode: runDefaultMode,
     });
     const producedBy = { ...lowered.producedBy, stopDiscrimination: discrimination };
 

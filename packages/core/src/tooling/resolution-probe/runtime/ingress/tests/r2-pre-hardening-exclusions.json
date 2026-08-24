@@ -1,0 +1,53 @@
+{
+  "bithire": {
+    "db-tenant-theme": [
+      {
+        "reason": "$.visualFoundation: light --ds-button-primary-color has APCA Lc -23.9 against --ds-button-primary-bg; authored tenant colors must meet the governed floor; $.visualFoundation: light --ds-color-text-on-primary has APCA Lc -23.9 against --ds-color-primary; authored tenant colors must meet the governed floor",
+        "stopId": "primary/warm-sand"
+      },
+      {
+        "reason": "$.visualFoundation: light --ds-button-primary-color has APCA Lc -16.1 against --ds-button-primary-bg; authored tenant colors must meet the governed floor; $.visualFoundation: light --ds-color-text-on-primary has APCA Lc -16.1 against --ds-color-primary; authored tenant colors must meet the governed floor",
+        "stopId": "primary/pale-mint"
+      },
+      {
+        "reason": "resolution-probe: stop \"primary/identity\" of palette.seeds is an IDENTITY stop, so its value is whatever the arm's own baseline authors at \"appearance.general.palette.primary\" \u2014 and the db-tenant-theme baseline authors nothing there. An identity that has to be invented is not an identity: it would measure a scene the vertical does not ship. (The db-tenant-theme arm takes no baseline by law, so an identity stop is a static-arm claim.)",
+        "stopId": "primary/identity"
+      }
+    ],
+    "static-brand-theme": []
+  },
+  "evnto": {
+    "db-tenant-theme": [
+      {
+        "reason": "$.visualFoundation: light --ds-button-primary-color has APCA Lc -23.9 against --ds-button-primary-bg; authored tenant colors must meet the governed floor; $.visualFoundation: light --ds-color-text-on-primary has APCA Lc -23.9 against --ds-color-primary; authored tenant colors must meet the governed floor",
+        "stopId": "primary/warm-sand"
+      },
+      {
+        "reason": "$.visualFoundation: light --ds-button-primary-color has APCA Lc -16.1 against --ds-button-primary-bg; authored tenant colors must meet the governed floor; $.visualFoundation: light --ds-color-text-on-primary has APCA Lc -16.1 against --ds-color-primary; authored tenant colors must meet the governed floor",
+        "stopId": "primary/pale-mint"
+      },
+      {
+        "reason": "resolution-probe: stop \"primary/identity\" of palette.seeds is an IDENTITY stop, so its value is whatever the arm's own baseline authors at \"appearance.general.palette.primary\" \u2014 and the db-tenant-theme baseline authors nothing there. An identity that has to be invented is not an identity: it would measure a scene the vertical does not ship. (The db-tenant-theme arm takes no baseline by law, so an identity stop is a static-arm claim.)",
+        "stopId": "primary/identity"
+      }
+    ],
+    "static-brand-theme": []
+  },
+  "rottay": {
+    "db-tenant-theme": [
+      {
+        "reason": "$.visualFoundation: dark --ds-button-primary-color has APCA Lc 32.2 against --ds-button-primary-bg; authored tenant colors must meet the governed floor; $.visualFoundation: dark --ds-color-text-on-primary has APCA Lc 32.2 against --ds-color-primary; authored tenant colors must meet the governed floor",
+        "stopId": "primary/crimson"
+      },
+      {
+        "reason": "$.visualFoundation: dark --ds-button-primary-color has APCA Lc 23.2 against --ds-button-primary-bg; authored tenant colors must meet the governed floor; $.visualFoundation: dark --ds-color-text-on-primary has APCA Lc 23.2 against --ds-color-primary; authored tenant colors must meet the governed floor",
+        "stopId": "primary/indigo"
+      },
+      {
+        "reason": "resolution-probe: stop \"primary/identity\" of palette.seeds is an IDENTITY stop, so its value is whatever the arm's own baseline authors at \"appearance.general.palette.primary\" \u2014 and the db-tenant-theme baseline authors nothing there. An identity that has to be invented is not an identity: it would measure a scene the vertical does not ship. (The db-tenant-theme arm takes no baseline by law, so an identity stop is a static-arm claim.)",
+        "stopId": "primary/identity"
+      }
+    ],
+    "static-brand-theme": []
+  }
+}

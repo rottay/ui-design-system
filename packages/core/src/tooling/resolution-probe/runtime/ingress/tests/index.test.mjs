@@ -42,6 +42,10 @@ import {
   RETIRED_DB_COMPILER_EXPORTS,
   staticTenantAuthoredPaths,
   tenantArmSelector,
+  verticalDefaultMode,
+  classifyStopExclusion,
+  StopExclusionError,
+  STOP_EXCLUSION_CLASSES,
 } from '../index.mjs';
 
 const CONTROL_MANIFEST = readManifest(
@@ -1064,6 +1068,22 @@ const BASE_SENSITIVE_BY_DESIGN = new Map([
     'its declared --ds-density-scale IS the vertical structural scale, which only exists in the ' +
       'baseline. That is the defect H-1 corrects; drill 2 pins the corrected values.',
   ],
+  [
+    'palette.seeds',
+    'THREE of its five declared channels are vertical-AUTHORED or derive against the vertical\'s ' +
+      'own ground, so they cannot exist without a baseline -- measured, not assumed, across all ' +
+      'five stops x three verticals. (a) --ds-color-text-on-primary is `undefined` without a base ' +
+      'on all three and carries the vertical\'s authored palette.onPrimaryColor with one ' +
+      '(#0C0C0E / #ffffff / #ffffff): an authored leaf has no value to have when there is no ' +
+      'author. (b) --ds-color-primary-500 differs everywhere because the OKLCH ramp derives ' +
+      'against the vertical\'s own ground, and on rottay it is pinned outright at #A0A0A5 by the ' +
+      'authored palette.ramps.primary, which wins over derivation regardless of the seed. ' +
+      '(c) --ds-chart-series-1 differs on rottay for the same ground reason (dark vs the default ' +
+      'light). And the identity stop cannot lower without a base BY LAW (W-A: an identity ' +
+      'resolves the vertical\'s own value), which the drill\'s own catch already skips. None of ' +
+      'this is a regression: it is the same structural fact this control publishes as ' +
+      'measuredResult.r2BlindWitnesses, seen from the H-1 side.',
+  ],
 ]);
 
 test('H-1 drill 3 [needs dist]: every OTHER closed control lowers identically with and without a base', async () => {
@@ -1320,6 +1340,12 @@ const discriminate = async (manifest, armId, vertical, overrides = {}) => {
     vertical,
     provenance: arms[armId].provenance,
     baseline: armId === 'static-brand-theme' ? baselines[vertical] : null,
+    /* R-2: the same wiring the CLI does, from the same published BrandTheme.
+     * A palette door fails closed without it, which is the guard working -- but
+     * a fence that cannot lower the control it is fencing measures nothing. For
+     * every non-palette control this is inert: the stamp only reaches documents
+     * that already write a palette node. */
+    defaultMode: verticalDefaultMode(baselines[vertical], vertical),
     ...overrides,
   });
 };
@@ -2172,6 +2198,9 @@ async function h3a2Arms(vertical, stopId = 'primary/crimson') {
       compile: arms[armId].compile,
       vertical,
       provenance: arms[armId].provenance,
+      // R-2: a palette door must declare the mode scope it is measured in, or
+      // fail closed. These drills lower the real DB compiler, so they declare it.
+      defaultMode: verticalDefaultMode(baselines[vertical], vertical),
       ...extra,
     });
   return {
@@ -2221,6 +2250,7 @@ test('H-3(a) drill 2 [needs dist]: the extraction reads the DB shape, named per 
     }),
     vertical: 'bithire',
     provenance: arms['db-tenant-theme'].provenance,
+    defaultMode: 'light',
   });
   assert.deepEqual(wrongShape.modeVariables, {}, 'the DB arm does not read modeBlocks');
 });
@@ -2660,4 +2690,517 @@ test('B-2 drill 7 [needs dist]: W-B — an IDENTITY stop declares NO authorship'
   assert.notEqual(ruling, -1, 'the W-B ruling is not written in the arm');
   assert.notEqual(branch, -1);
   assert.ok(ruling < branch, 'the ruling must sit above the branch it governs');
+});
+
+/* ==========================================================================
+ * R-2 — the emptiness question is asked over EVERY scope, and the DB document
+ * declares the mode scope it is measured in.
+ * ======================================================================== */
+
+/**
+ * The exact shape `compileTenantThemeConfig` returns for rottay +
+ * `primary/crimson` when the document declares no `backgroundMode` — measured
+ * in R-1, reproduced by Fable, and frozen here as a fixture rather than
+ * recomputed, so this drill states the defect even if the compiler later stops
+ * producing it.
+ */
+const R2_ROTTAY_NON_DEFAULT_MODE_SHAPE = Object.freeze({
+  variables: {},
+  modeDeltas: [
+    {
+      mode: 'light',
+      variables: {
+        '--ds-color-primary': '#DC2626',
+        '--ds-chart-series-1': '#B33831',
+        '--ds-color-link': '#DC2626',
+        '--ds-color-primary-rgb': '220, 38, 38',
+      },
+    },
+  ],
+});
+
+test('R-2 drill 1: a lowering empty in BASE but alive in a mode block IS an arm, not a finding', () => {
+  const lowered = lowerStop({
+    armId: 'db-tenant-theme',
+    controlManifest: M1_PALETTE,
+    stopId: 'primary/crimson',
+    compile: () => R2_ROTTAY_NON_DEFAULT_MODE_SHAPE,
+    vertical: 'rottay',
+    defaultMode: 'dark',
+    provenance: { schemaVersion: 1 },
+  });
+  // The base map is legitimately empty — that is the fact the old guard read.
+  assert.deepEqual(lowered.variables, {});
+  // And the lowering is real: two of the five declared channels, in `light`.
+  assert.deepEqual(Object.keys(lowered.modeVariables), ['light']);
+  assert.deepEqual(lowered.modeVariables.light, {
+    '--ds-color-primary': '#DC2626',
+    '--ds-chart-series-1': '#B33831',
+  });
+  // WHICH scope carried what is on the record, per channel (M-1's `modeChannels`).
+  assert.deepEqual(lowered.producedBy.modeChannels, {
+    light: ['--ds-chart-series-1', '--ds-color-primary'],
+  });
+  assert.deepEqual(lowered.producedBy.emittedChannels, []);
+  // And the arm composes: `assertVariables` no longer refuses an empty base.
+  const arm = composeDbArm({
+    vertical: 'rottay',
+    variables: lowered.variables,
+    producedBy: lowered.producedBy,
+    modeVariables: lowered.modeVariables,
+    themeModeSelector: (base, mode) => `${base}[data-theme='${mode}']`,
+  });
+  assert.deepEqual(Object.keys(arm.modeSelectors), ['light']);
+  assert.ok(arm.cssBlock.includes('--ds-color-primary: #DC2626'));
+});
+
+test('R-2 drill 2: empty in EVERY scope is still the finding, and the message names the scopes', () => {
+  // (a) no mode block at all — the pre-R-2 case, unchanged.
+  assert.throws(
+    () =>
+      lowerStop({
+        armId: 'db-tenant-theme',
+        controlManifest: M1_PALETTE,
+        stopId: 'primary/crimson',
+        compile: () => ({ variables: { '--ds-something-else': '1' } }),
+        vertical: 'rottay',
+        defaultMode: 'dark',
+        provenance: { schemaVersion: 1 },
+      }),
+    /emitted none of the declared channels[\s\S]*in ANY scope[\s\S]*no mode block/,
+  );
+  // (b) mode blocks present but carrying none of the DECLARED channels.
+  assert.throws(
+    () =>
+      lowerStop({
+        armId: 'db-tenant-theme',
+        controlManifest: M1_PALETTE,
+        stopId: 'primary/crimson',
+        compile: () => ({
+          variables: {},
+          modeDeltas: [{ mode: 'light', variables: { '--ds-unrelated': '1' } }],
+        }),
+        vertical: 'rottay',
+        defaultMode: 'dark',
+        provenance: { schemaVersion: 1 },
+      }),
+    /in ANY scope[\s\S]*not in any mode block \(light\)/,
+  );
+  // (c) and the composer agrees: every scope empty is refused.
+  assert.throws(
+    () =>
+      composeDbArm({
+        vertical: 'rottay',
+        variables: {},
+        producedBy: { ...PRODUCED_BY, module: INGRESS_ARMS['db-tenant-theme'].compilerModule, exportName: 'compileTenantThemeConfig', input: { path: 'appearance.general.palette.primary', stopId: 'x' } },
+        modeVariables: { light: {} },
+      }),
+    /carries no variable in ANY scope/,
+  );
+});
+
+test('R-2 drill 3: the DB document declares the vertical\'s OWN default mode, from the published BrandTheme', async () => {
+  const baselines = await loadStaticBaselines();
+  /* W-A ASKED FOR THIS TO BE VERIFIED, AND THE VERIFICATION CORRECTED ITS
+   * EVIDENCE. The preaudit's reason for reading the BrandTheme was that
+   * `FIRST_PARTY_THEMES.<v>.appearance.defaultMode` is `undefined`. Measured: it
+   * is `"dark"` -- the Theme projection DOES carry the field. The prescription
+   * is right anyway, and for a stronger reason: `FIRST_PARTY_THEMES` is not on
+   * the PUBLISHED entrypoint at all, so reaching it would need a deep import --
+   * exactly what this harness refuses for its compilers, because a deep path can
+   * be tree-shaken out from under it with no gate noticing. The BrandTheme is
+   * published, and `loadStaticBaselines()` already loads it under the freshness
+   * law. Both halves are asserted so neither claim can rot silently. */
+  const published = await import(`${CORE_ROOT}/dist/index.js`);
+  assert.equal(
+    'FIRST_PARTY_THEMES' in published,
+    false,
+    'the Theme projection is not reachable from the published entrypoint',
+  );
+  assert.equal('rottayBrandTheme' in published, true);
+  const { FIRST_PARTY_THEMES } = await import(
+    `${CORE_ROOT}/dist/foundation/tokens/ts/presentation/brand-themes/index.js`
+  );
+  assert.equal(FIRST_PARTY_THEMES.rottay.appearance?.defaultMode, 'dark');
+  assert.equal(verticalDefaultMode(baselines.rottay, 'rottay'), 'dark');
+  assert.equal(verticalDefaultMode(baselines.bithire, 'bithire'), 'light');
+  assert.equal(verticalDefaultMode(baselines.evnto, 'evnto'), 'light');
+
+  // Fail-closed: a theme with no usable defaultMode refuses rather than assuming light.
+  for (const bad of [{ theme: {}, source: 's' }, { theme: { appearance: { defaultMode: 'auto' } }, source: 's' }, null]) {
+    assert.throws(() => verticalDefaultMode(bad, 'rottay'), /declares no usable[\s\S]*defaultMode/);
+  }
+
+  // The declared scope reaches the compiler input, and is NAMED on the record.
+  const built = lowerStop({
+    armId: 'db-tenant-theme',
+    controlManifest: M1_PALETTE,
+    stopId: 'primary/crimson',
+    compile: (input) => {
+      assert.equal(input.appearance.palette.backgroundMode, 'dark');
+      return R2_ROTTAY_NON_DEFAULT_MODE_SHAPE;
+    },
+    vertical: 'rottay',
+    defaultMode: verticalDefaultMode(baselines.rottay, 'rottay'),
+    provenance: { schemaVersion: 1 },
+  });
+  assert.equal(built.producedBy.input.modeScope, 'dark');
+  assert.equal(built.producedBy.input.compilerInput.appearance.palette.backgroundMode, 'dark');
+  // W-A verified rather than restated: it does NOT travel in `document`, which is
+  // the pre-reshape manifest-path-relative shape.
+  assert.equal(built.producedBy.input.document.appearance.general.palette.backgroundMode, undefined);
+});
+
+test('R-2 drill 4: the scope stamp lands ONLY on a document that already writes a palette node', () => {
+  // A palette door with no declared scope fails closed rather than assuming light.
+  assert.throws(
+    () =>
+      lowerStop({
+        armId: 'db-tenant-theme',
+        controlManifest: M1_PALETTE,
+        stopId: 'primary/crimson',
+        compile: () => R2_ROTTAY_NON_DEFAULT_MODE_SHAPE,
+        vertical: 'rottay',
+        provenance: { schemaVersion: 1 },
+      }),
+    /writes a palette node[\s\S]*no vertical defaultMode/,
+  );
+  /* AND THE NON-PALETTE DOORS ARE UNTOUCHED — the half that protects the 46
+   * receipted scenarios. `backgroundMode` lives INSIDE `palette`, so stamping it
+   * unconditionally would MATERIALISE a palette node on a density document;
+   * `migratePalette` would then emit ten all-undefined seed fields that
+   * `collectPatchAuthoredPaths` collects as authored keypaths, including
+   * `palette.primaryColor` (a CONSULTED_PROVENANCE_FIELDS member), firing the
+   * governed seed-derivation ladder. Measured: 24 of the 36 receipted DB-arm
+   * compiles change VALUE that way. */
+  let seen = null;
+  lowerStop({
+    armId: 'db-tenant-theme',
+    controlManifest: CONTROL_MANIFEST, // spacing.rhythm — door is appearance.general.rhythm
+    stopId: 'airy',
+    compile: (input) => {
+      seen = input;
+      return { variables: { '--ds-rhythm-scale': '1.2' } };
+    },
+    vertical: 'rottay',
+    defaultMode: 'dark',
+    provenance: { schemaVersion: 1 },
+  });
+  assert.deepEqual(seen.appearance, { rhythm: 'airy' }, 'no palette node is materialised');
+  assert.equal(Object.hasOwn(seen.appearance, 'palette'), false);
+});
+
+test('R-2 drill 5 [needs dist]: crimson through the DB door on rottay-dark is REFUSED by the APCA floor', async () => {
+  const arms = await loadCompilerArms();
+  const baselines = await loadStaticBaselines();
+  const spec = arms['db-tenant-theme'];
+  /* The exclusion this control asserts is not a preference: the vertical
+   * envelope rejects the stop. rottay's dark identity pairs
+   * `--ds-color-primary: #FFFFFF` with near-black on-primary ink, so a mid
+   * chromatic seed drops the pair below the governed contrast floor. Citing the
+   * REAL message (P3): the compiler names the BUTTON pair. */
+  assert.throws(
+    () =>
+      lowerStop({
+        armId: 'db-tenant-theme',
+        controlManifest: M1_PALETTE,
+        stopId: 'primary/crimson',
+        compile: spec.compile,
+        vertical: 'rottay',
+        defaultMode: verticalDefaultMode(baselines.rottay, 'rottay'),
+        provenance: spec.provenance,
+      }),
+    /dark --ds-button-primary-color has APCA Lc 32\.2 against --ds-button-primary-bg/,
+  );
+  assert.throws(
+    () =>
+      lowerStop({
+        armId: 'db-tenant-theme',
+        controlManifest: M1_PALETTE,
+        stopId: 'primary/indigo',
+        compile: spec.compile,
+        vertical: 'rottay',
+        defaultMode: verticalDefaultMode(baselines.rottay, 'rottay'),
+        provenance: spec.provenance,
+      }),
+    /dark --ds-button-primary-color has APCA Lc 23\.2 against --ds-button-primary-bg/,
+  );
+  // The same two stops lower fine on the light-default verticals: the exclusion
+  // is a property of rottay's dark identity, not of the stop.
+  for (const vertical of ['bithire', 'evnto']) {
+    const lowered = lowerStop({
+      armId: 'db-tenant-theme',
+      controlManifest: M1_PALETTE,
+      stopId: 'primary/crimson',
+      compile: spec.compile,
+      vertical,
+      defaultMode: verticalDefaultMode(baselines[vertical], vertical),
+      provenance: spec.provenance,
+    });
+    assert.equal(lowered.variables['--ds-color-primary'], '#DC2626');
+  }
+});
+
+test('R-2 drill 6 [needs dist]: the scope-matched door puts rottay\'s seed in the BODY, and H-2 stays decidable', async () => {
+  const arms = await loadCompilerArms();
+  const baselines = await loadStaticBaselines();
+  const spec = arms['db-tenant-theme'];
+  const staticSpec = arms['static-brand-theme'];
+
+  /* THE ROSTER IS PER VERTICAL, and measured to be a partition rather than a
+   * preference: the governed floor is evaluated against the DEFAULT mode's
+   * on-primary ink, which is near-black on rottay and white on bithire/evnto.
+   * A 216-seed sweep of the RGB cube found ZERO seeds admissible on all three
+   * (79 rottay-only, 122 bithire+evnto-only, 15 nowhere, mixed-other EMPTY). */
+  const DB_STOPS = {
+    rottay: ['primary/warm-sand', 'primary/pale-mint'],
+    bithire: ['primary/crimson', 'primary/indigo'],
+    evnto: ['primary/crimson', 'primary/indigo'],
+  };
+  for (const vertical of ['rottay', 'bithire', 'evnto']) {
+    const defaultMode = verticalDefaultMode(baselines[vertical], vertical);
+    for (const stopId of DB_STOPS[vertical]) {
+      const db = lowerStop({
+        armId: 'db-tenant-theme',
+        controlManifest: M1_PALETTE,
+        stopId,
+        compile: spec.compile,
+        vertical,
+        defaultMode,
+        provenance: spec.provenance,
+      });
+      // The seed lands in the BASE map on every vertical now — the scope the
+      // static arm writes by construction.
+      assert.ok(
+        Object.hasOwn(db.variables, '--ds-color-primary'),
+        `${vertical}/${stopId}: the DB seed must land in the body, not an overlay`,
+      );
+      const stat = lowerStop({
+        armId: 'static-brand-theme',
+        controlManifest: M1_PALETTE,
+        stopId,
+        compile: staticSpec.compile,
+        vertical,
+        provenance: staticSpec.provenance,
+        base: baselines[vertical].theme,
+        baselineSource: baselines[vertical].source,
+      });
+      assert.equal(
+        stat.variables['--ds-color-primary'],
+        db.variables['--ds-color-primary'],
+        `${vertical}/${stopId}: both doors must write the same scope`,
+      );
+    }
+    // H-2, per arm, on the same scope the arm measures.
+    for (const [armId, loaded] of [
+      ['db-tenant-theme', spec],
+      ['static-brand-theme', staticSpec],
+    ]) {
+      const verdict = assertStopDiscrimination({
+        armId,
+        controlManifest: M1_PALETTE,
+        compile: loaded.compile,
+        vertical,
+        provenance: loaded.provenance,
+        defaultMode,
+        ...(armId === 'static-brand-theme' ? { baseline: baselines[vertical] } : {}),
+      });
+      assert.equal(verdict.outcome, 'PASS', `${vertical}/${armId}: H-2 must be decidable`);
+      assert.ok(verdict.witnesses.length >= 2, `${vertical}/${armId}: two witnesses minimum`);
+      assert.ok(
+        verdict.discriminating.includes('--ds-color-primary'),
+        `${vertical}/${armId}: the direct witness must discriminate`,
+      );
+    }
+  }
+});
+
+test('R-2 drill 7: widening the guard cannot re-adjudicate a receipted arm', () => {
+  /* The invariance the 46 rest on, asserted rather than argued: the new law only
+   * ADMITS lowerings the old one refused. Any arm with a non-empty base map —
+   * which every receipted arm has — takes exactly the same path it took before,
+   * and its `variables` are byte-identical. */
+  const compile = () => ({
+    variables: { '--ds-rhythm-scale': '1.2', '--ds-unrelated': 'x' },
+    modeDeltas: [{ mode: 'dark', variables: { '--ds-rhythm-scale': '1.2' } }],
+  });
+  const lowered = lowerStop({
+    armId: 'db-tenant-theme',
+    controlManifest: CONTROL_MANIFEST,
+    stopId: 'airy',
+    compile,
+    vertical: 'rottay',
+    defaultMode: 'dark',
+    provenance: { schemaVersion: 1 },
+  });
+  assert.deepEqual(lowered.variables, { '--ds-rhythm-scale': '1.2' });
+  assert.deepEqual(lowered.producedBy.emittedChannels, ['--ds-rhythm-scale']);
+  assert.deepEqual(lowered.producedBy.omittedChannels, ['--ds-rhythm-effective-scale']);
+  // A non-palette door declares no mode scope, and says so rather than inventing one.
+  assert.equal(lowered.producedBy.input.modeScope, null);
+});
+
+/* ==========================================================================
+ * R-2 hardening — the exclusion path is a CLOSED set, decided by type.
+ * ======================================================================== */
+
+test('R-2 drill 8: an unexpected throw is RE-THROWN, never published as an exclusion', async () => {
+  const baselines = await loadStaticBaselines();
+  /* The shape this closes: a broken double (or a renamed field, or a wiring
+   * mistake) used to become a legitimate-looking "this stop cannot lower". The
+   * witness set shrank and the guard reported the shrunken set as a
+   * measurement -- the guard's own false green. */
+  const brokenDouble = () => {
+    throw new TypeError("Cannot read properties of undefined (reading 'cssVariables')");
+  };
+  await assert.rejects(
+    async () =>
+      assertStopDiscrimination({
+        armId: 'db-tenant-theme',
+        controlManifest: M1_PALETTE,
+        compile: brokenDouble,
+        vertical: 'rottay',
+        provenance: { schemaVersion: 1 },
+        defaultMode: verticalDefaultMode(baselines.rottay, 'rottay'),
+      }),
+    (error) =>
+      error instanceof TypeError &&
+      /NOT allowed to publish as an exclusion \(TypeError\)/.test(error.message) &&
+      /publishable set is closed: COMPILER_ELIDES_VERTICAL_DEFAULT/.test(error.message) &&
+      /Cannot read properties of undefined/.test(error.message),
+    'a TypeError from a broken double must surface, not become an exclusion reason',
+  );
+  // And the same for a plain Error: it is the CLASS that admits, not the shape.
+  await assert.rejects(
+    async () =>
+      assertStopDiscrimination({
+        armId: 'db-tenant-theme',
+        controlManifest: M1_PALETTE,
+        compile: () => {
+          throw new Error('some future refactor renamed a field');
+        },
+        vertical: 'rottay',
+        provenance: { schemaVersion: 1 },
+        defaultMode: verticalDefaultMode(baselines.rottay, 'rottay'),
+      }),
+    /NOT allowed to publish as an exclusion/,
+  );
+});
+
+test('R-2 drill 9: each KNOWN class publishes, with its class and its reason', async () => {
+  // The class is carried on the error, so this is a type test end to end.
+  assert.equal(
+    classifyStopExclusion(
+      new StopExclusionError(STOP_EXCLUSION_CLASSES.DOMAIN_KIND_NOT_LOWERED, 'x'),
+    ),
+    'DOMAIN_KIND_NOT_LOWERED',
+  );
+  // The product compiler's throw is classified by TYPE plus its own issue
+  // payload -- the only place the APCA/envelope distinction exists.
+  const validationError = (issues) => Object.assign(new Error('v'), {
+    name: 'TenantThemeValidationError',
+    issues,
+  });
+  assert.equal(
+    classifyStopExclusion(
+      validationError([{ message: 'dark --ds-button-primary-color has APCA Lc 32.2 against x' }]),
+    ),
+    'GOVERNED_CONTRAST_FLOOR',
+  );
+  assert.equal(
+    classifyStopExclusion(validationError([{ message: 'Number must be between 0.75 and 1.25' }])),
+    'VERTICAL_ENVELOPE_REJECTS_STOP',
+  );
+  assert.equal(classifyStopExclusion(new TypeError('boom')), null);
+  // A class outside the closed set cannot even be constructed.
+  assert.throws(
+    () => new StopExclusionError('INVENTED_CLASS', 'x'),
+    /is not a declared stop-exclusion class/,
+  );
+
+  // End to end on the real compilers: every exclusion the six R-2 scenarios
+  // produce carries a class from the closed set, and the APCA ones carry the
+  // compiler's own message.
+  const arms = await loadCompilerArms();
+  const baselines = await loadStaticBaselines();
+  const seen = new Set();
+  for (const vertical of ['rottay', 'bithire', 'evnto']) {
+    const verdict = assertStopDiscrimination({
+      armId: 'db-tenant-theme',
+      controlManifest: M1_PALETTE,
+      compile: arms['db-tenant-theme'].compile,
+      vertical,
+      provenance: arms['db-tenant-theme'].provenance,
+      defaultMode: verticalDefaultMode(baselines[vertical], vertical),
+    });
+    assert.equal(verdict.excluded.length, 3, `${vertical}: three stops are inadmissible on the DB arm`);
+    for (const entry of verdict.excluded) {
+      assert.ok(
+        Object.hasOwn(STOP_EXCLUSION_CLASSES, entry.exclusionClass),
+        `${vertical}/${entry.stopId}: exclusion class ${entry.exclusionClass} is not in the closed set`,
+      );
+      assert.ok(entry.reason.length > 0);
+      seen.add(entry.exclusionClass);
+      if (entry.exclusionClass === STOP_EXCLUSION_CLASSES.GOVERNED_CONTRAST_FLOOR) {
+        assert.match(entry.reason, /APCA Lc -?\d+\.\d+ against --ds-button-primary-bg/);
+      }
+    }
+  }
+  assert.deepEqual(
+    [...seen].sort(),
+    ['GOVERNED_CONTRAST_FLOOR', 'IDENTITY_NEEDS_A_BASELINE'],
+    'the two classes this control actually exhibits, named rather than assumed',
+  );
+});
+
+test('R-2 drill 10: the hardening did not change WHAT is excluded, only how it is admitted', async () => {
+  /* Point (3) of the hardening ruling, as an executable fence rather than a
+   * claim in a report.
+   *
+   * The comparison is against a FROZEN fixture of the exclusion records as they
+   * stood BEFORE the hardening -- captured from the six R-2 scenarios while the
+   * catch was still untyped -- and not against the committed artifacts. Two
+   * reasons, and the second is the load-bearing one: the artifacts are re-run
+   * whenever the instrument changes (W-B), so comparing to them would decay
+   * into post-versus-post the moment they are refreshed, and the pre/post claim
+   * would quietly stop being tested. A frozen fixture cannot decay.
+   *
+   * What it proves: every exclusion the six scenarios produce was ALREADY a
+   * known class, so the hardening admits exactly the same set. It adds
+   * `exclusionClass` and it re-throws everything else; it excludes nothing new
+   * and it swallows nothing it used to publish. */
+  const { readFileSync } = await import('node:fs');
+  const PRE = JSON.parse(
+    readFileSync(new URL('./r2-pre-hardening-exclusions.json', import.meta.url), 'utf8'),
+  );
+  const arms = await loadCompilerArms();
+  const baselines = await loadStaticBaselines();
+  let compared = 0;
+  for (const vertical of ['rottay', 'bithire', 'evnto']) {
+    for (const armId of ['static-brand-theme', 'db-tenant-theme']) {
+      const verdict = assertStopDiscrimination({
+        armId,
+        controlManifest: M1_PALETTE,
+        compile: arms[armId].compile,
+        vertical,
+        provenance: arms[armId].provenance,
+        defaultMode: verticalDefaultMode(baselines[vertical], vertical),
+        ...(armId === 'static-brand-theme' ? { baseline: baselines[vertical] } : {}),
+      });
+      assert.deepEqual(
+        verdict.excluded.map((e) => ({ stopId: e.stopId, reason: e.reason })),
+        PRE[vertical][armId],
+        `${vertical}/${armId}: the hardening must not move a single exclusion`,
+      );
+      // And every one of them now carries a class from the closed set.
+      for (const entry of verdict.excluded) {
+        assert.ok(
+          Object.hasOwn(STOP_EXCLUSION_CLASSES, entry.exclusionClass),
+          `${vertical}/${armId}/${entry.stopId}: ${entry.exclusionClass} is not in the closed set`,
+        );
+      }
+      compared += 1;
+    }
+  }
+  assert.equal(compared, 6, 'three verticals x two arms');
 });

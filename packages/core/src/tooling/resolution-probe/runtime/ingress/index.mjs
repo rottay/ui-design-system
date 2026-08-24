@@ -54,6 +54,75 @@ import { VERTICALS } from '../../foundation/scope/index.mjs';
 import { assertDistFresh } from '../../../../../scripts/packaging/dist-freshness-gate/index.mjs';
 
 /**
+ * THE CLOSED SET OF REASONS A STOP MAY BE PUBLISHED AS "EXCLUDED" (R-2 hardening).
+ *
+ * `assertStopDiscrimination` lowers every declared stop and publishes the ones
+ * that could not lower, so a small witness set never looks arbitrary. That
+ * catch used to be UNTYPED: any throw at all became an exclusion with its
+ * message as the reason. A broken test double, a wiring mistake, a renamed
+ * field -- each would have been published as a legitimate reason a stop cannot
+ * lower, and the guard would have reported a shrunken witness set as a
+ * measurement instead of failing. That is the false-green shape this programme
+ * exists to refuse.
+ *
+ * So the reasons are a CLOSED SET, marked at the throw sites rather than
+ * recognised by pattern-matching a message afterwards. Anything not on this
+ * list re-throws.
+ */
+export const STOP_EXCLUSION_CLASSES = Object.freeze({
+  /** The compiler elides a vertical default, so the stop lowers no declared channel (radius/suave, typography/normal). */
+  COMPILER_ELIDES_VERTICAL_DEFAULT: 'COMPILER_ELIDES_VERTICAL_DEFAULT',
+  /** The vertical envelope refuses the stop outright (radius/recto, effect/estandar). */
+  VERTICAL_ENVELOPE_REJECTS_STOP: 'VERTICAL_ENVELOPE_REJECTS_STOP',
+  /** The governed APCA contrast floor refuses the compiled pair (palette.seeds, per vertical). */
+  GOVERNED_CONTRAST_FLOOR: 'GOVERNED_CONTRAST_FLOOR',
+  /** A domain kind, or a value in it, this harness will not lower (motion.dial; a non-hex colour). */
+  DOMAIN_KIND_NOT_LOWERED: 'DOMAIN_KIND_NOT_LOWERED',
+  /** An IDENTITY stop resolves the vertical's own value, so an arm with no baseline cannot lower it (W-A). */
+  IDENTITY_NEEDS_A_BASELINE: 'IDENTITY_NEEDS_A_BASELINE',
+});
+
+/**
+ * A throw that `assertStopDiscrimination` may publish as an exclusion.
+ *
+ * Carrying the class ON THE ERROR is the whole point: the guard then decides by
+ * TYPE, not by recognising prose. A message can be reworded by any future edit
+ * without anyone noticing that a fail-closed became a silent exclusion.
+ */
+export class StopExclusionError extends Error {
+  constructor(exclusionClass, message) {
+    super(message);
+    this.name = 'StopExclusionError';
+    if (!Object.hasOwn(STOP_EXCLUSION_CLASSES, exclusionClass)) {
+      throw new Error(
+        `resolution-probe: "${exclusionClass}" is not a declared stop-exclusion class. The set is ` +
+          `closed: ${Object.keys(STOP_EXCLUSION_CLASSES).join(', ')}.`,
+      );
+    }
+    this.exclusionClass = exclusionClass;
+  }
+}
+
+/**
+ * Classifies a throw that came out of the PRODUCT compiler rather than this
+ * harness. `TenantThemeValidationError` is a real exported type, so this is a
+ * type test and not a message match; the APCA split reads the issue payload the
+ * compiler itself builds, which is the only place that distinction exists.
+ *
+ * @returns {string|null} the exclusion class, or null when the throw is not one
+ *   this guard is allowed to publish.
+ */
+export function classifyStopExclusion(error) {
+  if (error instanceof StopExclusionError) return error.exclusionClass;
+  if (error?.name !== 'TenantThemeValidationError') return null;
+  const issues = Array.isArray(error.issues) ? error.issues : [];
+  const apca = issues.some((issue) => /\bAPCA Lc\b/.test(String(issue?.message ?? '')));
+  return apca
+    ? STOP_EXCLUSION_CLASSES.GOVERNED_CONTRAST_FLOOR
+    : STOP_EXCLUSION_CLASSES.VERTICAL_ENVELOPE_REJECTS_STOP;
+}
+
+/**
  * The two doors, with where each one lands and which compiler owns it.
  *
  * `manifestIngressPath` is the exact key the modern-rescue control manifest
@@ -224,19 +293,40 @@ export function assertArmProvenance(producedBy) {
   return Object.freeze({ ...producedBy });
 }
 
-function assertVariables(variables) {
+/**
+ * THE EMPTINESS QUESTION IS ASKED OVER EVERY SCOPE THE COMPILER WROTE (R-2).
+ *
+ * This guard predates H-3 phase (a): when it was written a lowering WAS its
+ * base map, so "the base map is empty" and "the compiler emitted nothing" were
+ * the same sentence. They stopped being the same sentence when mode blocks
+ * became a first-class half of the lowering, and nobody widened the question.
+ *
+ * Measured cost of the narrow question (R-1): rottay's DB door lowers a palette
+ * seed into `modeDeltas[light]` -- 19 variables, 2 of them declared -- because
+ * rottay is the only first-party vertical whose `defaultMode` is dark, so the
+ * v1 transport routes a top-level seed into its non-default mode. The base
+ * delta is legitimately empty, and this guard read that emptiness as "the door
+ * is inert". It was not; it was the guard looking at one of two scopes.
+ *
+ * So the union is the question, and the base map alone is not. A brazo whose
+ * every scope is empty is still the finding it always was.
+ */
+function assertVariables(variables, modeVariables = {}) {
   const names = Object.keys(variables ?? {});
-  if (names.length === 0) {
+  const modeNames = Object.values(modeVariables ?? {}).flatMap((map) => Object.keys(map ?? {}));
+  if (names.length === 0 && modeNames.length === 0) {
     throw new Error(
-      'resolution-probe: an ingress arm that carries no variable is not a mutation. If the ' +
-        'compiler emitted nothing for this stop, that is the finding — record it, do not run a ' +
-        'phase against an empty map.',
+      'resolution-probe: an ingress arm that carries no variable in ANY scope — not the base ' +
+        'map and not one mode block — is not a mutation. If the compiler emitted nothing for ' +
+        'this stop, that is the finding — record it, do not run a phase against an empty map.',
     );
   }
-  const nonCustom = names.filter((name) => !name.startsWith('--'));
+  const nonCustom = [...names, ...modeNames].filter((name) => !name.startsWith('--'));
   if (nonCustom.length > 0) {
     throw new Error(
-      `resolution-probe: ingress arms carry custom properties only; got ${nonCustom.join(', ')}.`,
+      `resolution-probe: ingress arms carry custom properties only; got ${[
+        ...new Set(nonCustom),
+      ].join(', ')}.`,
     );
   }
   return names.sort();
@@ -309,7 +399,7 @@ export function composeStaticArm({
   modeVariables = {},
   themeModeSelector = null,
 }) {
-  assertVariables(variables);
+  assertVariables(variables, modeVariables);
   const provenance = assertArmProvenance(producedBy);
   const selector = tenantArmSelector(vertical);
 
@@ -364,7 +454,7 @@ export function composeStaticArm({
  * re-serves the identical bytes instead of replaying an inline memo.
  */
 export function composeDbArm({ vertical, variables, producedBy, modeVariables = {}, themeModeSelector = null }) {
-  assertVariables(variables);
+  assertVariables(variables, modeVariables);
   const provenance = assertArmProvenance(producedBy);
   const selector = tenantArmSelector(vertical);
   const composed = composeArmCss({
@@ -787,7 +877,8 @@ function ingressValueForStop({ controlManifest, stop }) {
      * control manifest rather than left as an implied product law.
      */
     if (typeof stop.value !== 'string' || !HEX_COLOR.test(stop.value)) {
-      throw new Error(
+      throw new StopExclusionError(
+        STOP_EXCLUSION_CLASSES.DOMAIN_KIND_NOT_LOWERED,
         `resolution-probe: ${controlId} has a color-set domain, so a tenant writes a COLOUR at ` +
           `the ingress path — but stop "${stop.id}" declares ${JSON.stringify(stop.value)}, which ` +
           'is not a hex colour (#rgb or #rrggbb). A non-hex seed does not fail: the ramp ' +
@@ -797,7 +888,8 @@ function ingressValueForStop({ controlManifest, stop }) {
     }
     return stop.value;
   }
-  throw new Error(
+  throw new StopExclusionError(
+    STOP_EXCLUSION_CLASSES.DOMAIN_KIND_NOT_LOWERED,
     `resolution-probe: ${controlId} declares domain kind "${kind ?? 'none'}", and this harness ` +
       'only knows how to write a closed-enum stop id, a bounded stop value, a profile-id ' +
       'registry id, or a color-set hex colour at an ingress path. Refusing to lower a stop on a ' +
@@ -815,7 +907,8 @@ function resolveIdentityValue({ controlManifest, stop, base, resolvedPath, armId
   const controlId = controlManifest?.controlId ?? 'unknown control';
   const authored = readKeypath(base ?? {}, resolvedPath);
   if (authored === undefined || authored === null || authored === '') {
-    throw new Error(
+    throw new StopExclusionError(
+      STOP_EXCLUSION_CLASSES.IDENTITY_NEEDS_A_BASELINE,
       `resolution-probe: stop "${stop.id}" of ${controlId} is an IDENTITY stop, so its value is ` +
         `whatever the arm's own baseline authors at "${resolvedPath}" — and the ${armId} baseline ` +
         'authors nothing there. An identity that has to be invented is not an identity: it would ' +
@@ -925,6 +1018,7 @@ function toCompilerInput({
   tenantAuthoredPath = null,
   tenantSlug,
   vertical,
+  defaultMode = null,
   schemaVersion,
 }) {
   if (armId === 'db-tenant-theme') {
@@ -942,10 +1036,51 @@ function toCompilerInput({
           'published module. Refusing to hardcode a contract literal in the harness.',
       );
     }
+    const appearance = structuredClone(general);
+    /* R-2 SCOPE-MATCHED PARITY (DT ruling + W-A) — STAMPED ON THE PALETTE NODE
+     * THE SCENARIO ALREADY WROTE, and only there.
+     *
+     * `backgroundMode` is the field `migratePalette` reads to route a top-level
+     * seed (`migrate-v1:396`). Declaring it makes the DB door write the same
+     * mode scope the static door writes, which is what makes a parity run
+     * compare one question instead of two.
+     *
+     * WHY IT IS NOT STAMPED ON EVERY DOCUMENT. The ruling's own justification
+     * says "in bithire/evnto nothing changes"; measured, an unconditional stamp
+     * falsifies that. `backgroundMode` lives INSIDE `palette`, so writing it
+     * into a document that has no palette node MATERIALISES one — and
+     * `migratePalette` then returns a palette patch whose ten seed fields are
+     * all `undefined`, which `collectPatchAuthoredPaths` collects as ten
+     * AUTHORED keypaths including `palette.primaryColor`, a member of
+     * `CONSULTED_PROVENANCE_FIELDS`. The compiler is then told a tenant
+     * selected a seed nobody wrote, the governed seed-derivation ladder fires,
+     * and channels repaint: measured, 24 of the 36 receipted DB-arm compiles
+     * change value that way (density.mode, spacing.rhythm,
+     * surfaces.effect-intensity and experience.profile on all three verticals),
+     * with `--ds-button-primary-bg`, `--ds-button-primary-bg-hover` and
+     * `--ds-color-border-focus` among the new rows.
+     *
+     * So the stamp is scoped to documents that already carry a palette node.
+     * For every control whose door is not a palette keypath the document is
+     * byte-identical to what it was, which is what "nothing changes in
+     * bithire/evnto" actually requires. */
+    if (appearance.palette && typeof appearance.palette === 'object') {
+      if (defaultMode !== 'light' && defaultMode !== 'dark') {
+        throw new Error(
+          'resolution-probe: this db-tenant-theme document writes a palette node, so its mode ' +
+            'scope is decided by `palette.backgroundMode` — and no vertical defaultMode was ' +
+            `handed to lowerStop (got ${JSON.stringify(defaultMode)}). Read it from the ` +
+            'published BrandTheme with verticalDefaultMode(); assuming "light" would put the ' +
+            "seed in a dark vertical's non-default mode and the run would compare two different " +
+            'scopes without saying so.',
+        );
+      }
+      appearance.palette = { ...appearance.palette, backgroundMode: defaultMode };
+    }
     return {
       schemaVersion,
       mode: 'simple',
-      appearance: structuredClone(general),
+      appearance,
       ...dbTenantIdentity(vertical),
     };
   }
@@ -1049,13 +1184,68 @@ function deriveTenantSlug(vertical) {
 }
 
 /**
+ * THE MODE SCOPE THE DB DOCUMENT DECLARES (R-2 scope-matched parity, W-A).
+ *
+ * The two doors do not write the same mode scope on their own. The static door
+ * writes `palette.primaryColor` into the BrandTheme BODY, which is the
+ * vertical's DEFAULT mode. The DB door writes `appearance.general.palette.*`
+ * into a v1 document, and `migratePalette` routes a top-level seed by
+ * `palette.backgroundMode ?? "light"` (`migrate-v1:396`, `:404-418`) — so on a
+ * vertical whose default is LIGHT the seed lands in the body too, and on a
+ * vertical whose default is DARK it lands in `modes.light` instead. Measured:
+ * rottay is the only first-party vertical with a dark default, and its DB seed
+ * landed in a scope the static arm never wrote. Comparing those two arms would
+ * diff two different questions and call the difference a compiler divergence.
+ *
+ * Ruling (DT, 2026-08-24): the probe's DB document declares
+ * `backgroundMode = the vertical's own defaultMode`, uniformly — never a
+ * per-vertical literal, and never a special case for rottay. The dominant
+ * tenant intent a parity run models is "my brand in my product's default
+ * appearance".
+ *
+ * W-A — THE SOURCE OF THAT BOOLEAN IS THE PUBLISHED BrandTheme, and the reason
+ * is REACHABILITY rather than absence. W-A asked for the source to be verified
+ * and the verification corrected W-A's own evidence: it held that
+ * `FIRST_PARTY_THEMES.<v>.appearance.defaultMode` is `undefined`, and measured
+ * it is `'dark'` — the Theme projection DOES carry the field. What it does not
+ * do is leave the package: `FIRST_PARTY_THEMES` is not exported from the
+ * published entrypoint at all, so reading it would take the deep import this
+ * harness refuses for its compilers (a deep path can be tree-shaken out from
+ * under it with no gate noticing). `<v>BrandTheme` IS published, and
+ * `loadStaticBaselines()` already loads exactly those themes from
+ * `dist/index.js` under the freshness law — so the caller reads it there and
+ * hands it here. Both halves are asserted in R-2 drill 3 so neither claim can
+ * rot silently. FAIL-CLOSED: a missing value refuses the run rather than
+ * defaulting to `"light"`, which would silently reinstate the scope mismatch
+ * this exists to remove.
+ *
+ * @param {{theme: object, source: string}} baseline the tuple loadStaticBaselines returns
+ * @returns {'light'|'dark'} the vertical's declared default mode
+ */
+export function verticalDefaultMode(baseline, vertical) {
+  const mode = baseline?.theme?.appearance?.defaultMode;
+  if (mode !== 'light' && mode !== 'dark') {
+    throw new Error(
+      `resolution-probe: the published BrandTheme for "${vertical}" declares no usable ` +
+        `appearance.defaultMode (got ${JSON.stringify(mode)}), so the DB document cannot declare ` +
+        'the mode scope its parity run is measured in. Refusing to assume "light": that ' +
+        'assumption is exactly the scope mismatch the scope-matched ruling removes, and it ' +
+        'fails silently — the arm would still compile, in the wrong mode.',
+    );
+  }
+  return mode;
+}
+
+/**
  * Runs one compiler and keeps only the channels the manifest declares.
  *
  * FAIL-CLOSED ON AN EMPTY LOWERING. A compiler that emits none of the declared
- * channels for a valid stop is a finding — the door does not lower the control
- * — and it must surface as a thrown error rather than as an arm carrying an
- * empty map, which the causal run would later report as "the control moved
- * nothing".
+ * channels for a valid stop — IN ANY SCOPE IT WROTE, base map or mode block —
+ * is a finding: the door does not lower the control. It must surface as a
+ * thrown error rather than as an arm carrying an empty map, which the causal
+ * run would later report as "the control moved nothing". The union is the
+ * question (R-2); the base map alone was, and reading only it reported a
+ * 19-variable lowering as an inert door.
  *
  * `compile` is passed in (from `loadCompilerArms` or a test double), so the
  * extraction mechanics are provable without a build.
@@ -1065,6 +1255,10 @@ function deriveTenantSlug(vertical) {
  *   Required for `static-brand-theme` — the tenant `compileBrandTheme` is
  *   compiling for. Unused (and not required) for `db-tenant-theme`, which
  *   compiles a TenantAppearance document that carries no vertical concept.
+ * @param {'light'|'dark'} [input.defaultMode]
+ *   The vertical's own default mode, from `verticalDefaultMode()`. Required by
+ *   the DB arm whenever the document it builds writes a palette node, and
+ *   ignored otherwise. See `toCompilerInput`.
  */
 export function lowerStop({
   armId,
@@ -1075,6 +1269,7 @@ export function lowerStop({
   baselineSource = null,
   provenance = {},
   vertical = null,
+  defaultMode = null,
 }) {
   /* H-1 (V5): the DB arm resolves its own baseline inside
    * `compileTenantThemeConfig`. Handing it one HERE would apply the vertical
@@ -1098,6 +1293,7 @@ export function lowerStop({
     tenantAuthoredPath: input.tenantAuthoredPath,
     tenantSlug,
     vertical,
+    defaultMode,
     schemaVersion: provenance.schemaVersion,
   });
   /* B-2: the claim, in a shape a record can carry.
@@ -1132,12 +1328,8 @@ export function lowerStop({
   for (const channel of channels) {
     if (Object.hasOwn(emitted, channel)) variables[channel] = String(emitted[channel]);
   }
-  if (Object.keys(variables).length === 0) {
-    throw new Error(
-      `resolution-probe: ${armId} lowered "${stopId}" through ${input.path} and emitted none of ` +
-        `the declared channels (${channels.join(', ')}). That is the finding; it is not an arm.`,
-    );
-  }
+  /* R-2: THE EMPTY-LOWERING GUARD USED TO STAND HERE, and standing here is what
+   * made it wrong. See the union check below the mode extraction. */
   /* M-1 — THE MODE BLOCKS ARE PART OF THE LOWERING, and dropping them was a
    * measurement defect rather than an omission.
    *
@@ -1183,6 +1375,39 @@ export function lowerStop({
     modeVariables[block.mode] = perMode;
   }
 
+  /* R-2 — THE EMPTY-LOWERING GUARD, ASKED OVER THE UNION OF EVERY SCOPE.
+   *
+   * It used to sit 35 lines above, between the base extraction and this mode
+   * extraction, and that position was the whole defect: it was written before
+   * H-3 phase (a), when a lowering WAS its base map, and it was never widened
+   * when mode blocks became the other half of the lowering.
+   *
+   * Measured (R-1): rottay + `primary/crimson` through the DB door gives
+   * `variables = {}` and `modeDeltas = [{ mode: 'light', 19 variables }]`
+   * carrying two of the five declared channels
+   * (`--ds-color-primary: #DC2626`, `--ds-chart-series-1: #B33831`). rottay is
+   * the only first-party vertical with a dark `defaultMode`, so the v1
+   * transport routes a top-level seed into its NON-default mode
+   * (`migrate-v1:396`, `?? "light"`). The base delta is legitimately empty and
+   * the door is not inert -- the guard was reading one of two scopes and
+   * reporting a full lowering as a finding.
+   *
+   * FAIL-CLOSED IS UNCHANGED IN THE DIRECTION THAT MATTERS: an arm with
+   * nothing in the base map AND nothing in any mode block is still refused, and
+   * still with the sentence that says why. The message now names the scope so a
+   * future reader cannot mistake "empty everywhere" for "empty in base". Which
+   * scope carried what is recorded per channel in `producedBy.modeChannels`. */
+  const modeChannelNames = Object.values(modeVariables).flatMap((map) => Object.keys(map));
+  if (Object.keys(variables).length === 0 && modeChannelNames.length === 0) {
+    throw new StopExclusionError(
+      STOP_EXCLUSION_CLASSES.COMPILER_ELIDES_VERTICAL_DEFAULT,
+      `resolution-probe: ${armId} lowered "${stopId}" through ${input.path} and emitted none of ` +
+        `the declared channels (${channels.join(', ')}) in ANY scope — not in the base map and ` +
+        `not in any mode block (${Object.keys(modeVariables).join(', ') || 'no mode block'}). ` +
+        'That is the finding; it is not an arm.',
+    );
+  }
+
   return {
     variables,
     modeVariables,
@@ -1214,6 +1439,17 @@ export function lowerStop({
          * run that declared authorship from one that did not without
          * re-deriving it from `stopId`. */
         tenantAuthoredPaths: declaredAuthoredPaths,
+        /* R-2 (W-A): the mode scope this run was measured IN, named rather than
+         * left to be excavated. The value physically travels inside
+         * `compilerInput.appearance.palette.backgroundMode` (verified: it is
+         * stamped by `toCompilerInput`, so it is NOT in `document`, which is the
+         * manifest-path-relative shape `buildIngressInput` built before the
+         * reshape). `null` on the static arm and on any DB document with no
+         * palette node — both are honest: neither declares a mode scope. */
+        modeScope:
+          armId === 'db-tenant-theme'
+            ? (compilerInput.appearance?.palette?.backgroundMode ?? null)
+            : null,
         /* H-1 (V1): WHICH baseline this stop was composed onto. `document` now
          * carries the whole vertical theme, so diffing two runs by eye is not a
          * practical way to answer that question -- the digest is. Absent (null)
@@ -1414,6 +1650,7 @@ export function assertStopDiscrimination({
   baseline = null,
   provenance = {},
   armBaselineDigest = null,
+  defaultMode = null,
 }) {
   const spec = INGRESS_ARMS[armId];
   if (!spec) throw new Error(`resolution-probe: unknown ingress arm: ${armId}`);
@@ -1474,17 +1711,40 @@ export function assertStopDiscrimination({
         compile,
         vertical,
         provenance,
+        /* R-2: the guard lowers the SAME document the arm lowers, mode scope
+         * included. Without this a palette control would fail closed here
+         * (`toCompilerInput` refuses a palette node with no declared scope),
+         * which is the correct direction but the wrong place to stop — the
+         * guard is meant to measure the arm, not to differ from it. */
+        defaultMode,
         ...(armId === 'static-brand-theme' ? { base, baselineSource: baseline.source } : {}),
       });
       witnesses.push({ stopId: stop.id, variables: lowered.variables });
     } catch (error) {
-      // A stop that cannot lower on this arm is not a violation. Three
-      // legitimate kinds were measured: the compiler eliding a vertical default
-      // (radius/suave, typography/normal), the vertical envelope rejecting a
-      // stop (radius/recto, effect/estandar), and a domain kind this harness
-      // does not lower (motion.dial). They are PUBLISHED with their reason so a
-      // small witness set never looks arbitrary.
-      excluded.push({ stopId: stop.id, reason: error.message });
+      /* A stop that cannot lower on this arm is not a violation -- but only for
+       * a reason on the CLOSED list, and the class is read off the ERROR rather
+       * than recognised in its prose (see STOP_EXCLUSION_CLASSES).
+       *
+       * R-2 HARDENING. This catch used to publish ANY throw as an exclusion with
+       * its message as the reason. A broken test double, a renamed field, a
+       * wiring mistake -- each became a legitimate-looking "this stop cannot
+       * lower", the witness set shrank, and the guard reported the shrunken set
+       * as a measurement. That is the exact false-green this guard exists to
+       * refuse, sitting inside the guard itself. Anything unclassified now
+       * RE-THROWS, and the message says which stop and arm surfaced it so the
+       * real defect is not buried under a discrimination verdict. */
+      const exclusionClass = classifyStopExclusion(error);
+      if (exclusionClass === null) {
+        error.message =
+          `resolution-probe: lowering stop "${stop.id}" on ${armId} for ` +
+          `${controlManifest?.controlId} threw an error this guard is NOT allowed to publish as ` +
+          `an exclusion (${error?.name ?? 'Error'}). The publishable set is closed: ` +
+          `${Object.keys(STOP_EXCLUSION_CLASSES).join(', ')}. Fail-closed: an unrecognised throw ` +
+          `is a defect in the harness or the run, not a reason a stop cannot lower.\n  ` +
+          `${error.message}`;
+        throw error;
+      }
+      excluded.push({ stopId: stop.id, reason: error.message, exclusionClass });
     }
   }
 

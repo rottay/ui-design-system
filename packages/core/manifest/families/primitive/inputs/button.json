@@ -80,7 +80,9 @@
       "data-shadow",
       "data-radius"
     ],
-    "propertyGroups": [],
+    "propertyGroups": [
+      "control-seeded-fill-and-edge"
+    ],
     "invariants": [
       "The busy/loading announcement lives on data-part=\"busy-content\" with aria-live=\"polite\"; a tenant control may restyle it but must not remove the live region. [at packages/core/src/ui/primitives/inputs/Button/engines/modern/index.tsx:432, packages/core/src/ui/primitives/inputs/Button/engines/modern/index.tsx:443]",
       "A disabled or busy Button is advertised with aria-disabled rather than being removed from the accessibility tree. [at packages/core/src/ui/primitives/inputs/Button/engines/modern/index.tsx:563]",
@@ -11832,16 +11834,24 @@
       }
     },
     "evidenceIds": [],
-    "nextAction": "RATIFY_PROPERTY_GROUP_VOCABULARY_THEN_BIND_PROPERTY_GROUPS_COMPUTED_PROPERTIES_AND_CHANNELS"
+    "nextAction": "RATIFY_PROPERTY_GROUP_VOCABULARY_THEN_BIND_PROPERTY_GROUPS_COMPUTED_PROPERTIES_AND_CHANNELS",
+    "propertyGroupsProvenance": "Authored by R-2, and derived rather than named: the six receipted palette.seeds runs measure the primary seed moving exactly two computed properties on exactly one stable part of this family -- background-color and border-top-color on `root` -- so the group is that facet and nothing wider. It was authored because the COMPUTED_VERIFIED ladder requires a cell to name a property group its anatomy owns, and this anatomy owned none; the same act the seven other families with receipted cells already performed. It makes no claim beyond the measured facet: no other group is declared, and anatomy.assessmentState stays SOURCE_BOUND."
   },
   "themeControls": [
     {
       "controlId": "palette.seeds",
       "disposition": "UNKNOWN",
-      "verificationState": "UNKNOWN",
-      "unknownReason": "NOT_ASSESSED",
-      "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "verificationState": "COMPUTED_VERIFIED",
+      "unknownReason": "SIGHTED_ACCEPTANCE_PENDING. The computed evidence is complete and receipted (see evidenceIds): six causal runs, three verticals x each vertical's two admissible stops, both ingress doors on ONE DOM, zero divergent rows, exact restore everywhere, negative controls held and H-2 PASS on both arms. The claim is the BOUNDED one the control writes in calibration.equivalenceClaimScope -- equivalence for the stops admissible on each vertical, under an explicit modeScope equal to that vertical's default mode -- never 'the two doors are equivalent'. THIS FAMILY IS THE PRODUCTIVE WITNESS OF THE CONTROL: the seed reaches the button through --ds-button-primary-bg in modern/skin/button.css, and the button fixture is in the measured roster of every one of the six runs. disposition stays UNKNOWN because SIGHTED_ACCEPTED is not claimable from a run nobody looked at; whether the resulting button reads as premium at each seed is sighted acceptance, not a measurement this instrument can take.",
+      "evidenceIds": [
+        "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/palette-seeds/rottay-warm-sand.json.receipt.json",
+        "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/palette-seeds/bithire-crimson.json.receipt.json",
+        "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/palette-seeds/evnto-crimson.json.receipt.json",
+        "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/palette-seeds/rottay-pale-mint.json.receipt.json",
+        "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/palette-seeds/bithire-indigo.json.receipt.json",
+        "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/palette-seeds/evnto-indigo.json.receipt.json"
+      ],
+      "nextAction": "OBTAIN_SIGHTED_ACCEPTANCE. One measured residue is declared rather than left pending, and it is specific to THIS family: --ds-button-primary-bg is a reliable witness of the seed only on bithire, which authors the literal #3A6FB0. rottay and evnto author the alias var(--ds-color-primary), whose TEXT is constant across stops, so on those two verticals the channel never appears in a delta even though what it resolves to does move -- the button still repaints, and the painted equivalence in all six runs is what proves it. The seed's arrival at this family is therefore measured through --ds-color-primary plus the painted diff, not through the family channel alone. See the control's measuredResult.r2BlindWitnesses.",
       "targetBinding": {
         "uncoveredByDesign": {
           "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
@@ -13650,6 +13660,29 @@
             "state": "LIVE"
           }
         }
+      ],
+      "mechanism": "THEME_CONTROL",
+      "stableParts": [
+        "root"
+      ],
+      "propertyGroups": [
+        "control-seeded-fill-and-edge"
+      ],
+      "computedProperties": [
+        "background-color",
+        "border-top-color"
+      ],
+      "negativeControls": [
+        "font metrics remain fixed",
+        "border width and style remain fixed",
+        "motion remains fixed"
+      ],
+      "sourceBindings": [
+        "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+        "packages/core/src/ui/primitives/inputs/Button",
+        "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
+        "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
+        "packages/core/src/infrastructure/compilers/composition/tenant-theme/index.ts"
       ]
     },
     {

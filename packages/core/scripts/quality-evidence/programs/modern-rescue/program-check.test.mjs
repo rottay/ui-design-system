@@ -65,6 +65,15 @@ const CLOSURE_MEMBERS = [
   "packages/core/dist/server.js",
   "packages/core/dist/index.js",
   "packages/core/dist/infrastructure/compilers/kernel/runtime/brand-theme/index.js",
+  // R-2: the committed style mirrors. The palette.seeds receipts are the first
+  // to bind a FAMILY manifest (primitive/inputs/button), and that family's
+  // anatomy bindings pull the button skins, which pull these three. Measured
+  // rather than guessed: diffing the new receipts' sourceFiles against this
+  // closure names exactly styles/{index,rottay,bithire}.css and nothing else,
+  // and without them receipts.mjs hashes each as the literal 'MISSING' -- the
+  // same copy-boundary artefact the comment above describes, wearing the
+  // "source digest is stale" message.
+  "packages/core/styles",
   "packages/showroom/src",
   "packages/showroom/e2e/whitelabel/density-authority-matrix.spec.ts",
 ];
