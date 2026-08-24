@@ -1809,6 +1809,340 @@ export function serialize(output) {
 
 export const OUT_PATH = OUT;
 
+/* ==================================================== talking --check === */
+/*
+ * WHY THIS EXISTS. `--check` used to say only "the committed inventory is not
+ * what the tree produces", and twice (T-2, T-4) somebody had to write a
+ * throwaway leaf-differ to find out WHAT moved. In T-4 the answer was ONE leaf
+ * out of 215942 -- a digest of a source file that contributes no rows at all --
+ * and finding that took a packet.
+ *
+ * IT CHANGES NOTHING ABOUT THE VERDICT. What is hashed, what is compared and
+ * the exit codes are untouched: the comparison is still the byte comparison of
+ * the serialized artifact, and this only explains a failure that already
+ * happened. A diagnostic that could change a verdict would be a second
+ * authority on freshness.
+ *
+ * IT IS CAPPED, and the cap is drilled. A report that can print 215942 lines is
+ * a report nobody reads, and a check whose failure scrolls the terminal is the
+ * same silence it replaces.
+ */
+
+/** Hard ceiling on the diagnostic. A truncated report says how much it dropped. */
+export const REPORT_MAX_LINES = 40;
+
+/** How many identities to name per collection before switching to a count. */
+const REPORT_MAX_IDENTITIES = 4;
+
+/**
+ * What each `inputsDigest` entry covers, so the reader knows where to look
+ * WITHOUT opening this file. Static prose about a static surface: computing it
+ * would mean re-deriving the surface just to describe it.
+ */
+const INPUTS_DIGEST_COVERAGE = Object.freeze({
+  cssEdges: "the extracted CSS edge inventory (one JSON file)",
+  cascadeRoots: "every manifest/cascade/roots/*.json",
+  rootCatalog: "the cascade root catalog (one JSON file)",
+  srcTsx:
+    "sha256 of every scanned .ts/.tsx under packages/core/src " +
+    "(/tests/, /fixtures/, /__mocks__/, /examples/, /generated/, .test., .spec. and .stories. excluded)",
+  srcCompilers: "the TypeScript compiler sources the ts-compilers plane reads",
+  artifacts: "the compiled per-tenant CSS artifacts",
+});
+
+/**
+ * Collections compared by IDENTITY rather than by position.
+ *
+ * `scannedFileList` is deliberately NOT one of them: it is the scan surface, not
+ * a census row, and it is the only mechanical hint available for `srcTsx`. It is
+ * reported there instead of twice.
+ */
+const KEYED_COLLECTIONS = new Set(
+  [...ROW_ARRAYS, "byChannel"].filter((key) => key !== "scannedFileList"),
+);
+
+/**
+ * Leaves at which the reader should stop reading and escalate: a moved one is a
+ * census change, not a freshness one. Named so they sort to the top of the
+ * report instead of being the fortieth line.
+ */
+const ESCALATION_LEAVES = Object.freeze([
+  "stats.unknownProvenance",
+  "stats.openBlocking",
+  "stats.ownershipConflicts",
+  "openBacklogRollup.lotBOpen",
+  "openBacklogRollup.blocking",
+]);
+
+/** Fields that make a row recognisable to a person, in the order a person reads them. */
+const READABLE_IDENTITY_FIELDS = Object.freeze([
+  "plane",
+  "file",
+  "line",
+  "symbol",
+  "ordinal",
+  "channel",
+  "rootId",
+  "to",
+]);
+
+/** A row's identity: readable when the row has readable fields, hashed when it does not. */
+function identityOf(row) {
+  if (typeof row === "string") return row;
+  if (row === null || typeof row !== "object") return JSON.stringify(row);
+  const parts = READABLE_IDENTITY_FIELDS.filter((field) => row[field] !== undefined).map(
+    (field) => `${field}=${row[field]}`,
+  );
+  if (parts.length === 0) {
+    return JSON.stringify(row).slice(0, 120);
+  }
+  // A channel emission is only unique WITH its site, and the site is a hash.
+  if (row.channel !== undefined && row.file === undefined && row.producerSiteId !== undefined) {
+    parts.push(`site=${String(row.producerSiteId).slice(0, 12)}`);
+  }
+  return parts.join(" ");
+}
+
+/** Every leaf of a JSON document, keyed by its path. Arrays contribute their length. */
+function leavesOf(value, path = "", out = new Map()) {
+  if (value === null || typeof value !== "object") {
+    out.set(path, value);
+    return out;
+  }
+  if (Array.isArray(value)) {
+    out.set(`${path}.length`, value.length);
+    value.forEach((entry, index) => leavesOf(entry, `${path}[${index}]`, out));
+    return out;
+  }
+  for (const [key, child] of Object.entries(value)) {
+    leavesOf(child, path ? `${path}.${key}` : key, out);
+  }
+  return out;
+}
+
+/** Identity -> row, for a collection that is either an array of rows or a keyed map. */
+function indexCollection(collection) {
+  const index = new Map();
+  if (Array.isArray(collection)) {
+    for (const row of collection) {
+      const id = identityOf(row);
+      index.set(id, row);
+    }
+    return index;
+  }
+  if (collection && typeof collection === "object") {
+    for (const [key, row] of Object.entries(collection)) index.set(key, row);
+  }
+  return index;
+}
+
+function sizeOf(collection) {
+  if (Array.isArray(collection)) return collection.length;
+  if (collection && typeof collection === "object") return Object.keys(collection).length;
+  return 0;
+}
+
+/**
+ * The structured divergence between the committed inventory and this tree.
+ *
+ * PURE: it reads nothing and writes nothing. Both documents are handed in
+ * already parsed, so the same function serves the CLI and its drills.
+ *
+ * @param {object} committed the parsed inventory on disk
+ * @param {object} fresh     the parsed inventory this tree produces
+ */
+export function diffInventory(committed, fresh) {
+  const before = leavesOf(committed);
+  const after = leavesOf(fresh);
+  const movedLeaves = [];
+  const addedLeaves = [];
+  const removedLeaves = [];
+  for (const [path, value] of before) {
+    if (!after.has(path)) {
+      removedLeaves.push(path);
+      continue;
+    }
+    if (JSON.stringify(after.get(path)) !== JSON.stringify(value)) {
+      movedLeaves.push({ path, before: value, after: after.get(path) });
+    }
+  }
+  for (const path of after.keys()) if (!before.has(path)) addedLeaves.push(path);
+
+  /* The one mechanical cause available without re-deriving anything: which
+   * files entered or left the scan surface. When the set is unchanged the move
+   * is a CONTENT change, and the report says so rather than implying the
+   * inventory can name the file -- it stores no per-file hash, so it cannot. */
+  const scannedBefore = committed.tsxInlineStamp?.scannedFileList ?? [];
+  const scannedAfter = fresh.tsxInlineStamp?.scannedFileList ?? [];
+  const scannedBeforeSet = new Set(scannedBefore);
+  const scannedAfterSet = new Set(scannedAfter);
+  const scannedSetDelta = {
+    size: scannedAfter.length,
+    added: scannedAfter.filter((file) => !scannedBeforeSet.has(file)),
+    removed: scannedBefore.filter((file) => !scannedAfterSet.has(file)),
+  };
+
+  const hintsFor = (entry) => {
+    if (entry !== "srcTsx") return [];
+    const { added: enteredFiles, removed: leftFiles, size } = scannedSetDelta;
+    if (enteredFiles.length === 0 && leftFiles.length === 0) {
+      return [
+        `scanned set unchanged (${size} files), so this is a CONTENT change inside the surface`,
+        "the inventory stores no per-file hash: diff the scanned surface against the commit that last wrote it",
+      ];
+    }
+    return [
+      `scanned set moved: +${enteredFiles.length} -${leftFiles.length} (now ${size} files)`,
+      ...cappedIdentities("+", enteredFiles, ""),
+      ...cappedIdentities("-", leftFiles, ""),
+    ];
+  };
+
+  const inputsDigest = [];
+  for (const entry of Object.keys({ ...committed.inputsDigest, ...fresh.inputsDigest })) {
+    const b = committed.inputsDigest?.[entry];
+    const a = fresh.inputsDigest?.[entry];
+    if (JSON.stringify(b) === JSON.stringify(a)) continue;
+    inputsDigest.push({
+      entry,
+      before: b,
+      after: a,
+      covers: INPUTS_DIGEST_COVERAGE[entry] ?? null,
+      hints: hintsFor(entry),
+    });
+  }
+
+  const rows = [];
+  for (const key of KEYED_COLLECTIONS) {
+    const b = committed[key];
+    const a = fresh[key];
+    if (b === undefined && a === undefined) continue;
+    if (JSON.stringify(b) === JSON.stringify(a)) continue;
+    const bIndex = indexCollection(b);
+    const aIndex = indexCollection(a);
+    const added = [...aIndex.keys()].filter((id) => !bIndex.has(id));
+    const removed = [...bIndex.keys()].filter((id) => !aIndex.has(id));
+    let changed = 0;
+    for (const [id, row] of aIndex) {
+      if (!bIndex.has(id)) continue;
+      if (JSON.stringify(bIndex.get(id)) !== JSON.stringify(row)) changed += 1;
+    }
+    rows.push({
+      collection: key,
+      beforeSize: sizeOf(b),
+      afterSize: sizeOf(a),
+      added,
+      removed,
+      changed,
+    });
+  }
+
+  // Everything the two classes above do not already explain.
+  const explained = (path) =>
+    path.startsWith("inputsDigest.") ||
+    path.startsWith("tsxInlineStamp.scannedFileList") ||
+    [...KEYED_COLLECTIONS].some((key) => path === key || path.startsWith(`${key}.`) || path.startsWith(`${key}[`));
+  const other = movedLeaves.filter((leaf) => !explained(leaf.path));
+  other.sort((left, right) => {
+    const rank = (path) => {
+      const index = ESCALATION_LEAVES.indexOf(path);
+      return index === -1 ? ESCALATION_LEAVES.length : index;
+    };
+    return rank(left.path) - rank(right.path) || (left.path < right.path ? -1 : 1);
+  });
+
+  return {
+    totals: {
+      leaves: after.size,
+      moved: movedLeaves.length,
+      added: addedLeaves.length,
+      removed: removedLeaves.length,
+    },
+    identical: movedLeaves.length === 0 && addedLeaves.length === 0 && removedLeaves.length === 0,
+    escalations: other.filter((leaf) => ESCALATION_LEAVES.includes(leaf.path)).map((leaf) => leaf.path),
+    inputsDigest,
+    rows,
+    other,
+  };
+}
+
+/** Short form of a digest, so two 64-hex strings fit on one line. */
+const shortDigest = (value) => (typeof value === "string" && value.length > 16 ? `${value.slice(0, 12)}...` : String(value));
+
+/** `added`/`removed` identities, capped, with the remainder counted rather than dropped in silence. */
+function cappedIdentities(prefix, identities, indent) {
+  const lines = [];
+  for (const id of identities.slice(0, REPORT_MAX_IDENTITIES)) {
+    lines.push(`${indent}${prefix} ${id}`);
+  }
+  const rest = identities.length - REPORT_MAX_IDENTITIES;
+  if (rest > 0) lines.push(`${indent}${prefix} ... and ${rest} more`);
+  return lines;
+}
+
+/**
+ * The divergence, as lines a person reads top to bottom, HARD CAPPED.
+ *
+ * @param {ReturnType<typeof diffInventory>} diff
+ * @param {{maxLines?: number, scannedSetDelta?: {added: string[], removed: string[], size: number}}} [options]
+ * @returns {string[]} at most `maxLines` lines
+ */
+export function formatDivergence(diff, { maxLines = REPORT_MAX_LINES } = {}) {
+  const lines = [];
+  const { leaves, moved, added, removed } = diff.totals;
+
+  if (diff.identical) {
+    lines.push(
+      `  divergence: the parsed documents are IDENTICAL (${leaves} leaves), so the bytes differ in`,
+      "              SERIALIZATION only -- formatting or key order, not content.",
+    );
+    return lines.slice(0, maxLines);
+  }
+
+  lines.push(`  divergence: ${moved} leaf(es) moved, ${added} added, ${removed} removed, of ${leaves}`);
+
+  if (diff.escalations.length > 0) {
+    lines.push(`  ESCALATE: ${diff.escalations.join(", ")} moved -- this is a census change, not freshness`);
+  }
+
+  if (diff.inputsDigest.length > 0) {
+    lines.push(`  [inputsDigest] ${diff.inputsDigest.length} entry(ies) moved`);
+    for (const entry of diff.inputsDigest) {
+      lines.push(`    ${entry.entry}: ${shortDigest(entry.before)} -> ${shortDigest(entry.after)}`);
+      if (entry.covers) lines.push(`      covers ${entry.covers}`);
+      for (const hint of entry.hints ?? []) lines.push(`      ${hint}`);
+    }
+  }
+
+  if (diff.rows.length > 0) {
+    lines.push(`  [rows] ${diff.rows.length} collection(s) moved`);
+    for (const row of diff.rows) {
+      lines.push(
+        `    ${row.collection}: ${row.beforeSize} -> ${row.afterSize}` +
+          ` (+${row.added.length} -${row.removed.length} ~${row.changed})`,
+      );
+      lines.push(...cappedIdentities("+", row.added, "      "));
+      lines.push(...cappedIdentities("-", row.removed, "      "));
+    }
+  } else if (diff.inputsDigest.length > 0) {
+    lines.push("  [rows] no collection moved -- no producer, emission or classification changed");
+  }
+
+  if (diff.other.length > 0) {
+    lines.push(`  [other] ${diff.other.length} leaf(es) moved outside inputsDigest and the collections`);
+    for (const leaf of diff.other.slice(0, REPORT_MAX_IDENTITIES)) {
+      lines.push(`    ${leaf.path}: ${shortDigest(leaf.before)} -> ${shortDigest(leaf.after)}`);
+    }
+    const rest = diff.other.length - REPORT_MAX_IDENTITIES;
+    if (rest > 0) lines.push(`    ... and ${rest} more`);
+  }
+
+  if (lines.length <= maxLines) return lines;
+  const kept = lines.slice(0, maxLines - 1);
+  kept.push(`  ... ${lines.length - kept.length} more report line(s) not shown (cap ${maxLines})`);
+  return kept;
+}
+
 function usage(stream) {
   stream.write(
     "usage: node cascade-producers.mjs [--check|--write]\n" +
@@ -1838,6 +2172,17 @@ function main(argv) {
         "cascade-producers --check FAILED: the committed inventory is not what the tree produces.\n" +
           "  run: node cascade-producers.mjs --write",
       );
+      /* The verdict above is already decided by the byte comparison. Everything
+       * below only EXPLAINS it, so a report that cannot be produced must not
+       * change the exit code -- a diagnostic that can turn a failure into a
+       * crash is worse than the silence it replaces. */
+      try {
+        for (const line of formatDivergence(diffInventory(JSON.parse(onDisk), JSON.parse(text)))) {
+          console.error(line);
+        }
+      } catch (error) {
+        console.error(`  (no divergence report: the committed inventory did not parse -- ${error.message})`);
+      }
       process.exit(1);
     }
     console.log(`cascade-producers --check OK -- ${OUT} matches the tree`);

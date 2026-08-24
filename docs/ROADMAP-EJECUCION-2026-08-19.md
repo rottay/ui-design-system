@@ -2887,6 +2887,47 @@ owner:** el `--check` parlante — que nombre la hoja movida y su clase
 prototipó en su leaf-diff; habría convertido este triage en un minuto de
 lectura.
 
+##### T-5 — el `--check` parlante: cascade-producers nombra la hoja movida (2026-08-24)
+
+Autorización del owner ×2: "Hacé el packet de diagnóstico: que --check
+nombre la hoja movida" + **ruling §7.1** ("No guardes hashes por archivo —
+cerrá el packet así"). Writer: Opus. Postaudit Fable: **ACCEPT**, memo
+`/private/tmp/talking-check-fable-postaudit.md` (SHA en su `.ready`), con
+la cadena verificada por el auditor (un commit entre el fence y HEAD).
+
+**Lo que hace (aditivo puro, 525 líneas, 0 borrados):** el veredicto sigue
+siendo la comparación de bytes (contrato de salida intacto: limpio 0,
+divergencia 1, invocación mala 2 — verificado por Fable con escenarios
+propios); el reporte agregado sólo lo explica. Forma: totales +
+`[inputsDigest]` (entrada movida + qué cubre + pista de causa mecánica
+cuando la hay: set escaneado cambiado → nombra archivos capados; set
+intacto → declara "cambio de contenido, el inventario no guarda hash por
+archivo" + el paso que sí lo nombra) + `[rows]` (colecciones con
+`antes -> después (+altas -bajas ~cambiadas)` e identidades legibles
+capadas con el resto CONTADO) + `[other]` con **ESCALATE primero** para
+los campos STOP del programa (unknownProvenance, openBlocking,
+ownershipConflicts, lotBOpen, blocking — si se mueven, el lector deja de
+leer y escala) + el cuarto caso ("documentos idénticos: los bytes difieren
+sólo en serialización"). El caso T-4 entero se responde ahora en 7 líneas,
+siendo la más valiosa `[rows] no collection moved` — lo que separa
+"frescura" de "cambio de censo" y costó el leaf-diff manual entero.
+
+**Ruling §7.1 (owner):** NO se agregaron hashes por archivo al artefacto —
+la atribución declara hasta donde llega la evidencia en vez de simularla
+(artefacto byte-idéntico antes/después de la suite, sha verificado por
+Fable). 8 drills TC-1..TC-8 + 3 mutantes detectados por sus drills;
+217/217 (N13/T-21 intactos); pureza N13 preservada (el reporte no escribe
+nada; bytes + mtime idénticos durante la corrida).
+
+**Observaciones Fable registradas como deuda del próximo packet cascade:**
+(P2) colisiones de identidad en 5 colecciones cerradas (los conteos +/-/~
+pueden sub-contar por colapso de duplicados; los tamaños antes→después
+siguen verdaderos; dos hilos separados: un desambiguador barato en
+`identityOf`, y por qué `closedProducer` porta filas duplicadas
+deep-equal); (P3) la línea de totales es posicional y puede sobredeclarar
+(agregar "positional" o totales por identidad) + un JSDoc muerto
+(`scannedSetDelta`) — cosméticos para el próximo toque.
+
 **F0 — CERRADO (2026-08-19).** Criterio de cierre cumplido:
 `ci-gates OK — 78 blocking gate(s) passed` (2 excluded visibles con razón y
 dueño: channel-liveness y lane-control-drills, ambos esperan a F2); `find src -type d -empty` vacío salvo el inbox

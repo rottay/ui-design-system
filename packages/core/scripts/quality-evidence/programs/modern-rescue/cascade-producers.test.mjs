@@ -62,6 +62,9 @@ import {
   producerSiteIdOf,
   scanTsxSource,
   serialize,
+  diffInventory,
+  formatDivergence,
+  REPORT_MAX_LINES,
 } from './cascade-producers.mjs';
 /* T-11 anchors the published receipt digests against a recomputation. This is
  * the programme's own hash helper, the same createHash('sha256').digest('hex')
@@ -4548,4 +4551,181 @@ test('ER-5 NEGATIVE: forging the enumeration receipt moves the bound digest', ()
     assert.equal(identity(rows), identity(mutated), `${name}: identity alone cannot see the receipt`);
     assert.notEqual(bound(rows), bound(mutated), `${name} did NOT move the receipt-bound digest`);
   }
+});
+
+/* ============================================ the talking --check (TC) ===
+ *
+ * `--check` used to say only "the committed inventory is not what the tree
+ * produces". T-2 and T-4 each needed a throwaway leaf-differ to find out WHAT
+ * moved; in T-4 it was ONE leaf of 215942, a source digest with no row behind
+ * it, and finding that cost a packet.
+ *
+ * These drills fence the report, never the verdict: the byte comparison and the
+ * exit codes are untouched, so what is under test is whether a failure EXPLAINS
+ * itself, and whether it can be trusted not to flood the terminal doing it.
+ * ===================================================================== */
+
+/** The real inventory, used as the "fresh" side; the "committed" side is mutated per drill. */
+const tcBaseline = () => JSON.parse(readFileSync(OUT_PATH, 'utf8'));
+const tcDivergence = (mutate, options) => {
+  const fresh = tcBaseline();
+  const committed = JSON.parse(JSON.stringify(fresh));
+  mutate(committed);
+  const diff = diffInventory(committed, fresh);
+  return { diff, lines: formatDivergence(diff, options), text: formatDivergence(diff, options).join('\n') };
+};
+
+test('TC-1 an inputsDigest divergence is named by ENTRY, with what it covers', () => {
+  // The T-4 case exactly: one entry, and not a single row behind it.
+  const { diff, text } = tcDivergence((c) => {
+    c.inputsDigest.srcTsx = '0'.repeat(64);
+  });
+  assert.equal(diff.totals.moved, 1);
+  assert.equal(diff.rows.length, 0, 'no collection moved');
+  assert.deepEqual(diff.inputsDigest.map((entry) => entry.entry), ['srcTsx']);
+  assert.match(text, /\[inputsDigest\] 1 entry\(ies\) moved/);
+  assert.match(text, /srcTsx: 000000000000\.\.\. -> /);
+  assert.match(text, /covers sha256 of every scanned \.ts\/\.tsx/);
+  // And it says the rows are clean, which is the half that tells a reader the
+  // divergence is freshness rather than census.
+  assert.match(text, /\[rows\] no collection moved/);
+});
+
+test('TC-2 the srcTsx hint names the scanned-set delta, and says so when there is none', () => {
+  const moved = tcDivergence((c) => {
+    c.inputsDigest.srcTsx = '0'.repeat(64);
+    c.tsxInlineStamp.scannedFileList = c.tsxInlineStamp.scannedFileList.slice(0, -2);
+  });
+  assert.match(moved.text, /scanned set moved: \+2 -0/);
+  for (const entered of tcBaseline().tsxInlineStamp.scannedFileList.slice(-2)) {
+    assert.ok(moved.text.includes(entered), `the report must name ${entered}`);
+  }
+
+  // The honest half: when the set is identical the inventory CANNOT name the
+  // file, and the report says that instead of implying it could.
+  const contentOnly = tcDivergence((c) => {
+    c.inputsDigest.srcTsx = '0'.repeat(64);
+  });
+  assert.match(contentOnly.text, /scanned set unchanged \(\d+ files\), so this is a CONTENT change/);
+  assert.match(contentOnly.text, /stores no per-file hash/);
+});
+
+test('TC-3 a row divergence is named by collection, with counts and CAPPED identities', () => {
+  const { diff, text } = tcDivergence((c) => {
+    c.producerSites = c.producerSites.slice(0, -2);
+    c.channelEmissions = c.channelEmissions.slice(0, -9);
+  });
+  const sites = diff.rows.find((row) => row.collection === 'producerSites');
+  assert.ok(sites);
+  assert.equal(sites.added.length, 2);
+  assert.equal(sites.removed.length, 0);
+  assert.match(text, /producerSites: \d+ -> \d+ \(\+2 -0 ~0\)/);
+  // Identities are readable coordinates, not opaque hashes.
+  assert.match(text, /\+ plane=\S+ file=\S+ line=\d+/);
+  // Nine additions, four named, and the remainder COUNTED rather than dropped.
+  assert.match(text, /channelEmissions: \d+ -> \d+ \(\+9 -0 ~0\)/);
+  assert.match(text, /\+ \.\.\. and 5 more/);
+});
+
+test('TC-4 a census leaf ESCALATES to the top of the report', () => {
+  const { diff, lines } = tcDivergence((c) => {
+    c.stats.unknownProvenance = 7;
+    c.openBacklogRollup.lotBOpen = false;
+  });
+  assert.deepEqual(diff.escalations, ['stats.unknownProvenance', 'openBacklogRollup.lotBOpen']);
+  assert.match(lines[1], /^  ESCALATE: /, 'the escalation must be the first thing after the totals');
+  assert.match(lines[1], /census change, not freshness/);
+});
+
+test('TC-5 the report is CAPPED, and says how much it dropped', () => {
+  // Everything moves at once: without a cap this prints six figures of lines.
+  const { lines } = tcDivergence((c) => {
+    for (const key of Object.keys(c.inputsDigest)) c.inputsDigest[key] = '0'.repeat(64);
+    for (const key of Object.keys(c.digests)) c.digests[key] = '0'.repeat(64);
+    for (const key of Object.keys(c.stats)) if (typeof c.stats[key] === 'number') c.stats[key] = -1;
+    c.producerSites = [];
+    c.channelEmissions = [];
+    c.byChannel = {};
+    c.closedZeroGoverned = [];
+    c.publicBoundary = [];
+    c.privateRelay = [];
+    c.closedProducer = [];
+    c.closedNonObject = [];
+    c.precedenceMetadata = [];
+  });
+  assert.ok(lines.length <= REPORT_MAX_LINES, `report ran to ${lines.length} lines`);
+  assert.match(lines.at(-1), /more report line\(s\) not shown \(cap 40\)/);
+
+  // The cap is a parameter and it is obeyed, not approximated.
+  const tiny = tcDivergence((c) => { c.producerSites = []; }, { maxLines: 5 });
+  assert.equal(tiny.lines.length, 5);
+  assert.match(tiny.lines.at(-1), /not shown \(cap 5\)/);
+});
+
+test('TC-6 bytes that differ while the DOCUMENTS agree is reported as serialization', () => {
+  const { diff, text } = tcDivergence(() => {});
+  assert.equal(diff.identical, true);
+  assert.match(text, /SERIALIZATION only/);
+  assert.equal(diff.rows.length, 0);
+  assert.equal(diff.inputsDigest.length, 0);
+});
+
+test('TC-7 end to end: clean tree is silent, a divergence explains itself, and NOTHING is written', () => {
+  // Clean tree: exit 0, and no report on stderr.
+  const clean = execFileSync(process.execPath, [SCRIPT, '--check'], { encoding: 'utf8', stdio: 'pipe' });
+  assert.match(clean, /--check OK/);
+
+  const original = readFileSync(OUT_PATH, 'utf8');
+  const tampered = JSON.parse(original);
+  tampered.inputsDigest.srcTsx = '0'.repeat(64);
+  let stderr = '';
+  let status = 0;
+  let duringRun = null;
+  try {
+    writeFileSync(OUT_PATH, `${JSON.stringify(tampered, null, 2)}\n`);
+    const planted = { bytes: readFileSync(OUT_PATH), mtime: statSync(OUT_PATH).mtimeMs };
+    try {
+      execFileSync(process.execPath, [SCRIPT, '--check'], { stdio: 'pipe' });
+    } catch (error) {
+      status = error.status;
+      stderr = String(error.stderr);
+    }
+    // The report is DIAGNOSTIC: reading the tree must not touch it.
+    duringRun = {
+      unchangedBytes: readFileSync(OUT_PATH).equals(planted.bytes),
+      unchangedMtime: statSync(OUT_PATH).mtimeMs === planted.mtime,
+    };
+  } finally {
+    writeFileSync(OUT_PATH, original);
+  }
+  assert.equal(readFileSync(OUT_PATH, 'utf8'), original, 'the tree is left as we found it');
+
+  assert.equal(status, 1, 'the exit contract is unchanged');
+  assert.match(stderr, /the committed inventory is not what the tree produces/);
+  assert.match(stderr, /\[inputsDigest\] 1 entry\(ies\) moved/);
+  assert.match(stderr, /srcTsx: /);
+  assert.match(stderr, /\[rows\] no collection moved/);
+  assert.ok(stderr.split('\n').length <= REPORT_MAX_LINES + 4, 'the CLI report stays capped too');
+  assert.deepEqual(duringRun, { unchangedBytes: true, unchangedMtime: true }, '--check wrote to the artifact');
+});
+
+test('TC-8 an unparseable committed inventory still FAILS, and says why, instead of crashing', () => {
+  const original = readFileSync(OUT_PATH, 'utf8');
+  let stderr = '';
+  let status = 0;
+  try {
+    writeFileSync(OUT_PATH, '{ this is not json\n');
+    try {
+      execFileSync(process.execPath, [SCRIPT, '--check'], { stdio: 'pipe' });
+    } catch (error) {
+      status = error.status;
+      stderr = String(error.stderr);
+    }
+  } finally {
+    writeFileSync(OUT_PATH, original);
+  }
+  assert.equal(readFileSync(OUT_PATH, 'utf8'), original);
+  assert.equal(status, 1, 'a report that cannot be produced must not change the verdict');
+  assert.match(stderr, /the committed inventory is not what the tree produces/);
+  assert.match(stderr, /no divergence report/);
 });
