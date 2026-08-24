@@ -3547,6 +3547,21 @@ evnto 467→**468** (el segundo desfase escondido detrás del primero; bithire
    tener una puerta de contraste como la de `compileTenantThemeConfig`?
    (la asimetría de validación entre puertas, sin medir alcance).
 
+**R-1 — los 2 rojos preexistentes ARREGLADOS (Sonnet, 2026-08-24; directiva
+del owner ejecutada).** Un solo archivo
+(`tenant-theme/tests/provenance-acceptance.test.ts`), exactamente 3 líneas +
+comentario: (A) el caso B aserta ahora el valor emitido
+(`ABOVE_FLOOR_PAIR.itemColorActive`, identificador que el archivo ya tenía y
+que usan las aserciones de bithire/evnto) en vez de `undefined`, con el
+comentario reescrito a la verdad nueva (K1 `33efc95c0` recableó el leaf al
+alias); (B) los dos pines de conteo: rottay 1191→**1192**, evnto 467→**468**
+(el desfase de evnto estaba escondido detrás del throw de rottay).
+**Verificación independiente de Sonnet (no tomada del memo):** conteos
+recompilados desde `dist/` fresco = 1192/1231/468 exactos; atribución K1 y
+F4A-6/K3 confirmadas por `git show`. **Verificación DT propia:** 2 rojos
+antes, **22/22 verde** después, write-set de 1 archivo. Cero lógica de
+producto tocada. Commit propio tras postaudit focal.
+
 **F0 — CERRADO (2026-08-19).** Criterio de cierre cumplido:
 `ci-gates OK — 78 blocking gate(s) passed` (2 excluded visibles con razón y
 dueño: channel-liveness y lane-control-drills, ambos esperan a F2); `find src -type d -empty` vacío salvo el inbox

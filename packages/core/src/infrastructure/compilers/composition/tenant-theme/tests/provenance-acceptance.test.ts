@@ -285,11 +285,15 @@ describe("site B — an explicit sidebar leaf outranks the tenant's own tone", (
         "var(--ds-color-neutral-900)"
       );
     }
-    // rottay already rests at this ink, so its delta legitimately inherits the
-    // channel. Asserted rather than skipped: an absent delta row and a wrong
-    // delta row are not the same observation.
+    // rottay no longer rests at this ink literally: K1 (33efc95c0) rewired its
+    // baseline leaf to the alias `var(--ds-color-primary)`
+    // (brand-themes/rottay/index.ts:4315), so a tenant authoring the literal
+    // `#FFFFFF` diverges from that alias and the delta emits the row exactly
+    // like bithire and evnto.
     const rottay = compileFor("rottay", document);
-    expect(rottay.variables["--ds-sidebar-item-color-active"]).toBeUndefined();
+    expect(rottay.variables["--ds-sidebar-item-color-active"]).toBe(
+      ABOVE_FLOOR_PAIR.itemColorActive
+    );
     expect(rottay.variables["--ds-sidebar-item-bg-active"]).toBe(
       ABOVE_FLOOR_PAIR.itemBgActive
     );
@@ -451,9 +455,9 @@ describe("case C — no contested tenant authorship changes nothing", () => {
 
   it("keeps the shipped first-party variable counts", () => {
     const counts: Record<Vertical, number> = {
-      rottay: 1191,
+      rottay: 1192,
       bithire: 1231,
-      evnto: 467,
+      evnto: 468,
     };
     for (const vertical of VERTICALS) {
       expect(
