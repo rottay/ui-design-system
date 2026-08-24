@@ -3256,6 +3256,64 @@ cruce receipt por receipt, cero anomalías en ambas direcciones).
 **Cola:** diseño B-2 (el brazo estático lleva la autoría del patch) →
 preaudit → implementación → palette.seeds cierra.
 
+**B-2 — EN VUELO (2026-08-24, DT Kimi K3): el brazo estático declara la
+autoría del patch.** Remedio de la clase `CHROME_SEED_PROVENANCE_ASYMMETRY`.
+Diseño de Opus completo (read-only; el memo vive en /private/tmp, lo durable
+queda asentado acá): `lowerStop` pasa `tenantAuthoredPaths = {input.path}` —
+el keypath exacto que el stop escribió, nombrado nunca inferido; NO
+`collectPatchAuthoredPaths` (espacio equivocado: normaliza ThemePatch→BrandTheme
+y el patch de la sonda ya está en espacio BrandTheme; su propio doc advierte
+del modo de fallo). Fail-closed: sin `input.path`, conjunto vacío (= "no es un
+tenant", la semántica que el compilador ya define). **Ningún compilador se
+toca; el brazo DB no se toca.** **Invariancia derivable del vocabulario
+cerrado** (`CONSULTED_PROVENANCE_FIELDS`, 20 paths, dos sitios de lectura del
+compilador): de los 8 stops actuales sólo `palette.seeds` escribe un path
+consultado (`palette.primaryColor`) → predicción falsable: los 42 escenarios
+CSS receipteados no se mueven; una sola movida fuera de eso = provenance leída
+en un tercer sitio = STOP. Cerco ya existente: valla mP6
+(`provenance-acceptance.test.ts:815`). **Corrección de Opus al brief
+(asentada):** declarar autoría mueve SIETE canales en los TRES verticales;
+rottay/evnto quedan intactos en la carga del arm por el **filtro de canales
+declarados** (sólo `--ds-button-primary-bg` está entre los 5 declarados de
+palette.seeds), no por la guarda 3. **B-2 es necesario pero no suficiente:**
+rottay sigue refutado por el guard → el ruling
+`stopDiscriminationException` queda para el packet de cierre de palette.seeds
+(posterior, mío).
+
+**Ruling DT sobre el gate empírico (adjudicado una vez, documentado acá):**
+la sonda no modela un llamador productivo específico — modela **la pata del
+tenant** a través de cada transporte. Si NO existe vía productiva que compile
+`baseline vertical + patch tenant` en estático, B-2 procede sin más (drill 2
+protege la producción first-party: sin bandera, compilado byte-idéntico). Si
+SÍ existe, esa vía es un **defecto de PRODUCTO** de la misma clase (sirve al
+tenant un compile sin las derivaciones que su autoría manda) y se registra
+como packet propio contra el llamador — **no bloquea B-2**: la sonda mide la
+ley (opción B: el tenant prevalece sobre el baseline vertical), no replica el
+defecto. Verificación empírica despachada a Opus; preaudit Fable se despacha
+con el veredicto adjunto.
+
+**OPEN_DT nuevo (directiva del owner tipeada en sesión Sonnet, 2026-08-24):
+"fix the density.mode typeScale registry keypath".** Investigación DT previa
+(read-only, sobre `14d4d50cd`): (a) los keypaths de registry de density.mode
+están correctos y receipteados en ambas puertas
+(`appearance.general.density` / `surfaces.density`) — el guard H-2 de
+discriminación de stops habría atrapado una rotura viva; (b) `--ds-type-scale`
+pertenece a typography.scale (`appearance.general.typography.scale` /
+`typography.scale`), emitido incondicionalmente por el lowering de posture;
+(c) no existe acople density↔typeScale en el árbol — el único punto de
+contacto es la dependencia `density.posture` del efecto que re-lee
+`--ds-type-scale` en `adaptive-layout/presentation/react/index.ts:156-158`;
+(d) el registry de typography.scale (capabilities/index.ts:182-192) documenta
+un defecto de keypath de esa familia **ya corregido** ("typography (ramp
+channels)" prose → `typography.scale`). Hipótesis DT: línea stale de la era
+de ese packet, o referencia a ese defecto ya cerrado. **Disposición:** packet
+de verificación mecánica para Sonnet DESPUÉS del commit de B-2 (write-sets
+colisionan en receipts): enumerar todo keypath que mencione density o
+typeScale en capabilities/index.ts, schema tenant-theme, hooks-manifest y
+brand-studio; verificar que cada uno resuelve a un campo real en ambas
+puertas; reportar mismatches; tocar sólo con mismatch concreto. Si el owner
+confirma un sitio específico, el packet se repunta ahí.
+
 **F0 — CERRADO (2026-08-19).** Criterio de cierre cumplido:
 `ci-gates OK — 78 blocking gate(s) passed` (2 excluded visibles con razón y
 dueño: channel-liveness y lane-control-drills, ambos esperan a F2); `find src -type d -empty` vacío salvo el inbox
