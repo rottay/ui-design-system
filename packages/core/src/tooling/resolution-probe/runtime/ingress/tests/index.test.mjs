@@ -1881,3 +1881,214 @@ test('W-A drill 8: an identity with NO baseline to read fails CLOSED, on either 
     /identity stop is a static-arm claim/,
   );
 });
+
+/* ===================================================================== *
+ * M-1 — the arm learns the MODE BLOCKS.
+ *
+ * `compileBrandTheme` writes a base block plus one block per authored
+ * non-default mode, under `<tenant>[data-theme='X'], <tenant>.X` -- one
+ * attribute more, so in that mode it OUTRANKS the base. The arm used to append
+ * only the base block, which made it silent in exactly the scope that governs
+ * there.
+ *
+ * What these drills do NOT claim: that the tenant's seed SHOULD reach the mode
+ * block. Measured, it does not -- the vertical's overlay restates it, and the
+ * DB compiler even adds a delta to hold that line. Whether that is the right
+ * product behaviour is a separate adjudication; the arm's job is to serve what
+ * the compiler wrote, and these fence that it now does.
+ * ===================================================================== */
+
+/** A provenance that satisfies H-1: the static arm must name the baseline it composed onto. */
+const STATIC_PROVENANCE_FIXTURE = Object.freeze({
+  module: 'dist/infrastructure/compilers/kernel/runtime/brand-theme/index.js',
+  exportName: 'compileBrandTheme',
+  input: {
+    path: 'palette.primaryColor',
+    stopId: 'fixture',
+    baseline: { source: 'dist/index.js#fixtureBrandTheme', digest: 'a'.repeat(64) },
+  },
+});
+
+const M1_PALETTE = readManifest(resolve(CORE_ROOT, 'manifest/controls/palette.seeds.json'));
+const M1_CLOSED = [
+  'density.mode',
+  'spacing.rhythm',
+  'shape.radius-scale',
+  'surfaces.effect-intensity',
+  'typography.scale',
+].map((id) => readManifest(resolve(CORE_ROOT, `manifest/controls/${id}.json`)));
+
+/** One real static lowering, arms and baselines loaded from dist. */
+async function m1Lower(controlManifest, stopId, vertical) {
+  const arms = await loadCompilerArms();
+  const baselines = await loadStaticBaselines();
+  const spec = arms['static-brand-theme'];
+  const lowered = lowerStop({
+    armId: 'static-brand-theme',
+    controlManifest,
+    stopId,
+    compile: spec.compile,
+    vertical,
+    provenance: spec.provenance,
+    base: baselines[vertical].theme,
+    baselineSource: baselines[vertical].source,
+  });
+  return { lowered, spec };
+}
+
+test('M-1 drill 1 [needs dist]: the static arm emits ONE BLOCK PER SCOPE the compiler writes', async () => {
+  const { lowered, spec } = await m1Lower(M1_PALETTE, 'primary/crimson', 'bithire');
+  const arm = composeStaticArm({
+    vertical: 'bithire',
+    variables: lowered.variables,
+    producedBy: lowered.producedBy,
+    modeVariables: lowered.modeVariables,
+    themeModeSelector: spec.themeModeSelector,
+  });
+  assert.deepEqual(Object.keys(arm.modeSelectors), ['dark'], 'bithire authors a dark overlay');
+  assert.equal((arm.cssBlock.match(/\{/g) ?? []).length, 2, 'base block + one mode block');
+  assert.ok(arm.cssBlock.includes(arm.selector), 'the base scope is still written');
+  assert.ok(arm.cssBlock.includes(arm.modeSelectors.dark), 'and the mode scope now is too');
+  // The mode block carries the DECLARED channels the compiler put in it.
+  assert.deepEqual(
+    Object.keys(arm.modeVariables.dark).sort(),
+    lowered.producedBy.modeChannels.dark,
+  );
+});
+
+test('M-1 drill 2 [needs dist]: BOTH halves — the overlay governs its mode, and only its mode', async () => {
+  const { lowered } = await m1Lower(M1_PALETTE, 'primary/crimson', 'bithire');
+  // (a) the base scope carries the STOP: this is the tenant's decision landing.
+  assert.equal(lowered.variables['--ds-color-primary'], '#DC2626');
+  // (b) the mode scope carries the VERTICAL'S OWN dark value, not the stop --
+  //     bithire's overlay restates primaryColor, so the seed does not reach dark.
+  //     Only the second half distinguishes a real extraction from one that
+  //     copied the base map into the mode block (drill 7's failure mode).
+  assert.equal(lowered.modeVariables.dark['--ds-color-primary'], '#1e84e6');
+  assert.notEqual(
+    lowered.modeVariables.dark['--ds-color-primary'],
+    lowered.variables['--ds-color-primary'],
+  );
+});
+
+test('M-1 drill 3 [needs dist]: the CLOSED controls have nothing in any mode block — the fence', async () => {
+  // The invariance argument, in code: five closed controls, three verticals,
+  // zero declared channels in any compiled mode block. Their arm CSS therefore
+  // cannot change under M-1, and this says so before anyone re-measures.
+  for (const manifest of M1_CLOSED) {
+    const stopId = manifest.calibration.normalizedStops[0]?.id;
+    if (!stopId) continue;
+    for (const vertical of ['rottay', 'bithire', 'evnto']) {
+      let lowered;
+      try {
+        ({ lowered } = await m1Lower(manifest, stopId, vertical));
+      } catch {
+        continue; // a stop this arm legitimately cannot lower is not this drill's subject
+      }
+      for (const [mode, channels] of Object.entries(lowered.producedBy.modeChannels)) {
+        assert.deepEqual(
+          channels,
+          [],
+          `${manifest.controlId} on ${vertical} put ${channels.join(', ')} in the ${mode} block`,
+        );
+      }
+    }
+  }
+});
+
+test('M-1 drill 4: a theme with NO mode overlay yields exactly one block', () => {
+  const arm = composeStaticArm({
+    vertical: 'rottay',
+    variables: { '--ds-x': '1' },
+    producedBy: STATIC_PROVENANCE_FIXTURE,
+    modeVariables: {},
+    themeModeSelector: null,
+  });
+  assert.deepEqual(arm.modeSelectors, {});
+  assert.equal((arm.cssBlock.match(/\{/g) ?? []).length, 1);
+  // An EMPTY mode block is not a block either: a control with no declared
+  // channel in the overlay must not emit `selector[data-theme=dark] { }`.
+  const empty = composeStaticArm({
+    vertical: 'rottay',
+    variables: { '--ds-x': '1' },
+    producedBy: STATIC_PROVENANCE_FIXTURE,
+    modeVariables: { light: {} },
+    themeModeSelector: null,
+  });
+  assert.equal((empty.cssBlock.match(/\{/g) ?? []).length, 1);
+});
+
+test('M-1 drill 5: the baseline is still untouched, so removal stays byte-identical', () => {
+  const arm = composeStaticArm({
+    vertical: 'bithire',
+    variables: { '--ds-x': '1' },
+    producedBy: STATIC_PROVENANCE_FIXTURE,
+    modeVariables: { dark: { '--ds-x': '2' } },
+    themeModeSelector: (base, mode) => `${base}[data-theme='${mode}']`,
+  });
+  const baseline = '/* baseline */\nhtml { color: red }';
+  const mutated = arm.mutateCss(baseline);
+  assert.ok(mutated.startsWith(baseline), 'the arm APPENDS; the baseline string is never rewritten');
+  assert.equal(mutated.slice(0, baseline.length), baseline);
+  // Two scopes now, and the removal phase still re-serves `baseline` itself.
+  assert.equal((mutated.slice(baseline.length).match(/\{/g) ?? []).length, 2);
+});
+
+test('M-1 drill 6 [needs dist]: the mode grammar is the COMPILER\'s, imported, not spelled here', async () => {
+  const arms = await loadCompilerArms();
+  const spec = arms['static-brand-theme'];
+  assert.equal(typeof spec.themeModeSelector, 'function', 'the arm hands out the compiler grammar');
+  const { lowered } = await m1Lower(M1_PALETTE, 'primary/crimson', 'evnto');
+  const arm = composeStaticArm({
+    vertical: 'evnto',
+    variables: lowered.variables,
+    producedBy: lowered.producedBy,
+    modeVariables: lowered.modeVariables,
+    themeModeSelector: spec.themeModeSelector,
+  });
+  assert.equal(arm.modeSelectors.dark, spec.themeModeSelector(arm.selector, 'dark'));
+  // And a grammar-less compose with mode blocks REFUSES rather than inventing one.
+  assert.throws(
+    () =>
+      composeStaticArm({
+        vertical: 'evnto',
+        variables: lowered.variables,
+        producedBy: lowered.producedBy,
+        modeVariables: lowered.modeVariables,
+        themeModeSelector: null,
+      }),
+    /was handed no themeModeSelector/,
+  );
+});
+
+test('M-1 drill 7 [needs dist]: the mode block must carry the OVERLAY, never the base map', async () => {
+  // THE ERROR THIS EXISTS FOR: wiring `variables` in as `modeVariables`. It
+  // compiles, it emits two blocks, and it makes every control look live in the
+  // non-default mode — by overwriting the vertical's own overlay, which is the
+  // opposite defect and a worse one.
+  const { lowered, spec } = await m1Lower(M1_PALETTE, 'primary/crimson', 'bithire');
+  const correct = composeStaticArm({
+    vertical: 'bithire',
+    variables: lowered.variables,
+    producedBy: lowered.producedBy,
+    modeVariables: lowered.modeVariables,
+    themeModeSelector: spec.themeModeSelector,
+  });
+  const wrong = composeStaticArm({
+    vertical: 'bithire',
+    variables: lowered.variables,
+    producedBy: lowered.producedBy,
+    modeVariables: { dark: lowered.variables },
+    themeModeSelector: spec.themeModeSelector,
+  });
+  assert.notEqual(
+    correct.cssBlock,
+    wrong.cssBlock,
+    'the extraction must not be the base map under another selector',
+  );
+  assert.equal(correct.modeVariables.dark['--ds-color-primary'], '#1e84e6');
+  assert.equal(wrong.modeVariables.dark['--ds-color-primary'], '#DC2626');
+  // And the real lowering is the correct one: the extraction reads the compiled
+  // mode block, so this cannot pass by both sides being the same.
+  assert.notDeepEqual(lowered.modeVariables.dark, lowered.variables);
+});

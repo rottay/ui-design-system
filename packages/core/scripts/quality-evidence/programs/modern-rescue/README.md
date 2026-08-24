@@ -239,13 +239,13 @@ not rerun an implementation loop for every earlier assertion.
 
 <!-- lane-control:program-state v1 — DO NOT EDIT BY HAND. Rewrite it with:
      node packages/core/src/tooling/lane-control/public/program-state/index.mjs --write --intent <intent.json>
-     head=1a6bb5ce7 written=2026-08-23T19:23:32.929Z intent=f86d2f58794ec30e render=7330e15f341a1196 -->
+     head=a5848f4f7 written=2026-08-24T11:35:32.817Z intent=1a5217a0956cee46 render=b31b89ccaccab95e -->
 
 *Everything in this section is intent. Anything derivable is derived by command, not typed here.*
 
 **Current wave:** F4B — calibración causal de los 20 controles públicos: 5/20 COMPUTED_VERIFIED (spacing.rhythm, surfaces.effect-intensity, shape.radius-scale, density.mode; experience.profile degradado a IMPLEMENTED — su re-medición pintada refutó la equivalencia de brazos bajo el instrumento corregido H-1; ninguno SIGHTED_ACCEPTED), 30 receipts válidos y frescos bajo validador v2, 15 controles UNKNOWN. Cola inmediata: H1/H3 (spacing.rhythm legislativo + terminalReach), fix estructural de lowerStop, F4B-6 responsive.posture (sonda DATA diferencial con guardia nueva y preaudit Fable).
 
-**Blocked on:** OPEN_ARM_ASYMMETRY — decisión de PRODUCTO del owner con prueba medida (asimetría real general de precedencia authored>perfil entre transportes; bloquea la re-verificación de experience.profile y sigue gating F2 asimétrico/F3). OPEN_VERTICAL_CASCADE_DEFECT — bithire dark, packet propio del generador/cascada vertical (OPEN_DT). El stash pre-programa sigue owner-gated. Gobernanza al día: T-1 sucesión consumada, program-check CONSTITUTION_READY, GAT-07 resellado, brecha C4 regularizada.
+**Blocked on:** OPEN_VERTICAL_CASCADE_DEFECT — re-adjudicada por M-1 (2026-08-24): la doble declaración dark del artifact es salida CORRECTA de compileModeBlocks (los compiladores coinciden en dark); lo que estaba mal era el brazo DB del instrumento descartando modeDeltas (fase (a) de H-3, packet propio). Queda como instrumento-DB + pregunta de producto para el owner (¿debería el seed del tenant mover el modo no-default bajo la opción B?). OPEN_ARM_ASYMMETRY — CERRADA con la ley nueva (opción B implementada en B-1; experience.profile re-verificado). El stash pre-programa sigue owner-gated. Gobernanza al día: tablero 9/9 instrumento, 48/48 constitucional, 217/217 cascade, CONSTITUTION_READY.
 
 Active packets:
 

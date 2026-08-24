@@ -1709,6 +1709,15 @@ versión, así que este packet no reclama contraste de reproducibilidad.
   propio: es propiedad del generador de artifacts verticales, no de
   `experience.profile`. `OPEN_ARM_ASYMMETRY` (`experience.profile.json:103`)
   queda `OPEN_OWNER` — decisión requerida antes de F2-asimétrico/F3.
+  **SUPERSEDIDA la lectura de la clase (M-1, 2026-08-24 — ver su asiento
+  abajo):** la doble declaración dark del artifact es SALIDA CORRECTA de
+  `compileModeBlocks` (los compiladores coinciden en dark: el seed del
+  tenant no entra al bloque de modo); lo que estaba mal era el INSTRUMENTO
+  (brazo DB descartando `modeDeltas`). La clase se re-adjudica de "defecto
+  del generador" a "brazo DB del instrumento (fase (a) de H-3) + pregunta
+  de producto para el owner (¿debería el seed del tenant mover el modo
+  no-default?)". El hecho medido (especificidad, líneas) sigue verdadero;
+  lo refutado era la atribución.
 - **OPEN_OWNER adicionales:** resolución del `stash@{0}` pre-programa (toda
   operación de stash está vetada sin orden explícita del owner); política de
   backup de los 519 commits locales sin push; reapertura (o no) del fence
@@ -2997,6 +3006,82 @@ de artifacts verticales) → palette.seeds re-corre casi solo (stops,
 negativos, testigos y soporte ya escritos y drilleados). La re-emisión de
 los 45 fue quirúrgica (sólo `sourceDigest`/`createdAt`; artifacts
 intactos).
+
+##### M-1 — modeBlocks en la sonda: el brazo estático ya escribe en todos los scopes del compilador (2026-08-24)
+
+El instrumento deja de truncar el compilado a un mapa plano: `lowerStop`
+conserva `compiled.modeBlocks` (extrayendo de cada bloque los mismos
+canales declarados, con el censo en `producedBy.modeChannels`) y
+`composeStaticArm` emite **1+n bloques** (base + uno por modo compilado no
+vacío) con `themeModeSelector` **importado** del compilador, viajando bajo
+el mismo gate de frescura de dist (componer con bloques sin gramática
+TIRA). No se subió especificidad. El brazo DB queda intacto (sigue
+descartando `modeDeltas` — es la fase (a) de H-3, packet aparte).
+Writer: Opus. Preaudit Fable: ACCEPT con W-A/W-B/W-C. Postaudit Fable:
+**ACCEPT con una condición de commit** (la mitad pendiente de W-B en los
+tres carriers restantes — ejecutada en este commit), memo
+`/private/tmp/m1-modeblocks-fable-postaudit.md` (SHA en su `.ready`).
+
+**La corrección de atribución, verificada por Fable con evidencia propia
+(y su propia autocorrección incluida):** los dos compiladores coinciden en
+dark — el seed del tenant NO entra al bloque de modo (bithire: base mueve
+22, bloque dark 0; y el compilador DB AÑADE `modeDeltas` de 0→29 vars
+justamente para sostenerlo). El brazo estático ya acertaba por posición.
+**El brazo DB era el que mentía** (descartaba `modeDeltas` y escribía
+inline, ganándole al bloque de modo). **La clase
+`OPEN_VERTICAL_CASCADE_DEFECT` se re-adjudica entera:** la doble
+declaración dark del artifact es SALIDA CORRECTA de `compileModeBlocks`,
+no un defecto del generador (el hecho medido — especificidad, líneas,
+selectores — sigue verdadero; lo refutado era la atribución). Nuevo
+reparto de dueños: **el brazo DB del instrumento** (fase (a) de H-3) +
+**pregunta de producto para el owner** (¿debería el seed del tenant mover
+el modo no-default bajo la opción B? — hoy el compilador lo impide
+deliberadamente). La supersesión quedó ejecutada en los cuatro carriers:
+`manifest/controls/palette.seeds.json#knownDefects[0]` (writer),
+`checkpoint.intent.json#blockedOn` (DT), el asiento C6 de arriba (DT), y
+el artifact durable (compañía de supersesión junto al original, NUNCA
+editado — ley de snapshots inmutables).
+
+**Invariancia (medida, y la predicción se afiló sola):** 42 escenarios
+CSS (45 − 3 terminales DATA), 37.108 claves por intersección, **0
+movidas, 0 patas cambiadas, 0 claves perdidas** — 36/42 incluyen dark.
+Fable verificó que el cerco fue correcto y no laxo: los dos casos
+exceptuados NO están en el conjunto de receipts (palette.seeds no tiene
+receipts; los R7-light de experience son light-only y sus escenarios dark
+son rottay/evnto — cuyas celdas de modo están vacías para ese control),
+más el argumento por construcción (drill 3: `modeChannels` vacío para los
+cerrados en los tres verticales; el bloque base es byte-idéntico al de
+antes). W-A: la enumeración pre-registrada (24 filas) coincide EXACTA con
+la tabla medida de Fable — incluidos los DOS canales de
+experience/bithire/dark (`--ds-letter-spacing-heading` Y
+`--ds-material-canvas-texture`). W-C: 45 receipts con typography incluido,
+y `responsive.posture` contado como sexto cerrado (42 CSS + 3 DATA).
+
+**Los 7 drills (74/74):** el brazo emite un bloque por scope que el
+compilador escribe (2 bloques por vertical, verificado en los tres); las
+DOS mitades (base lleva el stop `#DC2626`, modo lleva el valor propio del
+vertical `#1e84e6` — sólo la segunda distingue extracción real de copia);
+el cerco en código (los 5 cerrados × 3 verticales con `modeChannels`
+vacío); un theme sin overlay da exactamente un bloque (y un bloque vacío
+tampoco se emite); restore append-only byte-idéntico; gramática idéntica
+a `themeModeSelector(...)` y componer sin ella TIRA; y **el negativo que
+importa**: pasar `variables` como `modeVariables` pone el stop donde va
+el valor del vertical — pisaría el overlay, el defecto opuesto y peor.
+
+**Evidencia direccional para H-3 fase (a) (observación del writer,
+reproducida por Fable):** en bithire la divergencia sigue 10 filas (el
+overlay restata; el brazo estático lee lo mismo que el artifact). En
+evnto APARECIÓ una quinta fila (`--ds-color-primary-500`): el estático
+ahora la fija en el valor compilado `#6B6B6B` y el brazo DB la sigue
+moviendo a `#CA0615` — **hacer fiel un brazo no reduce la divergencia:
+expone la del otro** (la dirección correcta). Precisión Fable: ese
+`#6B6B6B` es el gris LEGÍTIMO (la rampa dark deriva del seed dark propio
+de evnto `#E8E8E0`), no la clase del anti-door — que nadie lo
+pattern-matchee.
+
+**Desviación declarada:** `public/cli/index.mjs` (+4 líneas — cableado
+necesario del único call site productivo de `composeStaticArm`; verificada
+por Fable como cableado, no lógica).
 
 **F0 — CERRADO (2026-08-19).** Criterio de cierre cumplido:
 `ci-gates OK — 78 blocking gate(s) passed` (2 excluded visibles con razón y

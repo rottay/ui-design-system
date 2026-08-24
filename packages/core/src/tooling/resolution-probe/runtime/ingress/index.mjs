@@ -243,17 +243,57 @@ function assertVariables(variables) {
  * restore comparison is between two loads of byte-identical bytes — the
  * stylesheet-level analogue of restoring a preexisting inline value.
  */
-export function composeStaticArm({ vertical, variables, producedBy }) {
+export function composeStaticArm({
+  vertical,
+  variables,
+  producedBy,
+  modeVariables = {},
+  themeModeSelector = null,
+}) {
   const names = assertVariables(variables);
   const provenance = assertArmProvenance(producedBy);
   const selector = tenantArmSelector(vertical);
-  const declarations = names.map((name) => `  ${name}: ${variables[name]};`).join('\n');
+  const declare = (map) =>
+    Object.keys(map)
+      .sort()
+      .map((name) => `  ${name}: ${map[name]};`)
+      .join('\n');
+
+  /* M-1 — ONE BLOCK PER SCOPE THE COMPILER WRITES, not one block total.
+   *
+   * `compileBrandTheme` emits a base block plus one block per authored
+   * non-default mode, and the mode block carries one attribute more, so in that
+   * mode it outranks the base. An arm that appends only the base block is
+   * therefore INERT in the non-default mode -- not because the control is
+   * inert, but because the arm never spoke in the scope that governs there.
+   *
+   * The mode blocks carry the DELTA the compiler put in them, which is often
+   * empty for a given control: the five closed controls have no declared
+   * channel in any mode block, so their arm CSS is byte-identical to before
+   * this change. That is measured, and it is the invariance fence.
+   *
+   * SPECIFICITY IS NOT RAISED. The mode block is emitted at the compiler's own
+   * mode grammar; nothing is duplicated or `:is()`-stacked to win a comparison.
+   * A block that won without modelling anything would be building around the
+   * guard, not through it. */
+  const modes = Object.keys(modeVariables)
+    .filter((mode) => Object.keys(modeVariables[mode] ?? {}).length > 0)
+    .sort();
+  if (modes.length > 0 && typeof themeModeSelector !== 'function') {
+    throw new Error(
+      'resolution-probe: the static arm lowered mode blocks but was handed no themeModeSelector. ' +
+        'The mode grammar is the COMPILER\'s (it exports `themeModeSelector` for exactly this), ' +
+        'and spelling it here would keep matching a grammar the compiler had already left.',
+    );
+  }
+  const blocks = [
+    `${selector} {\n${declare(variables)}\n}`,
+    ...modes.map((mode) => `${themeModeSelector(selector, mode)} {\n${declare(modeVariables[mode])}\n}`),
+  ];
   const cssBlock = [
     '',
     `/* resolution-probe ingress arm: static-brand-theme (${provenance.exportName}) */`,
-    `${selector} {`,
-    declarations,
-    '}',
+    ...blocks,
     '',
   ].join('\n');
 
@@ -263,7 +303,14 @@ export function composeStaticArm({ vertical, variables, producedBy }) {
     position: INGRESS_ARMS['static-brand-theme'].position,
     positionMeaning: INGRESS_ARMS['static-brand-theme'].positionMeaning,
     selector,
+    /** The scopes this arm actually writes: the base, plus one per compiled mode. */
+    modeSelectors: Object.freeze(
+      Object.fromEntries(modes.map((mode) => [mode, themeModeSelector(selector, mode)])),
+    ),
     variables: Object.freeze({ ...variables }),
+    modeVariables: Object.freeze(
+      Object.fromEntries(modes.map((mode) => [mode, Object.freeze({ ...modeVariables[mode] })])),
+    ),
     cssBlock,
     /** Mutation-phase CSS. Removal re-serves the baseline string unchanged. */
     mutateCss: (baselineCss) => `${baselineCss}\n${cssBlock}`,
@@ -899,8 +946,39 @@ export function lowerStop({
         `the declared channels (${channels.join(', ')}). That is the finding; it is not an arm.`,
     );
   }
+  /* M-1 — THE MODE BLOCKS ARE PART OF THE LOWERING, and dropping them was a
+   * measurement defect rather than an omission.
+   *
+   * `compileModeBlocks` re-runs the whole lowering against the mode overlay and
+   * emits only the delta against the base, under
+   * `<tenant-selector>[data-theme='<mode>'], <tenant-selector>.<mode>` -- one
+   * attribute more than the base block, so it OUTRANKS it by specificity in
+   * that mode. An arm that carries only `variables` therefore serves a scene
+   * production never serves: in the non-default mode the vertical's own overlay
+   * is what governs, and the arm has nothing to say about it.
+   *
+   * Measured before this was written (M-1 design, reproduced by the preaudit):
+   * all three first-party verticals author an overlay (rottay light, bithire
+   * dark, evnto dark); a tenant seed moves the base block and NOT the mode block
+   * (bithire: 22 vs 0); and the DB compiler even ADDS a mode delta that
+   * re-asserts the vertical's values precisely to hold that line.
+   *
+   * Only the DECLARED channels are kept, exactly as for the base map: this is
+   * the same extraction, once per compiled mode. */
+  const modeVariables = {};
+  for (const block of compiled?.modeBlocks ?? []) {
+    const perMode = {};
+    for (const channel of channels) {
+      if (Object.hasOwn(block.cssVariables ?? {}, channel)) {
+        perMode[channel] = String(block.cssVariables[channel]);
+      }
+    }
+    modeVariables[block.mode] = perMode;
+  }
+
   return {
     variables,
+    modeVariables,
     producedBy: {
       ...provenance,
       module: provenance.module ?? INGRESS_ARMS[armId].compilerModule,
@@ -930,6 +1008,13 @@ export function lowerStop({
       declaredChannels: [...channels],
       emittedChannels: Object.keys(variables).sort(),
       omittedChannels: channels.filter((channel) => !Object.hasOwn(variables, channel)),
+      /* M-1: which modes the compiler emitted a block for, and how many of the
+       * declared channels each one carries. A reader can then tell "this control
+       * has nothing in any mode block" (the five closed controls) apart from
+       * "this control is governed per mode" without re-deriving it. */
+      modeChannels: Object.fromEntries(
+        Object.entries(modeVariables).map(([mode, map]) => [mode, Object.keys(map).sort()]),
+      ),
     },
   };
 }
@@ -988,6 +1073,14 @@ export async function loadCompilerArms({
     loaded[spec.id] = {
       armId: spec.id,
       compile: exported,
+      /* M-1: the compiler's OWN mode-selector grammar, handed out with the arm.
+       * Imported, never reconstructed: `themeModeSelector` is exported for
+       * exactly this reason ("Shared explicit-mode selector grammar for static
+       * and DB artifact renderers"), and a probe that spelled `[data-theme=...]`
+       * itself would keep matching a grammar the compiler had already left. It
+       * rides on the arm because that is what the dist-freshness gate above has
+       * already proven fresh. */
+      themeModeSelector: module?.themeModeSelector ?? null,
       provenance: {
         module: fromCoreRoot(absolute),
         moduleSubpath: spec.compilerModuleSubpath ?? null,

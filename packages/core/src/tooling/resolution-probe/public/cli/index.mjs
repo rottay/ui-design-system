@@ -1002,6 +1002,10 @@ async function commandCausal(options) {
           vertical: options.verticals[0],
           variables: lowered.variables,
           producedBy,
+          // M-1: the arm writes every scope the compiler writes, and it takes
+          // the mode grammar FROM the compiler it just called.
+          modeVariables: lowered.modeVariables,
+          themeModeSelector: loaded.themeModeSelector,
         })
       : composeDbArm({ variables: lowered.variables, producedBy });
   });
