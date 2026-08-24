@@ -3796,6 +3796,44 @@ DECLARE el canal) en los verticales que la medición marque; las alternativas
 (compiler deriva la tinta del ground; o aceptar el rojo como contrato y
 arreglar fixtures) quedan registradas con sus costos en el memo.
 
+**Estado de ejecución de la trenza APCA/E-1 (2026-08-24, tarde):**
+- **Centinelas re-anclados: commit `86ef42fee`** (Sonnet; pines verificados
+  contra los digests publicados en dist antes de escribir; nota de protocolo
+  "AMPLIACIÓN, no narrowing"; postaudit Fable ACCEPT). Los 7 APCA de ese
+  archivo quedan rojos por diseño: son de D-1.
+- **E-1 diagnosticado (Opus): el defecto rottay/db de elevation es de ORDEN,
+  no de pérdida.** Por la ruta DB la postura del tenant se resuelve DENTRO
+  del theme → indistinguible de autoría vertical → la escalera autorada
+  (`brand-theme:977-984`) la pisa; el piso de tenant (`:1080`) sólo dispara
+  con `tenantPatch` y `compileTheme` no lo recibe. La estática sí lo pasa →
+  el tenant gana. Causa raíz confirmada: sólo rottay autora
+  `surfaces.elevations` con VALORES (bithire/evnto tienen las claves con
+  `undefined`). Regla general falsable: muerde un campo de postura si y sólo
+  si (a) sus canales tienen escritor autorado posterior, (b) migrateV1 no lo
+  expande a esas hojas, (c) el vertical autora valores ahí — hoy sólo
+  elevation × rottay. **Ruling DT: opción 1** (`compileTheme` acepta y
+  reenvía `tenantPatch`; la llamada DB pasa `envelope.patch`) — arregla la
+  causa (el tenant deja de ser indistinguible de autoría vertical: la ley
+  opción B) con el cambio mínimo. Preaudit Fable ACCEPT con W-A (medir los
+  mode-blocks de rottay bajo el fix + doc del parámetro + rebuild +
+  producers.json nombrados) y W-B (el paso cross-espacio ThemePatch→BrandTheme
+  nombrado en código con justificación y cerco). **Decisión de empaquetado:
+  E-1 entra EN F4B-10** (write-sets disjuntos: Opus = compilador+tests;
+  Sonnet = control+corridas) — evita el acople de `producers.json` (su
+  re-derivación hornearía el edit del registry de Sonnet sin commitear en un
+  commit ajeno) y cierra la historia completa en un commit. Defecto INVERSO
+  registrado para motion.dial (no de E-1): `resolveTenantPosture` no
+  desenvuelve `.value` en el brazo estático — una línea, entra en el packet
+  de motion.dial.
+- **D-1 preaudit Fable: ACCEPT con W-A/W-B/W-C** (ley cero-delta re-legislada
+  a la forma real de 3 partes; alias-en-overlay NO emite → los 4 literales
+  llevan comentario anti-"modernización"; write-set completo: ~53 receipts
+  por artifacts verticales + producers.json doble input + gate de artifacts).
+  Implementación: DESPUÉS del commit de F4B-10 (acople producers.json).
+- **Triage del backlog CI (77) despachado a Sonnet (read-only):** 18/77 ya
+  son clase drenaje (D-1); ~59 a clasificar (PIN-RANCIO / FIXTURE /
+  REGRESIÓN / FLAKE-INFRA).
+
 **F0 — CERRADO (2026-08-19).** Criterio de cierre cumplido:
 `ci-gates OK — 78 blocking gate(s) passed` (2 excluded visibles con razón y
 dueño: channel-liveness y lane-control-drills, ambos esperan a F2); `find src -type d -empty` vacío salvo el inbox
