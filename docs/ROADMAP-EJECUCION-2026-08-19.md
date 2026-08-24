@@ -3423,6 +3423,51 @@ ruling rottay** (`ROTTAY_DB_DOOR_INERT_FOR_PALETTE`) — medir por qué el brazo
 DB emite 0 canales de paleta (¿política legítima o defecto de producto?) y
 adjudicar la `stopDiscriminationException` o declarar el defecto.
 
+**Preflight de los 12 controles restantes (Sonnet, 2026-08-24, read-only,
+censo mecánico completo — 24 filas control×puerta).** Mecánica del walker
+verificada en fuente: split SIEMPRE por `.`; `{a,b}` soportado sólo si el
+diferenciador está en el ÚLTIMO segmento; `*` suelto NO expande (se camina
+literal y rompe en silencio — el propio autor del walker lo advierte);
+ninguna normalización. La sonda baja EXACTAMENTE 4 kinds (`closed-enum`,
+`bounded`, `profile-id`, `color-set`); extrae sólo `--ds-*` (sin rama
+`rootAttributes`). **HALLAZGO SISTÉMICO §2: la puerta DB de la sonda tiene
+`mode: "simple"` HARDCODEADO** (`toCompilerInput`, ingress/index.mjs:930-951)
+— nunca construye el envelope `{mode:"advanced", visualFoundation}`, así que
+los 6 controles PRO (`chrome.anatomy`, `chrome.families`,
+`profiles.expressive`, `profiles.icon`, `recipe-profile`, `token-overrides`,
+todos bajo `visualFoundation.*`) son estructuralmente inalcanzables por la
+puerta DB con UN solo hueco de harness, no seis bugs. La unión discriminada
+simple/advanced es real y usada en producción (5 despachos en
+tenant-theme/index.ts). **Buckets:** B (keypath roto, clase F4B-7 probada,
+puerta DB ya lista): `shape.button-style` (prosa literal →
+`surfaces.buttonStyle`), `surfaces.elevation-posture` (campo real equivocado
+→ `surfaces.elevation`), `typography.pairing` (apunta al campo de OTRO
+control → `typography.typePairing`; **riesgo de falso-verde cercado**: hoy
+escribiría `"sober"` como font-family sin lanzar), `navigation.sidebar-tone`
+(wildcard → `chrome.sidebar.tone`, que el compilador YA nombra como la
+constante exportada `SIDEBAR_TONE_FIELD`; además el canal declarado
+`--ds-sidebar-item-color` no es de los 6 que el tono mueve — corregir a uno
+real). B+registry: `motion.dial` (sin `bounds` en el registry — con bounds
+sube a `bounded` que la sonda YA baja; y static `motion.*` → brace-set de 3).
+C (la sonda no baja kind/forma): `typography.families` (AMBOS keypaths
+limpios; sólo falta la rama `font-stack` — la más barata de la cola),
+`chrome.families` (chrome-map multi-campo), `token-overrides` (el destino
+real vive FUERA de BrandTheme: parámetro hermano `verticalTokenOverrides`),
+`chrome.anatomy` (triple bloqueo: brace-en-medio con sufijo compartido, kind
+`enum` sin rama, y data-only sin rama `rootAttributes`), `profiles.expressive`
+(kind `enum` + §2). D (instrumento equivocado): `profiles.icon` — DATA pura
+consumida por hook React (`channels=[]`, `rootAttributes=[]`); tratamiento
+terminal-DATA estilo responsive.posture, no CSS. Los 12 tienen
+`normalizedStops: []` — cada packet incluye autorar sus stops. **Cola F4B
+derivada de este censo (orden DT):** palette.seeds (en cierre) → los 4
+bucket-B (button-style, elevation-posture, pairing, sidebar-tone) →
+motion.dial → packet de instrumento (rama `mode:'advanced'` + rama
+`font-stack`, preaudited) → PRO controls → anatomy/token-overrides/icon al
+final (superficies de medición nuevas). Hallazgo de prevención asentado: el
+registry debería IMPORTAR las constantes de keypath que el compilador ya
+exporta (ej. `SIDEBAR_TONE_FIELD`) en vez de escribir strings a mano — el
+bug de sidebar-tone no habría existido por construcción.
+
 **F0 — CERRADO (2026-08-19).** Criterio de cierre cumplido:
 `ci-gates OK — 78 blocking gate(s) passed` (2 excluded visibles con razón y
 dueño: channel-liveness y lane-control-drills, ambos esperan a F2); `find src -type d -empty` vacío salvo el inbox
