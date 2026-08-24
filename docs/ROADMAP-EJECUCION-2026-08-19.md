@@ -3468,6 +3468,85 @@ registry debería IMPORTAR las constantes de keypath que el compilador ya
 exporta (ej. `SIDEBAR_TONE_FIELD`) en vez de escribir strings a mano — el
 bug de sidebar-tone no habría existido por construcción.
 
+**Rottay palette MEDIDO (Opus, 2026-08-24, read-only, instrumental
+reproducible en /private/tmp/rp/): el veredicto es INSTRUMENT-DEFECT — ni
+política legítima ni defecto de producto.** `ROTTAY_DB_DOOR_INERT_FOR_PALETTE`
+es **falso como está escrito**: para rottay/crimson, `compileTenantThemeConfig`
+devuelve `variables = {}` **y** `modeDeltas = [{mode:'light', 19 variables}]`,
+y esas 19 incluyen **2 de los 5 declarados** (`--ds-color-primary: #DC2626`,
+`--ds-chart-series-1: #B33831`). La puerta NO es inerte: el guard que rechaza
+lee sólo el mapa **base** y lanza **antes** de la extracción de mode-blocks
+que H-3 fase (a) agregó 35 líneas más abajo (`ingress/index.mjs:1135-1141` vs
+`:1170-1184`). Guard de la era pre-H-3, nunca ensanchado; y hay un SEGUNDO
+guard de la misma clase (`assertVariables`, `:227-234`, usado por
+`composeStaticArm`/`composeDbArm`). **El hop que diverge es migrateV1 y el
+hecho de datos es UN booleano: `defaultMode`.** rottay es el único vertical
+first-party con default oscuro; el v1 sin `backgroundMode` enruta el seed
+top-level a `modes.light` (`migrate-v1/index.ts:396,404-418`) — en bithire/
+evnto (default light) cae en el cuerpo. Los 5 canales, uno por uno: 2 se
+mueven; `--ds-color-primary-500` inerte (rottay es el ÚNICO que autora
+`palette.ramps.primary` en su cuerpo, y las rampas autoradas ganan a la
+derivación); `--ds-button-primary-bg` estructuralmente ciego en rottay/evnto
+(alias constante — testigo inválido ahí); `--ds-color-text-on-primary` inerte
+en los 3 (hoja autorada). **APCA gobierna la puerta dark**: crimson/indigo
+son inadmisibles en rottay-dark (Lc 32.2/23.2 contra el piso, guard
+`validateCompiledThemeContrast` en compileTenantThemeConfig); seeds claros
+(#FFD166, #A7F3D0, etc.) pasan con 19 vars / 2 declarados. La puerta dark NO
+está cerrada por política — sólo esos dos stops. **Hallazgo colateral
+incómodo (registrado, sin medir alcance):** el brazo static emite el par que
+el brazo DB RECHAZA (`#DC2626` + `#0C0C0E`, mismo Lc 32.2) —
+`compileBrandTheme` no tiene puerta de contraste; las puertas son asimétricas
+en VALIDACIÓN, no sólo en scope. **Los 2 rojos preexistentes: NO comparten
+raíz entre sí ni con esto, y ninguno es defecto de producto.** Rojo A
+(`--ds-sidebar-item-color-active`): pin rancio de K1 (`33efc95c0` — rottay
+pasó de literal `#FFFFFF` a alias `var(--ds-color-primary)`; la premisa del
+test era igualdad contra literal). Rojo B (conteos): pin rancio de
+`3393f70d4` (F4A-6/K3 autoró `--ds-color-text-page`): rottay 1191→**1192** Y
+evnto 467→**468** (el segundo desfase escondido detrás del primero; bithire
+1231 correcto). No stalean ningún receipt de palette.seeds (no están en
+`sourceBindings` ni en `gates:ci`); sí enrojecen la suite unitaria completa.
+
+**RULINGS DT (adjudicados una vez, acá):**
+1. **Directiva del owner formalizada** ("arreglá los 2 rojos del test y
+   ensanchá los guards"): packet R-1 (fix de los 2 rojos, 3 líneas, spec
+   exacta de la medición) ANTES de R-2 (ensanche de guards + cierre), para
+   medir el ensanche contra una suite limpia.
+2. **Ensanche de guards (R-2):** el chequeo de vacuidad de `lowerStop` se
+   mueve DESPUÉS de la extracción de `modeVariables` y se calcula sobre la
+   UNIÓN `variables ∪ ⋃ modeVariables[mode]` (mensaje nombrando el scope);
+   `assertVariables` acepta base vacío si `modeVariables` no lo está; drill
+   positivo nuevo: "una bajada vacía en base y no-vacía en un mode block ES
+   un brazo, no un hallazgo" con la forma medida de rottay/crimson. El drill
+   negativo existente (doble sin `modeDeltas`) sigue verde.
+3. **Paridad scope-matched (la decisión que la medición me dejó):** las dos
+   puertas escriben scopes de modo distintos en un vertical de default
+   oscuro (static → cuerpo = dark; DB sin backgroundMode → modes.light).
+   Compararlas así mediría cosas distintas. **Ruling: el documento DB de la
+   sonda declara `backgroundMode = defaultMode del vertical` SIEMPRE** — la
+   intención tenant dominante es "mi marca en la apariencia default de mi
+   producto"; en bithire/evnto no cambia nada (ya era light), en rottay el
+   seed cae al cuerpo y la paridad se mide like-for-like. El caso
+   "tenant que sólo marca su light" queda registrado como hecho de contrato,
+   no como corrida de equivalencia. El `ingress` del manifest NO gana campo
+   de scope: lo declara el escenario, uniformemente.
+4. **Stops de palette.seeds en R-2:** crimson/indigo quedan EXCLUIDOS en
+   rottay-dark con razón APCA escrita (la clase de exclusión legítima "el
+   envelope rechaza el stop"); se autoran seeds claros admisibles
+   (#FFD166 / #A7F3D0 o los que la medición de R-2 confirme) para la paridad
+   rottay. H-2 queda DECIDIBLE en cada brazo (2 canales discriminan 2 stops).
+5. **El finding del manifest se reescribe:** `ROTTAY_DB_DOOR_INERT_FOR_PALETTE`
+   → `ROTTAY_DB_SEED_LANDS_IN_THE_NON_DEFAULT_MODE` (su `stillTrue...`
+   re-verificó el GUARD, no la bajada). **NO corresponde
+   `stopDiscriminationException`** — no hay nada que exceptuar: había un
+   guard que medía media cosa. La salida nombrada queda sin uso y así queda
+   asentado.
+6. **Preguntas de producto para el owner (registradas, no bloquean F4B):**
+   (a) ¿debería el transporte v1 enrutar un seed sin `backgroundMode` al
+   modo default del vertical en vez de siempre a light? (hoy rottay-dark
+   recibe el seed sólo en su overlay); (b) ¿debería `compileBrandTheme`
+   tener una puerta de contraste como la de `compileTenantThemeConfig`?
+   (la asimetría de validación entre puertas, sin medir alcance).
+
 **F0 — CERRADO (2026-08-19).** Criterio de cierre cumplido:
 `ci-gates OK — 78 blocking gate(s) passed` (2 excluded visibles con razón y
 dueño: channel-liveness y lane-control-drills, ambos esperan a F2); `find src -type d -empty` vacío salvo el inbox
