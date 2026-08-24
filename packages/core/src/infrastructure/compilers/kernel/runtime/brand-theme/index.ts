@@ -2114,10 +2114,10 @@ export function compileTheme(
     verticalPersonality?: BrandCompilerInput["verticalPersonality"];
     verticalTokenOverrides?: BrandCompilerInput["verticalTokenOverrides"];
     /**
-     * Which paths of this Theme the TENANT authored, collected from the patch
-     * that produced it (`collectPatchAuthoredPaths`). Supplied only for the
-     * tenant leg of a DB compile; a baseline compile supplies nothing and
-     * therefore compiles exactly as it did before provenance existed.
+     * BrandTheme-space LEAF paths this compile's tenant floor writes. HERE,
+     * COLLECTED by the DB leg (`collectPatchAuthoredPaths`); on
+     * `compileBrandTheme` a second producer NAMES the keypath it wrote (the
+     * probe's static arm, B-2). Absent = not a tenant: bytes unchanged.
      */
     tenantAuthoredPaths?: TenantAuthoredPaths;
   }

@@ -66,10 +66,10 @@
     "packages/core/src/ui/primitives/display/Card/engines/rustic/index.tsx",
     "packages/core/src/ui/primitives/display/Card/index.tsx"
   ],
-  "sourceDigest": "91aabbbb57e6fe9d929a61130a3220db07c77392306b2d9b215777ead01f9a6b",
+  "sourceDigest": "b9ee501ebf579bfc93308711f5bccae84c686821774c7775e00b787b7d2b2ff0",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/surfaces-effect-intensity/evnto-mate.json",
   "artifactSha256": "bce6d7308c630f3bb7668b5a14b7b5930a9d1325dbf532223f132ba2f2e90885",
-  "createdAt": "2026-08-24T12:51:26.000Z",
+  "createdAt": "2026-08-24T14:08:38.844Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

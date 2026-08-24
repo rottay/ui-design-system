@@ -600,7 +600,8 @@ export function buildIngressInput({ armId, controlManifest, stopId, base = {} })
    * law (H-1 V5), so an identity stop is a static-arm claim and says so
    * instead of quietly becoming something else.
    */
-  const ingressValue = stop.identity === true
+  const isIdentityStop = stop.identity === true;
+  const ingressValue = isIdentityStop
     ? resolveIdentityValue({ controlManifest, stop, base, resolvedPath, armId })
     : ingressValueForStop({ controlManifest, stop });
 
@@ -630,7 +631,42 @@ export function buildIngressInput({ armId, controlManifest, stopId, base = {} })
     patchCursor = patchCursor[segment];
   }
   patchCursor[segments.at(-1)] = ingressValue;
-  return { path: resolvedPath, declaredPath: path, document, patch, stopId, ingressValue };
+  /* B-2: WHICH path of this compile the TENANT authored — and the one stop
+   * whose answer is "none".
+   *
+   * For a normal stop the patch above IS the tenant's authorship record, so the
+   * path is NAMED here rather than re-derived downstream: the arm knows exactly
+   * which keypath it wrote, and an instrument that re-infers what it already
+   * knows is inventing an opportunity to be wrong. `staticTenantAuthoredPaths`
+   * turns this into the compiler's set.
+   *
+   * AN IDENTITY STOP DECLARES NO AUTHORSHIP (W-B, owner-adjudicated 2026-08-24
+   * on Fable's measurement). Since W-A an identity stop does not write
+   * "nothing": it RESOLVES the vertical's own authored value at this door and
+   * writes THAT. Declaring authorship over it would tell the compiler that a
+   * tenant deliberately selected the value the vertical itself ships — and the
+   * governed seed derivation does not read the VALUE, it reads the CLAIM, so
+   * every leaf that shadows the seed would switch to the alias and the identity
+   * stop would stop being an identity. Measured on bithire: identity WITHOUT
+   * the flag moves 0 channels; identity WITH it moves 7, and
+   * `--ds-button-primary-bg` leaves `#3A6FB0` for `var(--ds-color-primary)`.
+   *
+   * That is the same law F4B-8 already seated for this arm — an identity is
+   * "whatever THIS vertical already authors" — and the DB arm reaches it from
+   * the other side: it refuses a base outright, so an identity stop is a
+   * STATIC-ARM CLAIM ABOUT WHAT THE VERTICAL SHIPS, not an act of tenant
+   * authorship. Fenced by drill 7. */
+  const tenantAuthoredPath = isIdentityStop ? null : resolvedPath;
+  return {
+    path: resolvedPath,
+    declaredPath: path,
+    document,
+    patch,
+    stopId,
+    ingressValue,
+    identity: isIdentityStop,
+    tenantAuthoredPath,
+  };
 }
 
 /**
@@ -791,6 +827,68 @@ function resolveIdentityValue({ controlManifest, stop, base, resolvedPath, armId
 }
 
 /**
+ * B-2 — the authorship set the static arm hands `compileBrandTheme`: exactly
+ * the keypath this stop wrote, or nothing at all.
+ *
+ * WHY THE ARM DECLARES ANYTHING. Since B-1 the static arm lowers a TENANT
+ * PATCH over the vertical baseline, which is the same composition the DB
+ * transport performs — and the DB transport declares its authorship every
+ * time (`composition/tenant-theme:1941-1950`, `collectPatchAuthoredPaths` over
+ * the migrated patch). Measured for this packet: that composition is the ONLY
+ * baseline+patch compile production performs, and it never happens without
+ * provenance. An arm that composed the same two floors and said nothing was
+ * lowering a tenant patch while telling the compiler no tenant existed.
+ *
+ * NAMED, NEVER COLLECTED. `collectPatchAuthoredPaths` is the right tool for
+ * the DB leg and the wrong one here: it normalises from ThemePatch space into
+ * BrandTheme space, unwrapping `.value` for six governed roots, and this patch
+ * is ALREADY in BrandTheme space because `buildIngressInput` writes it at the
+ * keypath `staticBrandThemePath` declares. Its own doc names the failure mode
+ * — "Collecting in one space and consuming in another is how a provenance set
+ * silently stops matching."
+ *
+ * ONE LEAF, NOT ITS CONTAINERS. `collectPatchAuthoredPaths` also enumerates the
+ * intermediate objects as a deliberate over-approximation. The compiler's two
+ * read sites test EXACT membership against `CONSULTED_PROVENANCE_FIELDS`, whose
+ * entries are all leaf paths, so one path is both sufficient and the honest
+ * claim.
+ *
+ * FAIL-CLOSED ON THE STRONGER LAW. A claim of authorship over a path the patch
+ * does not write is a FALSE STATEMENT about who wrote what, so it throws. That
+ * such a claim would be inert TODAY — the consulted vocabulary is closed, so
+ * most spellings are never asked about — is a property of that vocabulary, not
+ * of this arm; an instrument whose lie is harmless only because a neighbour
+ * happens to be closed has no law of its own.
+ *
+ * @param {{patch: object, authoredPath: string|null|undefined}} input
+ * @returns {ReadonlySet<string>|undefined} `undefined` means "this compile is
+ *   not a tenant" — the exact semantics the compiler already defines for an
+ *   absent set, and what every baseline compile supplies.
+ */
+export function staticTenantAuthoredPaths({ patch, authoredPath }) {
+  if (authoredPath === null || authoredPath === undefined) return undefined;
+  if (typeof authoredPath !== 'string' || authoredPath.length === 0) {
+    throw new Error(
+      'resolution-probe: a tenant-authorship claim must NAME a keypath, and got ' +
+        `${JSON.stringify(authoredPath)}. An empty claim is not the same thing as no claim — ` +
+        'pass null for "this compile is not a tenant".',
+    );
+  }
+  if (readKeypath(patch ?? {}, authoredPath) === undefined) {
+    throw new Error(
+      `resolution-probe: the static arm claimed the tenant authored "${authoredPath}", but the ` +
+        'patch it lowered writes nothing there (an EMPTY patch writes nothing anywhere, which is ' +
+        'the same refusal for a compile that carries no tenant floor at all). Provenance is a ' +
+        'statement about WHO WROTE WHAT, so a set that does not correspond to the patch is a ' +
+        'false claim rather than a harmless extra entry: the compiler would derive a leaf from a ' +
+        'tenant selection that never happened, and the run would report that derivation as the ' +
+        'door working.',
+    );
+  }
+  return new Set([authoredPath]);
+}
+
+/**
  * Reshapes the path-built document into the argument shape each compiler
  * FUNCTION actually takes — verified against source, not guessed.
  *
@@ -819,7 +917,16 @@ function resolveIdentityValue({ controlManifest, stop, base, resolvedPath, armId
  *     `tenantSlug` is a required SIBLING field the manifest path does not
  *     carry at all, so the caller must supply it.
  */
-function toCompilerInput({ armId, document, base, patch, tenantSlug, vertical, schemaVersion }) {
+function toCompilerInput({
+  armId,
+  document,
+  base,
+  patch,
+  tenantAuthoredPath = null,
+  tenantSlug,
+  vertical,
+  schemaVersion,
+}) {
   if (armId === 'db-tenant-theme') {
     const general = document?.appearance?.general;
     if (!general || typeof general !== 'object') {
@@ -861,8 +968,26 @@ function toCompilerInput({ armId, document, base, patch, tenantSlug, vertical, s
      * -- the H-1 "without a baseline" comparison, for one -- gets exactly the
      * bytes it got before. */
     if (patch && Object.keys(patch).length > 0) {
-      return { brandTheme: base ?? {}, tenantPatch: patch, tenantSlug };
+      /* B-2: the patch travels WITH its authorship. `compileBrandTheme` already
+       * accepts the field (`BrandCompilerProvenanceInput.tenantAuthoredPaths`);
+       * no compiler is touched by this arm learning to fill it. */
+      const authoredPaths = staticTenantAuthoredPaths({ patch, authoredPath: tenantAuthoredPath });
+      return {
+        brandTheme: base ?? {},
+        tenantPatch: patch,
+        tenantSlug,
+        ...(authoredPaths === undefined ? {} : { tenantAuthoredPaths: authoredPaths }),
+      };
     }
+    /* NO PATCH, NO AUTHORSHIP — routed through the SAME law rather than a
+     * second one. This branch is the H-1 "lowered in isolation" comparison:
+     * one theme, no tenant floor at all. Authorship is a claim ABOUT a patch,
+     * so a claim here has no writer to attribute it to — and an empty patch
+     * writes nothing at any path, which is exactly what
+     * `staticTenantAuthoredPaths` already refuses. Calling it (rather than
+     * writing a parallel guard that no caller could reach) keeps the refusal
+     * on the one exported unit a drill can actually exercise. */
+    staticTenantAuthoredPaths({ patch: {}, authoredPath: tenantAuthoredPath });
     return { brandTheme: document, tenantSlug };
   }
   throw new Error(`resolution-probe: unknown ingress arm: ${armId}`);
@@ -970,10 +1095,25 @@ export function lowerStop({
     document: input.document,
     base,
     patch: input.patch,
+    tenantAuthoredPath: input.tenantAuthoredPath,
     tenantSlug,
     vertical,
     schemaVersion: provenance.schemaVersion,
   });
+  /* B-2: the claim, in a shape a record can carry.
+   *
+   * `tenantAuthoredPaths` reaches the compiler as a `Set`, which has NO JSON
+   * form — `JSON.stringify(new Set(['a']))` is `{}`, and `{}` in an artifact
+   * reads as "an empty claim", the exact opposite of what happened. So the
+   * provenance record below carries a sorted ARRAY, and `compilerInput` is
+   * recorded with the same substitution so the two halves of the record cannot
+   * disagree about what was declared. Null on the DB arm, and that is honest
+   * rather than missing: `compileTenantThemeConfig` collects its own authorship
+   * INSIDE itself, so this arm has none to name here — the same asymmetry
+   * `baseline` already records. */
+  const declaredAuthoredPaths = compilerInput.tenantAuthoredPaths
+    ? [...compilerInput.tenantAuthoredPaths].sort()
+    : null;
   const compiled = compile(compilerInput);
   const emitted = compiled?.variables ?? compiled?.cssVariables ?? compiled;
   if (!emitted || typeof emitted !== 'object') {
@@ -1063,7 +1203,17 @@ export function lowerStop({
         // lowered instead of inferring it from the document.
         ingressValue: input.ingressValue,
         document: input.document,
-        compilerInput,
+        compilerInput:
+          declaredAuthoredPaths === null
+            ? compilerInput
+            : { ...compilerInput, tenantAuthoredPaths: declaredAuthoredPaths },
+        /* B-2: which paths this arm told the compiler the TENANT authored.
+         * `null` means no claim was made — the DB arm always, and a static
+         * IDENTITY stop by ruling (W-B: an identity is what the vertical
+         * ships, not what a tenant selected). A reader can therefore tell a
+         * run that declared authorship from one that did not without
+         * re-deriving it from `stopId`. */
+        tenantAuthoredPaths: declaredAuthoredPaths,
         /* H-1 (V1): WHICH baseline this stop was composed onto. `document` now
          * carries the whole vertical theme, so diffing two runs by eye is not a
          * practical way to answer that question -- the digest is. Absent (null)

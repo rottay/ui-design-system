@@ -3375,6 +3375,54 @@ descartar. **Disposición:** packet propio sobre `buildSurfaceVariables`
 cuando el frente de customización del studio esté en agenda (F3/F4C); no
 bloquea B-2 ni F4B.
 
+**B-2 — IMPLEMENTACIÓN COMPLETA (Opus, 2026-08-24) + verificación DT propia.
+Pendiente: postaudit Fable y commit.** Los 7 drills verdes (suite ingress
+91/0), la predicción §4 confirmada EXACTAMENTE en escena (bithire
+crimson/indigo: 7 canales movidos en AMBOS brazos, 0 filas divergentes —
+antes 3; `--ds-button-primary-bg = var(--ds-color-primary)` byte-idéntico
+entre brazos; evnto 5/5 sin cambio por el filtro de canales declarados;
+rottay sigue rechazado por el guard, misma forma), y el STOP que más
+importaba: **cero movidas en los 43 escenarios CSS receipteados** (verificado
+empíricamente re-bajándolos por el brazo estático, no sólo derivado; 46
+receipts = 43 CSS + 3 DATA de responsive.posture sin brazo estático). Dos
+artefactos NO receipteados difieren (`experience-profile/
+bithire-editorial.DIVERGENCE.json` y `bithire-technical.DESIGNED-NULL.json`,
+en `--ds-material-canvas-texture`): superseded por las corridas R7, cerrado
+por experimento directo (autoría sobre experience.profile mueve 0 canales).
+**Mi verificación DT (contra el árbol, no de palabra):** write-set 57 paths =
+lo declarado + 1 desviación adjudicada; diff de `brand-theme/index.ts` =
+sólo comentario (W-A); ingress 91/0; `program-check` CONSTITUTION_READY;
+validador v2 **46/46 VALID**; los 46 receipts re-emitidos cambian EXACTAMENTE
+`createdAt` + `sourceDigest` (chequeo campo por campo, 0 deriva de valores);
+`producer = claude-opus-5-f4b-lane` pasa la valla de segregación viva (el
+validador lee el aprobador desde las autoridades, nunca pineado).
+**Adjudicaciones DT de este packet:** (a) **desviación
+`manifest/index.json` ACEPTADA** — índice derivado de los manifests de
+control, misma clase que `producers.json`; `program-check` lo exige. Nota de
+orden asentada (Opus): el generador se niega a escribir con receipts stale →
+secuencia obligada `re-emitir 46 → generar index.json → program-check`. Queda
+como precedente: los índices derivados forzados por un gate se declaran, no
+se omiten. (b) **W-A comprimida ACEPTADA**: el texto largo reventaba
+`budget.maxSourceBytes` (pineado exactamente al valor actual en 5
+entrypoints; headroom 0). La versión de 308 bytes conserva las dos
+correcciones de Fable (conjunto NOMBRADO además de colectado + segundo
+proveedor nombrado + "Absent = not a tenant"); el porqué largo vive en el
+arm (`staticTenantAuthoredPaths`). **No subo el techo por un comentario** —
+los presupuestos de bytes mueren en F6 de todos modos; si en F6 sobra
+headroom, el texto largo puede volver. (c) **drill 7 fija la regla W-B
+load-bearing**: identidad + flag mueve 7/7/5 canales si la rama se rompe.
+**Deuda NUEVA registrada (no de B-2, probada preexistente por A/B con bytes
+de HEAD):** 2 rojos en `tenant-theme/tests/provenance-acceptance.test.ts` —
+`case B` (`--ds-sidebar-item-color-active`: esperado `undefined`, recibido
+`#FFFFFF`) y `keeps the shipped first-party variable counts` (rottay 1192 vs
+1191). Anterior a este packet; **muy probablemente la misma raíz que la
+puerta DB de rottay inerte para paleta** — se investiga en el packet del
+ruling rottay (siguiente). Suite fuera de los gates corridos: anotado para
+el barrido de cobertura. **Lo único que bloquea palette.seeds ahora: el
+ruling rottay** (`ROTTAY_DB_DOOR_INERT_FOR_PALETTE`) — medir por qué el brazo
+DB emite 0 canales de paleta (¿política legítima o defecto de producto?) y
+adjudicar la `stopDiscriminationException` o declarar el defecto.
+
 **F0 — CERRADO (2026-08-19).** Criterio de cierre cumplido:
 `ci-gates OK — 78 blocking gate(s) passed` (2 excluded visibles con razón y
 dueño: channel-liveness y lane-control-drills, ambos esperan a F2); `find src -type d -empty` vacío salvo el inbox

@@ -40,6 +40,7 @@ import {
   loadStaticBaselines,
   lowerStop,
   RETIRED_DB_COMPILER_EXPORTS,
+  staticTenantAuthoredPaths,
   tenantArmSelector,
 } from '../index.mjs';
 
@@ -260,10 +261,18 @@ test('positive control: lowerStop reshapes the document into the REAL compiler a
   // reshapes the document into the real compiler argument -- and it is asserted
   // over the shape that exists now: the stop rides `tenantPatch`, the baseline
   // rides `brandTheme`, and here there is no baseline to ride.
+  //
+  // AGED AGAIN IN B-2, and again the good kind: the shape gained a FOURTH
+  // field. The patch now travels with the authorship of the one keypath it
+  // wrote, so an assertion that pinned the three-field shape would have been
+  // asserting that the arm still tells the compiler no tenant exists. Pinned
+  // deeply rather than loosely on purpose -- this drill's whole value is that
+  // it notices a shape change instead of tolerating one.
   assert.deepEqual(staticSeen, {
     brandTheme: {},
     tenantPatch: { surfaces: { rhythm: 'airy' } },
     tenantSlug: 'rottay',
+    tenantAuthoredPaths: new Set(['surfaces.rhythm']),
   });
 
   // ...and with a baseline, the two floors stay APART. This is the half the old
@@ -283,6 +292,9 @@ test('positive control: lowerStop reshapes the document into the REAL compiler a
   });
   assert.deepEqual(composedSeen.brandTheme, { typography: { scale: 1.02 } });
   assert.deepEqual(composedSeen.tenantPatch, { surfaces: { rhythm: 'airy' } });
+  // B-2: the authorship rides the patch, and names the patch's own keypath --
+  // not the baseline's, which the tenant did not write.
+  assert.deepEqual([...composedSeen.tenantAuthoredPaths], ['surfaces.rhythm']);
 });
 
 test('negative drill: the db arm refuses a document with no "appearance.general"', () => {
@@ -2369,4 +2381,283 @@ test('H-3(a) drill 10 [needs dist]: no probe artifact carries a prefers-color-sc
       `${vertical}: a prefers-color-scheme rule appeared; the arm must now serve it too`,
     );
   }
+});
+
+/* ===================================================================== *
+ * B-2 — the static arm declares the PATCH'S AUTHORSHIP.
+ *
+ * Since B-1 this arm composes a tenant patch over the vertical baseline. That
+ * is the same two-floor composition the DB transport performs, and the DB
+ * transport declares its authorship every time
+ * (`composition/tenant-theme:1941-1950`). Measured for this packet's gate:
+ * baseline+patch is the ONLY such composition production performs, and
+ * production never performs it without a set — so an arm that composed both
+ * floors and said nothing was lowering a tenant patch while telling the
+ * compiler no tenant existed.
+ *
+ * The one exception is a RULING, not an omission: an IDENTITY stop writes the
+ * value the vertical itself authors, so it is a static-arm claim about what
+ * the vertical ships rather than an act of tenant authorship. Drill 7 fences
+ * it, and measures what would happen if it did not.
+ * ===================================================================== */
+
+const B2_PALETTE = readManifest(resolve(CORE_ROOT, 'manifest/controls/palette.seeds.json'));
+
+/** The three first-party baselines, from the same dist the arms bind. */
+async function b2Baselines() {
+  const { rottayBrandTheme, bithireBrandTheme, evntoBrandTheme } = await import(
+    `${CORE_ROOT}/dist/index.js`
+  );
+  return { rottay: rottayBrandTheme, bithire: bithireBrandTheme, evnto: evntoBrandTheme };
+}
+
+/** Channels whose value differs between two compiles, sorted. */
+const movedChannels = (before, after) =>
+  Object.keys(after.cssVariables)
+    .filter((name) => before.cssVariables[name] !== after.cssVariables[name])
+    .sort();
+
+test('B-2 drill 1 [needs dist]: the authorship IS the stop path, read back from the record', async () => {
+  const { lowered } = await m1Lower(B2_PALETTE, 'primary/crimson', 'bithire');
+  const declared = lowered.producedBy.input.tenantAuthoredPaths;
+  // Compared against what the arm RECORDED as the path it wrote, never against
+  // a literal: a drill that pasted 'palette.primaryColor' would keep passing
+  // the day the manifest moved the door, which is the one thing it exists to
+  // notice.
+  assert.deepEqual(declared, [lowered.producedBy.input.path]);
+  assert.equal(declared.length, 1, 'one leaf, not its containers');
+  // And the two halves of the record agree: what was declared is what was
+  // handed to the compiler.
+  assert.deepEqual(lowered.producedBy.input.compilerInput.tenantAuthoredPaths, declared);
+  assert.deepEqual(
+    Object.keys(lowered.producedBy.input.compilerInput).sort(),
+    ['brandTheme', 'tenantAuthoredPaths', 'tenantPatch', 'tenantSlug'],
+  );
+  // The DB arm declares nothing HERE, and that is honest rather than missing:
+  // `compileTenantThemeConfig` collects its own authorship inside itself.
+  const { dbLowered } = await h3a2Arms('bithire');
+  assert.equal(dbLowered.producedBy.input.tenantAuthoredPaths, null);
+});
+
+test('B-2 drill 2 [needs dist]: a BASELINE compile is untouched — production invariance', async () => {
+  const { compileBrandTheme, renderFirstPartyArtifact, FIRST_PARTY_ARTIFACT_SPECS } = await import(
+    `${CORE_ROOT}/dist/index.js`
+  );
+  const baselines = await b2Baselines();
+  for (const spec of FIRST_PARTY_ARTIFACT_SPECS) {
+    const brandTheme = baselines[spec.slug];
+    assert.ok(brandTheme, `no baseline for ${spec.slug}`);
+    // The production shape, exactly as `renderFirstPartyArtifact:213` calls it.
+    const bare = compileBrandTheme({ brandTheme, tenantSlug: spec.slug });
+    const explicitlyAbsent = compileBrandTheme({
+      brandTheme,
+      tenantSlug: spec.slug,
+      tenantAuthoredPaths: undefined,
+    });
+    assert.deepEqual(explicitlyAbsent.cssVariables, bare.cssVariables);
+    // ... and the production entry point takes that same no-provenance path.
+    const { compiled } = renderFirstPartyArtifact({ spec, brandTheme });
+    assert.deepEqual(compiled.cssVariables, bare.cssVariables);
+    // The vertical's OWN authored button bg survives, read from the theme
+    // rather than pasted: a leaked provenance would replace it with the alias.
+    const authored = brandTheme.chrome?.controls?.buttonPrimary?.bg;
+    if (authored !== undefined) {
+      assert.equal(bare.cssVariables['--ds-button-primary-bg'], authored);
+    }
+    // This cannot pass by the field being inert: the SAME theme with a tenant
+    // floor and a declared path compiles differently.
+    const withTenant = compileBrandTheme({
+      brandTheme,
+      tenantPatch: { palette: { primaryColor: '#DC2626' } },
+      tenantSlug: spec.slug,
+      tenantAuthoredPaths: new Set(['palette.primaryColor']),
+    });
+    assert.notDeepEqual(withTenant.cssVariables, bare.cssVariables);
+  }
+});
+
+test('B-2 drill 3 [needs dist]: bithire\'s button follows the seed on BOTH arms', async () => {
+  const { staticLowered, dbLowered } = await h3a2Arms('bithire');
+  const channel = '--ds-button-primary-bg';
+  // Asserted BETWEEN the two real compilers, not against a literal: the claim
+  // is equivalence, so a pasted expectation would let both arms drift together
+  // and still pass.
+  assert.equal(staticLowered.variables[channel], dbLowered.variables[channel]);
+  // And it really is the alias, not two copies of bithire's baked hex — which
+  // is what this arm carried before B-2.
+  assert.equal(staticLowered.variables[channel], 'var(--ds-color-primary)');
+  const baselines = await b2Baselines();
+  assert.equal(baselines.bithire.chrome.controls.buttonPrimary.bg, '#3A6FB0');
+  assert.notEqual(staticLowered.variables[channel], '#3A6FB0');
+});
+
+test('B-2 drill 4 [needs dist]: a VERTICAL editing its own theme still does not move the button', async () => {
+  /* The behaviour `applyTenantSeedDerivations` documents as intended: "No
+   * provenance, or a seed this block did not get from the tenant, and the
+   * function returns without touching a byte. Every static first-party compile
+   * takes this path." B-2 must not make a vertical's own palette edit look
+   * like a tenant selection. */
+  const { compileBrandTheme } = await import(`${CORE_ROOT}/dist/index.js`);
+  const baselines = await b2Baselines();
+  const edited = {
+    ...baselines.bithire,
+    palette: { ...baselines.bithire.palette, primaryColor: '#DC2626' },
+  };
+  const compiled = compileBrandTheme({ brandTheme: edited, tenantSlug: 'bithire' });
+  assert.equal(compiled.cssVariables['--ds-color-primary'], '#DC2626', 'the seed itself moved');
+  assert.equal(
+    compiled.cssVariables['--ds-button-primary-bg'],
+    baselines.bithire.chrome.controls.buttonPrimary.bg,
+    'but the leaf the vertical bakes did NOT follow it',
+  );
+});
+
+test('B-2 drill 5: authorship over a path the patch does not write THROWS', () => {
+  const patch = { palette: { primaryColor: '#DC2626' } };
+  assert.deepEqual([...staticTenantAuthoredPaths({ patch, authoredPath: 'palette.primaryColor' })], [
+    'palette.primaryColor',
+  ]);
+  /* THE LAW IS A THROW, not "no measurable effect". A set that does not
+   * correspond to the patch is a false statement about who wrote what. That
+   * `palette.secondaryColor` happens to be outside the consulted vocabulary
+   * today is a property of that vocabulary, not of this arm. */
+  assert.throws(
+    () => staticTenantAuthoredPaths({ patch, authoredPath: 'palette.secondaryColor' }),
+    /writes nothing there/,
+  );
+  // A consulted path the patch does not write is the same refusal — this is
+  // the spelling that WOULD have had an effect.
+  assert.throws(
+    () => staticTenantAuthoredPaths({ patch, authoredPath: 'chrome.controls.buttonPrimary.bg' }),
+    /writes nothing there/,
+  );
+  // No patch at all: the H-1 "lowered in isolation" compile has no writer to
+  // attribute a claim to, and an empty patch writes nothing anywhere.
+  assert.throws(
+    () => staticTenantAuthoredPaths({ patch: {}, authoredPath: 'palette.primaryColor' }),
+    /writes nothing there/,
+  );
+  // An EMPTY claim is not the same thing as no claim.
+  assert.throws(() => staticTenantAuthoredPaths({ patch, authoredPath: '' }), /must NAME a keypath/);
+  // And no claim is exactly that: a compile that is not a tenant.
+  assert.equal(staticTenantAuthoredPaths({ patch, authoredPath: null }), undefined);
+  assert.equal(staticTenantAuthoredPaths({ patch, authoredPath: undefined }), undefined);
+});
+
+test('B-2 drill 6: the CLOSED consulted vocabulary is what bounds the blast radius', () => {
+  /* THE RISK THIS FENCES is not today; it is the day the vocabulary grows and
+   * nobody re-reads this arm. The set is read from the CONTRACT SOURCE — the
+   * compiler does not publish it through any package entrypoint — and never
+   * copied, so a control whose stop starts writing a consulted field turns
+   * this drill red instead of quietly changing what the arm measures. */
+  const isoSource = readFileSync(
+    resolve(CORE_ROOT, 'src/foundation/contracts/composition/tenants/themes/iso/index.ts'),
+    'utf8',
+  );
+  const marker = 'export const CONSULTED_PROVENANCE_FIELDS: ReadonlySet<string> = new Set([';
+  const open = isoSource.indexOf(marker);
+  assert.notEqual(open, -1, 'the contract no longer declares CONSULTED_PROVENANCE_FIELDS this way');
+  const close = isoSource.indexOf(']);', open);
+  assert.notEqual(close, -1);
+  const consulted = new Set(
+    [...isoSource.slice(open + marker.length, close).matchAll(/"([^"]+)"/g)].map((m) => m[1]),
+  );
+  // A parse that silently returned nothing would make every assertion below
+  // vacuous, so the reader proves itself first.
+  assert.ok(consulted.size >= 12, `parsed only ${consulted.size} consulted fields`);
+  assert.ok(consulted.has('palette.primaryColor'), 'the primary seed must be in the vocabulary');
+
+  const controlDir = resolve(CORE_ROOT, 'manifest/controls');
+  const intersections = [];
+  for (const file of readdirSync(controlDir).filter((name) => name.endsWith('.json')).sort()) {
+    const manifest = readManifest(resolve(controlDir, file));
+    const declared = manifest?.ingress?.staticBrandThemePath;
+    if (typeof declared !== 'string' || declared.length === 0) continue;
+    for (const member of ingressPathMembers(declared)) {
+      if (consulted.has(member)) intersections.push(`${manifest.controlId} -> ${member}`);
+    }
+  }
+  /* Measured across EVERY control the registry declares a static door for, not
+   * just the eight that carry stops today: exactly one door lands on a field
+   * the compiler consults, and it is the primary seed of palette.seeds. That
+   * is why the 42 receipted scenarios cannot move — none of their stops writes
+   * a consulted path — and it is derivable here rather than from a run. */
+  assert.deepEqual(intersections, ['palette.seeds -> palette.primaryColor']);
+});
+
+test('B-2 drill 7 [needs dist]: W-B — an IDENTITY stop declares NO authorship', async () => {
+  const identityManifest = {
+    ...B2_PALETTE,
+    calibration: {
+      ...B2_PALETTE.calibration,
+      normalizedStops: [{ id: 'primary/identity', role: 'primary', identity: true }],
+    },
+  };
+  const baselines = await b2Baselines();
+
+  // The mechanics: the identity branch names no authored path, so the arm has
+  // nothing to declare and the set never reaches the compiler.
+  const built = buildIngressInput({
+    armId: 'static-brand-theme',
+    controlManifest: identityManifest,
+    stopId: 'primary/identity',
+    base: baselines.bithire,
+  });
+  assert.equal(built.identity, true);
+  assert.equal(built.tenantAuthoredPath, null);
+  assert.equal(built.ingressValue, baselines.bithire.palette.primaryColor);
+  assert.equal(staticTenantAuthoredPaths({ patch: built.patch, authoredPath: built.tenantAuthoredPath }), undefined);
+
+  // End to end, through the real compiler: the identity stop stays an identity.
+  const { lowered } = await m1Lower(identityManifest, 'primary/identity', 'bithire');
+  assert.equal(lowered.producedBy.input.tenantAuthoredPaths, null);
+  assert.equal(lowered.producedBy.input.compilerInput.tenantAuthoredPaths, undefined);
+
+  const { compileBrandTheme } = await import(`${CORE_ROOT}/dist/index.js`);
+  for (const [vertical, theme] of Object.entries(baselines)) {
+    const patch = { palette: { primaryColor: theme.palette.primaryColor } };
+    const baseline = compileBrandTheme({ brandTheme: theme, tenantSlug: vertical });
+    const asLowered = compileBrandTheme({ brandTheme: theme, tenantPatch: patch, tenantSlug: vertical });
+    assert.deepEqual(
+      movedChannels(baseline, asLowered),
+      [],
+      `${vertical}: the identity stop must be byte-identical to the baseline`,
+    );
+    /* AND THE RULING IS LOAD-BEARING, measured rather than assumed: declaring
+     * authorship of the vertical's OWN value moves real channels, because the
+     * seed derivation reads the CLAIM and not the value. On bithire that is
+     * exactly the leaf this control is about. */
+    const asAuthored = compileBrandTheme({
+      brandTheme: theme,
+      tenantPatch: patch,
+      tenantSlug: vertical,
+      tenantAuthoredPaths: new Set(['palette.primaryColor']),
+    });
+    assert.ok(
+      movedChannels(baseline, asAuthored).length > 0,
+      `${vertical}: declaring authorship of the identity value must NOT be a no-op`,
+    );
+  }
+  const bithire = baselines.bithire;
+  const authoredIdentity = compileBrandTheme({
+    brandTheme: bithire,
+    tenantPatch: { palette: { primaryColor: bithire.palette.primaryColor } },
+    tenantSlug: 'bithire',
+    tenantAuthoredPaths: new Set(['palette.primaryColor']),
+  });
+  assert.equal(
+    authoredIdentity.cssVariables['--ds-button-primary-bg'],
+    'var(--ds-color-primary)',
+    'bithire: with the flag, the identity stop stops being an identity',
+  );
+  assert.equal(bithire.chrome.controls.buttonPrimary.bg, '#3A6FB0');
+
+  // The ruling is WRITTEN beside the branch that resolves identity, so a
+  // future reader meets the reason before the code.
+  const armSource = readFileSync(resolve(CORE_ROOT, 'src/tooling/resolution-probe/runtime/ingress/index.mjs'), 'utf8');
+  const ruling = armSource.indexOf('AN IDENTITY STOP DECLARES NO AUTHORSHIP');
+  const branch = armSource.indexOf('const tenantAuthoredPath = isIdentityStop');
+  assert.notEqual(ruling, -1, 'the W-B ruling is not written in the arm');
+  assert.notEqual(branch, -1);
+  assert.ok(ruling < branch, 'the ruling must sit above the branch it governs');
 });

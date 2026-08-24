@@ -61,10 +61,10 @@
     "packages/core/src/ui/primitives/tests/EmbeddedCssRecovery.contract.test.ts",
     "packages/showroom/e2e/whitelabel/density-authority-matrix.spec.ts"
   ],
-  "sourceDigest": "d835075def9b4a4769225ab8e98459d0baa1e04a2a3988930dd9ed0c0761c1c6",
+  "sourceDigest": "cb6f8f6f0ac02236ce56e82659a30c26e1d4e635c3a0c2474c8396bae5c9cedd",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/spacing-rhythm/grid-tight.json",
   "artifactSha256": "0bfd75c11cd18db57277491f6be25a26f6e8acb09719db7b3ca0f616643e1840",
-  "createdAt": "2026-08-24T12:51:26.000Z",
+  "createdAt": "2026-08-24T14:08:38.844Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,
