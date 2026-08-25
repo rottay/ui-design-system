@@ -4130,6 +4130,32 @@ de CI-2. Y atribución pendiente de verificar: `capability-propagation`
 (rojo del backlog desde D-1) quedó verde con este registry en el árbol — si
 el fix del wildcard es la causa, ese rojo se cierra con este packet.
 
+**El "hang" de program-check.test.mjs — DIAGNOSTICADO (Opus, 2026-08-25;
+directiva del owner): NO SE CUELGA. Tarda 6m18s, y 5m43s son un `spawnSync`
+mudo.** El punto del apagón no es el `await import()` del test 45 (pasa en
+59 ms solo): es el drill A11 de transporte (`:1479`), que corre 3 suites por
+`spawnSync` y cuyo costo entero es `cascade-producers.test.mjs` (217 tests,
+334 s, re-derivando un inventario de 10 MB / 215.942 leaves). `spawnSync`
+bloquea el hilo principal: el reporter no puede vaciar su salida y la última
+línea visible es la del test 44 mientras el 45/46 ya pasaron detrás del
+bloqueo — TODA la ilusión está en esa diferencia entre "dónde se detiene la
+salida" y "dónde trabaja el proceso". Con cota de 30 min el archivo TERMINA
+(378 s, 48 tests, 47/1). Todo nació en `c269fb348` (2026-08-22, PRE_F4B
+Lote A: el inventario de 10 MB + la suite de 217 + el drill de transporte en
+la misma entrega); "intermitente → siempre" es el momento en que las cotas
+de los observadores bajaron de ~6,3 min. **Y el "hang" tapaba un rojo real**:
+el drill falla cuando un carril vecino edita `.ts/.tsx` durante la corrida
+(contención medida: los 2 rojos T-21/TC-7 se reproducen con un build en
+vuelo; en ventana tranquila, 217/217). **RULING DT (packet CI-4, chico):**
+(1) `timeout` + `maxBuffer` explícitos en el `spawnSync` (que un suite
+trabado FALLE CON SU STDOUT en vez de parecer colgado — ataca el síntoma del
+owner); (2) progreso por `stderr` por suite antes de cada spawn (los 5m43s
+dejan de ser silencio); (4) el drill declara que exige árbol limpio y lo
+DICE al fallar (la contención deja de leerse como defecto del inventario —
+es el estado normal de un worktree con lanes). (3) derivar una vez a nivel
+de módulo queda registrado para cuando se mida cuántos de los 217
+re-derivan (sin medir, no se toca). CI-4 va a Sonnet tras F4B-12.
+
 **F4B-11 — typography.pairing CIERRA SOURCE_BOUND (2026-08-24; Sonnet;
 postaudit Fable: ACCEPT — "el falso-verde más peligroso del censo quedó
 cerrado con el keypath real").** Keypath corregido (el de OTRO control →
