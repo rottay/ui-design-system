@@ -1154,7 +1154,12 @@ describe("H3 contract: evnto", () => {
     });
     it("artifact: layout vars present", () => {
       expect(artifact).toContain("--ds-layout-bg: #FFFFFF");
-      expect(artifact).toContain("--ds-layout-sider-bg: #FAFAFA");
+      // R-1 re-anchor (D-1): F2.4 (cf61da8bb) rewired the BASE sider ground
+      // from the literal to the governed root. The base literal does not come
+      // back -- D-1 restitutes the dark OVERLAY, asserted below. The colour
+      // truth is kept the A2-16 way: assert the alias and what it resolves to.
+      expect(artifact).toContain("--ds-layout-sider-bg: var(--ds-sidebar-bg)");
+      expect(artifact).toContain("--ds-sidebar-bg: #fafafa");
     });
     it("artifact: shell vars present (minimal)", () => {
       expect(artifact).toContain("--ds-shell-grid-size: 0px");

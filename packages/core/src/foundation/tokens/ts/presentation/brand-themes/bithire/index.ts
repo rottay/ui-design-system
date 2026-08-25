@@ -1497,6 +1497,9 @@ const OVERLAY: BrandThemeModeOverlay = {
        * @domicile seed
        * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
        */
+      // Literal on purpose: an alias equal to the body emits NOTHING in a mode
+      // block (diff-by-values) -- that is how F2.4 drained this shield. D-1.
+      bg: "#151d2b",
       bgHover: "#1b2535",
       /**
        * @domicile seed
@@ -1645,6 +1648,9 @@ const OVERLAY: BrandThemeModeOverlay = {
        * @governor dial: typography.scale
        */
       cellFontSize: OVERLAY_SEED.typeDetail.tableCellSize,
+      // Literal on purpose: an alias equal to the body emits NOTHING in a mode
+      // block (diff-by-values) -- that is how F2.4 drained this shield. D-1.
+      cellColor: "#e4e8ed",
       /**
        * @domicile derived
        * @governor deriva de: --ds-surface-control
@@ -2609,11 +2615,6 @@ const OVERLAY: BrandThemeModeOverlay = {
      * @placeholder OVERLAY.chrome.calendar
      * @domicile unassigned
      * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
-     */
-    /**
-     * @placeholder OVERLAY.chrome.cardComponent.bg
-     * @domicile unassigned
-     * @governor none — gap aceptado: el modo no diverge en este slot; CHROME lo autora en el cuerpo y su valor sirve a los dos modos (posture unassigned, roster F4A-1c)
      */
     /**
      * @placeholder OVERLAY.chrome.cardComponent.borderAccentHover

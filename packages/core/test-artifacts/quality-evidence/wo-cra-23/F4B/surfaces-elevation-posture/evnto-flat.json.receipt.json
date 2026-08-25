@@ -66,10 +66,10 @@
     "packages/core/src/ui/primitives/display/Card/engines/rustic/index.tsx",
     "packages/core/src/ui/primitives/display/Card/index.tsx"
   ],
-  "sourceDigest": "4f65ab95da5d3ff261097ee586d4368d769b623adba49cfae04887faa53fd8ff",
+  "sourceDigest": "137c9c3e9846e8decef8fc53ddfde35bc848772b1ea3c9244026faf6e321ecf6",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/surfaces-elevation-posture/evnto-flat.json",
   "artifactSha256": "d35e8e71d97fd0c3b6c2d1c6ad4da8a0175059badab728ee65ef856230a75652",
-  "createdAt": "2026-08-24T23:32:22.122Z",
+  "createdAt": "2026-08-25T00:47:52.136Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

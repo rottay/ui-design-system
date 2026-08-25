@@ -66,10 +66,10 @@
     "packages/core/src/ui/primitives/display/Card/engines/rustic/index.tsx",
     "packages/core/src/ui/primitives/display/Card/index.tsx"
   ],
-  "sourceDigest": "4257b8131ac5b2cc8b4ba5a678af667ec35efd4bf31abc50e7b9b00bf4d3285f",
+  "sourceDigest": "5c26dc0e7421cb010fa9a985a7b4c8d15b118b35c243510430933ed034a53a56",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/shape-radius-scale/rottay-amplio.json",
   "artifactSha256": "17454f1907ae7bb90f706f6d630d9cabe90755135f11072beba27426f5da3096",
-  "createdAt": "2026-08-24T23:32:21.882Z",
+  "createdAt": "2026-08-25T00:47:51.957Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

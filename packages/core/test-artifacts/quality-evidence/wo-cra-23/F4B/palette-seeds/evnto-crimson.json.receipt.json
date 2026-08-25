@@ -63,10 +63,10 @@
     "packages/core/styles/index.css",
     "packages/core/styles/rottay.css"
   ],
-  "sourceDigest": "712da986537a3f584f61add3172548bf6fa1fcaafdf61a2782e7ca37a2abff96",
+  "sourceDigest": "953055357112de412b0e9f602dea4370528ef43329c4e46bbdbf78a098876d03",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/palette-seeds/evnto-crimson.json",
   "artifactSha256": "7afb1b4d07330c2cc2d3b391c391b6baeff515738cac7618c0fc0dd87ac078ff",
-  "createdAt": "2026-08-24T23:32:21.592Z",
+  "createdAt": "2026-08-25T00:47:51.681Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

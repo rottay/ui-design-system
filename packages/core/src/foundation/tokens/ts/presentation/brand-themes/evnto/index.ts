@@ -666,6 +666,9 @@ const OVERLAY: BrandThemeModeOverlay = {
       bg: "#131210",
       headerBg: "rgba(19, 18, 16, 0.92)",
       headerBorder: "#2E2C24",
+      // Literal on purpose: an alias equal to the body emits NOTHING in a mode
+      // block (diff-by-values) -- that is how F2.4 drained this shield. D-1.
+      siderBg: "#0E0D0B",
       siderBorder: "#222018",
     },
     /**
@@ -1238,11 +1241,6 @@ const OVERLAY: BrandThemeModeOverlay = {
      * @placeholder OVERLAY.chrome.layout.dividerTextColor
      * @domicile unassigned
      * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
-     */
-    /**
-     * @placeholder OVERLAY.chrome.layout.siderBg
-     * @domicile unassigned
-     * @governor none — gap aceptado: el modo no diverge en este slot; CHROME lo autora en el cuerpo y su valor sirve a los dos modos (posture unassigned, roster F4A-1c)
      */
     /**
      * @placeholder OVERLAY.chrome.list

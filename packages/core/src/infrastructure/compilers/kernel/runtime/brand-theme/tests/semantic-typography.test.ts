@@ -45,6 +45,32 @@ const FIRST_PARTY = [
  * zero key: only authored order moved. bithire/evnto did not move and are not
  * re-anchored.
  *
+ * CI-1 re-anchor, ALL THREE VERTICALS (2026-08-24): F4A-6/K3 (3393f70d4,
+ * 2026-08-21) authored a NEW root, `--ds-color-text-page`, and rewired ~35
+ * ink channels onto it. Unlike the two re-anchors above, this is NOT
+ * order-only: confirmed the new channel is genuinely present in leg-A's
+ * compiled output for all three verticals (`--ds-color-text-page` appears in
+ * the tenant artifact today: 37 occurrences rottay, 3 bithire, 1 evnto) --
+ * real added content, not a permutation. This re-anchor does NOT repeat the
+ * full "measured, not asserted" invariant battery (value-map/cssString-
+ * multiset/keyset diffs) the two re-anchors above performed -- it is a
+ * mechanical CI-1 re-pin against the tree as measured today (the exact
+ * `Received` value the suite itself reports), not an architecture audit. If
+ * a zero-pixel proof is required for this specific move, it still needs
+ * doing.
+ *
+ * D-1 re-anchor, ALL THREE VERTICALS (2026-08-24, same protocol as the CI-1
+ * row above): D-1 restituted the four dark/light overlay shields that F2.4
+ * drained, so leg-A's mode blocks each gained exactly the lines the drain had
+ * removed -- bithire dark `--ds-card-bg: #151d2b` and
+ * `--ds-table-cell-color: #e4e8ed`, rottay light and evnto dark
+ * `--ds-layout-sider-bg`. Like the CI-1 row, this is real added content and
+ * NOT a permutation, and it does NOT repeat the full invariant battery: the
+ * zero-delta proof D-1 does carry is of a different shape -- each restituted
+ * value equals what the base alias already resolved to in that mode (measured
+ * per leaf), the rest of the compile is identical, and the three tenant
+ * artifacts changed in exactly those four lines and nothing else.
+ *
  * SHAPE-BASE re-anchor, ROTTAY ONLY: `applyModeOverlay` now completes the chrome
  * merge base to the canonical shape, so an overlay-ONLY key lands in its shape
  * slot instead of being appended after the authored base keys. That closed the
@@ -62,9 +88,9 @@ const FIRST_PARTY = [
  * re-anchored.
  */
 const LEG_A_SURFACE_DIGEST: Record<string, string> = {
-  rottay: "80b245093f6fb3b9691379ed06c359f3c4043dd6d55474ae321230f1711f3a90",
-  bithire: "b0c214994804004008f6f71a17d1e6f998db6edfe528ee07cf6f1899b7f3de7d",
-  evnto: "c965807e8cc21b69604defd2ced1d08127005ec8ae21158499c8233a454ede91",
+  rottay: "f3ab760aab5f478d6716625701858228c20720c44da328e1d4449959ed39e15b",
+  bithire: "621205167d0261ce960f4fb160965311282ea206f28c57ea031afca3dffb19e6",
+  evnto: "7e545d8968466f17a3b7b347da9f3a6a68ee80580b85b1ed0e7f1c5e6b45e980",
 };
 
 /** Every own key of a role, materialized with no value — the bridge skeleton. */

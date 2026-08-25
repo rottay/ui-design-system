@@ -126268,6 +126268,7 @@ html[lang]:lang(ar) {
   --ds-layout-bg: #FAFAF9;
   --ds-layout-header-bg: rgba(250, 250, 249, 0.82);
   --ds-layout-header-border: #E5E5E3;
+  --ds-layout-sider-bg: #F4F4F3;
   --ds-layout-sider-border: #E5E5E3;
   --ds-list-background-color: var(--ds-color-white, #ffffff);
   --ds-list-bg: #ffffff;
@@ -127842,6 +127843,7 @@ html[lang]:lang(ar) {
   --ds-button-secondary-border: #253545;
   --ds-button-secondary-color: #9aacbf;
   --ds-button-secondary-hover-bg: #1b2535;
+  --ds-card-bg: #151d2b;
   --ds-card-bg-hover: #1b2535;
   --ds-card-body-color: var(--ds-color-text-primary);
   --ds-card-border: #253545;
@@ -128234,6 +128236,7 @@ html[lang]:lang(ar) {
   --ds-table-action-bg: var(--ds-surface-control);
   --ds-table-bg: #0f1520;
   --ds-table-border: #1d2a38;
+  --ds-table-cell-color: #e4e8ed;
   --ds-table-cell-font-size: 0.875rem;
   --ds-table-cell-padding: 0.875rem 1rem;
   --ds-table-header-bg: #151d2b;
@@ -128863,6 +128866,7 @@ html[lang]:lang(ar) {
   --ds-layout-bg: #131210;
   --ds-layout-header-bg: rgba(19, 18, 16, 0.92);
   --ds-layout-header-border: #2E2C24;
+  --ds-layout-sider-bg: #0E0D0B;
   --ds-layout-sider-border: #222018;
   --ds-sidebar-bg: #0E0D0B;
   --ds-sidebar-text: #A8A898;

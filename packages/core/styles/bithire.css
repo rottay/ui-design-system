@@ -125925,6 +125925,7 @@ html[lang]:lang(ar) {
   --ds-button-secondary-border: #253545;
   --ds-button-secondary-color: #9aacbf;
   --ds-button-secondary-hover-bg: #1b2535;
+  --ds-card-bg: #151d2b;
   --ds-card-bg-hover: #1b2535;
   --ds-card-body-color: var(--ds-color-text-primary);
   --ds-card-border: #253545;
@@ -126317,6 +126318,7 @@ html[lang]:lang(ar) {
   --ds-table-action-bg: var(--ds-surface-control);
   --ds-table-bg: #0f1520;
   --ds-table-border: #1d2a38;
+  --ds-table-cell-color: #e4e8ed;
   --ds-table-cell-font-size: 0.875rem;
   --ds-table-cell-padding: 0.875rem 1rem;
   --ds-table-header-bg: #151d2b;

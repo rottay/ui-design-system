@@ -3966,6 +3966,38 @@ CI-2.** Las 13 suites quedan verdes salvo 3 rojos ajenos declarados
 (reduced-motion = WO de producto para el owner; W4-absent + negative-mutant
 de theme-iso = D-1).
 
+**D-1 — restitución de los 4 escudos de overlay F2.4 (2026-08-24; Opus;
+postaudit Fable: ACCEPT — "el primer packet del programa que toca producto
+cierra con las tres leyes ejecutadas al pie").** Los 4 literales restituidos
+con su comentario anti-alias (W-B: un alias igual a la base NO emite en el
+bloque de modo — así se drenó el escudo): bithire `cardComponent.bg #151d2b`
+y `table.cellColor #e4e8ed` (dark), rottay `layout.siderBg #F4F4F3` (light),
+evnto `layout.siderBg #0E0D0B` (dark). Ley cero-delta en sus 3 partes
+verificadas: (i) cada literal == la resolución en cadena del alias de base en
+ese modo (la del card a dos saltos); (ii) base byte-idéntica (1192/1231/468)
+y mode blocks cero removed/changed — puros agregados; (iii) artifacts diff =
+exactamente las 4 líneas en las DOS patas (facade/artifacts y styles/).
+**El censo de throws APCA: 16 → 0, con 0 regresiones** (22 → 5 fallos en las
+8 suites; 14 totalmente verdes). Techo de bytes respetado SIN tocar anclas
+(comentarios comprimidos + retiro de 3 bloques `@placeholder` cuyo governor
+declaraba la falsedad que D-1 refuta — neto −67 B; el retiro es el
+presupuesto, no cosmético). T0: 4 → 4 asimetrías, card 3/3, siderBg 3/3.
+Los 2 pines re-anclados (idiom A2-16); `semantic-typography` re-pineado contra
+el árbol final (19/19, protocolo de Sonnet). **La cadena blocker→ruling→
+re-emisión funcionó como proceso:** los 61 receipts stalearon (58 arrastran
+un artifact vertical), Opus se negó a emitir desde una invocación no probada
+(clase falso-verde — bien), el ruling DT resolvió por invariancia de
+construcción (ningún stop receipteado escribe los 4 leaves restituidos —
+cerca verificada control × keypath por Sonnet), y los 61 se re-atestaron
+sobre artifacts existentes con verificación por archivo: 61/61 VALID,
+CONSTITUTION_READY. **Registrados para después:** D-1b (el quinto escudo:
+`rottay OVERLAY.chrome.sidebar.footerBg` + `OVERLAY.chrome.table.headerColor`,
+drenados por `8f58229e3`); 2 defectos de font-pack DESENMASCARADOS por el
+fix (capability-reachability Fraunces + capability-propagation:573 — eran
+rojos antes, el throw los tapaba); 3 pins rancios más del backlog (~56
+restantes tras CI-1+D-1: 18 clase drenaje cerrados + sentinel + los pins de
+CI-1).
+
 **F0 — CERRADO (2026-08-19).** Criterio de cierre cumplido:
 `ci-gates OK — 78 blocking gate(s) passed` (2 excluded visibles con razón y
 dueño: channel-liveness y lane-control-drills, ambos esperan a F2); `find src -type d -empty` vacío salvo el inbox

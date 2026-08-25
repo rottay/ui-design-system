@@ -609,7 +609,11 @@ describe('shared pipeline: chrome vars NOW generated (G1)', () => {
   it('rottay generates layout vars with correct values', () => {
     expect(rottayCss).toContain('--ds-layout-bg: #0C0C0E');
     expect(rottayCss).toContain('--ds-layout-header-bg: rgba(12, 12, 14, 0.82)');
-    expect(rottayCss).toContain('--ds-layout-sider-bg: #0D0D10');
+    // R-1 re-anchor (D-1): F2.4 (a7929df5a) rewired the BASE sider ground from
+    // the literal to the governed root; the base literal does not come back.
+    // Assert the alias and what the root resolves to (A2-16 idiom).
+    expect(rottayCss).toContain('--ds-layout-sider-bg: var(--ds-sidebar-bg)');
+    expect(rottayCss).toContain('--ds-sidebar-bg: #0D0D10');
   });
 
   it('rottay generates shell vars with correct values', () => {
