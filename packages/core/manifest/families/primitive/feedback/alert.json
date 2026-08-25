@@ -3365,10 +3365,45 @@
     {
       "controlId": "motion.dial",
       "disposition": "UNKNOWN",
-      "verificationState": "UNKNOWN",
-      "unknownReason": "NOT_ASSESSED",
-      "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "verificationState": "SOURCE_BOUND",
+      "unknownReason": "NOT_ASSESSED_PAST_SOURCE_BOUND. Causal measurement complete and positive on both declared channels (12 receipted scenarios: 4 stops x 3 verticals, both ingress arms -- F4B-13, 2026-08-25). The identity stop is NOT among these: a single-arm run structurally cannot pass this evidence kind (ingressEquivalenceHeld requires 2 comparable arms), so identity is a directly-compiled fact on the control's own calibration, not a receipt -- same precedent as palette.seeds' own identity stop, which likewise carries zero receipts. NOT raised to IMPLEMENTED here: that rank requires non-empty `stableParts`/`propertyGroups`/`computedProperties`, and every `propertyGroups` entry must be OWNED by this family's own `anatomy.propertyGroups` -- which is `[]` right now, the same program-wide propertyGroups-vocabulary blocker F4B-11 and F4B-12 already documented (`anatomy.sourceEvidence.propertyGroupCensusNote.status`: 'UNRATIFIED OBSERVATION... blocked on the propertyGroup vocabulary ratification'). `--ds-motion-intensity` moves from `targetBinding.uncoveredByDesign` into `internalChannels` below: it was previously classified as a shared foundation arm this family only reads, but alert.css is in fact this control's own productiveConsumerWitness (skin/alert.css:16-17, `var(--ds-motion-intensity, 1)` multiplying the action-press transform directly) -- the file OTHER skin files' own comments cite as the reference idiom (menu.css:46, '(alert.css idiom)'). `--ds-motion-duration-scale` stays a genuine uncovered shared arm: alert.css does not read it at all (grep-confirmed) -- its real, direct consumer is foundation/animations/transitions.css, which derives --ds-motion-reveal/--ds-motion-attention from it two hops upstream of what button.css and others then read, and that file belongs to no UI-component family.",
+      "evidenceIds": [
+        "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/motion-dial/rottay-intensity-low.json.receipt.json",
+        "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/motion-dial/rottay-intensity-high.json.receipt.json",
+        "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/motion-dial/bithire-intensity-low.json.receipt.json",
+        "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/motion-dial/bithire-intensity-high.json.receipt.json",
+        "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/motion-dial/evnto-intensity-low.json.receipt.json",
+        "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/motion-dial/evnto-intensity-high.json.receipt.json",
+        "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/motion-dial/rottay-duration-scale-low.json.receipt.json",
+        "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/motion-dial/rottay-duration-scale-high.json.receipt.json",
+        "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/motion-dial/bithire-duration-scale-low.json.receipt.json",
+        "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/motion-dial/bithire-duration-scale-high.json.receipt.json",
+        "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/motion-dial/evnto-duration-scale-low.json.receipt.json",
+        "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/motion-dial/evnto-duration-scale-high.json.receipt.json"
+      ],
+      "nextAction": "PROPERTY_GROUPS_VOCABULARY_RATIFICATION_THEN_IMPLEMENTED",
+      "sourceBindings": [
+        "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/alert.css",
+        "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css",
+        "packages/core/src/infrastructure/compilers/composition/tenant-theme/index.ts",
+        "packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts",
+        "packages/core/manifest/controls/motion.dial.json"
+      ],
+      "negativeControls": [
+        "control height remains fixed",
+        "font metrics remain fixed",
+        "color remains fixed",
+        "border remains fixed"
+      ],
+      "negativeControlsScopeNote": "The same four the control declares, restated on this root so the cell is self-describing. `motion remains fixed` is deliberately NOT declared, matching the control's own scope note: this control's entire job is moving animation-duration/transition channels, so that negative control would assert against the very properties the dial legitimately moves.",
+      "stressCases": [
+        "The prior internalChannels entry only tracked the private derived transform (--_ds-alert-action-active-transform) and classified the public channel it derives from, --ds-motion-intensity, as an uncovered shared foundation arm. That classification undercounted this family's own evidence: alert.css is not a passive downstream reader of a foundation default here, it is the control's own cited reference consumer. Corrected by adding a second internalChannels entry for the public channel itself.",
+        "--ds-motion-duration-scale correctly stays out of this family's internalChannels: unlike --ds-motion-intensity, no selector in alert.css names it, directly or through a private derived channel. Its real producer/consumer, foundation/animations/transitions.css, is shared foundation scope with no UI-component family owner -- moving it into this family's internalChannels would misattribute a socket this family does not hold.",
+        "The registry's prior productiveConsumerWitness (button.css) was corrected this same packet (F4B-13) to alert.css: button.css reads only channels transitions.css derives from --ds-motion-duration-scale (--ds-motion-reveal/-attention/-ease-in-out), never either of the control's 2 declared channels directly."
+      ],
+      "restoreRequirements": [
+        "Unsetting the control through either door restores the DS foundation baseline for both channels exactly (measured: restore.exact true on every receipted scenario)."
+      ],
       "targetBinding": {
         "uncoveredByDesign": {
           "Canales compartidos porque OTRA familia los lee de verdad (nivel 2; el socket vive en la familia duena del namespace)": [
@@ -3378,8 +3413,8 @@
             "--ds-motion-calm",
             "--ds-motion-ease-out",
             "--ds-motion-instant",
-            "--ds-motion-intensity",
-            "--ds-motion-normal"
+            "--ds-motion-normal",
+            "--ds-motion-duration-scale"
           ]
         },
         "migratedToInternalChannels": true
@@ -3387,6 +3422,21 @@
       "internalChannels": [
         {
           "channelId": "--_ds-alert-action-active-transform",
+          "semanticOwner": "motion.dial",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/alert.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/feedback/alert"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/alert.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--ds-motion-intensity",
           "semanticOwner": "motion.dial",
           "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/alert.css",
           "fallbackAuthority": null,

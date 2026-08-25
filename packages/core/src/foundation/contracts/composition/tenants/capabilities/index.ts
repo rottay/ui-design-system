@@ -330,9 +330,17 @@ export const TENANT_CAPABILITY_REGISTRY = Object.freeze([
       version: 1,
       tier: 'standard',
       status: 'active',
+      // F4B-13 fix: the prior witness (button.css, symbol 'var(--ds-motion')
+      // was imprecise -- button.css reads only DERIVED motion channels
+      // (--ds-motion-reveal/-attention/-ease-in-out, all defined two hops
+      // downstream in foundation/animations/transitions.css), never either
+      // declared channel directly. alert.css consumes --ds-motion-intensity
+      // directly (skin/alert.css:16-17) and is the file OTHER skin files'
+      // own comments cite as the reference idiom (menu.css:46: "(alert.css
+      // idiom)").
       evidence: {
-        consumer: 'src/foundation/tokens/css/runtime/engines/modern/skin/button.css',
-        symbol: 'var(--ds-motion',
+        consumer: 'src/foundation/tokens/css/runtime/engines/modern/skin/alert.css',
+        symbol: 'var(--ds-motion-intensity',
       },
       scope: 'tenant',
       owner: 'design-system',
@@ -340,8 +348,33 @@ export const TENANT_CAPABILITY_REGISTRY = Object.freeze([
       valueType: 'scale',
       defaultBehavior: 'engine cadence unchanged',
       documentPath: 'appearance.general.motion.{intensity,durationScale,ambient}',
-      brandThemePath: 'motion.*',
+      // F4B-13 fix (false-INERT by PATH, not by compiler, same class as
+      // navigation.sidebar-tone/F4B-12): `motion.*` is a wildcard, and the
+      // ingress walker (`ingressPathMembers`/`resolveIngressMember`) only
+      // understands brace SETS -- a lone `*` resolves to itself as a
+      // literal member, writing to the nonsense key `motion['*']`. Fixed to
+      // the brace-set `motion.{intensity,durationScale,ambient}`, which
+      // discriminates cleanly by last segment; all 3 fields exist on
+      // `BrandMotion` (themes/index.ts:694-699). `ambient` intentionally
+      // emits no CSS custom property (behaviour, not a channel) and stays
+      // out of derivedChannels by design, not omission.
+      brandThemePath: 'motion.{intensity,durationScale,ambient}',
       derivedChannels: ['--ds-motion-intensity', '--ds-motion-duration-scale'],
+      // DT ruling (F4B-13): `domain.bounds` is one {min,max} pair per
+      // control, and this control governs TWO numeric channels with
+      // DIFFERENT ranges. Declares `intensity`'s per-vertical envelope range
+      // (0..0.8, identical across all 3 first-party verticals,
+      // TENANT_THEME_VERTICAL_ENVELOPES) as representative, since it is the
+      // first declared channel -- `durationScale`'s own range is 0.75..1.35,
+      // named here rather than expressed, because the schema has no per-
+      // channel bounds today. Extending `domain.bounds` to carry bounds per
+      // member (the same shape profiles.expressive already needs for its
+      // own per-member enumValues) is registered as a future schema
+      // decision, not this packet's write-set. The REAL authority is the
+      // envelope's own HARD gate (`compileTenantThemeConfig`, rejects the
+      // whole document outside range, never clamps) -- this bounds pair is
+      // documentation, not the enforcement mechanism.
+      bounds: { min: 0, max: 0.8 },
       compat: 'additive, unset-to-rollback; never authors keyframes',
     },
     {

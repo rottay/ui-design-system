@@ -5,7 +5,7 @@
   "scenarioId": "experience.profile/editorial/bithire/static-and-db/light",
   "evidenceKind": "exact-restore",
   "commandOrTool": "node src/tooling/resolution-probe/public/cli/index.mjs causal",
-  "toolVersion": "resolution-probe@d4b1e1faef38",
+  "toolVersion": "resolution-probe@b19779a06bef",
   "exitCode": 0,
   "sourceFiles": [
     "packages/core/dist/build-stamp.json",
@@ -67,10 +67,10 @@
     "packages/core/src/ui/primitives/display/Card/engines/rustic/index.tsx",
     "packages/core/src/ui/primitives/display/Card/index.tsx"
   ],
-  "sourceDigest": "948b1ebd9d750df780d3c78461b299b041e1587b7479764573af2262df1a9fbe",
+  "sourceDigest": "bf43dc2a1771ecee24a63e2d828164946fb4e3af9448442755870fb3a8b090d0",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/experience-profile/bithire-editorial.R7-light.json",
   "artifactSha256": "7f10597366c2960377c700bd422566a3ec53295dd437946a46bcfb3024b10e08",
-  "createdAt": "2026-08-25T05:17:09.280Z",
+  "createdAt": "2026-08-25T07:21:55.855Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

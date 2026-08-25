@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "generatedBy": "node packages/core/manifest/generator/index.mjs --sync",
   "authorityLaw": "Controls own semantics, groups own recipe vocabularies, families own applicability edges, and this index owns generated rollups.",
-  "inputsDigest": "dd98dc44127f037874deea542118d3a3ac63ebc2a4849dd4fb4f6e0776a0465f",
+  "inputsDigest": "aacf5811055c61727f66dea4b470d21cb034e29463bc741ae3c76c8c85d9c9d1",
   "denominators": {
     "canonicalFamilies": 255,
     "activeStandardControls": 13,
@@ -1006,15 +1006,17 @@
       },
       {
         "controlId": "motion.dial",
-        "declaredFamilies": 4,
-        "unknownCells": 251,
+        "declaredFamilies": 5,
+        "unknownCells": 250,
         "applicableFamilyIds": [],
         "parts": [],
         "propertyGroups": [],
         "channels": [
+          "--_ds-alert-action-active-transform",
           "--_ds-space-motion-duration",
           "--_ds-space-motion-easing",
           "--ds-motion-fast",
+          "--ds-motion-intensity",
           "--ds-motion-rearrange",
           "--ds-space-motion-duration",
           "--ds-space-motion-easing",
@@ -1022,6 +1024,19 @@
           "data-layout-motion"
         ],
         "families": [
+          {
+            "familyId": "primitive/feedback/alert",
+            "layer": "primitive",
+            "disposition": "UNKNOWN",
+            "verificationState": "SOURCE_BOUND",
+            "stableParts": [],
+            "propertyGroups": [],
+            "computedProperties": [],
+            "channels": [
+              "--_ds-alert-action-active-transform",
+              "--ds-motion-intensity"
+            ]
+          },
           {
             "familyId": "primitive/layout/flex",
             "layer": "primitive",
@@ -1797,102 +1812,102 @@
     {
       "controlId": "palette.seeds",
       "path": "manifest/controls/palette.seeds.json",
-      "digest": "1d0842b9cbf000ea00b30728196e9c52801079f6baf9661507eeb0f482ec7c78"
+      "digest": "0c04e1e23334e5e65680eedbdaef4a93b1b5530c7b38c4dc7cce1732bb8c71fa"
     },
     {
       "controlId": "typography.pairing",
       "path": "manifest/controls/typography.pairing.json",
-      "digest": "2300686a84c988920ca7404c6f1ea5d8bdafda964938f8a7cf939718d12cdc36"
+      "digest": "32a69bee6bfa114e454408a9e220a7e7514bfb90d8090e6e9de05db2862864cd"
     },
     {
       "controlId": "typography.families",
       "path": "manifest/controls/typography.families.json",
-      "digest": "5c10b2bae0a044576878e7794ffcf5cde1e92f9546b2d5a7cb1b4dc0a476d4af"
+      "digest": "fd5590b2a6121a4c1feacf883907a979e16c6f7bbad592792c2c32b76e5e2a8a"
     },
     {
       "controlId": "typography.scale",
       "path": "manifest/controls/typography.scale.json",
-      "digest": "1f297f7ff23fe14c8581f80d6f08080fc2cd75a622c4bf85d1055043dde80ffb"
+      "digest": "75de5c4c5837d953cc08aa8eb964d51d6c2e3b397994ab4452bec26a84c3dfbe"
     },
     {
       "controlId": "shape.radius-scale",
       "path": "manifest/controls/shape.radius-scale.json",
-      "digest": "8ce2ffe06d0c26711606de293e7d53c6fc514de6dc9fee6f7a40633391a9f402"
+      "digest": "330a897d23657691e0a6ecbfc93fddff9be9dbaecdc0f3f5c8f2ec8b2d63352b"
     },
     {
       "controlId": "shape.button-style",
       "path": "manifest/controls/shape.button-style.json",
-      "digest": "66b27cbc5fb3e18b14084df68de272ce3dd5a6717ac9ec6ff0c2d9b8bfd1c5ad"
+      "digest": "7b1c47ff1289351cd02150d20d769ef0ff53b973ca3f64ceaee22aee51b5f142"
     },
     {
       "controlId": "density.mode",
       "path": "manifest/controls/density.mode.json",
-      "digest": "ec90176910bf8d0302e0214c804f13b6ef96517b6b54a72e5f4a05276c25aad7"
+      "digest": "199886fb42a4f33de35e0d0b53f8fb76fc10a574861642d8bce6d3ef4b8d19d0"
     },
     {
       "controlId": "spacing.rhythm",
       "path": "manifest/controls/spacing.rhythm.json",
-      "digest": "0619a54f6f0ed2905e65d608e3c8f8ec0bff495e8169d23646e27322199dc331"
+      "digest": "93167bd15590397d919a873cc9330cf1c444c679ac04cbe006edbc5b801a4b6d"
     },
     {
       "controlId": "motion.dial",
       "path": "manifest/controls/motion.dial.json",
-      "digest": "a9041ca14a1650b3e901146d02e803a90056f744ffd47a83dae60a8dc43420f1"
+      "digest": "d381a8063a5828ca35bb83fa14fb09ae5f00f7976fc1f2e86fc8be806852a024"
     },
     {
       "controlId": "surfaces.elevation-posture",
       "path": "manifest/controls/surfaces.elevation-posture.json",
-      "digest": "22ebb64d70b0579f8d8701906d5b3e05d92a369d03c7c80c09afd171847f1031"
+      "digest": "686a6d231e79f34f1dbe21c039f80fee9ee9eec90fc1239316481f313e44c09a"
     },
     {
       "controlId": "surfaces.effect-intensity",
       "path": "manifest/controls/surfaces.effect-intensity.json",
-      "digest": "1365dd8f07f895570355ba55be0a6639c56886659156bc8dc5b7e878a1f46d91"
+      "digest": "e8869d1a31e0908e413ae5e8cb910347e8b61ed17d4209e7da48e138cefc701e"
     },
     {
       "controlId": "navigation.sidebar-tone",
       "path": "manifest/controls/navigation.sidebar-tone.json",
-      "digest": "509ece9e546586e5acd3a8d766c6791a42a84ea43fcd3e837f5150a5bb795c54"
+      "digest": "cc25e3991d57ce8fa1795e15ba7e76750a81a024198b00a3777edb782bf797db"
     },
     {
       "controlId": "experience.profile",
       "path": "manifest/controls/experience.profile.json",
-      "digest": "1bef8a4497f607b31921147cb48b46c7c436aa58f1fbc3090e74355dbdfc5e28"
+      "digest": "e805932bf3b3f5886bea5ca6e74ebdd80fd84edf1ab327b13f858f3cd163c8fd"
     },
     {
       "controlId": "chrome.families",
       "path": "manifest/controls/chrome.families.json",
-      "digest": "359f92c29445a28108f72b4f0c764cd7344ef3dcb2db13ea963cb510b9fd6ec9"
+      "digest": "aa95d8e41bef2996bc8bd2a3f49dc11d2054a3e13f52fde47a9de6f5fcb04c64"
     },
     {
       "controlId": "chrome.anatomy",
       "path": "manifest/controls/chrome.anatomy.json",
-      "digest": "49d8715a0cd1741d095d94faf5bf94be73fe8ff29a86b612e516a742f7981e2b"
+      "digest": "1e7dffb34b66119a3cede74fbb071c523b2db89e091d064eb364504ad11a48e7"
     },
     {
       "controlId": "token-overrides",
       "path": "manifest/controls/token-overrides.json",
-      "digest": "c753488b317f4fbb887670ccd077ba77d58d85fd756d7d16dc057acb8029cb2b"
+      "digest": "db253cd82143d8d189d2a4c434114a09b690b8488fa53f1b89c1db696347671a"
     },
     {
       "controlId": "recipe-profile",
       "path": "manifest/controls/recipe-profile.json",
-      "digest": "49a9c24063703ababeb828051044e4ef9901cea44ef430b909cbf31dbba8419c"
+      "digest": "78dc9f265877829d37a8c231cfe9ebd2e62b3dde4c9c7e488e43254c2ada79de"
     },
     {
       "controlId": "profiles.expressive",
       "path": "manifest/controls/profiles.expressive.json",
-      "digest": "b1ae35a44a7a363df9309374ea659f30ef282255a81118f0c55d269371bf840f"
+      "digest": "053cb158adac200cb9ffcc2830efabf742fca71e475c70097ca8f17a0698df38"
     },
     {
       "controlId": "profiles.icon",
       "path": "manifest/controls/profiles.icon.json",
-      "digest": "f3968837e675065e7dca26d4e296859f4ad0b6a4aff8b1c402ff93429dc00edc"
+      "digest": "efab8171f7fbf41c555e7bb109bb0097f351dd6335cbba0c30611ab27ef592f4"
     },
     {
       "controlId": "responsive.posture",
       "path": "manifest/controls/responsive.posture.json",
-      "digest": "87daa90b3a1ad5a35eaf50c691f300ef70085c3891aea5c141aba25a93f16461"
+      "digest": "a5d249beb4bd442b51ff9039b5fdb726ca5355c14acbb25b96ea8359f4adc014"
     }
   ],
   "groups": [
@@ -2609,7 +2624,7 @@
     {
       "familyId": "primitive/feedback/alert",
       "path": "manifest/families/primitive/feedback/alert.json",
-      "digest": "aaa5a5fe25fa48515abbeb7c5553c373f841cd80589d692cbb17cc9c3d3cb739",
+      "digest": "64e71e2b0eff0aee4bdd427e6b5302f94873df1d0e6cf513969284b828bc96ef",
       "maximumClaim": "SOURCE_BOUND",
       "reviewVerdict": null
     },

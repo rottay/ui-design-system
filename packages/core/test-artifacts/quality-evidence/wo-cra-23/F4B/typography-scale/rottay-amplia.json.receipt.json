@@ -5,7 +5,7 @@
   "scenarioId": "typography.scale/amplia/rottay/static-and-db",
   "evidenceKind": "exact-restore",
   "commandOrTool": "node src/tooling/resolution-probe/public/cli/index.mjs causal",
-  "toolVersion": "resolution-probe@d4b1e1faef38",
+  "toolVersion": "resolution-probe@b19779a06bef",
   "exitCode": 0,
   "sourceFiles": [
     "packages/core/dist/build-stamp.json",
@@ -66,10 +66,10 @@
     "packages/core/src/ui/primitives/display/Card/engines/rustic/index.tsx",
     "packages/core/src/ui/primitives/display/Card/index.tsx"
   ],
-  "sourceDigest": "21c4e771f2030674697ccc34d07f761a2aca340603a35c1ecac30a552b144249",
+  "sourceDigest": "09263efa8efb8dbf460d2cc2b7e4912b4feae067a7eef3827a7f047fe51dcbcb",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/typography-scale/rottay-amplia.json",
   "artifactSha256": "5fae6d365b189a1cbfc9d6170839a9a3e00205a1dfd1ee268a10af4fb1b188ad",
-  "createdAt": "2026-08-25T05:17:10.260Z",
+  "createdAt": "2026-08-25T07:21:56.968Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

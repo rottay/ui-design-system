@@ -817,6 +817,52 @@ describe("static and DB share one lowering", () => {
       expect(withDark.cssVariables["--ds-sidebar-text"]).toBe("#F4F4F5");
     }
   });
+
+  it("F4B-13: tenantPostureFloors unwraps motion the same way whether the patch arrives wrapped or bare", () => {
+    // STRUCTURAL fence, not behavioural (Fable preaudit, W-B): this asserts
+    // the SHAPE of the projection, not that any vertical's baseline moves —
+    // no first-party vertical authors a motion ladder that would out-rank
+    // the tenant floor post-merge today, so there is no before/after flip to
+    // assert (measured, not hypothesised — see the function's own docblock).
+    const wrapped = tenantPostureFloors({
+      motion: { value: { intensity: 0.4, durationScale: 1.2, ambient: "off" } },
+    } as never);
+    const bare = tenantPostureFloors({
+      motion: { intensity: 0.4, durationScale: 1.2, ambient: "off" },
+    } as never);
+    const expectedMotion = { intensity: 0.4, durationScale: 1.2, ambient: "off" };
+    expect(wrapped.motion, "wrapped patch unwraps").toEqual(expectedMotion);
+    expect(bare.motion, "bare patch passes through unchanged").toEqual(
+      expectedMotion
+    );
+    // MUTATION SENSITIVITY: reading `.intensity` off the WRAPPED input
+    // directly (not `.value.intensity`) means a regression that dropped the
+    // `mo?.value ?? mo` fallback back to `mo` alone would make `wrapped.motion`
+    // the wrapper object `{value:{...}}}` — `.intensity` would read `undefined`
+    // here, not `0.4`, so this assertion reddens on that exact regression.
+    expect(wrapped.motion?.intensity).toBe(0.4);
+    expect(wrapped.motion?.durationScale).toBe(1.2);
+    // The six previously-projected fields stay intact — motion's addition is
+    // additive, not a rewrite of the surrounding projection.
+    expect(wrapped.typography).toEqual({ typePairing: undefined, scale: undefined });
+    expect(wrapped.surfaces).toEqual({
+      buttonStyle: undefined,
+      radiusScale: undefined,
+      density: undefined,
+      elevation: undefined,
+    });
+    // CHEAP DEFENSIVE ASSERTION: today's registry keypath (fixed by this same
+    // packet) used to write a malformed `motion['*']` shape when broken. The
+    // unwrap must not throw on a patch that never carries `.value` at all —
+    // it falls through to `mo` itself, an inert object no downstream reader
+    // consumes (nothing reads a literal `'*'` key), so the projection stays
+    // harmless rather than crashing the whole lowering.
+    expect(() =>
+      tenantPostureFloors({ motion: { "*": 0.3 } } as never)
+    ).not.toThrow();
+    const malformed = tenantPostureFloors({ motion: { "*": 0.3 } } as never);
+    expect((malformed.motion as Record<string, unknown> | undefined)?.intensity).toBeUndefined();
+  });
 });
 
 describe("the digest tells the truth", () => {

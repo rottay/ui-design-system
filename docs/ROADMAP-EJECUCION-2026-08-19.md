@@ -4218,6 +4218,41 @@ mensaje. El hallazgo de entorno que arrastraba el programa desde F4B-11 (6
 corridas, 1 verde) queda cerrado con causa medida, síntoma corregido y
 fallo que dice la verdad.
 
+**F4B-13 — motion.dial CIERRA SOURCE_BOUND (2026-08-25; Sonnet; postaudit
+Fable: REJECT local de 1 frase del docblock → ACCEPT final).** Keypath
+corregido (`motion.*` wildcard roto → `motion.{intensity,durationScale,
+ambient}`; ambient sin canal por diseño — "intentionally emits no CSS custom
+property"). **El unwrap de motion en `tenantPostureFloors` completa E-1:**
+la reaplicación-al-final del piso del tenant ahora cubre motion
+(`patch.motion?.value ?? patch.motion` — cubre el patch envuelto de
+migrateV1 y el no envuelto de la sonda), con cerco ESTRUCTURAL (unit test de
+la proyección + mutación negativa + invariancia de las 3 verticales — la
+corrección W-B de Fable: el flip conductual no existe, la selección del
+tenant ya gana hoy contra motion autorado en base). **12/12 corridas
+receipteadas** (4 stops × 3 verticales: intensity {0.3, 0.7} +
+durationScale {0.85, 1.25}, todos dentro del envelope HARD gate 0..0.8 /
+0.75..1.35), ambos brazos, paridad byte-exacta, restore exact, negativos
+held. **Hallazgo nuevo:** evnto SÍ autora motion — vía
+`EVNTO_CANONICAL_MOTION` (preset congelado, `intensity: 1.5` FUERA del techo
+`MOTION_DIAL_BOUNDS.intensity` 0..1, contenido a `1` por el clamp del
+compilador: la identity más informativa de las 3, muestra el mecanismo de
+bounds conteniendo un valor autorado); y el segundo censo de identity sobre
+los 3 controles ya cerrados salió limpio (el patrón `const X = {...};
+field: X` no coló nada en button-style/elevation-posture/sidebar-tone). El
+identity stop queda documentado como hecho compilado, NO receipteado (la
+CLI exige ≥2 brazos para pass y identity es estático-solamente — precedente
+`palette.seeds`'s `primary/identity`). `evidence` del registry corregida
+(button.css → alert.css: el primero sólo lee canales derivados, el segundo
+es el idioma de referencia citado por otros skins). Bounds forma 2 (stops
+con valor propio dentro del rango de su campo; `domain.bounds` de
+intensity representativo + nota de durationScale; la extensión de schema
+por miembro registrada para después). El REJECT de Fable fue de vara fina:
+el docblock atribuía a `resolveTenantPosture` un unwrap que no tiene (el
+lector lee `patch.motion` AS-IS; por eso la proyección debe entregarle la
+spec DESNUDA) — corregido con cita de línea. Cierre en SOURCE_BOUND por la
+misma nota de anatomía (propertyGroups sin ratificar). 93/93 VALID,
+CONSTITUTION_READY, probe 228/0, provenance 24/24, producers --check OK.
+
 **F4B-11 — typography.pairing CIERRA SOURCE_BOUND (2026-08-24; Sonnet;
 postaudit Fable: ACCEPT — "el falso-verde más peligroso del censo quedó
 cerrado con el keypath real").** Keypath corregido (el de OTRO control →

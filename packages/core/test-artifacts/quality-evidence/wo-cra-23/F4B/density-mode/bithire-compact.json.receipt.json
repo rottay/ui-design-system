@@ -5,7 +5,7 @@
   "scenarioId": "density.mode/compact/bithire/static-and-db",
   "evidenceKind": "static-db-computed-parity",
   "commandOrTool": "node src/tooling/resolution-probe/public/cli/index.mjs causal",
-  "toolVersion": "resolution-probe@d4b1e1faef38",
+  "toolVersion": "resolution-probe@b19779a06bef",
   "exitCode": 0,
   "sourceFiles": [
     "packages/core/dist/build-stamp.json",
@@ -58,10 +58,10 @@
     "packages/core/src/ui/primitives/layout/Space/tests/Space.modern-fragment-children.test.tsx",
     "packages/core/src/ui/primitives/layout/Space/tests/Space.test.tsx"
   ],
-  "sourceDigest": "7eb947bce7c9cc951a2a8def2528ab696c49a2f2998192e3c67ca2db54b7cd50",
+  "sourceDigest": "55d2a415c477c7de4e8c0f60e802f2e0a0286cc32417875395d76ba04ca5e82a",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/density-mode/bithire-compact.json",
   "artifactSha256": "5d599286dda9e16d4546681d438caab65178a8b912d079f66d25953326a9fa8d",
-  "createdAt": "2026-08-25T05:17:09.201Z",
+  "createdAt": "2026-08-25T07:21:55.768Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

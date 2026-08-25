@@ -7,6 +7,7 @@
  */
 
 import {
+  type BrandMotion,
   type BrandTheme,
   type BrandThemeMode,
   type CompiledBrand,
@@ -1805,10 +1806,29 @@ function isoLowering<T>(run: () => T, path: string): T {
  * `mergeBrandThemeFloors` skips them and `resolveTenantPosture` collapses an
  * all-undefined posture to `undefined` -- so no guard is needed.
  *
- * The two keypaths deliberately NOT projected:
- *   - `motion` arrives WRAPPED (`{motion:{value:...}}`), so the posture reader
- *     would find no `intensity`. Projecting the wrapper changes nothing;
- *     UNWRAPPING it changes behaviour and belongs to the motion.dial packet.
+ * `motion.dial` (F4B-13): `motion` now projects too. It arrives WRAPPED
+ * (`Theme.motion: Governed<BrandMotion>`, so a migrated patch is
+ * `{motion:{value:{intensity,...}}}`) -- the posture reader
+ * (`resolveTenantPosture`, `brand-theme/index.ts:1976`) reads `patch.motion`
+ * AS-IS: its expression is `patch.motion ?? profile?.motion`, no `.value`
+ * unwrap anywhere, and its only fallback is the expressive profile, not this
+ * projection's own floor. That is exactly why this projection must hand it
+ * the BARE spec -- if the reader unwrapped on its own, a wrapped floor could
+ * pass through undetected; because it does not, the unwrap has to happen
+ * HERE. The causal probe's own patch (built leaf-by-leaf by
+ * `buildIngressInput` walking `motion.intensity`) never carries the wrapper
+ * at all, so `patch.motion?.value ?? patch.motion` has to cover both shapes
+ * with one expression. Preaudited (Fable, ACCEPT with binding correction
+ * W-B): the fence
+ * this projection closes is STRUCTURAL, not behavioural -- no first-party
+ * vertical today authors a motion "ladder" that would out-rank the tenant's
+ * own floor post-merge (unlike `surfaces.elevation`'s history), so there is
+ * no before/after flip to assert. The drill below is a unit test of the
+ * projection's SHAPE (both wrapped and unwrapped inputs unwrap the same
+ * way, and a mutation that removes the unwrap reddens it), not a claim about
+ * any vertical's baseline moving.
+ *
+ * One keypath deliberately NOT projected:
  *   - `expressive.*` is already expanded into `expressiveExpansion` above and
  *     applied at its own position; routing it again would lower one selection
  *     twice.
@@ -1816,6 +1836,7 @@ function isoLowering<T>(run: () => T, path: string): T {
 export function tenantPostureFloors(patch: ThemePatch): Partial<BrandTheme> {
   const ty = patch.typography;
   const su = patch.surfaces;
+  const mo = patch.motion;
   return {
     typography: { typePairing: ty?.typePairing, scale: ty?.scale },
     surfaces: {
@@ -1824,6 +1845,7 @@ export function tenantPostureFloors(patch: ThemePatch): Partial<BrandTheme> {
       density: su?.density,
       elevation: su?.elevation,
     },
+    motion: (mo?.value ?? mo) as BrandMotion | undefined,
   };
 }
 

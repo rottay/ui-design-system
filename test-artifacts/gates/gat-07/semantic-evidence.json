@@ -4,7 +4,7 @@
   "scope": "Phase-0 exact proof and minimal public-claim floor; not DS-IMP-060 completion",
   "reproducibility": {
     "classification": "deterministic same-input runs",
-    "authorityDigest": "9dc310da86091ca30f7fd0bd7c8dffd73a5b803e94c838b5527715b62c7415bf",
+    "authorityDigest": "dc22b1bddf334e069fff53ffe6c71d887552c21d73642a20c3117056613bb93c",
     "sourceHeadIsAuthority": false,
     "toolchain": {
       "node": {
@@ -1383,8 +1383,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 36252,
-        "sha256": "160b63c85b5149808223e74b49fcd984f955e4ba6b11811882c8ea29732c0e2b"
+        "bytes": 38608,
+        "sha256": "2bee31fb91d4ff55454f5dcb3575034f4aa58e8d40d45da1b1f41cdcb0d8dc7b"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/contracts/composition/tenants/index.ts",
@@ -12074,8 +12074,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 79386,
-        "sha256": "bec1dc457d34dc6d09e4c27cef23ef0b367ec65ebad877268cd7f65088e667b4"
+        "bytes": 80712,
+        "sha256": "90d6c575ab8a56bf0fc75165ab91925df2f10a53ddd55eb6c46b48e3ea89ba4b"
       },
       {
         "path": "ui-design-system/packages/core/src/infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts",
@@ -12196,8 +12196,8 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 39296,
-        "sha256": "803be48690fdf96f167f78852e6dc7a67167729c04c538fd42905f07d47e0579"
+        "bytes": 41934,
+        "sha256": "e0aaa841860723196804f9a0542d16d0c355cb5222c10bc7d31b7549ef55f94e"
       },
       {
         "path": "ui-design-system/packages/core/src/infrastructure/compilers/composition/tenant-theme/tests/semantic-material-overrides.test.ts",
@@ -15581,8 +15581,8 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 30029,
-        "sha256": "28358fc3af9e3c94a88ee2a2fabc06843fd63380c65328e16f1554b773a6dc8e"
+        "bytes": 31633,
+        "sha256": "196397f0985e9d507e3eb78f78cf274f26fecdb9dd95c1c8e2985cad38c3a823"
       },
       {
         "path": "ui-design-system/packages/core/src/tooling/resolution-probe/foundation/roster/tests/index.test.tsx",
@@ -40511,7 +40511,7 @@
         "sha256": "d2a99efed33922a4a699ea033538b677022ddaccf0cdbb25ece0a7295bdc4812"
       }
     ],
-    "digest": "9dc310da86091ca30f7fd0bd7c8dffd73a5b803e94c838b5527715b62c7415bf"
+    "digest": "dc22b1bddf334e069fff53ffe6c71d887552c21d73642a20c3117056613bb93c"
   },
   "paintAudit": {
     "output": "engine-token-audit --check OK (3326 counters; 3226 completed zeros locked exactly; 91 decrease-only ceilings; 2 positive exact invariants; 7 positive minimum floors)",
@@ -113892,8 +113892,8 @@
   "deterministicRuns": {
     "count": 2,
     "hashes": [
-      "b3ea3e0e5243124bd689d2cac6f4b1b2dd35b717cce923dba1c70f1c23c56821",
-      "b3ea3e0e5243124bd689d2cac6f4b1b2dd35b717cce923dba1c70f1c23c56821"
+      "b36586ca3b07ddc2f2f53464be138a70932aef576e419ae9ce6c3633a118fb32",
+      "b36586ca3b07ddc2f2f53464be138a70932aef576e419ae9ce6c3633a118fb32"
     ],
     "agree": true
   }
