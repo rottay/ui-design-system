@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "generatedBy": "node packages/core/manifest/generator/index.mjs --sync",
   "authorityLaw": "Controls own semantics, groups own recipe vocabularies, families own applicability edges, and this index owns generated rollups.",
-  "inputsDigest": "bd9bf3f3a7e4172551dbfbaf13afe96a72d68596a5563a08ebf53c1eae9c4d68",
+  "inputsDigest": "eeac7c65b780311ef241800cf1cae4b2f4c9c1455c1f845c839256628a0078d2",
   "denominators": {
     "canonicalFamilies": 255,
     "activeStandardControls": 13,
@@ -1553,13 +1553,23 @@
       },
       {
         "controlId": "token-overrides",
-        "declaredFamilies": 4,
-        "unknownCells": 251,
+        "declaredFamilies": 5,
+        "unknownCells": 250,
         "applicableFamilyIds": [],
         "parts": [],
         "propertyGroups": [],
         "channels": [],
         "families": [
+          {
+            "familyId": "primitive/feedback/alert",
+            "layer": "primitive",
+            "disposition": "UNKNOWN",
+            "verificationState": "SOURCE_BOUND",
+            "stableParts": [],
+            "propertyGroups": [],
+            "computedProperties": [],
+            "channels": []
+          },
           {
             "familyId": "primitive/layout/flex",
             "layer": "primitive",
@@ -1918,12 +1928,12 @@
     {
       "controlId": "chrome.anatomy",
       "path": "manifest/controls/chrome.anatomy.json",
-      "digest": "b679f40306d577c7a67baa08851a2e982cd5bbd36abd077620a95eaca740b067"
+      "digest": "a7271d7a2c390c0ead3f1c7e71b4037ffcd80e0cdbd97b4b17444097907a8b19"
     },
     {
       "controlId": "token-overrides",
       "path": "manifest/controls/token-overrides.json",
-      "digest": "b0986758be55b080e05e03dc7c0289d4a8cf844729664b3a11b26bf9fd9dba1e"
+      "digest": "3516a91b3e3f020e1e056cf69088cb5b09ba622d620d7f02dd9d7ebccac7e798"
     },
     {
       "controlId": "recipe-profile",
@@ -2660,7 +2670,7 @@
     {
       "familyId": "primitive/feedback/alert",
       "path": "manifest/families/primitive/feedback/alert.json",
-      "digest": "64e71e2b0eff0aee4bdd427e6b5302f94873df1d0e6cf513969284b828bc96ef",
+      "digest": "b2fe5cf3d20b25198ec16579cc534a13e180f1038375ded1078f3cb1a734a8b8",
       "maximumClaim": "SOURCE_BOUND",
       "reviewVerdict": null
     },

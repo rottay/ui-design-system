@@ -1589,6 +1589,14 @@
               "moved": false,
               "value": "#9F9C58"
             },
+            "--ds-color-bg-overlay": {
+              "moved": false,
+              "value": "rgba(2, 6, 23, 0.88)"
+            },
+            "--ds-color-error": {
+              "moved": false,
+              "value": "#B91C1C"
+            },
             "--ds-color-primary": {
               "moved": false,
               "value": "rgb(232, 232, 224)"
@@ -3448,6 +3456,14 @@
               "moved": false,
               "value": "#935267"
             },
+            "--ds-color-bg-overlay": {
+              "moved": false,
+              "value": "rgba(0, 0, 0, 0.5)"
+            },
+            "--ds-color-error": {
+              "moved": false,
+              "value": "#B91C1C"
+            },
             "--ds-color-primary": {
               "moved": false,
               "value": "rgb(23, 23, 23)"
@@ -3838,7 +3854,7 @@
         }
       },
       "restore": {
-        "comparedRows": 932,
+        "comparedRows": 936,
         "counts": {
           "byKind": {},
           "byPropertyKind": {},
@@ -3850,7 +3866,7 @@
         "rows": []
       },
       "totals": {
-        "inertProperties": 910,
+        "inertProperties": 914,
         "movedProperties": 2,
         "scope": "across every (vertical x theme x fixture x property) row measured for this arm"
       }
@@ -5445,6 +5461,14 @@
               "moved": false,
               "value": "#9F9C58"
             },
+            "--ds-color-bg-overlay": {
+              "moved": false,
+              "value": "rgba(2, 6, 23, 0.88)"
+            },
+            "--ds-color-error": {
+              "moved": false,
+              "value": "#B91C1C"
+            },
             "--ds-color-primary": {
               "moved": false,
               "value": "rgb(232, 232, 224)"
@@ -7304,6 +7328,14 @@
               "moved": false,
               "value": "#935267"
             },
+            "--ds-color-bg-overlay": {
+              "moved": false,
+              "value": "rgba(0, 0, 0, 0.5)"
+            },
+            "--ds-color-error": {
+              "moved": false,
+              "value": "#B91C1C"
+            },
             "--ds-color-primary": {
               "moved": false,
               "value": "rgb(23, 23, 23)"
@@ -8838,7 +8870,7 @@
         }
       },
       "restore": {
-        "comparedRows": 932,
+        "comparedRows": 936,
         "counts": {
           "byKind": {},
           "byPropertyKind": {},
@@ -8850,7 +8882,7 @@
         "rows": []
       },
       "totals": {
-        "inertProperties": 910,
+        "inertProperties": 914,
         "movedProperties": 2,
         "scope": "across every (vertical x theme x fixture x property) row measured for this arm"
       }
@@ -9022,17 +9054,19 @@
       }
     },
     "sourceFreshness": {
-      "declaredDigest": "e23640927ce77836322320af5a2c30e59b0f992ea015c7720551ca1181381fae",
-      "observedDigest": "e23640927ce77836322320af5a2c30e59b0f992ea015c7720551ca1181381fae",
-      "postMeasurementDigest": "e23640927ce77836322320af5a2c30e59b0f992ea015c7720551ca1181381fae",
-      "preMeasurementDigest": "e23640927ce77836322320af5a2c30e59b0f992ea015c7720551ca1181381fae",
+      "declaredDigest": "f0db2ec87c1d01ad6b03491367ec7cf6f342c6c7975806651814855ac1fe0933",
+      "observedDigest": "f0db2ec87c1d01ad6b03491367ec7cf6f342c6c7975806651814855ac1fe0933",
+      "postMeasurementDigest": "f0db2ec87c1d01ad6b03491367ec7cf6f342c6c7975806651814855ac1fe0933",
+      "preMeasurementDigest": "f0db2ec87c1d01ad6b03491367ec7cf6f342c6c7975806651814855ac1fe0933",
       "sourceFiles": [
         "packages/core/dist/build-stamp.json",
         "packages/core/dist/infrastructure/compilers/kernel/runtime/brand-theme/index.js",
         "packages/core/dist/server.js",
         "packages/core/manifest/controls/motion.dial.json",
+        "packages/core/manifest/controls/token-overrides.json",
         "packages/core/manifest/families/primitive/feedback/alert.json",
         "packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts",
+        "packages/core/src/foundation/contracts/composition/tenants/themes/index.ts",
         "packages/core/src/foundation/tokens/css/facade/artifacts/evnto/index.css",
         "packages/core/src/foundation/tokens/css/facade/entrypoints/base.css",
         "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css",

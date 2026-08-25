@@ -5,7 +5,7 @@
   "scenarioId": "recipe-profile/network-professional/rottay/static-and-db",
   "evidenceKind": "static-db-computed-parity",
   "commandOrTool": "node src/tooling/resolution-probe/public/cli/index.mjs causal",
-  "toolVersion": "resolution-probe@c96c110b3cfb",
+  "toolVersion": "resolution-probe@009c8df5b7f4",
   "exitCode": 0,
   "sourceFiles": [
     "packages/core/dist/build-stamp.json",
@@ -41,10 +41,10 @@
     "packages/core/src/tooling/resolution-probe/runtime/ingress/index.mjs",
     "packages/core/src/tooling/resolution-probe/runtime/measure/index.mjs"
   ],
-  "sourceDigest": "cffa659c83a8a88d8e29495569e43e37b7afd691e227b4b0946891188c87c6f3",
+  "sourceDigest": "81f4ba865389daa8d810b0ecf3d3f99981187f1374926b7cdced3f7ffe393a1c",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/recipe-profile/rottay-network-professional.json",
-  "artifactSha256": "ddb8fb4c6048c34f955c1b083c4d27d61e078594ebe7851bae8d7bb264127857",
-  "createdAt": "2026-08-25T15:49:35.719Z",
+  "artifactSha256": "edc470ba481262a6f3a8100074334190ef34d9441458f6f99adc0ecdee38af94",
+  "createdAt": "2026-08-25T18:59:42.038Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

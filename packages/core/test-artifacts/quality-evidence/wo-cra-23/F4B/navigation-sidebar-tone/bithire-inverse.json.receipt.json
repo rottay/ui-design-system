@@ -5,7 +5,7 @@
   "scenarioId": "navigation.sidebar-tone/inverse/bithire/static-and-db",
   "evidenceKind": "static-db-computed-parity",
   "commandOrTool": "node src/tooling/resolution-probe/public/cli/index.mjs causal",
-  "toolVersion": "resolution-probe@c96c110b3cfb",
+  "toolVersion": "resolution-probe@009c8df5b7f4",
   "exitCode": 0,
   "sourceFiles": [
     "packages/core/dist/build-stamp.json",
@@ -48,10 +48,10 @@
     "packages/core/src/tooling/resolution-probe/runtime/measure/index.mjs",
     "packages/core/src/ui/structures/shell/navigation/sidebar-surface/index.tsx"
   ],
-  "sourceDigest": "a2f33d223b95f181d84468a364cbac328a63a4f528e47e65c47cb160bca7d173",
+  "sourceDigest": "37a57a0df62be22fd82aa099a447889be7031452205a02f4dbe989af3860bbc3",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/navigation-sidebar-tone/bithire-inverse.json",
-  "artifactSha256": "565bba0bbc8f043583a457507b510b1523b2f01a877bb43c1fd9f68729e624e3",
-  "createdAt": "2026-08-25T15:46:42.345Z",
+  "artifactSha256": "7ac87a35493257cca3079e3b4b1d740a3b6fd178e408afd0df7b0480ce7afdca",
+  "createdAt": "2026-08-25T18:55:01.666Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

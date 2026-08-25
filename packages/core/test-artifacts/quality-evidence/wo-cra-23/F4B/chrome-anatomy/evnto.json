@@ -1,0 +1,303 @@
+{
+  "artifactVersion": 1,
+  "controlId": "chrome.anatomy",
+  "vertical": "evnto",
+  "terminal": "DATA",
+  "question": "Does this control CAUSE the governed field to appear with the requested value, leave every declared sibling untouched, and disappear entirely when the tenant removes it?",
+  "limit": "This proves the datum ARRIVES and VARIES. It does not prove the resulting geometry is the right geometry: that is sighted acceptance.",
+  "fieldPath": "normalizedAppearance.advanced.chrome",
+  "equalitySurface": [
+    "chrome",
+    "tokenOverrides",
+    "profiles"
+  ],
+  "phases": [
+    "baseline",
+    "mutation",
+    "removal"
+  ],
+  "restoreLaw": "Restore is EXACT: every measured computed property, every measured CSS custom property and every root attribute must be byte-identical between the baseline and removal phases. There is no numeric tolerance and no ignored property. A single differing row makes the run restore.exact=false and the row is named.",
+  "stops": [
+    {
+      "stopId": "framed",
+      "value": {
+        "cardComponent": {
+          "anatomy": "framed"
+        }
+      }
+    },
+    {
+      "stopId": "underline",
+      "value": {
+        "cardComponent": {
+          "anatomy": "underline"
+        }
+      }
+    },
+    {
+      "stopId": "ghost",
+      "value": {
+        "cardComponent": {
+          "anatomy": "ghost"
+        }
+      }
+    },
+    {
+      "stopId": "ruled",
+      "value": {
+        "table": {
+          "anatomy": "ruled"
+        }
+      }
+    },
+    {
+      "stopId": "zebra",
+      "value": {
+        "table": {
+          "anatomy": "zebra"
+        }
+      }
+    },
+    {
+      "stopId": "open",
+      "value": {
+        "table": {
+          "anatomy": "open"
+        }
+      }
+    },
+    {
+      "stopId": "rail",
+      "value": {
+        "sidebar": {
+          "anatomy": "rail"
+        }
+      }
+    },
+    {
+      "stopId": "panel",
+      "value": {
+        "sidebar": {
+          "anatomy": "panel"
+        }
+      }
+    },
+    {
+      "stopId": "flat",
+      "value": {
+        "layout": {
+          "anatomy": "flat"
+        }
+      }
+    },
+    {
+      "stopId": "floating",
+      "value": {
+        "layout": {
+          "anatomy": "floating"
+        }
+      }
+    }
+  ],
+  "equalityExceptField": [
+    {
+      "stopId": "framed",
+      "fieldMoved": true,
+      "siblingsChecked": [
+        "tokenOverrides",
+        "profiles"
+      ],
+      "siblingsDiffering": [],
+      "holds": true
+    },
+    {
+      "stopId": "underline",
+      "fieldMoved": true,
+      "siblingsChecked": [
+        "tokenOverrides",
+        "profiles"
+      ],
+      "siblingsDiffering": [],
+      "holds": true
+    },
+    {
+      "stopId": "ghost",
+      "fieldMoved": true,
+      "siblingsChecked": [
+        "tokenOverrides",
+        "profiles"
+      ],
+      "siblingsDiffering": [],
+      "holds": true
+    },
+    {
+      "stopId": "ruled",
+      "fieldMoved": true,
+      "siblingsChecked": [
+        "tokenOverrides",
+        "profiles"
+      ],
+      "siblingsDiffering": [],
+      "holds": true
+    },
+    {
+      "stopId": "zebra",
+      "fieldMoved": true,
+      "siblingsChecked": [
+        "tokenOverrides",
+        "profiles"
+      ],
+      "siblingsDiffering": [],
+      "holds": true
+    },
+    {
+      "stopId": "open",
+      "fieldMoved": true,
+      "siblingsChecked": [
+        "tokenOverrides",
+        "profiles"
+      ],
+      "siblingsDiffering": [],
+      "holds": true
+    },
+    {
+      "stopId": "rail",
+      "fieldMoved": true,
+      "siblingsChecked": [
+        "tokenOverrides",
+        "profiles"
+      ],
+      "siblingsDiffering": [],
+      "holds": true
+    },
+    {
+      "stopId": "panel",
+      "fieldMoved": true,
+      "siblingsChecked": [
+        "tokenOverrides",
+        "profiles"
+      ],
+      "siblingsDiffering": [],
+      "holds": true
+    },
+    {
+      "stopId": "flat",
+      "fieldMoved": true,
+      "siblingsChecked": [
+        "tokenOverrides",
+        "profiles"
+      ],
+      "siblingsDiffering": [],
+      "holds": true
+    },
+    {
+      "stopId": "floating",
+      "fieldMoved": true,
+      "siblingsChecked": [
+        "tokenOverrides",
+        "profiles"
+      ],
+      "siblingsDiffering": [],
+      "holds": true
+    }
+  ],
+  "restore": {
+    "exact": true,
+    "comparedRows": 3,
+    "counts": {
+      "differingRows": 0,
+      "byKind": {},
+      "byPropertyKind": {}
+    },
+    "rows": [],
+    "law": "Restore is EXACT: every measured computed property, every measured CSS custom property and every root attribute must be byte-identical between the baseline and removal phases. There is no numeric tolerance and no ignored property. A single differing row makes the run restore.exact=false and the row is named."
+  },
+  "dataGuards": [],
+  "bypass": null,
+  "behaviouralWitnesses": [
+    {
+      "id": "S2",
+      "question": "Does the root receive the REQUESTED anatomy on the family that declared it?",
+      "holds": true,
+      "detail": {
+        "rows": [
+          {
+            "stopId": "framed",
+            "family": "cardComponent",
+            "attribute": "data-anatomy-card",
+            "value": "framed"
+          },
+          {
+            "stopId": "underline",
+            "family": "cardComponent",
+            "attribute": "data-anatomy-card",
+            "value": "underline"
+          },
+          {
+            "stopId": "ghost",
+            "family": "cardComponent",
+            "attribute": "data-anatomy-card",
+            "value": "ghost"
+          },
+          {
+            "stopId": "ruled",
+            "family": "table",
+            "attribute": "data-anatomy-table",
+            "value": "ruled"
+          },
+          {
+            "stopId": "zebra",
+            "family": "table",
+            "attribute": "data-anatomy-table",
+            "value": "zebra"
+          },
+          {
+            "stopId": "open",
+            "family": "table",
+            "attribute": "data-anatomy-table",
+            "value": "open"
+          },
+          {
+            "stopId": "rail",
+            "family": "sidebar",
+            "attribute": "data-anatomy-sidebar",
+            "value": "rail"
+          },
+          {
+            "stopId": "panel",
+            "family": "sidebar",
+            "attribute": "data-anatomy-sidebar",
+            "value": "panel"
+          },
+          {
+            "stopId": "flat",
+            "family": "layout",
+            "attribute": "data-anatomy-layout",
+            "value": "flat"
+          },
+          {
+            "stopId": "floating",
+            "family": "layout",
+            "attribute": "data-anatomy-layout",
+            "value": "floating"
+          }
+        ]
+      }
+    }
+  ],
+  "exception": null,
+  "provenance": {
+    "module": "dist/server.js",
+    "moduleSubpath": "@rottay/design-system/server",
+    "exportName": "compileTenantThemeConfig",
+    "schemaVersion": 1,
+    "tenant": "probe-tenant-evnto"
+  },
+  "verdict": {
+    "pass": true,
+    "guardsHeld": true,
+    "restoreExact": true,
+    "equalityHeld": true,
+    "witnessesHeld": true
+  }
+}

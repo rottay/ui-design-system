@@ -1633,6 +1633,14 @@
               "moved": false,
               "value": "#459BF7"
             },
+            "--ds-color-bg-overlay": {
+              "moved": false,
+              "value": "rgba(20, 40, 59, 0.58)"
+            },
+            "--ds-color-error": {
+              "moved": false,
+              "value": "#e04848"
+            },
             "--ds-color-primary": {
               "moved": false,
               "value": "rgb(30, 132, 230)"
@@ -3535,6 +3543,14 @@
               "moved": false,
               "value": "#356AAB"
             },
+            "--ds-color-bg-overlay": {
+              "moved": false,
+              "value": "rgba(20, 40, 59, 0.42)"
+            },
+            "--ds-color-error": {
+              "moved": false,
+              "value": "#C5504C"
+            },
             "--ds-color-primary": {
               "moved": false,
               "value": "rgb(58, 111, 176)"
@@ -3918,7 +3934,7 @@
         }
       },
       "restore": {
-        "comparedRows": 952,
+        "comparedRows": 956,
         "counts": {
           "byKind": {},
           "byPropertyKind": {},
@@ -3930,7 +3946,7 @@
         "rows": []
       },
       "totals": {
-        "inertProperties": 924,
+        "inertProperties": 928,
         "movedProperties": 8,
         "scope": "across every (vertical x theme x fixture x property) row measured for this arm"
       }
@@ -5568,6 +5584,14 @@
               "moved": false,
               "value": "#459BF7"
             },
+            "--ds-color-bg-overlay": {
+              "moved": false,
+              "value": "rgba(20, 40, 59, 0.58)"
+            },
+            "--ds-color-error": {
+              "moved": false,
+              "value": "#e04848"
+            },
             "--ds-color-primary": {
               "moved": false,
               "value": "rgb(30, 132, 230)"
@@ -7469,6 +7493,14 @@
             "--ds-chart-series-1": {
               "moved": false,
               "value": "#356AAB"
+            },
+            "--ds-color-bg-overlay": {
+              "moved": false,
+              "value": "rgba(20, 40, 59, 0.42)"
+            },
+            "--ds-color-error": {
+              "moved": false,
+              "value": "#C5504C"
             },
             "--ds-color-primary": {
               "moved": false,
@@ -11491,7 +11523,7 @@
         }
       },
       "restore": {
-        "comparedRows": 952,
+        "comparedRows": 956,
         "counts": {
           "byKind": {},
           "byPropertyKind": {},
@@ -11503,7 +11535,7 @@
         "rows": []
       },
       "totals": {
-        "inertProperties": 924,
+        "inertProperties": 928,
         "movedProperties": 8,
         "scope": "across every (vertical x theme x fixture x property) row measured for this arm"
       }
@@ -11674,10 +11706,10 @@
       }
     },
     "sourceFreshness": {
-      "declaredDigest": "b7288b1f876386661c4eb85dc0c7f3c19ba1bb8ad76b9104293c8b758178bbee",
-      "observedDigest": "b7288b1f876386661c4eb85dc0c7f3c19ba1bb8ad76b9104293c8b758178bbee",
-      "postMeasurementDigest": "b7288b1f876386661c4eb85dc0c7f3c19ba1bb8ad76b9104293c8b758178bbee",
-      "preMeasurementDigest": "b7288b1f876386661c4eb85dc0c7f3c19ba1bb8ad76b9104293c8b758178bbee",
+      "declaredDigest": "e55ae0c0bcf483457932b787d89a8bd73dc4e09dad8d3a5516e3e09b0bb546c7",
+      "observedDigest": "e55ae0c0bcf483457932b787d89a8bd73dc4e09dad8d3a5516e3e09b0bb546c7",
+      "postMeasurementDigest": "e55ae0c0bcf483457932b787d89a8bd73dc4e09dad8d3a5516e3e09b0bb546c7",
+      "preMeasurementDigest": "e55ae0c0bcf483457932b787d89a8bd73dc4e09dad8d3a5516e3e09b0bb546c7",
       "sourceFiles": [
         "packages/core/dist/build-stamp.json",
         "packages/core/dist/infrastructure/compilers/kernel/runtime/brand-theme/index.js",

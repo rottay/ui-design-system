@@ -5,7 +5,7 @@
   "scenarioId": "experience.profile/technical/rottay/static-and-db/light",
   "evidenceKind": "static-db-computed-parity",
   "commandOrTool": "node src/tooling/resolution-probe/public/cli/index.mjs causal",
-  "toolVersion": "resolution-probe@c96c110b3cfb",
+  "toolVersion": "resolution-probe@009c8df5b7f4",
   "exitCode": 0,
   "sourceFiles": [
     "packages/core/dist/build-stamp.json",
@@ -71,10 +71,10 @@
     "packages/core/src/ui/primitives/display/Card/engines/rustic/index.tsx",
     "packages/core/src/ui/primitives/display/Card/index.tsx"
   ],
-  "sourceDigest": "827b4a130b8b12ab33d5d5b5d5ca0b131f1a422e17a97cb212ea6cc5fc4f49c9",
+  "sourceDigest": "0d12729dcfaaf5760a234c557572542066fd2fd7af1b8fceeaac7880a35b1d7d",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/experience-profile/rottay-technical.R7-light.json",
-  "artifactSha256": "a88e150de73ded4e4c6ea8b6e5285b8d55b7b0fe888c4ab62a2b9eabf295b192",
-  "createdAt": "2026-08-25T17:09:00.687Z",
+  "artifactSha256": "152a9551396265c75ef1534a34f1baf4cb91760efb49c336a55adecb6907b1a5",
+  "createdAt": "2026-08-25T18:53:18.224Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

@@ -5,7 +5,7 @@
   "scenarioId": "typography.pairing/geometric/evnto/static-and-db",
   "evidenceKind": "static-db-computed-parity",
   "commandOrTool": "node src/tooling/resolution-probe/public/cli/index.mjs causal",
-  "toolVersion": "resolution-probe@c96c110b3cfb",
+  "toolVersion": "resolution-probe@009c8df5b7f4",
   "exitCode": 0,
   "sourceFiles": [
     "packages/core/dist/build-stamp.json",
@@ -66,10 +66,10 @@
     "packages/core/src/ui/primitives/display/Typography/tests/Typography.test.tsx",
     "packages/core/src/ui/primitives/display/Typography/tests/Typography.type-roles.test.tsx"
   ],
-  "sourceDigest": "45ddb538b138845389388137c00bb8daad75681f4d150519c1c144bb7874ce7b",
+  "sourceDigest": "2a53f46b627c26f2316f512363b7ba06c541cdccb2efaed75f0430de594ae036",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/typography-pairing/evnto-geometric.json",
-  "artifactSha256": "079db398859a5362f42c9b1111d34c64cd127ed9d144c2e714c0642b813661dc",
-  "createdAt": "2026-08-25T17:14:14.284Z",
+  "artifactSha256": "dc2948b50a2ba8f2d9bc7dac2c3e2729417a414d292c887d52b2a83dbab94284",
+  "createdAt": "2026-08-25T19:06:24.623Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

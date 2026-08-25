@@ -5,7 +5,7 @@
   "scenarioId": "surfaces.elevation-posture/elevated/bithire/static-and-db",
   "evidenceKind": "exact-restore",
   "commandOrTool": "node src/tooling/resolution-probe/public/cli/index.mjs causal",
-  "toolVersion": "resolution-probe@c96c110b3cfb",
+  "toolVersion": "resolution-probe@009c8df5b7f4",
   "exitCode": 0,
   "sourceFiles": [
     "packages/core/dist/build-stamp.json",
@@ -68,10 +68,10 @@
     "packages/core/src/ui/primitives/display/Card/engines/rustic/index.tsx",
     "packages/core/src/ui/primitives/display/Card/index.tsx"
   ],
-  "sourceDigest": "c20c2473f159daa19027c7cc87c1b1e9b0d9c53632c5f8b6bd0bce1a52b8bae7",
+  "sourceDigest": "b513d328b2cd70d5bdaa2e3e2a6bfcba351e9dced964a0075c5a1e32e3f86840",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/surfaces-elevation-posture/bithire-elevated.json",
-  "artifactSha256": "b29c2a6c45f7be9694e7e0ec770e7cffebd9cd03d3eb500ea4eda1413de9e1c2",
-  "createdAt": "2026-08-25T17:11:41.881Z",
+  "artifactSha256": "989fa1316da5b2963ec9aed0e40514e0b0a88a0c6659713aa28a24c5d75cc0a5",
+  "createdAt": "2026-08-25T19:03:37.099Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

@@ -5,7 +5,7 @@
   "scenarioId": "typography.pairing/sober/rottay/static-and-db",
   "evidenceKind": "static-db-computed-parity",
   "commandOrTool": "node src/tooling/resolution-probe/public/cli/index.mjs causal",
-  "toolVersion": "resolution-probe@c96c110b3cfb",
+  "toolVersion": "resolution-probe@009c8df5b7f4",
   "exitCode": 0,
   "sourceFiles": [
     "packages/core/dist/build-stamp.json",
@@ -66,10 +66,10 @@
     "packages/core/src/ui/primitives/display/Typography/tests/Typography.test.tsx",
     "packages/core/src/ui/primitives/display/Typography/tests/Typography.type-roles.test.tsx"
   ],
-  "sourceDigest": "80d29d39b2d03b6302391ab1905415017ff83c216e4ad4464382cb540abee6e3",
+  "sourceDigest": "1c3b71e7882b653e6a0d721fbadb18605e4c605e0347152fc2f12347dec95301",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/typography-pairing/rottay-sober.json",
-  "artifactSha256": "bd75507cc80d80df7cbd8939f423771b80f307028e965c009cd525029fd4112f",
-  "createdAt": "2026-08-25T17:14:51.578Z",
+  "artifactSha256": "c8c4621c4acc8f2bc63621eccf2441984adbc00ea597eea70b3b5efb2ae194a6",
+  "createdAt": "2026-08-25T19:07:00.804Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

@@ -5,7 +5,7 @@
   "scenarioId": "profiles-expressive-bithire-pill-accented",
   "evidenceKind": "static-db-computed-parity",
   "commandOrTool": "node src/tooling/resolution-probe/public/cli/index.mjs causal",
-  "toolVersion": "resolution-probe@c96c110b3cfb",
+  "toolVersion": "resolution-probe@009c8df5b7f4",
   "exitCode": 0,
   "sourceFiles": [
     "packages/core/dist/build-stamp.json",
@@ -69,10 +69,10 @@
     "packages/core/src/ui/primitives/display/Card/engines/rustic/index.tsx",
     "packages/core/src/ui/primitives/display/Card/index.tsx"
   ],
-  "sourceDigest": "2388dc5f5c98939e9a90bb222437733050cc01cd54fd3ff30ae550877432bf76",
+  "sourceDigest": "c5e5049f9cb47bc75ddcb676b28a29abe3821e2ec3a7d6086ce6679aa1dbd61c",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/profiles-expressive/bithire-pill-accented.json",
-  "artifactSha256": "afc11c5513b5cca5cb6d2be40e123dfcf97232dc4670881e14958771d24a38d1",
-  "createdAt": "2026-08-25T17:24:00.163Z",
+  "artifactSha256": "10ae4bff37064703a146a659feb085ce15b7e3c514f11af6f3fd53e505b2da93",
+  "createdAt": "2026-08-25T18:57:15.008Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

@@ -5,7 +5,7 @@
   "scenarioId": "navigation.sidebar-tone/inverse/rottay/static-and-db",
   "evidenceKind": "static-db-computed-parity",
   "commandOrTool": "node src/tooling/resolution-probe/public/cli/index.mjs causal",
-  "toolVersion": "resolution-probe@c96c110b3cfb",
+  "toolVersion": "resolution-probe@009c8df5b7f4",
   "exitCode": 0,
   "sourceFiles": [
     "packages/core/dist/build-stamp.json",
@@ -48,10 +48,10 @@
     "packages/core/src/tooling/resolution-probe/runtime/measure/index.mjs",
     "packages/core/src/ui/structures/shell/navigation/sidebar-surface/index.tsx"
   ],
-  "sourceDigest": "9d4d402c606d93b5ec37cb810791f14bd4ebd9533ddfb1d1637c3f3567fd9e8f",
+  "sourceDigest": "038d4e72ea245a41833fa4ed9e2c24875390c1a3fb9ed1974fc69033bf29e10f",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/navigation-sidebar-tone/rottay-inverse.json",
-  "artifactSha256": "819f0917c54842990844d892eb30f9a993ca5f0e8332fa2fddb7ffcc8804961a",
-  "createdAt": "2026-08-25T15:47:25.653Z",
+  "artifactSha256": "d5889636eab06c979d6c340705ba441324b88aa48c12baa76260ed40bb7dba05",
+  "createdAt": "2026-08-25T18:55:48.077Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

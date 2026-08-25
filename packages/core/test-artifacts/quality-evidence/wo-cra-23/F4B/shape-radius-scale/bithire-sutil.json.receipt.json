@@ -5,7 +5,7 @@
   "scenarioId": "shape.radius-scale/sutil/bithire/static-and-db",
   "evidenceKind": "static-db-computed-parity",
   "commandOrTool": "node src/tooling/resolution-probe/public/cli/index.mjs causal",
-  "toolVersion": "resolution-probe@c96c110b3cfb",
+  "toolVersion": "resolution-probe@009c8df5b7f4",
   "exitCode": 0,
   "sourceFiles": [
     "packages/core/dist/build-stamp.json",
@@ -70,10 +70,10 @@
     "packages/core/src/ui/primitives/display/Card/engines/rustic/index.tsx",
     "packages/core/src/ui/primitives/display/Card/index.tsx"
   ],
-  "sourceDigest": "9709bc4f8f3713b6fc6c236febe92f9c49c6a749d679a39ec9b1f71ecde39419",
+  "sourceDigest": "22307a5588fcba6ba300e73e9fc6d9d7a2acc241f3031a690b101a66cc3daa72",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/shape-radius-scale/bithire-sutil.json",
-  "artifactSha256": "a828768ad187dfe49de26c4a3f5bf3bd6f010e6a8e1008080935117bea7398de",
-  "createdAt": "2026-08-25T17:10:05.822Z",
+  "artifactSha256": "01e9b28537b7e1768fe9677daca5ff2a9618d637cb77585e95bf85fb2843f5f9",
+  "createdAt": "2026-08-25T19:00:45.446Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

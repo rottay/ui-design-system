@@ -614,6 +614,95 @@ const DATA_TERMINAL_DESCRIPTORS = Object.freeze({
      * nothing resolves to `undefined` rather than to a default id. Absent stays
      * absent so a reader cannot read "not asked" as "asked and held". */
   },
+  'chrome.anatomy': {
+    /* ONE row, not four: this table is keyed by controlId, and `chrome.anatomy`
+     * IS one control with four member families. The stop carries its family
+     * because the ten non-`default` values are globally unique across the four
+     * vocabularies (measured against the compiler's own refusal), which is the
+     * same shape F4B-16 used for the per-member axes of `profiles.expressive`.
+     *
+     * `default` is NOT a stop here. The projector skips it by construction
+     * (`variant === "default"` -> continue, because default always maps to the
+     * current rendering), so the four `default` values are non-witnesses and
+     * live in the manifest as written law rather than as stops that could never
+     * discriminate. Same class as D-1's inert `soft`. */
+    document: (stopId) => {
+      const family = ANATOMY_FAMILY_BY_VARIANT[stopId];
+      if (stopId !== undefined && !family) {
+        throw new Error(
+          `resolution-probe: "${stopId}" is not a known chrome.anatomy variant. The vocabulary is ` +
+            `closed per family: ${JSON.stringify(ANATOMY_FAMILY_BY_VARIANT)}.`,
+        );
+      }
+      return {
+        visualFoundation: {
+          advanced: {
+            /* Siblings held constant, NON-COLOUR on purpose. `chrome` is the
+             * container this control writes into and `chrome.cardComponent.bg`
+             * is a real colour field of that same container -- authoring it
+             * would trip APCA validation in dark mode and the run could not
+             * compile its own baseline. So the constant sibling is a
+             * NON-colour field outside `chrome`. */
+            tokenOverrides: { '--ds-radius-md': '10px' },
+            profiles: { edge: 'inset-double' },
+            ...(stopId === undefined ? {} : { chrome: { [family]: { anatomy: stopId } } }),
+          },
+        },
+      };
+    },
+    fieldPath: ['normalizedAppearance', 'advanced', 'chrome'],
+    // The container is `.advanced`, so the surface is its siblings: the four
+    // families ride inside `chrome`, which is the key that moves.
+    equalitySurface: ['chrome', 'tokenOverrides', 'profiles'],
+    /* The witness is the PUBLISHED PROJECTOR, which is stronger than the
+     * normalized datum: it measures the value as the ROOT receives it
+     * (`data-anatomy-*`), which is what the consumer actually reads. */
+    witnesses: ({ compiledStops, tenantThemeAnatomyAttributes }) => {
+      const rows = compiledStops.map(({ stopId, artifact }) => {
+        const family = ANATOMY_FAMILY_BY_VARIANT[stopId];
+        const attributes = tenantThemeAnatomyAttributes(artifact ?? {});
+        return {
+          stopId,
+          family,
+          attribute: ANATOMY_ATTRIBUTE_BY_FAMILY[family] ?? null,
+          value: attributes[ANATOMY_ATTRIBUTE_BY_FAMILY[family]] ?? null,
+        };
+      });
+      return [
+        {
+          id: 'S2',
+          question:
+            'Does the root receive the REQUESTED anatomy on the family that declared it?',
+          holds: rows.every((row) => row.value === row.stopId),
+          detail: { rows },
+        },
+      ];
+    },
+  },
+});
+
+/** Which family owns each anatomy variant. The ten non-`default` values are
+ * globally unique, so a stop names its family without a second field. */
+const ANATOMY_FAMILY_BY_VARIANT = Object.freeze({
+  framed: 'cardComponent',
+  underline: 'cardComponent',
+  ghost: 'cardComponent',
+  ruled: 'table',
+  zebra: 'table',
+  open: 'table',
+  rail: 'sidebar',
+  panel: 'sidebar',
+  flat: 'layout',
+  floating: 'layout',
+});
+
+/** The attribute each family stamps on the root. Mirrors the compiler's own
+ * `ANATOMY_ATTRIBUTE_BY_FAMILY`; the drill asserts they agree. */
+const ANATOMY_ATTRIBUTE_BY_FAMILY = Object.freeze({
+  cardComponent: 'data-anatomy-card',
+  table: 'data-anatomy-table',
+  sidebar: 'data-anatomy-sidebar',
+  layout: 'data-anatomy-layout',
 });
 
 /**
@@ -708,6 +797,8 @@ async function commandDataCausal(options) {
   const { resolveActiveResponsivePosture, resolveResponsivePosture, resolveAdaptiveLayout } = main;
   // `/server`, not `/index`: that is where the icon reader is published.
   const { resolveActiveIconExpressiveProfile } = server;
+  // Published on `/index`: the pure artifact -> `data-anatomy-*` projection.
+  const { tenantThemeAnatomyAttributes } = main;
 
   // MEASURED, never asserted: the fail-closed default is whatever the control's
   // own resolver answers when asked for nothing. Hardcoding it would make the
@@ -747,6 +838,7 @@ async function commandDataCausal(options) {
     resolveResponsivePosture,
     resolveAdaptiveLayout,
     resolveActiveIconExpressiveProfile,
+    tenantThemeAnatomyAttributes,
   });
 
   const report = buildDataCausalReport({

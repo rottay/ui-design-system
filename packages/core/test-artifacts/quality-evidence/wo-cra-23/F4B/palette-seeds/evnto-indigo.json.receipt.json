@@ -5,7 +5,7 @@
   "scenarioId": "palette.seeds/indigo/evnto/static-and-db",
   "evidenceKind": "exact-restore",
   "commandOrTool": "node src/tooling/resolution-probe/public/cli/index.mjs causal",
-  "toolVersion": "resolution-probe@c96c110b3cfb",
+  "toolVersion": "resolution-probe@009c8df5b7f4",
   "exitCode": 0,
   "sourceFiles": [
     "packages/core/dist/build-stamp.json",
@@ -66,10 +66,10 @@
     "packages/core/styles/index.css",
     "packages/core/styles/rottay.css"
   ],
-  "sourceDigest": "69eb893658c205391cda5c70d4bc4134694301dc2d8391dd962dfef68012e9b2",
+  "sourceDigest": "7cf107c00f4b3f9c74409db0e155ce661aa8910ea3d1a2f84b5d3b4124a31edf",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/palette-seeds/evnto-indigo.json",
-  "artifactSha256": "5001350b8d6990724d87e47d361dbf16fa68d9acc17cf28369b870224da40ebf",
-  "createdAt": "2026-08-25T15:48:15.530Z",
+  "artifactSha256": "8833390b810afa3c0f0d7848d69128d5d56faaa7cdaed72ae9ba53e27eecc6df",
+  "createdAt": "2026-08-25T18:56:34.268Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

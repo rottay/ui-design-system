@@ -467,3 +467,144 @@ test('PACKET-2 drill: on a composed document the per-axis override wins', async 
     'the sibling axis the override does not name stays where the document put it',
   );
 });
+
+
+/* ==========================================================================
+ * PACKET 3 (DATA) — chrome.anatomy: four member families, one control.
+ * ========================================================================== */
+
+const ANATOMY_VOCABULARY = Object.freeze({
+  cardComponent: ['default', 'framed', 'underline', 'ghost'],
+  table: ['default', 'ruled', 'zebra', 'open'],
+  sidebar: ['default', 'rail', 'panel'],
+  layout: ['default', 'flat', 'floating'],
+});
+const ANATOMY_ATTRIBUTE = Object.freeze({
+  cardComponent: 'data-anatomy-card',
+  table: 'data-anatomy-table',
+  sidebar: 'data-anatomy-sidebar',
+  layout: 'data-anatomy-layout',
+});
+
+async function anatomyHarness() {
+  const server = await import(toFileUrl(resolvePath(CORE_ROOT, 'dist/server.js')).href);
+  const main = await import(toFileUrl(resolvePath(CORE_ROOT, 'dist/index.js')).href);
+  const verticalEnvelope = server.getTenantThemeVerticalEnvelope('bithire');
+  const identity = {
+    tenantId: 'probe-tenant-bithire',
+    slug: 'probe-tenant-bithire',
+    verticalKey: 'bithire',
+    rowVersion: 1,
+  };
+  const compile = (chrome) =>
+    server.compileTenantThemeConfig(
+      {
+        schemaVersion: server.TENANT_THEME_SCHEMA_VERSION,
+        mode: 'advanced',
+        visualFoundation: { advanced: { ...(chrome ? { chrome } : {}) } },
+        ...identity,
+      },
+      { verticalEnvelope },
+    );
+  return { compile, attributes: main.tenantThemeAnatomyAttributes };
+}
+
+/**
+ * The four families are INDEPENDENT — in admission and in projection — and a
+ * document may declare all four at once without them treading on each other.
+ * This is the drill the brief makes obligatory, and it is what licenses ONE
+ * descriptor row to serve four member families.
+ */
+test('PACKET-3 drill: the four anatomy families coexist in one document', async () => {
+  const { compile, attributes } = await anatomyHarness();
+  const all = {
+    cardComponent: { anatomy: 'framed' },
+    table: { anatomy: 'zebra' },
+    sidebar: { anatomy: 'rail' },
+    layout: { anatomy: 'floating' },
+  };
+  assert.deepEqual(attributes(compile(all)), {
+    'data-anatomy-card': 'framed',
+    'data-anatomy-table': 'zebra',
+    'data-anatomy-sidebar': 'rail',
+    'data-anatomy-layout': 'floating',
+  });
+  // And each one alone projects ONLY its own attribute: independence, not a
+  // lucky ordering of a merged object.
+  for (const [family, variants] of Object.entries(ANATOMY_VOCABULARY)) {
+    for (const variant of variants.filter((v) => v !== 'default')) {
+      const projected = attributes(compile({ [family]: { anatomy: variant } }));
+      assert.deepEqual(
+        projected,
+        { [ANATOMY_ATTRIBUTE[family]]: variant },
+        `${family}/${variant} must project exactly one attribute`,
+      );
+    }
+  }
+});
+
+/**
+ * `default` IS INERT BY CONSTRUCTION, and that is why it is written law in the
+ * manifest instead of a stop: the projector skips it ("default always maps to
+ * the current rendering"), so a `default` stop could never discriminate and a
+ * probe that shipped it would be reporting a non-witness as a witness.
+ */
+test('PACKET-3 drill: `default` projects nothing, on every family', async () => {
+  const { compile, attributes } = await anatomyHarness();
+  for (const family of Object.keys(ANATOMY_VOCABULARY)) {
+    assert.deepEqual(
+      attributes(compile({ [family]: { anatomy: 'default' } })),
+      {},
+      `${family}/default must project no attribute at all`,
+    );
+  }
+  // All four at once, still nothing: the emptiness is the rule, not a
+  // single-family accident.
+  assert.deepEqual(
+    attributes(
+      compile(
+        Object.fromEntries(
+          Object.keys(ANATOMY_VOCABULARY).map((f) => [f, { anatomy: 'default' }]),
+        ),
+      ),
+    ),
+    {},
+  );
+});
+
+/**
+ * The descriptor's attribute table is a COPY of the compiler's, so this drill
+ * keeps the copy honest — the same law the font-stack replica follows.
+ */
+test('PACKET-3 drill: the vocabulary and attribute map match the compiler', async () => {
+  const server = await import(toFileUrl(resolvePath(CORE_ROOT, 'dist/server.js')).href);
+  const identity = {
+    tenantId: 'probe-tenant-bithire',
+    slug: 'probe-tenant-bithire',
+    verticalKey: 'bithire',
+    rowVersion: 1,
+  };
+  const verticalEnvelope = server.getTenantThemeVerticalEnvelope('bithire');
+  for (const [family, variants] of Object.entries(ANATOMY_VOCABULARY)) {
+    let declared = null;
+    try {
+      server.compileTenantThemeConfig(
+        {
+          schemaVersion: server.TENANT_THEME_SCHEMA_VERSION,
+          mode: 'advanced',
+          visualFoundation: { advanced: { chrome: { [family]: { anatomy: '__probe__' } } } },
+          ...identity,
+        },
+        { verticalEnvelope },
+      );
+    } catch (error) {
+      declared = /Expected one of ([^;\n]+)/.exec(String(error.message))?.[1];
+    }
+    assert.ok(declared, `${family} must refuse an unknown variant`);
+    assert.deepEqual(
+      declared.split(',').map((v) => v.trim()),
+      variants,
+      `${family}: the drill's vocabulary must be the compiler's own`,
+    );
+  }
+});

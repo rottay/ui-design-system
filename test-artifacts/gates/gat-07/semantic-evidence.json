@@ -4,7 +4,7 @@
   "scope": "Phase-0 exact proof and minimal public-claim floor; not DS-IMP-060 completion",
   "reproducibility": {
     "classification": "deterministic same-input runs",
-    "authorityDigest": "81a69704baaf8b07af297113113961266600288dc295454ccf3128bfae768fa7",
+    "authorityDigest": "c1c3f1252a6916bd7bfaaaf945c52c9f4123997265c3742ff0895eeea35fd81a",
     "sourceHeadIsAuthority": false,
     "toolchain": {
       "node": {
@@ -15589,8 +15589,8 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 35139,
-        "sha256": "740a2a3d32a58d2eb7f1082c6ec2802e2ffcc77f21cc80189f783e5380d1918d"
+        "bytes": 36442,
+        "sha256": "68f63ff4a0deeed1074145604090d62b556d0277334c27bf7b620fe0614af364"
       },
       {
         "path": "ui-design-system/packages/core/src/tooling/resolution-probe/foundation/roster/tests/index.test.tsx",
@@ -40519,7 +40519,7 @@
         "sha256": "d2a99efed33922a4a699ea033538b677022ddaccf0cdbb25ece0a7295bdc4812"
       }
     ],
-    "digest": "81a69704baaf8b07af297113113961266600288dc295454ccf3128bfae768fa7"
+    "digest": "c1c3f1252a6916bd7bfaaaf945c52c9f4123997265c3742ff0895eeea35fd81a"
   },
   "paintAudit": {
     "output": "engine-token-audit --check OK (3326 counters; 3226 completed zeros locked exactly; 91 decrease-only ceilings; 2 positive exact invariants; 7 positive minimum floors)",
@@ -113900,8 +113900,8 @@
   "deterministicRuns": {
     "count": 2,
     "hashes": [
-      "1293f869669bec38a95a4b59eb732f743560a51927155959a56400f3aeae2496",
-      "1293f869669bec38a95a4b59eb732f743560a51927155959a56400f3aeae2496"
+      "4353f4c6c25e330dea6aaf8ea89aff2ab3d214f372b4dd5c83494f6e5cf612cf",
+      "4353f4c6c25e330dea6aaf8ea89aff2ab3d214f372b4dd5c83494f6e5cf612cf"
     ],
     "agree": true
   }

@@ -4333,6 +4333,57 @@ verificación previa). La primera aplicación (compound-editorial de F4B-14,
 fence `capability-propagation:573` + `e2-composed-pairing.test.ts`) cumple
 ambas y quedó evaluada por Fable como "fortalece el programa".
 
+**PACKET 3 DATA — chrome.anatomy CIERRA SOURCE_BOUND y la serie DATA queda
+completa (2026-08-25; Opus; postaudit Fable: ACCEPT — "la serie DATA cierra
+completa (posture + icon + anatomy en una tabla), la reparación de la
+colisión es causalmente honesta"; su barrido propio de los 134: 0
+exitCode≠0, 0 sha mismatch).** El tercer control DATA: UNA fila keyed por
+controlId con las 4 familias (los 10 valores no-default son globalmente
+únicos entre los 4 vocabularios — la forma más chica que es honesta),
+`fieldPath` al contenedor `chrome`, equalitySurface con siblings FUERA de
+chrome (porque `chrome.cardComponent.bg` es un campo de COLOR real del mismo
+contenedor: autorarlo dispararía APCA en dark — la nota P3 aplicada).
+Witness = `tenantThemeAnatomyAttributes` (publicado por `/index`): el
+proyector de producción, más fuerte que el dato normalizado. **La mitad C
+medida: la puerta estática es `STRUCTURALLY_UNREACHABLE` GENUINA** (no la
+clase RUNTIME_ONLY de profiles.icon): cero lectores de `anatomy` en el
+compilador estático, CERO menciones en el provider (el contraste exacto con
+icon), los callers del proyector consumen el ARTIFACT, y la conducta la
+sella (compile del tema con `anatomy:'framed'` byte-idéntico al baseline).
+El gap queda registrado: un tipo que promete una capacidad que su compilador
+no implementa (misma clase honesta que F4B-17). **La ley del `default`
+inerte:** el proyector saltea `variant === "default"` por construcción; los
+4 stops default son no-testigos declarados como LEY ESCRITA y cercados por
+drill (una familia en default proyecta `{}`; las cuatro a la vez también).
+**Enums verificados contra el compilador** (card/table/sidebar/layout) y
+drill de vocabulario que los asierta CONTRA él; 10 stops discriminantes × 3
+verticales; las 4 familias conviven en un documento sin pisarse (drill).
+**La colisión inter-lane y la reparación (adjudicación DT ejecutada):** 26
+receipts dañados por el driver (exitCode 1 + sha inconsistente) fueron
+RE-EMITIDOS correctos — NUNCA restaurados por git; el caso rottay-mate (el
+artifact dañado tenía `negativeControlResolution` de OTRO control —
+reconstrucción lossy) recuperó su bind del artifact sano de git HEAD por
+`git show` SÓLO LECTURA con estampas HEAD≡worktree verificadas (legal bajo
+la ley del owner: lectura, no restauración). Barrido final: 134/134 limpios,
+133 frescos (sólo el compound histórico re-clasificado). Los 118 "moved" son
+el crecimiento legítimo del fixture de F4B-17 (+2 tokens inertes; ningún
+verdict cambió — verificado por el auditor en muestra propia). Los 9 DATA
+re-corridos: posture e icon payload byte-idéntico (la fila de anatomy no
+alteró los controles previos — la invariancia del drill 1 del Packet 1 se
+cumple en toda la serie). El driver corregido vive en /tmp (fuera del
+commit, declarado; reconstrucción adoptando el método de F4B-16 + snapshot
+del par artifact+receipt + fail-fast ante arms stale + pre-flight de
+dist-freshness). **Registrada la recomendación permanente de Fable (sube de
+tono): promover el driver de re-emisión a `scripts/` con el ledger de
+invocaciones es la mejora CI-2 más pagada del programa** — 4 drivers
+nacidos en /tmp en esta serie; cada colisión futura la cobra. `manifest/
+index.json` entra a este commit (rollup de ambos manifests nuevos —
+declarado en el commit de F4B-17). Cadena: drills 24/24, suites 248/248,
+validador 133/134, CONSTITUTION_READY, program-check.test 48/48,
+dist-freshness OK, GAT-07 resellado (4353f4c6…). Cierre en SOURCE_BOUND por
+el mismo techo mecánico de celdas que profiles.icon (251 UNKNOWN + 4
+SOURCE_BOUND pre-existentes — la calibración de celdas es frente F4C/F5).
+
 **F4B-17 — token-overrides CIERRA SOURCE_BOUND con la puerta DB medida
 directa y el hueco de domain.kind adjudicado (2026-08-25; Sonnet; postaudit
 Fable: ACCEPT — "la puerta estática está sellada con la evidencia más

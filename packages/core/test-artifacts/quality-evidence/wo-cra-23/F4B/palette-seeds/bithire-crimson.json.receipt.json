@@ -5,7 +5,7 @@
   "scenarioId": "palette.seeds/crimson/bithire/static-and-db",
   "evidenceKind": "static-db-computed-parity",
   "commandOrTool": "node src/tooling/resolution-probe/public/cli/index.mjs causal",
-  "toolVersion": "resolution-probe@c96c110b3cfb",
+  "toolVersion": "resolution-probe@009c8df5b7f4",
   "exitCode": 0,
   "sourceFiles": [
     "packages/core/dist/build-stamp.json",
@@ -65,10 +65,10 @@
     "packages/core/styles/index.css",
     "packages/core/styles/rottay.css"
   ],
-  "sourceDigest": "eb8da98adac04c23d3780c69458d1d91578adaa419cb736697681a0e1c468623",
+  "sourceDigest": "2e97da14ae0fc0412d0bbf5cfed3567932f890e3ffcbaf5d780a4ccc9c732ea5",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/palette-seeds/bithire-crimson.json",
-  "artifactSha256": "7abc097f47bcad7fe8fd3531a1f76709d732ccb99b9f5d23365d7eafdb32b8bc",
-  "createdAt": "2026-08-25T15:47:49.837Z",
+  "artifactSha256": "822261dcbbb7c5454289095d48e5cdacd1d8bdf64fa5b8d5bc2a058c5ec4cfe3",
+  "createdAt": "2026-08-25T18:56:11.484Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

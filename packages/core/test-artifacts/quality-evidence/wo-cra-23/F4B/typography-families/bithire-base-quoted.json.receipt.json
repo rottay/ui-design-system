@@ -5,7 +5,7 @@
   "scenarioId": "typography.families/base-quoted/bithire/static-and-db",
   "evidenceKind": "static-db-computed-parity",
   "commandOrTool": "node src/tooling/resolution-probe/public/cli/index.mjs causal",
-  "toolVersion": "resolution-probe@c96c110b3cfb",
+  "toolVersion": "resolution-probe@009c8df5b7f4",
   "exitCode": 0,
   "sourceFiles": [
     "packages/core/dist/build-stamp.json",
@@ -65,10 +65,10 @@
     "packages/core/src/ui/primitives/display/Typography/tests/Typography.test.tsx",
     "packages/core/src/ui/primitives/display/Typography/tests/Typography.type-roles.test.tsx"
   ],
-  "sourceDigest": "ab8d78f5f3a5f72f90d85cf9e6f98fb81c895aa4f1e82023b3f2dec1ce2536a6",
+  "sourceDigest": "29683ff159dcc1db3c2a378bbb2183384012d7d67ca62e0a29e87c565f7bf236",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/typography-families/bithire-base-quoted.json",
-  "artifactSha256": "009b3659684e692110298adff4cf65b14851201cf0a85a0fc7c660cf30235072",
-  "createdAt": "2026-08-25T17:12:27.238Z",
+  "artifactSha256": "744d28990cbc95ca30c5734bf5d9a869479753bcb54e647680603bc272832b92",
+  "createdAt": "2026-08-25T19:04:22.666Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,
