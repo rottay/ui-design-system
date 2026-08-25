@@ -287,6 +287,7 @@ import { execFileSync } from 'node:child_process';
 import { mkdtempSync, readFileSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, resolve as resolvePath } from 'node:path';
+import { pathToFileURL as toFileUrl } from 'node:url';
 
 import { CORE_ROOT } from '../../../foundation/paths/index.mjs';
 
@@ -393,4 +394,76 @@ test('PACKET-1 drill 2: a control with no descriptor is refused, by name', () =>
   // It names the law and the way out, not just the symptom.
   assert.match(stderr, /refuses to guess/);
   assert.match(stderr, /Declared: responsive\.posture/);
+});
+
+
+/**
+ * PACKET 2 (DATA) — the precedence fence for `profiles.icon`.
+ *
+ * FASE 0 measured that an explicit per-axis override beats the experience
+ * composition, axis by axis, in ONE place: `resolveExpressiveAxes`'s
+ * `pick = (key) => overrides?.[key] !== undefined ? overrides[key] : experience?.[key]`.
+ *
+ * Today that law has nothing to arbitrate for `icon`: neither catalog profile
+ * declares the axis, so a document that selects a profile AND an icon has only
+ * one source for the icon. The house prefers an executable fence to a note, so
+ * this drill states the law as an assertion instead: on a composed document the
+ * override wins, and it wins for the axis it names WITHOUT disturbing an axis
+ * the profile does own. The day a profile declares `icon`, this drill is
+ * already standing where the disputed precedence would appear.
+ */
+test('PACKET-2 drill: on a composed document the per-axis override wins', async () => {
+  const server = await import(toFileUrl(resolvePath(CORE_ROOT, 'dist/server.js')).href);
+  const {
+    compileTenantThemeConfig,
+    getTenantThemeVerticalEnvelope,
+    TENANT_THEME_SCHEMA_VERSION,
+    resolveActiveIconExpressiveProfile,
+  } = server;
+  const verticalEnvelope = getTenantThemeVerticalEnvelope('bithire');
+  const identity = {
+    tenantId: 'probe-tenant-bithire',
+    slug: 'probe-tenant-bithire',
+    verticalKey: 'bithire',
+    rowVersion: 1,
+  };
+  const PROFILE = 'rottay/bithire-technical@1';
+  const compose = (icon) =>
+    compileTenantThemeConfig(
+      {
+        schemaVersion: TENANT_THEME_SCHEMA_VERSION,
+        mode: 'advanced',
+        visualFoundation: {
+          general: { experienceProfile: PROFILE },
+          advanced: { profiles: { edge: 'inset-double', ...(icon ? { icon } : {}) } },
+        },
+        ...identity,
+      },
+      { verticalEnvelope },
+    );
+
+  for (const icon of ['linear', 'strong-outline', 'duotone', 'solid-active']) {
+    const artifact = compose(icon);
+    assert.equal(
+      resolveActiveIconExpressiveProfile({ appearance: artifact.normalizedAppearance }),
+      icon,
+      `the explicit icon override must win on a document that also selects ${PROFILE}`,
+    );
+  }
+
+  /* The other half: the profile still owns the axes the override does NOT name.
+   * Without this, a fence that merely showed "icon wins" could be satisfied by
+   * an implementation that dropped the profile entirely. */
+  const composed = compose('duotone');
+  const profileOnly = compose(null);
+  assert.equal(
+    JSON.stringify(composed.normalizedAppearance?.general?.experienceProfile),
+    JSON.stringify(profileOnly.normalizedAppearance?.general?.experienceProfile),
+    'the override must not disturb the profile selection itself',
+  );
+  assert.equal(
+    composed.normalizedAppearance?.advanced?.profiles?.edge,
+    'inset-double',
+    'the sibling axis the override does not name stays where the document put it',
+  );
 });

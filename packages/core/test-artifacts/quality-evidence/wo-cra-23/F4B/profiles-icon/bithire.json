@@ -1,0 +1,130 @@
+{
+  "artifactVersion": 1,
+  "controlId": "profiles.icon",
+  "vertical": "bithire",
+  "terminal": "DATA",
+  "question": "Does this control CAUSE the governed field to appear with the requested value, leave every declared sibling untouched, and disappear entirely when the tenant removes it?",
+  "limit": "This proves the datum ARRIVES and VARIES. It does not prove the resulting geometry is the right geometry: that is sighted acceptance.",
+  "fieldPath": "normalizedAppearance.advanced.profiles.icon",
+  "equalitySurface": [
+    "icon",
+    "edge"
+  ],
+  "phases": [
+    "baseline",
+    "mutation",
+    "removal"
+  ],
+  "restoreLaw": "Restore is EXACT: every measured computed property, every measured CSS custom property and every root attribute must be byte-identical between the baseline and removal phases. There is no numeric tolerance and no ignored property. A single differing row makes the run restore.exact=false and the row is named.",
+  "stops": [
+    {
+      "stopId": "linear",
+      "value": "linear"
+    },
+    {
+      "stopId": "strong-outline",
+      "value": "strong-outline"
+    },
+    {
+      "stopId": "duotone",
+      "value": "duotone"
+    },
+    {
+      "stopId": "solid-active",
+      "value": "solid-active"
+    }
+  ],
+  "equalityExceptField": [
+    {
+      "stopId": "linear",
+      "fieldMoved": true,
+      "siblingsChecked": [
+        "edge"
+      ],
+      "siblingsDiffering": [],
+      "holds": true
+    },
+    {
+      "stopId": "strong-outline",
+      "fieldMoved": true,
+      "siblingsChecked": [
+        "edge"
+      ],
+      "siblingsDiffering": [],
+      "holds": true
+    },
+    {
+      "stopId": "duotone",
+      "fieldMoved": true,
+      "siblingsChecked": [
+        "edge"
+      ],
+      "siblingsDiffering": [],
+      "holds": true
+    },
+    {
+      "stopId": "solid-active",
+      "fieldMoved": true,
+      "siblingsChecked": [
+        "edge"
+      ],
+      "siblingsDiffering": [],
+      "holds": true
+    }
+  ],
+  "restore": {
+    "exact": true,
+    "comparedRows": 2,
+    "counts": {
+      "differingRows": 0,
+      "byKind": {},
+      "byPropertyKind": {}
+    },
+    "rows": [],
+    "law": "Restore is EXACT: every measured computed property, every measured CSS custom property and every root attribute must be byte-identical between the baseline and removal phases. There is no numeric tolerance and no ignored property. A single differing row makes the run restore.exact=false and the row is named."
+  },
+  "dataGuards": [],
+  "bypass": null,
+  "behaviouralWitnesses": [
+    {
+      "id": "S2",
+      "question": "Does the icon consumer resolve the REQUESTED axis off the compiled artifact?",
+      "holds": true,
+      "detail": {
+        "rows": [
+          {
+            "stopId": "linear",
+            "resolved": "linear"
+          },
+          {
+            "stopId": "strong-outline",
+            "resolved": "strong-outline"
+          },
+          {
+            "stopId": "duotone",
+            "resolved": "duotone"
+          },
+          {
+            "stopId": "solid-active",
+            "resolved": "solid-active"
+          }
+        ]
+      }
+    }
+  ],
+  "exception": null,
+  "provenance": {
+    "module": "dist/server.js",
+    "moduleSubpath": "@rottay/design-system/server",
+    "exportName": "compileTenantThemeConfig",
+    "schemaVersion": 1,
+    "tenant": "probe-tenant-bithire"
+  },
+  "verdict": {
+    "pass": true,
+    "guardsHeld": true,
+    "restoreExact": true,
+    "equalityHeld": true,
+    "witnessesHeld": true
+  }
+}

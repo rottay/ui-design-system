@@ -571,6 +571,49 @@ const DATA_TERMINAL_DESCRIPTORS = Object.freeze({
       };
     },
   },
+  'profiles.icon': {
+    /* The stop writes ONE axis; `edge` is the constant sibling, so "only this
+     * moved" is a claim about the `profiles` surface and not about a lone key.
+     * Non-colour on purpose -- the same neighbourhood rule the row above
+     * states: an authored colour trips APCA validation in dark mode, and a
+     * probe that cannot compile its own baseline proves nothing. */
+    document: (stopId) => ({
+      visualFoundation: {
+        advanced: {
+          tokenOverrides: { '--ds-radius-md': '10px' },
+          chrome: { cardComponent: { anatomy: 'underline' } },
+          profiles: { edge: 'inset-double', ...(stopId === undefined ? {} : { icon: stopId }) },
+        },
+      },
+    }),
+    // The container is the field's PARENT, so the surface is the sibling axes
+    // under `profiles` -- not the siblings of `.advanced`.
+    fieldPath: ['normalizedAppearance', 'advanced', 'profiles', 'icon'],
+    equalitySurface: ['icon', 'edge'],
+    /* The witness is the PRODUCTION reader, published on `/server` (it is NOT
+     * exported from `/index`). Asserting on it IS the consumer's own question:
+     * `useActiveIconExpressiveProfile` only reads the context this function
+     * fills, so a paraphrase here would measure something no icon consults. */
+    witnesses: ({ compiledStops, resolveActiveIconExpressiveProfile }) => {
+      const rows = compiledStops.map(({ stopId, artifact }) => ({
+        stopId,
+        resolved:
+          resolveActiveIconExpressiveProfile({ appearance: artifact?.normalizedAppearance }) ?? null,
+      }));
+      return [
+        {
+          id: 'S2',
+          question: 'Does the icon consumer resolve the REQUESTED axis off the compiled artifact?',
+          holds: rows.every((row) => row.resolved === row.stopId),
+          detail: { rows },
+        },
+      ];
+    },
+    /* No bypass and no failClosedDefault, and both absences are measured, not
+     * assumed: the axis has no ladder to bypass, and a document that selects
+     * nothing resolves to `undefined` rather than to a default id. Absent stays
+     * absent so a reader cannot read "not asked" as "asked and held". */
+  },
 });
 
 /**
@@ -663,6 +706,8 @@ async function commandDataCausal(options) {
   // The bypass guard needs BOTH paths, observed separately.
   const main = await import(pathToFileURL(resolve(CORE_ROOT, 'dist/index.js')).href);
   const { resolveActiveResponsivePosture, resolveResponsivePosture, resolveAdaptiveLayout } = main;
+  // `/server`, not `/index`: that is where the icon reader is published.
+  const { resolveActiveIconExpressiveProfile } = server;
 
   // MEASURED, never asserted: the fail-closed default is whatever the control's
   // own resolver answers when asked for nothing. Hardcoding it would make the
@@ -701,6 +746,7 @@ async function commandDataCausal(options) {
     resolveActiveResponsivePosture,
     resolveResponsivePosture,
     resolveAdaptiveLayout,
+    resolveActiveIconExpressiveProfile,
   });
 
   const report = buildDataCausalReport({

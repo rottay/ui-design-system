@@ -4333,6 +4333,53 @@ verificación previa). La primera aplicación (compound-editorial de F4B-14,
 fence `capability-propagation:573` + `e2-composed-pairing.test.ts`) cumple
 ambas y quedó evaluada por Fable como "fortalece el programa".
 
+**PACKET 2 DATA — profiles.icon CIERRA SOURCE_BOUND (2026-08-25; Opus;
+postaudit Fable: ACCEPT — "la clase nueva la medí en sus cuatro patas;
+`STRUCTURALLY_UNREACHABLE` habría sido FALSO"; corrección vinculante (i)
+adoptada: sus 3 receipts re-stampeados en la misma pasada del commit,
+atestando sólo contenido commiteado).** El segundo control DATA y el primero
+con la parametrización del Packet 1 probando lo que prometía: una fila en
+`DATA_TERMINAL_DESCRIPTORS` + las 2 líneas contiguas de inyección (desde
+`/server`, no `/index` — el lector `resolveActiveIconExpressiveProfile` se
+publica ahí) + manifest + 3 receipts `data-field-delta` (R6, la convención
+de la serie). **Stops:** los 4 valores del enum (verificados contra el
+mensaje del compilador, no contra memoria: `linear, strong-outline,
+duotone, solid-active`), discriminación 4/4; baseline sin selección →
+`undefined` (fail-closed honesto, removal-witness natural); sin
+`bypass` y sin `failClosedDefault` (ausencias medidas: sin escalera que
+bypassear, sin id por defecto). **RULING DT — la puerta estática se declara
+con clase NUEVA `RUNTIME_ONLY_NO_ARTIFACT`** (STOP de Opus bien planteado;
+el precedente no era análogo): inerte en TODO output compilado (CSS
+byte-idéntico con y sin el eje; el artifact no lo lleva; el resolver
+alimentado con el artifact da `undefined`) pero VIVA en producción — el
+provider (`bootstrap/facade/react/provider/index.tsx:1137-1142`) pasa el
+tema crudo al resolver y `BrandExpressiveAxisOverrides.icon` existe
+declarado a propósito (`themes/index.ts:111`, "Declared vocabulary; carries
+no v1 expansion rows (frontier axis)"). Para un control DATA, cuyo terminal
+ES la lectura del consumidor, `STRUCTURALLY_UNREACHABLE` habría sido texto
+falso. Fable lo midió en las cuatro patas y lo confirmó; la clase vive como
+`staticDoorDisposition` del manifest sin tocar `STOP_EXCLUSION_CLASSES`.
+**Ningún vertical autora el eje hoy** (medido del objeto publicado, no por
+grep — el grep da falsos positivos de tokens de icono; bithire autora
+experienceProfile y aun así el resolver da `undefined`: ningún perfil del
+catálogo declara eje `icon`) — sin identity stop. **La ley
+override-gana-por-eje** (`pick()` de `resolveExpressiveAxes`) asentada como
+PREDICCIÓN y cercada por drill ejecutable (el override gana en los 4 stops
+sobre un documento compuesto Y el perfil conserva lo no nombrado — sin esa
+segunda mitad, tirar el perfil entero pasaría el cerco). **La opción
+"evidencia runtime-only receipteable" queda REGISTRADA para F5, no
+construida** (¿qué receipt lleva una medición sin artifact? — diseño de
+evidencia, no de esta serie). **Cierre en SOURCE_BOUND, no
+COMPUTED_VERIFIED, por ley mecánica (decisión DT):** `a control may not
+outrank its own evidence` — 251 celdas UNKNOWN + 4 SOURCE_BOUND
+pre-existentes (censo corregido por Fable: 4, no 0); calibrar las celdas de
+icono es trabajo del frente de celdas (F4C/F5, mismo bucket que la
+ratificación propertyGroup), registrado como dependencia. La evidencia DATA
+está completa; el tope es mecánico y está asentado. Verificación: drills
+3/3 con la invariancia de posture byte-idéntica, suites 245/245, los 3
+receipts frescos tras el re-stamp de la pasada (puerta (i)), GAT-07
+resellado.
+
 **F4B-16 — profiles.expressive CIERRA SOURCE_BOUND (2026-08-25; Sonnet;
 postaudit Fable: ACCEPT — "cierra con el último wildcard del registry
 retirado, el cerco correcto para la unión role-blind, exclusiones honestas
