@@ -7,7 +7,7 @@
   "semanticOwner": {
     "owner": "design-system",
     "registryPath": "packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts",
-    "registryDigest": "cac7bc30a8a1d549fb96d80250ebb61f126e8219b3c23bd30c10bc2b1012bb86"
+    "registryDigest": "5c3fab7c88ba68541b566dcb45586d2da179fd9eaccb96872e3867242cd0e921"
   },
   "title": "Family recipe profile",
   "valueType": "profile-id",

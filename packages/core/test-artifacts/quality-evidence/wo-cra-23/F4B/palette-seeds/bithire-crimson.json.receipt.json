@@ -5,7 +5,7 @@
   "scenarioId": "palette.seeds/crimson/bithire/static-and-db",
   "evidenceKind": "static-db-computed-parity",
   "commandOrTool": "node src/tooling/resolution-probe/public/cli/index.mjs causal",
-  "toolVersion": "resolution-probe@ac4109e656ec",
+  "toolVersion": "resolution-probe@331f8bc7a4ed",
   "exitCode": 0,
   "sourceFiles": [
     "packages/core/dist/build-stamp.json",
@@ -62,10 +62,10 @@
     "packages/core/styles/index.css",
     "packages/core/styles/rottay.css"
   ],
-  "sourceDigest": "0cb3336ca8c0d17a7c3fdb506151f47c66a98f8373ac85b349b935cd31a0bf3c",
+  "sourceDigest": "c4d507d81e6e29d3f0b86607479ce1cef91ed723da3464b016206eccaa1edde7",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/palette-seeds/bithire-crimson.json",
   "artifactSha256": "028cbe11315e43a90317ecb0ba2926a34056506cc7360064e0b9a6e842e0efd4",
-  "createdAt": "2026-08-25T00:47:51.624Z",
+  "createdAt": "2026-08-25T02:10:24.631Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

@@ -5,7 +5,7 @@
   "scenarioId": "surfaces.elevation-posture/flat/rottay/static-and-db",
   "evidenceKind": "static-db-computed-parity",
   "commandOrTool": "node src/tooling/resolution-probe/public/cli/index.mjs causal",
-  "toolVersion": "resolution-probe@ac4109e656ec",
+  "toolVersion": "resolution-probe@331f8bc7a4ed",
   "exitCode": 0,
   "sourceFiles": [
     "packages/core/dist/build-stamp.json",
@@ -66,10 +66,10 @@
     "packages/core/src/ui/primitives/display/Card/engines/rustic/index.tsx",
     "packages/core/src/ui/primitives/display/Card/index.tsx"
   ],
-  "sourceDigest": "de5c22a1a90b159718340040344810494950d79f91f4758ba09981e69f508edc",
+  "sourceDigest": "5812cdc365faf9be5841189ed3ea12f243d363ad1160148f032b0152bb2089bb",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/surfaces-elevation-posture/rottay-flat.json",
   "artifactSha256": "13e266cd2148a98e103011226c8def65a6343c94113f81e3ed6f1759d71468ce",
-  "createdAt": "2026-08-25T00:47:52.156Z",
+  "createdAt": "2026-08-25T02:10:25.265Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

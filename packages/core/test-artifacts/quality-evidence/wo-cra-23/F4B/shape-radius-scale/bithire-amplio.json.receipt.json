@@ -5,7 +5,7 @@
   "scenarioId": "shape.radius-scale/amplio/bithire/static-and-db",
   "evidenceKind": "exact-restore",
   "commandOrTool": "node src/tooling/resolution-probe/public/cli/index.mjs causal",
-  "toolVersion": "resolution-probe@ac4109e656ec",
+  "toolVersion": "resolution-probe@331f8bc7a4ed",
   "exitCode": 0,
   "sourceFiles": [
     "packages/core/dist/build-stamp.json",
@@ -66,10 +66,10 @@
     "packages/core/src/ui/primitives/display/Card/engines/rustic/index.tsx",
     "packages/core/src/ui/primitives/display/Card/index.tsx"
   ],
-  "sourceDigest": "7c5d3ca91a4aef61f132f55b50333c1a4d50b87aebae56d788297fabe4f0584a",
+  "sourceDigest": "6da9d3f988b2d7f0f133eb6bfe828e40a1077b08895ab496ca43604417f5fc6e",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/shape-radius-scale/bithire-amplio.json",
   "artifactSha256": "e535690a60784338b4c7d6ec1105c692466311fcc53586416a37fafa86dba4ed",
-  "createdAt": "2026-08-25T00:47:51.921Z",
+  "createdAt": "2026-08-25T02:10:24.985Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

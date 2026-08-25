@@ -4025,6 +4025,61 @@ costo de la pausa es real. Corolario para briefs futuros: cuando un control
 "mide cero" en un brazo, la primera pregunta es la forma de la llamada, no el
 compilador.
 
+**Cluster DesignSystemProvider — DIAGNOSTICADO (Opus, 2026-08-24): NO es P0
+de producción; clase ENTORNO-TEST / fixtures rancios.** El provider NO está
+roto: **falla cerrado a propósito** contra la barrera de autoridad
+(`358ce9188`, 2026-08-14): un `tenantConfig` con pintura en runtime
+(`brandTheme`, `personality`, `tokenOverrides`, `branding.*Color`,
+`appearance`) SIN artifact compilado verificado y montado es rechazado →
+renderiza `LoadingScreen` (que es `null` → body vacío). La conducta está
+DOCUMENTADA en el árbol (`ui/surfaces/foundation/common/test-utils/index.tsx:14-32`)
+y las suites de surfaces YA se migraron al patrón honesto ("las suites
+aserten anatomía, no pintura de tenant; la que necesite pintura compilada
+monta artifact verificado y declara `visualAuthority`"). **Los 4 archivos
+del cluster son los que quedaron sin migrar** (les entregan pintura cruda
+sin artifact). Severidad baja-media: el fallo tiene SEÑAL (throw en
+development, `console.error` una vez fuera). Ninguna app de ESTE monorepo
+monta el provider en runtime (las 21 menciones del showroom son literales
+de código; la sonda no lo monta); las apps consumidoras (repos aparte)
+quedaron fuera de la medición — registrado para F8. `SvgRenderers:711`
+(radio no uniforme) es defecto de geometría aparte, registrado. **CI-3
+(encolado): migrar los 4 archivos al patrón documentado** (Sonnet). **Dos
+preguntas de producto registradas para F5:** (a) el predicado de la barrera
+es por PRESENCIA en `brandTheme`/`appearance` pero por CONTENIDO en
+`branding`/`tokenOverrides` — medido: si fuera por contenido en los cinco,
+las 2 fallas de density desaparecen sin tocar el test y ninguna config con
+pintura real queda admitida; (b) `LoadingScreen = null` convierte un error
+de config de tenant en página en blanco (¿degradar al baseline del vertical
+en vez de no montar?).
+
+**F4B-11 — typography.pairing CIERRA SOURCE_BOUND (2026-08-24; Sonnet;
+postaudit Fable: ACCEPT — "el falso-verde más peligroso del censo quedó
+cerrado con el keypath real").** Keypath corregido (el de OTRO control →
+`typography.typePairing`). **11 receipts R7** (12 combinaciones menos
+bithire/sober, no-mover genuino: los literales de bithire SON
+`TYPE_PAIRINGS.sober` — misma clase que flat/elevation). Estático 12/12
+moved; DB byte-exacto a `TYPE_PAIRINGS` (funciona POR E-1); H-2 ambos
+brazos sin excepción; paridad 24/24; restore exact; negativos held (con el
+ajuste metodológico documentado del control-height: el hitbox del botón
+auto-dimensiona al glifo — re-atado a `card-modern-md/title`). **Cierre en
+SOURCE_BOUND, no COMPUTED_VERIFIED, por LEY ESCRITA de la anatomía:**
+`anatomy.sourceEvidence.propertyGroupCensusNote.status` de la familia
+typography dice textual que `anatomy.propertyGroups` "stays blocked on the
+propertyGroup vocabulary ratification" — fabricar los grupos saltándose la
+nota es la clase de canal falso que el ownership check existe para bloquear
+(button.json NO tiene esa nota: el bloqueo es POR FAMILIA; R-2 pudo autorar
+`control-seeded-fill-and-edge` porque su anatomía no la cargaba). El canal
+SÍ pinta; el techo es de vocabulario de programa. **Dependencia registrada
+para F4B 20/20 COMPUTED_VERIFIED: la ratificación del vocabulario
+propertyGroup** — sin ella, las 79 familias MUST_REACH con la nota no
+pueden pasar de SOURCE_BOUND; entra en la planificación F4C/F5. A11 del
+program-check test falló una vez en mi verificación (hijo anidado pesado
+muriendo en Z-12) y NO se reprodujo en re-corrida (48/48): registrado como
+flake-suspect del drill con hijos pesados, para el diseño de CI-2. Colateral
+de proceso: el build-stamp ausente del árbol principal (build cortado) lo
+encontró y reparó Sonnet antes de receiptear (`dist/build-stamp.json`
+fresco; dist es gitignored).
+
 **F0 — CERRADO (2026-08-19).** Criterio de cierre cumplido:
 `ci-gates OK — 78 blocking gate(s) passed` (2 excluded visibles con razón y
 dueño: channel-liveness y lane-control-drills, ambos esperan a F2); `find src -type d -empty` vacío salvo el inbox

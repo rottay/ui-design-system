@@ -5,7 +5,7 @@
   "scenarioId": "surfaces.effect-intensity/mate/rottay/static-and-db",
   "evidenceKind": "static-db-computed-parity",
   "commandOrTool": "node src/tooling/resolution-probe/public/cli/index.mjs causal",
-  "toolVersion": "resolution-probe@ac4109e656ec",
+  "toolVersion": "resolution-probe@331f8bc7a4ed",
   "exitCode": 0,
   "sourceFiles": [
     "packages/core/dist/build-stamp.json",
@@ -66,10 +66,10 @@
     "packages/core/src/ui/primitives/display/Card/engines/rustic/index.tsx",
     "packages/core/src/ui/primitives/display/Card/index.tsx"
   ],
-  "sourceDigest": "9ac81794b3c2b352bdb0d69d582b41e3bd5fc07ea1a9378808c82b84311b78ee",
+  "sourceDigest": "9e11a866e549a78c89054c9ad7de407238ce08c79ccf471cb8ae6275c2392c9b",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/surfaces-effect-intensity/rottay-mate.json",
   "artifactSha256": "3ccb4046a7fb59c5be073c78419fa09886de8a3665ab994ddd093fde50a5d7d1",
-  "createdAt": "2026-08-25T00:47:52.097Z",
+  "createdAt": "2026-08-25T02:10:25.192Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

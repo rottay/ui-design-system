@@ -140,7 +140,22 @@ export const TENANT_CAPABILITY_REGISTRY = Object.freeze([
       enumValues: ['sober', 'editorial', 'geometric', 'technical'],
       defaultBehavior: 'vertical baseline families',
       documentPath: 'appearance.general.typography.typePairing',
-      brandThemePath: 'typography.{fontFamilyBase,fontFamilyHeading}',
+      // F4B-11 fix (F4B-7 class, false-green variant -- the census's most
+      // dangerous shape): this read `typography.{fontFamilyBase,
+      // fontFamilyHeading}`, literally `typography.families`'s own
+      // brandThemePath copy-pasted one entry down. Both are real,
+      // string-typed BrandTheme fields, so a causal run writing an enum
+      // value there (e.g. "sober") would NOT throw -- it would silently set
+      // `fontFamilyBase` to the literal string "sober", which reads back as
+      // "the stop moved something", a false PASS that never exercises
+      // `typePairingToTypography()` at all. The real field is
+      // `typography.typePairing` (brand-theme/index.ts:784 --
+      // `typePairing: bt.typography?.typePairing`; themes/index.ts:566 --
+      // `BrandTypography.typePairing?: "sober"|"editorial"|"geometric"|
+      // "technical"`, the same four enum values this control declares).
+      // Caught by the F4B census preflight before any causal run wrote the
+      // false-green value.
+      brandThemePath: 'typography.typePairing',
       derivedChannels: ['--ds-font-family-base', '--ds-font-family-heading'],
       compat: 'additive, unset-to-rollback',
     },

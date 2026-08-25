@@ -5,7 +5,7 @@
   "scenarioId": "palette.seeds/indigo/bithire/static-and-db",
   "evidenceKind": "exact-restore",
   "commandOrTool": "node src/tooling/resolution-probe/public/cli/index.mjs causal",
-  "toolVersion": "resolution-probe@ac4109e656ec",
+  "toolVersion": "resolution-probe@331f8bc7a4ed",
   "exitCode": 0,
   "sourceFiles": [
     "packages/core/dist/build-stamp.json",
@@ -62,10 +62,10 @@
     "packages/core/styles/index.css",
     "packages/core/styles/rottay.css"
   ],
-  "sourceDigest": "0cb3336ca8c0d17a7c3fdb506151f47c66a98f8373ac85b349b935cd31a0bf3c",
+  "sourceDigest": "c4d507d81e6e29d3f0b86607479ce1cef91ed723da3464b016206eccaa1edde7",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/palette-seeds/bithire-indigo.json",
   "artifactSha256": "a720ea1b69ecd258b9b2e8d5cd39a279e404bf62c24b0e467cdf2ecba70e62f5",
-  "createdAt": "2026-08-25T00:47:51.652Z",
+  "createdAt": "2026-08-25T02:10:24.673Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

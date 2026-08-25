@@ -4,7 +4,7 @@
   "scope": "Phase-0 exact proof and minimal public-claim floor; not DS-IMP-060 completion",
   "reproducibility": {
     "classification": "deterministic same-input runs",
-    "authorityDigest": "f3ae3c94fe365289ef848bf88a87c9e1c8c517d5febef1f4018f582bcac51ba1",
+    "authorityDigest": "e535f6f3c817974b1ef2efa643b60abd4ab72bfbc730c35276f24dbbeebcc225",
     "sourceHeadIsAuthority": false,
     "toolchain": {
       "node": {
@@ -1383,8 +1383,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 33157,
-        "sha256": "cac7bc30a8a1d549fb96d80250ebb61f126e8219b3c23bd30c10bc2b1012bb86"
+        "bytes": 34159,
+        "sha256": "5c3fab7c88ba68541b566dcb45586d2da179fd9eaccb96872e3867242cd0e921"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/contracts/composition/tenants/index.ts",
@@ -15581,8 +15581,8 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 28149,
-        "sha256": "744e7bb5137820e4893dec443be40a8d2f05d9a25c45073d89abc6e43e12fa63"
+        "bytes": 28739,
+        "sha256": "fbcb17f3f7145677358dbe81709c34c4eddf1654d028e1d7896aeca463e6712f"
       },
       {
         "path": "ui-design-system/packages/core/src/tooling/resolution-probe/foundation/roster/tests/index.test.tsx",
@@ -40511,7 +40511,7 @@
         "sha256": "d2a99efed33922a4a699ea033538b677022ddaccf0cdbb25ece0a7295bdc4812"
       }
     ],
-    "digest": "f3ae3c94fe365289ef848bf88a87c9e1c8c517d5febef1f4018f582bcac51ba1"
+    "digest": "e535f6f3c817974b1ef2efa643b60abd4ab72bfbc730c35276f24dbbeebcc225"
   },
   "paintAudit": {
     "output": "engine-token-audit --check OK (3326 counters; 3226 completed zeros locked exactly; 91 decrease-only ceilings; 2 positive exact invariants; 7 positive minimum floors)",
@@ -113892,8 +113892,8 @@
   "deterministicRuns": {
     "count": 2,
     "hashes": [
-      "98e84ae644aa250bcf3ed43c626a34db78cef92bdb0d73882cdfae17a391d294",
-      "98e84ae644aa250bcf3ed43c626a34db78cef92bdb0d73882cdfae17a391d294"
+      "beb264039e012bc9f53cce0adb766ec4982240056017fb1f6101ea4c8ea51a99",
+      "beb264039e012bc9f53cce0adb766ec4982240056017fb1f6101ea4c8ea51a99"
     ],
     "agree": true
   }

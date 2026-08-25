@@ -5,7 +5,7 @@
   "scenarioId": "spacing.rhythm/airy/static-and-db",
   "evidenceKind": "exact-restore",
   "commandOrTool": "node src/tooling/resolution-probe/public/cli/index.mjs causal",
-  "toolVersion": "resolution-probe@ac4109e656ec",
+  "toolVersion": "resolution-probe@331f8bc7a4ed",
   "exitCode": 0,
   "sourceFiles": [
     "packages/core/dist/build-stamp.json",
@@ -59,10 +59,10 @@
     "packages/core/src/ui/primitives/tests/EmbeddedCssRecovery.contract.test.ts",
     "packages/showroom/e2e/whitelabel/density-authority-matrix.spec.ts"
   ],
-  "sourceDigest": "e9659e8ff65517be46e185d3562fa0daabd71d26a8d7137ccc08b76ff41fd691",
+  "sourceDigest": "197759890f9e7ec5204563b7c29862b0da205423d353a77849ab64522ae05bb0",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/spacing-rhythm/flex-airy.json",
   "artifactSha256": "debb17fe9c1366f898c82673d2f09779f0bb67be8ab87abbac5438ee51eb2cc7",
-  "createdAt": "2026-08-25T00:47:51.983Z",
+  "createdAt": "2026-08-25T02:10:25.044Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

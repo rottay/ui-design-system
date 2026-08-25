@@ -5,7 +5,7 @@
   "scenarioId": "palette.seeds/warm-sand/rottay/static-and-db",
   "evidenceKind": "static-db-computed-parity",
   "commandOrTool": "node src/tooling/resolution-probe/public/cli/index.mjs causal",
-  "toolVersion": "resolution-probe@ac4109e656ec",
+  "toolVersion": "resolution-probe@331f8bc7a4ed",
   "exitCode": 0,
   "sourceFiles": [
     "packages/core/dist/build-stamp.json",
@@ -63,10 +63,10 @@
     "packages/core/styles/index.css",
     "packages/core/styles/rottay.css"
   ],
-  "sourceDigest": "954c722d284e14c23b51a5f98e3b66cc80df97a056ce100932ff00f7586b40b2",
+  "sourceDigest": "702273a13e1380f0e10b255442e5c01320cde168f5f12485b1b3d25a4132a38f",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/palette-seeds/rottay-warm-sand.json",
   "artifactSha256": "0e35eb69feb275c06cbb5bad3be887d79e24c82771258020f6fc880c3ec5df70",
-  "createdAt": "2026-08-25T00:47:51.764Z",
+  "createdAt": "2026-08-25T02:10:24.805Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

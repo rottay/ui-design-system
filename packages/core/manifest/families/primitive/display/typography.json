@@ -3288,10 +3288,77 @@
     {
       "controlId": "typography.pairing",
       "disposition": "UNKNOWN",
-      "verificationState": "UNKNOWN",
-      "unknownReason": "NOT_ASSESSED",
-      "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "verificationState": "SOURCE_BOUND",
+      "unknownReason": "NOT_ASSESSED_PAST_SOURCE_BOUND. The causal measurement is complete and positive on this family: `--ds-font-family-base`/`--ds-font-family-heading` are read directly by this family's own skin (typography.css:39,42,45,71,174-175,182,268 -- var(--ds-font-family...)), and both channels move on both ingress arms, all 3 verticals, all 4 stops (see the control's own calibration.measuredResult and evidenceIds below; F4B-11, 2026-08-24). NOT raised to IMPLEMENTED here: that rank requires non-empty `stableParts`/`propertyGroups`/`computedProperties`, and every `propertyGroups` entry must be OWNED by this family's own `anatomy.propertyGroups` -- which is `[]` right now (see `anatomy.sourceEvidence.propertyGroupCensusNote.status`: 'UNRATIFIED OBSERVATION... blocked on the propertyGroup vocabulary ratification'). This is not specific to this family: every `MUST_REACH` family for `typography.pairing` has the identical empty `anatomy.propertyGroups`, so no seat for this control can currently pass IMPLEMENTED's ownership check. Declaring `propertyGroups` here anyway (skipping the family's own anatomy) is exactly the fabrication `validateInternalChannels`'s cardinality law and the ownership check in `manifest/rules/index.mjs` exist to block. `stableParts`/`propertyGroups`/`computedProperties` stay unset on this cell for that reason; `internalChannels` is populated below (optional but fully validated at any state, same shape as shape.button-style's own home-family cell).",
+      "evidenceIds": [
+        "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/typography-pairing/rottay-sober.json.receipt.json",
+        "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/typography-pairing/rottay-editorial.json.receipt.json",
+        "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/typography-pairing/rottay-geometric.json.receipt.json",
+        "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/typography-pairing/rottay-technical.json.receipt.json",
+        "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/typography-pairing/bithire-editorial.json.receipt.json",
+        "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/typography-pairing/bithire-geometric.json.receipt.json",
+        "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/typography-pairing/bithire-technical.json.receipt.json",
+        "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/typography-pairing/evnto-sober.json.receipt.json",
+        "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/typography-pairing/evnto-editorial.json.receipt.json",
+        "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/typography-pairing/evnto-geometric.json.receipt.json",
+        "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/typography-pairing/evnto-technical.json.receipt.json"
+      ],
+      "nextAction": "PROPERTY_GROUPS_VOCABULARY_RATIFICATION_THEN_IMPLEMENTED",
+      "sourceBindings": [
+        "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css",
+        "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
+        "packages/core/src/infrastructure/compilers/composition/tenant-theme/index.ts",
+        "packages/core/src/foundation/tokens/ts/presentation/typography/pairings/index.ts",
+        "packages/core/manifest/controls/typography.pairing.json"
+      ],
+      "negativeControls": [
+        "control height remains fixed",
+        "color remains fixed",
+        "border remains fixed",
+        "motion remains fixed"
+      ],
+      "negativeControlsScopeNote": "The same four the control declares, restated on this root so the cell is self-describing; the effective set is the union, so this narrows nothing and loosens nothing. `control height remains fixed` was bound to card-modern-md/title (content-independent box geometry) in every receipted scenario and held on all 11. First bound to button-modern-md/hitbox too, an auto-sized target whose own rendered width legitimately reflows with a font-family change (the `editorial` stop's serif family moved the button hitbox's @rect-inline-size, both arms, byte-identical) -- a real, expected consequence of this control's own mechanism, not a defect, so the auto-sized target was dropped from the bind rather than treated as a violation.",
+      "stressCases": [
+        "The first measurement attempt on this control mutated a vertical's own BrandTheme clone directly instead of passing a tenantPatch -- an artifact of measurement form, not a real defect. Diagnosed and corrected before this cell was written; see the control's own calibration.measuredResult.methodologyCorrection.",
+        "technical.heading == sober.heading and technical.base == geometric.base (both real TYPE_PAIRINGS collisions) do not break H-2: every pair of the 4 stops still discriminates on at least one of the two declared channels, measured on both arms.",
+        "bithire/sober is a genuine non-mover on both arms (moved=0, byte-identical applied value to bithire's own baseline): bithire authors fontFamilyBase/fontFamilyHeading literally equal to TYPE_PAIRINGS.sober (brand-themes/bithire/index.ts:3492-3499). Not receipted for that reason -- see the control's own normalizedStops law. 11 of 12 vertical x stop combinations receipted, not 12.",
+        "UNMEASURED: light mode divergence, mono family, letterSpacing.heading/lineHeight.display as separate channels, and any viewport other than 1280x800 dpr1 -- see the control's own unmeasuredScope."
+      ],
+      "restoreRequirements": [
+        "Unsetting the control through either door restores the baseline font-family exactly (measured: restore.exact true on all 11 receipted scenarios, byte-identical rows)."
+      ],
+      "internalChannels": [
+        {
+          "channelId": "--ds-font-family-base",
+          "semanticOwner": "typography.pairing",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/base/typography.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/display/typography"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--ds-font-family-heading",
+          "semanticOwner": "typography.pairing",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/base/typography.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/display/typography"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        }
+      ],
       "targetBinding": {
         "status": "MUST_REACH",
         "bindings": [

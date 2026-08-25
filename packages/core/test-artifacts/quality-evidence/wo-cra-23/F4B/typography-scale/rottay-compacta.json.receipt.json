@@ -5,7 +5,7 @@
   "scenarioId": "typography.scale/compacta/rottay/static-and-db",
   "evidenceKind": "static-db-computed-parity",
   "commandOrTool": "node src/tooling/resolution-probe/public/cli/index.mjs causal",
-  "toolVersion": "resolution-probe@ac4109e656ec",
+  "toolVersion": "resolution-probe@331f8bc7a4ed",
   "exitCode": 0,
   "sourceFiles": [
     "packages/core/dist/build-stamp.json",
@@ -66,10 +66,10 @@
     "packages/core/src/ui/primitives/display/Card/engines/rustic/index.tsx",
     "packages/core/src/ui/primitives/display/Card/index.tsx"
   ],
-  "sourceDigest": "5870f850fee59adcc848618e8fac334b7e7f7c8a9fe326187b4fffdb4ba09c18",
+  "sourceDigest": "b0a6ef901becb07a53f0941dc7263be866d0318e5e3b336badc573742dd8728e",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/typography-scale/rottay-compacta.json",
   "artifactSha256": "bb2a7b24340010bc5102dc75a5c7cca9cff495d185ae3cdf352af46dd16f8a1a",
-  "createdAt": "2026-08-25T00:47:52.210Z",
+  "createdAt": "2026-08-25T02:10:25.474Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,
