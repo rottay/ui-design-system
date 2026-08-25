@@ -4052,6 +4052,25 @@ pintura real queda admitida; (b) `LoadingScreen = null` convierte un error
 de config de tenant en página en blanco (¿degradar al baseline del vertical
 en vez de no montar?).
 
+**CI-3 — los 4 archivos del cluster migrados (2026-08-24; Sonnet; postaudit
+Fable: ACCEPT).** Tres migrados por la forma honesta: ChartPalette (expected
+al scheme `default` — el alcanzable; propósito intacto: paleta uniforme
+entre las 5 familias), SvgRenderers `:388` (`branding.primaryColor` retirado
+— ninguna aserción lo lee; corrección a la lectura "load-bearing" del
+diagnóstico, con evidencia), icon-profile-ssr-acid (vía
+`IconExpressiveProfileContext` directo — el seam público real que la suite
+existe para probar; los tenants con pintura completa quedaron SÓLO en el
+describe de llamadas puras que nunca renderizan). `density-authority-equivalence`
+queda ROJO INTENCIONALMENTE (clase D: el config con pintura es el sujeto;
+arreglarlo exige el cambio de predicado — pregunta de producto F5) con su
+comentario de protocolo. `SvgRenderers:711` (geometría) registrado aparte.
+**Hallazgo nuevo de Sonnet (más allá del diagnóstico, verificado):**
+`brandTheme` y `personality` se rechazan INCONDICIONALMENTE incluso con
+`visualAuthority: compiled-artifact` declarado (`admission/index.ts:783-787`)
+— el camino (b) no existe para esos dos; `appearance` sí puede coincidir con
+el artifact y pasar. Refina la pregunta de producto (a) de F5: la asimetría
+del predicado es aún más profunda de lo medido.
+
 **F4B-11 — typography.pairing CIERRA SOURCE_BOUND (2026-08-24; Sonnet;
 postaudit Fable: ACCEPT — "el falso-verde más peligroso del censo quedó
 cerrado con el keypath real").** Keypath corregido (el de OTRO control →

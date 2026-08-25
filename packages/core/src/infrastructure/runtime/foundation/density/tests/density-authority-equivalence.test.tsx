@@ -38,6 +38,46 @@ import { compileAppearanceVariables } from '@/infrastructure/compilers/kernel/ru
 import { DesignSystemProvider } from '@/infrastructure/runtime/bootstrap/facade/react/provider';
 import { DensityScope, useDensity } from '../index';
 
+/**
+ * CI-3 (cluster DesignSystemProvider): the first two `it()` blocks below
+ * render through the provider with `brandTheme.surfaces.{densityScale,
+ * density}` and/or `appearance.general.density` on `TenantConfig` --
+ * `resolveVisualAuthority`'s barrier (`358ce9188`) refuses both by mere
+ * PRESENCE of the `brandTheme`/`appearance` keys (content-independent; a
+ * `brandTheme` carrying zero colour still trips it), so `DesignSystemProvider`
+ * renders `<LoadingScreen />` and both tests fail.
+ *
+ * Neither of the cluster's two documented fixes applies here, and this file
+ * is deliberately left UNFIXED rather than forcing one through:
+ *   (a) strip the config -- the config IS the subject. The test's own title
+ *       ("resolves one effective scale from static BrandTheme, DB Appearance,
+ *       CSS, JS context and a nested scope") names five authorities it
+ *       exists to cross-check; `brandTheme.surfaces.density*` and
+ *       `appearance.general.density` are the two runtime ones being
+ *       compared. Removing them leaves nothing to compare.
+ *   (b) mount a verified artifact + declare `visualAuthority` -- doesn't
+ *       help: `payload.brandTheme` is REFUSED unconditionally in the
+ *       conflict list even under a compiled-artifact declaration
+ *       (`admission/index.ts`'s `resolveVisualAuthority`, same treatment as
+ *       `payload.personality`), and this suite measures RUNTIME AUTHORITY
+ *       RESOLUTION across five authorities, not rendering of compiled CSS --
+ *       mounting an artifact would be scaffolding to dodge a barrier this
+ *       config should arguably never trip in the first place.
+ *
+ * This is the barrier-asymmetry product question, not a stale fixture: three
+ * of the five census channels (`visualBranding`, `tokenOverrides`, and
+ * implicitly the *content* of `appearance`/`brandTheme` when matched against
+ * an artifact) are content-gated, but `appearance` and `brandTheme` are
+ * PRESENCE-gated for a bare (no-authority) render, and neither test config
+ * carries a single byte of colour, font, or token override. Registered as a
+ * question for the DT/product owner (see the CI-3 diagnosis,
+ * `/private/tmp/dsprovider-cluster-opus-diagnosis.md` §4.a/§5.2): whether the
+ * barrier's `appearance`/`brandTheme`/`personality` channels should be
+ * content-gated the way `visualBranding`/`tokenOverrides` already are. Not
+ * touched here -- the barrier predicate is explicitly out of this packet's
+ * write-set.
+ */
+
 const densityCss = readFileSync(
   resolve(process.cwd(), 'src/foundation/tokens/css/foundation/base/density.css'),
   'utf8',

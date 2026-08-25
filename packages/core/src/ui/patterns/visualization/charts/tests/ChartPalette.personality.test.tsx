@@ -2,7 +2,6 @@ import React from 'react';
 import { waitFor } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 
-import type { TenantConfig } from '../../../../../foundation/contracts';
 import {
   FunnelChart,
   GanttChart,
@@ -10,22 +9,31 @@ import {
   SankeyChart,
   ScatterChart,
 } from '..';
-import { MONOCHROME_COLORS } from '../foundation/palettes';
+import { resolveChartSeriesPaint } from '../runtime/chart-engine/foundation/grammar/palette';
 import { renderSurface } from '../../../../surfaces/foundation/common/test-utils';
 
-const MONOCHROME_TENANT_OVERRIDE = {
-  personality: {
-    chart: {
-      animateOnMount: false,
-      mountDuration: 0,
-      lineStyle: 'sharp',
-      showDots: true,
-      useGradientFill: false,
-      tooltipStyle: 'minimal',
-      colorScheme: 'monochrome',
-    },
-  },
-} satisfies Partial<TenantConfig>;
+/**
+ * `tenantOverrides.personality` used to select the `monochrome` colour
+ * scheme here. `personality` is refused by `resolveVisualAuthority` by mere
+ * PRESENCE on `TenantConfig` -- unconditionally, even under a declared
+ * `visualAuthority: { authority: 'compiled-artifact', ... }`
+ * (`resolveVisualAuthority`'s conflict list treats `payload.personality` the
+ * same as `payload.brandTheme`: any presence blocks, regardless of an
+ * artifact) -- so `renderSurface` fails closed against
+ * `DesignSystemProvider`'s authority barrier (`358ce9188`) and every chart
+ * mounts nothing. None of the 5 chart family components under test forward a
+ * `colorScheme` prop to `useChartPersonality` (only `animate`/`tooltip`), so
+ * there is no per-component override path either. The suite's own helper
+ * docblock (`test-utils/index.tsx:14-32`) is explicit: "a suite that
+ * genuinely needs compiled tenant paint must mount a verified artifact and
+ * declare `visualAuthority`; it must not re-add raw colours here" -- and here
+ * that is doubly true, since no artifact declaration can admit `personality`
+ * either. Dropped the override; the suite still verifies its real subject
+ * (one resolved series palette applied consistently across every
+ * colors-capable chart family) against `DEFAULT_PERSONALITY.chart.colorScheme
+ * = 'default'`, the scheme every chart resolves to with no tenant override at
+ * all.
+ */
 
 describe('chart personality palette fallback', () => {
   it('uses the provider-resolved tenant palette in every colors-capable family', async () => {
@@ -88,7 +96,6 @@ describe('chart personality palette fallback', () => {
           />
         </div>
       </>,
-      { tenantOverrides: MONOCHROME_TENANT_OVERRIDE },
     );
 
     await waitFor(() => {
@@ -96,7 +103,7 @@ describe('chart personality palette fallback', () => {
       expect(container.querySelectorAll('[data-part="node-mark"]')).toHaveLength(3);
     });
 
-    const expected = MONOCHROME_COLORS[0];
+    const expected = resolveChartSeriesPaint('accessible')[0];
     const marks = [
       container.querySelector('[data-testid="funnel-palette"] [data-part="segment"]'),
       container.querySelector('[data-testid="gantt-palette"] [data-part="task-duration"]'),

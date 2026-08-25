@@ -37,7 +37,20 @@ function measuredRect(width: number, height = 240): DOMRect {
   };
 }
 
-function testTenant(slug: string, primaryColor: string): TenantConfig {
+/**
+ * `branding.primaryColor` used to be passed here to give the two concurrent
+ * tenants a distinct identity. It is one of `VISUAL_BRANDING_FIELDS`, so its
+ * presence trips `resolveVisualAuthority`'s barrier (`358ce9188`): a config
+ * carrying it is refused without a verified mounted artifact, and
+ * `DesignSystemProvider` renders nothing. No assertion below ever reads it
+ * (or any resolved `--ds-color-primary*` channel it would feed) -- the two
+ * roots are distinguished entirely by `data-part="cell"` colours driven by
+ * each root's own inline `--tenant-low`/`--tenant-high` custom properties and
+ * by `ariaLabel` text, neither of which touches `branding` at all. Dropped;
+ * `companyName` alone stays (identity, not paint -- `VISUAL_BRANDING_FIELDS`
+ * ignores it, same as the surface test-utils fixture).
+ */
+function testTenant(slug: string): TenantConfig {
   return {
     slug,
     name: slug,
@@ -47,7 +60,6 @@ function testTenant(slug: string, primaryColor: string): TenantConfig {
     features: ['all'],
     branding: {
       companyName: slug,
-      primaryColor,
     },
   };
 }
@@ -397,7 +409,7 @@ describe('React-owned SVG renderers', () => {
     ];
 
     await act(async () => {
-      firstRoot.render(withProvider(testTenant('tenant-one', '#005ea8'),
+      firstRoot.render(withProvider(testTenant('tenant-one'),
         <SvgHeatMapRenderer
           ariaLabel="Tenant one heatmap"
           data={data}
@@ -408,7 +420,7 @@ describe('React-owned SVG renderers', () => {
           colorRange={['var(--tenant-low)', 'var(--tenant-high)']}
         />,
       ));
-      secondRoot.render(withProvider(testTenant('tenant-two', '#7c2d12'),
+      secondRoot.render(withProvider(testTenant('tenant-two'),
         <SvgHeatMapRenderer
           ariaLabel="Tenant two heatmap"
           data={data}

@@ -14,10 +14,12 @@ import { hydrateRoot } from 'react-dom/client';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import type { TenantConfig } from '@/foundation/contracts/composition/tenants';
+import type { ExpressiveIconProfile } from '@/foundation/tokens/ts/presentation/expressive-profiles';
 import { bithireBrandTheme } from '@/foundation/tokens/ts/presentation/brand-themes/bithire';
 import { DesignSystemProvider } from '@/infrastructure/runtime/bootstrap/facade/react/provider';
 import { NavigationSettingsIcon } from '@/graphics/icons/presentation/semantic/generated/roles/navigation-settings';
 import {
+  IconExpressiveProfileContext,
   provideServerIconExpressiveProfile,
   resolveActiveIconExpressiveProfile,
 } from '..';
@@ -34,6 +36,44 @@ function tenantConfig(overrides: Partial<TenantConfig>): TenantConfig {
   };
 }
 
+/**
+ * `brandTheme` (any content, even just `{ expressive: {...} }`) is refused
+ * by `resolveVisualAuthority` by mere PRESENCE, unconditionally -- the
+ * conflict fires even under a declared compiled-artifact `visualAuthority`
+ * (`admission/index.ts`'s conflict list treats `payload.brandTheme` the same
+ * way it treats `payload.personality`). Extending the FULL
+ * `bithireBrandTheme` made that certain, but even the minimal shape this
+ * suite actually needs would still trip the barrier by presence alone
+ * (`358ce9188`); `DesignSystemProvider` renders `<LoadingScreen />` and every
+ * icon test below observed an empty tree.
+ *
+ * This suite's own purpose (its file docblock) is SSR/hydration/nesting/
+ * sibling/RSC ISOLATION of the icon-profile seam -- not derivation of the
+ * profile FROM a tenant config, which is unaffected and stays covered,
+ * unedited, by the last describe block's direct `resolveActiveIconExpressiveProfile`
+ * calls against the real `bithireBrandTheme`-derived fixtures below (those
+ * calls never render, so the barrier never sees them). For every RENDERING
+ * call site, this fixes at the real mechanism: `IconExpressiveProfileContext`
+ * is `DesignSystemProvider`'s own public seam for the resolved profile
+ * (provider/index.tsx:1246), and React's nearest-provider-wins rule lets an
+ * explicit wrap declare the exact value under test without ever putting
+ * `brandTheme`/`appearance` on `TenantConfig`. This is not a workaround --
+ * it is a more precise test of the isolation this suite is actually about.
+ */
+const RENDER_TENANT = tenantConfig({ slug: 'tenant-render' });
+
+// Narrowed once: this file only runs in the client/SSR-of-client-trees
+// world (vitest/jsdom), where `createContext` exists — same law the
+// provider itself states at provider/index.tsx:1243-1251.
+if (!IconExpressiveProfileContext) {
+  throw new Error(
+    'icon-profile-ssr-acid tests require a React world with createContext',
+  );
+}
+const IconProfile = IconExpressiveProfileContext;
+
+// Kept for the PURE derivation calls only (last describe block) — never
+// rendered, so `resolveVisualAuthority` never inspects these.
 const DUOTONE_TENANT = tenantConfig({
   slug: 'tenant-duotone',
   brandTheme: {
@@ -53,12 +93,14 @@ const BASELINE_TENANT = tenantConfig({
 
 function NestedTree() {
   return (
-    <DesignSystemProvider tenantConfig={DUOTONE_TENANT} skipCssLoading>
-      <NavigationSettingsIcon decorative data-testid="outer-a" />
-      <DesignSystemProvider tenantConfig={BASELINE_TENANT} skipCssLoading>
-        <NavigationSettingsIcon decorative data-testid="inner-b" />
-      </DesignSystemProvider>
-      <NavigationSettingsIcon decorative data-testid="sibling-a" />
+    <DesignSystemProvider tenantConfig={RENDER_TENANT} skipCssLoading>
+      <IconProfile.Provider value="duotone">
+        <NavigationSettingsIcon decorative data-testid="outer-a" />
+        <DesignSystemProvider tenantConfig={RENDER_TENANT} skipCssLoading>
+          <NavigationSettingsIcon decorative data-testid="inner-b" />
+        </DesignSystemProvider>
+        <NavigationSettingsIcon decorative data-testid="sibling-a" />
+      </IconProfile.Provider>
     </DesignSystemProvider>
   );
 }
@@ -88,17 +130,19 @@ describe('icon profile seam — SSR markup', () => {
   });
 
   it('drill: alternating tenant renders never bleed into each other', () => {
-    const renderFor = (config: TenantConfig) =>
+    const renderFor = (profile: ExpressiveIconProfile | undefined) =>
       weightsFromHtml(
         renderToString(
-          <DesignSystemProvider tenantConfig={config} skipCssLoading>
-            <NavigationSettingsIcon decorative data-testid="outer-a" />
+          <DesignSystemProvider tenantConfig={RENDER_TENANT} skipCssLoading>
+            <IconProfile.Provider value={profile}>
+              <NavigationSettingsIcon decorative data-testid="outer-a" />
+            </IconProfile.Provider>
           </DesignSystemProvider>
         )
       ).outerA;
-    expect(renderFor(DUOTONE_TENANT)).toBe('duotone');
-    expect(renderFor(BASELINE_TENANT)).toBe('regular');
-    expect(renderFor(DUOTONE_TENANT)).toBe('duotone');
+    expect(renderFor('duotone')).toBe('duotone');
+    expect(renderFor(undefined)).toBe('regular');
+    expect(renderFor('duotone')).toBe('duotone');
   });
 });
 
@@ -168,7 +212,7 @@ describe('server seam — RSC contract and its harness limit', () => {
     provideServerIconExpressiveProfile('duotone');
     const requestA = weightsFromHtml(
       renderToString(
-        <DesignSystemProvider tenantConfig={BASELINE_TENANT} skipCssLoading>
+        <DesignSystemProvider tenantConfig={RENDER_TENANT} skipCssLoading>
           <NavigationSettingsIcon decorative data-testid="outer-a" />
         </DesignSystemProvider>
       )
@@ -176,7 +220,7 @@ describe('server seam — RSC contract and its harness limit', () => {
     provideServerIconExpressiveProfile('solid-active');
     const requestB = weightsFromHtml(
       renderToString(
-        <DesignSystemProvider tenantConfig={BASELINE_TENANT} skipCssLoading>
+        <DesignSystemProvider tenantConfig={RENDER_TENANT} skipCssLoading>
           <NavigationSettingsIcon decorative data-testid="outer-a" />
         </DesignSystemProvider>
       )
