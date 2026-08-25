@@ -4,7 +4,7 @@
   "scope": "Phase-0 exact proof and minimal public-claim floor; not DS-IMP-060 completion",
   "reproducibility": {
     "classification": "deterministic same-input runs",
-    "authorityDigest": "e535f6f3c817974b1ef2efa643b60abd4ab72bfbc730c35276f24dbbeebcc225",
+    "authorityDigest": "9dc310da86091ca30f7fd0bd7c8dffd73a5b803e94c838b5527715b62c7415bf",
     "sourceHeadIsAuthority": false,
     "toolchain": {
       "node": {
@@ -1383,8 +1383,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 34159,
-        "sha256": "5c3fab7c88ba68541b566dcb45586d2da179fd9eaccb96872e3867242cd0e921"
+        "bytes": 36252,
+        "sha256": "160b63c85b5149808223e74b49fcd984f955e4ba6b11811882c8ea29732c0e2b"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/contracts/composition/tenants/index.ts",
@@ -2674,8 +2674,8 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 90693,
-        "sha256": "14362557607d39a70c3bef8641734d78cd6fcf1acde8b67b45ded451be7e4c51"
+        "bytes": 90764,
+        "sha256": "73399df536f70b04e9e2d723a35f6268be64480ff525af898d23a18fe61ca593"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/tokens/css/facade/entrypoints/base.css",
@@ -7554,8 +7554,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 342161,
-        "sha256": "564d6b027cd5b54e3da35610c76803ea84efb8292e5d96614733f4d3ae423a58"
+        "bytes": 342000,
+        "sha256": "2e9315e2c6aa65492dd7d9dbd8e66c19317c0659f2f13c71a57e343ffa255fd1"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/tokens/ts/presentation/brand-themes/rottay/seeds.json",
@@ -12546,8 +12546,8 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 69141,
-        "sha256": "fc5f66f4d643b084827411e68a34dd948b1984d8691dae227d13d34b837d8d2b"
+        "bytes": 70286,
+        "sha256": "9f1cc38091fe88e066153e7d5a987b11b20c79a1fe2c3ff920963c49210660d5"
       },
       {
         "path": "ui-design-system/packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/tests/mandatory-font-fallback.test.ts",
@@ -12594,8 +12594,8 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 39587,
-        "sha256": "5d1e52dcbd0bf1442b0790928f0c46e0b287b20878a7220d1225eb2d1d0cb803"
+        "bytes": 40751,
+        "sha256": "d8604f956214250e3f491467a34028abfcd8a1e639f08adb397ca3801fd78756"
       },
       {
         "path": "ui-design-system/packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/tests/recipe-profile.test.ts",
@@ -12626,8 +12626,8 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 20063,
-        "sha256": "09f40ef21dbb51507f9daa850ebe19b67c6c84d5d87b4ae73db82e7b0e56f3f6"
+        "bytes": 20781,
+        "sha256": "0a59698d4cbaaa9babf9c44df42e1a7bd7dd6059b70355c236a230b1ba99d93d"
       },
       {
         "path": "ui-design-system/packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/tests/sidebar-group-channels.test.ts",
@@ -13724,8 +13724,8 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 9242,
-        "sha256": "408b70242dfa97a389301254af7cc95828323946d2367eaa49b4bfadad8f2700"
+        "bytes": 11731,
+        "sha256": "010559f229d76941e7f306a22effe0bb0795651f8b55225c4adc6cc99bf5bc1b"
       },
       {
         "path": "ui-design-system/packages/core/src/infrastructure/runtime/foundation/density/tests/density-scope.test.tsx",
@@ -13822,8 +13822,8 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 8885,
-        "sha256": "dff7679f7916169770f7dfbecf330373f5b59e02f93829a05ad103320865f9a5"
+        "bytes": 11345,
+        "sha256": "e967c1a67f6a18c8816a97d3c37a4cb9665c50cdefe2e79d9583e01857f94a97"
       },
       {
         "path": "ui-design-system/packages/core/src/infrastructure/runtime/foundation/motion/composition/react/preference/index.ts",
@@ -15581,8 +15581,8 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 28739,
-        "sha256": "fbcb17f3f7145677358dbe81709c34c4eddf1654d028e1d7896aeca463e6712f"
+        "bytes": 30029,
+        "sha256": "28358fc3af9e3c94a88ee2a2fabc06843fd63380c65328e16f1554b773a6dc8e"
       },
       {
         "path": "ui-design-system/packages/core/src/tooling/resolution-probe/foundation/roster/tests/index.test.tsx",
@@ -21096,8 +21096,8 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 28629,
-        "sha256": "e5d1b3430a28cb4ceb4845c10d1186f2488540cda02a936419c17c311cd82000"
+        "bytes": 29390,
+        "sha256": "8d33918520f96c225f5d4da8b259ebe795e053bfc7cc8f36db7bffcf367067b5"
       },
       {
         "path": "ui-design-system/packages/core/src/ui/patterns/visualization/charts/runtime/chart-engine/presentation/react/renderers/tests/SvgScatterRenderer.parity.test.tsx",
@@ -21464,8 +21464,8 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 3976,
-        "sha256": "dbd9c6bcbe4d91493944bb5e6f188176c07013e76c28603753aa4e9dd2099cc5"
+        "bytes": 5005,
+        "sha256": "7cf4e5f1e342779476f82d24198cb919c18d86860380894fcd0bbbd61f4c9a40"
       },
       {
         "path": "ui-design-system/packages/core/src/ui/patterns/visualization/charts/tests/ChartPublicApi.test.tsx",
@@ -37003,8 +37003,8 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 5503624,
-        "sha256": "8f12a05fcd4de33a27a6f398d744fe4dda762c82e191d78862f804850fbf8bfc"
+        "bytes": 5503695,
+        "sha256": "a303912284e82ebba1017286e48904f235b780567667550519739839dd62e98c"
       },
       {
         "path": "ui-design-system/packages/core/styles/modern.css",
@@ -37019,8 +37019,8 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 5374394,
-        "sha256": "9cb764fbc729eeb0c0308c28f2e57807a51ac4d57a505bbb0c507a2f66aa1c93"
+        "bytes": 5374465,
+        "sha256": "e48a70362af1100ce112e3bb447a0ecb8df819ec5f24b98fa240906fc8161de0"
       },
       {
         "path": "ui-design-system/packages/showroom/e2e/visual/communication-batch.spec.ts",
@@ -40511,7 +40511,7 @@
         "sha256": "d2a99efed33922a4a699ea033538b677022ddaccf0cdbb25ece0a7295bdc4812"
       }
     ],
-    "digest": "e535f6f3c817974b1ef2efa643b60abd4ab72bfbc730c35276f24dbbeebcc225"
+    "digest": "9dc310da86091ca30f7fd0bd7c8dffd73a5b803e94c838b5527715b62c7415bf"
   },
   "paintAudit": {
     "output": "engine-token-audit --check OK (3326 counters; 3226 completed zeros locked exactly; 91 decrease-only ceilings; 2 positive exact invariants; 7 positive minimum floors)",
@@ -113892,8 +113892,8 @@
   "deterministicRuns": {
     "count": 2,
     "hashes": [
-      "beb264039e012bc9f53cce0adb766ec4982240056017fb1f6101ea4c8ea51a99",
-      "beb264039e012bc9f53cce0adb766ec4982240056017fb1f6101ea4c8ea51a99"
+      "b3ea3e0e5243124bd689d2cac6f4b1b2dd35b717cce923dba1c70f1c23c56821",
+      "b3ea3e0e5243124bd689d2cac6f4b1b2dd35b717cce923dba1c70f1c23c56821"
     ],
     "agree": true
   }

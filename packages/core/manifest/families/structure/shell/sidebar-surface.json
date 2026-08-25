@@ -735,57 +735,132 @@
     {
       "controlId": "navigation.sidebar-tone",
       "disposition": "UNKNOWN",
-      "verificationState": "UNKNOWN",
-      "unknownReason": "NOT_ASSESSED",
-      "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "verificationState": "SOURCE_BOUND",
+      "unknownReason": "NOT_ASSESSED_PAST_SOURCE_BOUND. Causal measurement complete and positive: 18/18 (scenario x mode) lowerings show demonstrated life on both ingress arms, and the channel-level union is 52/54 moved (9 scenarios x 6 channels) -- the 2 non-movers are a named, benign value-coincidence with the vertical's own authored baseline (see the control's own calibration.measuredResult and unmeasuredScope; F4B-12, 2026-08-24). NOT raised to IMPLEMENTED here: that rank requires non-empty `stableParts`/`propertyGroups`/`computedProperties`, and every `propertyGroups` entry must be OWNED by this family's own `anatomy.propertyGroups` -- which is `[]` right now (same program-wide propertyGroups-vocabulary blocker F4B-11 already documented on primitive/display/typography, `anatomy.sourceEvidence.propertyGroupCensusNote.status`: 'UNRATIFIED OBSERVATION... blocked on the propertyGroup vocabulary ratification'). `stableParts`/`propertyGroups`/`computedProperties` stay unset for that reason; `internalChannels` is populated below with the REAL producers (corrected from the prior REQUIRED_ADDITION placeholders, which cited `layout-sidebar.css` -- a real file that owns this family's LAYOUT GEOMETRY only, produces neither the tone's six channels nor the three removed phantom sockets, and was simply the wrong producer for a colour control). DT ruling (F4B-12 widen adjudication): declaredOutputs widened from 2 to the full closed six-channel `SIDEBAR_TONE_LEAF_FIELDS` table -- the control's authority IS that table, and declaring a subset under-declares the real governed surface.",
+      "evidenceIds": [
+        "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/navigation-sidebar-tone/rottay-subtle.json.receipt.json",
+        "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/navigation-sidebar-tone/rottay-strong.json.receipt.json",
+        "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/navigation-sidebar-tone/rottay-inverse.json.receipt.json",
+        "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/navigation-sidebar-tone/bithire-subtle.json.receipt.json",
+        "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/navigation-sidebar-tone/bithire-strong.json.receipt.json",
+        "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/navigation-sidebar-tone/bithire-inverse.json.receipt.json",
+        "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/navigation-sidebar-tone/evnto-subtle.json.receipt.json",
+        "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/navigation-sidebar-tone/evnto-strong.json.receipt.json",
+        "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/navigation-sidebar-tone/evnto-inverse.json.receipt.json"
+      ],
+      "nextAction": "PROPERTY_GROUPS_VOCABULARY_RATIFICATION_THEN_IMPLEMENTED",
+      "sourceBindings": [
+        "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/menu.css",
+        "packages/core/src/foundation/tokens/css/presentation/components/skin/app-shell.css",
+        "packages/core/src/infrastructure/compilers/kernel/foundation/css/chrome-variables/index.ts",
+        "packages/core/src/infrastructure/compilers/composition/tenant-theme/index.ts",
+        "packages/core/manifest/controls/navigation.sidebar-tone.json"
+      ],
+      "negativeControls": [
+        "control height remains fixed",
+        "font metrics remain fixed",
+        "border remains fixed",
+        "motion remains fixed"
+      ],
+      "negativeControlsScopeNote": "The same four the control declares, restated on this root so the cell is self-describing. `color remains fixed` is deliberately NOT declared, unlike most Standard posture controls: this control's entire job is moving colour channels, so a blanket colour negative control would be self-contradicting. No vocabulary phrase exists for 'one specific colour channel among many stays fixed' -- the neighbouring-leaf proof (`--ds-sidebar-item-color`, chrome-variables/index.ts:1351, `s.itemColor`, a DIFFERENT leaf from the tone's own six) is a direct measurement instead, not a formal negativeControls entry. With declaredOutputs now widened to all 6 real channels (DT ruling, F4B-12), this witness proves what it claims: the tone's full, formally-declared six-channel surface moves and the seventh, non-declared neighbour does not -- see the control's own measuredResult.negativeWitness.",
+      "stressCases": [
+        "The registry's prior `chrome.sidebar.*` keypath was a broken wildcard: the ingress walker only understands brace SETS (`{a,b,c}`), so `*` resolved to itself as a literal member (`chrome.sidebar['*']`), a false-INERT-by-path defect distinct from a compiler defect. Fixed to the real field `chrome.sidebar.tone` (SIDEBAR_TONE_FIELD).",
+        "The prior declaredOutputs (2 channels: --ds-sidebar-bg, --ds-sidebar-item-color -- the latter a typo/omission for -active) under-declared the control's real six-channel authority. Widened (DT ruling, F4B-12) to the full closed `SIDEBAR_TONE_LEAF_FIELDS` table; the neighbouring-leaf proof (see restoreRequirements/measuredResult) only became a meaningful witness once all six real channels were formally declared alongside it.",
+        "internalChannels' prior producer, `layout-sidebar.css`, is a REAL file (verified: 73 lines, `presentation/components/skin/layout-sidebar.css`) but owns this family's LAYOUT GEOMETRY only (`--_ds-sidebar-inline-size`/`--_ds-sidebar-aside-inline-size`, grid tracks, gap, min-block-size) -- its own docblock says so explicitly ('geometry data, not paint'). It produces neither the tone's six colour channels nor the three removed phantom sockets. Corrected to the real colour producers, `menu.css` (5 of 6 channels) and `app-shell.css` (--ds-sidebar-bg, read at its own :70/:95/:217).",
+        "All 3 first-party verticals author the six tone leaves literally in their own baseline theme (rottay/bithire/evnto's `chrome.sidebar.{bg,text,textMuted,itemBgHover,itemBgActive,itemColorActive}`) -- an earlier draft of this evidence wrongly claimed otherwise. The 9 receipted scenarios measured `assignToneUnderTenantLeaves`'s rank mechanism working exactly as designed on every one of the 54 (scenario x channel) cells -- tone always outranks a baseline-authored leaf, never the reverse -- because `tenantAuthoredPaths` (chrome-variables/index.ts:213-230) is built from the causal harness's own `tenantPatch` alone (runtime/ingress/index.mjs's `staticTenantAuthoredPaths`); a vertical's baseline-authored leaf never enters it, so every leaf's rank falls to `baselineLeaf(1)` against the stop's own `tenantDerived(3)` tone, regardless of the vertical's own literal authorship. This is NOT the same claim as 'every channel moved': 2 of the 54 cells are non-movers because the tone's WINNING value happens to numerically equal the leaf it beat (a value coincidence, not a rank failure) -- see the control's own unmeasuredScope for the 2 named cells. See the control's own B-2 drill 6 fix for the full rank mechanism."
+      ],
+      "restoreRequirements": [
+        "Unsetting the control through either door restores the baseline sidebar colours exactly (measured: restore.exact true on every receipted scenario, byte-identical rows)."
+      ],
       "internalChannels": [
         {
-          "channelId": "--_ds-sidebar-item-bg-active",
+          "channelId": "--ds-sidebar-bg",
           "semanticOwner": "navigation.sidebar-tone",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-sidebar.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/app-shell.css",
           "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
           "productiveConsumerFamilyIds": [
             "structure/shell/sidebar-surface"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-sidebar.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/app-shell.css"
           ],
           "replacementDisposition": {
-            "state": "REQUIRED_ADDITION",
-            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+            "state": "LIVE"
           }
         },
         {
-          "channelId": "--_ds-sidebar-item-bg-hover",
+          "channelId": "--ds-sidebar-text",
           "semanticOwner": "navigation.sidebar-tone",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-sidebar.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/menu.css",
           "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
           "productiveConsumerFamilyIds": [
             "structure/shell/sidebar-surface"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-sidebar.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/menu.css"
           ],
           "replacementDisposition": {
-            "state": "REQUIRED_ADDITION",
-            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+            "state": "LIVE"
           }
         },
         {
-          "channelId": "--_ds-sidebar-surface-sidebar-bg",
+          "channelId": "--ds-sidebar-text-muted",
           "semanticOwner": "navigation.sidebar-tone",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-sidebar.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/menu.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
+          "productiveConsumerFamilyIds": [
+            "structure/shell/sidebar-surface"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/menu.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--ds-sidebar-item-bg-hover",
+          "semanticOwner": "navigation.sidebar-tone",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/menu.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/shell/sidebar-surface"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-sidebar.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/menu.css"
           ],
           "replacementDisposition": {
-            "state": "REQUIRED_ADDITION",
-            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--ds-sidebar-item-bg-active",
+          "semanticOwner": "navigation.sidebar-tone",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/menu.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "structure/shell/sidebar-surface"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/menu.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--ds-sidebar-item-color-active",
+          "semanticOwner": "navigation.sidebar-tone",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/menu.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
+          "productiveConsumerFamilyIds": [
+            "structure/shell/sidebar-surface"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/menu.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
           }
         }
       ]

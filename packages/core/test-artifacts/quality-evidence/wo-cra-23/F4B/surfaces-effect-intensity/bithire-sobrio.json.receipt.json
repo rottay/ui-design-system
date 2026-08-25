@@ -5,7 +5,7 @@
   "scenarioId": "surfaces.effect-intensity/sobrio/bithire/static-and-db",
   "evidenceKind": "exact-restore",
   "commandOrTool": "node src/tooling/resolution-probe/public/cli/index.mjs causal",
-  "toolVersion": "resolution-probe@331f8bc7a4ed",
+  "toolVersion": "resolution-probe@d4b1e1faef38",
   "exitCode": 0,
   "sourceFiles": [
     "packages/core/dist/build-stamp.json",
@@ -66,10 +66,10 @@
     "packages/core/src/ui/primitives/display/Card/engines/rustic/index.tsx",
     "packages/core/src/ui/primitives/display/Card/index.tsx"
   ],
-  "sourceDigest": "4b492afe739b273a8480ffc489c3691218f3b05704e30cea273ce1c7c9cc6a8a",
+  "sourceDigest": "1e7cb52e2105f8c5a3ccfccaa40578f7fa73a3cd550e8b32eed033247a1179e1",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/surfaces-effect-intensity/bithire-sobrio.json",
   "artifactSha256": "49dc9374117f19cebbd3ce15c2f9f714cda616526cc2dfc1195ab7f1c3017396",
-  "createdAt": "2026-08-25T02:10:25.155Z",
+  "createdAt": "2026-08-25T05:17:09.964Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

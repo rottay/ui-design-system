@@ -271,21 +271,6 @@
       "state": "PRESCRIPCION"
     },
     {
-      "channelId": "--_ds-sidebar-item-bg-active",
-      "familyId": "structure/shell/sidebar-surface",
-      "state": "PRESCRIPCION"
-    },
-    {
-      "channelId": "--_ds-sidebar-item-bg-hover",
-      "familyId": "structure/shell/sidebar-surface",
-      "state": "PRESCRIPCION"
-    },
-    {
-      "channelId": "--_ds-sidebar-surface-sidebar-bg",
-      "familyId": "structure/shell/sidebar-surface",
-      "state": "PRESCRIPCION"
-    },
-    {
       "channelId": "--_ds-surface-chrome-sidebar-bg",
       "familyId": "structure/shell/surface-chrome",
       "state": "PRESCRIPCION"

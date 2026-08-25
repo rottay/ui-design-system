@@ -5,7 +5,7 @@
   "scenarioId": "surfaces.effect-intensity/mate/evnto/static-and-db",
   "evidenceKind": "static-db-computed-parity",
   "commandOrTool": "node src/tooling/resolution-probe/public/cli/index.mjs causal",
-  "toolVersion": "resolution-probe@331f8bc7a4ed",
+  "toolVersion": "resolution-probe@d4b1e1faef38",
   "exitCode": 0,
   "sourceFiles": [
     "packages/core/dist/build-stamp.json",
@@ -66,10 +66,10 @@
     "packages/core/src/ui/primitives/display/Card/engines/rustic/index.tsx",
     "packages/core/src/ui/primitives/display/Card/index.tsx"
   ],
-  "sourceDigest": "d4224c3b29a6991366ce47cea0d6edc3d6306d85ca8a2271a94d5acf88785697",
+  "sourceDigest": "766931cbbb00c13684628ee5eeede5d61619c8409d73db887ace1435c0003a62",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/surfaces-effect-intensity/evnto-mate.json",
   "artifactSha256": "bce6d7308c630f3bb7668b5a14b7b5930a9d1325dbf532223f132ba2f2e90885",
-  "createdAt": "2026-08-25T02:10:25.165Z",
+  "createdAt": "2026-08-25T05:17:09.974Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

@@ -4130,6 +4130,49 @@ de CI-2. Y atribución pendiente de verificar: `capability-propagation`
 (rojo del backlog desde D-1) quedó verde con este registry en el árbol — si
 el fix del wildcard es la causa, ese rojo se cierra con este packet.
 
+**F4B-12 — navigation.sidebar-tone CIERRA SOURCE_BOUND (2026-08-25; Sonnet;
+postaudit Fable: REJECT → REJECT 2 → REJECT 3 → ACCEPT final, los 3 de texto,
+ninguno de mecánica).** Keypath corregido (`chrome.sidebar.*` wildcard roto
+→ `chrome.sidebar.tone`, con drill que parsea `SIDEBAR_TONE_FIELD`/
+`SIDEBAR_TONE_LEAF_FIELDS` del fuente del compilador y asierte igualdad —
+nunca import, por el ruling de capas) y canal corregido
+(`--ds-sidebar-item-color` → `--ds-sidebar-item-color-active`, el typo del
+sufijo). **RULING DT de anchura: la declaración se ensancha a los 6 canales
+reales del tono** (la tabla cerrada `SIDEBAR_TONE_LEAF_FIELDS` — el objetivo
+del programa es controles que gobiernan múltiples canales; declarar 2 de 6
+sub-declaraba la superficie real) y los 9 escenarios se RE-CORRIERON con
+evidencia real: 9/9 limpias, H-2 ambos brazos sin excepción (los 3 tonos
+pueblan los 6 canales — no hay preset vacío como elevation/soft), restore
+exact, y **paridad por modo: 18/18 comparaciones byte-exactas, no-movers
+incluidos** (2 benignos: `--ds-sidebar-text` en bithire-subtle y
+`--ds-sidebar-bg` en evnto-subtle — la receta subtle resuelve al mismo valor
+que el vertical ya autoraba: la clase bithire/sober, reportada con ley, no
+negada). **La predicción B-2 de Fable cumplida:** drill 6 disparó con la
+segunda intersección real (`navigation.sidebar-tone -> chrome.sidebar.tone`
+— el sitio sidebar del compilador consulta exactamente ese field; la tabla
+de rangos colapsa a tono-gana porque `tenantAuthoredPaths` lleva SÓLO el
+path del stop — la ley B-2, no porque los verticales no autoren leaves: los
+3 autoran los 6). El testigo del vecino (`itemColor`, medición directa no
+declarada) prueba ahora la superficie real completa: los 6 del tono se
+mueven, el vecino nunca. Ripples mecánicas declaradas: productores reales
+corregidos en internalChannels (menu.css, app-shell.css — el productor
+anterior era inexistente; `layout-sidebar.css` SÍ existe pero es el skin de
+geometría y no produce ninguno de los 6 ni los 3 sockets fantasma) y 3
+entradas PRESCRIPCION de cascade/roots retiradas (su terminalReach prohíbe
+channels públicos estructuralmente). **Lección de vara (3 REJECTs de texto
+en UN packet, todos la misma clase): mecánica correcta, prosa inventada al
+redactar el asiento** — tercera instancia del programa (R-2, F4B-10, acá);
+el chequeo mecánico manifest-vs-receipts (glosas numéricas contra conteos
+reales de artifacts) va al diseño de CI-2 CON ESTE CASO como fixture, y la
+nota de vara de Fable (su segundo REJECT no barrió el objeto entero;
+certificado de lista cerrada del tercero) queda como forma de los deltas:
+barrido total o no hay delta. capability-propagation verde con atribución
+honesta (su mutator escribe directo, no via registry — NO es downstream del
+fix; documentado así). Cierre en SOURCE_BOUND por la misma nota de anatomía
+que F4B-11 (el bloqueo propertyGroups ya registrado como dependencia). Con
+este commit, la deuda de cadena derivada que D-1b dejó declarada queda
+saldada exactamente como la adjudicación de secuencia lo ordenó.
+
 **El "hang" de program-check.test.mjs — DIAGNOSTICADO (Opus, 2026-08-25;
 directiva del owner): NO SE CUELGA. Tarda 6m18s, y 5m43s son un `spawnSync`
 mudo.** El punto del apagón no es el `await import()` del test 45 (pasa en

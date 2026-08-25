@@ -411,8 +411,42 @@ export const TENANT_CAPABILITY_REGISTRY = Object.freeze([
       enumValues: ['subtle', 'strong', 'inverse'],
       defaultBehavior: 'subtle',
       documentPath: 'appearance.general.navigation.sidebarTone',
-      brandThemePath: 'chrome.sidebar.*',
-      derivedChannels: ['--ds-sidebar-bg', '--ds-sidebar-item-color'],
+      // F4B-12 fix (false-INERT by PATH, not by compiler): `chrome.sidebar.*`
+      // is a wildcard, and the ingress walker (runtime/ingress/index.mjs's
+      // `ingressPathMembers`/`resolveIngressMember`) only understands brace
+      // SETS (`{a,b,c}`) -- a lone `*` resolves to itself as a single literal
+      // member, so a causal stop would write to the nonsense key
+      // `chrome.sidebar['*']`, which nothing reads. The real field is
+      // `chrome.sidebar.tone` -- the single string this control's compiler
+      // authority exports as `SIDEBAR_TONE_FIELD`
+      // (chrome-variables/index.ts:194), matching what `migrateV1` writes and
+      // what `chromeToVariables` reads (`s.tone`, chrome-variables/index.ts's
+      // tone-lowering path). Not imported here on purpose (DT ruling,
+      // F4B-12): importing the compiler's own constant into this purely
+      // declarative registry would be the first infrastructure import here
+      // and would cross the foundation<-infrastructure layer direction; the
+      // literal is fenced instead by a drill in
+      // resolution-probe/runtime/ingress/tests/index.test.mjs that PARSES
+      // the compiler source text (never imports it) for `SIDEBAR_TONE_FIELD`
+      // and asserts equality against this exact string.
+      brandThemePath: 'chrome.sidebar.tone',
+      // DT ruling (F4B-12, widen adjudication): the control's authority IS
+      // the closed six-channel table `SIDEBAR_TONE_LEAF_FIELDS`
+      // (chrome-variables/index.ts:184-191) -- declaring 2 of 6 under-declares
+      // the real surface a Standard multi-channel posture control governs.
+      // `--ds-sidebar-item-color` (no `-active` suffix) is deliberately
+      // EXCLUDED: it is a DIFFERENT leaf's channel -- chrome-variables/index.ts:1351
+      // writes it from `s.itemColor` directly, never from the tone -- the
+      // exact channel this control's declaredOutputs mistakenly named before
+      // this fix.
+      derivedChannels: [
+        '--ds-sidebar-bg',
+        '--ds-sidebar-text',
+        '--ds-sidebar-text-muted',
+        '--ds-sidebar-item-bg-hover',
+        '--ds-sidebar-item-bg-active',
+        '--ds-sidebar-item-color-active',
+      ],
       compat: 'additive, unset-to-rollback',
     },
     {

@@ -2608,11 +2608,98 @@ test('B-2 drill 6: the CLOSED consulted vocabulary is what bounds the blast radi
     }
   }
   /* Measured across EVERY control the registry declares a static door for, not
-   * just the eight that carry stops today: exactly one door lands on a field
-   * the compiler consults, and it is the primary seed of palette.seeds. That
-   * is why the 42 receipted scenarios cannot move — none of their stops writes
-   * a consulted path — and it is derivable here rather than from a run. */
-  assert.deepEqual(intersections, ['palette.seeds -> palette.primaryColor']);
+   * just the eight that carry stops today: two doors land on a field the
+   * compiler consults -- the primary seed of palette.seeds, and (F4B-12,
+   * 2026-08-24) navigation.sidebar-tone's own field, `chrome.sidebar.tone`
+   * (SIDEBAR_TONE_FIELD), which `assignToneUnderTenantLeaves`
+   * (chrome-variables/index.ts:213-230) consults via `isTenantAuthoredField`
+   * to rank a tenant's tone recipe against that SAME tenant's own explicit
+   * sidebar leaves. This second intersection only became VISIBLE once the
+   * registry's keypath was fixed from the broken wildcard `chrome.sidebar.*`
+   * to the real field -- the wildcard never matched anything here either, so
+   * the consultation was silently invisible before. It does not change what
+   * F4B-12's own 9 receipted scenarios measured, but NOT for the reason an
+   * earlier draft of this comment gave: all 3 first-party verticals DO
+   * author the six tone leaves literally (rottay/bithire/evnto's own
+   * `chrome.sidebar.{bg,text,textMuted,itemBgHover,itemBgActive,itemColorActive}`
+   * -- rottay's `bg` even carries its own `@governor dial:
+   * navigation.sidebar-tone` doc comment). `isTenantAuthoredField` is not
+   * about whether a vertical's BASELINE theme happens to write a field --
+   * it is about whether `context.tenantAuthoredPaths` (built by
+   * `toCompilerInput`/`buildIngressInput` from the causal harness's own
+   * `tenantPatch`) contains that field's path. A causal stop patches ONLY
+   * `chrome.sidebar.tone` on top of the vertical's published baseline, so
+   * `tenantAuthoredPaths` carries exactly that one path -- the vertical's
+   * own baseline-authored leaves are on a DIFFERENT plane (vertical baseline,
+   * not tenant patch) and never enter `authoredPaths` at all, so every leaf's
+   * `leafRank` falls through to `baselineLeaf(1)` regardless of how the
+   * vertical wrote it. That is why `assignToneUnderTenantLeaves`'s own rank
+   * table collapses to `tone(3) > leaf(1)` (B-2's own law, not an absence of
+   * authorship) on every one of the 9 scenarios -- the tone wins because the
+   * causal harness's own patch never contests a vertical's baseline leaf,
+   * which is exactly the clean 6/6-moved result every receipt records. */
+  assert.deepEqual(intersections, [
+    'navigation.sidebar-tone -> chrome.sidebar.tone',
+    'palette.seeds -> palette.primaryColor',
+  ]);
+});
+
+test('F4B-12 drill: the registry keypath is exactly SIDEBAR_TONE_FIELD, read from its one authority', () => {
+  /* DT ruling (F4B-12): the registry (capabilities/index.ts) is a purely
+   * declarative contract and does not import the compiler's own
+   * SIDEBAR_TONE_FIELD constant -- that would be the first infrastructure
+   * import in a foundation-layer file and would cross the
+   * foundation<-infrastructure direction. The registry instead states the
+   * literal string `chrome.sidebar.tone` with a comment citing this exact
+   * authority. This drill is what fences the derivation without the import:
+   * it reads the compiler's OWN source (never a copy, never a deep-import
+   * the package boundary would reject) and asserts the registry's declared
+   * path is byte-identical to it. Same technique as B-2 drill 6 above
+   * (CONSULTED_PROVENANCE_FIELDS), applied to a single exported literal
+   * instead of a Set. */
+  const chromeVariablesSource = readFileSync(
+    resolve(
+      CORE_ROOT,
+      'src/infrastructure/compilers/kernel/foundation/css/chrome-variables/index.ts',
+    ),
+    'utf8',
+  );
+  const fieldMatch = chromeVariablesSource.match(
+    /export const SIDEBAR_TONE_FIELD = "([^"]+)";/,
+  );
+  assert.ok(
+    fieldMatch,
+    'chrome-variables/index.ts no longer declares SIDEBAR_TONE_FIELD this way',
+  );
+  const [, sidebarToneField] = fieldMatch;
+  assert.equal(sidebarToneField, 'chrome.sidebar.tone');
+
+  const manifest = readManifest(
+    resolve(CORE_ROOT, 'manifest/controls/navigation.sidebar-tone.json'),
+  );
+  assert.equal(manifest.ingress.staticBrandThemePath, sidebarToneField);
+
+  // The closed six-channel leaf table is the other half of this control's
+  // authority; pin its membership the same way so a future rename of the
+  // table cannot silently drift the registry's declaredOutputs.channels
+  // without this drill noticing.
+  const leafFieldsMatch = chromeVariablesSource.match(
+    /export const SIDEBAR_TONE_LEAF_FIELDS: Readonly<Record<string, string>> = \{([\s\S]*?)\n\};/,
+  );
+  assert.ok(
+    leafFieldsMatch,
+    'chrome-variables/index.ts no longer declares SIDEBAR_TONE_LEAF_FIELDS this way',
+  );
+  const leafChannels = new Set(
+    [...leafFieldsMatch[1].matchAll(/"(--ds-[a-z0-9-]+)":/g)].map((m) => m[1]),
+  );
+  assert.ok(leafChannels.size >= 6, `parsed only ${leafChannels.size} sidebar tone leaf channels`);
+  for (const channel of manifest.declaredOutputs.channels) {
+    assert.ok(
+      leafChannels.has(channel),
+      `${channel} is not one of the six SIDEBAR_TONE_LEAF_FIELDS members`,
+    );
+  }
 });
 
 test('B-2 drill 7 [needs dist]: W-B — an IDENTITY stop declares NO authorship', async () => {

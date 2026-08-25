@@ -7,7 +7,7 @@
   "semanticOwner": {
     "owner": "design-system",
     "registryPath": "packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts",
-    "registryDigest": "5c3fab7c88ba68541b566dcb45586d2da179fd9eaccb96872e3867242cd0e921"
+    "registryDigest": "160b63c85b5149808223e74b49fcd984f955e4ba6b11811882c8ea29732c0e2b"
   },
   "title": "Anatomy variants",
   "valueType": "enum",

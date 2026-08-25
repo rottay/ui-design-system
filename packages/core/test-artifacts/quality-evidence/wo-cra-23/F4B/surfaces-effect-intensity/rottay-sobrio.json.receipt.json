@@ -5,7 +5,7 @@
   "scenarioId": "surfaces.effect-intensity/sobrio/rottay/static-and-db",
   "evidenceKind": "exact-restore",
   "commandOrTool": "node src/tooling/resolution-probe/public/cli/index.mjs causal",
-  "toolVersion": "resolution-probe@331f8bc7a4ed",
+  "toolVersion": "resolution-probe@d4b1e1faef38",
   "exitCode": 0,
   "sourceFiles": [
     "packages/core/dist/build-stamp.json",
@@ -66,10 +66,10 @@
     "packages/core/src/ui/primitives/display/Card/engines/rustic/index.tsx",
     "packages/core/src/ui/primitives/display/Card/index.tsx"
   ],
-  "sourceDigest": "9e11a866e549a78c89054c9ad7de407238ce08c79ccf471cb8ae6275c2392c9b",
+  "sourceDigest": "4d34bcb21efb769c9fb83c48e10b800e068fa4c7474642c53030c2ba89277ffe",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/surfaces-effect-intensity/rottay-sobrio.json",
   "artifactSha256": "d9abb76fe0a8cae632d87655d27f73b93dafd0a6f86116eff5e7289859b9c03b",
-  "createdAt": "2026-08-25T02:10:25.203Z",
+  "createdAt": "2026-08-25T05:17:10.002Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,
