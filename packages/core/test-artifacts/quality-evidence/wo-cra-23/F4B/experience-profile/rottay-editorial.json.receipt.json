@@ -5,7 +5,7 @@
   "scenarioId": "experience.profile/editorial/rottay/static-and-db",
   "evidenceKind": "exact-restore",
   "commandOrTool": "node src/tooling/resolution-probe/public/cli/index.mjs causal",
-  "toolVersion": "resolution-probe@fa9e6d1c136b",
+  "toolVersion": "resolution-probe@ac4109e656ec",
   "exitCode": 0,
   "sourceFiles": [
     "packages/core/dist/build-stamp.json",
@@ -67,10 +67,10 @@
     "packages/core/src/ui/primitives/display/Card/engines/rustic/index.tsx",
     "packages/core/src/ui/primitives/display/Card/index.tsx"
   ],
-  "sourceDigest": "b5d2813044231273a0fcf41c7f7fcef850052486e320923848851f50fc06e291",
+  "sourceDigest": "1ff7ce12b50bb4a327bcfa918b5d122c0adc72eb862a9cea0211b4ed4b19dd84",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/experience-profile/rottay-editorial.json",
   "artifactSha256": "a09422ac1dfb2d391582ec44ee8b38b4dc5cec93017d444856856e3aa892d9f5",
-  "createdAt": "2026-08-24T19:21:40.937Z",
+  "createdAt": "2026-08-24T23:32:21.496Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

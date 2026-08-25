@@ -975,9 +975,16 @@ function brandThemeToCssVariables(
         vars["--ds-shadow-focus-ring-error"] = su.shadows.focusRingError;
     }
     if (su.elevations) {
-      // Authored AFTER the governed posture preset on purpose: the preset is
-      // the floor a tenant selects, an authored ladder is the ceiling it
-      // states outright, and it is never the other way around.
+      /* AGED CLAUSE RE-SEATED IN E-1. It said "an authored ladder is the
+       * ceiling it states outright, and it is never the other way around" --
+       * true before option B, when nothing ran after this block. Measured now:
+       * the tenant floor lowers LAST (`if (tenantPosture)`, below) in the base
+       * AND every mode block, so the ladder is the ceiling only against the
+       * VERTICAL's posture; a TENANT selection discards it, overlay ladders
+       * included (they stop emitting once equal to the base). rottay shows it:
+       * six authored levels, three channels moved in both modes. Both doors
+       * agree -- the static arm always applied the floor last, and since E-1
+       * the DB door supplies floors too. */
       if (su.elevations.level0) vars["--ds-elevation-0"] = su.elevations.level0;
       if (su.elevations.level1) vars["--ds-elevation-1"] = su.elevations.level1;
       if (su.elevations.level2) vars["--ds-elevation-2"] = su.elevations.level2;
@@ -1077,6 +1084,12 @@ function brandThemeToCssVariables(
   // theme > DS defaults. Applied last rather than gated per field: a per-field
   // gate must enumerate every authored writer, and would miss the one that
   // started this packet. Absent => identity.
+  // E-1 widened WHO reaches it, not what it does: the DB door supplies floors
+  // now too. It runs per BLOCK, so an overlay the floor overwrites stops
+  // diverging and drops out of that block's delta -- measured on bithire, whose
+  // dark `--ds-letter-spacing-heading` delta disappears once a tenant's
+  // `typePairing` governs dark as well as light. Adjudicated: that is the
+  // selection reaching both modes, which is what option B says.
   if (tenantPosture) {
     Object.assign(vars, appearancePostureToVariables(tenantPosture));
   }
@@ -2120,6 +2133,14 @@ export function compileTheme(
      * probe's static arm, B-2). Absent = not a tenant: bytes unchanged.
      */
     tenantAuthoredPaths?: TenantAuthoredPaths;
+    /**
+     * E-1: this compile's TENANT FLOORS. `theme` arrives RESOLVED, and the
+     * merge erases WHOSE a value is, so without this a tenant selection lowers
+     * at the vertical's position instead of the tenant floor. SOLE PROVIDER:
+     * `compileTenantThemeConfig` (posture projection; the reason is at that
+     * call site). Absent = not a tenant: bytes unchanged.
+     */
+    tenantPatch?: BrandCompilerProvenanceInput["tenantPatch"];
   }
 ): CompiledBrand {
   const input: BrandCompilerProvenanceInput = {
@@ -2128,6 +2149,7 @@ export function compileTheme(
     verticalPersonality: options?.verticalPersonality,
     verticalTokenOverrides: options?.verticalTokenOverrides,
     tenantAuthoredPaths: options?.tenantAuthoredPaths,
+    tenantPatch: options?.tenantPatch,
   };
   return compileBrandTheme(input);
 }

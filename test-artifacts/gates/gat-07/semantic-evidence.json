@@ -4,7 +4,7 @@
   "scope": "Phase-0 exact proof and minimal public-claim floor; not DS-IMP-060 completion",
   "reproducibility": {
     "classification": "deterministic same-input runs",
-    "authorityDigest": "caed115db199a3131d8a873e2069b93619ff929e29eb4940ff1c52a1d02faad0",
+    "authorityDigest": "71efceebacf623cbf82dc6f90fce4c0a25a98bda71849b4f18bd911d48ba9e3e",
     "sourceHeadIsAuthority": false,
     "toolchain": {
       "node": {
@@ -2394,8 +2394,8 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 4762,
-        "sha256": "b359dac101e9d291bf3694e39856e3b68bfb4b54ab63746a791299757b1e71fe"
+        "bytes": 5285,
+        "sha256": "01053f81262399ae30492d0cfb361a7e82a2415f15980c289ccff13763630803"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/tokens/__tests__/bithire-tint-scale.test.ts",
@@ -12074,8 +12074,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 74307,
-        "sha256": "4ddb57e97ab99a3a45705913b9d5751250bbb2234b2a2ca579c2232b05c483a4"
+        "bytes": 79386,
+        "sha256": "bec1dc457d34dc6d09e4c27cef23ef0b367ec65ebad877268cd7f65088e667b4"
       },
       {
         "path": "ui-design-system/packages/core/src/infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts",
@@ -12092,8 +12092,8 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 32040,
-        "sha256": "6d509b1d947edb0806002c2bc25cfbc2189650143bdfb1c83a68bc2429ed479f"
+        "bytes": 32985,
+        "sha256": "d496aae958639c4c2fb7994ac2edb7411f5b5b25e2a469da19c9fa534de75ad2"
       },
       {
         "path": "ui-design-system/packages/core/src/infrastructure/compilers/composition/tenant-theme/tests/capability-reachability.test.ts",
@@ -12196,8 +12196,8 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 35632,
-        "sha256": "ce969ce44db2d9674e711ad8a78f0d6b409e4ff6c498c28f9cb8fc2e4d33aedd"
+        "bytes": 39296,
+        "sha256": "803be48690fdf96f167f78852e6dc7a67167729c04c538fd42905f07d47e0579"
       },
       {
         "path": "ui-design-system/packages/core/src/infrastructure/compilers/composition/tenant-theme/tests/semantic-material-overrides.test.ts",
@@ -12498,8 +12498,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 90242,
-        "sha256": "3ac3bbe8a297c7157a7bf585a680db9c3a3e658ec988824e5f64f50dda06a4c8"
+        "bytes": 91707,
+        "sha256": "32d3b8713a5d7d1691a508fb8793c29ba7be08310fe69c6241aa0443e7b6832c"
       },
       {
         "path": "ui-design-system/packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/tests/brand-compiler.test.ts",
@@ -12514,8 +12514,8 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 14701,
-        "sha256": "0ea26a007401435e8b0220ef6167ebe3c0c9beb032bb2b1130a975560f23f7ef"
+        "bytes": 15589,
+        "sha256": "abebef6f2cb66e6d651206284e3c572f76b2135ca5328ce262dcfa2f23499806"
       },
       {
         "path": "ui-design-system/packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/tests/canvas-channel.test.ts",
@@ -12626,8 +12626,8 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 18353,
-        "sha256": "7ae20ce7f748e8da461608c0a1f4a6506b7ac46d97386af35d45db9686b24990"
+        "bytes": 19257,
+        "sha256": "8e54514387dd52b2849db2ab26d0b92acbdca432ac0619a849ec55799336eb3d"
       },
       {
         "path": "ui-design-system/packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/tests/sidebar-group-channels.test.ts",
@@ -12682,8 +12682,8 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 45432,
-        "sha256": "cc0441b559be11be42739cc0903665776258012fd5e0b7816e3533538a71af40"
+        "bytes": 46595,
+        "sha256": "4a6cca9b6cb6db69a9e3937630fa50eca44b95298df0a142d1caac43e92fc2a5"
       },
       {
         "path": "ui-design-system/packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/tests/torture-fixtures.test.ts",
@@ -15893,8 +15893,8 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 8287,
-        "sha256": "12739de8b720e5ae30ff3fc1facb50b56ed873df36f6ad73961c02211ad0a6d6"
+        "bytes": 9067,
+        "sha256": "91e939f80ce6297af2885176daedaae3d449bf307dfe3c2615570d67bdf580f7"
       },
       {
         "path": "ui-design-system/packages/core/src/tooling/testing/integration/monochrome/visual-remediation/tests/index.test.tsx",
@@ -23062,8 +23062,8 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 12068,
-        "sha256": "55b536bc0892a1666fd389be436b69f68a7523719cdb50eed9d1ec14771f67a7"
+        "bytes": 12689,
+        "sha256": "45f45515158f408eaadf0f5608aced0bcfd4d6722b85adb7456acc030aaa166a"
       },
       {
         "path": "ui-design-system/packages/core/src/ui/primitives/display/CodeBlock/tests/CodeBlock.test.tsx",
@@ -23682,8 +23682,8 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 9843,
-        "sha256": "99a0121646da328c7d8d5e0c4423f0ed3488be978fbd7736dfc07e7a5cdb154b"
+        "bytes": 10301,
+        "sha256": "5f3c621159ac66a8e6ae985a316ba35e10f486c36f6f3ff222d556eece565f21"
       },
       {
         "path": "ui-design-system/packages/core/src/ui/primitives/display/MarkdownView/tests/MarkdownView.test.tsx",
@@ -27063,8 +27063,8 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 7848,
-        "sha256": "05d24f44c958854746c4989123226654106962b7f8bde35c4ada765d7aa7f9f2"
+        "bytes": 8399,
+        "sha256": "39d827caabf98b5f09cc4541af63ce978a86be5cf895a83d37ec3ed3c33c2f6e"
       },
       {
         "path": "ui-design-system/packages/core/src/ui/primitives/inputs/Button/tests/Button.pass2-craft.test.tsx",
@@ -34340,8 +34340,8 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 32080,
-        "sha256": "897d8f907710441d99da63efda769cd5fab0d0b700b4937f257969af47bc5a7f"
+        "bytes": 35148,
+        "sha256": "dd3d6ec76072a8af6d56d75a8db30940b1dcc0df2c6095fd581130d0776aed50"
       },
       {
         "path": "ui-design-system/packages/core/src/ui/structures/dashboard/data-terminal-card/index.tsx",
@@ -34358,8 +34358,8 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 7374,
-        "sha256": "fdd08bb11c9755c5e534ae2b7e41964917dc415f5b58e510d0a8205aee58c4a2"
+        "bytes": 7870,
+        "sha256": "268c4cb53c2d9b691b11b17bae89c5e48be7a09e4924d2de6fb8e718c37d41af"
       },
       {
         "path": "ui-design-system/packages/core/src/ui/structures/dashboard/index.ts",
@@ -34618,8 +34618,8 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 28378,
-        "sha256": "c7f14900f589eaa45ab21b439d29d6bee75e49cd475db26151b0107d29557fa3"
+        "bytes": 32831,
+        "sha256": "28978ebc9d5637d3a8ccf4567fe0e9ab20598313b99ab80e1dcace2b2b493b10"
       },
       {
         "path": "ui-design-system/packages/core/src/ui/structures/dashboard/tests/DashboardInsightsPanelCapacity.contract.test.ts",
@@ -36979,8 +36979,8 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 36520,
-        "sha256": "fc041f31048d022b306ce92201baef3daaa4657a4d755d8c0d3faee7f382ca27"
+        "bytes": 37319,
+        "sha256": "a8c949ccb546c6c6e39d79291f962fd5a358d0ba5fc8db3752aa374f8bdad6c6"
       },
       {
         "path": "ui-design-system/packages/core/styles/bithire.css",
@@ -40511,7 +40511,7 @@
         "sha256": "d2a99efed33922a4a699ea033538b677022ddaccf0cdbb25ece0a7295bdc4812"
       }
     ],
-    "digest": "caed115db199a3131d8a873e2069b93619ff929e29eb4940ff1c52a1d02faad0"
+    "digest": "71efceebacf623cbf82dc6f90fce4c0a25a98bda71849b4f18bd911d48ba9e3e"
   },
   "paintAudit": {
     "output": "engine-token-audit --check OK (3326 counters; 3226 completed zeros locked exactly; 91 decrease-only ceilings; 2 positive exact invariants; 7 positive minimum floors)",
@@ -113892,8 +113892,8 @@
   "deterministicRuns": {
     "count": 2,
     "hashes": [
-      "0619e0cfb7d6b29ca469a5c94e093220e3ef5f0dc91cfd18a887082b7b06d383",
-      "0619e0cfb7d6b29ca469a5c94e093220e3ef5f0dc91cfd18a887082b7b06d383"
+      "af55b1ddd2faf4a00904f969ab481def6452248869a2be09db3be7d33a1f6f8e",
+      "af55b1ddd2faf4a00904f969ab481def6452248869a2be09db3be7d33a1f6f8e"
     ],
     "agree": true
   }

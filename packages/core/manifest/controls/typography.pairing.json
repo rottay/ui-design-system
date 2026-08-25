@@ -7,7 +7,7 @@
   "semanticOwner": {
     "owner": "design-system",
     "registryPath": "packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts",
-    "registryDigest": "1c0d6459c6d744ad8acdbd87045a58c01c7365964e823b0627d3029c32b72eda"
+    "registryDigest": "cac7bc30a8a1d549fb96d80250ebb61f126e8219b3c23bd30c10bc2b1012bb86"
   },
   "title": "Type pairing personality",
   "valueType": "enum",

@@ -5,7 +5,7 @@
   "scenarioId": "responsive.posture/all-stops/bithire/db-data-terminal",
   "evidenceKind": "data-field-delta",
   "commandOrTool": "node src/tooling/resolution-probe/public/cli/index.mjs data-causal",
-  "toolVersion": "resolution-probe@fa9e6d1c136b",
+  "toolVersion": "resolution-probe@ac4109e656ec",
   "exitCode": 0,
   "sourceFiles": [
     "packages/core/dist/build-stamp.json",
@@ -45,10 +45,10 @@
     "packages/core/src/ui/patterns/runtime/adaptive-layout/runtime/index.ts",
     "packages/core/src/ui/surfaces/presentation/pages/data/dashboard/index.tsx"
   ],
-  "sourceDigest": "38590b41a120c568ec466c0e40169564668656bfa9ad46ff79d5749d6d931ee3",
+  "sourceDigest": "5cd34708c2c15e0c30fa6f2bfe098a3e3ca449fd802db5101da19154c357bc0f",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/responsive-posture/bithire.json",
   "artifactSha256": "891910e6a43873ad6e39fd3bba3232dc577f7ca8e28201c23dc300f0a5499a2a",
-  "createdAt": "2026-08-24T19:21:41.164Z",
+  "createdAt": "2026-08-24T23:32:21.703Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

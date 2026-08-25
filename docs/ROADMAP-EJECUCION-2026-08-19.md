@@ -3825,6 +3825,29 @@ arreglar fixtures) quedan registradas con sus costos en el memo.
   registrado para motion.dial (no de E-1): `resolveTenantPosture` no
   desenvuelve `.value` en el brazo estático — una línea, entra en el packet
   de motion.dial.
+
+**F4B-10 — las dos piezas del REJECT y las dos leyes que ganó (asentado en el
+ACCEPT final de Fable):** (a) frescura rota por TERCERA instancia de la clase
+(el `--sync` de la secuencia de cierre movió el `registryDigest` de los 20
+manifests DESPUÉS de la re-emisión de los receipts que los atestaban: 8 de
+spacing + 2 palette + 4 button-style + 6 density + 11 experience-profile —
+Sonnet re-emitió los 61 con verificación por archivo, 61/61); (b) el docblock
+W-B afirmaba un enforcement fail-closed inexistente — Opus encontró CUATRO
+afirmaciones falsas (no una) y reescribió el párrafo completo a la verdad
+(cerrar por clase, no por instancia: omisión por proyección + rechazo de
+tipos + construcción; "must stop" drenado de fuente y dist). **LEY 1 (tercera
+instancia en tres días — de lección a gate): toda escritura posterior a la
+verificación re-corre la cadena entera (re-emitir → index → producers →
+program-check → validador) ANTES de despachar al auditor; y la verificación
+del DT es lo ÚLTIMO antes del despacho, nunca 30 minutos antes.** El gate
+CI-2 la hace ejecutable. **LEY 2: el emisor de receipts verifica POR ARCHIVO
+post-escritura** (la anomalía §3 de Sonnet — una re-emisión que se
+auto-verificaba en memoria pero dejaba el digest viejo en disco en el primer
+intento: quedó atrapada en la segunda pasada, causa raíz abierta y declarada;
+no puede depender de la suerte del segundo intento). Agujero abierto
+registrado: el `--check` del generador reportó limpio con receipts stale
+encima — el validador v2 lo atrapó; la cadena CI-2 debe incluir el validador,
+no sólo `--check`.
 - **D-1 preaudit Fable: ACCEPT con W-A/W-B/W-C** (ley cero-delta re-legislada
   a la forma real de 3 partes; alias-en-overlay NO emite → los 4 literales
   llevan comentario anti-"modernización"; write-set completo: ~53 receipts
@@ -3875,6 +3898,42 @@ DB; adjudicaciones DT:**
   bloqueado sólo por el index.json de la lane de Sonnet (se limpia solo al
   cerrar ella).
 - **Empaquetado confirmado:** todo esto commitea dentro de F4B-10.
+
+**F4B-10 — surfaces.elevation-posture CIERRA COMPUTED_VERIFIED (2026-08-24;
+Sonnet + Opus en packet fusionado; postaudit Fable: REJECT local de 2 piezas
+→ correcciones focales → ACCEPT final; F4B pasa a 9/20).** El fix
+de keypath (clase F4B-7, variante campo-real-equivocado:
+`surfaces.shadows.*` → `surfaces.elevation`) + el fix E-1 del compilador
+(packet fusionado) + **5 receipts R7 en las TRES verticales**: rottay×2
+(flat/elevated — el brazo DB ya baja: 4 canales byte-idénticos al estático),
+evnto×2, bithire×1 (elevated, `PASS_WITH_EXCEPTION` verificado EN el
+artifact: `witnesses: ['elevated']`, `exception.armId: db-tenant-theme` con
+mi ratificación pre-escrita). `soft`: no-op estructural confirmado en las 3
+verticales y ambos brazos (`ELEVATION_PRESET.soft = {}` — sin receipt, con
+ley). El brazo estático de bithire NO necesita excepción (flat es testigo
+real no-excluido ahí — medido en corrida aislada). **COMPUTED_VERIFIED, no
+SOURCE_BOUND:** acá SÍ pinta — `box-shadow` de card se mueve (del shadow de
+3 capas del seed a `none` en flat, y a la escala en elevated), byte-idéntico
+entre brazos; `card.css` lee el canal vía fallback de un salto
+(`var(--ds-card-shadow, var(--ds-elevation-1))`), no un hermano
+desconectado como button-style. Celda de card escrita con el mismo shape
+que effect-intensity (`computedProperties: ["box-shadow"]`, disposition
+UNKNOWN). **E-1 en el árbol, verificado por Sonnet antes de correr** (no
+asumido: import directo de dist + corrida causal). Anclas de bytes
+escritos por el DT (5 subpaths, exactos, holgura cero — "decrece-solo"
+muerde desde el primer byte). `supplier-contract.json` regenerado (sólo
+`tenantPostureFloors`, dos listas; la superficie pública del paquete NO se
+ensancha). 61/61 VALID; CONSTITUTION_READY; probe 170/170;
+provenance-acceptance 23/23 con el drill G3 de E-1. **Rojo A11 resuelto
+(mecánico):** las 3 fallas de `cascade-producers.test.mjs` eran el re-seat de
+comentarios de E-1 en `brand-theme/index.ts` DESPUÉS de la última
+re-derivación de `producers.json` (line-shifts + site-hashes: byChannel
++0/−0, mismos símbolos, cero filas nuevas o perdidas — la clase "no
+collection moved"). `--write` + 217/0 + 48/48 + `--check` OK, verificado por
+el DT. Lección afilada (segunda vez en el día, misma raíz que el REJECT de
+F4B-9): **toda edición tardía re-corre TODA la cadena de derivados antes de
+cerrar** (receipts, index, producers, dist) — el cierre de un packet no
+termina en el código, termina en la cadena verde.
 
 **F0 — CERRADO (2026-08-19).** Criterio de cierre cumplido:
 `ci-gates OK — 78 blocking gate(s) passed` (2 excluded visibles con razón y

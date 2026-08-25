@@ -61,6 +61,7 @@ import {
   SIDEBAR_CONTRAST_ATTRIBUTION,
   TenantThemeValidationError,
   compileTenantThemeConfig,
+  tenantPostureFloors,
   getTenantThemeVerticalEnvelope,
   hydrateTenantThemeConfig,
 } from "..";
@@ -492,6 +493,11 @@ describe("static and DB share one lowering", () => {
       baseTheme,
       resolved: resolveTheme(baseTheme, envelope.patch),
       authoredPaths: collectPatchAuthoredPaths(envelope.patch),
+      // E-1: the DB leg hands the compiler the tenant's posture FLOORS as well
+      // as its authorship, so a reconstruction that omits them is no longer the
+      // same lowering. Imported rather than re-derived: one definition, or this
+      // mirror drifts from the compiler it is meant to mirror.
+      floors: tenantPostureFloors(envelope.patch),
     };
   };
 
@@ -507,13 +513,14 @@ describe("static and DB share one lowering", () => {
   it("case G1: the artifact is the direct lowering minus the vertical baseline", () => {
     for (const vertical of VERTICALS) {
       const artifact = compileFor(vertical, POPULATED_SIMPLE_DOCUMENT);
-      const { baseTheme, resolved, authoredPaths } = lower(
+      const { baseTheme, resolved, authoredPaths, floors } = lower(
         vertical,
         POPULATED_SIMPLE_DOCUMENT as unknown as TenantThemeDocument
       );
       const direct = compileTheme(resolved, {
         tenantSlug: IDENTITY.slug,
         tenantAuthoredPaths: authoredPaths,
+        tenantPatch: floors,
       });
       const baseline = compileTheme(baseTheme, { tenantSlug: IDENTITY.slug });
 
@@ -533,6 +540,75 @@ describe("static and DB share one lowering", () => {
         }
       }
     }
+  });
+
+  it("case G3 (E-1): the tenant's posture floor outranks an authored ladder", () => {
+    // THE DEFECT THIS FIX CLOSES, as a fence. rottay is the only vertical that
+    // authors values for all six `surfaces.elevations` levels, and the compiler
+    // lowers an authored ladder AFTER the governed posture preset by law ("the
+    // preset is the floor a tenant selects, an authored ladder is the ceiling").
+    // Before E-1 the DB leg resolved the tenant's patch into the theme and then
+    // compiled without a tenant floor, so the selection lowered at the
+    // VERTICAL's position and the ladder erased it: `surfaces.elevation` moved
+    // ZERO variables on both non-identity stops while the static arm moved
+    // three. The values below are the static arm's, reproduced through the DB
+    // door.
+    const PRESET = {
+      flat: {
+        "--ds-elevation-1": "none",
+        "--ds-elevation-2": "none",
+        "--ds-elevation-3": "0 1px 2px rgba(0,0,0,0.05)",
+      },
+      elevated: {
+        "--ds-elevation-1": "0 2px 4px rgba(0,0,0,0.08)",
+        "--ds-elevation-2": "0 4px 8px rgba(0,0,0,0.1)",
+        "--ds-elevation-3": "0 8px 16px rgba(0,0,0,0.12)",
+      },
+    } as const;
+    const elevationDoc = (elevation: string) => ({
+      schemaVersion: 1,
+      mode: "simple",
+      appearance: { surfaces: { elevation } },
+    });
+    for (const stop of ["flat", "elevated"] as const) {
+      const artifact = compileFor("rottay", elevationDoc(stop));
+      for (const [channel, value] of Object.entries(PRESET[stop])) {
+        expect(artifact.variables[channel], `rottay/${stop} ${channel}`).toBe(
+          value
+        );
+      }
+    }
+    // `soft` writes no channel at all (its preset is empty), so it is not a
+    // witness for this axis on ANY vertical -- asserted so a future reader does
+    // not mistake its silence for this defect returning.
+    expect(
+      compileFor("rottay", elevationDoc("soft")).variables
+    ).toEqual({});
+    // ADJUDICATED (DT, 2026-08-24, option B): the floor runs per BLOCK, so a
+    // tenant selection governs BOTH modes and a mode overlay that the floor
+    // overwrites stops diverging from the base -- it drops out of that block's
+    // delta. bithire is where E-1's sweep surfaced it: before the fix its dark
+    // overlay kept `--ds-letter-spacing-heading: -0.01em` against a tenant's
+    // `typePairing`; now the selection reaches dark too and the delta is gone.
+    // Fenced here so the adjudication is executable rather than remembered.
+    const paired = compileFor("bithire", {
+      schemaVersion: 1,
+      mode: "simple",
+      appearance: { typography: { typePairing: "editorial" } },
+    });
+    expect(paired.variables["--ds-letter-spacing-heading"]).toBe("0");
+    expect(
+      (paired.modeDeltas ?? []).flatMap((d) =>
+        Object.keys(d.variables).filter((c) => c === "--ds-letter-spacing-heading")
+      ),
+      "the tenant's pairing governs dark too, so the overlay stops diverging"
+    ).toEqual([]);
+
+    // And the floor reaches ONLY what it should: the two verticals without an
+    // authored ladder are untouched by the change.
+    expect(
+      compileFor("bithire", elevationDoc("elevated")).variables
+    ).toEqual(PRESET.elevated);
   });
 
   it("case G2: one lowering, and provenance moves only what it arbitrates", () => {

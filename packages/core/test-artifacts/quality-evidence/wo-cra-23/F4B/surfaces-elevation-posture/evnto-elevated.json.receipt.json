@@ -1,8 +1,8 @@
 {
   "schemaVersion": 2,
-  "roundId": "R3",
+  "roundId": "R7",
   "familyId": "primitive/display/card",
-  "scenarioId": "shape.radius-scale/amplio/evnto/static-and-db",
+  "scenarioId": "surfaces.elevation-posture/elevated/evnto/static-and-db",
   "evidenceKind": "exact-restore",
   "commandOrTool": "node src/tooling/resolution-probe/public/cli/index.mjs causal",
   "toolVersion": "resolution-probe@ac4109e656ec",
@@ -14,10 +14,10 @@
     "packages/core/manifest/controls/experience.profile.json",
     "packages/core/manifest/controls/shape.radius-scale.json",
     "packages/core/manifest/controls/surfaces.effect-intensity.json",
+    "packages/core/manifest/controls/surfaces.elevation-posture.json",
     "packages/core/manifest/controls/typography.scale.json",
     "packages/core/manifest/families/primitive/display/card.json",
     "packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts",
-    "packages/core/src/foundation/contracts/composition/tenants/themes/index.ts",
     "packages/core/src/foundation/tokens/css/facade/artifacts/evnto/index.css",
     "packages/core/src/foundation/tokens/css/facade/entrypoints/base.css",
     "packages/core/src/foundation/tokens/css/foundation/animations/premium.css",
@@ -34,6 +34,7 @@
     "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/card.css",
     "packages/core/src/foundation/tokens/css/runtime/personality.css",
     "packages/core/src/infrastructure/compilers/composition/tenant-theme/index.ts",
+    "packages/core/src/infrastructure/compilers/kernel/foundation/css/appearance-posture/index.ts",
     "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
     "packages/core/src/tooling/resolution-probe/composition/data-run/index.mjs",
     "packages/core/src/tooling/resolution-probe/composition/diff/index.mjs",
@@ -54,7 +55,6 @@
     "packages/core/src/tooling/resolution-probe/runtime/browser/index.mjs",
     "packages/core/src/tooling/resolution-probe/runtime/bundle/index.mjs",
     "packages/core/src/tooling/resolution-probe/runtime/ingress/index.mjs",
-    "packages/core/src/tooling/resolution-probe/runtime/ingress/tests/index.test.mjs",
     "packages/core/src/tooling/resolution-probe/runtime/measure/index.mjs",
     "packages/core/src/ui/primitives/display/Card/compound/Body/index.tsx",
     "packages/core/src/ui/primitives/display/Card/compound/Footer/index.tsx",
@@ -66,14 +66,14 @@
     "packages/core/src/ui/primitives/display/Card/engines/rustic/index.tsx",
     "packages/core/src/ui/primitives/display/Card/index.tsx"
   ],
-  "sourceDigest": "3a8c3770df90dd813141ec5d9a3c9238dac96a61da22651b4f02d2adff58ff59",
-  "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/shape-radius-scale/evnto-amplio.json",
-  "artifactSha256": "3cbf23f963c1ce88d8c2e6c50c1051caa36c28db2fe00addea7a7061435efcfb",
-  "createdAt": "2026-08-24T23:32:21.863Z",
+  "sourceDigest": "4f65ab95da5d3ff261097ee586d4368d769b623adba49cfae04887faa53fd8ff",
+  "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/surfaces-elevation-posture/evnto-elevated.json",
+  "artifactSha256": "1cd6c6fe5699eb5fec4c646793766fe77707d3b57b72cd15dfc20eb2d6bce1cd",
+  "createdAt": "2026-08-24T23:32:22.111Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,
     "proof": "node --test src/tooling/resolution-probe/foundation/causality/tests/index.test.mjs src/tooling/resolution-probe/foundation/guards/tests/index.test.mjs src/tooling/resolution-probe/foundation/negative-controls/tests/index.test.mjs src/tooling/resolution-probe/composition/run/tests/index.test.mjs"
   },
-  "producer": "claude-opus-5-f4b-lane"
+  "producer": "claude-sonnet-5-f4b10-lane"
 }

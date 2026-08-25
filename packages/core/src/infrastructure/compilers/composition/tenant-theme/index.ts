@@ -7,6 +7,7 @@
  */
 
 import {
+  type BrandTheme,
   type BrandThemeMode,
   type CompiledBrand,
   type TenantAppearance,
@@ -69,7 +70,10 @@ import {
 import { withExpressiveFieldDefaults } from "../../kernel/runtime/appearance";
 import { TENANT_THEME_COMPILER_VERSION } from "./version";
 import { FIRST_PARTY_THEMES } from "@/foundation/tokens/ts/presentation/brand-themes";
-import type { TenantAuthoredPaths } from "@/foundation/contracts/composition/tenants/themes/iso";
+import type {
+  TenantAuthoredPaths,
+  ThemePatch,
+} from "@/foundation/contracts/composition/tenants/themes/iso";
 import {
   collectPatchAuthoredPaths,
   isTenantAuthoredField,
@@ -1783,6 +1787,46 @@ function isoLowering<T>(run: () => T, path: string): T {
   }
 }
 
+/**
+ * E-1 / W-B: the tenant's POSTURE FLOORS, projected out of a migrated patch.
+ *
+ * EXPORTED so the DB leg and anything that reconstructs it read ONE definition.
+ * `provenance-acceptance` case G1 rebuilds this compiler's own inputs to prove
+ * the artifact is the direct lowering; a private copy there would be a second
+ * authority for the same projection, and the two would drift.
+ *
+ * NOT the whole patch, and the compiler settled that: a `ThemePatch` makes every
+ * nested leaf optional where `Partial<BrandTheme>` keeps it required, so the
+ * whole patch does not assign (`appearance.defaultMode`, then
+ * `palette.primaryColor` -- a pattern, not a pair), and casting across would be
+ * the silent narrowing this programme refuses. Only the paths the floor is READ
+ * at cross: `resolveTenantPosture` consults nine keypaths, and these six scalars
+ * are the ones that carry across unchanged. `undefined` leaves cost nothing --
+ * `mergeBrandThemeFloors` skips them and `resolveTenantPosture` collapses an
+ * all-undefined posture to `undefined` -- so no guard is needed.
+ *
+ * The two keypaths deliberately NOT projected:
+ *   - `motion` arrives WRAPPED (`{motion:{value:...}}`), so the posture reader
+ *     would find no `intensity`. Projecting the wrapper changes nothing;
+ *     UNWRAPPING it changes behaviour and belongs to the motion.dial packet.
+ *   - `expressive.*` is already expanded into `expressiveExpansion` above and
+ *     applied at its own position; routing it again would lower one selection
+ *     twice.
+ */
+export function tenantPostureFloors(patch: ThemePatch): Partial<BrandTheme> {
+  const ty = patch.typography;
+  const su = patch.surfaces;
+  return {
+    typography: { typePairing: ty?.typePairing, scale: ty?.scale },
+    surfaces: {
+      buttonStyle: su?.buttonStyle,
+      radiusScale: su?.radiusScale,
+      density: su?.density,
+      elevation: su?.elevation,
+    },
+  };
+}
+
 export function compileTenantThemeConfig(
   input: unknown,
   options: CompileTenantThemeConfigOptions = {}
@@ -1946,10 +1990,56 @@ export function compileTenantThemeConfig(
       // code-owned vertical and has no tenant, so it stays provenance-free and
       // keeps producing the exact baseline the delta subtracts against.
       const authoredPaths = collectPatchAuthoredPaths(envelope.patch);
+      const tenantFloors = tenantPostureFloors(envelope.patch);
       return {
         compiledTheme: compileTheme(resolved, {
           tenantSlug: config.slug,
           tenantAuthoredPaths: authoredPaths,
+          /* E-1: THE TENANT'S FLOORS, handed over as well as its authorship.
+           *
+           * `resolved` already carries this patch -- that is what `resolveTheme`
+           * above did -- so this is NOT a second application of the values. It
+           * is the one thing the merge destroys: WHOSE floor they are. The
+           * compiler lowers a vertical's own authoring and a tenant's selection
+           * at different positions (the posture preset early, `tenantPosture`
+           * last), and after a merge it can no longer tell them apart. Measured
+           * before this line existed: rottay authors all six
+           * `surfaces.elevations` levels, its authored ladder overwrote the
+           * posture preset, and `surfaces.elevation` lowered ZERO variables
+           * through this door on both non-identity stops while the static arm
+           * -- which hands its patch over -- moved three. This is the second
+           * half of the symmetry B-2 opened: that packet gave the tenant leg
+           * its AUTHORSHIP, this one gives it its FLOORS, through the same door
+           * and from the same envelope.
+           *
+           * W-B -- THE CROSS-SPACE HANDOFF IS AN OMISSION, NOT AN ASSERTION.
+           * What travels is BrandTheme-space, projected out of a `ThemePatch`
+           * by `tenantPostureFloors` (its docblock carries the reasoning; this
+           * is the caller's summary, not a second copy).
+           *
+           * THERE IS NO RUNTIME GUARD HERE, and an earlier draft of this
+           * comment claimed one -- it described a peel-and-check design that
+           * was abandoned when the projection replaced it. What actually keeps
+           * Theme-space fields out is three things, none of which throws:
+           *   1. OMISSION -- the projection reads six named posture keypaths
+           *      and nothing else, so a field like `appearance` is never read
+           *      and cannot cross. Silently, by construction.
+           *   2. THE TYPE SYSTEM -- the whole patch does not assign to
+           *      `Partial<BrandTheme>` (`appearance.defaultMode`, then
+           *      `palette.primaryColor`: a pattern, not a pair), which is what
+           *      forced the projection instead of a cast.
+           *   3. CONSTRUCTION -- `migrateV1` never emits `appearance` at all;
+           *      it states as law that `backgroundMode` is runtime selection
+           *      metadata that "never reaches ThemePatch.appearance.defaultMode"
+           *      (migrate-v1/index.ts:400-402).
+           * A guard would defend a case the projection cannot express and the
+           * migrator does not produce; the honest record is that nothing stops
+           * a bad field here because nothing can deliver one.
+           *
+           * THE FENCE is the 9-field x 3-vertical sweep re-measured with this
+           * line in place: only the two rottay elevation rows may move, and
+           * every other row must read exactly as it did before. */
+          tenantPatch: tenantFloors,
         }),
         tenantAuthoredPaths: authoredPaths,
       };

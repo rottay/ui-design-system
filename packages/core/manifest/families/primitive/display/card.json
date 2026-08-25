@@ -16734,10 +16734,16 @@
     {
       "controlId": "surfaces.elevation-posture",
       "disposition": "UNKNOWN",
-      "verificationState": "UNKNOWN",
-      "unknownReason": "NOT_ASSESSED",
-      "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "verificationState": "COMPUTED_VERIFIED",
+      "unknownReason": "SHAPE_AND_SIGHTED_ACCEPTANCE_PENDING. The computed evidence this row was waiting for now exists (see evidenceIds): both ingress doors measured on card-modern-md/root in all three verticals, the painted box-shadow moving byte-identically between arms on every receipted scenario -- flat removes it entirely (to 'none'), elevated raises it ('rgba(0, 0, 0, 0.08) 0px 2px 4px 0px'), negative controls held and restore exact throughout. This closes the F4B-10 packet's own defect (E-1: rottay's db-tenant-theme arm compiled an empty result for every elevation stop) -- fixed upstream before this cell's evidence was gathered, then measured directly against the fixed tree, not assumed fixed. disposition stays UNKNOWN for reasons that are NOT missing measurement: the schema dispositionLaw for APPLICABLE requires separate staticSourceBindings/dbSourceBindings plus states and stressCases, which this cell shape does not carry, and SIGHTED_ACCEPTED is not claimable from a computed run.",
+      "evidenceIds": [
+        "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/surfaces-elevation-posture/rottay-flat.json.receipt.json",
+        "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/surfaces-elevation-posture/rottay-elevated.json.receipt.json",
+        "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/surfaces-elevation-posture/evnto-flat.json.receipt.json",
+        "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/surfaces-elevation-posture/evnto-elevated.json.receipt.json",
+        "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/surfaces-elevation-posture/bithire-elevated.json.receipt.json"
+      ],
+      "nextAction": "OBTAIN_SIGHTED_ACCEPTANCE. Computed half done for flat and elevated on rottay and evnto (both doors), and for elevated on bithire (both doors, db-tenant-theme under its DT-ratified stopDiscriminationException). Two facts stay open at source and are recorded in the control's own manifest rather than repeated here: bithire's db-tenant-theme arm has only one usable witness stop (flat coincides with the tenant's own experienceProfile baseline; soft is a universal structural exclusion on this arm, see the control's soft stop law), and no vertical receipts the soft stop at all because it throws the harness's own StopExclusionError on db-tenant-theme before a browser measurement is possible.",
       "targetBinding": {
         "uncoveredByDesign": {
           "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
@@ -16914,6 +16920,41 @@
             "state": "LIVE"
           }
         }
+      ],
+      "mechanism": "THEME_CONTROL",
+      "stableParts": [
+        "root"
+      ],
+      "propertyGroups": [
+        "surface-decoration"
+      ],
+      "computedProperties": [
+        "box-shadow"
+      ],
+      "sourceBindings": [
+        "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card.css",
+        "packages/core/src/foundation/tokens/css/presentation/components/card.css",
+        "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
+        "packages/core/src/infrastructure/compilers/kernel/foundation/css/appearance-posture/index.ts",
+        "packages/core/manifest/controls/surfaces.elevation-posture.json"
+      ],
+      "negativeControls": [
+        "control height remains fixed",
+        "font metrics remain fixed",
+        "color remains fixed",
+        "border remains fixed",
+        "motion remains fixed"
+      ],
+      "negativeControlsScopeNote": "The same five the control declares, restated on this root so the cell is self-describing; the effective set is the union, so this narrows nothing and loosens nothing. 'control height remains fixed' is bound to card-modern-md/root in every run and therefore checked rather than assumed.",
+      "stressCases": [
+        "flat removes the shadow ladder entirely: box-shadow -> 'none' on card-modern-md/root, measured moved=true, byte-identical between arms, on rottay and evnto (measured on both doors, 4 receipted scenarios total)",
+        "elevated raises the shadow to 'rgba(0, 0, 0, 0.08) 0px 2px 4px 0px' on all three verticals' modern engine, moved=true on every arm, byte-identical between doors",
+        "bithire's own baseline already coincides with flat via its experienceProfile ('hairline-lift' -> 'flat'), so flat is a genuine non-mover there, not a broken door -- measured on the static arm directly (moved=0) and structurally excluded on the db arm (see the control's stopDiscriminationException)",
+        "soft is the empty preset (ELEVATION_PRESET.soft = {}) and is UNMEASURED by receipt for any vertical: it throws the harness's own StopExclusionError on db-tenant-theme (no surfaces.elevation write to lower) for all three verticals, and on static-brand-theme it reproduces the DS foundation seed exactly -- see the control's own soft stop law",
+        "UNMEASURED: any viewport other than 1280x800 dpr1"
+      ],
+      "restoreRequirements": [
+        "Unsetting the control through either door restores the baseline box-shadow exactly (measured: restore.exact true on every arm of all 5 receipted scenarios, byte-identical rows)."
       ]
     },
     {

@@ -5,7 +5,7 @@
   "scenarioId": "palette.seeds/crimson/evnto/static-and-db",
   "evidenceKind": "static-db-computed-parity",
   "commandOrTool": "node src/tooling/resolution-probe/public/cli/index.mjs causal",
-  "toolVersion": "resolution-probe@fa9e6d1c136b",
+  "toolVersion": "resolution-probe@ac4109e656ec",
   "exitCode": 0,
   "sourceFiles": [
     "packages/core/dist/build-stamp.json",
@@ -63,10 +63,10 @@
     "packages/core/styles/index.css",
     "packages/core/styles/rottay.css"
   ],
-  "sourceDigest": "0b37858c622c025c5155617b0906ccd39f115339e3797d51080a5dad5af38e19",
+  "sourceDigest": "712da986537a3f584f61add3172548bf6fa1fcaafdf61a2782e7ca37a2abff96",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/palette-seeds/evnto-crimson.json",
   "artifactSha256": "7afb1b4d07330c2cc2d3b391c391b6baeff515738cac7618c0fc0dd87ac078ff",
-  "createdAt": "2026-08-24T19:21:41.042Z",
+  "createdAt": "2026-08-24T23:32:21.592Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

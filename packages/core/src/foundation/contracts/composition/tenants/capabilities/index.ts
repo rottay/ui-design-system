@@ -345,7 +345,18 @@ export const TENANT_CAPABILITY_REGISTRY = Object.freeze([
       enumValues: ['flat', 'soft', 'elevated'],
       defaultBehavior: 'soft (DS shadow ramp untouched)',
       documentPath: 'appearance.general.surfaces.elevation',
-      brandThemePath: 'surfaces.shadows.*',
+      // The static door is the POSTURE, not the raw ladder. This once read
+      // `surfaces.shadows.*`, which is a REAL field but the WRONG one — worse
+      // than F4B-9's prose, because it walks and measures something: `shadows`
+      // is the crude per-step override map (`--ds-shadow-{xs,sm,...}`, themes/
+      // index.ts:612-625), not the posture. It is also a bare wildcard on top
+      // of that, which this walker never expands (see F4B-9's census). The
+      // real field is `BrandSurfaces.elevation` (themes/index.ts:601) — a
+      // sibling of `shadows`, not a member of it — and `brand-theme:796` hands
+      // it to the same posture lowering as every other Standard field. Caught
+      // by the F4B-10 preflight census reading the source directly, not by a
+      // guard firing: no stop had been authored yet.
+      brandThemePath: 'surfaces.elevation',
       derivedChannels: ['--ds-elevation-1', '--ds-elevation-2', '--ds-elevation-3'],
       compat: 'additive, unset-to-rollback',
     },
