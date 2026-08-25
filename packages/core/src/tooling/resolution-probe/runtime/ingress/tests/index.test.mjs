@@ -35,6 +35,10 @@ import {
   composeStaticArm,
   INGRESS_ARM_IDS,
   INGRESS_ARMS,
+  advancedCompileOptions,
+  dbIngressSpace,
+  DB_INGRESS_SPACES,
+  IngressSpaceError,
   loadCompilerArms,
   assertStopDiscrimination,
   loadStaticBaselines,
@@ -51,6 +55,24 @@ import {
 const CONTROL_MANIFEST = readManifest(
   resolve(CORE_ROOT, 'manifest/controls/spacing.rhythm.json'),
 );
+
+/* FASE-A: the advanced manifest these drills lower is SYNTHETIC, and it has to
+ * be. Censused over the seven advanced controls: every one declares either zero
+ * normalized stops or zero CSS output channels -- `responsive.posture` is the
+ * only one with stops (3) and it declares no channels because it is data-only,
+ * routed to the DATA runner which never passes through `toCompilerInput`. So
+ * NO advanced control is lowerable end to end through the CSS arm today, and
+ * the branch this phase builds has no live consumer yet by construction.
+ *
+ * The synthetic keeps a real control's stops and channels and changes ONLY the
+ * declared space, so the drills measure the space law and nothing else. The day
+ * a real advanced control declares both, it replaces this fixture. */
+const ADVANCED_MANIFEST = {
+  ...CONTROL_MANIFEST,
+  ingress: { dbTenantThemePath: 'visualFoundation.advanced.tokenOverrides' },
+};
+const ADVANCED_STOP = 'airy';
+const FAKE_DIGEST = `sha256-${'a'.repeat(64)}`;
 
 const PRODUCED_BY = {
   module: 'dist/infrastructure/compilers/kernel/runtime/brand-theme/index.js',
@@ -301,19 +323,78 @@ test('positive control: lowerStop reshapes the document into the REAL compiler a
   assert.deepEqual([...composedSeen.tenantAuthoredPaths], ['surfaces.rhythm']);
 });
 
-test('negative drill: the db arm refuses a document with no "appearance.general"', () => {
-  assert.throws(
-    () =>
-      lowerStop({
-        armId: 'db-tenant-theme',
-        controlManifest: { ...CONTROL_MANIFEST, ingress: { dbTenantThemePath: 'general.rhythm' } },
-        stopId: 'airy',
-        compile: () => ({ variables: { '--ds-rhythm-scale': '1.2' } }),
-        vertical: 'rottay',
-        provenance: { schemaVersion: 1 },
-      }),
-    /has no "appearance\.general" object/,
-  );
+/* FASE-A SUPERSEDES THE MESSAGE THIS DRILL USED TO ASSERT.
+ *
+ * It reached the generic "has no appearance.general object" throw by declaring
+ * `general.rhythm` -- a path under NEITHER document space. That throw described
+ * the SYMPTOM (a missing object) for what is really a defect in the manifest's
+ * declared space, and it was the only way to reach it: `buildIngressInput`
+ * walks the declared path and therefore always builds the node it names. The
+ * space law now catches that case first and by name, so the drill asserts the
+ * law instead of the symptom -- and asserts which side of the closed set it
+ * falls on (W-B). */
+test('A1 (W-B): a path under neither space THROWS, and is NOT publishable as an exclusion', () => {
+  let thrown = null;
+  try {
+    lowerStop({
+      armId: 'db-tenant-theme',
+      controlManifest: { ...CONTROL_MANIFEST, ingress: { dbTenantThemePath: 'general.rhythm' } },
+      stopId: 'airy',
+      compile: () => ({ variables: { '--ds-rhythm-scale': '1.2' } }),
+      vertical: 'rottay',
+      provenance: { schemaVersion: 1 },
+    });
+  } catch (error) {
+    thrown = error;
+  }
+  assert.ok(thrown instanceof IngressSpaceError, 'the third edge throws its own class');
+  assert.match(thrown.message, /lives under neither legal document space/);
+  assert.match(thrown.message, /appearance\.general\.<rest>/);
+  assert.match(thrown.message, /visualFoundation\.<rest>/);
+  // W-B: a manifest defect is NOT a stop the compiler refused. Unclassified =>
+  // the R-2 hardening re-throws it and the run breaks, instead of the witness
+  // set quietly shrinking by one.
+  assert.equal(classifyStopExclusion(thrown), null);
+  assert.ok(!Object.hasOwn(STOP_EXCLUSION_CLASSES, 'UNKNOWN_INGRESS_SPACE'));
+});
+
+test('A1: the space is decided by the DECLARED path -- simple and advanced', () => {
+  assert.equal(dbIngressSpace('appearance.general.rhythm'), 'simple');
+  assert.equal(dbIngressSpace('visualFoundation.advanced.responsivePosture'), 'advanced');
+  assert.deepEqual(Object.values(DB_INGRESS_SPACES).sort(), ['advanced', 'simple']);
+
+  let simpleInput = null;
+  lowerStop({
+    armId: 'db-tenant-theme',
+    controlManifest: CONTROL_MANIFEST,
+    stopId: 'airy',
+    compile: (input) => {
+      simpleInput = input;
+      return { variables: { '--ds-rhythm-scale': '1.2' } };
+    },
+    vertical: 'rottay',
+    provenance: { schemaVersion: 1 },
+  });
+  assert.equal(simpleInput.mode, 'simple');
+  assert.ok(simpleInput.appearance, 'simple keeps the general object at `appearance`');
+  assert.equal(simpleInput.visualFoundation, undefined);
+
+  let advancedInput = null;
+  lowerStop({
+    armId: 'db-tenant-theme',
+    controlManifest: ADVANCED_MANIFEST,
+    stopId: ADVANCED_STOP,
+    compile: (input) => {
+      advancedInput = input;
+      return { variables: { '--ds-rhythm-scale': '1.2' }, verticalEnvelopeDigest: FAKE_DIGEST };
+    },
+    vertical: 'rottay',
+    provenance: { schemaVersion: 1 },
+    verticalEnvelopeFor: () => ({ verticalKey: 'rottay' }),
+  });
+  assert.equal(advancedInput.mode, 'advanced');
+  assert.ok(advancedInput.visualFoundation, 'advanced carries the foundation');
+  assert.equal(advancedInput.appearance, undefined, 'and NOT an appearance field');
 });
 
 test('negative drill: the db arm refuses to hardcode the contract version', () => {
@@ -405,6 +486,10 @@ test('loadCompilerArms claims freshness only after the dist gate proves it', asy
       compileBrandTheme: () => ({}),
       compileTenantThemeConfig: () => ({}),
       TENANT_THEME_SCHEMA_VERSION: 1,
+      // FASE-A: the DB arm now also refuses to load without the envelope
+      // resolver, for the same reason and at the same moment as the schema
+      // version above.
+      getTenantThemeVerticalEnvelope: () => ({ verticalKey: 'rottay' }),
     }),
     assertFresh: () => ({ ok: true, failures: [] }),
   });
@@ -3290,4 +3375,182 @@ test('R-2 drill 10: the hardening did not change WHAT is excluded, only how it i
     }
   }
   assert.equal(compared, 6, 'three verticals x two arms');
+});
+
+
+/* ==========================================================================
+ * FASE-A — the advanced-envelope branch. A2..A7.
+ * ========================================================================== */
+
+test('A2: R-2 drill 4, advanced half -- no palette node means no stamp and no materialised general', () => {
+  let seen = null;
+  lowerStop({
+    armId: 'db-tenant-theme',
+    controlManifest: ADVANCED_MANIFEST,
+    stopId: ADVANCED_STOP,
+    compile: (input) => {
+      seen = input;
+      return { variables: { '--ds-rhythm-scale': '1.2' }, verticalEnvelopeDigest: FAKE_DIGEST };
+    },
+    vertical: 'rottay',
+    provenance: { schemaVersion: 1 },
+    verticalEnvelopeFor: () => ({ verticalKey: 'rottay' }),
+  });
+  // The seal's condition is unchanged word for word: it fires only on a
+  // document that ALREADY writes a palette node. This one does not, so nothing
+  // is stamped and no `general` is invented -- the same protection the simple
+  // half gives the receipted scenarios.
+  assert.equal(seen.visualFoundation.general, undefined);
+  assert.equal(seen.mode, 'advanced');
+  assert.equal(seen.appearance, undefined);
+});
+
+test('A3: the vertical envelope comes from the PUBLISHED module, and fails closed', async () => {
+  // No resolver at all: the run breaks rather than compiling ungoverned.
+  assert.throws(
+    () => advancedCompileOptions({ armId: 'db-tenant-theme', mode: 'advanced', vertical: 'rottay' }),
+    /no resolver was handed to lowerStop/,
+  );
+  // A resolver that cannot resolve THIS vertical: same refusal, different half.
+  assert.throws(
+    () =>
+      advancedCompileOptions({
+        armId: 'db-tenant-theme',
+        mode: 'advanced',
+        vertical: 'rottay',
+        verticalEnvelopeFor: () => undefined,
+      }),
+    /resolves no vertical policy envelope/,
+  );
+  // And the real arm carries the real export, from the module the compiler
+  // itself came from.
+  const arms = await loadCompilerArms();
+  assert.equal(typeof arms['db-tenant-theme'].verticalEnvelopeFor, 'function');
+  const envelope = arms['db-tenant-theme'].verticalEnvelopeFor('bithire');
+  assert.equal(envelope.verticalKey, 'bithire');
+});
+
+test('A4/A5: compile takes TWO arguments -- {} in simple, the envelope in advanced', () => {
+  const calls = [];
+  lowerStop({
+    armId: 'db-tenant-theme',
+    controlManifest: CONTROL_MANIFEST,
+    stopId: 'airy',
+    compile: (...args) => {
+      calls.push(args);
+      return { variables: { '--ds-rhythm-scale': '1.2' } };
+    },
+    vertical: 'rottay',
+    provenance: { schemaVersion: 1 },
+  });
+  assert.equal(calls[0].length, 2, 'arity is stable');
+  assert.deepEqual(calls[0][1], {}, 'simple hands over nothing -- and says so with {}');
+
+  const envelope = { verticalKey: 'rottay', ranges: {} };
+  const advCalls = [];
+  lowerStop({
+    armId: 'db-tenant-theme',
+    controlManifest: ADVANCED_MANIFEST,
+    stopId: ADVANCED_STOP,
+    compile: (...args) => {
+      advCalls.push(args);
+      return { variables: { '--ds-rhythm-scale': '1.2' }, verticalEnvelopeDigest: FAKE_DIGEST };
+    },
+    vertical: 'rottay',
+    provenance: { schemaVersion: 1 },
+    verticalEnvelopeFor: () => envelope,
+  });
+  assert.equal(advCalls[0].length, 2);
+  assert.equal(advCalls[0][1].verticalEnvelope, envelope, 'the SAME object, not a rebuild');
+});
+
+test('A6 (W-A.1): the second argument is in the provenance, digest read off the artifact', () => {
+  const simple = lowerStop({
+    armId: 'db-tenant-theme',
+    controlManifest: CONTROL_MANIFEST,
+    stopId: 'airy',
+    compile: () => ({ variables: { '--ds-rhythm-scale': '1.2' } }),
+    vertical: 'rottay',
+    provenance: { schemaVersion: 1 },
+  });
+  assert.deepEqual(simple.producedBy.input.compileOptions, {}, 'honest: nothing was handed over');
+
+  const advanced = lowerStop({
+    armId: 'db-tenant-theme',
+    controlManifest: ADVANCED_MANIFEST,
+    stopId: ADVANCED_STOP,
+    compile: () => ({ variables: { '--ds-rhythm-scale': '1.2' }, verticalEnvelopeDigest: FAKE_DIGEST }),
+    vertical: 'rottay',
+    provenance: { schemaVersion: 1 },
+    verticalEnvelopeFor: () => ({ verticalKey: 'rottay' }),
+  });
+  assert.deepEqual(advanced.producedBy.input.compileOptions, {
+    verticalEnvelope: { verticalKey: 'rottay', digest: FAKE_DIGEST },
+  });
+  // The two halves of the record cannot disagree, because the digest is READ
+  // from the artifact rather than recomputed here (B-2's law).
+  assert.equal(advanced.producedBy.input.compileOptions.verticalEnvelope.digest, FAKE_DIGEST);
+  // And an advanced compile that names no envelope cannot be recorded at all.
+  assert.throws(
+    () =>
+      lowerStop({
+        armId: 'db-tenant-theme',
+        controlManifest: ADVANCED_MANIFEST,
+        stopId: ADVANCED_STOP,
+        compile: () => ({ variables: { '--ds-rhythm-scale': '1.2' } }),
+        vertical: 'rottay',
+        provenance: { schemaVersion: 1 },
+        verticalEnvelopeFor: () => ({ verticalKey: 'rottay' }),
+      }),
+    /no well-formed verticalEnvelopeDigest/,
+  );
+});
+
+test('A7 (W-A.2): the seal reaches the advanced space too -- synthetic palette door', () => {
+  /* No advanced control writes a palette today, so the fence for "the day one
+   * does" has to be synthetic. The door is declared under the advanced space
+   * and lands on `visualFoundation.general.palette.*`, which is the SAME
+   * TenantAppearanceGeneral the simple space puts at `appearance`. */
+  const synthetic = {
+    ...M1_PALETTE,
+    ingress: {
+      ...M1_PALETTE.ingress,
+      dbTenantThemePath: 'visualFoundation.general.palette.primaryColor',
+    },
+  };
+  const stopId = M1_PALETTE.calibration.normalizedStops[0].id;
+  // Fail-closed half: a palette node with no declared mode scope refuses.
+  assert.throws(
+    () =>
+      lowerStop({
+        armId: 'db-tenant-theme',
+        controlManifest: synthetic,
+        stopId,
+        compile: () => ({ variables: { '--ds-color-primary': '#B3123C' }, verticalEnvelopeDigest: FAKE_DIGEST }),
+        vertical: 'rottay',
+        provenance: { schemaVersion: 1 },
+        verticalEnvelopeFor: () => ({ verticalKey: 'rottay' }),
+      }),
+    /writes a palette node[\s\S]*no vertical defaultMode/,
+  );
+  // Stamped half: with the scope declared, the seal lands on the general the
+  // advanced space carries -- and the provenance reads it back from there.
+  let seen = null;
+  const lowered = lowerStop({
+    armId: 'db-tenant-theme',
+    controlManifest: synthetic,
+    stopId,
+    compile: (input) => {
+      seen = input;
+      return { variables: { '--ds-color-primary': '#B3123C' }, verticalEnvelopeDigest: FAKE_DIGEST };
+    },
+    vertical: 'rottay',
+    provenance: { schemaVersion: 1 },
+    defaultMode: 'dark',
+    verticalEnvelopeFor: () => ({ verticalKey: 'rottay' }),
+  });
+  assert.equal(seen.mode, 'advanced');
+  assert.equal(seen.visualFoundation.general.palette.backgroundMode, 'dark');
+  assert.ok(seen.visualFoundation.general.palette.primaryColor, 'the seed travelled into general');
+  assert.equal(lowered.producedBy.input.modeScope, 'dark', 'modeScope finds it in either space');
 });

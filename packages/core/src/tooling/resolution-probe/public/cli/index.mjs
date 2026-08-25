@@ -982,6 +982,10 @@ async function commandCausal(options) {
       // against. Same vertical for both, which is what makes them comparable.
       vertical: options.verticals[0],
       provenance: loaded.provenance,
+      /* FASE-A: the vertical policy envelope resolver, from the SAME arm the
+       * compiler came from. Only the advanced space consumes it; the simple
+       * space compiles with `{}` exactly as before. */
+      verticalEnvelopeFor: loaded.verticalEnvelopeFor,
       // R-2: the mode scope the DB document declares (ignored by the static arm,
       // which writes the theme body and therefore the default mode by construction).
       defaultMode: runDefaultMode,
@@ -1015,6 +1019,8 @@ async function commandCausal(options) {
       armBaselineDigest: lowered.producedBy.input.baseline?.digest ?? null,
       // R-2: same scope as the arm it certifies.
       defaultMode: runDefaultMode,
+      // FASE-A: and the same envelope, for the same reason.
+      verticalEnvelopeFor: loaded.verticalEnvelopeFor,
     });
     const producedBy = { ...lowered.producedBy, stopDiscrimination: discrimination };
 

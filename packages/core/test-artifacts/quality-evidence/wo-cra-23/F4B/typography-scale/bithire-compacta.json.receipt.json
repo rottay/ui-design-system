@@ -5,7 +5,7 @@
   "scenarioId": "typography.scale/compacta/bithire/static-and-db",
   "evidenceKind": "static-db-computed-parity",
   "commandOrTool": "node src/tooling/resolution-probe/public/cli/index.mjs causal",
-  "toolVersion": "resolution-probe@b19779a06bef",
+  "toolVersion": "resolution-probe@e6f5bed27982",
   "exitCode": 0,
   "sourceFiles": [
     "packages/core/dist/build-stamp.json",
@@ -66,10 +66,10 @@
     "packages/core/src/ui/primitives/display/Card/engines/rustic/index.tsx",
     "packages/core/src/ui/primitives/display/Card/index.tsx"
   ],
-  "sourceDigest": "3f807f6d6f6cb297519ba21193aa2702b9b944c41cfe556242b4a3d0f3924eb5",
+  "sourceDigest": "831f8a46bce39fd23a1e091a550af767f51de30cf7642399998aab2ac51f6d73",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/typography-scale/bithire-compacta.json",
   "artifactSha256": "260fccb917776a43dee2264ced9c54806588bc307a1291e280e71d2a52356c06",
-  "createdAt": "2026-08-25T07:21:56.934Z",
+  "createdAt": "2026-08-25T08:29:53.690Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

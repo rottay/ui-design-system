@@ -123,6 +123,57 @@ export function classifyStopExclusion(error) {
 }
 
 /**
+ * The two DOCUMENT SPACES the DB door lowers into, keyed by the prefix of the
+ * `dbTenantThemePath` a control manifest DECLARES.
+ *
+ * Deciding by the declared path and not by inspecting the built document is the
+ * point: the document is a DERIVED shape, and a derived shape can coincide with
+ * the other space by accident. The contract cannot.
+ */
+export const DB_INGRESS_SPACES = Object.freeze({
+  'appearance.general.': 'simple',
+  'visualFoundation.': 'advanced',
+});
+
+/**
+ * A declared `dbTenantThemePath` that lives under NEITHER space.
+ *
+ * W-B -- WHICH SIDE OF THE CLOSED SET THIS FALLS ON, stated so nobody has to
+ * guess later: this is NOT a `StopExclusionError`. An unknown space is a defect
+ * in the MANIFEST, not a stop the compiler legitimately refuses, so
+ * `classifyStopExclusion` must return null for it and the R-2 hardening must
+ * RE-THROW it -- breaking the run instead of shrinking the witness set by one
+ * and reporting the shrunken set as a measurement. `STOP_EXCLUSION_CLASSES`
+ * stays untouched on purpose: adding a class here would make this publishable,
+ * which is exactly the silent-exclusion failure R-2 closed.
+ */
+export class IngressSpaceError extends Error {
+  constructor(message) {
+    super(message);
+    this.name = 'IngressSpaceError';
+  }
+}
+
+/**
+ * The declared path -> the document space it lowers into. Fail-closed on the
+ * third edge: an unknown prefix NEVER degrades to simple.
+ */
+export function dbIngressSpace(declaredPath) {
+  if (typeof declaredPath === 'string') {
+    for (const [prefix, space] of Object.entries(DB_INGRESS_SPACES)) {
+      if (declaredPath.startsWith(prefix)) return space;
+    }
+  }
+  throw new IngressSpaceError(
+    `resolution-probe: the control declares dbTenantThemePath ${JSON.stringify(declaredPath)}, ` +
+      'which lives under neither legal document space. The set is closed: ' +
+      `${Object.keys(DB_INGRESS_SPACES).map((k) => `"${k}<rest>"`).join(' (simple) or ')} ` +
+      '(advanced). Refusing to degrade an unknown space to simple: that would compile a ' +
+      'document the manifest never described and report the result as a measurement.',
+  );
+}
+
+/**
  * The two doors, with where each one lands and which compiler owns it.
  *
  * `manifestIngressPath` is the exact key the modern-rescue control manifest
@@ -1020,10 +1071,29 @@ function toCompilerInput({
   vertical,
   defaultMode = null,
   schemaVersion,
+  dbTenantThemePath = null,
 }) {
   if (armId === 'db-tenant-theme') {
-    const general = document?.appearance?.general;
-    if (!general || typeof general !== 'object') {
+    /* FASE-A: the space is decided by the DECLARED path, never by the built
+     * document (see `dbIngressSpace`). Simple keeps its shape byte-identical to
+     * what it produced before this branch existed. */
+    const space = dbIngressSpace(dbTenantThemePath);
+    const visualFoundation = space === 'advanced' ? document?.visualFoundation : undefined;
+    if (space === 'advanced' && (!visualFoundation || typeof visualFoundation !== 'object')) {
+      throw new Error(
+        'resolution-probe: the db-tenant-theme document declares the advanced space but has no ' +
+          '"visualFoundation" object, so there is no TenantVisualFoundation to put in the ' +
+          'TenantThemeConfig.',
+      );
+    }
+    /* ONE extraction, whatever the space. `general` is the SAME
+     * `TenantAppearanceGeneral` in both: simple puts it at `appearance`,
+     * advanced at `visualFoundation.general` (measured: an advanced document
+     * with `general.palette` compiles the same 29 vars as its simple twin). It
+     * is optional in the advanced space -- today's seven advanced controls all
+     * write under `.advanced` -- and absent is not a defect there. */
+    const general = space === 'simple' ? document?.appearance?.general : visualFoundation?.general;
+    if (space === 'simple' && (!general || typeof general !== 'object')) {
       throw new Error(
         'resolution-probe: the db-tenant-theme document has no "appearance.general" object ' +
           '(dbTenantThemePath must read "appearance.general.<rest>"), so there is no ' +
@@ -1036,7 +1106,7 @@ function toCompilerInput({
           'published module. Refusing to hardcode a contract literal in the harness.',
       );
     }
-    const appearance = structuredClone(general);
+    const appearance = general ? structuredClone(general) : undefined;
     /* R-2 SCOPE-MATCHED PARITY (DT ruling + W-A) — STAMPED ON THE PALETTE NODE
      * THE SCENARIO ALREADY WROTE, and only there.
      *
@@ -1064,7 +1134,7 @@ function toCompilerInput({
      * For every control whose door is not a palette keypath the document is
      * byte-identical to what it was, which is what "nothing changes in
      * bithire/evnto" actually requires. */
-    if (appearance.palette && typeof appearance.palette === 'object') {
+    if (appearance?.palette && typeof appearance.palette === 'object') {
       if (defaultMode !== 'light' && defaultMode !== 'dark') {
         throw new Error(
           'resolution-probe: this db-tenant-theme document writes a palette node, so its mode ' +
@@ -1077,10 +1147,23 @@ function toCompilerInput({
       }
       appearance.palette = { ...appearance.palette, backgroundMode: defaultMode };
     }
+    if (space === 'simple') {
+      return {
+        schemaVersion,
+        mode: 'simple',
+        appearance,
+        ...dbTenantIdentity(vertical),
+      };
+    }
+    /* The sealed `general` goes back where the advanced space keeps it. The
+     * rest of the foundation travels verbatim. */
     return {
       schemaVersion,
-      mode: 'simple',
-      appearance,
+      mode: 'advanced',
+      visualFoundation: {
+        ...structuredClone(visualFoundation),
+        ...(appearance === undefined ? {} : { general: appearance }),
+      },
       ...dbTenantIdentity(vertical),
     };
   }
@@ -1260,6 +1343,60 @@ export function verticalDefaultMode(baseline, vertical) {
  *   the DB arm whenever the document it builds writes a palette node, and
  *   ignored otherwise. See `toCompilerInput`.
  */
+/**
+ * The compile options for one lowering. `{}` unless the DB arm is lowering into
+ * the advanced space, which the compiler refuses to compile without a vertical
+ * policy envelope.
+ *
+ * FAIL-CLOSED IN BOTH DIRECTIONS, and neither is a `StopExclusionError`: a
+ * missing export is a defect in the published module and an unresolvable
+ * vertical is a defect in the call, so both must break the run rather than be
+ * published as "this stop cannot lower".
+ */
+export function advancedCompileOptions({ armId, mode, vertical, verticalEnvelopeFor }) {
+  if (armId !== 'db-tenant-theme' || mode !== 'advanced') return {};
+  if (typeof verticalEnvelopeFor !== 'function') {
+    throw new Error(
+      'resolution-probe: lowering into the advanced space needs the vertical policy envelope, ' +
+        'and no resolver was handed to lowerStop. It rides on the arm that `loadCompilerArms` ' +
+        'returns (`verticalEnvelopeFor`), from the SAME published module the compiler comes ' +
+        'from and under the same freshness proof. Refusing to reconstruct an envelope here: a ' +
+        'hand-built one could disagree with the contract the compiler validates against.',
+    );
+  }
+  const verticalEnvelope = verticalEnvelopeFor(vertical);
+  if (!verticalEnvelope || typeof verticalEnvelope !== 'object') {
+    throw new Error(
+      `resolution-probe: the published module resolves no vertical policy envelope for ` +
+        `${JSON.stringify(vertical)}, so an advanced document has nothing to be validated ` +
+        'against. Refusing to compile without it: the compiler would throw "$.verticalKey: ' +
+        'Tenant theme compilation requires a vertical policy envelope" anyway, and a run that ' +
+        'cannot name its envelope cannot claim the result was governed by one.',
+    );
+  }
+  return { verticalEnvelope };
+}
+
+/**
+ * The envelope digest the COMPILER stamped on the artifact it just produced.
+ *
+ * Fail-closed: an advanced compile that carries no digest cannot be recorded as
+ * having been governed by an envelope, and inventing one here would be the
+ * second authority this record exists to avoid.
+ */
+export function assertEnvelopeDigest(compiled, vertical) {
+  const digest = compiled?.verticalEnvelopeDigest ?? null;
+  if (typeof digest !== 'string' || !/^sha256-[0-9a-f]{64}$/.test(digest)) {
+    throw new Error(
+      `resolution-probe: the advanced compile for ${JSON.stringify(vertical)} produced no ` +
+        `well-formed verticalEnvelopeDigest (got ${JSON.stringify(digest)}), so the run cannot ` +
+        'record WHICH envelope governed it. The digest is read off the artifact on purpose, so ' +
+        'the two halves of the provenance cannot disagree.',
+    );
+  }
+  return digest;
+}
+
 export function lowerStop({
   armId,
   controlManifest,
@@ -1270,6 +1407,7 @@ export function lowerStop({
   provenance = {},
   vertical = null,
   defaultMode = null,
+  verticalEnvelopeFor = null,
 }) {
   /* H-1 (V5): the DB arm resolves its own baseline inside
    * `compileTenantThemeConfig`. Handing it one HERE would apply the vertical
@@ -1295,6 +1433,9 @@ export function lowerStop({
     vertical,
     defaultMode,
     schemaVersion: provenance.schemaVersion,
+    /* FASE-A: the CONTRACT decides the space, so the declared path travels here
+     * rather than the built document being sniffed. */
+    dbTenantThemePath: controlManifest?.ingress?.dbTenantThemePath ?? null,
   });
   /* B-2: the claim, in a shape a record can carry.
    *
@@ -1310,7 +1451,20 @@ export function lowerStop({
   const declaredAuthoredPaths = compilerInput.tenantAuthoredPaths
     ? [...compilerInput.tenantAuthoredPaths].sort()
     : null;
-  const compiled = compile(compilerInput);
+  /* FASE-A: `compile` is called with TWO arguments, always. `{}` in the simple
+   * space keeps the arity stable (measured: no test double asserts
+   * `compile.length`, and the compiler ignores an empty options object -- a
+   * simple scene compiles byte-identically with it and without it). The
+   * advanced space MUST carry the vertical policy envelope: without it the
+   * compiler throws `$.verticalKey: Tenant theme compilation requires a
+   * vertical policy envelope`, which is the gate this argument answers. */
+  const compileOptions = advancedCompileOptions({
+    armId,
+    mode: compilerInput.mode,
+    vertical,
+    verticalEnvelopeFor,
+  });
+  const compiled = compile(compilerInput, compileOptions);
   const emitted = compiled?.variables ?? compiled?.cssVariables ?? compiled;
   if (!emitted || typeof emitted !== 'object') {
     throw new Error(
@@ -1448,8 +1602,35 @@ export function lowerStop({
          * palette node — both are honest: neither declares a mode scope. */
         modeScope:
           armId === 'db-tenant-theme'
-            ? (compilerInput.appearance?.palette?.backgroundMode ?? null)
+            ? (compilerInput.appearance?.palette?.backgroundMode ??
+              /* FASE-A: the advanced space keeps the same `general` one level
+               * in, so the stamp is read from wherever the seal placed it. */
+              compilerInput.visualFoundation?.general?.palette?.backgroundMode ??
+              null)
             : null,
+        /* FASE-A (W-A.1): the SECOND argument, in the record.
+         *
+         * An argument that changes what the compiler validates against has to
+         * be readable in the provenance, for the same reason `modeScope` is.
+         * `{}` in the simple space -- honest, nothing was handed over.
+         *
+         * The digest is NOT recomputed here. It is read off the artifact the
+         * compiler just produced (`verticalEnvelopeDigest`), so the two halves
+         * of the record CANNOT disagree -- the same law B-2 applied to
+         * `tenantAuthoredPaths`. Re-deriving it would need a second sha
+         * implementation (`sha256Utf8` is not published), i.e. a second
+         * authority for one number. The object itself stays out: the artifact
+         * already carries the digest and duplicating the envelope would fatten
+         * every artifact without adding information. */
+        compileOptions:
+          compilerInput.mode === 'advanced'
+            ? {
+                verticalEnvelope: {
+                  verticalKey: vertical,
+                  digest: assertEnvelopeDigest(compiled, vertical),
+                },
+              }
+            : {},
         /* H-1 (V1): WHICH baseline this stop was composed onto. `document` now
          * carries the whole vertical theme, so diffing two runs by eye is not a
          * practical way to answer that question -- the digest is. Absent (null)
@@ -1516,6 +1697,14 @@ export async function loadCompilerArms({
     // Read from the same published module that supplies the compiler, so the
     // envelope the harness builds can never disagree with the contract version
     // the compiler validates against.
+    if (spec.id === 'db-tenant-theme' && typeof module?.getTenantThemeVerticalEnvelope !== 'function') {
+      throw new Error(
+        `resolution-probe: ${spec.compilerModule} exports no getTenantThemeVerticalEnvelope, so ` +
+          'the DB arm cannot lower an advanced document without hand-building the vertical ' +
+          'policy envelope the compiler validates against. Failing at load, like the schema ' +
+          'version above, rather than at the first advanced stop.',
+      );
+    }
     const schemaVersion = module?.TENANT_THEME_SCHEMA_VERSION;
     if (spec.id === 'db-tenant-theme' && !Number.isInteger(schemaVersion)) {
       throw new Error(
@@ -1531,6 +1720,11 @@ export async function loadCompilerArms({
        * what the dist-freshness gate above has already proven fresh. */
       themeModeSelector: module?.themeModeSelector ?? null,
       themeModeSelectorSource: module?.themeModeSelector ? spec.compilerModule : null,
+      /* FASE-A: the vertical policy envelope resolver, handed out with the arm
+       * for exactly the reason `themeModeSelector` is -- it comes from the SAME
+       * published module as the compiler, under the freshness the gate above
+       * already proved. Never a deep-path import, never a hand-built envelope. */
+      verticalEnvelopeFor: module?.getTenantThemeVerticalEnvelope ?? null,
       provenance: {
         module: fromCoreRoot(absolute),
         moduleSubpath: spec.compilerModuleSubpath ?? null,
@@ -1651,6 +1845,7 @@ export function assertStopDiscrimination({
   provenance = {},
   armBaselineDigest = null,
   defaultMode = null,
+  verticalEnvelopeFor = null,
 }) {
   const spec = INGRESS_ARMS[armId];
   if (!spec) throw new Error(`resolution-probe: unknown ingress arm: ${armId}`);
@@ -1711,6 +1906,11 @@ export function assertStopDiscrimination({
         compile,
         vertical,
         provenance,
+        /* FASE-A: the guard lowers through the SAME door as the arm, so it
+         * needs the same envelope resolver. Without it an advanced control
+         * would throw here and the throw is not publishable, which is the
+         * correct direction but the wrong place to discover it. */
+        verticalEnvelopeFor,
         /* R-2: the guard lowers the SAME document the arm lowers, mode scope
          * included. Without this a palette control would fail closed here
          * (`toCompilerInput` refuses a palette node with no declared scope),

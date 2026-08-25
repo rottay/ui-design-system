@@ -4253,6 +4253,38 @@ spec DESNUDA) — corregido con cita de línea. Cierre en SOURCE_BOUND por la
 misma nota de anatomía (propertyGroups sin ratificar). 93/93 VALID,
 CONSTITUTION_READY, probe 228/0, provenance 24/24, producers --check OK.
 
+**FASE-A — la rama `mode:'advanced'` de la sonda construida (2026-08-25;
+Opus; postaudit Fable: ACCEPT).** El bloqueo sistémico del preflight §2 se
+cierra: la puerta DB de la sonda ya no hardcodea `mode:'simple'` — el modo
+se decide por PREFIJO del `dbTenantThemePath` declarado
+(`appearance.general.` → simple byte-idéntico; `visualFoundation.` →
+`{mode:'advanced', visualFoundation}` + segundo argumento
+`{verticalEnvelope}`; cualquier otro → `IngressSpaceError` NO publicable
+como exclusión, re-lanza — el conjunto cerrado R-2 intacto). El envelope
+sale del módulo publicado (`getTenantThemeVerticalEnvelope` vía
+`loadCompilerArms`, mismo assertDistFresh), fail-closed en las dos
+direcciones (cargar y usar). El record en provenance:
+`compileOptions.{verticalEnvelope:{verticalKey, digest}}` — con la decisión
+de que el digest se LEE del artifact (la ley B-2: las dos mitades no pueden
+discrepar; `sha256Utf8` no está publicado y una segunda implementación sería
+segunda autoridad). El sello de scope de R-2 queda con una sola extracción
+de `general` y su condición palabra por palabra. **Invariancia del espacio
+simple probada por tres vías: 36/36** (el compilerInput es idéntico al que
+armaba la rama vieja; el compilador real da variables/modeDeltas/css
+byte-idénticos con `{}` y sin segundo argumento; y ninguno de los 90
+receipts simple + 3 data-field-delta del runner DATA — que no pasa por
+`toCompilerInput` — recorre la rama nueva). **Censo asentado: la rama no
+tiene consumidor vivo todavía** — los 7 controles advanced declaran 0 stops
+o 0 canales (responsive.posture tiene 3 stops pero 0 canales CSS por ser
+data-only): queda probada por drills (con manifest sintético declarado),
+no por una corrida real — declarado, no insinuado. La re-emisión de los 93
+por el mecanismo existente de Sonnet (re-atestación + verificación por
+archivo; staleness = pura frescura de digest). Drills A1-A7 nuevos; el
+negative drill viejo del throw genérico reemplazado por el tercer borde
+nombrado. Suites 234/234, build EXIT=0, 0 trackeados movidos. Con esto, la
+puerta DB de los 6 controles PRO (`visualFoundation.*`) queda
+estructuralmente alcanzable — su calibración es la cola que sigue.
+
 **F4B-11 — typography.pairing CIERRA SOURCE_BOUND (2026-08-24; Sonnet;
 postaudit Fable: ACCEPT — "el falso-verde más peligroso del censo quedó
 cerrado con el keypath real").** Keypath corregido (el de OTRO control →

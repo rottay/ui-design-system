@@ -5,7 +5,7 @@
   "scenarioId": "density.mode/spacious/bithire/static-and-db",
   "evidenceKind": "exact-restore",
   "commandOrTool": "node src/tooling/resolution-probe/public/cli/index.mjs causal",
-  "toolVersion": "resolution-probe@b19779a06bef",
+  "toolVersion": "resolution-probe@e6f5bed27982",
   "exitCode": 0,
   "sourceFiles": [
     "packages/core/dist/build-stamp.json",
@@ -58,10 +58,10 @@
     "packages/core/src/ui/primitives/layout/Space/tests/Space.modern-fragment-children.test.tsx",
     "packages/core/src/ui/primitives/layout/Space/tests/Space.test.tsx"
   ],
-  "sourceDigest": "55d2a415c477c7de4e8c0f60e802f2e0a0286cc32417875395d76ba04ca5e82a",
+  "sourceDigest": "7c96206b7546c1430241b3cd0b687a2a03747e99f5af218d112c8e673d98eb92",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/density-mode/bithire-spacious.json",
   "artifactSha256": "55ab7e5eb75b758c2760171ee6ca81fbd666de6ce8d4051b5f65fad99e56fb01",
-  "createdAt": "2026-08-25T07:21:55.790Z",
+  "createdAt": "2026-08-25T08:29:52.436Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,
