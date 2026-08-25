@@ -29,42 +29,84 @@
         }
       },
       "inline": {
-        "rottay/dark/modern/both": {
-          "clobbered": [],
-          "introduced": [
-            "--ds-density-mode-factor"
-          ],
-          "restoreOps": [
-            {
-              "name": "--ds-density-mode-factor",
-              "op": "remove"
-            },
-            {
-              "name": "style",
-              "op": "remove-attribute"
-            }
-          ]
-        },
-        "rottay/light/modern/both": {
-          "clobbered": [],
-          "introduced": [
-            "--ds-density-mode-factor"
-          ],
-          "restoreOps": [
-            {
-              "name": "--ds-density-mode-factor",
-              "op": "remove"
-            },
-            {
-              "name": "style",
-              "op": "remove-attribute"
-            }
-          ]
-        }
+        "rottay/dark/modern/both": null,
+        "rottay/light/modern/both": null
       },
       "movements": {
         "rottay/dark/modern/both": {
           "space-modern-numeric-gap/root": {
+            "animation-duration": {
+              "moved": false,
+              "value": "1e-05s"
+            },
+            "animation-name": {
+              "moved": false,
+              "value": "none"
+            },
+            "animation-timing-function": {
+              "moved": false,
+              "value": "ease"
+            },
+            "background-color": {
+              "moved": false,
+              "value": "rgba(0, 0, 0, 0)"
+            },
+            "border-bottom-color": {
+              "moved": false,
+              "value": "rgb(240, 240, 240)"
+            },
+            "border-bottom-left-radius": {
+              "moved": false,
+              "value": "0px"
+            },
+            "border-bottom-right-radius": {
+              "moved": false,
+              "value": "0px"
+            },
+            "border-bottom-width": {
+              "moved": false,
+              "value": "0px"
+            },
+            "border-left-color": {
+              "moved": false,
+              "value": "rgb(240, 240, 240)"
+            },
+            "border-left-width": {
+              "moved": false,
+              "value": "0px"
+            },
+            "border-right-color": {
+              "moved": false,
+              "value": "rgb(240, 240, 240)"
+            },
+            "border-right-width": {
+              "moved": false,
+              "value": "0px"
+            },
+            "border-top-color": {
+              "moved": false,
+              "value": "rgb(240, 240, 240)"
+            },
+            "border-top-left-radius": {
+              "moved": false,
+              "value": "0px"
+            },
+            "border-top-right-radius": {
+              "moved": false,
+              "value": "0px"
+            },
+            "border-top-style": {
+              "moved": false,
+              "value": "solid"
+            },
+            "border-top-width": {
+              "moved": false,
+              "value": "0px"
+            },
+            "color": {
+              "moved": false,
+              "value": "rgb(240, 240, 240)"
+            },
             "column-gap": {
               "moved": false,
               "value": "8px"
@@ -76,6 +118,18 @@
             "row-gap": {
               "moved": false,
               "value": "8px"
+            },
+            "transition-duration": {
+              "moved": false,
+              "value": "1e-05s"
+            },
+            "transition-property": {
+              "moved": false,
+              "value": "none"
+            },
+            "transition-timing-function": {
+              "moved": false,
+              "value": "ease"
             }
           },
           "space-modern-preset-gap/root": {
@@ -83,9 +137,69 @@
               "moved": false,
               "value": "center"
             },
+            "animation-duration": {
+              "moved": false,
+              "value": "1e-05s"
+            },
+            "animation-name": {
+              "moved": false,
+              "value": "none"
+            },
+            "animation-timing-function": {
+              "moved": false,
+              "value": "ease"
+            },
+            "background-color": {
+              "moved": false,
+              "value": "rgba(0, 0, 0, 0)"
+            },
+            "border-bottom-color": {
+              "moved": false,
+              "value": "rgb(240, 240, 240)"
+            },
+            "border-bottom-left-radius": {
+              "moved": false,
+              "value": "0px"
+            },
+            "border-bottom-right-radius": {
+              "moved": false,
+              "value": "0px"
+            },
+            "border-bottom-width": {
+              "moved": false,
+              "value": "0px"
+            },
+            "border-left-color": {
+              "moved": false,
+              "value": "rgb(240, 240, 240)"
+            },
+            "border-left-width": {
+              "moved": false,
+              "value": "0px"
+            },
+            "border-right-color": {
+              "moved": false,
+              "value": "rgb(240, 240, 240)"
+            },
+            "border-right-width": {
+              "moved": false,
+              "value": "0px"
+            },
             "border-top-color": {
               "moved": false,
               "value": "rgb(240, 240, 240)"
+            },
+            "border-top-left-radius": {
+              "moved": false,
+              "value": "0px"
+            },
+            "border-top-right-radius": {
+              "moved": false,
+              "value": "0px"
+            },
+            "border-top-style": {
+              "moved": false,
+              "value": "solid"
             },
             "border-top-width": {
               "moved": false,
@@ -133,6 +247,14 @@
             "transition-duration": {
               "moved": false,
               "value": "1e-05s"
+            },
+            "transition-property": {
+              "moved": false,
+              "value": "none"
+            },
+            "transition-timing-function": {
+              "moved": false,
+              "value": "ease"
             }
           },
           "token-readout/tokens": {
@@ -144,6 +266,10 @@
               "moved": false,
               "value": "calc(10px * 1)"
             },
+            "--ds-button-primary-bg": {
+              "moved": false,
+              "value": "rgb(255, 255, 255)"
+            },
             "--ds-card-border-radius": {
               "moved": false,
               "value": "calc(14px * 1)"
@@ -151,6 +277,22 @@
             "--ds-card-radius": {
               "moved": false,
               "value": "calc(14px * 1)"
+            },
+            "--ds-chart-series-1": {
+              "moved": false,
+              "value": "#C68196"
+            },
+            "--ds-color-primary": {
+              "moved": false,
+              "value": "rgb(255, 255, 255)"
+            },
+            "--ds-color-primary-500": {
+              "moved": false,
+              "value": "#A0A0A5"
+            },
+            "--ds-color-text-on-primary": {
+              "moved": false,
+              "value": "#0C0C0E"
             },
             "--ds-density-effective-scale": {
               "from": "clamp(\n    0.5,\n    calc(\n      clamp(\n    0.5,\n    calc(1 * 1),\n    3\n  ) *\n      1\n    ),\n    3\n  )",
@@ -171,6 +313,10 @@
               "moved": false,
               "value": "1"
             },
+            "--ds-edge-emphasis-width": {
+              "moved": false,
+              "value": "1px"
+            },
             "--ds-edge-standard-width": {
               "moved": false,
               "value": "1px"
@@ -178,6 +324,18 @@
             "--ds-effect-intensity": {
               "moved": false,
               "value": "1"
+            },
+            "--ds-elevation-1": {
+              "moved": false,
+              "value": "inset 0 1px 0 rgba(255, 255, 255, 0.04), 0 1px 2px rgba(0, 0, 0, 0.40), 0 2px 6px rgba(0, 0, 0, 0.28)"
+            },
+            "--ds-elevation-2": {
+              "moved": false,
+              "value": "inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 2px 4px rgba(0, 0, 0, 0.44), 0 6px 16px rgba(0, 0, 0, 0.34)"
+            },
+            "--ds-elevation-3": {
+              "moved": false,
+              "value": "inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 6px 12px rgba(0, 0, 0, 0.46), 0 12px 28px rgba(0, 0, 0, 0.40)"
             },
             "--ds-elevation-lift-strength": {
               "moved": false,
@@ -187,6 +345,22 @@
               "moved": false,
               "value": ""
             },
+            "--ds-font-family-base": {
+              "moved": false,
+              "value": "'Public Sans', ui-sans-serif, system-ui, -apple-system, sans-serif, \"Noto Sans Arabic\", sans-serif"
+            },
+            "--ds-font-family-display": {
+              "moved": false,
+              "value": "'Public Sans', ui-sans-serif, system-ui, -apple-system, sans-serif, \"Noto Sans Arabic\", sans-serif"
+            },
+            "--ds-font-family-heading": {
+              "moved": false,
+              "value": "'Public Sans', ui-sans-serif, system-ui, -apple-system, sans-serif, \"Noto Sans Arabic\", sans-serif"
+            },
+            "--ds-font-family-mono": {
+              "moved": false,
+              "value": "'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, monospace"
+            },
             "--ds-font-size-xs": {
               "moved": false,
               "value": "calc(0.75rem * 1)"
@@ -206,6 +380,22 @@
             "--ds-material-canvas-texture": {
               "moved": false,
               "value": ""
+            },
+            "--ds-material-card-highlight": {
+              "moved": false,
+              "value": ""
+            },
+            "--ds-motion-duration-scale": {
+              "moved": false,
+              "value": "1"
+            },
+            "--ds-motion-intensity": {
+              "moved": false,
+              "value": "1"
+            },
+            "--ds-radius-button": {
+              "moved": false,
+              "value": "calc(10px * 1)"
             },
             "--ds-radius-lg": {
               "moved": false,
@@ -243,6 +433,10 @@
               "moved": false,
               "value": "18px"
             },
+            "--ds-recipe-profile": {
+              "moved": false,
+              "value": "\"rottay/technical-sharp@1\""
+            },
             "--ds-rhythm-effective-scale": {
               "moved": false,
               "value": "clamp(0.8, 1, 1.25)"
@@ -250,6 +444,38 @@
             "--ds-rhythm-scale": {
               "moved": false,
               "value": "1"
+            },
+            "--ds-select-group-text-transform": {
+              "moved": false,
+              "value": "uppercase"
+            },
+            "--ds-sidebar-bg": {
+              "moved": false,
+              "value": "#0D0D10"
+            },
+            "--ds-sidebar-item-bg-active": {
+              "moved": false,
+              "value": "rgba(255, 255, 255, 0.07)"
+            },
+            "--ds-sidebar-item-bg-hover": {
+              "moved": false,
+              "value": "rgba(255, 255, 255, 0.04)"
+            },
+            "--ds-sidebar-item-color": {
+              "moved": false,
+              "value": "#A0A0A5"
+            },
+            "--ds-sidebar-item-color-active": {
+              "moved": false,
+              "value": "rgb(255, 255, 255)"
+            },
+            "--ds-sidebar-text": {
+              "moved": false,
+              "value": "#ECECEC"
+            },
+            "--ds-sidebar-text-muted": {
+              "moved": false,
+              "value": "#6B6B72"
             },
             "--ds-table-header-letter-spacing": {
               "moved": false,
@@ -275,14 +501,166 @@
               "moved": false,
               "value": "1"
             },
+            "animation-duration": {
+              "moved": false,
+              "value": "1e-05s"
+            },
+            "animation-name": {
+              "moved": false,
+              "value": "none"
+            },
+            "animation-timing-function": {
+              "moved": false,
+              "value": "ease"
+            },
+            "background-color": {
+              "moved": false,
+              "value": "rgba(0, 0, 0, 0)"
+            },
+            "border-bottom-color": {
+              "moved": false,
+              "value": "rgb(240, 240, 240)"
+            },
+            "border-bottom-left-radius": {
+              "moved": false,
+              "value": "0px"
+            },
+            "border-bottom-right-radius": {
+              "moved": false,
+              "value": "0px"
+            },
+            "border-bottom-width": {
+              "moved": false,
+              "value": "0px"
+            },
+            "border-left-color": {
+              "moved": false,
+              "value": "rgb(240, 240, 240)"
+            },
+            "border-left-width": {
+              "moved": false,
+              "value": "0px"
+            },
+            "border-right-color": {
+              "moved": false,
+              "value": "rgb(240, 240, 240)"
+            },
+            "border-right-width": {
+              "moved": false,
+              "value": "0px"
+            },
+            "border-top-color": {
+              "moved": false,
+              "value": "rgb(240, 240, 240)"
+            },
+            "border-top-left-radius": {
+              "moved": false,
+              "value": "0px"
+            },
+            "border-top-right-radius": {
+              "moved": false,
+              "value": "0px"
+            },
             "border-top-style": {
               "moved": false,
               "value": "solid"
+            },
+            "border-top-width": {
+              "moved": false,
+              "value": "0px"
+            },
+            "color": {
+              "moved": false,
+              "value": "rgb(240, 240, 240)"
+            },
+            "transition-duration": {
+              "moved": false,
+              "value": "1e-05s"
+            },
+            "transition-property": {
+              "moved": false,
+              "value": "all"
+            },
+            "transition-timing-function": {
+              "moved": false,
+              "value": "ease"
             }
           }
         },
         "rottay/light/modern/both": {
           "space-modern-numeric-gap/root": {
+            "animation-duration": {
+              "moved": false,
+              "value": "1e-05s"
+            },
+            "animation-name": {
+              "moved": false,
+              "value": "none"
+            },
+            "animation-timing-function": {
+              "moved": false,
+              "value": "ease"
+            },
+            "background-color": {
+              "moved": false,
+              "value": "rgba(0, 0, 0, 0)"
+            },
+            "border-bottom-color": {
+              "moved": false,
+              "value": "rgb(26, 26, 26)"
+            },
+            "border-bottom-left-radius": {
+              "moved": false,
+              "value": "0px"
+            },
+            "border-bottom-right-radius": {
+              "moved": false,
+              "value": "0px"
+            },
+            "border-bottom-width": {
+              "moved": false,
+              "value": "0px"
+            },
+            "border-left-color": {
+              "moved": false,
+              "value": "rgb(26, 26, 26)"
+            },
+            "border-left-width": {
+              "moved": false,
+              "value": "0px"
+            },
+            "border-right-color": {
+              "moved": false,
+              "value": "rgb(26, 26, 26)"
+            },
+            "border-right-width": {
+              "moved": false,
+              "value": "0px"
+            },
+            "border-top-color": {
+              "moved": false,
+              "value": "rgb(26, 26, 26)"
+            },
+            "border-top-left-radius": {
+              "moved": false,
+              "value": "0px"
+            },
+            "border-top-right-radius": {
+              "moved": false,
+              "value": "0px"
+            },
+            "border-top-style": {
+              "moved": false,
+              "value": "solid"
+            },
+            "border-top-width": {
+              "moved": false,
+              "value": "0px"
+            },
+            "color": {
+              "moved": false,
+              "value": "rgb(26, 26, 26)"
+            },
             "column-gap": {
               "moved": false,
               "value": "8px"
@@ -294,6 +672,18 @@
             "row-gap": {
               "moved": false,
               "value": "8px"
+            },
+            "transition-duration": {
+              "moved": false,
+              "value": "1e-05s"
+            },
+            "transition-property": {
+              "moved": false,
+              "value": "none"
+            },
+            "transition-timing-function": {
+              "moved": false,
+              "value": "ease"
             }
           },
           "space-modern-preset-gap/root": {
@@ -301,9 +691,69 @@
               "moved": false,
               "value": "center"
             },
+            "animation-duration": {
+              "moved": false,
+              "value": "1e-05s"
+            },
+            "animation-name": {
+              "moved": false,
+              "value": "none"
+            },
+            "animation-timing-function": {
+              "moved": false,
+              "value": "ease"
+            },
+            "background-color": {
+              "moved": false,
+              "value": "rgba(0, 0, 0, 0)"
+            },
+            "border-bottom-color": {
+              "moved": false,
+              "value": "rgb(26, 26, 26)"
+            },
+            "border-bottom-left-radius": {
+              "moved": false,
+              "value": "0px"
+            },
+            "border-bottom-right-radius": {
+              "moved": false,
+              "value": "0px"
+            },
+            "border-bottom-width": {
+              "moved": false,
+              "value": "0px"
+            },
+            "border-left-color": {
+              "moved": false,
+              "value": "rgb(26, 26, 26)"
+            },
+            "border-left-width": {
+              "moved": false,
+              "value": "0px"
+            },
+            "border-right-color": {
+              "moved": false,
+              "value": "rgb(26, 26, 26)"
+            },
+            "border-right-width": {
+              "moved": false,
+              "value": "0px"
+            },
             "border-top-color": {
               "moved": false,
               "value": "rgb(26, 26, 26)"
+            },
+            "border-top-left-radius": {
+              "moved": false,
+              "value": "0px"
+            },
+            "border-top-right-radius": {
+              "moved": false,
+              "value": "0px"
+            },
+            "border-top-style": {
+              "moved": false,
+              "value": "solid"
             },
             "border-top-width": {
               "moved": false,
@@ -351,6 +801,14 @@
             "transition-duration": {
               "moved": false,
               "value": "1e-05s"
+            },
+            "transition-property": {
+              "moved": false,
+              "value": "none"
+            },
+            "transition-timing-function": {
+              "moved": false,
+              "value": "ease"
             }
           },
           "token-readout/tokens": {
@@ -362,6 +820,10 @@
               "moved": false,
               "value": "calc(10px * 1)"
             },
+            "--ds-button-primary-bg": {
+              "moved": false,
+              "value": "rgb(10, 10, 10)"
+            },
             "--ds-card-border-radius": {
               "moved": false,
               "value": "calc(14px * 1)"
@@ -369,6 +831,22 @@
             "--ds-card-radius": {
               "moved": false,
               "value": "calc(14px * 1)"
+            },
+            "--ds-chart-series-1": {
+              "moved": false,
+              "value": "#935267"
+            },
+            "--ds-color-primary": {
+              "moved": false,
+              "value": "rgb(10, 10, 10)"
+            },
+            "--ds-color-primary-500": {
+              "moved": false,
+              "value": "#6B6B6B"
+            },
+            "--ds-color-text-on-primary": {
+              "moved": false,
+              "value": "#FFFFFF"
             },
             "--ds-density-effective-scale": {
               "from": "clamp(\n    0.5,\n    calc(\n      clamp(\n    0.5,\n    calc(1 * 1),\n    3\n  ) *\n      1\n    ),\n    3\n  )",
@@ -389,6 +867,10 @@
               "moved": false,
               "value": "1"
             },
+            "--ds-edge-emphasis-width": {
+              "moved": false,
+              "value": "1px"
+            },
             "--ds-edge-standard-width": {
               "moved": false,
               "value": "1px"
@@ -397,6 +879,18 @@
               "moved": false,
               "value": "1"
             },
+            "--ds-elevation-1": {
+              "moved": false,
+              "value": "0 1px 2px color-mix(in srgb, #000 calc(4% * 1), transparent), 0 2px 4px color-mix(in srgb, #000 calc(3% * 1), transparent), 0 4px 8px color-mix(in srgb, #000 calc(2% * 1), transparent)"
+            },
+            "--ds-elevation-2": {
+              "moved": false,
+              "value": "0 2px 4px color-mix(in srgb, #000 calc(3% * 1), transparent), 0 4px 8px color-mix(in srgb, #000 calc(4% * 1), transparent), 0 8px 16px color-mix(in srgb, #000 calc(3% * 1), transparent)"
+            },
+            "--ds-elevation-3": {
+              "moved": false,
+              "value": "0 2px 4px color-mix(in srgb, #000 calc(2% * 1), transparent), 0 4px 8px color-mix(in srgb, #000 calc(3% * 1), transparent), 0 8px 16px color-mix(in srgb, #000 calc(4% * 1), transparent), 0 16px 32px color-mix(in srgb, #000 calc(4% * 1), transparent)"
+            },
             "--ds-elevation-lift-strength": {
               "moved": false,
               "value": "0"
@@ -404,6 +898,22 @@
             "--ds-experience-profile": {
               "moved": false,
               "value": ""
+            },
+            "--ds-font-family-base": {
+              "moved": false,
+              "value": "'Public Sans', ui-sans-serif, system-ui, -apple-system, sans-serif, \"Noto Sans Arabic\", sans-serif"
+            },
+            "--ds-font-family-display": {
+              "moved": false,
+              "value": "'Public Sans', ui-sans-serif, system-ui, -apple-system, sans-serif, \"Noto Sans Arabic\", sans-serif"
+            },
+            "--ds-font-family-heading": {
+              "moved": false,
+              "value": "'Public Sans', ui-sans-serif, system-ui, -apple-system, sans-serif, \"Noto Sans Arabic\", sans-serif"
+            },
+            "--ds-font-family-mono": {
+              "moved": false,
+              "value": "'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, monospace"
             },
             "--ds-font-size-xs": {
               "moved": false,
@@ -424,6 +934,22 @@
             "--ds-material-canvas-texture": {
               "moved": false,
               "value": ""
+            },
+            "--ds-material-card-highlight": {
+              "moved": false,
+              "value": ""
+            },
+            "--ds-motion-duration-scale": {
+              "moved": false,
+              "value": "1"
+            },
+            "--ds-motion-intensity": {
+              "moved": false,
+              "value": "1"
+            },
+            "--ds-radius-button": {
+              "moved": false,
+              "value": "calc(10px * 1)"
             },
             "--ds-radius-lg": {
               "moved": false,
@@ -461,6 +987,10 @@
               "moved": false,
               "value": "18px"
             },
+            "--ds-recipe-profile": {
+              "moved": false,
+              "value": "\"rottay/technical-sharp@1\""
+            },
             "--ds-rhythm-effective-scale": {
               "moved": false,
               "value": "clamp(0.8, 1, 1.25)"
@@ -468,6 +998,38 @@
             "--ds-rhythm-scale": {
               "moved": false,
               "value": "1"
+            },
+            "--ds-select-group-text-transform": {
+              "moved": false,
+              "value": "uppercase"
+            },
+            "--ds-sidebar-bg": {
+              "moved": false,
+              "value": "#F4F4F3"
+            },
+            "--ds-sidebar-item-bg-active": {
+              "moved": false,
+              "value": "rgba(0, 0, 0, 0.06)"
+            },
+            "--ds-sidebar-item-bg-hover": {
+              "moved": false,
+              "value": "rgba(0, 0, 0, 0.03)"
+            },
+            "--ds-sidebar-item-color": {
+              "moved": false,
+              "value": "#6B6B6B"
+            },
+            "--ds-sidebar-item-color-active": {
+              "moved": false,
+              "value": "rgb(10, 10, 10)"
+            },
+            "--ds-sidebar-text": {
+              "moved": false,
+              "value": "#1A1A1A"
+            },
+            "--ds-sidebar-text-muted": {
+              "moved": false,
+              "value": "#9C9C9C"
             },
             "--ds-table-header-letter-spacing": {
               "moved": false,
@@ -493,23 +1055,103 @@
               "moved": false,
               "value": "1"
             },
+            "animation-duration": {
+              "moved": false,
+              "value": "1e-05s"
+            },
+            "animation-name": {
+              "moved": false,
+              "value": "none"
+            },
+            "animation-timing-function": {
+              "moved": false,
+              "value": "ease"
+            },
+            "background-color": {
+              "moved": false,
+              "value": "rgba(0, 0, 0, 0)"
+            },
+            "border-bottom-color": {
+              "moved": false,
+              "value": "rgb(26, 26, 26)"
+            },
+            "border-bottom-left-radius": {
+              "moved": false,
+              "value": "0px"
+            },
+            "border-bottom-right-radius": {
+              "moved": false,
+              "value": "0px"
+            },
+            "border-bottom-width": {
+              "moved": false,
+              "value": "0px"
+            },
+            "border-left-color": {
+              "moved": false,
+              "value": "rgb(26, 26, 26)"
+            },
+            "border-left-width": {
+              "moved": false,
+              "value": "0px"
+            },
+            "border-right-color": {
+              "moved": false,
+              "value": "rgb(26, 26, 26)"
+            },
+            "border-right-width": {
+              "moved": false,
+              "value": "0px"
+            },
+            "border-top-color": {
+              "moved": false,
+              "value": "rgb(26, 26, 26)"
+            },
+            "border-top-left-radius": {
+              "moved": false,
+              "value": "0px"
+            },
+            "border-top-right-radius": {
+              "moved": false,
+              "value": "0px"
+            },
             "border-top-style": {
               "moved": false,
               "value": "solid"
+            },
+            "border-top-width": {
+              "moved": false,
+              "value": "0px"
+            },
+            "color": {
+              "moved": false,
+              "value": "rgb(26, 26, 26)"
+            },
+            "transition-duration": {
+              "moved": false,
+              "value": "1e-05s"
+            },
+            "transition-property": {
+              "moved": false,
+              "value": "all"
+            },
+            "transition-timing-function": {
+              "moved": false,
+              "value": "ease"
             }
           }
         }
       },
       "negativeControls": {
-        "checkedRows": 26,
-        "expectedRows": 26,
+        "checkedRows": 158,
+        "expectedRows": 158,
         "held": true,
         "meaning": "Every declared negative control was measured and none moved.",
-        "observedRows": 26,
+        "observedRows": 158,
         "violations": []
       },
-      "position": "root-inline-style",
-      "positionMeaning": "Written with setProperty on document.documentElement from the compiled TenantThemeArtifact.variables. This is the strongest position a tenant occupies, and it is ABOVE the static arm.",
+      "position": "tenant-artifact-stylesheet",
+      "positionMeaning": "The compiled TenantThemeArtifact, served the way production serves it: a base rule plus one rule per modeDelta, re-scoped from the artifact's probe-tenant selector onto the scene's own (H-3 phase (a)). It used to be a root inline write, and that was a measurement defect, not a position: inline beats every mode block, so the arm reported the tenant BASE value in a mode where production serves the vertical's own. The provider preview does write inline; whether the preview can express mode deltas at all is a separate, unmeasured product question.",
       "provenance": {
         "declaredChannels": [
           "--ds-density-mode-factor",
@@ -523,6 +1165,7 @@
         "freshnessProven": true,
         "input": {
           "baseline": null,
+          "compileOptions": {},
           "compilerInput": {
             "appearance": {
               "density": "spacious"
@@ -542,19 +1185,40 @@
             }
           },
           "ingressValue": "spacious",
+          "modeScope": null,
           "path": "appearance.general.density",
-          "stopId": "spacious"
+          "stopId": "spacious",
+          "tenantAuthoredPaths": null
         },
+        "modeChannels": {},
         "module": "dist/server.js",
         "moduleSubpath": "@rottay/design-system/server",
         "omittedChannels": [
           "--ds-density-scale"
         ],
         "schemaVersion": 1,
-        "sourceOfTruth": "src/infrastructure/compilers/composition/tenant-theme/index.ts"
+        "sourceOfTruth": "src/infrastructure/compilers/composition/tenant-theme/index.ts",
+        "stopDiscrimination": {
+          "armId": "db-tenant-theme",
+          "constant": [
+            "--ds-density-scale"
+          ],
+          "discriminating": [
+            "--ds-density-mode-factor"
+          ],
+          "exception": null,
+          "excluded": [],
+          "outcome": "PASS",
+          "vertical": "rottay",
+          "witnesses": [
+            "compact",
+            "normal",
+            "spacious"
+          ]
+        }
       },
       "restore": {
-        "comparedRows": 122,
+        "comparedRows": 290,
         "counts": {
           "byKind": {},
           "byPropertyKind": {},
@@ -566,7 +1230,7 @@
         "rows": []
       },
       "totals": {
-        "inertProperties": 90,
+        "inertProperties": 258,
         "movedProperties": 12,
         "scope": "across every (vertical x theme x fixture x property) row measured for this arm"
       }
@@ -607,6 +1271,78 @@
       "movements": {
         "rottay/dark/modern/both": {
           "space-modern-numeric-gap/root": {
+            "animation-duration": {
+              "moved": false,
+              "value": "1e-05s"
+            },
+            "animation-name": {
+              "moved": false,
+              "value": "none"
+            },
+            "animation-timing-function": {
+              "moved": false,
+              "value": "ease"
+            },
+            "background-color": {
+              "moved": false,
+              "value": "rgba(0, 0, 0, 0)"
+            },
+            "border-bottom-color": {
+              "moved": false,
+              "value": "rgb(240, 240, 240)"
+            },
+            "border-bottom-left-radius": {
+              "moved": false,
+              "value": "0px"
+            },
+            "border-bottom-right-radius": {
+              "moved": false,
+              "value": "0px"
+            },
+            "border-bottom-width": {
+              "moved": false,
+              "value": "0px"
+            },
+            "border-left-color": {
+              "moved": false,
+              "value": "rgb(240, 240, 240)"
+            },
+            "border-left-width": {
+              "moved": false,
+              "value": "0px"
+            },
+            "border-right-color": {
+              "moved": false,
+              "value": "rgb(240, 240, 240)"
+            },
+            "border-right-width": {
+              "moved": false,
+              "value": "0px"
+            },
+            "border-top-color": {
+              "moved": false,
+              "value": "rgb(240, 240, 240)"
+            },
+            "border-top-left-radius": {
+              "moved": false,
+              "value": "0px"
+            },
+            "border-top-right-radius": {
+              "moved": false,
+              "value": "0px"
+            },
+            "border-top-style": {
+              "moved": false,
+              "value": "solid"
+            },
+            "border-top-width": {
+              "moved": false,
+              "value": "0px"
+            },
+            "color": {
+              "moved": false,
+              "value": "rgb(240, 240, 240)"
+            },
             "column-gap": {
               "moved": false,
               "value": "8px"
@@ -618,6 +1354,18 @@
             "row-gap": {
               "moved": false,
               "value": "8px"
+            },
+            "transition-duration": {
+              "moved": false,
+              "value": "1e-05s"
+            },
+            "transition-property": {
+              "moved": false,
+              "value": "none"
+            },
+            "transition-timing-function": {
+              "moved": false,
+              "value": "ease"
             }
           },
           "space-modern-preset-gap/root": {
@@ -625,9 +1373,69 @@
               "moved": false,
               "value": "center"
             },
+            "animation-duration": {
+              "moved": false,
+              "value": "1e-05s"
+            },
+            "animation-name": {
+              "moved": false,
+              "value": "none"
+            },
+            "animation-timing-function": {
+              "moved": false,
+              "value": "ease"
+            },
+            "background-color": {
+              "moved": false,
+              "value": "rgba(0, 0, 0, 0)"
+            },
+            "border-bottom-color": {
+              "moved": false,
+              "value": "rgb(240, 240, 240)"
+            },
+            "border-bottom-left-radius": {
+              "moved": false,
+              "value": "0px"
+            },
+            "border-bottom-right-radius": {
+              "moved": false,
+              "value": "0px"
+            },
+            "border-bottom-width": {
+              "moved": false,
+              "value": "0px"
+            },
+            "border-left-color": {
+              "moved": false,
+              "value": "rgb(240, 240, 240)"
+            },
+            "border-left-width": {
+              "moved": false,
+              "value": "0px"
+            },
+            "border-right-color": {
+              "moved": false,
+              "value": "rgb(240, 240, 240)"
+            },
+            "border-right-width": {
+              "moved": false,
+              "value": "0px"
+            },
             "border-top-color": {
               "moved": false,
               "value": "rgb(240, 240, 240)"
+            },
+            "border-top-left-radius": {
+              "moved": false,
+              "value": "0px"
+            },
+            "border-top-right-radius": {
+              "moved": false,
+              "value": "0px"
+            },
+            "border-top-style": {
+              "moved": false,
+              "value": "solid"
             },
             "border-top-width": {
               "moved": false,
@@ -675,6 +1483,14 @@
             "transition-duration": {
               "moved": false,
               "value": "1e-05s"
+            },
+            "transition-property": {
+              "moved": false,
+              "value": "none"
+            },
+            "transition-timing-function": {
+              "moved": false,
+              "value": "ease"
             }
           },
           "token-readout/tokens": {
@@ -686,6 +1502,10 @@
               "moved": false,
               "value": "calc(10px * 1)"
             },
+            "--ds-button-primary-bg": {
+              "moved": false,
+              "value": "rgb(255, 255, 255)"
+            },
             "--ds-card-border-radius": {
               "moved": false,
               "value": "calc(14px * 1)"
@@ -693,6 +1513,22 @@
             "--ds-card-radius": {
               "moved": false,
               "value": "calc(14px * 1)"
+            },
+            "--ds-chart-series-1": {
+              "moved": false,
+              "value": "#C68196"
+            },
+            "--ds-color-primary": {
+              "moved": false,
+              "value": "rgb(255, 255, 255)"
+            },
+            "--ds-color-primary-500": {
+              "moved": false,
+              "value": "#A0A0A5"
+            },
+            "--ds-color-text-on-primary": {
+              "moved": false,
+              "value": "#0C0C0E"
             },
             "--ds-density-effective-scale": {
               "from": "clamp(\n    0.5,\n    calc(\n      clamp(\n    0.5,\n    calc(1 * 1),\n    3\n  ) *\n      1\n    ),\n    3\n  )",
@@ -713,6 +1549,10 @@
               "moved": false,
               "value": "1"
             },
+            "--ds-edge-emphasis-width": {
+              "moved": false,
+              "value": "1px"
+            },
             "--ds-edge-standard-width": {
               "moved": false,
               "value": "1px"
@@ -720,6 +1560,18 @@
             "--ds-effect-intensity": {
               "moved": false,
               "value": "1"
+            },
+            "--ds-elevation-1": {
+              "moved": false,
+              "value": "inset 0 1px 0 rgba(255, 255, 255, 0.04), 0 1px 2px rgba(0, 0, 0, 0.40), 0 2px 6px rgba(0, 0, 0, 0.28)"
+            },
+            "--ds-elevation-2": {
+              "moved": false,
+              "value": "inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 2px 4px rgba(0, 0, 0, 0.44), 0 6px 16px rgba(0, 0, 0, 0.34)"
+            },
+            "--ds-elevation-3": {
+              "moved": false,
+              "value": "inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 6px 12px rgba(0, 0, 0, 0.46), 0 12px 28px rgba(0, 0, 0, 0.40)"
             },
             "--ds-elevation-lift-strength": {
               "moved": false,
@@ -729,6 +1581,22 @@
               "moved": false,
               "value": ""
             },
+            "--ds-font-family-base": {
+              "moved": false,
+              "value": "'Public Sans', ui-sans-serif, system-ui, -apple-system, sans-serif, \"Noto Sans Arabic\", sans-serif"
+            },
+            "--ds-font-family-display": {
+              "moved": false,
+              "value": "'Public Sans', ui-sans-serif, system-ui, -apple-system, sans-serif, \"Noto Sans Arabic\", sans-serif"
+            },
+            "--ds-font-family-heading": {
+              "moved": false,
+              "value": "'Public Sans', ui-sans-serif, system-ui, -apple-system, sans-serif, \"Noto Sans Arabic\", sans-serif"
+            },
+            "--ds-font-family-mono": {
+              "moved": false,
+              "value": "'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, monospace"
+            },
             "--ds-font-size-xs": {
               "moved": false,
               "value": "calc(0.75rem * 1)"
@@ -748,6 +1616,22 @@
             "--ds-material-canvas-texture": {
               "moved": false,
               "value": ""
+            },
+            "--ds-material-card-highlight": {
+              "moved": false,
+              "value": ""
+            },
+            "--ds-motion-duration-scale": {
+              "moved": false,
+              "value": "1"
+            },
+            "--ds-motion-intensity": {
+              "moved": false,
+              "value": "1"
+            },
+            "--ds-radius-button": {
+              "moved": false,
+              "value": "calc(10px * 1)"
             },
             "--ds-radius-lg": {
               "moved": false,
@@ -785,6 +1669,10 @@
               "moved": false,
               "value": "18px"
             },
+            "--ds-recipe-profile": {
+              "moved": false,
+              "value": "\"rottay/technical-sharp@1\""
+            },
             "--ds-rhythm-effective-scale": {
               "moved": false,
               "value": "clamp(0.8, 1, 1.25)"
@@ -792,6 +1680,38 @@
             "--ds-rhythm-scale": {
               "moved": false,
               "value": "1"
+            },
+            "--ds-select-group-text-transform": {
+              "moved": false,
+              "value": "uppercase"
+            },
+            "--ds-sidebar-bg": {
+              "moved": false,
+              "value": "#0D0D10"
+            },
+            "--ds-sidebar-item-bg-active": {
+              "moved": false,
+              "value": "rgba(255, 255, 255, 0.07)"
+            },
+            "--ds-sidebar-item-bg-hover": {
+              "moved": false,
+              "value": "rgba(255, 255, 255, 0.04)"
+            },
+            "--ds-sidebar-item-color": {
+              "moved": false,
+              "value": "#A0A0A5"
+            },
+            "--ds-sidebar-item-color-active": {
+              "moved": false,
+              "value": "rgb(255, 255, 255)"
+            },
+            "--ds-sidebar-text": {
+              "moved": false,
+              "value": "#ECECEC"
+            },
+            "--ds-sidebar-text-muted": {
+              "moved": false,
+              "value": "#6B6B72"
             },
             "--ds-table-header-letter-spacing": {
               "moved": false,
@@ -817,14 +1737,166 @@
               "moved": false,
               "value": "1"
             },
+            "animation-duration": {
+              "moved": false,
+              "value": "1e-05s"
+            },
+            "animation-name": {
+              "moved": false,
+              "value": "none"
+            },
+            "animation-timing-function": {
+              "moved": false,
+              "value": "ease"
+            },
+            "background-color": {
+              "moved": false,
+              "value": "rgba(0, 0, 0, 0)"
+            },
+            "border-bottom-color": {
+              "moved": false,
+              "value": "rgb(240, 240, 240)"
+            },
+            "border-bottom-left-radius": {
+              "moved": false,
+              "value": "0px"
+            },
+            "border-bottom-right-radius": {
+              "moved": false,
+              "value": "0px"
+            },
+            "border-bottom-width": {
+              "moved": false,
+              "value": "0px"
+            },
+            "border-left-color": {
+              "moved": false,
+              "value": "rgb(240, 240, 240)"
+            },
+            "border-left-width": {
+              "moved": false,
+              "value": "0px"
+            },
+            "border-right-color": {
+              "moved": false,
+              "value": "rgb(240, 240, 240)"
+            },
+            "border-right-width": {
+              "moved": false,
+              "value": "0px"
+            },
+            "border-top-color": {
+              "moved": false,
+              "value": "rgb(240, 240, 240)"
+            },
+            "border-top-left-radius": {
+              "moved": false,
+              "value": "0px"
+            },
+            "border-top-right-radius": {
+              "moved": false,
+              "value": "0px"
+            },
             "border-top-style": {
               "moved": false,
               "value": "solid"
+            },
+            "border-top-width": {
+              "moved": false,
+              "value": "0px"
+            },
+            "color": {
+              "moved": false,
+              "value": "rgb(240, 240, 240)"
+            },
+            "transition-duration": {
+              "moved": false,
+              "value": "1e-05s"
+            },
+            "transition-property": {
+              "moved": false,
+              "value": "all"
+            },
+            "transition-timing-function": {
+              "moved": false,
+              "value": "ease"
             }
           }
         },
         "rottay/light/modern/both": {
           "space-modern-numeric-gap/root": {
+            "animation-duration": {
+              "moved": false,
+              "value": "1e-05s"
+            },
+            "animation-name": {
+              "moved": false,
+              "value": "none"
+            },
+            "animation-timing-function": {
+              "moved": false,
+              "value": "ease"
+            },
+            "background-color": {
+              "moved": false,
+              "value": "rgba(0, 0, 0, 0)"
+            },
+            "border-bottom-color": {
+              "moved": false,
+              "value": "rgb(26, 26, 26)"
+            },
+            "border-bottom-left-radius": {
+              "moved": false,
+              "value": "0px"
+            },
+            "border-bottom-right-radius": {
+              "moved": false,
+              "value": "0px"
+            },
+            "border-bottom-width": {
+              "moved": false,
+              "value": "0px"
+            },
+            "border-left-color": {
+              "moved": false,
+              "value": "rgb(26, 26, 26)"
+            },
+            "border-left-width": {
+              "moved": false,
+              "value": "0px"
+            },
+            "border-right-color": {
+              "moved": false,
+              "value": "rgb(26, 26, 26)"
+            },
+            "border-right-width": {
+              "moved": false,
+              "value": "0px"
+            },
+            "border-top-color": {
+              "moved": false,
+              "value": "rgb(26, 26, 26)"
+            },
+            "border-top-left-radius": {
+              "moved": false,
+              "value": "0px"
+            },
+            "border-top-right-radius": {
+              "moved": false,
+              "value": "0px"
+            },
+            "border-top-style": {
+              "moved": false,
+              "value": "solid"
+            },
+            "border-top-width": {
+              "moved": false,
+              "value": "0px"
+            },
+            "color": {
+              "moved": false,
+              "value": "rgb(26, 26, 26)"
+            },
             "column-gap": {
               "moved": false,
               "value": "8px"
@@ -836,6 +1908,18 @@
             "row-gap": {
               "moved": false,
               "value": "8px"
+            },
+            "transition-duration": {
+              "moved": false,
+              "value": "1e-05s"
+            },
+            "transition-property": {
+              "moved": false,
+              "value": "none"
+            },
+            "transition-timing-function": {
+              "moved": false,
+              "value": "ease"
             }
           },
           "space-modern-preset-gap/root": {
@@ -843,9 +1927,69 @@
               "moved": false,
               "value": "center"
             },
+            "animation-duration": {
+              "moved": false,
+              "value": "1e-05s"
+            },
+            "animation-name": {
+              "moved": false,
+              "value": "none"
+            },
+            "animation-timing-function": {
+              "moved": false,
+              "value": "ease"
+            },
+            "background-color": {
+              "moved": false,
+              "value": "rgba(0, 0, 0, 0)"
+            },
+            "border-bottom-color": {
+              "moved": false,
+              "value": "rgb(26, 26, 26)"
+            },
+            "border-bottom-left-radius": {
+              "moved": false,
+              "value": "0px"
+            },
+            "border-bottom-right-radius": {
+              "moved": false,
+              "value": "0px"
+            },
+            "border-bottom-width": {
+              "moved": false,
+              "value": "0px"
+            },
+            "border-left-color": {
+              "moved": false,
+              "value": "rgb(26, 26, 26)"
+            },
+            "border-left-width": {
+              "moved": false,
+              "value": "0px"
+            },
+            "border-right-color": {
+              "moved": false,
+              "value": "rgb(26, 26, 26)"
+            },
+            "border-right-width": {
+              "moved": false,
+              "value": "0px"
+            },
             "border-top-color": {
               "moved": false,
               "value": "rgb(26, 26, 26)"
+            },
+            "border-top-left-radius": {
+              "moved": false,
+              "value": "0px"
+            },
+            "border-top-right-radius": {
+              "moved": false,
+              "value": "0px"
+            },
+            "border-top-style": {
+              "moved": false,
+              "value": "solid"
             },
             "border-top-width": {
               "moved": false,
@@ -893,6 +2037,14 @@
             "transition-duration": {
               "moved": false,
               "value": "1e-05s"
+            },
+            "transition-property": {
+              "moved": false,
+              "value": "none"
+            },
+            "transition-timing-function": {
+              "moved": false,
+              "value": "ease"
             }
           },
           "token-readout/tokens": {
@@ -904,6 +2056,10 @@
               "moved": false,
               "value": "calc(10px * 1)"
             },
+            "--ds-button-primary-bg": {
+              "moved": false,
+              "value": "rgb(10, 10, 10)"
+            },
             "--ds-card-border-radius": {
               "moved": false,
               "value": "calc(14px * 1)"
@@ -911,6 +2067,22 @@
             "--ds-card-radius": {
               "moved": false,
               "value": "calc(14px * 1)"
+            },
+            "--ds-chart-series-1": {
+              "moved": false,
+              "value": "#935267"
+            },
+            "--ds-color-primary": {
+              "moved": false,
+              "value": "rgb(10, 10, 10)"
+            },
+            "--ds-color-primary-500": {
+              "moved": false,
+              "value": "#6B6B6B"
+            },
+            "--ds-color-text-on-primary": {
+              "moved": false,
+              "value": "#FFFFFF"
             },
             "--ds-density-effective-scale": {
               "from": "clamp(\n    0.5,\n    calc(\n      clamp(\n    0.5,\n    calc(1 * 1),\n    3\n  ) *\n      1\n    ),\n    3\n  )",
@@ -931,6 +2103,10 @@
               "moved": false,
               "value": "1"
             },
+            "--ds-edge-emphasis-width": {
+              "moved": false,
+              "value": "1px"
+            },
             "--ds-edge-standard-width": {
               "moved": false,
               "value": "1px"
@@ -939,6 +2115,18 @@
               "moved": false,
               "value": "1"
             },
+            "--ds-elevation-1": {
+              "moved": false,
+              "value": "0 1px 2px color-mix(in srgb, #000 calc(4% * 1), transparent), 0 2px 4px color-mix(in srgb, #000 calc(3% * 1), transparent), 0 4px 8px color-mix(in srgb, #000 calc(2% * 1), transparent)"
+            },
+            "--ds-elevation-2": {
+              "moved": false,
+              "value": "0 2px 4px color-mix(in srgb, #000 calc(3% * 1), transparent), 0 4px 8px color-mix(in srgb, #000 calc(4% * 1), transparent), 0 8px 16px color-mix(in srgb, #000 calc(3% * 1), transparent)"
+            },
+            "--ds-elevation-3": {
+              "moved": false,
+              "value": "0 2px 4px color-mix(in srgb, #000 calc(2% * 1), transparent), 0 4px 8px color-mix(in srgb, #000 calc(3% * 1), transparent), 0 8px 16px color-mix(in srgb, #000 calc(4% * 1), transparent), 0 16px 32px color-mix(in srgb, #000 calc(4% * 1), transparent)"
+            },
             "--ds-elevation-lift-strength": {
               "moved": false,
               "value": "0"
@@ -946,6 +2134,22 @@
             "--ds-experience-profile": {
               "moved": false,
               "value": ""
+            },
+            "--ds-font-family-base": {
+              "moved": false,
+              "value": "'Public Sans', ui-sans-serif, system-ui, -apple-system, sans-serif, \"Noto Sans Arabic\", sans-serif"
+            },
+            "--ds-font-family-display": {
+              "moved": false,
+              "value": "'Public Sans', ui-sans-serif, system-ui, -apple-system, sans-serif, \"Noto Sans Arabic\", sans-serif"
+            },
+            "--ds-font-family-heading": {
+              "moved": false,
+              "value": "'Public Sans', ui-sans-serif, system-ui, -apple-system, sans-serif, \"Noto Sans Arabic\", sans-serif"
+            },
+            "--ds-font-family-mono": {
+              "moved": false,
+              "value": "'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, monospace"
             },
             "--ds-font-size-xs": {
               "moved": false,
@@ -966,6 +2170,22 @@
             "--ds-material-canvas-texture": {
               "moved": false,
               "value": ""
+            },
+            "--ds-material-card-highlight": {
+              "moved": false,
+              "value": ""
+            },
+            "--ds-motion-duration-scale": {
+              "moved": false,
+              "value": "1"
+            },
+            "--ds-motion-intensity": {
+              "moved": false,
+              "value": "1"
+            },
+            "--ds-radius-button": {
+              "moved": false,
+              "value": "calc(10px * 1)"
             },
             "--ds-radius-lg": {
               "moved": false,
@@ -1003,6 +2223,10 @@
               "moved": false,
               "value": "18px"
             },
+            "--ds-recipe-profile": {
+              "moved": false,
+              "value": "\"rottay/technical-sharp@1\""
+            },
             "--ds-rhythm-effective-scale": {
               "moved": false,
               "value": "clamp(0.8, 1, 1.25)"
@@ -1010,6 +2234,38 @@
             "--ds-rhythm-scale": {
               "moved": false,
               "value": "1"
+            },
+            "--ds-select-group-text-transform": {
+              "moved": false,
+              "value": "uppercase"
+            },
+            "--ds-sidebar-bg": {
+              "moved": false,
+              "value": "#F4F4F3"
+            },
+            "--ds-sidebar-item-bg-active": {
+              "moved": false,
+              "value": "rgba(0, 0, 0, 0.06)"
+            },
+            "--ds-sidebar-item-bg-hover": {
+              "moved": false,
+              "value": "rgba(0, 0, 0, 0.03)"
+            },
+            "--ds-sidebar-item-color": {
+              "moved": false,
+              "value": "#6B6B6B"
+            },
+            "--ds-sidebar-item-color-active": {
+              "moved": false,
+              "value": "rgb(10, 10, 10)"
+            },
+            "--ds-sidebar-text": {
+              "moved": false,
+              "value": "#1A1A1A"
+            },
+            "--ds-sidebar-text-muted": {
+              "moved": false,
+              "value": "#9C9C9C"
             },
             "--ds-table-header-letter-spacing": {
               "moved": false,
@@ -1035,23 +2291,103 @@
               "moved": false,
               "value": "1"
             },
+            "animation-duration": {
+              "moved": false,
+              "value": "1e-05s"
+            },
+            "animation-name": {
+              "moved": false,
+              "value": "none"
+            },
+            "animation-timing-function": {
+              "moved": false,
+              "value": "ease"
+            },
+            "background-color": {
+              "moved": false,
+              "value": "rgba(0, 0, 0, 0)"
+            },
+            "border-bottom-color": {
+              "moved": false,
+              "value": "rgb(26, 26, 26)"
+            },
+            "border-bottom-left-radius": {
+              "moved": false,
+              "value": "0px"
+            },
+            "border-bottom-right-radius": {
+              "moved": false,
+              "value": "0px"
+            },
+            "border-bottom-width": {
+              "moved": false,
+              "value": "0px"
+            },
+            "border-left-color": {
+              "moved": false,
+              "value": "rgb(26, 26, 26)"
+            },
+            "border-left-width": {
+              "moved": false,
+              "value": "0px"
+            },
+            "border-right-color": {
+              "moved": false,
+              "value": "rgb(26, 26, 26)"
+            },
+            "border-right-width": {
+              "moved": false,
+              "value": "0px"
+            },
+            "border-top-color": {
+              "moved": false,
+              "value": "rgb(26, 26, 26)"
+            },
+            "border-top-left-radius": {
+              "moved": false,
+              "value": "0px"
+            },
+            "border-top-right-radius": {
+              "moved": false,
+              "value": "0px"
+            },
             "border-top-style": {
               "moved": false,
               "value": "solid"
+            },
+            "border-top-width": {
+              "moved": false,
+              "value": "0px"
+            },
+            "color": {
+              "moved": false,
+              "value": "rgb(26, 26, 26)"
+            },
+            "transition-duration": {
+              "moved": false,
+              "value": "1e-05s"
+            },
+            "transition-property": {
+              "moved": false,
+              "value": "all"
+            },
+            "transition-timing-function": {
+              "moved": false,
+              "value": "ease"
             }
           }
         }
       },
       "negativeControls": {
-        "checkedRows": 26,
-        "expectedRows": 26,
+        "checkedRows": 158,
+        "expectedRows": 158,
         "held": true,
         "meaning": "Every declared negative control was measured and none moved.",
-        "observedRows": 26,
+        "observedRows": 158,
         "violations": []
       },
       "position": "tenant-scoped-stylesheet-block",
-      "positionMeaning": "Appended to the measured bundle behind the same unlayered tenant selector the compiled artifact uses. This is where a code-owned vertical lands: below an inline root write, above the base layer.",
+      "positionMeaning": "Appended to the measured bundle behind the same unlayered tenant selector the compiled artifact uses, plus one block per compiled mode at the compiler's own mode grammar (M-1). This is where a code-owned vertical lands: above the base layer, and above the vertical artifact by source order at equal specificity. AGED CLAUSE REMOVED IN H-3 PHASE (a): this used to say \"below an inline root write\", which described the DB arm as it was then. Both arms are stylesheet arms now, so nothing sits above this one.",
       "provenance": {
         "declaredChannels": [
           "--ds-density-mode-factor",
@@ -1066,9 +2402,10 @@
         "freshnessProven": true,
         "input": {
           "baseline": {
-            "digest": "c794292a6627d370391dc8b967a913a5c9c834ee334996d9d5f40ca876db6c1c",
+            "digest": "8500910e0508452a3d403e0d5d2a3d840f368c5d0038b33e9b56711cbc7e43f0",
             "source": "dist/index.js#rottayBrandTheme"
           },
+          "compileOptions": {},
           "compilerInput": {
             "brandTheme": {
               "appearance": {
@@ -2546,6 +3883,7 @@
                       "dividerTextColor": "#1A1A1A",
                       "headerBg": "rgba(250, 250, 249, 0.82)",
                       "headerBorder": "#E5E5E3",
+                      "siderBg": "#F4F4F3",
                       "siderBorder": "#E5E5E3"
                     },
                     "list": {
@@ -2656,6 +3994,7 @@
                       "bg": "#F4F4F3",
                       "border": "#E5E5E3",
                       "childPaddingInline": "initial",
+                      "footerBg": "#F4F4F3",
                       "groupColor": "#9C9C9C",
                       "groupFontSize": "11px",
                       "groupLetterSpacing": "0.04em",
@@ -2728,6 +4067,7 @@
                       "bg": "#FFFFFF",
                       "border": "#E5E5E3",
                       "headerBg": "#FAFAF9",
+                      "headerColor": "#6B6B6B",
                       "loadingOverlayBg": "rgba(255, 255, 255, 0.7)",
                       "rowBg": "#FFFFFF",
                       "rowBgHover": "#FAFAF9",
@@ -3190,7 +4530,6 @@
                   "sm": "6px",
                   "xl": "18px"
                 },
-                "density": "spacious",
                 "densityScale": 1,
                 "elevations": {
                   "level0": "none",
@@ -3248,6 +4587,14 @@
                   "relaxed": 1.75,
                   "tight": 1.25
                 }
+              }
+            },
+            "tenantAuthoredPaths": [
+              "surfaces.density"
+            ],
+            "tenantPatch": {
+              "surfaces": {
+                "density": "spacious"
               }
             },
             "tenantSlug": "rottay"
@@ -4728,6 +6075,7 @@
                     "dividerTextColor": "#1A1A1A",
                     "headerBg": "rgba(250, 250, 249, 0.82)",
                     "headerBorder": "#E5E5E3",
+                    "siderBg": "#F4F4F3",
                     "siderBorder": "#E5E5E3"
                   },
                   "list": {
@@ -4838,6 +6186,7 @@
                     "bg": "#F4F4F3",
                     "border": "#E5E5E3",
                     "childPaddingInline": "initial",
+                    "footerBg": "#F4F4F3",
                     "groupColor": "#9C9C9C",
                     "groupFontSize": "11px",
                     "groupLetterSpacing": "0.04em",
@@ -4910,6 +6259,7 @@
                     "bg": "#FFFFFF",
                     "border": "#E5E5E3",
                     "headerBg": "#FAFAF9",
+                    "headerColor": "#6B6B6B",
                     "loadingOverlayBg": "rgba(255, 255, 255, 0.7)",
                     "rowBg": "#FFFFFF",
                     "rowBgHover": "#FAFAF9",
@@ -5433,16 +6783,41 @@
             }
           },
           "ingressValue": "spacious",
+          "modeScope": null,
           "path": "surfaces.density",
-          "stopId": "spacious"
+          "stopId": "spacious",
+          "tenantAuthoredPaths": [
+            "surfaces.density"
+          ]
+        },
+        "modeChannels": {
+          "light": []
         },
         "module": "dist/infrastructure/compilers/kernel/runtime/brand-theme/index.js",
         "moduleSubpath": null,
         "omittedChannels": [],
-        "sourceOfTruth": "src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts"
+        "sourceOfTruth": "src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
+        "stopDiscrimination": {
+          "armId": "static-brand-theme",
+          "constant": [
+            "--ds-density-scale"
+          ],
+          "discriminating": [
+            "--ds-density-mode-factor"
+          ],
+          "exception": null,
+          "excluded": [],
+          "outcome": "PASS",
+          "vertical": "rottay",
+          "witnesses": [
+            "compact",
+            "normal",
+            "spacious"
+          ]
+        }
       },
       "restore": {
-        "comparedRows": 122,
+        "comparedRows": 290,
         "counts": {
           "byKind": {},
           "byPropertyKind": {},
@@ -5454,7 +6829,7 @@
         "rows": []
       },
       "totals": {
-        "inertProperties": 90,
+        "inertProperties": 258,
         "movedProperties": 12,
         "scope": "across every (vertical x theme x fixture x property) row measured for this arm"
       }
@@ -5464,8 +6839,17 @@
   "controlId": "density.mode",
   "declaredNegativeControls": {
     "controlId": "density.mode",
-    "controlPhrases": [],
+    "controlPhrases": [
+      "color remains fixed",
+      "motion remains fixed",
+      "border remains fixed",
+      "numeric instance gaps remain exact"
+    ],
     "effective": [
+      "color remains fixed",
+      "motion remains fixed",
+      "border remains fixed",
+      "numeric instance gaps remain exact",
       "numeric and tuple size remain exact",
       "separator count direction wrap alignment and touch ownership remain unchanged"
     ],
@@ -5498,6 +6882,76 @@
   "negativeControlResolution": {
     "complete": true,
     "resolved": [
+      {
+        "assertion": "did-not-move",
+        "id": "color-fixed",
+        "meaning": "Rhythm shares no channel with any palette seed.",
+        "partiallyMechanised": [],
+        "phrase": "color remains fixed",
+        "properties": [
+          "color",
+          "background-color",
+          "border-top-color",
+          "border-right-color",
+          "border-bottom-color",
+          "border-left-color"
+        ],
+        "targetScope": "every-measured-target",
+        "targets": null
+      },
+      {
+        "assertion": "did-not-move",
+        "id": "motion-fixed",
+        "meaning": "Rhythm has no motion authority.",
+        "partiallyMechanised": [],
+        "phrase": "motion remains fixed",
+        "properties": [
+          "transition-duration",
+          "transition-property",
+          "transition-timing-function",
+          "animation-duration",
+          "animation-name",
+          "animation-timing-function"
+        ],
+        "targetScope": "every-measured-target",
+        "targets": null
+      },
+      {
+        "assertion": "did-not-move",
+        "id": "border-fixed",
+        "meaning": "Border geometry belongs to the shape axis. Radius is included on purpose: a rhythm stop that moved a corner would be reaching a channel it does not own.",
+        "partiallyMechanised": [],
+        "phrase": "border remains fixed",
+        "properties": [
+          "border-top-width",
+          "border-right-width",
+          "border-bottom-width",
+          "border-left-width",
+          "border-top-style",
+          "border-top-left-radius",
+          "border-top-right-radius",
+          "border-bottom-left-radius",
+          "border-bottom-right-radius"
+        ],
+        "targetScope": "every-measured-target",
+        "targets": null
+      },
+      {
+        "assertion": "did-not-move",
+        "id": "numeric-instance-gaps-exact",
+        "meaning": "A numeric gap is exact instance geometry. Rhythm is applied at the preset rungs, never at a consume site, so an instance that asked for 8px must still read 8px.",
+        "partiallyMechanised": [],
+        "phrase": "numeric instance gaps remain exact",
+        "properties": [
+          "gap",
+          "column-gap",
+          "row-gap"
+        ],
+        "targetScope": "declared-targets",
+        "targets": [
+          "space-modern-numeric-gap/root"
+        ]
+      },
       {
         "assertion": "did-not-move",
         "id": "numeric-instance-gaps-exact",
@@ -5558,7 +7012,7 @@
     "bundleMode": "fresh",
     "bundles": {
       "rottay": {
-        "bytes": 5344245,
+        "bytes": 5344349,
         "distMatchesStyles": true,
         "freshnessNote": "Recomposed in memory from src/foundation/tokens/css with the formula in build-vertical-css.mjs. Omits the per-tenant --ds-motion-spring tail, which requires compiled BrandTheme modules under dist/.",
         "freshnessProven": true,
@@ -5568,7 +7022,7 @@
           "src/foundation/tokens/css/facade/artifacts/rottay/index.css"
         ],
         "mode": "fresh",
-        "sha256": "d69ab515a7374b6eba10b8d5533e7aa20ac350a35a9c88af5037769f80003085",
+        "sha256": "ece49e89a2e91c1ffef93ee8d45b0f1f26b66c52032495d7cb36121c7c66892b",
         "shippedDistDrift": {
           "identical": false,
           "meaning": "The shipped bundle is this exact text plus a trailing remainder — the expected shape, since `fresh` omits the per-tenant --ds-motion-spring tail. Whether that remainder is the sanctioned spring block is scripts/verticals/css-staleness-gate/index.mjs's question, not this harness's.",
@@ -5579,10 +7033,10 @@
       }
     },
     "sourceFreshness": {
-      "declaredDigest": "a2d6e5bd7a92612df6f84bc699676d14dc04a960cba0deee07a8df4c93063d56",
-      "observedDigest": "a2d6e5bd7a92612df6f84bc699676d14dc04a960cba0deee07a8df4c93063d56",
-      "postMeasurementDigest": "a2d6e5bd7a92612df6f84bc699676d14dc04a960cba0deee07a8df4c93063d56",
-      "preMeasurementDigest": "a2d6e5bd7a92612df6f84bc699676d14dc04a960cba0deee07a8df4c93063d56",
+      "declaredDigest": "19da7f8187ee04799e62612421a01e17d61ecea541be83703c2feff6f074a3e9",
+      "observedDigest": "19da7f8187ee04799e62612421a01e17d61ecea541be83703c2feff6f074a3e9",
+      "postMeasurementDigest": "19da7f8187ee04799e62612421a01e17d61ecea541be83703c2feff6f074a3e9",
+      "preMeasurementDigest": "19da7f8187ee04799e62612421a01e17d61ecea541be83703c2feff6f074a3e9",
       "sourceFiles": [
         "packages/core/dist/build-stamp.json",
         "packages/core/dist/infrastructure/compilers/kernel/runtime/brand-theme/index.js",
@@ -5594,13 +7048,18 @@
         "packages/core/src/foundation/tokens/css/facade/artifacts/rottay/index.css",
         "packages/core/src/foundation/tokens/css/facade/entrypoints/base.css",
         "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css",
+        "packages/core/src/foundation/tokens/css/foundation/base/density.css",
         "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
         "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives.css",
         "packages/core/src/foundation/tokens/css/presentation/components/space.css",
         "packages/core/src/foundation/tokens/css/runtime/engines/modern/compiled.css",
+        "packages/core/src/foundation/tokens/ts/foundation/base/density/index.ts",
         "packages/core/src/infrastructure/compilers/composition/tenant-theme/index.ts",
+        "packages/core/src/infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts",
+        "packages/core/src/infrastructure/compilers/kernel/foundation/css/appearance-posture/index.ts",
         "packages/core/src/infrastructure/compilers/kernel/foundation/css/chrome-variables/index.ts",
         "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
+        "packages/core/src/tooling/resolution-probe/composition/data-run/index.mjs",
         "packages/core/src/tooling/resolution-probe/composition/diff/index.mjs",
         "packages/core/src/tooling/resolution-probe/composition/receipt/index.mjs",
         "packages/core/src/tooling/resolution-probe/composition/run/index.mjs",
@@ -5634,33 +7093,33 @@
     "stylesheets": {
       "db-tenant-theme": {
         "rottay/dark/modern/both": {
-          "baseline": "d69ab515a7374b6eba10b8d5533e7aa20ac350a35a9c88af5037769f80003085",
-          "mutation": "d69ab515a7374b6eba10b8d5533e7aa20ac350a35a9c88af5037769f80003085",
-          "mutationDifferedFromBaseline": false,
-          "removal": "d69ab515a7374b6eba10b8d5533e7aa20ac350a35a9c88af5037769f80003085",
+          "baseline": "ece49e89a2e91c1ffef93ee8d45b0f1f26b66c52032495d7cb36121c7c66892b",
+          "mutation": "0dfde96ca34567990c8a9cb51cda1f80316cf28c03499ee9c7b73c764857f6c1",
+          "mutationDifferedFromBaseline": true,
+          "removal": "ece49e89a2e91c1ffef93ee8d45b0f1f26b66c52032495d7cb36121c7c66892b",
           "removalIsByteIdenticalToBaseline": true
         },
         "rottay/light/modern/both": {
-          "baseline": "d69ab515a7374b6eba10b8d5533e7aa20ac350a35a9c88af5037769f80003085",
-          "mutation": "d69ab515a7374b6eba10b8d5533e7aa20ac350a35a9c88af5037769f80003085",
-          "mutationDifferedFromBaseline": false,
-          "removal": "d69ab515a7374b6eba10b8d5533e7aa20ac350a35a9c88af5037769f80003085",
+          "baseline": "ece49e89a2e91c1ffef93ee8d45b0f1f26b66c52032495d7cb36121c7c66892b",
+          "mutation": "0dfde96ca34567990c8a9cb51cda1f80316cf28c03499ee9c7b73c764857f6c1",
+          "mutationDifferedFromBaseline": true,
+          "removal": "ece49e89a2e91c1ffef93ee8d45b0f1f26b66c52032495d7cb36121c7c66892b",
           "removalIsByteIdenticalToBaseline": true
         }
       },
       "static-brand-theme": {
         "rottay/dark/modern/both": {
-          "baseline": "d69ab515a7374b6eba10b8d5533e7aa20ac350a35a9c88af5037769f80003085",
-          "mutation": "23b1b96516dbf3b48b3ec01fa8d1732bdada8a900c82716b2fdc0e96bf6dfe78",
+          "baseline": "ece49e89a2e91c1ffef93ee8d45b0f1f26b66c52032495d7cb36121c7c66892b",
+          "mutation": "13764af435b8fa9cf10fb573c21fb87f42724a1f4bad2b597556ef5de89a878b",
           "mutationDifferedFromBaseline": true,
-          "removal": "d69ab515a7374b6eba10b8d5533e7aa20ac350a35a9c88af5037769f80003085",
+          "removal": "ece49e89a2e91c1ffef93ee8d45b0f1f26b66c52032495d7cb36121c7c66892b",
           "removalIsByteIdenticalToBaseline": true
         },
         "rottay/light/modern/both": {
-          "baseline": "d69ab515a7374b6eba10b8d5533e7aa20ac350a35a9c88af5037769f80003085",
-          "mutation": "23b1b96516dbf3b48b3ec01fa8d1732bdada8a900c82716b2fdc0e96bf6dfe78",
+          "baseline": "ece49e89a2e91c1ffef93ee8d45b0f1f26b66c52032495d7cb36121c7c66892b",
+          "mutation": "13764af435b8fa9cf10fb573c21fb87f42724a1f4bad2b597556ef5de89a878b",
           "mutationDifferedFromBaseline": true,
-          "removal": "d69ab515a7374b6eba10b8d5533e7aa20ac350a35a9c88af5037769f80003085",
+          "removal": "ece49e89a2e91c1ffef93ee8d45b0f1f26b66c52032495d7cb36121c7c66892b",
           "removalIsByteIdenticalToBaseline": true
         }
       }

@@ -4317,6 +4317,88 @@ re-atestación de Sonnet. Con esto, typography.families (el control más
 barato de la cola: ambos keypaths limpios) queda desbloqueado para su
 calibración — F4B-14 sigue.
 
+**LEY DE ADMISIÓN de `SUPERSEDED_BY_LIVE_FENCE` (DT, 2026-08-25, sobre la
+evaluación vinculada de Fable en el postaudit de F4B-16 — escrita UNA vez,
+vale para toda aplicación futura de la clase; CI-2 la hará gate ejecutable):**
+la clase SÓLO aplica cuando se cumplen LAS DOS condiciones: **(1) el receipt
+es in-re-verificable POR CONSTRUCCIÓN** — su productor ya no existe y no es
+reconstruible, así que la frescura no es re-verificable (NUNCA aplica a un
+receipt re-emitible; un receipt incómodo re-emitible se re-emite, no se
+retira); **(2) la ley que el receipt medía tiene una cerca VIVA y bloqueante
+igual o más fuerte que el receipt retirado, verificada por medición directa**
+(leer la cerca y confirmar que cubre la misma escena — NUNCA una cerca más
+débil que lo que retira). El archivo NUNCA se borra: se re-clasifica
+(`supersededEvidence` con la clase, la cita de la cerca y la doble
+verificación previa). La primera aplicación (compound-editorial de F4B-14,
+fence `capability-propagation:573` + `e2-composed-pairing.test.ts`) cumple
+ambas y quedó evaluada por Fable como "fortalece el programa".
+
+**F4B-16 — profiles.expressive CIERRA SOURCE_BOUND (2026-08-25; Sonnet;
+postaudit Fable: ACCEPT — "cierra con el último wildcard del registry
+retirado, el cerco correcto para la unión role-blind, exclusiones honestas
+medidas y re-medidas por mí"; P2 de una cláusula corregida al commitear;
+`SUPERSEDED_BY_LIVE_FENCE` evaluada: FORTALECE, con su ley de admisión
+escrita arriba y el fence fuerte `e2-composed-pairing.test.ts` citado en
+ambas notas).** Los 6 ejes expresivos con vocabularios
+por-miembro, y tres asientos de verdad que valen más que el control mismo.
+**Registry:** (a) keypath corregido de `expressive.profiles.*` (wildcard
+roto — el walker de ingress sólo entiende brace-SETS; un `*` solo escribía
+la key literal nonsense) al brace-set de 6 miembros con últimos segmentos
+distintos (la ley del brace de Fase B no muerde); (b) `enumValues` como
+unión plana deduplicada de 28 valores (30 crudos; `flat` y `soft-depth`
+comparten material y elevation) declarada explícitamente ROLE-BLIND y NO
+autoridad — `enumValues.includes(stop.id)` nunca chequea a qué eje pertenece
+un valor; el gate real fail-closed es `sanitizeExpressiveOverrides`, y la
+forma per-member genuina queda como decisión de schema futura (tocaría el
+instrumento); (c) `derivedChannels` corregidos por medición
+(`--ds-type-label-text-transform` nunca se mueve — lo escribe OTRO overlay;
+swap a `--ds-select-group-text-transform` por el no-movedor bithire-only de
+table-header). **El cerco contra el falso testigo (drills H-2 10/11):** un
+stop cross-axis (`flat` para geometry) pasa la unión ciega, el compilador
+real lo descarta (canales byte-idénticos al baseline) Y
+`assertStopDiscrimination` rechaza certificar con un solo stop; y el
+catálogo declarado se compara `deepEqual` contra los 6 vocabularios reales
+de dist/ (la desincronización silenciosa se pone roja). **Matriz causal
+15/15** (6 ejes × las verticales que discriminan): type=editorial (swap
+desde geometric — su `uppercase` coincide con el default incondicional de
+`default.css:759`, medido), geometry=pill-accented, edge=outlined,
+material=paper, elevation=dramatic, motif=contour. **Exclusión medida
+nueva:** el arm DB de bithire da cero-diff genuino en 3 de 6 ejes (type,
+material, motif — sin importar el valor, probado con dos valores en type);
+excluido por combinación (rottay+evnto en esos 3), causa raíz NO trazada
+(merge path específico de bithire en el compilador DB — fuera del
+write-set). **DEUDA REGISTRADA: diagnóstico del merge path de bithire en el
+arm DB** (¿por qué esos 3 ejes no se mueven?) — va a F5 o a un packet de
+diagnóstico propio. **negativeControls:** `"border remains fixed"` eliminado
+completo (la frase agrupa border-width/style Y border-radius, y DOS ejes
+propios — edge y geometry — la mueven legítimamente; no existe frase más
+angosta en el vocabulario cerrado; documentado en `negativeControlsScopeNote`).
+**Nota P3 de Fable asentada:** el contenedor `visualFoundation.advanced` es
+compartido y PODRÍA llevar un sibling de color; en la práctica ninguno de
+los 8 stops puebla otro campo (verificado por `buildIngressInput` desde
+`base = {}` y por compile directo de un documento mínimo). **ADJUDICACIÓN DT
+— el receipt del caso compuesto de F4B-14 se retira con clase
+SUPERSEDED_BY_LIVE_FENCE:** su productor ad-hoc (`/tmp/f4b14-compound-case.mjs`)
+ya no existe (frescura no re-verificable por construcción); la ley que midió
+(explicit family wins en el caso compuesto, ambas mitades, ambas puertas)
+está cercada viva por `capability-propagation/index.test.ts:573` (BASE_DOC
+:141-146, verde, verificado standalone 8/8 por el implementador antes de
+aplicar el retiro); la medición quedó doblemente verificada en F4B-14
+(ACCEPT Fable). El archivo queda en disco como registro histórico; las
+referencias en `typography.families.json` y `typography.json` (familia)
+pasaron a `supersededEvidence` con la clase y las citas. **Re-emisión total
+con bug propio encontrado y auditado:** el selector de control-manifest por
+primer archivo de `sourceFiles` (varios controles listan primero
+`experience.profile.json`) → match exacto por `controlId`; 85 corridas "OK"
+del primer pase auditadas 0 falsos-positivos silenciosos; 108/108 + 3/3
+data-causal; la cascada final (su propio edit de `typography.json`
+re-staleó 23) re-emitida junto con el R7-dark-closed: 24/24, re-emisión
+como ÚLTIMO paso (la ley, otra vez). Cadena: validador v2 127/131 (los 4 =
+3 icon del Packet 2 + compound histórico, todos declarados),
+CONSTITUTION_READY, program-check.test 48/48, probe 245/245, provenance
+24/24, css-staleness 5/5, producers --check OK. Cierre en SOURCE_BOUND por
+la nota de anatomía (propertyGroups sin ratificar — dependencia registrada).
+
 **PACKET 1 DATA — el runner DATA queda parametrizado por descriptor
 (2026-08-25; Opus; postaudit Fable: ACCEPT — "la invariancia la probé con mis
 propias manos: los 3 artifacts vivos se reproducen byte-idénticos bajo el

@@ -1657,6 +1657,10 @@
               "moved": false,
               "value": "0.9"
             },
+            "--ds-edge-emphasis-width": {
+              "moved": false,
+              "value": "1px"
+            },
             "--ds-edge-standard-width": {
               "moved": false,
               "value": "1px"
@@ -1721,6 +1725,10 @@
               "moved": false,
               "value": "radial-gradient(circle at 88% 4%, color-mix(in srgb, rgb(30, 132, 230) 14%, transparent), transparent 30%)"
             },
+            "--ds-material-card-highlight": {
+              "moved": false,
+              "value": "inset 0 1px 0 color-mix(in srgb, #e4e8ed 6%, transparent)"
+            },
             "--ds-motion-duration-scale": {
               "moved": false,
               "value": "1"
@@ -1781,6 +1789,10 @@
             "--ds-rhythm-scale": {
               "moved": false,
               "value": "1"
+            },
+            "--ds-select-group-text-transform": {
+              "moved": false,
+              "value": "none"
             },
             "--ds-sidebar-bg": {
               "moved": false,
@@ -3544,6 +3556,10 @@
               "moved": false,
               "value": "0.9"
             },
+            "--ds-edge-emphasis-width": {
+              "moved": false,
+              "value": "1px"
+            },
             "--ds-edge-standard-width": {
               "moved": false,
               "value": "1px"
@@ -3608,6 +3624,10 @@
               "moved": false,
               "value": "radial-gradient(circle at 88% 4%, rgba(58, 111, 176, 0.055), transparent 30%)"
             },
+            "--ds-material-card-highlight": {
+              "moved": false,
+              "value": "inset 0 1px 0 rgba(255, 255, 255, 0.9)"
+            },
             "--ds-motion-duration-scale": {
               "moved": false,
               "value": "1"
@@ -3668,6 +3688,10 @@
             "--ds-rhythm-scale": {
               "moved": false,
               "value": "1"
+            },
+            "--ds-select-group-text-transform": {
+              "moved": false,
+              "value": "none"
             },
             "--ds-sidebar-bg": {
               "moved": false,
@@ -3897,7 +3921,7 @@
         }
       },
       "restore": {
-        "comparedRows": 946,
+        "comparedRows": 952,
         "counts": {
           "byKind": {},
           "byPropertyKind": {},
@@ -3909,7 +3933,7 @@
         "rows": []
       },
       "totals": {
-        "inertProperties": 924,
+        "inertProperties": 930,
         "movedProperties": 2,
         "scope": "across every (vertical x theme x fixture x property) row measured for this arm"
       }
@@ -5571,6 +5595,10 @@
               "moved": false,
               "value": "0.9"
             },
+            "--ds-edge-emphasis-width": {
+              "moved": false,
+              "value": "1px"
+            },
             "--ds-edge-standard-width": {
               "moved": false,
               "value": "1px"
@@ -5635,6 +5663,10 @@
               "moved": false,
               "value": "radial-gradient(circle at 88% 4%, color-mix(in srgb, rgb(30, 132, 230) 14%, transparent), transparent 30%)"
             },
+            "--ds-material-card-highlight": {
+              "moved": false,
+              "value": "inset 0 1px 0 color-mix(in srgb, #e4e8ed 6%, transparent)"
+            },
             "--ds-motion-duration-scale": {
               "moved": false,
               "value": "1"
@@ -5695,6 +5727,10 @@
             "--ds-rhythm-scale": {
               "moved": false,
               "value": "1"
+            },
+            "--ds-select-group-text-transform": {
+              "moved": false,
+              "value": "none"
             },
             "--ds-sidebar-bg": {
               "moved": false,
@@ -7458,6 +7494,10 @@
               "moved": false,
               "value": "0.9"
             },
+            "--ds-edge-emphasis-width": {
+              "moved": false,
+              "value": "1px"
+            },
             "--ds-edge-standard-width": {
               "moved": false,
               "value": "1px"
@@ -7522,6 +7562,10 @@
               "moved": false,
               "value": "radial-gradient(circle at 88% 4%, rgba(58, 111, 176, 0.055), transparent 30%)"
             },
+            "--ds-material-card-highlight": {
+              "moved": false,
+              "value": "inset 0 1px 0 rgba(255, 255, 255, 0.9)"
+            },
             "--ds-motion-duration-scale": {
               "moved": false,
               "value": "1"
@@ -7582,6 +7626,10 @@
             "--ds-rhythm-scale": {
               "moved": false,
               "value": "1"
+            },
+            "--ds-select-group-text-transform": {
+              "moved": false,
+              "value": "none"
             },
             "--ds-sidebar-bg": {
               "moved": false,
@@ -11436,7 +11484,7 @@
         }
       },
       "restore": {
-        "comparedRows": 946,
+        "comparedRows": 952,
         "counts": {
           "byKind": {},
           "byPropertyKind": {},
@@ -11448,7 +11496,7 @@
         "rows": []
       },
       "totals": {
-        "inertProperties": 924,
+        "inertProperties": 930,
         "movedProperties": 2,
         "scope": "across every (vertical x theme x fixture x property) row measured for this arm"
       }
@@ -11614,10 +11662,10 @@
       }
     },
     "sourceFreshness": {
-      "declaredDigest": "1d14ba01573e8636dce9004b6b96d94ba51a0e309df7f60356508f225e0c6210",
-      "observedDigest": "1d14ba01573e8636dce9004b6b96d94ba51a0e309df7f60356508f225e0c6210",
-      "postMeasurementDigest": "1d14ba01573e8636dce9004b6b96d94ba51a0e309df7f60356508f225e0c6210",
-      "preMeasurementDigest": "1d14ba01573e8636dce9004b6b96d94ba51a0e309df7f60356508f225e0c6210",
+      "declaredDigest": "398439d1fd4bbd062db42692d9d03c062c6f4556d2ba7bac0fea213d8f52860b",
+      "observedDigest": "398439d1fd4bbd062db42692d9d03c062c6f4556d2ba7bac0fea213d8f52860b",
+      "postMeasurementDigest": "398439d1fd4bbd062db42692d9d03c062c6f4556d2ba7bac0fea213d8f52860b",
+      "preMeasurementDigest": "398439d1fd4bbd062db42692d9d03c062c6f4556d2ba7bac0fea213d8f52860b",
       "sourceFiles": [
         "packages/core/dist/build-stamp.json",
         "packages/core/dist/infrastructure/compilers/kernel/runtime/brand-theme/index.js",

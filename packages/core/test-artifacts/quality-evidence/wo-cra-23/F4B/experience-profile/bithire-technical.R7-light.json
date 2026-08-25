@@ -29,24 +29,944 @@
         }
       },
       "inline": {
-        "bithire/light/modern/both": {
-          "clobbered": [],
-          "introduced": [
-            "--ds-letter-spacing-heading"
-          ],
-          "restoreOps": [
-            {
-              "name": "--ds-letter-spacing-heading",
-              "op": "remove"
-            },
-            {
-              "name": "style",
-              "op": "remove-attribute"
-            }
-          ]
-        }
+        "bithire/dark/modern/both": null,
+        "bithire/light/modern/both": null
       },
       "movements": {
+        "bithire/dark/modern/both": {
+          "button-modern-md/hitbox": {
+            "@rect-block-size": {
+              "moved": false,
+              "value": "32.390625"
+            },
+            "@rect-inline-size": {
+              "moved": false,
+              "value": "66.984375"
+            },
+            "aspect-ratio": {
+              "moved": false,
+              "value": "auto"
+            },
+            "background-color": {
+              "moved": false,
+              "value": "rgb(26, 127, 224)"
+            },
+            "block-size": {
+              "moved": false,
+              "value": "32.3906px"
+            },
+            "border-bottom-color": {
+              "moved": false,
+              "value": "rgb(26, 127, 224)"
+            },
+            "border-left-color": {
+              "moved": false,
+              "value": "rgb(26, 127, 224)"
+            },
+            "border-right-color": {
+              "moved": false,
+              "value": "rgb(26, 127, 224)"
+            },
+            "border-top-color": {
+              "moved": false,
+              "value": "rgb(26, 127, 224)"
+            },
+            "color": {
+              "moved": false,
+              "value": "rgb(255, 255, 255)"
+            },
+            "contain-intrinsic-size": {
+              "moved": false,
+              "value": "none"
+            },
+            "height": {
+              "moved": false,
+              "value": "32.3906px"
+            },
+            "inline-size": {
+              "moved": false,
+              "value": "66.9844px"
+            },
+            "max-block-size": {
+              "moved": false,
+              "value": "none"
+            },
+            "max-height": {
+              "moved": false,
+              "value": "none"
+            },
+            "max-inline-size": {
+              "moved": false,
+              "value": "100%"
+            },
+            "max-width": {
+              "moved": false,
+              "value": "100%"
+            },
+            "min-block-size": {
+              "moved": false,
+              "value": "32.4px"
+            },
+            "min-height": {
+              "moved": false,
+              "value": "32.4px"
+            },
+            "min-inline-size": {
+              "moved": false,
+              "value": "0px"
+            },
+            "min-width": {
+              "moved": false,
+              "value": "0px"
+            },
+            "scale": {
+              "moved": false,
+              "value": "none"
+            },
+            "width": {
+              "moved": false,
+              "value": "66.9844px"
+            },
+            "zoom": {
+              "moved": false,
+              "value": "1"
+            }
+          },
+          "button-modern-md/root": {
+            "background-color": {
+              "moved": false,
+              "value": "rgb(26, 127, 224)"
+            },
+            "border-bottom-color": {
+              "moved": false,
+              "value": "rgb(26, 127, 224)"
+            },
+            "border-left-color": {
+              "moved": false,
+              "value": "rgb(26, 127, 224)"
+            },
+            "border-right-color": {
+              "moved": false,
+              "value": "rgb(26, 127, 224)"
+            },
+            "border-top-color": {
+              "moved": false,
+              "value": "rgb(26, 127, 224)"
+            },
+            "border-top-left-radius": {
+              "moved": false,
+              "value": "9px"
+            },
+            "border-top-width": {
+              "moved": false,
+              "value": "1px"
+            },
+            "box-shadow": {
+              "moved": false,
+              "value": "color(srgb 0.894118 0.909804 0.929412 / 0.05) 0px 1px 0px 0px inset"
+            },
+            "color": {
+              "moved": false,
+              "value": "rgb(255, 255, 255)"
+            },
+            "font-family": {
+              "moved": false,
+              "value": "\"Public Sans\", ui-sans-serif, system-ui, -apple-system, sans-serif, \"Noto Sans Arabic\", sans-serif"
+            },
+            "font-size": {
+              "moved": false,
+              "value": "13px"
+            },
+            "font-weight": {
+              "moved": false,
+              "value": "600"
+            }
+          },
+          "card-modern-md/root": {
+            "background-color": {
+              "moved": false,
+              "value": "rgb(21, 29, 43)"
+            },
+            "background-image": {
+              "moved": false,
+              "value": "linear-gradient(oklch(0 0 265.703 / 0), oklch(0 0 265.703 / 0)), linear-gradient(145deg, rgb(21, 29, 43) 0%, rgb(15, 21, 32) 58%, rgb(15, 21, 32) 100%)"
+            },
+            "border-bottom-color": {
+              "moved": false,
+              "value": "rgb(37, 53, 69)"
+            },
+            "border-bottom-right-radius": {
+              "moved": false,
+              "value": "10px"
+            },
+            "border-left-color": {
+              "moved": false,
+              "value": "rgb(37, 53, 69)"
+            },
+            "border-right-color": {
+              "moved": false,
+              "value": "rgb(37, 53, 69)"
+            },
+            "border-top-color": {
+              "moved": false,
+              "value": "rgb(37, 53, 69)"
+            },
+            "border-top-left-radius": {
+              "moved": false,
+              "value": "10px"
+            },
+            "border-top-width": {
+              "moved": false,
+              "value": "0px"
+            },
+            "box-shadow": {
+              "moved": false,
+              "value": "rgba(20, 40, 59, 0.16) 0px 4px 12px 0px, rgba(20, 40, 59, 0.1) 0px 2px 4px 0px"
+            },
+            "color": {
+              "moved": false,
+              "value": "rgb(228, 232, 237)"
+            },
+            "font-family": {
+              "moved": false,
+              "value": "\"Public Sans\", ui-sans-serif, system-ui, -apple-system, sans-serif, \"Noto Sans Arabic\", sans-serif"
+            },
+            "font-size": {
+              "moved": false,
+              "value": "15px"
+            },
+            "padding-top": {
+              "moved": false,
+              "value": "0px"
+            }
+          },
+          "card-modern-md/title": {
+            "background-color": {
+              "moved": false,
+              "value": "rgba(0, 0, 0, 0)"
+            },
+            "border-bottom-color": {
+              "moved": false,
+              "value": "rgb(228, 232, 237)"
+            },
+            "border-left-color": {
+              "moved": false,
+              "value": "rgb(228, 232, 237)"
+            },
+            "border-right-color": {
+              "moved": false,
+              "value": "rgb(228, 232, 237)"
+            },
+            "border-top-color": {
+              "moved": false,
+              "value": "rgb(228, 232, 237)"
+            },
+            "border-top-style": {
+              "moved": false,
+              "value": "solid"
+            },
+            "color": {
+              "moved": false,
+              "value": "rgb(228, 232, 237)"
+            },
+            "font-family": {
+              "moved": false,
+              "value": "\"Space Grotesk\", ui-sans-serif, system-ui, -apple-system, sans-serif, \"Noto Sans Arabic\", sans-serif"
+            },
+            "font-size": {
+              "moved": false,
+              "value": "13px"
+            },
+            "letter-spacing": {
+              "moved": false,
+              "value": "-0.13px"
+            }
+          },
+          "flex-modern-numeric-gap/root": {
+            "background-color": {
+              "moved": false,
+              "value": "rgba(0, 0, 0, 0)"
+            },
+            "border-bottom-color": {
+              "moved": false,
+              "value": "rgb(228, 232, 237)"
+            },
+            "border-left-color": {
+              "moved": false,
+              "value": "rgb(228, 232, 237)"
+            },
+            "border-right-color": {
+              "moved": false,
+              "value": "rgb(228, 232, 237)"
+            },
+            "border-top-color": {
+              "moved": false,
+              "value": "rgb(228, 232, 237)"
+            },
+            "color": {
+              "moved": false,
+              "value": "rgb(228, 232, 237)"
+            },
+            "column-gap": {
+              "moved": false,
+              "value": "8px"
+            },
+            "gap": {
+              "moved": false,
+              "value": "8px"
+            },
+            "row-gap": {
+              "moved": false,
+              "value": "8px"
+            }
+          },
+          "flex-modern-preset-gap/root": {
+            "background-color": {
+              "moved": false,
+              "value": "rgba(0, 0, 0, 0)"
+            },
+            "border-bottom-color": {
+              "moved": false,
+              "value": "rgb(228, 232, 237)"
+            },
+            "border-left-color": {
+              "moved": false,
+              "value": "rgb(228, 232, 237)"
+            },
+            "border-right-color": {
+              "moved": false,
+              "value": "rgb(228, 232, 237)"
+            },
+            "border-top-color": {
+              "moved": false,
+              "value": "rgb(228, 232, 237)"
+            },
+            "color": {
+              "moved": false,
+              "value": "rgb(228, 232, 237)"
+            },
+            "column-gap": {
+              "moved": false,
+              "value": "13.5px"
+            },
+            "gap": {
+              "moved": false,
+              "value": "13.5px"
+            },
+            "row-gap": {
+              "moved": false,
+              "value": "13.5px"
+            }
+          },
+          "grid-modern-numeric-gap/root": {
+            "background-color": {
+              "moved": false,
+              "value": "rgba(0, 0, 0, 0)"
+            },
+            "border-bottom-color": {
+              "moved": false,
+              "value": "rgb(228, 232, 237)"
+            },
+            "border-left-color": {
+              "moved": false,
+              "value": "rgb(228, 232, 237)"
+            },
+            "border-right-color": {
+              "moved": false,
+              "value": "rgb(228, 232, 237)"
+            },
+            "border-top-color": {
+              "moved": false,
+              "value": "rgb(228, 232, 237)"
+            },
+            "color": {
+              "moved": false,
+              "value": "rgb(228, 232, 237)"
+            },
+            "column-gap": {
+              "moved": false,
+              "value": "8px"
+            },
+            "gap": {
+              "moved": false,
+              "value": "8px"
+            },
+            "row-gap": {
+              "moved": false,
+              "value": "8px"
+            }
+          },
+          "grid-modern-preset-gap/root": {
+            "background-color": {
+              "moved": false,
+              "value": "rgba(0, 0, 0, 0)"
+            },
+            "border-bottom-color": {
+              "moved": false,
+              "value": "rgb(228, 232, 237)"
+            },
+            "border-left-color": {
+              "moved": false,
+              "value": "rgb(228, 232, 237)"
+            },
+            "border-right-color": {
+              "moved": false,
+              "value": "rgb(228, 232, 237)"
+            },
+            "border-top-color": {
+              "moved": false,
+              "value": "rgb(228, 232, 237)"
+            },
+            "color": {
+              "moved": false,
+              "value": "rgb(228, 232, 237)"
+            },
+            "column-gap": {
+              "moved": false,
+              "value": "13.5px"
+            },
+            "gap": {
+              "moved": false,
+              "value": "13.5px"
+            },
+            "row-gap": {
+              "moved": false,
+              "value": "13.5px"
+            }
+          },
+          "input-modern-md/root": {
+            "background-color": {
+              "moved": false,
+              "value": "rgb(15, 21, 32)"
+            },
+            "border-bottom-color": {
+              "moved": false,
+              "value": "rgb(37, 53, 69)"
+            },
+            "border-left-color": {
+              "moved": false,
+              "value": "rgb(37, 53, 69)"
+            },
+            "border-right-color": {
+              "moved": false,
+              "value": "rgb(37, 53, 69)"
+            },
+            "border-top-color": {
+              "moved": false,
+              "value": "rgb(37, 53, 69)"
+            },
+            "border-top-left-radius": {
+              "moved": false,
+              "value": "9px"
+            },
+            "border-top-width": {
+              "moved": false,
+              "value": "1px"
+            },
+            "color": {
+              "moved": false,
+              "value": "rgb(228, 232, 237)"
+            },
+            "font-family": {
+              "moved": false,
+              "value": "\"Public Sans\", ui-sans-serif, system-ui, -apple-system, sans-serif, \"Noto Sans Arabic\", sans-serif"
+            },
+            "font-size": {
+              "moved": false,
+              "value": "13px"
+            }
+          },
+          "skeleton-card-line/line": {
+            "background-color": {
+              "moved": false,
+              "value": "rgba(0, 0, 0, 0)"
+            },
+            "border-bottom-color": {
+              "moved": false,
+              "value": "rgb(228, 232, 237)"
+            },
+            "border-left-color": {
+              "moved": false,
+              "value": "rgb(228, 232, 237)"
+            },
+            "border-right-color": {
+              "moved": false,
+              "value": "rgb(228, 232, 237)"
+            },
+            "border-top-color": {
+              "moved": false,
+              "value": "rgb(228, 232, 237)"
+            },
+            "border-top-left-radius": {
+              "moved": false,
+              "value": "5px"
+            },
+            "color": {
+              "moved": false,
+              "value": "rgb(228, 232, 237)"
+            },
+            "height": {
+              "moved": false,
+              "value": "13.125px"
+            }
+          },
+          "skeleton-form-action/action": {
+            "background-color": {
+              "moved": false,
+              "value": "rgba(0, 0, 0, 0)"
+            },
+            "border-bottom-color": {
+              "moved": false,
+              "value": "rgb(228, 232, 237)"
+            },
+            "border-left-color": {
+              "moved": false,
+              "value": "rgb(228, 232, 237)"
+            },
+            "border-right-color": {
+              "moved": false,
+              "value": "rgb(228, 232, 237)"
+            },
+            "border-top-color": {
+              "moved": false,
+              "value": "rgb(228, 232, 237)"
+            },
+            "border-top-left-radius": {
+              "moved": false,
+              "value": "7.5px"
+            },
+            "color": {
+              "moved": false,
+              "value": "rgb(228, 232, 237)"
+            },
+            "height": {
+              "moved": false,
+              "value": "35.625px"
+            }
+          },
+          "space-modern-numeric-gap/root": {
+            "background-color": {
+              "moved": false,
+              "value": "rgba(0, 0, 0, 0)"
+            },
+            "border-bottom-color": {
+              "moved": false,
+              "value": "rgb(228, 232, 237)"
+            },
+            "border-left-color": {
+              "moved": false,
+              "value": "rgb(228, 232, 237)"
+            },
+            "border-right-color": {
+              "moved": false,
+              "value": "rgb(228, 232, 237)"
+            },
+            "border-top-color": {
+              "moved": false,
+              "value": "rgb(228, 232, 237)"
+            },
+            "color": {
+              "moved": false,
+              "value": "rgb(228, 232, 237)"
+            },
+            "column-gap": {
+              "moved": false,
+              "value": "8px"
+            },
+            "gap": {
+              "moved": false,
+              "value": "8px"
+            },
+            "row-gap": {
+              "moved": false,
+              "value": "8px"
+            }
+          },
+          "space-modern-preset-gap/root": {
+            "background-color": {
+              "moved": false,
+              "value": "rgba(0, 0, 0, 0)"
+            },
+            "border-bottom-color": {
+              "moved": false,
+              "value": "rgb(228, 232, 237)"
+            },
+            "border-left-color": {
+              "moved": false,
+              "value": "rgb(228, 232, 237)"
+            },
+            "border-right-color": {
+              "moved": false,
+              "value": "rgb(228, 232, 237)"
+            },
+            "border-top-color": {
+              "moved": false,
+              "value": "rgb(228, 232, 237)"
+            },
+            "color": {
+              "moved": false,
+              "value": "rgb(228, 232, 237)"
+            },
+            "column-gap": {
+              "moved": false,
+              "value": "13.5px"
+            },
+            "gap": {
+              "moved": false,
+              "value": "13.5px"
+            },
+            "row-gap": {
+              "moved": false,
+              "value": "13.5px"
+            }
+          },
+          "stack-modern-numeric-gap/root": {
+            "background-color": {
+              "moved": false,
+              "value": "rgba(0, 0, 0, 0)"
+            },
+            "border-bottom-color": {
+              "moved": false,
+              "value": "rgb(228, 232, 237)"
+            },
+            "border-left-color": {
+              "moved": false,
+              "value": "rgb(228, 232, 237)"
+            },
+            "border-right-color": {
+              "moved": false,
+              "value": "rgb(228, 232, 237)"
+            },
+            "border-top-color": {
+              "moved": false,
+              "value": "rgb(228, 232, 237)"
+            },
+            "color": {
+              "moved": false,
+              "value": "rgb(228, 232, 237)"
+            },
+            "column-gap": {
+              "moved": false,
+              "value": "8px"
+            },
+            "gap": {
+              "moved": false,
+              "value": "8px"
+            },
+            "row-gap": {
+              "moved": false,
+              "value": "8px"
+            }
+          },
+          "stack-modern-preset-gap/root": {
+            "background-color": {
+              "moved": false,
+              "value": "rgba(0, 0, 0, 0)"
+            },
+            "border-bottom-color": {
+              "moved": false,
+              "value": "rgb(228, 232, 237)"
+            },
+            "border-left-color": {
+              "moved": false,
+              "value": "rgb(228, 232, 237)"
+            },
+            "border-right-color": {
+              "moved": false,
+              "value": "rgb(228, 232, 237)"
+            },
+            "border-top-color": {
+              "moved": false,
+              "value": "rgb(228, 232, 237)"
+            },
+            "color": {
+              "moved": false,
+              "value": "rgb(228, 232, 237)"
+            },
+            "column-gap": {
+              "moved": false,
+              "value": "13.5px"
+            },
+            "gap": {
+              "moved": false,
+              "value": "13.5px"
+            },
+            "row-gap": {
+              "moved": false,
+              "value": "13.5px"
+            }
+          },
+          "token-readout/tokens": {
+            "--ds-button-md-border-radius": {
+              "moved": false,
+              "value": "calc(calc(10px / 1.25) * 1.25)"
+            },
+            "--ds-button-md-radius": {
+              "moved": false,
+              "value": "calc(9px / 1.25 * 1.25)"
+            },
+            "--ds-button-primary-bg": {
+              "moved": false,
+              "value": "#1a7fe0"
+            },
+            "--ds-card-border-radius": {
+              "moved": false,
+              "value": "calc(calc(10px / 1.25) * 1.25)"
+            },
+            "--ds-card-radius": {
+              "moved": false,
+              "value": "calc(calc(10px / 1.25) * 1.25)"
+            },
+            "--ds-chart-series-1": {
+              "moved": false,
+              "value": "#459BF7"
+            },
+            "--ds-color-primary": {
+              "moved": false,
+              "value": "rgb(30, 132, 230)"
+            },
+            "--ds-color-primary-500": {
+              "moved": false,
+              "value": "#1e84e6"
+            },
+            "--ds-color-text-on-primary": {
+              "moved": false,
+              "value": "#ffffff"
+            },
+            "--ds-density-effective-scale": {
+              "moved": false,
+              "value": "clamp(\n    0.5,\n    calc(\n      clamp(\n    0.5,\n    calc(0.9 * 1),\n    3\n  ) *\n      1\n    ),\n    3\n  )"
+            },
+            "--ds-density-global-effective-scale": {
+              "moved": false,
+              "value": "clamp(\n    0.5,\n    calc(0.9 * 1),\n    3\n  )"
+            },
+            "--ds-density-mode-factor": {
+              "moved": false,
+              "value": "1"
+            },
+            "--ds-density-scale": {
+              "moved": false,
+              "value": "0.9"
+            },
+            "--ds-edge-emphasis-width": {
+              "moved": false,
+              "value": "1px"
+            },
+            "--ds-edge-standard-width": {
+              "moved": false,
+              "value": "1px"
+            },
+            "--ds-effect-intensity": {
+              "moved": false,
+              "value": "0.58"
+            },
+            "--ds-elevation-1": {
+              "moved": false,
+              "value": "none"
+            },
+            "--ds-elevation-2": {
+              "moved": false,
+              "value": "none"
+            },
+            "--ds-elevation-3": {
+              "moved": false,
+              "value": "0 1px 2px rgba(0,0,0,0.05)"
+            },
+            "--ds-elevation-lift-strength": {
+              "moved": false,
+              "value": "0"
+            },
+            "--ds-experience-profile": {
+              "moved": false,
+              "value": "\"rottay/bithire-technical@1\""
+            },
+            "--ds-font-family-base": {
+              "moved": false,
+              "value": "'Public Sans', ui-sans-serif, system-ui, -apple-system, sans-serif, \"Noto Sans Arabic\", sans-serif"
+            },
+            "--ds-font-family-display": {
+              "moved": false,
+              "value": "'Space Grotesk', ui-sans-serif, system-ui, -apple-system, sans-serif, \"Noto Sans Arabic\", sans-serif"
+            },
+            "--ds-font-family-heading": {
+              "moved": false,
+              "value": "'Space Grotesk', ui-sans-serif, system-ui, -apple-system, sans-serif, \"Noto Sans Arabic\", sans-serif"
+            },
+            "--ds-font-family-mono": {
+              "moved": false,
+              "value": "'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, monospace"
+            },
+            "--ds-font-size-xs": {
+              "moved": false,
+              "value": "calc(0.75rem * 1)"
+            },
+            "--ds-input-md-border-radius": {
+              "moved": false,
+              "value": "calc(calc(10px / 1.25) * 1.25)"
+            },
+            "--ds-letter-spacing-body": {
+              "moved": false,
+              "value": "0"
+            },
+            "--ds-letter-spacing-heading": {
+              "moved": false,
+              "value": "-0.01em"
+            },
+            "--ds-material-canvas-texture": {
+              "moved": false,
+              "value": "radial-gradient(circle at 88% 4%, color-mix(in srgb, rgb(30, 132, 230) 14%, transparent), transparent 30%)"
+            },
+            "--ds-material-card-highlight": {
+              "moved": false,
+              "value": "inset 0 1px 0 color-mix(in srgb, #e4e8ed 6%, transparent)"
+            },
+            "--ds-motion-duration-scale": {
+              "moved": false,
+              "value": "1"
+            },
+            "--ds-motion-intensity": {
+              "moved": false,
+              "value": "0.55"
+            },
+            "--ds-radius-button": {
+              "moved": false,
+              "value": "calc(9px / 1.25 * 1.25)"
+            },
+            "--ds-radius-lg": {
+              "moved": false,
+              "value": "calc(calc(14px / 1.25) * 1.25)"
+            },
+            "--ds-radius-lg-base": {
+              "moved": false,
+              "value": "calc(14px / 1.25)"
+            },
+            "--ds-radius-md": {
+              "moved": false,
+              "value": "calc(calc(10px / 1.25) * 1.25)"
+            },
+            "--ds-radius-md-base": {
+              "moved": false,
+              "value": "calc(10px / 1.25)"
+            },
+            "--ds-radius-scale": {
+              "moved": false,
+              "value": "1.25"
+            },
+            "--ds-radius-sm": {
+              "moved": false,
+              "value": "calc(calc(7px / 1.25) * 1.25)"
+            },
+            "--ds-radius-sm-base": {
+              "moved": false,
+              "value": "calc(7px / 1.25)"
+            },
+            "--ds-radius-xl": {
+              "moved": false,
+              "value": "calc(calc(18px / 1.25) * 1.25)"
+            },
+            "--ds-radius-xl-base": {
+              "moved": false,
+              "value": "calc(18px / 1.25)"
+            },
+            "--ds-recipe-profile": {
+              "moved": false,
+              "value": "\"rottay/network-professional@1\""
+            },
+            "--ds-rhythm-effective-scale": {
+              "moved": false,
+              "value": "clamp(0.8, 1, 1.25)"
+            },
+            "--ds-rhythm-scale": {
+              "moved": false,
+              "value": "1"
+            },
+            "--ds-select-group-text-transform": {
+              "moved": false,
+              "value": "none"
+            },
+            "--ds-sidebar-bg": {
+              "moved": false,
+              "value": "#0a0f18"
+            },
+            "--ds-sidebar-item-bg-active": {
+              "moved": false,
+              "value": "rgba(26, 127, 224, 0.12)"
+            },
+            "--ds-sidebar-item-bg-hover": {
+              "moved": false,
+              "value": "rgba(255, 255, 255, 0.04)"
+            },
+            "--ds-sidebar-item-color": {
+              "moved": false,
+              "value": "#9aacbf"
+            },
+            "--ds-sidebar-item-color-active": {
+              "moved": false,
+              "value": "#3b9af0"
+            },
+            "--ds-sidebar-text": {
+              "moved": false,
+              "value": "#9aacbf"
+            },
+            "--ds-sidebar-text-muted": {
+              "moved": false,
+              "value": "#5a7085"
+            },
+            "--ds-table-header-letter-spacing": {
+              "moved": false,
+              "value": "calc(0.08em * 0.8125)"
+            },
+            "--ds-table-header-text-transform": {
+              "moved": false,
+              "value": "uppercase"
+            },
+            "--ds-text-eyebrow-letter-spacing": {
+              "moved": false,
+              "value": "0.08em"
+            },
+            "--ds-text-eyebrow-size": {
+              "moved": false,
+              "value": "0.75rem"
+            },
+            "--ds-text-eyebrow-transform": {
+              "moved": false,
+              "value": "uppercase"
+            },
+            "--ds-type-scale": {
+              "moved": false,
+              "value": "1"
+            },
+            "background-color": {
+              "moved": false,
+              "value": "rgba(0, 0, 0, 0)"
+            },
+            "border-bottom-color": {
+              "moved": false,
+              "value": "rgb(228, 232, 237)"
+            },
+            "border-left-color": {
+              "moved": false,
+              "value": "rgb(228, 232, 237)"
+            },
+            "border-right-color": {
+              "moved": false,
+              "value": "rgb(228, 232, 237)"
+            },
+            "border-top-color": {
+              "moved": false,
+              "value": "rgb(228, 232, 237)"
+            },
+            "border-top-style": {
+              "moved": false,
+              "value": "solid"
+            },
+            "color": {
+              "moved": false,
+              "value": "rgb(228, 232, 237)"
+            }
+          }
+        },
         "bithire/light/modern/both": {
           "button-modern-md/hitbox": {
             "@rect-block-size": {
@@ -720,6 +1640,10 @@
               "moved": false,
               "value": "calc(9px / 1.25 * 1.25)"
             },
+            "--ds-button-primary-bg": {
+              "moved": false,
+              "value": "#3A6FB0"
+            },
             "--ds-card-border-radius": {
               "moved": false,
               "value": "calc(calc(10px / 1.25) * 1.25)"
@@ -727,6 +1651,22 @@
             "--ds-card-radius": {
               "moved": false,
               "value": "calc(calc(10px / 1.25) * 1.25)"
+            },
+            "--ds-chart-series-1": {
+              "moved": false,
+              "value": "#356AAB"
+            },
+            "--ds-color-primary": {
+              "moved": false,
+              "value": "rgb(58, 111, 176)"
+            },
+            "--ds-color-primary-500": {
+              "moved": false,
+              "value": "#376BAB"
+            },
+            "--ds-color-text-on-primary": {
+              "moved": false,
+              "value": "#ffffff"
             },
             "--ds-density-effective-scale": {
               "moved": false,
@@ -744,6 +1684,10 @@
               "moved": false,
               "value": "0.9"
             },
+            "--ds-edge-emphasis-width": {
+              "moved": false,
+              "value": "1px"
+            },
             "--ds-edge-standard-width": {
               "moved": false,
               "value": "1px"
@@ -752,6 +1696,18 @@
               "moved": false,
               "value": "0.58"
             },
+            "--ds-elevation-1": {
+              "moved": false,
+              "value": "none"
+            },
+            "--ds-elevation-2": {
+              "moved": false,
+              "value": "none"
+            },
+            "--ds-elevation-3": {
+              "moved": false,
+              "value": "0 1px 2px rgba(0,0,0,0.05)"
+            },
             "--ds-elevation-lift-strength": {
               "moved": false,
               "value": "0"
@@ -759,6 +1715,22 @@
             "--ds-experience-profile": {
               "moved": false,
               "value": "\"rottay/bithire-technical@1\""
+            },
+            "--ds-font-family-base": {
+              "moved": false,
+              "value": "'Public Sans', ui-sans-serif, system-ui, -apple-system, sans-serif, \"Noto Sans Arabic\", sans-serif"
+            },
+            "--ds-font-family-display": {
+              "moved": false,
+              "value": "'Space Grotesk', ui-sans-serif, system-ui, -apple-system, sans-serif, \"Noto Sans Arabic\", sans-serif"
+            },
+            "--ds-font-family-heading": {
+              "moved": false,
+              "value": "'Space Grotesk', ui-sans-serif, system-ui, -apple-system, sans-serif, \"Noto Sans Arabic\", sans-serif"
+            },
+            "--ds-font-family-mono": {
+              "moved": false,
+              "value": "'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, monospace"
             },
             "--ds-font-size-xs": {
               "moved": false,
@@ -780,6 +1752,22 @@
             "--ds-material-canvas-texture": {
               "moved": false,
               "value": "radial-gradient(circle at 88% 4%, rgba(58, 111, 176, 0.055), transparent 30%)"
+            },
+            "--ds-material-card-highlight": {
+              "moved": false,
+              "value": "inset 0 1px 0 rgba(255, 255, 255, 0.9)"
+            },
+            "--ds-motion-duration-scale": {
+              "moved": false,
+              "value": "1"
+            },
+            "--ds-motion-intensity": {
+              "moved": false,
+              "value": "0.55"
+            },
+            "--ds-radius-button": {
+              "moved": false,
+              "value": "calc(9px / 1.25 * 1.25)"
             },
             "--ds-radius-lg": {
               "moved": false,
@@ -817,6 +1805,10 @@
               "moved": false,
               "value": "calc(18px / 1.25)"
             },
+            "--ds-recipe-profile": {
+              "moved": false,
+              "value": "\"rottay/network-professional@1\""
+            },
             "--ds-rhythm-effective-scale": {
               "moved": false,
               "value": "clamp(0.8, 1, 1.25)"
@@ -824,6 +1816,38 @@
             "--ds-rhythm-scale": {
               "moved": false,
               "value": "1"
+            },
+            "--ds-select-group-text-transform": {
+              "moved": false,
+              "value": "none"
+            },
+            "--ds-sidebar-bg": {
+              "moved": false,
+              "value": "#ffffff"
+            },
+            "--ds-sidebar-item-bg-active": {
+              "moved": false,
+              "value": "color-mix(in oklab, rgb(58, 111, 176) 8%, #F4F8FB)"
+            },
+            "--ds-sidebar-item-bg-hover": {
+              "moved": false,
+              "value": "#F4F8FD"
+            },
+            "--ds-sidebar-item-color": {
+              "moved": false,
+              "value": "#53697E"
+            },
+            "--ds-sidebar-item-color-active": {
+              "moved": false,
+              "value": "#3A6FB0"
+            },
+            "--ds-sidebar-text": {
+              "moved": false,
+              "value": "#14283B"
+            },
+            "--ds-sidebar-text-muted": {
+              "moved": false,
+              "value": "#728398"
             },
             "--ds-table-header-letter-spacing": {
               "moved": false,
@@ -881,15 +1905,15 @@
         }
       },
       "negativeControls": {
-        "checkedRows": 96,
-        "expectedRows": 96,
+        "checkedRows": 192,
+        "expectedRows": 192,
         "held": true,
         "meaning": "Every declared negative control was measured and none moved.",
-        "observedRows": 96,
+        "observedRows": 192,
         "violations": []
       },
-      "position": "root-inline-style",
-      "positionMeaning": "Written with setProperty on document.documentElement from the compiled TenantThemeArtifact.variables. This is the strongest position a tenant occupies, and it is ABOVE the static arm.",
+      "position": "tenant-artifact-stylesheet",
+      "positionMeaning": "The compiled TenantThemeArtifact, served the way production serves it: a base rule plus one rule per modeDelta, re-scoped from the artifact's probe-tenant selector onto the scene's own (H-3 phase (a)). It used to be a root inline write, and that was a measurement defect, not a position: inline beats every mode block, so the arm reported the tenant BASE value in a mode where production serves the vertical's own. The provider preview does write inline; whether the preview can express mode deltas at all is a separate, unmeasured product question.",
       "provenance": {
         "declaredChannels": [
           "--ds-experience-profile",
@@ -906,6 +1930,7 @@
         "freshnessProven": true,
         "input": {
           "baseline": null,
+          "compileOptions": {},
           "compilerInput": {
             "appearance": {
               "experienceProfile": "rottay/bithire-technical@1"
@@ -925,8 +1950,13 @@
             }
           },
           "ingressValue": "rottay/bithire-technical@1",
+          "modeScope": null,
           "path": "appearance.general.experienceProfile",
-          "stopId": "rottay/bithire-technical@1"
+          "stopId": "rottay/bithire-technical@1",
+          "tenantAuthoredPaths": null
+        },
+        "modeChannels": {
+          "dark": []
         },
         "module": "dist/server.js",
         "moduleSubpath": "@rottay/design-system/server",
@@ -960,7 +1990,7 @@
         }
       },
       "restore": {
-        "comparedRows": 209,
+        "comparedRows": 470,
         "counts": {
           "byKind": {},
           "byPropertyKind": {},
@@ -972,7 +2002,7 @@
         "rows": []
       },
       "totals": {
-        "inertProperties": 197,
+        "inertProperties": 448,
         "movedProperties": 2,
         "scope": "across every (vertical x theme x fixture x property) row measured for this arm"
       }
@@ -1010,9 +2040,944 @@
         }
       },
       "inline": {
+        "bithire/dark/modern/both": null,
         "bithire/light/modern/both": null
       },
       "movements": {
+        "bithire/dark/modern/both": {
+          "button-modern-md/hitbox": {
+            "@rect-block-size": {
+              "moved": false,
+              "value": "32.390625"
+            },
+            "@rect-inline-size": {
+              "moved": false,
+              "value": "66.984375"
+            },
+            "aspect-ratio": {
+              "moved": false,
+              "value": "auto"
+            },
+            "background-color": {
+              "moved": false,
+              "value": "rgb(26, 127, 224)"
+            },
+            "block-size": {
+              "moved": false,
+              "value": "32.3906px"
+            },
+            "border-bottom-color": {
+              "moved": false,
+              "value": "rgb(26, 127, 224)"
+            },
+            "border-left-color": {
+              "moved": false,
+              "value": "rgb(26, 127, 224)"
+            },
+            "border-right-color": {
+              "moved": false,
+              "value": "rgb(26, 127, 224)"
+            },
+            "border-top-color": {
+              "moved": false,
+              "value": "rgb(26, 127, 224)"
+            },
+            "color": {
+              "moved": false,
+              "value": "rgb(255, 255, 255)"
+            },
+            "contain-intrinsic-size": {
+              "moved": false,
+              "value": "none"
+            },
+            "height": {
+              "moved": false,
+              "value": "32.3906px"
+            },
+            "inline-size": {
+              "moved": false,
+              "value": "66.9844px"
+            },
+            "max-block-size": {
+              "moved": false,
+              "value": "none"
+            },
+            "max-height": {
+              "moved": false,
+              "value": "none"
+            },
+            "max-inline-size": {
+              "moved": false,
+              "value": "100%"
+            },
+            "max-width": {
+              "moved": false,
+              "value": "100%"
+            },
+            "min-block-size": {
+              "moved": false,
+              "value": "32.4px"
+            },
+            "min-height": {
+              "moved": false,
+              "value": "32.4px"
+            },
+            "min-inline-size": {
+              "moved": false,
+              "value": "0px"
+            },
+            "min-width": {
+              "moved": false,
+              "value": "0px"
+            },
+            "scale": {
+              "moved": false,
+              "value": "none"
+            },
+            "width": {
+              "moved": false,
+              "value": "66.9844px"
+            },
+            "zoom": {
+              "moved": false,
+              "value": "1"
+            }
+          },
+          "button-modern-md/root": {
+            "background-color": {
+              "moved": false,
+              "value": "rgb(26, 127, 224)"
+            },
+            "border-bottom-color": {
+              "moved": false,
+              "value": "rgb(26, 127, 224)"
+            },
+            "border-left-color": {
+              "moved": false,
+              "value": "rgb(26, 127, 224)"
+            },
+            "border-right-color": {
+              "moved": false,
+              "value": "rgb(26, 127, 224)"
+            },
+            "border-top-color": {
+              "moved": false,
+              "value": "rgb(26, 127, 224)"
+            },
+            "border-top-left-radius": {
+              "moved": false,
+              "value": "9px"
+            },
+            "border-top-width": {
+              "moved": false,
+              "value": "1px"
+            },
+            "box-shadow": {
+              "moved": false,
+              "value": "color(srgb 0.894118 0.909804 0.929412 / 0.05) 0px 1px 0px 0px inset"
+            },
+            "color": {
+              "moved": false,
+              "value": "rgb(255, 255, 255)"
+            },
+            "font-family": {
+              "moved": false,
+              "value": "\"Public Sans\", ui-sans-serif, system-ui, -apple-system, sans-serif, \"Noto Sans Arabic\", sans-serif"
+            },
+            "font-size": {
+              "moved": false,
+              "value": "13px"
+            },
+            "font-weight": {
+              "moved": false,
+              "value": "600"
+            }
+          },
+          "card-modern-md/root": {
+            "background-color": {
+              "moved": false,
+              "value": "rgb(21, 29, 43)"
+            },
+            "background-image": {
+              "moved": false,
+              "value": "linear-gradient(oklch(0 0 265.703 / 0), oklch(0 0 265.703 / 0)), linear-gradient(145deg, rgb(21, 29, 43) 0%, rgb(15, 21, 32) 58%, rgb(15, 21, 32) 100%)"
+            },
+            "border-bottom-color": {
+              "moved": false,
+              "value": "rgb(37, 53, 69)"
+            },
+            "border-bottom-right-radius": {
+              "moved": false,
+              "value": "10px"
+            },
+            "border-left-color": {
+              "moved": false,
+              "value": "rgb(37, 53, 69)"
+            },
+            "border-right-color": {
+              "moved": false,
+              "value": "rgb(37, 53, 69)"
+            },
+            "border-top-color": {
+              "moved": false,
+              "value": "rgb(37, 53, 69)"
+            },
+            "border-top-left-radius": {
+              "moved": false,
+              "value": "10px"
+            },
+            "border-top-width": {
+              "moved": false,
+              "value": "0px"
+            },
+            "box-shadow": {
+              "moved": false,
+              "value": "rgba(20, 40, 59, 0.16) 0px 4px 12px 0px, rgba(20, 40, 59, 0.1) 0px 2px 4px 0px"
+            },
+            "color": {
+              "moved": false,
+              "value": "rgb(228, 232, 237)"
+            },
+            "font-family": {
+              "moved": false,
+              "value": "\"Public Sans\", ui-sans-serif, system-ui, -apple-system, sans-serif, \"Noto Sans Arabic\", sans-serif"
+            },
+            "font-size": {
+              "moved": false,
+              "value": "15px"
+            },
+            "padding-top": {
+              "moved": false,
+              "value": "0px"
+            }
+          },
+          "card-modern-md/title": {
+            "background-color": {
+              "moved": false,
+              "value": "rgba(0, 0, 0, 0)"
+            },
+            "border-bottom-color": {
+              "moved": false,
+              "value": "rgb(228, 232, 237)"
+            },
+            "border-left-color": {
+              "moved": false,
+              "value": "rgb(228, 232, 237)"
+            },
+            "border-right-color": {
+              "moved": false,
+              "value": "rgb(228, 232, 237)"
+            },
+            "border-top-color": {
+              "moved": false,
+              "value": "rgb(228, 232, 237)"
+            },
+            "border-top-style": {
+              "moved": false,
+              "value": "solid"
+            },
+            "color": {
+              "moved": false,
+              "value": "rgb(228, 232, 237)"
+            },
+            "font-family": {
+              "moved": false,
+              "value": "\"Space Grotesk\", ui-sans-serif, system-ui, -apple-system, sans-serif, \"Noto Sans Arabic\", sans-serif"
+            },
+            "font-size": {
+              "moved": false,
+              "value": "13px"
+            },
+            "letter-spacing": {
+              "moved": false,
+              "value": "-0.13px"
+            }
+          },
+          "flex-modern-numeric-gap/root": {
+            "background-color": {
+              "moved": false,
+              "value": "rgba(0, 0, 0, 0)"
+            },
+            "border-bottom-color": {
+              "moved": false,
+              "value": "rgb(228, 232, 237)"
+            },
+            "border-left-color": {
+              "moved": false,
+              "value": "rgb(228, 232, 237)"
+            },
+            "border-right-color": {
+              "moved": false,
+              "value": "rgb(228, 232, 237)"
+            },
+            "border-top-color": {
+              "moved": false,
+              "value": "rgb(228, 232, 237)"
+            },
+            "color": {
+              "moved": false,
+              "value": "rgb(228, 232, 237)"
+            },
+            "column-gap": {
+              "moved": false,
+              "value": "8px"
+            },
+            "gap": {
+              "moved": false,
+              "value": "8px"
+            },
+            "row-gap": {
+              "moved": false,
+              "value": "8px"
+            }
+          },
+          "flex-modern-preset-gap/root": {
+            "background-color": {
+              "moved": false,
+              "value": "rgba(0, 0, 0, 0)"
+            },
+            "border-bottom-color": {
+              "moved": false,
+              "value": "rgb(228, 232, 237)"
+            },
+            "border-left-color": {
+              "moved": false,
+              "value": "rgb(228, 232, 237)"
+            },
+            "border-right-color": {
+              "moved": false,
+              "value": "rgb(228, 232, 237)"
+            },
+            "border-top-color": {
+              "moved": false,
+              "value": "rgb(228, 232, 237)"
+            },
+            "color": {
+              "moved": false,
+              "value": "rgb(228, 232, 237)"
+            },
+            "column-gap": {
+              "moved": false,
+              "value": "13.5px"
+            },
+            "gap": {
+              "moved": false,
+              "value": "13.5px"
+            },
+            "row-gap": {
+              "moved": false,
+              "value": "13.5px"
+            }
+          },
+          "grid-modern-numeric-gap/root": {
+            "background-color": {
+              "moved": false,
+              "value": "rgba(0, 0, 0, 0)"
+            },
+            "border-bottom-color": {
+              "moved": false,
+              "value": "rgb(228, 232, 237)"
+            },
+            "border-left-color": {
+              "moved": false,
+              "value": "rgb(228, 232, 237)"
+            },
+            "border-right-color": {
+              "moved": false,
+              "value": "rgb(228, 232, 237)"
+            },
+            "border-top-color": {
+              "moved": false,
+              "value": "rgb(228, 232, 237)"
+            },
+            "color": {
+              "moved": false,
+              "value": "rgb(228, 232, 237)"
+            },
+            "column-gap": {
+              "moved": false,
+              "value": "8px"
+            },
+            "gap": {
+              "moved": false,
+              "value": "8px"
+            },
+            "row-gap": {
+              "moved": false,
+              "value": "8px"
+            }
+          },
+          "grid-modern-preset-gap/root": {
+            "background-color": {
+              "moved": false,
+              "value": "rgba(0, 0, 0, 0)"
+            },
+            "border-bottom-color": {
+              "moved": false,
+              "value": "rgb(228, 232, 237)"
+            },
+            "border-left-color": {
+              "moved": false,
+              "value": "rgb(228, 232, 237)"
+            },
+            "border-right-color": {
+              "moved": false,
+              "value": "rgb(228, 232, 237)"
+            },
+            "border-top-color": {
+              "moved": false,
+              "value": "rgb(228, 232, 237)"
+            },
+            "color": {
+              "moved": false,
+              "value": "rgb(228, 232, 237)"
+            },
+            "column-gap": {
+              "moved": false,
+              "value": "13.5px"
+            },
+            "gap": {
+              "moved": false,
+              "value": "13.5px"
+            },
+            "row-gap": {
+              "moved": false,
+              "value": "13.5px"
+            }
+          },
+          "input-modern-md/root": {
+            "background-color": {
+              "moved": false,
+              "value": "rgb(15, 21, 32)"
+            },
+            "border-bottom-color": {
+              "moved": false,
+              "value": "rgb(37, 53, 69)"
+            },
+            "border-left-color": {
+              "moved": false,
+              "value": "rgb(37, 53, 69)"
+            },
+            "border-right-color": {
+              "moved": false,
+              "value": "rgb(37, 53, 69)"
+            },
+            "border-top-color": {
+              "moved": false,
+              "value": "rgb(37, 53, 69)"
+            },
+            "border-top-left-radius": {
+              "moved": false,
+              "value": "9px"
+            },
+            "border-top-width": {
+              "moved": false,
+              "value": "1px"
+            },
+            "color": {
+              "moved": false,
+              "value": "rgb(228, 232, 237)"
+            },
+            "font-family": {
+              "moved": false,
+              "value": "\"Public Sans\", ui-sans-serif, system-ui, -apple-system, sans-serif, \"Noto Sans Arabic\", sans-serif"
+            },
+            "font-size": {
+              "moved": false,
+              "value": "13px"
+            }
+          },
+          "skeleton-card-line/line": {
+            "background-color": {
+              "moved": false,
+              "value": "rgba(0, 0, 0, 0)"
+            },
+            "border-bottom-color": {
+              "moved": false,
+              "value": "rgb(228, 232, 237)"
+            },
+            "border-left-color": {
+              "moved": false,
+              "value": "rgb(228, 232, 237)"
+            },
+            "border-right-color": {
+              "moved": false,
+              "value": "rgb(228, 232, 237)"
+            },
+            "border-top-color": {
+              "moved": false,
+              "value": "rgb(228, 232, 237)"
+            },
+            "border-top-left-radius": {
+              "moved": false,
+              "value": "5px"
+            },
+            "color": {
+              "moved": false,
+              "value": "rgb(228, 232, 237)"
+            },
+            "height": {
+              "moved": false,
+              "value": "13.125px"
+            }
+          },
+          "skeleton-form-action/action": {
+            "background-color": {
+              "moved": false,
+              "value": "rgba(0, 0, 0, 0)"
+            },
+            "border-bottom-color": {
+              "moved": false,
+              "value": "rgb(228, 232, 237)"
+            },
+            "border-left-color": {
+              "moved": false,
+              "value": "rgb(228, 232, 237)"
+            },
+            "border-right-color": {
+              "moved": false,
+              "value": "rgb(228, 232, 237)"
+            },
+            "border-top-color": {
+              "moved": false,
+              "value": "rgb(228, 232, 237)"
+            },
+            "border-top-left-radius": {
+              "moved": false,
+              "value": "7.5px"
+            },
+            "color": {
+              "moved": false,
+              "value": "rgb(228, 232, 237)"
+            },
+            "height": {
+              "moved": false,
+              "value": "35.625px"
+            }
+          },
+          "space-modern-numeric-gap/root": {
+            "background-color": {
+              "moved": false,
+              "value": "rgba(0, 0, 0, 0)"
+            },
+            "border-bottom-color": {
+              "moved": false,
+              "value": "rgb(228, 232, 237)"
+            },
+            "border-left-color": {
+              "moved": false,
+              "value": "rgb(228, 232, 237)"
+            },
+            "border-right-color": {
+              "moved": false,
+              "value": "rgb(228, 232, 237)"
+            },
+            "border-top-color": {
+              "moved": false,
+              "value": "rgb(228, 232, 237)"
+            },
+            "color": {
+              "moved": false,
+              "value": "rgb(228, 232, 237)"
+            },
+            "column-gap": {
+              "moved": false,
+              "value": "8px"
+            },
+            "gap": {
+              "moved": false,
+              "value": "8px"
+            },
+            "row-gap": {
+              "moved": false,
+              "value": "8px"
+            }
+          },
+          "space-modern-preset-gap/root": {
+            "background-color": {
+              "moved": false,
+              "value": "rgba(0, 0, 0, 0)"
+            },
+            "border-bottom-color": {
+              "moved": false,
+              "value": "rgb(228, 232, 237)"
+            },
+            "border-left-color": {
+              "moved": false,
+              "value": "rgb(228, 232, 237)"
+            },
+            "border-right-color": {
+              "moved": false,
+              "value": "rgb(228, 232, 237)"
+            },
+            "border-top-color": {
+              "moved": false,
+              "value": "rgb(228, 232, 237)"
+            },
+            "color": {
+              "moved": false,
+              "value": "rgb(228, 232, 237)"
+            },
+            "column-gap": {
+              "moved": false,
+              "value": "13.5px"
+            },
+            "gap": {
+              "moved": false,
+              "value": "13.5px"
+            },
+            "row-gap": {
+              "moved": false,
+              "value": "13.5px"
+            }
+          },
+          "stack-modern-numeric-gap/root": {
+            "background-color": {
+              "moved": false,
+              "value": "rgba(0, 0, 0, 0)"
+            },
+            "border-bottom-color": {
+              "moved": false,
+              "value": "rgb(228, 232, 237)"
+            },
+            "border-left-color": {
+              "moved": false,
+              "value": "rgb(228, 232, 237)"
+            },
+            "border-right-color": {
+              "moved": false,
+              "value": "rgb(228, 232, 237)"
+            },
+            "border-top-color": {
+              "moved": false,
+              "value": "rgb(228, 232, 237)"
+            },
+            "color": {
+              "moved": false,
+              "value": "rgb(228, 232, 237)"
+            },
+            "column-gap": {
+              "moved": false,
+              "value": "8px"
+            },
+            "gap": {
+              "moved": false,
+              "value": "8px"
+            },
+            "row-gap": {
+              "moved": false,
+              "value": "8px"
+            }
+          },
+          "stack-modern-preset-gap/root": {
+            "background-color": {
+              "moved": false,
+              "value": "rgba(0, 0, 0, 0)"
+            },
+            "border-bottom-color": {
+              "moved": false,
+              "value": "rgb(228, 232, 237)"
+            },
+            "border-left-color": {
+              "moved": false,
+              "value": "rgb(228, 232, 237)"
+            },
+            "border-right-color": {
+              "moved": false,
+              "value": "rgb(228, 232, 237)"
+            },
+            "border-top-color": {
+              "moved": false,
+              "value": "rgb(228, 232, 237)"
+            },
+            "color": {
+              "moved": false,
+              "value": "rgb(228, 232, 237)"
+            },
+            "column-gap": {
+              "moved": false,
+              "value": "13.5px"
+            },
+            "gap": {
+              "moved": false,
+              "value": "13.5px"
+            },
+            "row-gap": {
+              "moved": false,
+              "value": "13.5px"
+            }
+          },
+          "token-readout/tokens": {
+            "--ds-button-md-border-radius": {
+              "moved": false,
+              "value": "calc(calc(10px / 1.25) * 1.25)"
+            },
+            "--ds-button-md-radius": {
+              "moved": false,
+              "value": "calc(9px / 1.25 * 1.25)"
+            },
+            "--ds-button-primary-bg": {
+              "moved": false,
+              "value": "#1a7fe0"
+            },
+            "--ds-card-border-radius": {
+              "moved": false,
+              "value": "calc(calc(10px / 1.25) * 1.25)"
+            },
+            "--ds-card-radius": {
+              "moved": false,
+              "value": "calc(calc(10px / 1.25) * 1.25)"
+            },
+            "--ds-chart-series-1": {
+              "moved": false,
+              "value": "#459BF7"
+            },
+            "--ds-color-primary": {
+              "moved": false,
+              "value": "rgb(30, 132, 230)"
+            },
+            "--ds-color-primary-500": {
+              "moved": false,
+              "value": "#1e84e6"
+            },
+            "--ds-color-text-on-primary": {
+              "moved": false,
+              "value": "#ffffff"
+            },
+            "--ds-density-effective-scale": {
+              "moved": false,
+              "value": "clamp(\n    0.5,\n    calc(\n      clamp(\n    0.5,\n    calc(0.9 * 1),\n    3\n  ) *\n      1\n    ),\n    3\n  )"
+            },
+            "--ds-density-global-effective-scale": {
+              "moved": false,
+              "value": "clamp(\n    0.5,\n    calc(0.9 * 1),\n    3\n  )"
+            },
+            "--ds-density-mode-factor": {
+              "moved": false,
+              "value": "1"
+            },
+            "--ds-density-scale": {
+              "moved": false,
+              "value": "0.9"
+            },
+            "--ds-edge-emphasis-width": {
+              "moved": false,
+              "value": "1px"
+            },
+            "--ds-edge-standard-width": {
+              "moved": false,
+              "value": "1px"
+            },
+            "--ds-effect-intensity": {
+              "moved": false,
+              "value": "0.58"
+            },
+            "--ds-elevation-1": {
+              "moved": false,
+              "value": "none"
+            },
+            "--ds-elevation-2": {
+              "moved": false,
+              "value": "none"
+            },
+            "--ds-elevation-3": {
+              "moved": false,
+              "value": "0 1px 2px rgba(0,0,0,0.05)"
+            },
+            "--ds-elevation-lift-strength": {
+              "moved": false,
+              "value": "0"
+            },
+            "--ds-experience-profile": {
+              "moved": false,
+              "value": "\"rottay/bithire-technical@1\""
+            },
+            "--ds-font-family-base": {
+              "moved": false,
+              "value": "'Public Sans', ui-sans-serif, system-ui, -apple-system, sans-serif, \"Noto Sans Arabic\", sans-serif"
+            },
+            "--ds-font-family-display": {
+              "moved": false,
+              "value": "'Space Grotesk', ui-sans-serif, system-ui, -apple-system, sans-serif, \"Noto Sans Arabic\", sans-serif"
+            },
+            "--ds-font-family-heading": {
+              "moved": false,
+              "value": "'Space Grotesk', ui-sans-serif, system-ui, -apple-system, sans-serif, \"Noto Sans Arabic\", sans-serif"
+            },
+            "--ds-font-family-mono": {
+              "moved": false,
+              "value": "'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, monospace"
+            },
+            "--ds-font-size-xs": {
+              "moved": false,
+              "value": "calc(0.75rem * 1)"
+            },
+            "--ds-input-md-border-radius": {
+              "moved": false,
+              "value": "calc(calc(10px / 1.25) * 1.25)"
+            },
+            "--ds-letter-spacing-body": {
+              "moved": false,
+              "value": "0"
+            },
+            "--ds-letter-spacing-heading": {
+              "moved": false,
+              "value": "-0.01em"
+            },
+            "--ds-material-canvas-texture": {
+              "moved": false,
+              "value": "radial-gradient(circle at 88% 4%, color-mix(in srgb, rgb(30, 132, 230) 14%, transparent), transparent 30%)"
+            },
+            "--ds-material-card-highlight": {
+              "moved": false,
+              "value": "inset 0 1px 0 color-mix(in srgb, #e4e8ed 6%, transparent)"
+            },
+            "--ds-motion-duration-scale": {
+              "moved": false,
+              "value": "1"
+            },
+            "--ds-motion-intensity": {
+              "moved": false,
+              "value": "0.55"
+            },
+            "--ds-radius-button": {
+              "moved": false,
+              "value": "calc(9px / 1.25 * 1.25)"
+            },
+            "--ds-radius-lg": {
+              "moved": false,
+              "value": "calc(calc(14px / 1.25) * 1.25)"
+            },
+            "--ds-radius-lg-base": {
+              "moved": false,
+              "value": "calc(14px / 1.25)"
+            },
+            "--ds-radius-md": {
+              "moved": false,
+              "value": "calc(calc(10px / 1.25) * 1.25)"
+            },
+            "--ds-radius-md-base": {
+              "moved": false,
+              "value": "calc(10px / 1.25)"
+            },
+            "--ds-radius-scale": {
+              "moved": false,
+              "value": "1.25"
+            },
+            "--ds-radius-sm": {
+              "moved": false,
+              "value": "calc(calc(7px / 1.25) * 1.25)"
+            },
+            "--ds-radius-sm-base": {
+              "moved": false,
+              "value": "calc(7px / 1.25)"
+            },
+            "--ds-radius-xl": {
+              "moved": false,
+              "value": "calc(calc(18px / 1.25) * 1.25)"
+            },
+            "--ds-radius-xl-base": {
+              "moved": false,
+              "value": "calc(18px / 1.25)"
+            },
+            "--ds-recipe-profile": {
+              "moved": false,
+              "value": "\"rottay/network-professional@1\""
+            },
+            "--ds-rhythm-effective-scale": {
+              "moved": false,
+              "value": "clamp(0.8, 1, 1.25)"
+            },
+            "--ds-rhythm-scale": {
+              "moved": false,
+              "value": "1"
+            },
+            "--ds-select-group-text-transform": {
+              "moved": false,
+              "value": "none"
+            },
+            "--ds-sidebar-bg": {
+              "moved": false,
+              "value": "#0a0f18"
+            },
+            "--ds-sidebar-item-bg-active": {
+              "moved": false,
+              "value": "rgba(26, 127, 224, 0.12)"
+            },
+            "--ds-sidebar-item-bg-hover": {
+              "moved": false,
+              "value": "rgba(255, 255, 255, 0.04)"
+            },
+            "--ds-sidebar-item-color": {
+              "moved": false,
+              "value": "#9aacbf"
+            },
+            "--ds-sidebar-item-color-active": {
+              "moved": false,
+              "value": "#3b9af0"
+            },
+            "--ds-sidebar-text": {
+              "moved": false,
+              "value": "#9aacbf"
+            },
+            "--ds-sidebar-text-muted": {
+              "moved": false,
+              "value": "#5a7085"
+            },
+            "--ds-table-header-letter-spacing": {
+              "moved": false,
+              "value": "calc(0.08em * 0.8125)"
+            },
+            "--ds-table-header-text-transform": {
+              "moved": false,
+              "value": "uppercase"
+            },
+            "--ds-text-eyebrow-letter-spacing": {
+              "moved": false,
+              "value": "0.08em"
+            },
+            "--ds-text-eyebrow-size": {
+              "moved": false,
+              "value": "0.75rem"
+            },
+            "--ds-text-eyebrow-transform": {
+              "moved": false,
+              "value": "uppercase"
+            },
+            "--ds-type-scale": {
+              "moved": false,
+              "value": "1"
+            },
+            "background-color": {
+              "moved": false,
+              "value": "rgba(0, 0, 0, 0)"
+            },
+            "border-bottom-color": {
+              "moved": false,
+              "value": "rgb(228, 232, 237)"
+            },
+            "border-left-color": {
+              "moved": false,
+              "value": "rgb(228, 232, 237)"
+            },
+            "border-right-color": {
+              "moved": false,
+              "value": "rgb(228, 232, 237)"
+            },
+            "border-top-color": {
+              "moved": false,
+              "value": "rgb(228, 232, 237)"
+            },
+            "border-top-style": {
+              "moved": false,
+              "value": "solid"
+            },
+            "color": {
+              "moved": false,
+              "value": "rgb(228, 232, 237)"
+            }
+          }
+        },
         "bithire/light/modern/both": {
           "button-modern-md/hitbox": {
             "@rect-block-size": {
@@ -1686,6 +3651,10 @@
               "moved": false,
               "value": "calc(9px / 1.25 * 1.25)"
             },
+            "--ds-button-primary-bg": {
+              "moved": false,
+              "value": "#3A6FB0"
+            },
             "--ds-card-border-radius": {
               "moved": false,
               "value": "calc(calc(10px / 1.25) * 1.25)"
@@ -1693,6 +3662,22 @@
             "--ds-card-radius": {
               "moved": false,
               "value": "calc(calc(10px / 1.25) * 1.25)"
+            },
+            "--ds-chart-series-1": {
+              "moved": false,
+              "value": "#356AAB"
+            },
+            "--ds-color-primary": {
+              "moved": false,
+              "value": "rgb(58, 111, 176)"
+            },
+            "--ds-color-primary-500": {
+              "moved": false,
+              "value": "#376BAB"
+            },
+            "--ds-color-text-on-primary": {
+              "moved": false,
+              "value": "#ffffff"
             },
             "--ds-density-effective-scale": {
               "moved": false,
@@ -1710,6 +3695,10 @@
               "moved": false,
               "value": "0.9"
             },
+            "--ds-edge-emphasis-width": {
+              "moved": false,
+              "value": "1px"
+            },
             "--ds-edge-standard-width": {
               "moved": false,
               "value": "1px"
@@ -1718,6 +3707,18 @@
               "moved": false,
               "value": "0.58"
             },
+            "--ds-elevation-1": {
+              "moved": false,
+              "value": "none"
+            },
+            "--ds-elevation-2": {
+              "moved": false,
+              "value": "none"
+            },
+            "--ds-elevation-3": {
+              "moved": false,
+              "value": "0 1px 2px rgba(0,0,0,0.05)"
+            },
             "--ds-elevation-lift-strength": {
               "moved": false,
               "value": "0"
@@ -1725,6 +3726,22 @@
             "--ds-experience-profile": {
               "moved": false,
               "value": "\"rottay/bithire-technical@1\""
+            },
+            "--ds-font-family-base": {
+              "moved": false,
+              "value": "'Public Sans', ui-sans-serif, system-ui, -apple-system, sans-serif, \"Noto Sans Arabic\", sans-serif"
+            },
+            "--ds-font-family-display": {
+              "moved": false,
+              "value": "'Space Grotesk', ui-sans-serif, system-ui, -apple-system, sans-serif, \"Noto Sans Arabic\", sans-serif"
+            },
+            "--ds-font-family-heading": {
+              "moved": false,
+              "value": "'Space Grotesk', ui-sans-serif, system-ui, -apple-system, sans-serif, \"Noto Sans Arabic\", sans-serif"
+            },
+            "--ds-font-family-mono": {
+              "moved": false,
+              "value": "'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, monospace"
             },
             "--ds-font-size-xs": {
               "moved": false,
@@ -1746,6 +3763,22 @@
             "--ds-material-canvas-texture": {
               "moved": false,
               "value": "radial-gradient(circle at 88% 4%, rgba(58, 111, 176, 0.055), transparent 30%)"
+            },
+            "--ds-material-card-highlight": {
+              "moved": false,
+              "value": "inset 0 1px 0 rgba(255, 255, 255, 0.9)"
+            },
+            "--ds-motion-duration-scale": {
+              "moved": false,
+              "value": "1"
+            },
+            "--ds-motion-intensity": {
+              "moved": false,
+              "value": "0.55"
+            },
+            "--ds-radius-button": {
+              "moved": false,
+              "value": "calc(9px / 1.25 * 1.25)"
             },
             "--ds-radius-lg": {
               "moved": false,
@@ -1783,6 +3816,10 @@
               "moved": false,
               "value": "calc(18px / 1.25)"
             },
+            "--ds-recipe-profile": {
+              "moved": false,
+              "value": "\"rottay/network-professional@1\""
+            },
             "--ds-rhythm-effective-scale": {
               "moved": false,
               "value": "clamp(0.8, 1, 1.25)"
@@ -1790,6 +3827,38 @@
             "--ds-rhythm-scale": {
               "moved": false,
               "value": "1"
+            },
+            "--ds-select-group-text-transform": {
+              "moved": false,
+              "value": "none"
+            },
+            "--ds-sidebar-bg": {
+              "moved": false,
+              "value": "#ffffff"
+            },
+            "--ds-sidebar-item-bg-active": {
+              "moved": false,
+              "value": "color-mix(in oklab, rgb(58, 111, 176) 8%, #F4F8FB)"
+            },
+            "--ds-sidebar-item-bg-hover": {
+              "moved": false,
+              "value": "#F4F8FD"
+            },
+            "--ds-sidebar-item-color": {
+              "moved": false,
+              "value": "#53697E"
+            },
+            "--ds-sidebar-item-color-active": {
+              "moved": false,
+              "value": "#3A6FB0"
+            },
+            "--ds-sidebar-text": {
+              "moved": false,
+              "value": "#14283B"
+            },
+            "--ds-sidebar-text-muted": {
+              "moved": false,
+              "value": "#728398"
             },
             "--ds-table-header-letter-spacing": {
               "moved": false,
@@ -1847,15 +3916,15 @@
         }
       },
       "negativeControls": {
-        "checkedRows": 96,
-        "expectedRows": 96,
+        "checkedRows": 192,
+        "expectedRows": 192,
         "held": true,
         "meaning": "Every declared negative control was measured and none moved.",
-        "observedRows": 96,
+        "observedRows": 192,
         "violations": []
       },
       "position": "tenant-scoped-stylesheet-block",
-      "positionMeaning": "Appended to the measured bundle behind the same unlayered tenant selector the compiled artifact uses. This is where a code-owned vertical lands: below an inline root write, above the base layer.",
+      "positionMeaning": "Appended to the measured bundle behind the same unlayered tenant selector the compiled artifact uses, plus one block per compiled mode at the compiler's own mode grammar (M-1). This is where a code-owned vertical lands: above the base layer, and above the vertical artifact by source order at equal specificity. AGED CLAUSE REMOVED IN H-3 PHASE (a): this used to say \"below an inline root write\", which described the DB arm as it was then. Both arms are stylesheet arms now, so nothing sits above this one.",
       "provenance": {
         "declaredChannels": [
           "--ds-experience-profile",
@@ -1876,9 +3945,10 @@
         "freshnessProven": true,
         "input": {
           "baseline": {
-            "digest": "311154af677f47d4807910322130bad40db3ea4f18d0a520ff3668aa7f35ae19",
+            "digest": "58af79982271be88f65ffeb35549d3931157b47bb8a33db1d0f9fff363459f34",
             "source": "dist/index.js#bithireBrandTheme"
           },
+          "compileOptions": {},
           "compilerInput": {
             "brandTheme": {
               "appearance": {
@@ -2876,6 +4946,7 @@
                       "separatorColor": "var(--ds-color-text-tertiary)"
                     },
                     "cardComponent": {
+                      "bg": "#151d2b",
                       "bgHover": "#1b2535",
                       "bodyColor": "var(--ds-color-text-primary)",
                       "border": "#253545",
@@ -3152,6 +5223,7 @@
                       "actionBg": "var(--ds-surface-control)",
                       "bg": "#0f1520",
                       "border": "#1d2a38",
+                      "cellColor": "#e4e8ed",
                       "cellFontSize": "0.875rem",
                       "cellPadding": "0.875rem 1rem",
                       "headerBg": "#151d2b",
@@ -3699,6 +5771,9 @@
                 }
               }
             },
+            "tenantAuthoredPaths": [
+              "expressive.experienceProfile"
+            ],
             "tenantPatch": {
               "expressive": {
                 "experienceProfile": "rottay/bithire-technical@1"
@@ -4702,6 +6777,7 @@
                     "separatorColor": "var(--ds-color-text-tertiary)"
                   },
                   "cardComponent": {
+                    "bg": "#151d2b",
                     "bgHover": "#1b2535",
                     "bodyColor": "var(--ds-color-text-primary)",
                     "border": "#253545",
@@ -4978,6 +7054,7 @@
                     "actionBg": "var(--ds-surface-control)",
                     "bg": "#0f1520",
                     "border": "#1d2a38",
+                    "cellColor": "#e4e8ed",
                     "cellFontSize": "0.875rem",
                     "cellPadding": "0.875rem 1rem",
                     "headerBg": "#151d2b",
@@ -5526,8 +7603,17 @@
             }
           },
           "ingressValue": "rottay/bithire-technical@1",
+          "modeScope": null,
           "path": "expressive.experienceProfile",
-          "stopId": "rottay/bithire-technical@1"
+          "stopId": "rottay/bithire-technical@1",
+          "tenantAuthoredPaths": [
+            "expressive.experienceProfile"
+          ]
+        },
+        "modeChannels": {
+          "dark": [
+            "--ds-material-canvas-texture"
+          ]
         },
         "module": "dist/infrastructure/compilers/kernel/runtime/brand-theme/index.js",
         "moduleSubpath": null,
@@ -5555,7 +7641,7 @@
         }
       },
       "restore": {
-        "comparedRows": 209,
+        "comparedRows": 470,
         "counts": {
           "byKind": {},
           "byPropertyKind": {},
@@ -5567,7 +7653,7 @@
         "rows": []
       },
       "totals": {
-        "inertProperties": 197,
+        "inertProperties": 448,
         "movedProperties": 2,
         "scope": "across every (vertical x theme x fixture x property) row measured for this arm"
       }
@@ -5647,7 +7733,7 @@
     "bundleMode": "fresh",
     "bundles": {
       "bithire": {
-        "bytes": 5351164,
+        "bytes": 5351223,
         "distMatchesStyles": true,
         "freshnessNote": "Recomposed in memory from src/foundation/tokens/css with the formula in build-vertical-css.mjs. Omits the per-tenant --ds-motion-spring tail, which requires compiled BrandTheme modules under dist/.",
         "freshnessProven": true,
@@ -5657,7 +7743,7 @@
           "src/foundation/tokens/css/facade/artifacts/bithire/index.css"
         ],
         "mode": "fresh",
-        "sha256": "74d7f4b2b4b22981d0e795ef301b9de37dddb17a0042ded741a762c5de8a1e42",
+        "sha256": "006ed5a882d3333112fb19f508de0eec3df42bbd4487fafb4a54ee4f5700dc01",
         "shippedDistDrift": {
           "identical": true,
           "prefixIdentical": true,
@@ -5667,17 +7753,20 @@
       }
     },
     "sourceFreshness": {
-      "declaredDigest": "0e2ba019088307307806fd0e4d6e38ac90d7bec87009b9437182e7fb1f90eeb2",
-      "observedDigest": "0e2ba019088307307806fd0e4d6e38ac90d7bec87009b9437182e7fb1f90eeb2",
-      "postMeasurementDigest": "0e2ba019088307307806fd0e4d6e38ac90d7bec87009b9437182e7fb1f90eeb2",
-      "preMeasurementDigest": "0e2ba019088307307806fd0e4d6e38ac90d7bec87009b9437182e7fb1f90eeb2",
+      "declaredDigest": "9c1eeb775780619526d62ac1e762b1e4ad17bf665dd85181142e2a010e832e65",
+      "observedDigest": "9c1eeb775780619526d62ac1e762b1e4ad17bf665dd85181142e2a010e832e65",
+      "postMeasurementDigest": "9c1eeb775780619526d62ac1e762b1e4ad17bf665dd85181142e2a010e832e65",
+      "preMeasurementDigest": "9c1eeb775780619526d62ac1e762b1e4ad17bf665dd85181142e2a010e832e65",
       "sourceFiles": [
         "packages/core/dist/build-stamp.json",
         "packages/core/dist/infrastructure/compilers/kernel/runtime/brand-theme/index.js",
         "packages/core/dist/server.js",
         "packages/core/manifest/controls/experience.profile.json",
+        "packages/core/manifest/controls/profiles.expressive.json",
         "packages/core/manifest/controls/shape.radius-scale.json",
         "packages/core/manifest/controls/surfaces.effect-intensity.json",
+        "packages/core/manifest/controls/surfaces.elevation-posture.json",
+        "packages/core/manifest/controls/typography.scale.json",
         "packages/core/manifest/families/primitive/display/card.json",
         "packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts",
         "packages/core/src/foundation/tokens/css/facade/artifacts/bithire/index.css",
@@ -5695,8 +7784,10 @@
         "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card.css",
         "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/card.css",
         "packages/core/src/foundation/tokens/css/runtime/personality.css",
+        "packages/core/src/foundation/tokens/ts/presentation/expressive-profiles/expansion/index.ts",
         "packages/core/src/foundation/tokens/ts/presentation/expressive-profiles/index.ts",
         "packages/core/src/infrastructure/compilers/composition/tenant-theme/index.ts",
+        "packages/core/src/infrastructure/compilers/kernel/foundation/css/appearance-posture/index.ts",
         "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
         "packages/core/src/infrastructure/runtime/bootstrap/facade/react/provider/index.tsx",
         "packages/core/src/tooling/resolution-probe/composition/data-run/index.mjs",
@@ -5734,20 +7825,34 @@
     "stylesheetLaw": "A static arm removes by re-serving the baseline BYTES, so removal and baseline must hash identically and the mutation must not. A DB arm never changes the sheet, so all three hashes agree and its restore law lives in the inline memo instead.",
     "stylesheets": {
       "db-tenant-theme": {
+        "bithire/dark/modern/both": {
+          "baseline": "006ed5a882d3333112fb19f508de0eec3df42bbd4487fafb4a54ee4f5700dc01",
+          "mutation": "944f5faa14e5db07b993a50fb69789e110bb4e7d9dac8d6d6fdc4ab429718d13",
+          "mutationDifferedFromBaseline": true,
+          "removal": "006ed5a882d3333112fb19f508de0eec3df42bbd4487fafb4a54ee4f5700dc01",
+          "removalIsByteIdenticalToBaseline": true
+        },
         "bithire/light/modern/both": {
-          "baseline": "74d7f4b2b4b22981d0e795ef301b9de37dddb17a0042ded741a762c5de8a1e42",
-          "mutation": "74d7f4b2b4b22981d0e795ef301b9de37dddb17a0042ded741a762c5de8a1e42",
-          "mutationDifferedFromBaseline": false,
-          "removal": "74d7f4b2b4b22981d0e795ef301b9de37dddb17a0042ded741a762c5de8a1e42",
+          "baseline": "006ed5a882d3333112fb19f508de0eec3df42bbd4487fafb4a54ee4f5700dc01",
+          "mutation": "944f5faa14e5db07b993a50fb69789e110bb4e7d9dac8d6d6fdc4ab429718d13",
+          "mutationDifferedFromBaseline": true,
+          "removal": "006ed5a882d3333112fb19f508de0eec3df42bbd4487fafb4a54ee4f5700dc01",
           "removalIsByteIdenticalToBaseline": true
         }
       },
       "static-brand-theme": {
-        "bithire/light/modern/both": {
-          "baseline": "74d7f4b2b4b22981d0e795ef301b9de37dddb17a0042ded741a762c5de8a1e42",
-          "mutation": "d069a805f4662a5ebb4c03885d550d6ab4c2421091083116515b19c6d618267a",
+        "bithire/dark/modern/both": {
+          "baseline": "006ed5a882d3333112fb19f508de0eec3df42bbd4487fafb4a54ee4f5700dc01",
+          "mutation": "2d609995bcb8e6839494350d5f77c3d29b3887f53ccf9f3dca5d1269df39f2cc",
           "mutationDifferedFromBaseline": true,
-          "removal": "74d7f4b2b4b22981d0e795ef301b9de37dddb17a0042ded741a762c5de8a1e42",
+          "removal": "006ed5a882d3333112fb19f508de0eec3df42bbd4487fafb4a54ee4f5700dc01",
+          "removalIsByteIdenticalToBaseline": true
+        },
+        "bithire/light/modern/both": {
+          "baseline": "006ed5a882d3333112fb19f508de0eec3df42bbd4487fafb4a54ee4f5700dc01",
+          "mutation": "2d609995bcb8e6839494350d5f77c3d29b3887f53ccf9f3dca5d1269df39f2cc",
+          "mutationDifferedFromBaseline": true,
+          "removal": "006ed5a882d3333112fb19f508de0eec3df42bbd4487fafb4a54ee4f5700dc01",
           "removalIsByteIdenticalToBaseline": true
         }
       }
@@ -5774,7 +7879,8 @@
     ],
     "note": "A fixture that names a real component takes its element shape FROM THAT COMPONENT — rendered, then pasted — never from the CSS. Deriving the shape from the CSS is what let `button-modern-md` and `input-modern-md` sit on `.ds-btn`/`.ds-input` for months: a selector states what an element must carry to be MATCHED, and says nothing about whether any component emits it, so a CSS-derived fixture can measure a rule that never paints and still look green. Regenerate a component shape by rendering the engine implementation with `renderToStaticMarkup` and pasting the result, minus React-generated ids, plus `data-probe`. The synthetic fixtures (the two skeleton controls and the token readout) are exempt: they exist to read a dial, not to stand for a component. `requiresSelectors` is not documentation either: the harness asserts each string occurs verbatim in the CSS it is about to measure and marks the fixture `unmatched` if it does not, so a fixture that stops being matched is reported, never silently measured as zero. Pin selectors and the paint statement, never a declaration's VALUE — a precedence ruling would then read as a broken fixture.",
     "themes": [
-      "light"
+      "light",
+      "dark"
     ],
     "verticals": [
       "bithire"
@@ -5795,6 +7901,7 @@
           ],
           "meaning": "At least one control moved under the dial, so the harness demonstrably observes movement. Inert verdicts in this artifact are about the CSS, not the instrument.",
           "perControl": {
+            "bithire/dark/modern/both/token-readout/tokens": [],
             "bithire/light/modern/both/token-readout/tokens": [
               "--ds-letter-spacing-heading"
             ]
@@ -5808,6 +7915,7 @@
           ],
           "meaning": "At least one control moved under the dial, so the harness demonstrably observes movement. Inert verdicts in this artifact are about the CSS, not the instrument.",
           "perControl": {
+            "bithire/dark/modern/both/token-readout/tokens": [],
             "bithire/light/modern/both/token-readout/tokens": [
               "--ds-letter-spacing-heading"
             ]

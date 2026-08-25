@@ -1657,6 +1657,10 @@
               "moved": false,
               "value": "1"
             },
+            "--ds-edge-emphasis-width": {
+              "moved": false,
+              "value": "1px"
+            },
             "--ds-edge-standard-width": {
               "moved": false,
               "value": "1px"
@@ -1721,6 +1725,10 @@
               "moved": false,
               "value": ""
             },
+            "--ds-material-card-highlight": {
+              "moved": false,
+              "value": ""
+            },
             "--ds-motion-duration-scale": {
               "moved": false,
               "value": "1"
@@ -1781,6 +1789,10 @@
             "--ds-rhythm-scale": {
               "moved": false,
               "value": "1"
+            },
+            "--ds-select-group-text-transform": {
+              "moved": false,
+              "value": "uppercase"
             },
             "--ds-sidebar-bg": {
               "moved": false,
@@ -3544,6 +3556,10 @@
               "moved": false,
               "value": "1"
             },
+            "--ds-edge-emphasis-width": {
+              "moved": false,
+              "value": "1px"
+            },
             "--ds-edge-standard-width": {
               "moved": false,
               "value": "1px"
@@ -3608,6 +3624,10 @@
               "moved": false,
               "value": ""
             },
+            "--ds-material-card-highlight": {
+              "moved": false,
+              "value": ""
+            },
             "--ds-motion-duration-scale": {
               "moved": false,
               "value": "1"
@@ -3668,6 +3688,10 @@
             "--ds-rhythm-scale": {
               "moved": false,
               "value": "1"
+            },
+            "--ds-select-group-text-transform": {
+              "moved": false,
+              "value": "uppercase"
             },
             "--ds-sidebar-bg": {
               "moved": false,
@@ -3897,7 +3921,7 @@
         }
       },
       "restore": {
-        "comparedRows": 946,
+        "comparedRows": 952,
         "counts": {
           "byKind": {},
           "byPropertyKind": {},
@@ -3909,7 +3933,7 @@
         "rows": []
       },
       "totals": {
-        "inertProperties": 924,
+        "inertProperties": 930,
         "movedProperties": 2,
         "scope": "across every (vertical x theme x fixture x property) row measured for this arm"
       }
@@ -5571,6 +5595,10 @@
               "moved": false,
               "value": "1"
             },
+            "--ds-edge-emphasis-width": {
+              "moved": false,
+              "value": "1px"
+            },
             "--ds-edge-standard-width": {
               "moved": false,
               "value": "1px"
@@ -5635,6 +5663,10 @@
               "moved": false,
               "value": ""
             },
+            "--ds-material-card-highlight": {
+              "moved": false,
+              "value": ""
+            },
             "--ds-motion-duration-scale": {
               "moved": false,
               "value": "1"
@@ -5695,6 +5727,10 @@
             "--ds-rhythm-scale": {
               "moved": false,
               "value": "1"
+            },
+            "--ds-select-group-text-transform": {
+              "moved": false,
+              "value": "uppercase"
             },
             "--ds-sidebar-bg": {
               "moved": false,
@@ -7458,6 +7494,10 @@
               "moved": false,
               "value": "1"
             },
+            "--ds-edge-emphasis-width": {
+              "moved": false,
+              "value": "1px"
+            },
             "--ds-edge-standard-width": {
               "moved": false,
               "value": "1px"
@@ -7522,6 +7562,10 @@
               "moved": false,
               "value": ""
             },
+            "--ds-material-card-highlight": {
+              "moved": false,
+              "value": ""
+            },
             "--ds-motion-duration-scale": {
               "moved": false,
               "value": "1"
@@ -7582,6 +7626,10 @@
             "--ds-rhythm-scale": {
               "moved": false,
               "value": "1"
+            },
+            "--ds-select-group-text-transform": {
+              "moved": false,
+              "value": "uppercase"
             },
             "--ds-sidebar-bg": {
               "moved": false,
@@ -12158,7 +12206,7 @@
         }
       },
       "restore": {
-        "comparedRows": 946,
+        "comparedRows": 952,
         "counts": {
           "byKind": {},
           "byPropertyKind": {},
@@ -12170,7 +12218,7 @@
         "rows": []
       },
       "totals": {
-        "inertProperties": 924,
+        "inertProperties": 930,
         "movedProperties": 2,
         "scope": "across every (vertical x theme x fixture x property) row measured for this arm"
       }
@@ -12337,10 +12385,10 @@
       }
     },
     "sourceFreshness": {
-      "declaredDigest": "316e98236068f88e20b884c3bcc69cc3bb6ccffe49b36b47db53f1e3bf7ac4bd",
-      "observedDigest": "316e98236068f88e20b884c3bcc69cc3bb6ccffe49b36b47db53f1e3bf7ac4bd",
-      "postMeasurementDigest": "316e98236068f88e20b884c3bcc69cc3bb6ccffe49b36b47db53f1e3bf7ac4bd",
-      "preMeasurementDigest": "316e98236068f88e20b884c3bcc69cc3bb6ccffe49b36b47db53f1e3bf7ac4bd",
+      "declaredDigest": "cffa659c83a8a88d8e29495569e43e37b7afd691e227b4b0946891188c87c6f3",
+      "observedDigest": "cffa659c83a8a88d8e29495569e43e37b7afd691e227b4b0946891188c87c6f3",
+      "postMeasurementDigest": "cffa659c83a8a88d8e29495569e43e37b7afd691e227b4b0946891188c87c6f3",
+      "preMeasurementDigest": "cffa659c83a8a88d8e29495569e43e37b7afd691e227b4b0946891188c87c6f3",
       "sourceFiles": [
         "packages/core/dist/build-stamp.json",
         "packages/core/dist/infrastructure/compilers/kernel/runtime/brand-theme/index.js",

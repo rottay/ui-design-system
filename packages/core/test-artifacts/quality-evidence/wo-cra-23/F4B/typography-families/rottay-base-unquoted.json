@@ -1660,6 +1660,10 @@
               "moved": false,
               "value": "1"
             },
+            "--ds-edge-emphasis-width": {
+              "moved": false,
+              "value": "1px"
+            },
             "--ds-edge-standard-width": {
               "moved": false,
               "value": "1px"
@@ -1725,6 +1729,10 @@
               "moved": false,
               "value": ""
             },
+            "--ds-material-card-highlight": {
+              "moved": false,
+              "value": ""
+            },
             "--ds-motion-duration-scale": {
               "moved": false,
               "value": "1"
@@ -1773,6 +1781,10 @@
               "moved": false,
               "value": "18px"
             },
+            "--ds-recipe-profile": {
+              "moved": false,
+              "value": "\"rottay/technical-sharp@1\""
+            },
             "--ds-rhythm-effective-scale": {
               "moved": false,
               "value": "clamp(0.8, 1, 1.25)"
@@ -1780,6 +1792,10 @@
             "--ds-rhythm-scale": {
               "moved": false,
               "value": "1"
+            },
+            "--ds-select-group-text-transform": {
+              "moved": false,
+              "value": "uppercase"
             },
             "--ds-sidebar-bg": {
               "moved": false,
@@ -3546,6 +3562,10 @@
               "moved": false,
               "value": "1"
             },
+            "--ds-edge-emphasis-width": {
+              "moved": false,
+              "value": "1px"
+            },
             "--ds-edge-standard-width": {
               "moved": false,
               "value": "1px"
@@ -3611,6 +3631,10 @@
               "moved": false,
               "value": ""
             },
+            "--ds-material-card-highlight": {
+              "moved": false,
+              "value": ""
+            },
             "--ds-motion-duration-scale": {
               "moved": false,
               "value": "1"
@@ -3659,6 +3683,10 @@
               "moved": false,
               "value": "18px"
             },
+            "--ds-recipe-profile": {
+              "moved": false,
+              "value": "\"rottay/technical-sharp@1\""
+            },
             "--ds-rhythm-effective-scale": {
               "moved": false,
               "value": "clamp(0.8, 1, 1.25)"
@@ -3666,6 +3694,10 @@
             "--ds-rhythm-scale": {
               "moved": false,
               "value": "1"
+            },
+            "--ds-select-group-text-transform": {
+              "moved": false,
+              "value": "uppercase"
             },
             "--ds-sidebar-bg": {
               "moved": false,
@@ -3904,7 +3936,7 @@
         }
       },
       "restore": {
-        "comparedRows": 944,
+        "comparedRows": 952,
         "counts": {
           "byKind": {},
           "byPropertyKind": {},
@@ -3916,7 +3948,7 @@
         "rows": []
       },
       "totals": {
-        "inertProperties": 916,
+        "inertProperties": 924,
         "movedProperties": 8,
         "scope": "across every (vertical x theme x fixture x property) row measured for this arm"
       }
@@ -5584,6 +5616,10 @@
               "moved": false,
               "value": "1"
             },
+            "--ds-edge-emphasis-width": {
+              "moved": false,
+              "value": "1px"
+            },
             "--ds-edge-standard-width": {
               "moved": false,
               "value": "1px"
@@ -5649,6 +5685,10 @@
               "moved": false,
               "value": ""
             },
+            "--ds-material-card-highlight": {
+              "moved": false,
+              "value": ""
+            },
             "--ds-motion-duration-scale": {
               "moved": false,
               "value": "1"
@@ -5697,6 +5737,10 @@
               "moved": false,
               "value": "18px"
             },
+            "--ds-recipe-profile": {
+              "moved": false,
+              "value": "\"rottay/technical-sharp@1\""
+            },
             "--ds-rhythm-effective-scale": {
               "moved": false,
               "value": "clamp(0.8, 1, 1.25)"
@@ -5704,6 +5748,10 @@
             "--ds-rhythm-scale": {
               "moved": false,
               "value": "1"
+            },
+            "--ds-select-group-text-transform": {
+              "moved": false,
+              "value": "uppercase"
             },
             "--ds-sidebar-bg": {
               "moved": false,
@@ -7470,6 +7518,10 @@
               "moved": false,
               "value": "1"
             },
+            "--ds-edge-emphasis-width": {
+              "moved": false,
+              "value": "1px"
+            },
             "--ds-edge-standard-width": {
               "moved": false,
               "value": "1px"
@@ -7535,6 +7587,10 @@
               "moved": false,
               "value": ""
             },
+            "--ds-material-card-highlight": {
+              "moved": false,
+              "value": ""
+            },
             "--ds-motion-duration-scale": {
               "moved": false,
               "value": "1"
@@ -7583,6 +7639,10 @@
               "moved": false,
               "value": "18px"
             },
+            "--ds-recipe-profile": {
+              "moved": false,
+              "value": "\"rottay/technical-sharp@1\""
+            },
             "--ds-rhythm-effective-scale": {
               "moved": false,
               "value": "clamp(0.8, 1, 1.25)"
@@ -7590,6 +7650,10 @@
             "--ds-rhythm-scale": {
               "moved": false,
               "value": "1"
+            },
+            "--ds-select-group-text-transform": {
+              "moved": false,
+              "value": "uppercase"
             },
             "--ds-sidebar-bg": {
               "moved": false,
@@ -12177,7 +12241,7 @@
         }
       },
       "restore": {
-        "comparedRows": 944,
+        "comparedRows": 952,
         "counts": {
           "byKind": {},
           "byPropertyKind": {},
@@ -12189,7 +12253,7 @@
         "rows": []
       },
       "totals": {
-        "inertProperties": 916,
+        "inertProperties": 924,
         "movedProperties": 8,
         "scope": "across every (vertical x theme x fixture x property) row measured for this arm"
       }
@@ -12212,7 +12276,12 @@
       "motion remains fixed"
     ],
     "familyId": "primitive/display/typography",
-    "familyPhrases": [],
+    "familyPhrases": [
+      "control height remains fixed",
+      "color remains fixed",
+      "border remains fixed",
+      "motion remains fixed"
+    ],
     "law": "The family list narrows the control list by being more specific about one family root. It never replaces it, so the effective set is the union and a silent family inherits the full control list."
   },
   "ingressEquivalence": {
@@ -12356,10 +12425,10 @@
       }
     },
     "sourceFreshness": {
-      "declaredDigest": "565cdf62fb6466b6d9fe46c6fc33743e7d02d86669d0a415eefc7fad6417954f",
-      "observedDigest": "565cdf62fb6466b6d9fe46c6fc33743e7d02d86669d0a415eefc7fad6417954f",
-      "postMeasurementDigest": "565cdf62fb6466b6d9fe46c6fc33743e7d02d86669d0a415eefc7fad6417954f",
-      "preMeasurementDigest": "565cdf62fb6466b6d9fe46c6fc33743e7d02d86669d0a415eefc7fad6417954f",
+      "declaredDigest": "60feba8ad53d0120601c876b139d17edba8dfed88c2ac9ba8bafb98bcaa3aa19",
+      "observedDigest": "60feba8ad53d0120601c876b139d17edba8dfed88c2ac9ba8bafb98bcaa3aa19",
+      "postMeasurementDigest": "60feba8ad53d0120601c876b139d17edba8dfed88c2ac9ba8bafb98bcaa3aa19",
+      "preMeasurementDigest": "60feba8ad53d0120601c876b139d17edba8dfed88c2ac9ba8bafb98bcaa3aa19",
       "sourceFiles": [
         "packages/core/dist/build-stamp.json",
         "packages/core/dist/infrastructure/compilers/kernel/runtime/brand-theme/index.js",
@@ -12371,6 +12440,7 @@
         "packages/core/src/foundation/tokens/css/facade/artifacts/rottay/index.css",
         "packages/core/src/foundation/tokens/css/facade/entrypoints/base.css",
         "packages/core/src/foundation/tokens/css/foundation/base/typography.css",
+        "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
         "packages/core/src/foundation/tokens/css/runtime/engines/modern/compiled.css",
         "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css",
         "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/typography.css",

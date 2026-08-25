@@ -7,7 +7,7 @@
   "semanticOwner": {
     "owner": "design-system",
     "registryPath": "packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts",
-    "registryDigest": "2081d156ee6241676e4ade123971df20acccc70caf1190466529c16ae3645a4b"
+    "registryDigest": "08fbe40fd643224faf86e79d53e34c47c4a05c0ae424f99d3a34721a42658e9b"
   },
   "title": "Explicit font stacks",
   "valueType": "font-stack",
@@ -85,9 +85,9 @@
       "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/typography-families/rottay-base-quoted.json.receipt.json",
       "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/typography-families/rottay-base-unquoted.json.receipt.json",
       "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/typography-families/rottay-heading-quoted.json.receipt.json",
-      "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/typography-families/rottay-heading-unquoted.json.receipt.json",
-      "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/typography-families/compound-editorial-plus-explicit-heading.json.receipt.json"
+      "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/typography-families/rottay-heading-unquoted.json.receipt.json"
     ],
+    "supersededEvidence": "SUPERSEDED_BY_LIVE_FENCE (DT adjudication, F4B-16 close, 2026-08-25): compound-editorial-plus-explicit-heading.json.receipt.json retired from staticDbParityEvidenceIds above. The producer ad-hoc (/tmp/f4b14-compound-case.mjs) no longer exists -- the receipt's freshness is not re-verifiable by construction. The law it measured (explicit family wins in the compound case, both halves, both doors) is cerca viva by TWO live fences: capability-propagation/index.test.ts:573 (\"does not let one capability move another capability's exclusive channel\", green in CI, same BASE_DOC shape :141-146) AND e2-composed-pairing.test.ts (9 drills, both doors -- STATIC :58 and DB :74 -- covering the exact composed shape, including (iii) F4B-11 preserved and the negative \"a pairing with NO explicit family still lowers the pairing\"). The measurement was verified twice in F4B-14 (Fable ACCEPT postaudit). The artifact and its receipt stay on disk as historical record; evidence is not deleted, only re-classified.",
     "exactRestoreEvidenceIds": [],
     "negativeControls": [
       "control height remains fixed",

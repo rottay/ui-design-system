@@ -29,40 +29,8 @@
         }
       },
       "inline": {
-        "bithire/dark/modern/both": {
-          "clobbered": [],
-          "delivery": "fresh-page",
-          "introduced": [
-            "--ds-type-scale"
-          ],
-          "restoreOps": [
-            {
-              "name": "--ds-type-scale",
-              "op": "remove"
-            },
-            {
-              "name": "style",
-              "op": "remove-attribute"
-            }
-          ]
-        },
-        "bithire/light/modern/both": {
-          "clobbered": [],
-          "delivery": "fresh-page",
-          "introduced": [
-            "--ds-type-scale"
-          ],
-          "restoreOps": [
-            {
-              "name": "--ds-type-scale",
-              "op": "remove"
-            },
-            {
-              "name": "style",
-              "op": "remove-attribute"
-            }
-          ]
-        }
+        "bithire/dark/modern/both": null,
+        "bithire/light/modern/both": null
       },
       "movements": {
         "bithire/dark/modern/both": {
@@ -1576,6 +1544,10 @@
               "moved": false,
               "value": "calc(9px / 1.25 * 1.25)"
             },
+            "--ds-button-primary-bg": {
+              "moved": false,
+              "value": "#1a7fe0"
+            },
             "--ds-card-border-radius": {
               "moved": false,
               "value": "calc(calc(10px / 1.25) * 1.25)"
@@ -1583,6 +1555,22 @@
             "--ds-card-radius": {
               "moved": false,
               "value": "calc(calc(10px / 1.25) * 1.25)"
+            },
+            "--ds-chart-series-1": {
+              "moved": false,
+              "value": "#459BF7"
+            },
+            "--ds-color-primary": {
+              "moved": false,
+              "value": "rgb(30, 132, 230)"
+            },
+            "--ds-color-primary-500": {
+              "moved": false,
+              "value": "#1e84e6"
+            },
+            "--ds-color-text-on-primary": {
+              "moved": false,
+              "value": "#ffffff"
             },
             "--ds-density-effective-scale": {
               "moved": false,
@@ -1600,6 +1588,10 @@
               "moved": false,
               "value": "0.9"
             },
+            "--ds-edge-emphasis-width": {
+              "moved": false,
+              "value": "1px"
+            },
             "--ds-edge-standard-width": {
               "moved": false,
               "value": "1px"
@@ -1608,6 +1600,18 @@
               "moved": false,
               "value": "0.58"
             },
+            "--ds-elevation-1": {
+              "moved": false,
+              "value": "none"
+            },
+            "--ds-elevation-2": {
+              "moved": false,
+              "value": "none"
+            },
+            "--ds-elevation-3": {
+              "moved": false,
+              "value": "0 1px 2px rgba(0,0,0,0.05)"
+            },
             "--ds-elevation-lift-strength": {
               "moved": false,
               "value": "0"
@@ -1615,6 +1619,22 @@
             "--ds-experience-profile": {
               "moved": false,
               "value": "\"rottay/bithire-technical@1\""
+            },
+            "--ds-font-family-base": {
+              "moved": false,
+              "value": "'Public Sans', ui-sans-serif, system-ui, -apple-system, sans-serif, \"Noto Sans Arabic\", sans-serif"
+            },
+            "--ds-font-family-display": {
+              "moved": false,
+              "value": "'Space Grotesk', ui-sans-serif, system-ui, -apple-system, sans-serif, \"Noto Sans Arabic\", sans-serif"
+            },
+            "--ds-font-family-heading": {
+              "moved": false,
+              "value": "'Space Grotesk', ui-sans-serif, system-ui, -apple-system, sans-serif, \"Noto Sans Arabic\", sans-serif"
+            },
+            "--ds-font-family-mono": {
+              "moved": false,
+              "value": "'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, monospace"
             },
             "--ds-font-size-xs": {
               "from": "calc(0.75rem * 1)",
@@ -1636,6 +1656,22 @@
             "--ds-material-canvas-texture": {
               "moved": false,
               "value": "radial-gradient(circle at 88% 4%, color-mix(in srgb, rgb(30, 132, 230) 14%, transparent), transparent 30%)"
+            },
+            "--ds-material-card-highlight": {
+              "moved": false,
+              "value": "inset 0 1px 0 color-mix(in srgb, #e4e8ed 6%, transparent)"
+            },
+            "--ds-motion-duration-scale": {
+              "moved": false,
+              "value": "1"
+            },
+            "--ds-motion-intensity": {
+              "moved": false,
+              "value": "0.55"
+            },
+            "--ds-radius-button": {
+              "moved": false,
+              "value": "calc(9px / 1.25 * 1.25)"
             },
             "--ds-radius-lg": {
               "moved": false,
@@ -1673,6 +1709,10 @@
               "moved": false,
               "value": "calc(18px / 1.25)"
             },
+            "--ds-recipe-profile": {
+              "moved": false,
+              "value": "\"rottay/network-professional@1\""
+            },
             "--ds-rhythm-effective-scale": {
               "moved": false,
               "value": "clamp(0.8, 1, 1.25)"
@@ -1680,6 +1720,38 @@
             "--ds-rhythm-scale": {
               "moved": false,
               "value": "1"
+            },
+            "--ds-select-group-text-transform": {
+              "moved": false,
+              "value": "none"
+            },
+            "--ds-sidebar-bg": {
+              "moved": false,
+              "value": "#0a0f18"
+            },
+            "--ds-sidebar-item-bg-active": {
+              "moved": false,
+              "value": "rgba(26, 127, 224, 0.12)"
+            },
+            "--ds-sidebar-item-bg-hover": {
+              "moved": false,
+              "value": "rgba(255, 255, 255, 0.04)"
+            },
+            "--ds-sidebar-item-color": {
+              "moved": false,
+              "value": "#9aacbf"
+            },
+            "--ds-sidebar-item-color-active": {
+              "moved": false,
+              "value": "#3b9af0"
+            },
+            "--ds-sidebar-text": {
+              "moved": false,
+              "value": "#9aacbf"
+            },
+            "--ds-sidebar-text-muted": {
+              "moved": false,
+              "value": "#5a7085"
             },
             "--ds-table-header-letter-spacing": {
               "moved": false,
@@ -3299,6 +3371,10 @@
               "moved": false,
               "value": "calc(9px / 1.25 * 1.25)"
             },
+            "--ds-button-primary-bg": {
+              "moved": false,
+              "value": "#3A6FB0"
+            },
             "--ds-card-border-radius": {
               "moved": false,
               "value": "calc(calc(10px / 1.25) * 1.25)"
@@ -3306,6 +3382,22 @@
             "--ds-card-radius": {
               "moved": false,
               "value": "calc(calc(10px / 1.25) * 1.25)"
+            },
+            "--ds-chart-series-1": {
+              "moved": false,
+              "value": "#356AAB"
+            },
+            "--ds-color-primary": {
+              "moved": false,
+              "value": "rgb(58, 111, 176)"
+            },
+            "--ds-color-primary-500": {
+              "moved": false,
+              "value": "#376BAB"
+            },
+            "--ds-color-text-on-primary": {
+              "moved": false,
+              "value": "#ffffff"
             },
             "--ds-density-effective-scale": {
               "moved": false,
@@ -3323,6 +3415,10 @@
               "moved": false,
               "value": "0.9"
             },
+            "--ds-edge-emphasis-width": {
+              "moved": false,
+              "value": "1px"
+            },
             "--ds-edge-standard-width": {
               "moved": false,
               "value": "1px"
@@ -3331,6 +3427,18 @@
               "moved": false,
               "value": "0.58"
             },
+            "--ds-elevation-1": {
+              "moved": false,
+              "value": "none"
+            },
+            "--ds-elevation-2": {
+              "moved": false,
+              "value": "none"
+            },
+            "--ds-elevation-3": {
+              "moved": false,
+              "value": "0 1px 2px rgba(0,0,0,0.05)"
+            },
             "--ds-elevation-lift-strength": {
               "moved": false,
               "value": "0"
@@ -3338,6 +3446,22 @@
             "--ds-experience-profile": {
               "moved": false,
               "value": "\"rottay/bithire-technical@1\""
+            },
+            "--ds-font-family-base": {
+              "moved": false,
+              "value": "'Public Sans', ui-sans-serif, system-ui, -apple-system, sans-serif, \"Noto Sans Arabic\", sans-serif"
+            },
+            "--ds-font-family-display": {
+              "moved": false,
+              "value": "'Space Grotesk', ui-sans-serif, system-ui, -apple-system, sans-serif, \"Noto Sans Arabic\", sans-serif"
+            },
+            "--ds-font-family-heading": {
+              "moved": false,
+              "value": "'Space Grotesk', ui-sans-serif, system-ui, -apple-system, sans-serif, \"Noto Sans Arabic\", sans-serif"
+            },
+            "--ds-font-family-mono": {
+              "moved": false,
+              "value": "'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, monospace"
             },
             "--ds-font-size-xs": {
               "from": "calc(0.75rem * 1)",
@@ -3359,6 +3483,22 @@
             "--ds-material-canvas-texture": {
               "moved": false,
               "value": "radial-gradient(circle at 88% 4%, rgba(58, 111, 176, 0.055), transparent 30%)"
+            },
+            "--ds-material-card-highlight": {
+              "moved": false,
+              "value": "inset 0 1px 0 rgba(255, 255, 255, 0.9)"
+            },
+            "--ds-motion-duration-scale": {
+              "moved": false,
+              "value": "1"
+            },
+            "--ds-motion-intensity": {
+              "moved": false,
+              "value": "0.55"
+            },
+            "--ds-radius-button": {
+              "moved": false,
+              "value": "calc(9px / 1.25 * 1.25)"
             },
             "--ds-radius-lg": {
               "moved": false,
@@ -3396,6 +3536,10 @@
               "moved": false,
               "value": "calc(18px / 1.25)"
             },
+            "--ds-recipe-profile": {
+              "moved": false,
+              "value": "\"rottay/network-professional@1\""
+            },
             "--ds-rhythm-effective-scale": {
               "moved": false,
               "value": "clamp(0.8, 1, 1.25)"
@@ -3403,6 +3547,38 @@
             "--ds-rhythm-scale": {
               "moved": false,
               "value": "1"
+            },
+            "--ds-select-group-text-transform": {
+              "moved": false,
+              "value": "none"
+            },
+            "--ds-sidebar-bg": {
+              "moved": false,
+              "value": "#ffffff"
+            },
+            "--ds-sidebar-item-bg-active": {
+              "moved": false,
+              "value": "color-mix(in oklab, rgb(58, 111, 176) 8%, #F4F8FB)"
+            },
+            "--ds-sidebar-item-bg-hover": {
+              "moved": false,
+              "value": "#F4F8FD"
+            },
+            "--ds-sidebar-item-color": {
+              "moved": false,
+              "value": "#53697E"
+            },
+            "--ds-sidebar-item-color-active": {
+              "moved": false,
+              "value": "#3A6FB0"
+            },
+            "--ds-sidebar-text": {
+              "moved": false,
+              "value": "#14283B"
+            },
+            "--ds-sidebar-text-muted": {
+              "moved": false,
+              "value": "#728398"
             },
             "--ds-table-header-letter-spacing": {
               "moved": false,
@@ -3520,8 +3696,8 @@
         "observedRows": 640,
         "violations": []
       },
-      "position": "root-inline-style",
-      "positionMeaning": "Written with setProperty on document.documentElement from the compiled TenantThemeArtifact.variables. This is the strongest position a tenant occupies, and it is ABOVE the static arm.",
+      "position": "tenant-artifact-stylesheet",
+      "positionMeaning": "The compiled TenantThemeArtifact, served the way production serves it: a base rule plus one rule per modeDelta, re-scoped from the artifact's probe-tenant selector onto the scene's own (H-3 phase (a)). It used to be a root inline write, and that was a measurement defect, not a position: inline beats every mode block, so the arm reported the tenant BASE value in a mode where production serves the vertical's own. The provider preview does write inline; whether the preview can express mode deltas at all is a separate, unmeasured product question.",
       "provenance": {
         "declaredChannels": [
           "--ds-type-scale"
@@ -3534,6 +3710,7 @@
         "freshnessProven": true,
         "input": {
           "baseline": null,
+          "compileOptions": {},
           "compilerInput": {
             "appearance": {
               "typography": {
@@ -3557,9 +3734,12 @@
             }
           },
           "ingressValue": 0.94,
+          "modeScope": null,
           "path": "appearance.general.typography.scale",
-          "stopId": "compacta"
+          "stopId": "compacta",
+          "tenantAuthoredPaths": null
         },
+        "modeChannels": {},
         "module": "dist/server.js",
         "moduleSubpath": "@rottay/design-system/server",
         "omittedChannels": [],
@@ -3574,7 +3754,8 @@
           "exception": null,
           "excluded": [
             {
-              "reason": "resolution-probe: db-tenant-theme lowered \"normal\" through appearance.general.typography.scale and emitted none of the declared channels (--ds-type-scale). That is the finding; it is not an arm.",
+              "exclusionClass": "COMPILER_ELIDES_VERTICAL_DEFAULT",
+              "reason": "resolution-probe: db-tenant-theme lowered \"normal\" through appearance.general.typography.scale and emitted none of the declared channels (--ds-type-scale) in ANY scope — not in the base map and not in any mode block (no mode block). That is the finding; it is not an arm.",
               "stopId": "normal"
             }
           ],
@@ -3587,7 +3768,7 @@
         }
       },
       "restore": {
-        "comparedRows": 856,
+        "comparedRows": 908,
         "counts": {
           "byKind": {},
           "byPropertyKind": {},
@@ -3599,7 +3780,7 @@
         "rows": []
       },
       "totals": {
-        "inertProperties": 802,
+        "inertProperties": 854,
         "movedProperties": 34,
         "scope": "across every (vertical x theme x fixture x property) row measured for this arm"
       }
@@ -5148,6 +5329,10 @@
               "moved": false,
               "value": "calc(9px / 1.25 * 1.25)"
             },
+            "--ds-button-primary-bg": {
+              "moved": false,
+              "value": "#1a7fe0"
+            },
             "--ds-card-border-radius": {
               "moved": false,
               "value": "calc(calc(10px / 1.25) * 1.25)"
@@ -5155,6 +5340,22 @@
             "--ds-card-radius": {
               "moved": false,
               "value": "calc(calc(10px / 1.25) * 1.25)"
+            },
+            "--ds-chart-series-1": {
+              "moved": false,
+              "value": "#459BF7"
+            },
+            "--ds-color-primary": {
+              "moved": false,
+              "value": "rgb(30, 132, 230)"
+            },
+            "--ds-color-primary-500": {
+              "moved": false,
+              "value": "#1e84e6"
+            },
+            "--ds-color-text-on-primary": {
+              "moved": false,
+              "value": "#ffffff"
             },
             "--ds-density-effective-scale": {
               "moved": false,
@@ -5172,6 +5373,10 @@
               "moved": false,
               "value": "0.9"
             },
+            "--ds-edge-emphasis-width": {
+              "moved": false,
+              "value": "1px"
+            },
             "--ds-edge-standard-width": {
               "moved": false,
               "value": "1px"
@@ -5180,6 +5385,18 @@
               "moved": false,
               "value": "0.58"
             },
+            "--ds-elevation-1": {
+              "moved": false,
+              "value": "none"
+            },
+            "--ds-elevation-2": {
+              "moved": false,
+              "value": "none"
+            },
+            "--ds-elevation-3": {
+              "moved": false,
+              "value": "0 1px 2px rgba(0,0,0,0.05)"
+            },
             "--ds-elevation-lift-strength": {
               "moved": false,
               "value": "0"
@@ -5187,6 +5404,22 @@
             "--ds-experience-profile": {
               "moved": false,
               "value": "\"rottay/bithire-technical@1\""
+            },
+            "--ds-font-family-base": {
+              "moved": false,
+              "value": "'Public Sans', ui-sans-serif, system-ui, -apple-system, sans-serif, \"Noto Sans Arabic\", sans-serif"
+            },
+            "--ds-font-family-display": {
+              "moved": false,
+              "value": "'Space Grotesk', ui-sans-serif, system-ui, -apple-system, sans-serif, \"Noto Sans Arabic\", sans-serif"
+            },
+            "--ds-font-family-heading": {
+              "moved": false,
+              "value": "'Space Grotesk', ui-sans-serif, system-ui, -apple-system, sans-serif, \"Noto Sans Arabic\", sans-serif"
+            },
+            "--ds-font-family-mono": {
+              "moved": false,
+              "value": "'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, monospace"
             },
             "--ds-font-size-xs": {
               "from": "calc(0.75rem * 1)",
@@ -5208,6 +5441,22 @@
             "--ds-material-canvas-texture": {
               "moved": false,
               "value": "radial-gradient(circle at 88% 4%, color-mix(in srgb, rgb(30, 132, 230) 14%, transparent), transparent 30%)"
+            },
+            "--ds-material-card-highlight": {
+              "moved": false,
+              "value": "inset 0 1px 0 color-mix(in srgb, #e4e8ed 6%, transparent)"
+            },
+            "--ds-motion-duration-scale": {
+              "moved": false,
+              "value": "1"
+            },
+            "--ds-motion-intensity": {
+              "moved": false,
+              "value": "0.55"
+            },
+            "--ds-radius-button": {
+              "moved": false,
+              "value": "calc(9px / 1.25 * 1.25)"
             },
             "--ds-radius-lg": {
               "moved": false,
@@ -5245,6 +5494,10 @@
               "moved": false,
               "value": "calc(18px / 1.25)"
             },
+            "--ds-recipe-profile": {
+              "moved": false,
+              "value": "\"rottay/network-professional@1\""
+            },
             "--ds-rhythm-effective-scale": {
               "moved": false,
               "value": "clamp(0.8, 1, 1.25)"
@@ -5252,6 +5505,38 @@
             "--ds-rhythm-scale": {
               "moved": false,
               "value": "1"
+            },
+            "--ds-select-group-text-transform": {
+              "moved": false,
+              "value": "none"
+            },
+            "--ds-sidebar-bg": {
+              "moved": false,
+              "value": "#0a0f18"
+            },
+            "--ds-sidebar-item-bg-active": {
+              "moved": false,
+              "value": "rgba(26, 127, 224, 0.12)"
+            },
+            "--ds-sidebar-item-bg-hover": {
+              "moved": false,
+              "value": "rgba(255, 255, 255, 0.04)"
+            },
+            "--ds-sidebar-item-color": {
+              "moved": false,
+              "value": "#9aacbf"
+            },
+            "--ds-sidebar-item-color-active": {
+              "moved": false,
+              "value": "#3b9af0"
+            },
+            "--ds-sidebar-text": {
+              "moved": false,
+              "value": "#9aacbf"
+            },
+            "--ds-sidebar-text-muted": {
+              "moved": false,
+              "value": "#5a7085"
             },
             "--ds-table-header-letter-spacing": {
               "moved": false,
@@ -6871,6 +7156,10 @@
               "moved": false,
               "value": "calc(9px / 1.25 * 1.25)"
             },
+            "--ds-button-primary-bg": {
+              "moved": false,
+              "value": "#3A6FB0"
+            },
             "--ds-card-border-radius": {
               "moved": false,
               "value": "calc(calc(10px / 1.25) * 1.25)"
@@ -6878,6 +7167,22 @@
             "--ds-card-radius": {
               "moved": false,
               "value": "calc(calc(10px / 1.25) * 1.25)"
+            },
+            "--ds-chart-series-1": {
+              "moved": false,
+              "value": "#356AAB"
+            },
+            "--ds-color-primary": {
+              "moved": false,
+              "value": "rgb(58, 111, 176)"
+            },
+            "--ds-color-primary-500": {
+              "moved": false,
+              "value": "#376BAB"
+            },
+            "--ds-color-text-on-primary": {
+              "moved": false,
+              "value": "#ffffff"
             },
             "--ds-density-effective-scale": {
               "moved": false,
@@ -6895,6 +7200,10 @@
               "moved": false,
               "value": "0.9"
             },
+            "--ds-edge-emphasis-width": {
+              "moved": false,
+              "value": "1px"
+            },
             "--ds-edge-standard-width": {
               "moved": false,
               "value": "1px"
@@ -6903,6 +7212,18 @@
               "moved": false,
               "value": "0.58"
             },
+            "--ds-elevation-1": {
+              "moved": false,
+              "value": "none"
+            },
+            "--ds-elevation-2": {
+              "moved": false,
+              "value": "none"
+            },
+            "--ds-elevation-3": {
+              "moved": false,
+              "value": "0 1px 2px rgba(0,0,0,0.05)"
+            },
             "--ds-elevation-lift-strength": {
               "moved": false,
               "value": "0"
@@ -6910,6 +7231,22 @@
             "--ds-experience-profile": {
               "moved": false,
               "value": "\"rottay/bithire-technical@1\""
+            },
+            "--ds-font-family-base": {
+              "moved": false,
+              "value": "'Public Sans', ui-sans-serif, system-ui, -apple-system, sans-serif, \"Noto Sans Arabic\", sans-serif"
+            },
+            "--ds-font-family-display": {
+              "moved": false,
+              "value": "'Space Grotesk', ui-sans-serif, system-ui, -apple-system, sans-serif, \"Noto Sans Arabic\", sans-serif"
+            },
+            "--ds-font-family-heading": {
+              "moved": false,
+              "value": "'Space Grotesk', ui-sans-serif, system-ui, -apple-system, sans-serif, \"Noto Sans Arabic\", sans-serif"
+            },
+            "--ds-font-family-mono": {
+              "moved": false,
+              "value": "'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, monospace"
             },
             "--ds-font-size-xs": {
               "from": "calc(0.75rem * 1)",
@@ -6931,6 +7268,22 @@
             "--ds-material-canvas-texture": {
               "moved": false,
               "value": "radial-gradient(circle at 88% 4%, rgba(58, 111, 176, 0.055), transparent 30%)"
+            },
+            "--ds-material-card-highlight": {
+              "moved": false,
+              "value": "inset 0 1px 0 rgba(255, 255, 255, 0.9)"
+            },
+            "--ds-motion-duration-scale": {
+              "moved": false,
+              "value": "1"
+            },
+            "--ds-motion-intensity": {
+              "moved": false,
+              "value": "0.55"
+            },
+            "--ds-radius-button": {
+              "moved": false,
+              "value": "calc(9px / 1.25 * 1.25)"
             },
             "--ds-radius-lg": {
               "moved": false,
@@ -6968,6 +7321,10 @@
               "moved": false,
               "value": "calc(18px / 1.25)"
             },
+            "--ds-recipe-profile": {
+              "moved": false,
+              "value": "\"rottay/network-professional@1\""
+            },
             "--ds-rhythm-effective-scale": {
               "moved": false,
               "value": "clamp(0.8, 1, 1.25)"
@@ -6975,6 +7332,38 @@
             "--ds-rhythm-scale": {
               "moved": false,
               "value": "1"
+            },
+            "--ds-select-group-text-transform": {
+              "moved": false,
+              "value": "none"
+            },
+            "--ds-sidebar-bg": {
+              "moved": false,
+              "value": "#ffffff"
+            },
+            "--ds-sidebar-item-bg-active": {
+              "moved": false,
+              "value": "color-mix(in oklab, rgb(58, 111, 176) 8%, #F4F8FB)"
+            },
+            "--ds-sidebar-item-bg-hover": {
+              "moved": false,
+              "value": "#F4F8FD"
+            },
+            "--ds-sidebar-item-color": {
+              "moved": false,
+              "value": "#53697E"
+            },
+            "--ds-sidebar-item-color-active": {
+              "moved": false,
+              "value": "#3A6FB0"
+            },
+            "--ds-sidebar-text": {
+              "moved": false,
+              "value": "#14283B"
+            },
+            "--ds-sidebar-text-muted": {
+              "moved": false,
+              "value": "#728398"
             },
             "--ds-table-header-letter-spacing": {
               "moved": false,
@@ -7093,7 +7482,7 @@
         "violations": []
       },
       "position": "tenant-scoped-stylesheet-block",
-      "positionMeaning": "Appended to the measured bundle behind the same unlayered tenant selector the compiled artifact uses. This is where a code-owned vertical lands: below an inline root write, above the base layer.",
+      "positionMeaning": "Appended to the measured bundle behind the same unlayered tenant selector the compiled artifact uses, plus one block per compiled mode at the compiler's own mode grammar (M-1). This is where a code-owned vertical lands: above the base layer, and above the vertical artifact by source order at equal specificity. AGED CLAUSE REMOVED IN H-3 PHASE (a): this used to say \"below an inline root write\", which described the DB arm as it was then. Both arms are stylesheet arms now, so nothing sits above this one.",
       "provenance": {
         "declaredChannels": [
           "--ds-type-scale"
@@ -7106,9 +7495,10 @@
         "freshnessProven": true,
         "input": {
           "baseline": {
-            "digest": "311154af677f47d4807910322130bad40db3ea4f18d0a520ff3668aa7f35ae19",
+            "digest": "58af79982271be88f65ffeb35549d3931157b47bb8a33db1d0f9fff363459f34",
             "source": "dist/index.js#bithireBrandTheme"
           },
+          "compileOptions": {},
           "compilerInput": {
             "brandTheme": {
               "appearance": {
@@ -8106,6 +8496,7 @@
                       "separatorColor": "var(--ds-color-text-tertiary)"
                     },
                     "cardComponent": {
+                      "bg": "#151d2b",
                       "bgHover": "#1b2535",
                       "bodyColor": "var(--ds-color-text-primary)",
                       "border": "#253545",
@@ -8382,6 +8773,7 @@
                       "actionBg": "var(--ds-surface-control)",
                       "bg": "#0f1520",
                       "border": "#1d2a38",
+                      "cellColor": "#e4e8ed",
                       "cellFontSize": "0.875rem",
                       "cellPadding": "0.875rem 1rem",
                       "headerBg": "#151d2b",
@@ -8929,6 +9321,9 @@
                 }
               }
             },
+            "tenantAuthoredPaths": [
+              "typography.scale"
+            ],
             "tenantPatch": {
               "typography": {
                 "scale": 0.94
@@ -9932,6 +10327,7 @@
                     "separatorColor": "var(--ds-color-text-tertiary)"
                   },
                   "cardComponent": {
+                    "bg": "#151d2b",
                     "bgHover": "#1b2535",
                     "bodyColor": "var(--ds-color-text-primary)",
                     "border": "#253545",
@@ -10208,6 +10604,7 @@
                     "actionBg": "var(--ds-surface-control)",
                     "bg": "#0f1520",
                     "border": "#1d2a38",
+                    "cellColor": "#e4e8ed",
                     "cellFontSize": "0.875rem",
                     "cellPadding": "0.875rem 1rem",
                     "headerBg": "#151d2b",
@@ -10757,8 +11154,15 @@
             }
           },
           "ingressValue": 0.94,
+          "modeScope": null,
           "path": "typography.scale",
-          "stopId": "compacta"
+          "stopId": "compacta",
+          "tenantAuthoredPaths": [
+            "typography.scale"
+          ]
+        },
+        "modeChannels": {
+          "dark": []
         },
         "module": "dist/infrastructure/compilers/kernel/runtime/brand-theme/index.js",
         "moduleSubpath": null,
@@ -10782,7 +11186,7 @@
         }
       },
       "restore": {
-        "comparedRows": 856,
+        "comparedRows": 908,
         "counts": {
           "byKind": {},
           "byPropertyKind": {},
@@ -10794,7 +11198,7 @@
         "rows": []
       },
       "totals": {
-        "inertProperties": 802,
+        "inertProperties": 854,
         "movedProperties": 34,
         "scope": "across every (vertical x theme x fixture x property) row measured for this arm"
       }
@@ -10916,7 +11320,7 @@
     "bundleMode": "fresh",
     "bundles": {
       "bithire": {
-        "bytes": 5351164,
+        "bytes": 5351223,
         "distMatchesStyles": true,
         "freshnessNote": "Recomposed in memory from src/foundation/tokens/css with the formula in build-vertical-css.mjs. Omits the per-tenant --ds-motion-spring tail, which requires compiled BrandTheme modules under dist/.",
         "freshnessProven": true,
@@ -10926,7 +11330,7 @@
           "src/foundation/tokens/css/facade/artifacts/bithire/index.css"
         ],
         "mode": "fresh",
-        "sha256": "74d7f4b2b4b22981d0e795ef301b9de37dddb17a0042ded741a762c5de8a1e42",
+        "sha256": "006ed5a882d3333112fb19f508de0eec3df42bbd4487fafb4a54ee4f5700dc01",
         "shippedDistDrift": {
           "identical": true,
           "prefixIdentical": true,
@@ -10936,17 +11340,19 @@
       }
     },
     "sourceFreshness": {
-      "declaredDigest": "591210b5812cf7dd85d3d50dc39ff2a9177601d90cb56427b13506d9483b46d1",
-      "observedDigest": "591210b5812cf7dd85d3d50dc39ff2a9177601d90cb56427b13506d9483b46d1",
-      "postMeasurementDigest": "591210b5812cf7dd85d3d50dc39ff2a9177601d90cb56427b13506d9483b46d1",
-      "preMeasurementDigest": "591210b5812cf7dd85d3d50dc39ff2a9177601d90cb56427b13506d9483b46d1",
+      "declaredDigest": "d63806bd48682cb829ea1815292ac27a9cb5eaeb0ee516f4baffd52282eeaade",
+      "observedDigest": "d63806bd48682cb829ea1815292ac27a9cb5eaeb0ee516f4baffd52282eeaade",
+      "postMeasurementDigest": "d63806bd48682cb829ea1815292ac27a9cb5eaeb0ee516f4baffd52282eeaade",
+      "preMeasurementDigest": "d63806bd48682cb829ea1815292ac27a9cb5eaeb0ee516f4baffd52282eeaade",
       "sourceFiles": [
         "packages/core/dist/build-stamp.json",
         "packages/core/dist/infrastructure/compilers/kernel/runtime/brand-theme/index.js",
         "packages/core/dist/server.js",
         "packages/core/manifest/controls/experience.profile.json",
+        "packages/core/manifest/controls/profiles.expressive.json",
         "packages/core/manifest/controls/shape.radius-scale.json",
         "packages/core/manifest/controls/surfaces.effect-intensity.json",
+        "packages/core/manifest/controls/surfaces.elevation-posture.json",
         "packages/core/manifest/controls/typography.scale.json",
         "packages/core/manifest/families/primitive/display/card.json",
         "packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts",
@@ -10966,6 +11372,7 @@
         "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card.css",
         "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/card.css",
         "packages/core/src/foundation/tokens/css/runtime/personality.css",
+        "packages/core/src/foundation/tokens/ts/presentation/expressive-profiles/expansion/index.ts",
         "packages/core/src/infrastructure/compilers/composition/tenant-theme/index.ts",
         "packages/core/src/infrastructure/compilers/kernel/foundation/css/appearance-posture/index.ts",
         "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
@@ -11004,33 +11411,33 @@
     "stylesheets": {
       "db-tenant-theme": {
         "bithire/dark/modern/both": {
-          "baseline": "74d7f4b2b4b22981d0e795ef301b9de37dddb17a0042ded741a762c5de8a1e42",
-          "mutation": "74d7f4b2b4b22981d0e795ef301b9de37dddb17a0042ded741a762c5de8a1e42",
-          "mutationDifferedFromBaseline": false,
-          "removal": "74d7f4b2b4b22981d0e795ef301b9de37dddb17a0042ded741a762c5de8a1e42",
+          "baseline": "006ed5a882d3333112fb19f508de0eec3df42bbd4487fafb4a54ee4f5700dc01",
+          "mutation": "54580f6f2afbc29b2d51e8ff779b834d51f5f3dfbab6cff2a5c262e39b1ed2ca",
+          "mutationDifferedFromBaseline": true,
+          "removal": "006ed5a882d3333112fb19f508de0eec3df42bbd4487fafb4a54ee4f5700dc01",
           "removalIsByteIdenticalToBaseline": true
         },
         "bithire/light/modern/both": {
-          "baseline": "74d7f4b2b4b22981d0e795ef301b9de37dddb17a0042ded741a762c5de8a1e42",
-          "mutation": "74d7f4b2b4b22981d0e795ef301b9de37dddb17a0042ded741a762c5de8a1e42",
-          "mutationDifferedFromBaseline": false,
-          "removal": "74d7f4b2b4b22981d0e795ef301b9de37dddb17a0042ded741a762c5de8a1e42",
+          "baseline": "006ed5a882d3333112fb19f508de0eec3df42bbd4487fafb4a54ee4f5700dc01",
+          "mutation": "54580f6f2afbc29b2d51e8ff779b834d51f5f3dfbab6cff2a5c262e39b1ed2ca",
+          "mutationDifferedFromBaseline": true,
+          "removal": "006ed5a882d3333112fb19f508de0eec3df42bbd4487fafb4a54ee4f5700dc01",
           "removalIsByteIdenticalToBaseline": true
         }
       },
       "static-brand-theme": {
         "bithire/dark/modern/both": {
-          "baseline": "74d7f4b2b4b22981d0e795ef301b9de37dddb17a0042ded741a762c5de8a1e42",
-          "mutation": "d09a89ad4d469aa08420444573817fddfd862a46d3c1bfe94d9911d18b8c5752",
+          "baseline": "006ed5a882d3333112fb19f508de0eec3df42bbd4487fafb4a54ee4f5700dc01",
+          "mutation": "8b58769c9e83a17b8c46982deb9e5421539aded9a04940c45c5c79c5f47a4471",
           "mutationDifferedFromBaseline": true,
-          "removal": "74d7f4b2b4b22981d0e795ef301b9de37dddb17a0042ded741a762c5de8a1e42",
+          "removal": "006ed5a882d3333112fb19f508de0eec3df42bbd4487fafb4a54ee4f5700dc01",
           "removalIsByteIdenticalToBaseline": true
         },
         "bithire/light/modern/both": {
-          "baseline": "74d7f4b2b4b22981d0e795ef301b9de37dddb17a0042ded741a762c5de8a1e42",
-          "mutation": "d09a89ad4d469aa08420444573817fddfd862a46d3c1bfe94d9911d18b8c5752",
+          "baseline": "006ed5a882d3333112fb19f508de0eec3df42bbd4487fafb4a54ee4f5700dc01",
+          "mutation": "8b58769c9e83a17b8c46982deb9e5421539aded9a04940c45c5c79c5f47a4471",
           "mutationDifferedFromBaseline": true,
-          "removal": "74d7f4b2b4b22981d0e795ef301b9de37dddb17a0042ded741a762c5de8a1e42",
+          "removal": "006ed5a882d3333112fb19f508de0eec3df42bbd4487fafb4a54ee4f5700dc01",
           "removalIsByteIdenticalToBaseline": true
         }
       }

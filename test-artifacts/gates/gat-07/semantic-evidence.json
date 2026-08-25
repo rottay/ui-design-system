@@ -4,7 +4,7 @@
   "scope": "Phase-0 exact proof and minimal public-claim floor; not DS-IMP-060 completion",
   "reproducibility": {
     "classification": "deterministic same-input runs",
-    "authorityDigest": "b8f581fdf4e2941e02c5aa99348fb93496db08ef860836403d1bdbd395dcba03",
+    "authorityDigest": "81a69704baaf8b07af297113113961266600288dc295454ccf3128bfae768fa7",
     "sourceHeadIsAuthority": false,
     "toolchain": {
       "node": {
@@ -1383,8 +1383,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 45087,
-        "sha256": "707ac2c1531dd92a4e3423c72cdee99f3345538dcffe446a8a7dcabb52e1531a"
+        "bytes": 45582,
+        "sha256": "08fbe40fd643224faf86e79d53e34c47c4a05c0ae424f99d3a34721a42658e9b"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/contracts/composition/tenants/index.ts",
@@ -15589,8 +15589,8 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 33430,
-        "sha256": "c775ed389b7f14ddf2bb21e5af1606ac541fcaa05702fb83d0c5565c780a5713"
+        "bytes": 35139,
+        "sha256": "740a2a3d32a58d2eb7f1082c6ec2802e2ffcc77f21cc80189f783e5380d1918d"
       },
       {
         "path": "ui-design-system/packages/core/src/tooling/resolution-probe/foundation/roster/tests/index.test.tsx",
@@ -40519,7 +40519,7 @@
         "sha256": "d2a99efed33922a4a699ea033538b677022ddaccf0cdbb25ece0a7295bdc4812"
       }
     ],
-    "digest": "b8f581fdf4e2941e02c5aa99348fb93496db08ef860836403d1bdbd395dcba03"
+    "digest": "81a69704baaf8b07af297113113961266600288dc295454ccf3128bfae768fa7"
   },
   "paintAudit": {
     "output": "engine-token-audit --check OK (3326 counters; 3226 completed zeros locked exactly; 91 decrease-only ceilings; 2 positive exact invariants; 7 positive minimum floors)",
@@ -113900,8 +113900,8 @@
   "deterministicRuns": {
     "count": 2,
     "hashes": [
-      "926b0adad6ab72a6bff2d653ae18851015e40c5d1e7ffc0610d007412c5ba0aa",
-      "926b0adad6ab72a6bff2d653ae18851015e40c5d1e7ffc0610d007412c5ba0aa"
+      "1293f869669bec38a95a4b59eb732f743560a51927155959a56400f3aeae2496",
+      "1293f869669bec38a95a4b59eb732f743560a51927155959a56400f3aeae2496"
     ],
     "agree": true
   }

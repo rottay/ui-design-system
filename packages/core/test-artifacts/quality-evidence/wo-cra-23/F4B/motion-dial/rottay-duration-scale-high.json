@@ -1617,6 +1617,10 @@
               "moved": false,
               "value": "1"
             },
+            "--ds-edge-emphasis-width": {
+              "moved": false,
+              "value": "1px"
+            },
             "--ds-edge-standard-width": {
               "moved": false,
               "value": "1px"
@@ -1649,9 +1653,17 @@
               "moved": false,
               "value": "'Public Sans', ui-sans-serif, system-ui, -apple-system, sans-serif, \"Noto Sans Arabic\", sans-serif"
             },
+            "--ds-font-family-display": {
+              "moved": false,
+              "value": "'Public Sans', ui-sans-serif, system-ui, -apple-system, sans-serif, \"Noto Sans Arabic\", sans-serif"
+            },
             "--ds-font-family-heading": {
               "moved": false,
               "value": "'Public Sans', ui-sans-serif, system-ui, -apple-system, sans-serif, \"Noto Sans Arabic\", sans-serif"
+            },
+            "--ds-font-family-mono": {
+              "moved": false,
+              "value": "'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, monospace"
             },
             "--ds-font-size-xs": {
               "moved": false,
@@ -1670,6 +1682,10 @@
               "value": "-0.015em"
             },
             "--ds-material-canvas-texture": {
+              "moved": false,
+              "value": ""
+            },
+            "--ds-material-card-highlight": {
               "moved": false,
               "value": ""
             },
@@ -1722,6 +1738,10 @@
               "moved": false,
               "value": "18px"
             },
+            "--ds-recipe-profile": {
+              "moved": false,
+              "value": "\"rottay/technical-sharp@1\""
+            },
             "--ds-rhythm-effective-scale": {
               "moved": false,
               "value": "clamp(0.8, 1, 1.25)"
@@ -1729,6 +1749,10 @@
             "--ds-rhythm-scale": {
               "moved": false,
               "value": "1"
+            },
+            "--ds-select-group-text-transform": {
+              "moved": false,
+              "value": "uppercase"
             },
             "--ds-sidebar-bg": {
               "moved": false,
@@ -3452,6 +3476,10 @@
               "moved": false,
               "value": "1"
             },
+            "--ds-edge-emphasis-width": {
+              "moved": false,
+              "value": "1px"
+            },
             "--ds-edge-standard-width": {
               "moved": false,
               "value": "1px"
@@ -3484,9 +3512,17 @@
               "moved": false,
               "value": "'Public Sans', ui-sans-serif, system-ui, -apple-system, sans-serif, \"Noto Sans Arabic\", sans-serif"
             },
+            "--ds-font-family-display": {
+              "moved": false,
+              "value": "'Public Sans', ui-sans-serif, system-ui, -apple-system, sans-serif, \"Noto Sans Arabic\", sans-serif"
+            },
             "--ds-font-family-heading": {
               "moved": false,
               "value": "'Public Sans', ui-sans-serif, system-ui, -apple-system, sans-serif, \"Noto Sans Arabic\", sans-serif"
+            },
+            "--ds-font-family-mono": {
+              "moved": false,
+              "value": "'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, monospace"
             },
             "--ds-font-size-xs": {
               "moved": false,
@@ -3505,6 +3541,10 @@
               "value": "-0.015em"
             },
             "--ds-material-canvas-texture": {
+              "moved": false,
+              "value": ""
+            },
+            "--ds-material-card-highlight": {
               "moved": false,
               "value": ""
             },
@@ -3557,6 +3597,10 @@
               "moved": false,
               "value": "18px"
             },
+            "--ds-recipe-profile": {
+              "moved": false,
+              "value": "\"rottay/technical-sharp@1\""
+            },
             "--ds-rhythm-effective-scale": {
               "moved": false,
               "value": "clamp(0.8, 1, 1.25)"
@@ -3564,6 +3608,10 @@
             "--ds-rhythm-scale": {
               "moved": false,
               "value": "1"
+            },
+            "--ds-select-group-text-transform": {
+              "moved": false,
+              "value": "uppercase"
             },
             "--ds-sidebar-bg": {
               "moved": false,
@@ -3727,6 +3775,7 @@
         "freshnessProven": true,
         "input": {
           "baseline": null,
+          "compileOptions": {},
           "compilerInput": {
             "appearance": {
               "motion": {
@@ -3789,7 +3838,7 @@
         }
       },
       "restore": {
-        "comparedRows": 920,
+        "comparedRows": 932,
         "counts": {
           "byKind": {},
           "byPropertyKind": {},
@@ -3801,7 +3850,7 @@
         "rows": []
       },
       "totals": {
-        "inertProperties": 898,
+        "inertProperties": 910,
         "movedProperties": 2,
         "scope": "across every (vertical x theme x fixture x property) row measured for this arm"
       }
@@ -5424,6 +5473,10 @@
               "moved": false,
               "value": "1"
             },
+            "--ds-edge-emphasis-width": {
+              "moved": false,
+              "value": "1px"
+            },
             "--ds-edge-standard-width": {
               "moved": false,
               "value": "1px"
@@ -5456,9 +5509,17 @@
               "moved": false,
               "value": "'Public Sans', ui-sans-serif, system-ui, -apple-system, sans-serif, \"Noto Sans Arabic\", sans-serif"
             },
+            "--ds-font-family-display": {
+              "moved": false,
+              "value": "'Public Sans', ui-sans-serif, system-ui, -apple-system, sans-serif, \"Noto Sans Arabic\", sans-serif"
+            },
             "--ds-font-family-heading": {
               "moved": false,
               "value": "'Public Sans', ui-sans-serif, system-ui, -apple-system, sans-serif, \"Noto Sans Arabic\", sans-serif"
+            },
+            "--ds-font-family-mono": {
+              "moved": false,
+              "value": "'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, monospace"
             },
             "--ds-font-size-xs": {
               "moved": false,
@@ -5477,6 +5538,10 @@
               "value": "-0.015em"
             },
             "--ds-material-canvas-texture": {
+              "moved": false,
+              "value": ""
+            },
+            "--ds-material-card-highlight": {
               "moved": false,
               "value": ""
             },
@@ -5529,6 +5594,10 @@
               "moved": false,
               "value": "18px"
             },
+            "--ds-recipe-profile": {
+              "moved": false,
+              "value": "\"rottay/technical-sharp@1\""
+            },
             "--ds-rhythm-effective-scale": {
               "moved": false,
               "value": "clamp(0.8, 1, 1.25)"
@@ -5536,6 +5605,10 @@
             "--ds-rhythm-scale": {
               "moved": false,
               "value": "1"
+            },
+            "--ds-select-group-text-transform": {
+              "moved": false,
+              "value": "uppercase"
             },
             "--ds-sidebar-bg": {
               "moved": false,
@@ -7259,6 +7332,10 @@
               "moved": false,
               "value": "1"
             },
+            "--ds-edge-emphasis-width": {
+              "moved": false,
+              "value": "1px"
+            },
             "--ds-edge-standard-width": {
               "moved": false,
               "value": "1px"
@@ -7291,9 +7368,17 @@
               "moved": false,
               "value": "'Public Sans', ui-sans-serif, system-ui, -apple-system, sans-serif, \"Noto Sans Arabic\", sans-serif"
             },
+            "--ds-font-family-display": {
+              "moved": false,
+              "value": "'Public Sans', ui-sans-serif, system-ui, -apple-system, sans-serif, \"Noto Sans Arabic\", sans-serif"
+            },
             "--ds-font-family-heading": {
               "moved": false,
               "value": "'Public Sans', ui-sans-serif, system-ui, -apple-system, sans-serif, \"Noto Sans Arabic\", sans-serif"
+            },
+            "--ds-font-family-mono": {
+              "moved": false,
+              "value": "'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, monospace"
             },
             "--ds-font-size-xs": {
               "moved": false,
@@ -7312,6 +7397,10 @@
               "value": "-0.015em"
             },
             "--ds-material-canvas-texture": {
+              "moved": false,
+              "value": ""
+            },
+            "--ds-material-card-highlight": {
               "moved": false,
               "value": ""
             },
@@ -7364,6 +7453,10 @@
               "moved": false,
               "value": "18px"
             },
+            "--ds-recipe-profile": {
+              "moved": false,
+              "value": "\"rottay/technical-sharp@1\""
+            },
             "--ds-rhythm-effective-scale": {
               "moved": false,
               "value": "clamp(0.8, 1, 1.25)"
@@ -7371,6 +7464,10 @@
             "--ds-rhythm-scale": {
               "moved": false,
               "value": "1"
+            },
+            "--ds-select-group-text-transform": {
+              "moved": false,
+              "value": "uppercase"
             },
             "--ds-sidebar-bg": {
               "moved": false,
@@ -7538,6 +7635,7 @@
             "digest": "8500910e0508452a3d403e0d5d2a3d840f368c5d0038b33e9b56711cbc7e43f0",
             "source": "dist/index.js#rottayBrandTheme"
           },
+          "compileOptions": {},
           "compilerInput": {
             "brandTheme": {
               "appearance": {
@@ -11950,7 +12048,7 @@
         }
       },
       "restore": {
-        "comparedRows": 920,
+        "comparedRows": 932,
         "counts": {
           "byKind": {},
           "byPropertyKind": {},
@@ -11962,7 +12060,7 @@
         "rows": []
       },
       "totals": {
-        "inertProperties": 898,
+        "inertProperties": 910,
         "movedProperties": 2,
         "scope": "across every (vertical x theme x fixture x property) row measured for this arm"
       }
@@ -12134,10 +12232,10 @@
       }
     },
     "sourceFreshness": {
-      "declaredDigest": "bcfa7286e7d13cf8a97d177279a04d64dd539b5eff49b1eced1247586b6137b9",
-      "observedDigest": "bcfa7286e7d13cf8a97d177279a04d64dd539b5eff49b1eced1247586b6137b9",
-      "postMeasurementDigest": "bcfa7286e7d13cf8a97d177279a04d64dd539b5eff49b1eced1247586b6137b9",
-      "preMeasurementDigest": "bcfa7286e7d13cf8a97d177279a04d64dd539b5eff49b1eced1247586b6137b9",
+      "declaredDigest": "153d052a1e5d7a983279d455526d303249199acbdc1564d6fa2132de47f1e491",
+      "observedDigest": "153d052a1e5d7a983279d455526d303249199acbdc1564d6fa2132de47f1e491",
+      "postMeasurementDigest": "153d052a1e5d7a983279d455526d303249199acbdc1564d6fa2132de47f1e491",
+      "preMeasurementDigest": "153d052a1e5d7a983279d455526d303249199acbdc1564d6fa2132de47f1e491",
       "sourceFiles": [
         "packages/core/dist/build-stamp.json",
         "packages/core/dist/infrastructure/compilers/kernel/runtime/brand-theme/index.js",

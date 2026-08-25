@@ -7,7 +7,7 @@
   "semanticOwner": {
     "owner": "design-system",
     "registryPath": "packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts",
-    "registryDigest": "2081d156ee6241676e4ade123971df20acccc70caf1190466529c16ae3645a4b"
+    "registryDigest": "08fbe40fd643224faf86e79d53e34c47c4a05c0ae424f99d3a34721a42658e9b"
   },
   "title": "Brand palette seeds",
   "valueType": "color-set",

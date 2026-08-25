@@ -5,7 +5,7 @@
   "scenarioId": "typography.families/heading-quoted/rottay/static-and-db",
   "evidenceKind": "static-db-computed-parity",
   "commandOrTool": "node src/tooling/resolution-probe/public/cli/index.mjs causal",
-  "toolVersion": "resolution-probe@471baf755c2a",
+  "toolVersion": "resolution-probe@c96c110b3cfb",
   "exitCode": 0,
   "sourceFiles": [
     "packages/core/dist/build-stamp.json",
@@ -18,6 +18,7 @@
     "packages/core/src/foundation/tokens/css/facade/artifacts/rottay/index.css",
     "packages/core/src/foundation/tokens/css/facade/entrypoints/base.css",
     "packages/core/src/foundation/tokens/css/foundation/base/typography.css",
+    "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
     "packages/core/src/foundation/tokens/css/runtime/engines/modern/compiled.css",
     "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css",
     "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/typography.css",
@@ -64,10 +65,10 @@
     "packages/core/src/ui/primitives/display/Typography/tests/Typography.test.tsx",
     "packages/core/src/ui/primitives/display/Typography/tests/Typography.type-roles.test.tsx"
   ],
-  "sourceDigest": "e2fae837712a5d684bb026c8a3ada173d0efa99488feaa61fb66f51144ab5532",
+  "sourceDigest": "60feba8ad53d0120601c876b139d17edba8dfed88c2ac9ba8bafb98bcaa3aa19",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/typography-families/rottay-heading-quoted.json",
-  "artifactSha256": "065ba51605f111be35c86a41c13c4cdecc07c22f37dc1834f65adf58ccb6aa06",
-  "createdAt": "2026-08-25T12:55:54.941Z",
+  "artifactSha256": "2964d0387eeebad60527ecf0758b67d554f939f8859d690f3920d192d6d949f4",
+  "createdAt": "2026-08-25T17:13:31.423Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

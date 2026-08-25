@@ -1663,6 +1663,10 @@
               "moved": false,
               "value": "0.9"
             },
+            "--ds-edge-emphasis-width": {
+              "moved": false,
+              "value": "1px"
+            },
             "--ds-edge-standard-width": {
               "moved": false,
               "value": "1px"
@@ -1728,6 +1732,10 @@
               "moved": false,
               "value": "radial-gradient(circle at 88% 4%, color-mix(in srgb, rgb(30, 132, 230) 14%, transparent), transparent 30%)"
             },
+            "--ds-material-card-highlight": {
+              "moved": false,
+              "value": "inset 0 1px 0 color-mix(in srgb, #e4e8ed 6%, transparent)"
+            },
             "--ds-motion-duration-scale": {
               "moved": false,
               "value": "1"
@@ -1776,6 +1784,10 @@
               "moved": false,
               "value": "calc(18px / 1.25)"
             },
+            "--ds-recipe-profile": {
+              "moved": false,
+              "value": "\"rottay/network-professional@1\""
+            },
             "--ds-rhythm-effective-scale": {
               "moved": false,
               "value": "clamp(0.8, 1, 1.25)"
@@ -1783,6 +1795,10 @@
             "--ds-rhythm-scale": {
               "moved": false,
               "value": "1"
+            },
+            "--ds-select-group-text-transform": {
+              "moved": false,
+              "value": "none"
             },
             "--ds-sidebar-bg": {
               "moved": false,
@@ -3552,6 +3568,10 @@
               "moved": false,
               "value": "0.9"
             },
+            "--ds-edge-emphasis-width": {
+              "moved": false,
+              "value": "1px"
+            },
             "--ds-edge-standard-width": {
               "moved": false,
               "value": "1px"
@@ -3617,6 +3637,10 @@
               "moved": false,
               "value": "radial-gradient(circle at 88% 4%, rgba(58, 111, 176, 0.055), transparent 30%)"
             },
+            "--ds-material-card-highlight": {
+              "moved": false,
+              "value": "inset 0 1px 0 rgba(255, 255, 255, 0.9)"
+            },
             "--ds-motion-duration-scale": {
               "moved": false,
               "value": "1"
@@ -3665,6 +3689,10 @@
               "moved": false,
               "value": "calc(18px / 1.25)"
             },
+            "--ds-recipe-profile": {
+              "moved": false,
+              "value": "\"rottay/network-professional@1\""
+            },
             "--ds-rhythm-effective-scale": {
               "moved": false,
               "value": "clamp(0.8, 1, 1.25)"
@@ -3672,6 +3700,10 @@
             "--ds-rhythm-scale": {
               "moved": false,
               "value": "1"
+            },
+            "--ds-select-group-text-transform": {
+              "moved": false,
+              "value": "none"
             },
             "--ds-sidebar-bg": {
               "moved": false,
@@ -3910,7 +3942,7 @@
         }
       },
       "restore": {
-        "comparedRows": 944,
+        "comparedRows": 952,
         "counts": {
           "byKind": {},
           "byPropertyKind": {},
@@ -3922,7 +3954,7 @@
         "rows": []
       },
       "totals": {
-        "inertProperties": 910,
+        "inertProperties": 918,
         "movedProperties": 14,
         "scope": "across every (vertical x theme x fixture x property) row measured for this arm"
       }
@@ -5593,6 +5625,10 @@
               "moved": false,
               "value": "0.9"
             },
+            "--ds-edge-emphasis-width": {
+              "moved": false,
+              "value": "1px"
+            },
             "--ds-edge-standard-width": {
               "moved": false,
               "value": "1px"
@@ -5658,6 +5694,10 @@
               "moved": false,
               "value": "radial-gradient(circle at 88% 4%, color-mix(in srgb, rgb(30, 132, 230) 14%, transparent), transparent 30%)"
             },
+            "--ds-material-card-highlight": {
+              "moved": false,
+              "value": "inset 0 1px 0 color-mix(in srgb, #e4e8ed 6%, transparent)"
+            },
             "--ds-motion-duration-scale": {
               "moved": false,
               "value": "1"
@@ -5706,6 +5746,10 @@
               "moved": false,
               "value": "calc(18px / 1.25)"
             },
+            "--ds-recipe-profile": {
+              "moved": false,
+              "value": "\"rottay/network-professional@1\""
+            },
             "--ds-rhythm-effective-scale": {
               "moved": false,
               "value": "clamp(0.8, 1, 1.25)"
@@ -5713,6 +5757,10 @@
             "--ds-rhythm-scale": {
               "moved": false,
               "value": "1"
+            },
+            "--ds-select-group-text-transform": {
+              "moved": false,
+              "value": "none"
             },
             "--ds-sidebar-bg": {
               "moved": false,
@@ -7482,6 +7530,10 @@
               "moved": false,
               "value": "0.9"
             },
+            "--ds-edge-emphasis-width": {
+              "moved": false,
+              "value": "1px"
+            },
             "--ds-edge-standard-width": {
               "moved": false,
               "value": "1px"
@@ -7547,6 +7599,10 @@
               "moved": false,
               "value": "radial-gradient(circle at 88% 4%, rgba(58, 111, 176, 0.055), transparent 30%)"
             },
+            "--ds-material-card-highlight": {
+              "moved": false,
+              "value": "inset 0 1px 0 rgba(255, 255, 255, 0.9)"
+            },
             "--ds-motion-duration-scale": {
               "moved": false,
               "value": "1"
@@ -7595,6 +7651,10 @@
               "moved": false,
               "value": "calc(18px / 1.25)"
             },
+            "--ds-recipe-profile": {
+              "moved": false,
+              "value": "\"rottay/network-professional@1\""
+            },
             "--ds-rhythm-effective-scale": {
               "moved": false,
               "value": "clamp(0.8, 1, 1.25)"
@@ -7602,6 +7662,10 @@
             "--ds-rhythm-scale": {
               "moved": false,
               "value": "1"
+            },
+            "--ds-select-group-text-transform": {
+              "moved": false,
+              "value": "none"
             },
             "--ds-sidebar-bg": {
               "moved": false,
@@ -11467,7 +11531,7 @@
         }
       },
       "restore": {
-        "comparedRows": 944,
+        "comparedRows": 952,
         "counts": {
           "byKind": {},
           "byPropertyKind": {},
@@ -11479,7 +11543,7 @@
         "rows": []
       },
       "totals": {
-        "inertProperties": 910,
+        "inertProperties": 918,
         "movedProperties": 14,
         "scope": "across every (vertical x theme x fixture x property) row measured for this arm"
       }
@@ -11502,7 +11566,12 @@
       "motion remains fixed"
     ],
     "familyId": "primitive/display/typography",
-    "familyPhrases": [],
+    "familyPhrases": [
+      "control height remains fixed",
+      "color remains fixed",
+      "border remains fixed",
+      "motion remains fixed"
+    ],
     "law": "The family list narrows the control list by being more specific about one family root. It never replaces it, so the effective set is the union and a silent family inherits the full control list."
   },
   "ingressEquivalence": {
@@ -11645,10 +11714,10 @@
       }
     },
     "sourceFreshness": {
-      "declaredDigest": "1ca07f40246a492b2173ea1c3fb564aebb19962b0379bfea3aa26a625cf82fec",
-      "observedDigest": "1ca07f40246a492b2173ea1c3fb564aebb19962b0379bfea3aa26a625cf82fec",
-      "postMeasurementDigest": "1ca07f40246a492b2173ea1c3fb564aebb19962b0379bfea3aa26a625cf82fec",
-      "preMeasurementDigest": "1ca07f40246a492b2173ea1c3fb564aebb19962b0379bfea3aa26a625cf82fec",
+      "declaredDigest": "ab8d78f5f3a5f72f90d85cf9e6f98fb81c895aa4f1e82023b3f2dec1ce2536a6",
+      "observedDigest": "ab8d78f5f3a5f72f90d85cf9e6f98fb81c895aa4f1e82023b3f2dec1ce2536a6",
+      "postMeasurementDigest": "ab8d78f5f3a5f72f90d85cf9e6f98fb81c895aa4f1e82023b3f2dec1ce2536a6",
+      "preMeasurementDigest": "ab8d78f5f3a5f72f90d85cf9e6f98fb81c895aa4f1e82023b3f2dec1ce2536a6",
       "sourceFiles": [
         "packages/core/dist/build-stamp.json",
         "packages/core/dist/infrastructure/compilers/kernel/runtime/brand-theme/index.js",
@@ -11660,6 +11729,7 @@
         "packages/core/src/foundation/tokens/css/facade/artifacts/bithire/index.css",
         "packages/core/src/foundation/tokens/css/facade/entrypoints/base.css",
         "packages/core/src/foundation/tokens/css/foundation/base/typography.css",
+        "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
         "packages/core/src/foundation/tokens/css/runtime/engines/modern/compiled.css",
         "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css",
         "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/typography.css",

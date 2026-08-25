@@ -1979,6 +1979,10 @@
               "moved": false,
               "value": "0.9"
             },
+            "--ds-edge-emphasis-width": {
+              "moved": false,
+              "value": "1px"
+            },
             "--ds-edge-standard-width": {
               "moved": false,
               "value": "1px"
@@ -2010,6 +2014,22 @@
               "moved": false,
               "value": "\"rottay/bithire-technical@1\""
             },
+            "--ds-font-family-base": {
+              "moved": false,
+              "value": "'Public Sans', ui-sans-serif, system-ui, -apple-system, sans-serif, \"Noto Sans Arabic\", sans-serif"
+            },
+            "--ds-font-family-display": {
+              "moved": false,
+              "value": "'Space Grotesk', ui-sans-serif, system-ui, -apple-system, sans-serif, \"Noto Sans Arabic\", sans-serif"
+            },
+            "--ds-font-family-heading": {
+              "moved": false,
+              "value": "'Space Grotesk', ui-sans-serif, system-ui, -apple-system, sans-serif, \"Noto Sans Arabic\", sans-serif"
+            },
+            "--ds-font-family-mono": {
+              "moved": false,
+              "value": "'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, monospace"
+            },
             "--ds-font-size-xs": {
               "moved": false,
               "value": "calc(0.75rem * 1)"
@@ -2029,6 +2049,18 @@
             "--ds-material-canvas-texture": {
               "moved": false,
               "value": "radial-gradient(circle at 88% 4%, color-mix(in srgb, rgb(30, 132, 230) 14%, transparent), transparent 30%)"
+            },
+            "--ds-material-card-highlight": {
+              "moved": false,
+              "value": "inset 0 1px 0 color-mix(in srgb, #e4e8ed 6%, transparent)"
+            },
+            "--ds-motion-duration-scale": {
+              "moved": false,
+              "value": "1"
+            },
+            "--ds-motion-intensity": {
+              "moved": false,
+              "value": "0.55"
             },
             "--ds-radius-button": {
               "moved": false,
@@ -2070,6 +2102,10 @@
               "moved": false,
               "value": "calc(18px / 1.25)"
             },
+            "--ds-recipe-profile": {
+              "moved": false,
+              "value": "\"rottay/network-professional@1\""
+            },
             "--ds-rhythm-effective-scale": {
               "moved": false,
               "value": "clamp(0.8, 1, 1.25)"
@@ -2077,6 +2113,38 @@
             "--ds-rhythm-scale": {
               "moved": false,
               "value": "1"
+            },
+            "--ds-select-group-text-transform": {
+              "moved": false,
+              "value": "none"
+            },
+            "--ds-sidebar-bg": {
+              "moved": false,
+              "value": "#0a0f18"
+            },
+            "--ds-sidebar-item-bg-active": {
+              "moved": false,
+              "value": "rgba(26, 127, 224, 0.12)"
+            },
+            "--ds-sidebar-item-bg-hover": {
+              "moved": false,
+              "value": "rgba(255, 255, 255, 0.04)"
+            },
+            "--ds-sidebar-item-color": {
+              "moved": false,
+              "value": "#9aacbf"
+            },
+            "--ds-sidebar-item-color-active": {
+              "moved": false,
+              "value": "#3b9af0"
+            },
+            "--ds-sidebar-text": {
+              "moved": false,
+              "value": "#9aacbf"
+            },
+            "--ds-sidebar-text-muted": {
+              "moved": false,
+              "value": "#5a7085"
             },
             "--ds-table-header-letter-spacing": {
               "moved": false,
@@ -4156,6 +4224,10 @@
               "moved": false,
               "value": "0.9"
             },
+            "--ds-edge-emphasis-width": {
+              "moved": false,
+              "value": "1px"
+            },
             "--ds-edge-standard-width": {
               "moved": false,
               "value": "1px"
@@ -4187,6 +4259,22 @@
               "moved": false,
               "value": "\"rottay/bithire-technical@1\""
             },
+            "--ds-font-family-base": {
+              "moved": false,
+              "value": "'Public Sans', ui-sans-serif, system-ui, -apple-system, sans-serif, \"Noto Sans Arabic\", sans-serif"
+            },
+            "--ds-font-family-display": {
+              "moved": false,
+              "value": "'Space Grotesk', ui-sans-serif, system-ui, -apple-system, sans-serif, \"Noto Sans Arabic\", sans-serif"
+            },
+            "--ds-font-family-heading": {
+              "moved": false,
+              "value": "'Space Grotesk', ui-sans-serif, system-ui, -apple-system, sans-serif, \"Noto Sans Arabic\", sans-serif"
+            },
+            "--ds-font-family-mono": {
+              "moved": false,
+              "value": "'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, monospace"
+            },
             "--ds-font-size-xs": {
               "moved": false,
               "value": "calc(0.75rem * 1)"
@@ -4206,6 +4294,18 @@
             "--ds-material-canvas-texture": {
               "moved": false,
               "value": "radial-gradient(circle at 88% 4%, rgba(58, 111, 176, 0.055), transparent 30%)"
+            },
+            "--ds-material-card-highlight": {
+              "moved": false,
+              "value": "inset 0 1px 0 rgba(255, 255, 255, 0.9)"
+            },
+            "--ds-motion-duration-scale": {
+              "moved": false,
+              "value": "1"
+            },
+            "--ds-motion-intensity": {
+              "moved": false,
+              "value": "0.55"
             },
             "--ds-radius-button": {
               "moved": false,
@@ -4247,6 +4347,10 @@
               "moved": false,
               "value": "calc(18px / 1.25)"
             },
+            "--ds-recipe-profile": {
+              "moved": false,
+              "value": "\"rottay/network-professional@1\""
+            },
             "--ds-rhythm-effective-scale": {
               "moved": false,
               "value": "clamp(0.8, 1, 1.25)"
@@ -4254,6 +4358,38 @@
             "--ds-rhythm-scale": {
               "moved": false,
               "value": "1"
+            },
+            "--ds-select-group-text-transform": {
+              "moved": false,
+              "value": "none"
+            },
+            "--ds-sidebar-bg": {
+              "moved": false,
+              "value": "#ffffff"
+            },
+            "--ds-sidebar-item-bg-active": {
+              "moved": false,
+              "value": "color-mix(in oklab, rgb(58, 111, 176) 8%, #F4F8FB)"
+            },
+            "--ds-sidebar-item-bg-hover": {
+              "moved": false,
+              "value": "#F4F8FD"
+            },
+            "--ds-sidebar-item-color": {
+              "moved": false,
+              "value": "#53697E"
+            },
+            "--ds-sidebar-item-color-active": {
+              "moved": false,
+              "value": "#3A6FB0"
+            },
+            "--ds-sidebar-text": {
+              "moved": false,
+              "value": "#14283B"
+            },
+            "--ds-sidebar-text-muted": {
+              "moved": false,
+              "value": "#728398"
             },
             "--ds-table-header-letter-spacing": {
               "moved": false,
@@ -4416,6 +4552,7 @@
         "freshnessProven": true,
         "input": {
           "baseline": null,
+          "compileOptions": {},
           "compilerInput": {
             "appearance": {
               "surfaces": {
@@ -4483,7 +4620,7 @@
         }
       },
       "restore": {
-        "comparedRows": 1090,
+        "comparedRows": 1124,
         "counts": {
           "byKind": {},
           "byPropertyKind": {},
@@ -4495,7 +4632,7 @@
         "rows": []
       },
       "totals": {
-        "inertProperties": 1064,
+        "inertProperties": 1098,
         "movedProperties": 6,
         "scope": "across every (vertical x theme x fixture x property) row measured for this arm"
       }
@@ -6479,6 +6616,10 @@
               "moved": false,
               "value": "0.9"
             },
+            "--ds-edge-emphasis-width": {
+              "moved": false,
+              "value": "1px"
+            },
             "--ds-edge-standard-width": {
               "moved": false,
               "value": "1px"
@@ -6510,6 +6651,22 @@
               "moved": false,
               "value": "\"rottay/bithire-technical@1\""
             },
+            "--ds-font-family-base": {
+              "moved": false,
+              "value": "'Public Sans', ui-sans-serif, system-ui, -apple-system, sans-serif, \"Noto Sans Arabic\", sans-serif"
+            },
+            "--ds-font-family-display": {
+              "moved": false,
+              "value": "'Space Grotesk', ui-sans-serif, system-ui, -apple-system, sans-serif, \"Noto Sans Arabic\", sans-serif"
+            },
+            "--ds-font-family-heading": {
+              "moved": false,
+              "value": "'Space Grotesk', ui-sans-serif, system-ui, -apple-system, sans-serif, \"Noto Sans Arabic\", sans-serif"
+            },
+            "--ds-font-family-mono": {
+              "moved": false,
+              "value": "'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, monospace"
+            },
             "--ds-font-size-xs": {
               "moved": false,
               "value": "calc(0.75rem * 1)"
@@ -6529,6 +6686,18 @@
             "--ds-material-canvas-texture": {
               "moved": false,
               "value": "radial-gradient(circle at 88% 4%, color-mix(in srgb, rgb(30, 132, 230) 14%, transparent), transparent 30%)"
+            },
+            "--ds-material-card-highlight": {
+              "moved": false,
+              "value": "inset 0 1px 0 color-mix(in srgb, #e4e8ed 6%, transparent)"
+            },
+            "--ds-motion-duration-scale": {
+              "moved": false,
+              "value": "1"
+            },
+            "--ds-motion-intensity": {
+              "moved": false,
+              "value": "0.55"
             },
             "--ds-radius-button": {
               "moved": false,
@@ -6570,6 +6739,10 @@
               "moved": false,
               "value": "calc(18px / 1.25)"
             },
+            "--ds-recipe-profile": {
+              "moved": false,
+              "value": "\"rottay/network-professional@1\""
+            },
             "--ds-rhythm-effective-scale": {
               "moved": false,
               "value": "clamp(0.8, 1, 1.25)"
@@ -6577,6 +6750,38 @@
             "--ds-rhythm-scale": {
               "moved": false,
               "value": "1"
+            },
+            "--ds-select-group-text-transform": {
+              "moved": false,
+              "value": "none"
+            },
+            "--ds-sidebar-bg": {
+              "moved": false,
+              "value": "#0a0f18"
+            },
+            "--ds-sidebar-item-bg-active": {
+              "moved": false,
+              "value": "rgba(26, 127, 224, 0.12)"
+            },
+            "--ds-sidebar-item-bg-hover": {
+              "moved": false,
+              "value": "rgba(255, 255, 255, 0.04)"
+            },
+            "--ds-sidebar-item-color": {
+              "moved": false,
+              "value": "#9aacbf"
+            },
+            "--ds-sidebar-item-color-active": {
+              "moved": false,
+              "value": "#3b9af0"
+            },
+            "--ds-sidebar-text": {
+              "moved": false,
+              "value": "#9aacbf"
+            },
+            "--ds-sidebar-text-muted": {
+              "moved": false,
+              "value": "#5a7085"
             },
             "--ds-table-header-letter-spacing": {
               "moved": false,
@@ -8656,6 +8861,10 @@
               "moved": false,
               "value": "0.9"
             },
+            "--ds-edge-emphasis-width": {
+              "moved": false,
+              "value": "1px"
+            },
             "--ds-edge-standard-width": {
               "moved": false,
               "value": "1px"
@@ -8687,6 +8896,22 @@
               "moved": false,
               "value": "\"rottay/bithire-technical@1\""
             },
+            "--ds-font-family-base": {
+              "moved": false,
+              "value": "'Public Sans', ui-sans-serif, system-ui, -apple-system, sans-serif, \"Noto Sans Arabic\", sans-serif"
+            },
+            "--ds-font-family-display": {
+              "moved": false,
+              "value": "'Space Grotesk', ui-sans-serif, system-ui, -apple-system, sans-serif, \"Noto Sans Arabic\", sans-serif"
+            },
+            "--ds-font-family-heading": {
+              "moved": false,
+              "value": "'Space Grotesk', ui-sans-serif, system-ui, -apple-system, sans-serif, \"Noto Sans Arabic\", sans-serif"
+            },
+            "--ds-font-family-mono": {
+              "moved": false,
+              "value": "'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, monospace"
+            },
             "--ds-font-size-xs": {
               "moved": false,
               "value": "calc(0.75rem * 1)"
@@ -8706,6 +8931,18 @@
             "--ds-material-canvas-texture": {
               "moved": false,
               "value": "radial-gradient(circle at 88% 4%, rgba(58, 111, 176, 0.055), transparent 30%)"
+            },
+            "--ds-material-card-highlight": {
+              "moved": false,
+              "value": "inset 0 1px 0 rgba(255, 255, 255, 0.9)"
+            },
+            "--ds-motion-duration-scale": {
+              "moved": false,
+              "value": "1"
+            },
+            "--ds-motion-intensity": {
+              "moved": false,
+              "value": "0.55"
             },
             "--ds-radius-button": {
               "moved": false,
@@ -8747,6 +8984,10 @@
               "moved": false,
               "value": "calc(18px / 1.25)"
             },
+            "--ds-recipe-profile": {
+              "moved": false,
+              "value": "\"rottay/network-professional@1\""
+            },
             "--ds-rhythm-effective-scale": {
               "moved": false,
               "value": "clamp(0.8, 1, 1.25)"
@@ -8754,6 +8995,38 @@
             "--ds-rhythm-scale": {
               "moved": false,
               "value": "1"
+            },
+            "--ds-select-group-text-transform": {
+              "moved": false,
+              "value": "none"
+            },
+            "--ds-sidebar-bg": {
+              "moved": false,
+              "value": "#ffffff"
+            },
+            "--ds-sidebar-item-bg-active": {
+              "moved": false,
+              "value": "color-mix(in oklab, rgb(58, 111, 176) 8%, #F4F8FB)"
+            },
+            "--ds-sidebar-item-bg-hover": {
+              "moved": false,
+              "value": "#F4F8FD"
+            },
+            "--ds-sidebar-item-color": {
+              "moved": false,
+              "value": "#53697E"
+            },
+            "--ds-sidebar-item-color-active": {
+              "moved": false,
+              "value": "#3A6FB0"
+            },
+            "--ds-sidebar-text": {
+              "moved": false,
+              "value": "#14283B"
+            },
+            "--ds-sidebar-text-muted": {
+              "moved": false,
+              "value": "#728398"
             },
             "--ds-table-header-letter-spacing": {
               "moved": false,
@@ -8916,9 +9189,10 @@
         "freshnessProven": true,
         "input": {
           "baseline": {
-            "digest": "311154af677f47d4807910322130bad40db3ea4f18d0a520ff3668aa7f35ae19",
+            "digest": "58af79982271be88f65ffeb35549d3931157b47bb8a33db1d0f9fff363459f34",
             "source": "dist/index.js#bithireBrandTheme"
           },
+          "compileOptions": {},
           "compilerInput": {
             "brandTheme": {
               "appearance": {
@@ -9916,6 +10190,7 @@
                       "separatorColor": "var(--ds-color-text-tertiary)"
                     },
                     "cardComponent": {
+                      "bg": "#151d2b",
                       "bgHover": "#1b2535",
                       "bodyColor": "var(--ds-color-text-primary)",
                       "border": "#253545",
@@ -10192,6 +10467,7 @@
                       "actionBg": "var(--ds-surface-control)",
                       "bg": "#0f1520",
                       "border": "#1d2a38",
+                      "cellColor": "#e4e8ed",
                       "cellFontSize": "0.875rem",
                       "cellPadding": "0.875rem 1rem",
                       "headerBg": "#151d2b",
@@ -11745,6 +12021,7 @@
                     "separatorColor": "var(--ds-color-text-tertiary)"
                   },
                   "cardComponent": {
+                    "bg": "#151d2b",
                     "bgHover": "#1b2535",
                     "bodyColor": "var(--ds-color-text-primary)",
                     "border": "#253545",
@@ -12021,6 +12298,7 @@
                     "actionBg": "var(--ds-surface-control)",
                     "bg": "#0f1520",
                     "border": "#1d2a38",
+                    "cellColor": "#e4e8ed",
                     "cellFontSize": "0.875rem",
                     "cellPadding": "0.875rem 1rem",
                     "headerBg": "#151d2b",
@@ -12604,7 +12882,7 @@
         }
       },
       "restore": {
-        "comparedRows": 1090,
+        "comparedRows": 1124,
         "counts": {
           "byKind": {},
           "byPropertyKind": {},
@@ -12616,7 +12894,7 @@
         "rows": []
       },
       "totals": {
-        "inertProperties": 1064,
+        "inertProperties": 1098,
         "movedProperties": 6,
         "scope": "across every (vertical x theme x fixture x property) row measured for this arm"
       }
@@ -12787,7 +13065,7 @@
     "bundleMode": "fresh",
     "bundles": {
       "bithire": {
-        "bytes": 5351164,
+        "bytes": 5351223,
         "distMatchesStyles": true,
         "freshnessNote": "Recomposed in memory from src/foundation/tokens/css with the formula in build-vertical-css.mjs. Omits the per-tenant --ds-motion-spring tail, which requires compiled BrandTheme modules under dist/.",
         "freshnessProven": true,
@@ -12797,7 +13075,7 @@
           "src/foundation/tokens/css/facade/artifacts/bithire/index.css"
         ],
         "mode": "fresh",
-        "sha256": "74d7f4b2b4b22981d0e795ef301b9de37dddb17a0042ded741a762c5de8a1e42",
+        "sha256": "006ed5a882d3333112fb19f508de0eec3df42bbd4487fafb4a54ee4f5700dc01",
         "shippedDistDrift": {
           "identical": true,
           "prefixIdentical": true,
@@ -12807,15 +13085,16 @@
       }
     },
     "sourceFreshness": {
-      "declaredDigest": "833ab13421adfd4eb4b5c25176d79d68a7a2506a803ca7803bc135411e1c6d59",
-      "observedDigest": "833ab13421adfd4eb4b5c25176d79d68a7a2506a803ca7803bc135411e1c6d59",
-      "postMeasurementDigest": "833ab13421adfd4eb4b5c25176d79d68a7a2506a803ca7803bc135411e1c6d59",
-      "preMeasurementDigest": "833ab13421adfd4eb4b5c25176d79d68a7a2506a803ca7803bc135411e1c6d59",
+      "declaredDigest": "c20c2473f159daa19027c7cc87c1b1e9b0d9c53632c5f8b6bd0bce1a52b8bae7",
+      "observedDigest": "c20c2473f159daa19027c7cc87c1b1e9b0d9c53632c5f8b6bd0bce1a52b8bae7",
+      "postMeasurementDigest": "c20c2473f159daa19027c7cc87c1b1e9b0d9c53632c5f8b6bd0bce1a52b8bae7",
+      "preMeasurementDigest": "c20c2473f159daa19027c7cc87c1b1e9b0d9c53632c5f8b6bd0bce1a52b8bae7",
       "sourceFiles": [
         "packages/core/dist/build-stamp.json",
         "packages/core/dist/infrastructure/compilers/kernel/runtime/brand-theme/index.js",
         "packages/core/dist/server.js",
         "packages/core/manifest/controls/experience.profile.json",
+        "packages/core/manifest/controls/profiles.expressive.json",
         "packages/core/manifest/controls/shape.radius-scale.json",
         "packages/core/manifest/controls/surfaces.effect-intensity.json",
         "packages/core/manifest/controls/surfaces.elevation-posture.json",
@@ -12837,6 +13116,7 @@
         "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card.css",
         "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/card.css",
         "packages/core/src/foundation/tokens/css/runtime/personality.css",
+        "packages/core/src/foundation/tokens/ts/presentation/expressive-profiles/expansion/index.ts",
         "packages/core/src/infrastructure/compilers/composition/tenant-theme/index.ts",
         "packages/core/src/infrastructure/compilers/kernel/foundation/css/appearance-posture/index.ts",
         "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
@@ -12875,33 +13155,33 @@
     "stylesheets": {
       "db-tenant-theme": {
         "bithire/dark/modern/both": {
-          "baseline": "74d7f4b2b4b22981d0e795ef301b9de37dddb17a0042ded741a762c5de8a1e42",
-          "mutation": "78e38c2a582e5593ab5890bdcce2fbb1f1f50ae155076c1ff8f64ff1e3a01527",
+          "baseline": "006ed5a882d3333112fb19f508de0eec3df42bbd4487fafb4a54ee4f5700dc01",
+          "mutation": "ba1e14164cbb973631357c10674978a23b12cc306847f436edd7624b1f4a5ccd",
           "mutationDifferedFromBaseline": true,
-          "removal": "74d7f4b2b4b22981d0e795ef301b9de37dddb17a0042ded741a762c5de8a1e42",
+          "removal": "006ed5a882d3333112fb19f508de0eec3df42bbd4487fafb4a54ee4f5700dc01",
           "removalIsByteIdenticalToBaseline": true
         },
         "bithire/light/modern/both": {
-          "baseline": "74d7f4b2b4b22981d0e795ef301b9de37dddb17a0042ded741a762c5de8a1e42",
-          "mutation": "78e38c2a582e5593ab5890bdcce2fbb1f1f50ae155076c1ff8f64ff1e3a01527",
+          "baseline": "006ed5a882d3333112fb19f508de0eec3df42bbd4487fafb4a54ee4f5700dc01",
+          "mutation": "ba1e14164cbb973631357c10674978a23b12cc306847f436edd7624b1f4a5ccd",
           "mutationDifferedFromBaseline": true,
-          "removal": "74d7f4b2b4b22981d0e795ef301b9de37dddb17a0042ded741a762c5de8a1e42",
+          "removal": "006ed5a882d3333112fb19f508de0eec3df42bbd4487fafb4a54ee4f5700dc01",
           "removalIsByteIdenticalToBaseline": true
         }
       },
       "static-brand-theme": {
         "bithire/dark/modern/both": {
-          "baseline": "74d7f4b2b4b22981d0e795ef301b9de37dddb17a0042ded741a762c5de8a1e42",
-          "mutation": "37b7144f40a0b32753521d906af6ac5663d9000a7a26c61ef205e350de9c5e3d",
+          "baseline": "006ed5a882d3333112fb19f508de0eec3df42bbd4487fafb4a54ee4f5700dc01",
+          "mutation": "581531546732a5dce322f750bb5b23a176b83272168a03dea51f47974bde433f",
           "mutationDifferedFromBaseline": true,
-          "removal": "74d7f4b2b4b22981d0e795ef301b9de37dddb17a0042ded741a762c5de8a1e42",
+          "removal": "006ed5a882d3333112fb19f508de0eec3df42bbd4487fafb4a54ee4f5700dc01",
           "removalIsByteIdenticalToBaseline": true
         },
         "bithire/light/modern/both": {
-          "baseline": "74d7f4b2b4b22981d0e795ef301b9de37dddb17a0042ded741a762c5de8a1e42",
-          "mutation": "37b7144f40a0b32753521d906af6ac5663d9000a7a26c61ef205e350de9c5e3d",
+          "baseline": "006ed5a882d3333112fb19f508de0eec3df42bbd4487fafb4a54ee4f5700dc01",
+          "mutation": "581531546732a5dce322f750bb5b23a176b83272168a03dea51f47974bde433f",
           "mutationDifferedFromBaseline": true,
-          "removal": "74d7f4b2b4b22981d0e795ef301b9de37dddb17a0042ded741a762c5de8a1e42",
+          "removal": "006ed5a882d3333112fb19f508de0eec3df42bbd4487fafb4a54ee4f5700dc01",
           "removalIsByteIdenticalToBaseline": true
         }
       }

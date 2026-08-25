@@ -17467,10 +17467,27 @@
     {
       "controlId": "profiles.expressive",
       "disposition": "UNKNOWN",
-      "verificationState": "UNKNOWN",
-      "unknownReason": "NOT_ASSESSED",
-      "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "verificationState": "SOURCE_BOUND",
+      "unknownReason": "NOT_ASSESSED_PAST_SOURCE_BOUND. Causal measurement complete and positive on 6 of the control's own 6 axes (6 receipted scenarios, one representative discriminating value per axis, both ingress arms, all rottay; F4B-16, 2026-08-25) + 2 static-only identity stops (bithire's own authored type/geometry overrides, F4B-8 law, not receipted). This family cell is chosen as the representative seat among the ~250 families carrying an identical OVERLAY_OF_ROOTS scaffold for this control (adjudicated once, copied identically -- source: adjudicacion-controls-pro) because 2 of the 6 axes (material, elevation) map here specifically: material's own channels (--ds-material-card-highlight/-texture) are card-owned per this family's own targetBinding.axisToRoot (`material` -> `surface.finish`), and elevation's shared channels (--ds-elevation-1/2/3) are the SAME ones `surfaces.elevation-posture` already seats in THIS family (F4B-10). NOT raised to IMPLEMENTED: the same program-wide propertyGroups-vocabulary blocker (F4B-11/12/13/14/15) applies, and this cell's own OVERLAY_OF_ROOTS shape means it was never expected to own new internalChannels in the first place (`socketsExpected: false` below, unchanged).",
+      "evidenceIds": [
+        "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/profiles-expressive/rottay-editorial.json.receipt.json",
+        "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/profiles-expressive/rottay-pill-accented.json.receipt.json",
+        "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/profiles-expressive/rottay-outlined.json.receipt.json",
+        "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/profiles-expressive/rottay-paper.json.receipt.json",
+        "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/profiles-expressive/rottay-dramatic.json.receipt.json",
+        "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/profiles-expressive/rottay-contour.json.receipt.json"
+      ],
+      "nextAction": "PROPERTY_GROUPS_VOCABULARY_RATIFICATION_THEN_IMPLEMENTED",
+      "sourceBindings": [
+        "packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts",
+        "packages/core/src/foundation/tokens/ts/presentation/expressive-profiles/expansion/index.ts",
+        "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
+        "packages/core/manifest/controls/profiles.expressive.json"
+      ],
+      "stressCases": [
+        "The union of channels each axis moves is far larger than any single family's own targetBinding.axisToRoot suggests -- geometry alone cascades through 35 channels shared with shape.button-style/shape.radius-scale (measured, see the control's own calibration.measuredChannelUnion). This cell does not attempt to enumerate them; OVERLAY_OF_ROOTS already states the sockets belong to the mapped roots, not to this family.",
+        "bithire authors real, explicit identity for 2 of the 6 axes (type: 'humanist', geometry: 'rounded') but NOT for edge/material/elevation, where its own zero-diff is a DIFFERENT class: its selected experience profile ('rottay/bithire-technical@1') independently resolves those 3 axes to the same values a naive stop would also test, coincidentally -- not an authored override of this control. See the control's own calibration.coincidentalIdentityExclusionNote."
+      ],
       "targetBinding": {
         "status": "OVERLAY_OF_ROOTS",
         "why": "no necesita raiz propia: dependsOn=[experience.profile] y sus seis ejes sobrescriben por eje los MISMOS canales que ya componen las raices existentes. Los sockets de esta celda son los sockets de las raices mapeadas, no unos nuevos.",

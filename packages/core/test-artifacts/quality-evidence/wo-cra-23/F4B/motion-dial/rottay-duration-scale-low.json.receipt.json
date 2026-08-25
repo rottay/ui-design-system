@@ -5,7 +5,7 @@
   "scenarioId": "motion.dial/duration-scale-low/rottay/static-and-db",
   "evidenceKind": "static-db-computed-parity",
   "commandOrTool": "node src/tooling/resolution-probe/public/cli/index.mjs causal",
-  "toolVersion": "resolution-probe@471baf755c2a",
+  "toolVersion": "resolution-probe@c96c110b3cfb",
   "exitCode": 0,
   "sourceFiles": [
     "packages/core/dist/build-stamp.json",
@@ -51,10 +51,10 @@
     "packages/core/src/ui/primitives/feedback/Alert/engines/rustic/index.tsx",
     "packages/core/src/ui/primitives/feedback/Alert/index.tsx"
   ],
-  "sourceDigest": "88ddb186f2592d972e8ea4ed4a0b49c9fc9de291c463cbdcfbb05aaa1adf3604",
+  "sourceDigest": "153d052a1e5d7a983279d455526d303249199acbdc1564d6fa2132de47f1e491",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/motion-dial/rottay-duration-scale-low.json",
-  "artifactSha256": "c4dac97293c92be068feaa756c4d9811815c70d1d8d712fc4f73bd2900142e4e",
-  "createdAt": "2026-08-25T12:55:53.915Z",
+  "artifactSha256": "f88f22d637e07dee3266bbd9260485f87dfac61cf1fa604c6dc67de9dce10e12",
+  "createdAt": "2026-08-25T15:46:20.337Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

@@ -650,6 +650,28 @@ export const TENANT_CAPABILITY_REGISTRY = Object.freeze([
       version: 1,
       tier: 'pro',
       status: 'active',
+      // F4B-16 ruling (DT): the future schema decision F4B-13 registered
+      // (motion.dial's own bounds comment, above) -- a genuine per-member
+      // enumValues shape -- stays out of this packet's write-set (it would
+      // touch ingressValueForStop/manifest/rules, the instrument). `enumValues`
+      // below is the DEDUPLICATED FLAT UNION of all 6 axes' vocabularies (28
+      // of 30 raw values -- 'flat' and 'soft-depth' each appear in BOTH
+      // material and elevation, measured). This is what MAKES domain.kind
+      // resolve to 'closed-enum' at all (manifest/generator/index.mjs:186,
+      // `entry.enumValues?.length ? 'closed-enum' : ...`) rather than the
+      // unrecognised bare 'enum', which `ingressValueForStop` cannot lower
+      // (DOMAIN_KIND_NOT_LOWERED). The union check is ROLE-BLIND by
+      // construction (`enumValues.includes(stop.id)`, runtime/ingress/index.mjs:925,
+      // never checks WHICH axis a value belongs to) -- a stop declaring
+      // `role: 'geometry', value: 'flat'` would pass this check even though
+      // 'flat' is not a valid geometry value. This is NOT the real gate: the
+      // real, role-aware fail-closed check is `sanitizeExpressiveOverrides`
+      // itself (expressive-profiles/index.ts:396-421), which drops a value
+      // that isn't in ITS OWN axis's vocabulary silently, at the compiler.
+      // Every stop this control declares is crafted against its OWN axis's
+      // real vocabulary (calibration.catalog, per member) -- never against
+      // the union -- and the H-2 false-witness drill (runtime/ingress/tests)
+      // proves the union's blindness cannot silently pass as a measurement.
       evidence: {
         consumer: 'src/infrastructure/runtime/bootstrap/facade/react/provider/index.tsx',
         symbol: 'sanitizeExpressiveOverrides',
@@ -658,16 +680,54 @@ export const TENANT_CAPABILITY_REGISTRY = Object.freeze([
       owner: 'design-system',
       title: 'Explicit expressive axes',
       valueType: 'enum',
+      enumValues: [
+        'technical', 'editorial', 'humanist', 'geometric',
+        'sharp', 'soft', 'rounded', 'pill-accented',
+        'borderless-shadow', 'hairline', 'outlined', 'ruled', 'inset-double',
+        'flat', 'paper', 'soft-depth', 'frosted', 'luminous',
+        'hairline-lift', 'dramatic', 'luminous-glow',
+        'none', 'micro-grid', 'dots', 'pinstripe', 'deco-fan', 'ambient-orbs', 'contour',
+      ],
       defaultBehavior:
         'each axis independently overrides the experience composition; an unset axis falls back to it, then to baseline',
       documentPath:
         'visualFoundation.advanced.profiles.{type,geometry,edge,material,elevation,motif}',
-      brandThemePath: 'expressive.profiles.*',
+      // F4B-16 fix (false-INERT by PATH, same class as F4B-7/F4B-12/F4B-13):
+      // `expressive.profiles.*` is a wildcard, and the ingress walker
+      // (`ingressPathMembers`/`resolveIngressMember`) only understands brace
+      // SETS -- a lone `*` resolves to itself as a literal member, writing to
+      // the nonsense key `expressive.profiles['*']`. Fixed to the 6-member
+      // brace-set, all last segments distinct (Fase B's brace law only bites
+      // on a SHARED last segment; none here), matching the DB path's own
+      // already-correct 6-member set one level down.
+      brandThemePath:
+        'expressive.profiles.{type,geometry,edge,material,elevation,motif}',
+      // F4B-16 fix: `--ds-type-label-text-transform` was never measured --
+      // it does not move (direct compile sweep, all 3 verticals, all 4
+      // type values: the static path's role-level channels are written by
+      // setSemanticTypographyVariables's OWN overlay, not by this expansion's
+      // direct `variables`, which only reaches the DB path for role facets).
+      // `--ds-select-group-text-transform` replaces `--ds-table-header-text-
+      // transform` as the type representative: BOTH are real (typeProfileVariables
+      // writes both unconditionally), but table-header specifically is a
+      // measured, bithire-only DB-arm non-mover (baseline and every tested
+      // value alike resolve `undefined` there; select-group moves cleanly on
+      // both arms, all 3 verticals -- see calibration.measuredChannelUnion).
+      // One representative channel PER AXIS, each independently measured
+      // moving (compileBrandTheme + compileTenantThemeConfig sweep, this
+      // packet): the FULL real union is far larger (type alone has 8,
+      // geometry cascades through the shared --ds-radius-*/--ds-*-radius
+      // surface at 35 -- see the control's own calibration.measuredChannelUnion)
+      // but declaring all of it here would require token-readout to track
+      // 60+ channels for one control; `representativeOnly` already states
+      // these are not exhaustive.
       derivedChannels: [
-        '--ds-type-label-text-transform',
+        '--ds-select-group-text-transform',
+        '--ds-radius-scale',
         '--ds-edge-emphasis-width',
         '--ds-material-card-highlight',
-        '--ds-table-header-text-transform',
+        '--ds-elevation-lift-strength',
+        '--ds-material-canvas-texture',
       ],
       dependsOn: ['experience.profile'],
       compat:

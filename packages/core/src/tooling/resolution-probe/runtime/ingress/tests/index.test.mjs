@@ -1715,6 +1715,91 @@ test('H-2 drill 9 (W-C): the guard stands on the ARM\'s baseline, and proves it'
   );
 });
 
+const EXPRESSIVE_H2 = readManifest(resolve(CORE_ROOT, 'manifest/controls/profiles.expressive.json'));
+
+test('H-2 drill 10 (profiles.expressive): the flat enumValues union cannot catch a cross-axis value, and the compiler is the real gate', async () => {
+  // The union check (`enumValues.includes(stop.id)`, runtime/ingress/index.mjs)
+  // is role-blind: 'flat' is a REAL value, just for material/elevation, not
+  // geometry. A stop naming it for `role: 'geometry'` passes the union check
+  // and reaches the real compiler -- which is exactly the scene this drill
+  // proves is caught somewhere, not silently painted as a measurement.
+  const crossAxisManifest = {
+    ...EXPRESSIVE_H2,
+    calibration: {
+      ...EXPRESSIVE_H2.calibration,
+      // The closed-enum branch of ingressValueForStop returns stop.id itself
+      // (not stop.value) -- the id IS the value the harness lowers. 'flat'
+      // must be the id directly, matching every other closed-enum stop in
+      // this control (F4B-16 fix: the manifest's own regular stops made this
+      // exact mistake first and were corrected the same way).
+      normalizedStops: [
+        { id: 'flat', role: 'geometry' },
+      ],
+    },
+  };
+
+  const arms = await loadCompilerArms();
+  const baselines = await loadStaticBaselines();
+  const baselineVars = arms['static-brand-theme'].compile({
+    brandTheme: baselines.rottay.theme,
+    tenantSlug: 'h2-drill-10-baseline',
+    tenantPatch: {},
+    tenantAuthoredPaths: new Set(),
+  }).cssVariables;
+
+  const lowered = lowerStop({
+    armId: 'static-brand-theme',
+    controlManifest: crossAxisManifest,
+    stopId: 'flat',
+    compile: arms['static-brand-theme'].compile,
+    vertical: 'rottay',
+    base: baselines.rottay.theme,
+    baselineSource: baselines.rottay.source,
+  });
+
+  // The real, product-owned sanitizer drops the value: geometry's own
+  // channels (radius/button-style cascade) stay byte-identical to baseline.
+  assert.equal(lowered.variables['--ds-radius-scale'], baselineVars['--ds-radius-scale']);
+  assert.equal(lowered.variables['--ds-radius-button'], baselineVars['--ds-radius-button']);
+
+  // And the discrimination guard -- the evidence pipeline's own EXISTS check
+  // -- must not accept this as a witness for geometry: only ONE stop exists
+  // in this manifest, so `assertStopDiscrimination` has nothing to compare
+  // against and must refuse to certify a verdict, not report a false PASS.
+  await assert.rejects(
+    () => discriminate(crossAxisManifest, 'static-brand-theme', 'rottay'),
+    /fewer than two|NOT DECIDABLE/i,
+    'a single cross-axis-invalid stop must not be certified as a discriminating measurement',
+  );
+});
+
+test('H-2 drill 11 (profiles.expressive): the declared per-axis catalog is exactly the real vocabulary', async () => {
+  // Fails closed if the manifest's calibration.catalog drifts from the
+  // product's own closed vocabularies -- the other half of "desincroniza del
+  // real": not just a bad stop, but a stale catalog nobody caught.
+  // Read from the SAME dist/ this whole suite already trusts (loadCompilerArms
+  // proves it fresh before any drill runs) -- never a second, hand-built copy
+  // of the vocabulary that could quietly drift from the one the compiler uses.
+  const {
+    EXPRESSIVE_TYPE_PROFILES,
+    EXPRESSIVE_GEOMETRY_PROFILES,
+    EXPRESSIVE_EDGE_PROFILES,
+    EXPRESSIVE_MATERIAL_PROFILES,
+    EXPRESSIVE_ELEVATION_PROFILES,
+    EXPRESSIVE_MOTIF_PROFILES,
+  } = await import(
+    pathToFileURL(resolve(CORE_ROOT, 'dist/foundation/tokens/ts/presentation/expressive-profiles/index.js')).href
+  );
+
+  const catalog = EXPRESSIVE_H2.calibration.catalog;
+  assert.deepEqual(catalog.type, [...EXPRESSIVE_TYPE_PROFILES]);
+  assert.deepEqual(catalog.geometry, [...EXPRESSIVE_GEOMETRY_PROFILES]);
+  assert.deepEqual(catalog.edge, [...EXPRESSIVE_EDGE_PROFILES]);
+  assert.deepEqual(catalog.material, [...EXPRESSIVE_MATERIAL_PROFILES]);
+  assert.deepEqual(catalog.elevation, [...EXPRESSIVE_ELEVATION_PROFILES]);
+  assert.deepEqual(catalog.motif, [...EXPRESSIVE_MOTIF_PROFILES]);
+});
+
 // ---------------------------------------------------------------------------
 // H3C — the DB arm delivers its write on a FRESH page
 //

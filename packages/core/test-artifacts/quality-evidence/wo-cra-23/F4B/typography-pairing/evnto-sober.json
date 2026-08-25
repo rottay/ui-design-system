@@ -1659,6 +1659,10 @@
               "moved": false,
               "value": "1.125"
             },
+            "--ds-edge-emphasis-width": {
+              "moved": false,
+              "value": "1px"
+            },
             "--ds-edge-standard-width": {
               "moved": false,
               "value": "1px"
@@ -1691,10 +1695,18 @@
               "moved": false,
               "value": "'Public Sans', ui-sans-serif, system-ui, -apple-system, sans-serif, \"Noto Sans Arabic\", sans-serif"
             },
+            "--ds-font-family-display": {
+              "moved": false,
+              "value": "'Outfit', ui-sans-serif, system-ui, -apple-system, sans-serif, \"Noto Sans Arabic\", sans-serif"
+            },
             "--ds-font-family-heading": {
               "from": "'Outfit', ui-sans-serif, system-ui, -apple-system, sans-serif, \"Noto Sans Arabic\", sans-serif",
               "moved": true,
               "to": "'Geist Sans', 'Geist', -apple-system, BlinkMacSystemFont, 'Segoe UI',\n                  Roboto, 'Helvetica Neue', Arial, sans-serif, \"Noto Sans Arabic\", sans-serif"
+            },
+            "--ds-font-family-mono": {
+              "moved": false,
+              "value": "'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, monospace"
             },
             "--ds-font-size-xs": {
               "moved": false,
@@ -1715,6 +1727,18 @@
             "--ds-material-canvas-texture": {
               "moved": false,
               "value": ""
+            },
+            "--ds-material-card-highlight": {
+              "moved": false,
+              "value": ""
+            },
+            "--ds-motion-duration-scale": {
+              "moved": false,
+              "value": "1"
+            },
+            "--ds-motion-intensity": {
+              "moved": false,
+              "value": "1"
             },
             "--ds-radius-button": {
               "moved": false,
@@ -1756,6 +1780,10 @@
               "moved": false,
               "value": "24px"
             },
+            "--ds-recipe-profile": {
+              "moved": false,
+              "value": ""
+            },
             "--ds-rhythm-effective-scale": {
               "moved": false,
               "value": "clamp(0.8, 1, 1.25)"
@@ -1763,6 +1791,38 @@
             "--ds-rhythm-scale": {
               "moved": false,
               "value": "1"
+            },
+            "--ds-select-group-text-transform": {
+              "moved": false,
+              "value": "uppercase"
+            },
+            "--ds-sidebar-bg": {
+              "moved": false,
+              "value": "#0E0D0B"
+            },
+            "--ds-sidebar-item-bg-active": {
+              "moved": false,
+              "value": "rgba(0, 0, 0, 0.06)"
+            },
+            "--ds-sidebar-item-bg-hover": {
+              "moved": false,
+              "value": "rgba(0, 0, 0, 0.03)"
+            },
+            "--ds-sidebar-item-color": {
+              "moved": false,
+              "value": "#3d3d3d"
+            },
+            "--ds-sidebar-item-color-active": {
+              "moved": false,
+              "value": "#171717"
+            },
+            "--ds-sidebar-text": {
+              "moved": false,
+              "value": "#A8A898"
+            },
+            "--ds-sidebar-text-muted": {
+              "moved": false,
+              "value": "#525252"
             },
             "--ds-table-header-letter-spacing": {
               "moved": false,
@@ -3499,6 +3559,10 @@
               "moved": false,
               "value": "1.125"
             },
+            "--ds-edge-emphasis-width": {
+              "moved": false,
+              "value": "1px"
+            },
             "--ds-edge-standard-width": {
               "moved": false,
               "value": "1px"
@@ -3531,10 +3595,18 @@
               "moved": false,
               "value": "'Public Sans', ui-sans-serif, system-ui, -apple-system, sans-serif, \"Noto Sans Arabic\", sans-serif"
             },
+            "--ds-font-family-display": {
+              "moved": false,
+              "value": "'Outfit', ui-sans-serif, system-ui, -apple-system, sans-serif, \"Noto Sans Arabic\", sans-serif"
+            },
             "--ds-font-family-heading": {
               "from": "'Outfit', ui-sans-serif, system-ui, -apple-system, sans-serif, \"Noto Sans Arabic\", sans-serif",
               "moved": true,
               "to": "'Geist Sans', 'Geist', -apple-system, BlinkMacSystemFont, 'Segoe UI',\n                  Roboto, 'Helvetica Neue', Arial, sans-serif, \"Noto Sans Arabic\", sans-serif"
+            },
+            "--ds-font-family-mono": {
+              "moved": false,
+              "value": "'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, monospace"
             },
             "--ds-font-size-xs": {
               "moved": false,
@@ -3555,6 +3627,18 @@
             "--ds-material-canvas-texture": {
               "moved": false,
               "value": ""
+            },
+            "--ds-material-card-highlight": {
+              "moved": false,
+              "value": ""
+            },
+            "--ds-motion-duration-scale": {
+              "moved": false,
+              "value": "1"
+            },
+            "--ds-motion-intensity": {
+              "moved": false,
+              "value": "1"
             },
             "--ds-radius-button": {
               "moved": false,
@@ -3596,6 +3680,10 @@
               "moved": false,
               "value": "24px"
             },
+            "--ds-recipe-profile": {
+              "moved": false,
+              "value": ""
+            },
             "--ds-rhythm-effective-scale": {
               "moved": false,
               "value": "clamp(0.8, 1, 1.25)"
@@ -3603,6 +3691,38 @@
             "--ds-rhythm-scale": {
               "moved": false,
               "value": "1"
+            },
+            "--ds-select-group-text-transform": {
+              "moved": false,
+              "value": "uppercase"
+            },
+            "--ds-sidebar-bg": {
+              "moved": false,
+              "value": "#fafafa"
+            },
+            "--ds-sidebar-item-bg-active": {
+              "moved": false,
+              "value": "rgba(0, 0, 0, 0.06)"
+            },
+            "--ds-sidebar-item-bg-hover": {
+              "moved": false,
+              "value": "rgba(0, 0, 0, 0.03)"
+            },
+            "--ds-sidebar-item-color": {
+              "moved": false,
+              "value": "#3d3d3d"
+            },
+            "--ds-sidebar-item-color-active": {
+              "moved": false,
+              "value": "#171717"
+            },
+            "--ds-sidebar-text": {
+              "moved": false,
+              "value": "#171717"
+            },
+            "--ds-sidebar-text-muted": {
+              "moved": false,
+              "value": "#525252"
             },
             "--ds-table-header-letter-spacing": {
               "moved": false,
@@ -3739,6 +3859,7 @@
         "freshnessProven": true,
         "input": {
           "baseline": null,
+          "compileOptions": {},
           "compilerInput": {
             "appearance": {
               "typography": {
@@ -3793,7 +3914,7 @@
         }
       },
       "restore": {
-        "comparedRows": 922,
+        "comparedRows": 952,
         "counts": {
           "byKind": {},
           "byPropertyKind": {},
@@ -3805,7 +3926,7 @@
         "rows": []
       },
       "totals": {
-        "inertProperties": 898,
+        "inertProperties": 928,
         "movedProperties": 4,
         "scope": "across every (vertical x theme x fixture x property) row measured for this arm"
       }
@@ -5469,6 +5590,10 @@
               "moved": false,
               "value": "1.125"
             },
+            "--ds-edge-emphasis-width": {
+              "moved": false,
+              "value": "1px"
+            },
             "--ds-edge-standard-width": {
               "moved": false,
               "value": "1px"
@@ -5501,10 +5626,18 @@
               "moved": false,
               "value": "'Public Sans', ui-sans-serif, system-ui, -apple-system, sans-serif, \"Noto Sans Arabic\", sans-serif"
             },
+            "--ds-font-family-display": {
+              "moved": false,
+              "value": "'Outfit', ui-sans-serif, system-ui, -apple-system, sans-serif, \"Noto Sans Arabic\", sans-serif"
+            },
             "--ds-font-family-heading": {
               "from": "'Outfit', ui-sans-serif, system-ui, -apple-system, sans-serif, \"Noto Sans Arabic\", sans-serif",
               "moved": true,
               "to": "'Geist Sans', 'Geist', -apple-system, BlinkMacSystemFont, 'Segoe UI',\n                  Roboto, 'Helvetica Neue', Arial, sans-serif, \"Noto Sans Arabic\", sans-serif"
+            },
+            "--ds-font-family-mono": {
+              "moved": false,
+              "value": "'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, monospace"
             },
             "--ds-font-size-xs": {
               "moved": false,
@@ -5525,6 +5658,18 @@
             "--ds-material-canvas-texture": {
               "moved": false,
               "value": ""
+            },
+            "--ds-material-card-highlight": {
+              "moved": false,
+              "value": ""
+            },
+            "--ds-motion-duration-scale": {
+              "moved": false,
+              "value": "1"
+            },
+            "--ds-motion-intensity": {
+              "moved": false,
+              "value": "1"
             },
             "--ds-radius-button": {
               "moved": false,
@@ -5566,6 +5711,10 @@
               "moved": false,
               "value": "24px"
             },
+            "--ds-recipe-profile": {
+              "moved": false,
+              "value": ""
+            },
             "--ds-rhythm-effective-scale": {
               "moved": false,
               "value": "clamp(0.8, 1, 1.25)"
@@ -5573,6 +5722,38 @@
             "--ds-rhythm-scale": {
               "moved": false,
               "value": "1"
+            },
+            "--ds-select-group-text-transform": {
+              "moved": false,
+              "value": "uppercase"
+            },
+            "--ds-sidebar-bg": {
+              "moved": false,
+              "value": "#0E0D0B"
+            },
+            "--ds-sidebar-item-bg-active": {
+              "moved": false,
+              "value": "rgba(0, 0, 0, 0.06)"
+            },
+            "--ds-sidebar-item-bg-hover": {
+              "moved": false,
+              "value": "rgba(0, 0, 0, 0.03)"
+            },
+            "--ds-sidebar-item-color": {
+              "moved": false,
+              "value": "#3d3d3d"
+            },
+            "--ds-sidebar-item-color-active": {
+              "moved": false,
+              "value": "#171717"
+            },
+            "--ds-sidebar-text": {
+              "moved": false,
+              "value": "#A8A898"
+            },
+            "--ds-sidebar-text-muted": {
+              "moved": false,
+              "value": "#525252"
             },
             "--ds-table-header-letter-spacing": {
               "moved": false,
@@ -7309,6 +7490,10 @@
               "moved": false,
               "value": "1.125"
             },
+            "--ds-edge-emphasis-width": {
+              "moved": false,
+              "value": "1px"
+            },
             "--ds-edge-standard-width": {
               "moved": false,
               "value": "1px"
@@ -7341,10 +7526,18 @@
               "moved": false,
               "value": "'Public Sans', ui-sans-serif, system-ui, -apple-system, sans-serif, \"Noto Sans Arabic\", sans-serif"
             },
+            "--ds-font-family-display": {
+              "moved": false,
+              "value": "'Outfit', ui-sans-serif, system-ui, -apple-system, sans-serif, \"Noto Sans Arabic\", sans-serif"
+            },
             "--ds-font-family-heading": {
               "from": "'Outfit', ui-sans-serif, system-ui, -apple-system, sans-serif, \"Noto Sans Arabic\", sans-serif",
               "moved": true,
               "to": "'Geist Sans', 'Geist', -apple-system, BlinkMacSystemFont, 'Segoe UI',\n                  Roboto, 'Helvetica Neue', Arial, sans-serif, \"Noto Sans Arabic\", sans-serif"
+            },
+            "--ds-font-family-mono": {
+              "moved": false,
+              "value": "'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, monospace"
             },
             "--ds-font-size-xs": {
               "moved": false,
@@ -7365,6 +7558,18 @@
             "--ds-material-canvas-texture": {
               "moved": false,
               "value": ""
+            },
+            "--ds-material-card-highlight": {
+              "moved": false,
+              "value": ""
+            },
+            "--ds-motion-duration-scale": {
+              "moved": false,
+              "value": "1"
+            },
+            "--ds-motion-intensity": {
+              "moved": false,
+              "value": "1"
             },
             "--ds-radius-button": {
               "moved": false,
@@ -7406,6 +7611,10 @@
               "moved": false,
               "value": "24px"
             },
+            "--ds-recipe-profile": {
+              "moved": false,
+              "value": ""
+            },
             "--ds-rhythm-effective-scale": {
               "moved": false,
               "value": "clamp(0.8, 1, 1.25)"
@@ -7413,6 +7622,38 @@
             "--ds-rhythm-scale": {
               "moved": false,
               "value": "1"
+            },
+            "--ds-select-group-text-transform": {
+              "moved": false,
+              "value": "uppercase"
+            },
+            "--ds-sidebar-bg": {
+              "moved": false,
+              "value": "#fafafa"
+            },
+            "--ds-sidebar-item-bg-active": {
+              "moved": false,
+              "value": "rgba(0, 0, 0, 0.06)"
+            },
+            "--ds-sidebar-item-bg-hover": {
+              "moved": false,
+              "value": "rgba(0, 0, 0, 0.03)"
+            },
+            "--ds-sidebar-item-color": {
+              "moved": false,
+              "value": "#3d3d3d"
+            },
+            "--ds-sidebar-item-color-active": {
+              "moved": false,
+              "value": "#171717"
+            },
+            "--ds-sidebar-text": {
+              "moved": false,
+              "value": "#171717"
+            },
+            "--ds-sidebar-text-muted": {
+              "moved": false,
+              "value": "#525252"
             },
             "--ds-table-header-letter-spacing": {
               "moved": false,
@@ -7552,6 +7793,7 @@
             "digest": "67dfde02f7aab0a18a6f4bcf44cf107047f2d66bcf577ad2952921d190eead3d",
             "source": "dist/index.js#evntoBrandTheme"
           },
+          "compileOptions": {},
           "compilerInput": {
             "brandTheme": {
               "appearance": {
@@ -8753,7 +8995,7 @@
         }
       },
       "restore": {
-        "comparedRows": 922,
+        "comparedRows": 952,
         "counts": {
           "byKind": {},
           "byPropertyKind": {},
@@ -8765,7 +9007,7 @@
         "rows": []
       },
       "totals": {
-        "inertProperties": 898,
+        "inertProperties": 928,
         "movedProperties": 4,
         "scope": "across every (vertical x theme x fixture x property) row measured for this arm"
       }
@@ -8937,20 +9179,22 @@
       }
     },
     "sourceFreshness": {
-      "declaredDigest": "112172303f571d7afb21287fdda01ee83b42063a333f054a2f4a90e0082753c4",
-      "observedDigest": "112172303f571d7afb21287fdda01ee83b42063a333f054a2f4a90e0082753c4",
-      "postMeasurementDigest": "112172303f571d7afb21287fdda01ee83b42063a333f054a2f4a90e0082753c4",
-      "preMeasurementDigest": "112172303f571d7afb21287fdda01ee83b42063a333f054a2f4a90e0082753c4",
+      "declaredDigest": "45ddb538b138845389388137c00bb8daad75681f4d150519c1c144bb7874ce7b",
+      "observedDigest": "45ddb538b138845389388137c00bb8daad75681f4d150519c1c144bb7874ce7b",
+      "postMeasurementDigest": "45ddb538b138845389388137c00bb8daad75681f4d150519c1c144bb7874ce7b",
+      "preMeasurementDigest": "45ddb538b138845389388137c00bb8daad75681f4d150519c1c144bb7874ce7b",
       "sourceFiles": [
         "packages/core/dist/build-stamp.json",
         "packages/core/dist/infrastructure/compilers/kernel/runtime/brand-theme/index.js",
         "packages/core/dist/server.js",
+        "packages/core/manifest/controls/typography.families.json",
         "packages/core/manifest/controls/typography.pairing.json",
         "packages/core/manifest/families/primitive/display/typography.json",
         "packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts",
         "packages/core/src/foundation/tokens/css/facade/artifacts/evnto/index.css",
         "packages/core/src/foundation/tokens/css/facade/entrypoints/base.css",
         "packages/core/src/foundation/tokens/css/foundation/base/typography.css",
+        "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
         "packages/core/src/foundation/tokens/css/runtime/engines/modern/compiled.css",
         "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css",
         "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/typography.css",
@@ -9118,6 +9362,7 @@
   },
   "stop": {
     "id": "sober",
+    "law": "Not receiptable for bithire specifically: measured moved=0 on BOTH arms (both declared channels, all fixtures, both modes) -- a genuine baseline coincidence, not a broken door. bithire authors `fontFamilyBase`/`fontFamilyHeading` literally at brand-themes/bithire/index.ts:3492-3499 as `var(--ds-font-pack-humanist-text, ...)` / `var(--ds-font-pack-grotesk-display, ...)` -- byte-identical (mod fallback tail) to TYPE_PAIRINGS.sober, and the fontFamilyHeading field even carries its own source comment '@governor dial: typography.pairing'. Same class of finding as bithire's `flat` non-mover on surfaces.elevation-posture and its sharp/pill static-arm shadow on shape.button-style. Does not threaten H-2: bithire's other 3 stops (editorial/geometric/technical) all discriminate cleanly, so the >=2-witness bar is met without this one.",
     "value": "sober"
   },
   "unmatched": [],

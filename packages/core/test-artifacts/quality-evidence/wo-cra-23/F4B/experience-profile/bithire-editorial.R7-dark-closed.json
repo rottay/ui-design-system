@@ -752,6 +752,10 @@
               "moved": false,
               "value": "0.9"
             },
+            "--ds-edge-emphasis-width": {
+              "moved": false,
+              "value": "1px"
+            },
             "--ds-edge-standard-width": {
               "moved": false,
               "value": "1px"
@@ -759,6 +763,18 @@
             "--ds-effect-intensity": {
               "moved": false,
               "value": "0.58"
+            },
+            "--ds-elevation-1": {
+              "moved": false,
+              "value": "none"
+            },
+            "--ds-elevation-2": {
+              "moved": false,
+              "value": "none"
+            },
+            "--ds-elevation-3": {
+              "moved": false,
+              "value": "0 1px 2px rgba(0,0,0,0.05)"
             },
             "--ds-elevation-lift-strength": {
               "from": "0",
@@ -769,6 +785,22 @@
               "from": "\"rottay/bithire-technical@1\"",
               "moved": true,
               "to": "\"rottay/management-editorial@1\""
+            },
+            "--ds-font-family-base": {
+              "moved": false,
+              "value": "'Public Sans', ui-sans-serif, system-ui, -apple-system, sans-serif, \"Noto Sans Arabic\", sans-serif"
+            },
+            "--ds-font-family-display": {
+              "moved": false,
+              "value": "'Space Grotesk', ui-sans-serif, system-ui, -apple-system, sans-serif, \"Noto Sans Arabic\", sans-serif"
+            },
+            "--ds-font-family-heading": {
+              "moved": false,
+              "value": "'Space Grotesk', ui-sans-serif, system-ui, -apple-system, sans-serif, \"Noto Sans Arabic\", sans-serif"
+            },
+            "--ds-font-family-mono": {
+              "moved": false,
+              "value": "'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, monospace"
             },
             "--ds-font-size-xs": {
               "moved": false,
@@ -789,6 +821,22 @@
             "--ds-material-canvas-texture": {
               "moved": false,
               "value": "radial-gradient(circle at 88% 4%, color-mix(in srgb, rgb(30, 132, 230) 14%, transparent), transparent 30%)"
+            },
+            "--ds-material-card-highlight": {
+              "moved": false,
+              "value": "inset 0 1px 0 color-mix(in srgb, #e4e8ed 6%, transparent)"
+            },
+            "--ds-motion-duration-scale": {
+              "moved": false,
+              "value": "1"
+            },
+            "--ds-motion-intensity": {
+              "moved": false,
+              "value": "0.55"
+            },
+            "--ds-radius-button": {
+              "moved": false,
+              "value": "calc(9px / 1.25 * 1.25)"
             },
             "--ds-radius-lg": {
               "moved": false,
@@ -826,6 +874,10 @@
               "moved": false,
               "value": "calc(18px / 1.25)"
             },
+            "--ds-recipe-profile": {
+              "moved": false,
+              "value": "\"rottay/network-professional@1\""
+            },
             "--ds-rhythm-effective-scale": {
               "moved": false,
               "value": "clamp(0.8, 1, 1.25)"
@@ -833,6 +885,38 @@
             "--ds-rhythm-scale": {
               "moved": false,
               "value": "1"
+            },
+            "--ds-select-group-text-transform": {
+              "moved": false,
+              "value": "none"
+            },
+            "--ds-sidebar-bg": {
+              "moved": false,
+              "value": "#0a0f18"
+            },
+            "--ds-sidebar-item-bg-active": {
+              "moved": false,
+              "value": "rgba(26, 127, 224, 0.12)"
+            },
+            "--ds-sidebar-item-bg-hover": {
+              "moved": false,
+              "value": "rgba(255, 255, 255, 0.04)"
+            },
+            "--ds-sidebar-item-color": {
+              "moved": false,
+              "value": "#9aacbf"
+            },
+            "--ds-sidebar-item-color-active": {
+              "moved": false,
+              "value": "#3b9af0"
+            },
+            "--ds-sidebar-text": {
+              "moved": false,
+              "value": "#9aacbf"
+            },
+            "--ds-sidebar-text-muted": {
+              "moved": false,
+              "value": "#5a7085"
             },
             "--ds-table-header-letter-spacing": {
               "moved": false,
@@ -1606,6 +1690,10 @@
               "moved": false,
               "value": "0.9"
             },
+            "--ds-edge-emphasis-width": {
+              "moved": false,
+              "value": "1px"
+            },
             "--ds-edge-standard-width": {
               "moved": false,
               "value": "1px"
@@ -1613,6 +1701,18 @@
             "--ds-effect-intensity": {
               "moved": false,
               "value": "0.58"
+            },
+            "--ds-elevation-1": {
+              "moved": false,
+              "value": "none"
+            },
+            "--ds-elevation-2": {
+              "moved": false,
+              "value": "none"
+            },
+            "--ds-elevation-3": {
+              "moved": false,
+              "value": "0 1px 2px rgba(0,0,0,0.05)"
             },
             "--ds-elevation-lift-strength": {
               "from": "0",
@@ -1623,6 +1723,22 @@
               "from": "\"rottay/bithire-technical@1\"",
               "moved": true,
               "to": "\"rottay/management-editorial@1\""
+            },
+            "--ds-font-family-base": {
+              "moved": false,
+              "value": "'Public Sans', ui-sans-serif, system-ui, -apple-system, sans-serif, \"Noto Sans Arabic\", sans-serif"
+            },
+            "--ds-font-family-display": {
+              "moved": false,
+              "value": "'Space Grotesk', ui-sans-serif, system-ui, -apple-system, sans-serif, \"Noto Sans Arabic\", sans-serif"
+            },
+            "--ds-font-family-heading": {
+              "moved": false,
+              "value": "'Space Grotesk', ui-sans-serif, system-ui, -apple-system, sans-serif, \"Noto Sans Arabic\", sans-serif"
+            },
+            "--ds-font-family-mono": {
+              "moved": false,
+              "value": "'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, monospace"
             },
             "--ds-font-size-xs": {
               "moved": false,
@@ -1644,6 +1760,22 @@
             "--ds-material-canvas-texture": {
               "moved": false,
               "value": "radial-gradient(circle at 88% 4%, rgba(58, 111, 176, 0.055), transparent 30%)"
+            },
+            "--ds-material-card-highlight": {
+              "moved": false,
+              "value": "inset 0 1px 0 rgba(255, 255, 255, 0.9)"
+            },
+            "--ds-motion-duration-scale": {
+              "moved": false,
+              "value": "1"
+            },
+            "--ds-motion-intensity": {
+              "moved": false,
+              "value": "0.55"
+            },
+            "--ds-radius-button": {
+              "moved": false,
+              "value": "calc(9px / 1.25 * 1.25)"
             },
             "--ds-radius-lg": {
               "moved": false,
@@ -1681,6 +1813,10 @@
               "moved": false,
               "value": "calc(18px / 1.25)"
             },
+            "--ds-recipe-profile": {
+              "moved": false,
+              "value": "\"rottay/network-professional@1\""
+            },
             "--ds-rhythm-effective-scale": {
               "moved": false,
               "value": "clamp(0.8, 1, 1.25)"
@@ -1688,6 +1824,38 @@
             "--ds-rhythm-scale": {
               "moved": false,
               "value": "1"
+            },
+            "--ds-select-group-text-transform": {
+              "moved": false,
+              "value": "none"
+            },
+            "--ds-sidebar-bg": {
+              "moved": false,
+              "value": "#ffffff"
+            },
+            "--ds-sidebar-item-bg-active": {
+              "moved": false,
+              "value": "color-mix(in oklab, rgb(58, 111, 176) 8%, #F4F8FB)"
+            },
+            "--ds-sidebar-item-bg-hover": {
+              "moved": false,
+              "value": "#F4F8FD"
+            },
+            "--ds-sidebar-item-color": {
+              "moved": false,
+              "value": "#53697E"
+            },
+            "--ds-sidebar-item-color-active": {
+              "moved": false,
+              "value": "#3A6FB0"
+            },
+            "--ds-sidebar-text": {
+              "moved": false,
+              "value": "#14283B"
+            },
+            "--ds-sidebar-text-muted": {
+              "moved": false,
+              "value": "#728398"
             },
             "--ds-table-header-letter-spacing": {
               "moved": false,
@@ -1772,6 +1940,7 @@
         "freshnessProven": true,
         "input": {
           "baseline": null,
+          "compileOptions": {},
           "compilerInput": {
             "appearance": {
               "experienceProfile": "rottay/management-editorial@1"
@@ -1791,13 +1960,13 @@
             }
           },
           "ingressValue": "rottay/management-editorial@1",
+          "modeScope": null,
           "path": "appearance.general.experienceProfile",
-          "stopId": "rottay/management-editorial@1"
+          "stopId": "rottay/management-editorial@1",
+          "tenantAuthoredPaths": null
         },
         "modeChannels": {
-          "dark": [
-            "--ds-letter-spacing-heading"
-          ]
+          "dark": []
         },
         "module": "dist/server.js",
         "moduleSubpath": "@rottay/design-system/server",
@@ -1829,7 +1998,7 @@
         }
       },
       "restore": {
-        "comparedRows": 428,
+        "comparedRows": 470,
         "counts": {
           "byKind": {},
           "byPropertyKind": {},
@@ -1841,7 +2010,7 @@
         "rows": []
       },
       "totals": {
-        "inertProperties": 400,
+        "inertProperties": 442,
         "movedProperties": 8,
         "scope": "across every (vertical x theme x fixture x property) row measured for this arm"
       }
@@ -2600,6 +2769,10 @@
               "moved": false,
               "value": "0.9"
             },
+            "--ds-edge-emphasis-width": {
+              "moved": false,
+              "value": "1px"
+            },
             "--ds-edge-standard-width": {
               "moved": false,
               "value": "1px"
@@ -2607,6 +2780,18 @@
             "--ds-effect-intensity": {
               "moved": false,
               "value": "0.58"
+            },
+            "--ds-elevation-1": {
+              "moved": false,
+              "value": "none"
+            },
+            "--ds-elevation-2": {
+              "moved": false,
+              "value": "none"
+            },
+            "--ds-elevation-3": {
+              "moved": false,
+              "value": "0 1px 2px rgba(0,0,0,0.05)"
             },
             "--ds-elevation-lift-strength": {
               "from": "0",
@@ -2617,6 +2802,22 @@
               "from": "\"rottay/bithire-technical@1\"",
               "moved": true,
               "to": "\"rottay/management-editorial@1\""
+            },
+            "--ds-font-family-base": {
+              "moved": false,
+              "value": "'Public Sans', ui-sans-serif, system-ui, -apple-system, sans-serif, \"Noto Sans Arabic\", sans-serif"
+            },
+            "--ds-font-family-display": {
+              "moved": false,
+              "value": "'Space Grotesk', ui-sans-serif, system-ui, -apple-system, sans-serif, \"Noto Sans Arabic\", sans-serif"
+            },
+            "--ds-font-family-heading": {
+              "moved": false,
+              "value": "'Space Grotesk', ui-sans-serif, system-ui, -apple-system, sans-serif, \"Noto Sans Arabic\", sans-serif"
+            },
+            "--ds-font-family-mono": {
+              "moved": false,
+              "value": "'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, monospace"
             },
             "--ds-font-size-xs": {
               "moved": false,
@@ -2637,6 +2838,22 @@
             "--ds-material-canvas-texture": {
               "moved": false,
               "value": "radial-gradient(circle at 88% 4%, color-mix(in srgb, rgb(30, 132, 230) 14%, transparent), transparent 30%)"
+            },
+            "--ds-material-card-highlight": {
+              "moved": false,
+              "value": "inset 0 1px 0 color-mix(in srgb, #e4e8ed 6%, transparent)"
+            },
+            "--ds-motion-duration-scale": {
+              "moved": false,
+              "value": "1"
+            },
+            "--ds-motion-intensity": {
+              "moved": false,
+              "value": "0.55"
+            },
+            "--ds-radius-button": {
+              "moved": false,
+              "value": "calc(9px / 1.25 * 1.25)"
             },
             "--ds-radius-lg": {
               "moved": false,
@@ -2674,6 +2891,10 @@
               "moved": false,
               "value": "calc(18px / 1.25)"
             },
+            "--ds-recipe-profile": {
+              "moved": false,
+              "value": "\"rottay/network-professional@1\""
+            },
             "--ds-rhythm-effective-scale": {
               "moved": false,
               "value": "clamp(0.8, 1, 1.25)"
@@ -2681,6 +2902,38 @@
             "--ds-rhythm-scale": {
               "moved": false,
               "value": "1"
+            },
+            "--ds-select-group-text-transform": {
+              "moved": false,
+              "value": "none"
+            },
+            "--ds-sidebar-bg": {
+              "moved": false,
+              "value": "#0a0f18"
+            },
+            "--ds-sidebar-item-bg-active": {
+              "moved": false,
+              "value": "rgba(26, 127, 224, 0.12)"
+            },
+            "--ds-sidebar-item-bg-hover": {
+              "moved": false,
+              "value": "rgba(255, 255, 255, 0.04)"
+            },
+            "--ds-sidebar-item-color": {
+              "moved": false,
+              "value": "#9aacbf"
+            },
+            "--ds-sidebar-item-color-active": {
+              "moved": false,
+              "value": "#3b9af0"
+            },
+            "--ds-sidebar-text": {
+              "moved": false,
+              "value": "#9aacbf"
+            },
+            "--ds-sidebar-text-muted": {
+              "moved": false,
+              "value": "#5a7085"
             },
             "--ds-table-header-letter-spacing": {
               "moved": false,
@@ -3454,6 +3707,10 @@
               "moved": false,
               "value": "0.9"
             },
+            "--ds-edge-emphasis-width": {
+              "moved": false,
+              "value": "1px"
+            },
             "--ds-edge-standard-width": {
               "moved": false,
               "value": "1px"
@@ -3461,6 +3718,18 @@
             "--ds-effect-intensity": {
               "moved": false,
               "value": "0.58"
+            },
+            "--ds-elevation-1": {
+              "moved": false,
+              "value": "none"
+            },
+            "--ds-elevation-2": {
+              "moved": false,
+              "value": "none"
+            },
+            "--ds-elevation-3": {
+              "moved": false,
+              "value": "0 1px 2px rgba(0,0,0,0.05)"
             },
             "--ds-elevation-lift-strength": {
               "from": "0",
@@ -3471,6 +3740,22 @@
               "from": "\"rottay/bithire-technical@1\"",
               "moved": true,
               "to": "\"rottay/management-editorial@1\""
+            },
+            "--ds-font-family-base": {
+              "moved": false,
+              "value": "'Public Sans', ui-sans-serif, system-ui, -apple-system, sans-serif, \"Noto Sans Arabic\", sans-serif"
+            },
+            "--ds-font-family-display": {
+              "moved": false,
+              "value": "'Space Grotesk', ui-sans-serif, system-ui, -apple-system, sans-serif, \"Noto Sans Arabic\", sans-serif"
+            },
+            "--ds-font-family-heading": {
+              "moved": false,
+              "value": "'Space Grotesk', ui-sans-serif, system-ui, -apple-system, sans-serif, \"Noto Sans Arabic\", sans-serif"
+            },
+            "--ds-font-family-mono": {
+              "moved": false,
+              "value": "'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, monospace"
             },
             "--ds-font-size-xs": {
               "moved": false,
@@ -3492,6 +3777,22 @@
             "--ds-material-canvas-texture": {
               "moved": false,
               "value": "radial-gradient(circle at 88% 4%, rgba(58, 111, 176, 0.055), transparent 30%)"
+            },
+            "--ds-material-card-highlight": {
+              "moved": false,
+              "value": "inset 0 1px 0 rgba(255, 255, 255, 0.9)"
+            },
+            "--ds-motion-duration-scale": {
+              "moved": false,
+              "value": "1"
+            },
+            "--ds-motion-intensity": {
+              "moved": false,
+              "value": "0.55"
+            },
+            "--ds-radius-button": {
+              "moved": false,
+              "value": "calc(9px / 1.25 * 1.25)"
             },
             "--ds-radius-lg": {
               "moved": false,
@@ -3529,6 +3830,10 @@
               "moved": false,
               "value": "calc(18px / 1.25)"
             },
+            "--ds-recipe-profile": {
+              "moved": false,
+              "value": "\"rottay/network-professional@1\""
+            },
             "--ds-rhythm-effective-scale": {
               "moved": false,
               "value": "clamp(0.8, 1, 1.25)"
@@ -3536,6 +3841,38 @@
             "--ds-rhythm-scale": {
               "moved": false,
               "value": "1"
+            },
+            "--ds-select-group-text-transform": {
+              "moved": false,
+              "value": "none"
+            },
+            "--ds-sidebar-bg": {
+              "moved": false,
+              "value": "#ffffff"
+            },
+            "--ds-sidebar-item-bg-active": {
+              "moved": false,
+              "value": "color-mix(in oklab, rgb(58, 111, 176) 8%, #F4F8FB)"
+            },
+            "--ds-sidebar-item-bg-hover": {
+              "moved": false,
+              "value": "#F4F8FD"
+            },
+            "--ds-sidebar-item-color": {
+              "moved": false,
+              "value": "#53697E"
+            },
+            "--ds-sidebar-item-color-active": {
+              "moved": false,
+              "value": "#3A6FB0"
+            },
+            "--ds-sidebar-text": {
+              "moved": false,
+              "value": "#14283B"
+            },
+            "--ds-sidebar-text-muted": {
+              "moved": false,
+              "value": "#728398"
             },
             "--ds-table-header-letter-spacing": {
               "moved": false,
@@ -3622,9 +3959,10 @@
         "freshnessProven": true,
         "input": {
           "baseline": {
-            "digest": "311154af677f47d4807910322130bad40db3ea4f18d0a520ff3668aa7f35ae19",
+            "digest": "58af79982271be88f65ffeb35549d3931157b47bb8a33db1d0f9fff363459f34",
             "source": "dist/index.js#bithireBrandTheme"
           },
+          "compileOptions": {},
           "compilerInput": {
             "brandTheme": {
               "appearance": {
@@ -4622,6 +4960,7 @@
                       "separatorColor": "var(--ds-color-text-tertiary)"
                     },
                     "cardComponent": {
+                      "bg": "#151d2b",
                       "bgHover": "#1b2535",
                       "bodyColor": "var(--ds-color-text-primary)",
                       "border": "#253545",
@@ -4898,6 +5237,7 @@
                       "actionBg": "var(--ds-surface-control)",
                       "bg": "#0f1520",
                       "border": "#1d2a38",
+                      "cellColor": "#e4e8ed",
                       "cellFontSize": "0.875rem",
                       "cellPadding": "0.875rem 1rem",
                       "headerBg": "#151d2b",
@@ -5445,6 +5785,9 @@
                 }
               }
             },
+            "tenantAuthoredPaths": [
+              "expressive.experienceProfile"
+            ],
             "tenantPatch": {
               "expressive": {
                 "experienceProfile": "rottay/management-editorial@1"
@@ -6448,6 +6791,7 @@
                     "separatorColor": "var(--ds-color-text-tertiary)"
                   },
                   "cardComponent": {
+                    "bg": "#151d2b",
                     "bgHover": "#1b2535",
                     "bodyColor": "var(--ds-color-text-primary)",
                     "border": "#253545",
@@ -6724,6 +7068,7 @@
                     "actionBg": "var(--ds-surface-control)",
                     "bg": "#0f1520",
                     "border": "#1d2a38",
+                    "cellColor": "#e4e8ed",
                     "cellFontSize": "0.875rem",
                     "cellPadding": "0.875rem 1rem",
                     "headerBg": "#151d2b",
@@ -7272,8 +7617,12 @@
             }
           },
           "ingressValue": "rottay/management-editorial@1",
+          "modeScope": null,
           "path": "expressive.experienceProfile",
-          "stopId": "rottay/management-editorial@1"
+          "stopId": "rottay/management-editorial@1",
+          "tenantAuthoredPaths": [
+            "expressive.experienceProfile"
+          ]
         },
         "modeChannels": {
           "dark": [
@@ -7306,7 +7655,7 @@
         }
       },
       "restore": {
-        "comparedRows": 428,
+        "comparedRows": 470,
         "counts": {
           "byKind": {},
           "byPropertyKind": {},
@@ -7318,7 +7667,7 @@
         "rows": []
       },
       "totals": {
-        "inertProperties": 400,
+        "inertProperties": 442,
         "movedProperties": 8,
         "scope": "across every (vertical x theme x fixture x property) row measured for this arm"
       }
@@ -7398,7 +7747,7 @@
     "bundleMode": "fresh",
     "bundles": {
       "bithire": {
-        "bytes": 5351164,
+        "bytes": 5351223,
         "distMatchesStyles": true,
         "freshnessNote": "Recomposed in memory from src/foundation/tokens/css with the formula in build-vertical-css.mjs. Omits the per-tenant --ds-motion-spring tail, which requires compiled BrandTheme modules under dist/.",
         "freshnessProven": true,
@@ -7408,7 +7757,7 @@
           "src/foundation/tokens/css/facade/artifacts/bithire/index.css"
         ],
         "mode": "fresh",
-        "sha256": "74d7f4b2b4b22981d0e795ef301b9de37dddb17a0042ded741a762c5de8a1e42",
+        "sha256": "006ed5a882d3333112fb19f508de0eec3df42bbd4487fafb4a54ee4f5700dc01",
         "shippedDistDrift": {
           "identical": true,
           "prefixIdentical": true,
@@ -7418,17 +7767,19 @@
       }
     },
     "sourceFreshness": {
-      "declaredDigest": "e05c39ad4625231e137f3567e1124eab3ec02bd7dd04b98e1ab343b621e0f8ef",
-      "observedDigest": "e05c39ad4625231e137f3567e1124eab3ec02bd7dd04b98e1ab343b621e0f8ef",
-      "postMeasurementDigest": "e05c39ad4625231e137f3567e1124eab3ec02bd7dd04b98e1ab343b621e0f8ef",
-      "preMeasurementDigest": "e05c39ad4625231e137f3567e1124eab3ec02bd7dd04b98e1ab343b621e0f8ef",
+      "declaredDigest": "9c1eeb775780619526d62ac1e762b1e4ad17bf665dd85181142e2a010e832e65",
+      "observedDigest": "9c1eeb775780619526d62ac1e762b1e4ad17bf665dd85181142e2a010e832e65",
+      "postMeasurementDigest": "9c1eeb775780619526d62ac1e762b1e4ad17bf665dd85181142e2a010e832e65",
+      "preMeasurementDigest": "9c1eeb775780619526d62ac1e762b1e4ad17bf665dd85181142e2a010e832e65",
       "sourceFiles": [
         "packages/core/dist/build-stamp.json",
         "packages/core/dist/infrastructure/compilers/kernel/runtime/brand-theme/index.js",
         "packages/core/dist/server.js",
         "packages/core/manifest/controls/experience.profile.json",
+        "packages/core/manifest/controls/profiles.expressive.json",
         "packages/core/manifest/controls/shape.radius-scale.json",
         "packages/core/manifest/controls/surfaces.effect-intensity.json",
+        "packages/core/manifest/controls/surfaces.elevation-posture.json",
         "packages/core/manifest/controls/typography.scale.json",
         "packages/core/manifest/families/primitive/display/card.json",
         "packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts",
@@ -7447,8 +7798,10 @@
         "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card.css",
         "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/card.css",
         "packages/core/src/foundation/tokens/css/runtime/personality.css",
+        "packages/core/src/foundation/tokens/ts/presentation/expressive-profiles/expansion/index.ts",
         "packages/core/src/foundation/tokens/ts/presentation/expressive-profiles/index.ts",
         "packages/core/src/infrastructure/compilers/composition/tenant-theme/index.ts",
+        "packages/core/src/infrastructure/compilers/kernel/foundation/css/appearance-posture/index.ts",
         "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
         "packages/core/src/infrastructure/runtime/bootstrap/facade/react/provider/index.tsx",
         "packages/core/src/tooling/resolution-probe/composition/data-run/index.mjs",
@@ -7487,33 +7840,33 @@
     "stylesheets": {
       "db-tenant-theme": {
         "bithire/dark/modern/both": {
-          "baseline": "74d7f4b2b4b22981d0e795ef301b9de37dddb17a0042ded741a762c5de8a1e42",
-          "mutation": "d5884ee204839ab66f43967b4b2006569e3b9444cd57e97217cb141eeef582be",
+          "baseline": "006ed5a882d3333112fb19f508de0eec3df42bbd4487fafb4a54ee4f5700dc01",
+          "mutation": "0dc594e8853eb425742866e4477d5f467780b9379886351a9694efd5e2be3607",
           "mutationDifferedFromBaseline": true,
-          "removal": "74d7f4b2b4b22981d0e795ef301b9de37dddb17a0042ded741a762c5de8a1e42",
+          "removal": "006ed5a882d3333112fb19f508de0eec3df42bbd4487fafb4a54ee4f5700dc01",
           "removalIsByteIdenticalToBaseline": true
         },
         "bithire/light/modern/both": {
-          "baseline": "74d7f4b2b4b22981d0e795ef301b9de37dddb17a0042ded741a762c5de8a1e42",
-          "mutation": "d5884ee204839ab66f43967b4b2006569e3b9444cd57e97217cb141eeef582be",
+          "baseline": "006ed5a882d3333112fb19f508de0eec3df42bbd4487fafb4a54ee4f5700dc01",
+          "mutation": "0dc594e8853eb425742866e4477d5f467780b9379886351a9694efd5e2be3607",
           "mutationDifferedFromBaseline": true,
-          "removal": "74d7f4b2b4b22981d0e795ef301b9de37dddb17a0042ded741a762c5de8a1e42",
+          "removal": "006ed5a882d3333112fb19f508de0eec3df42bbd4487fafb4a54ee4f5700dc01",
           "removalIsByteIdenticalToBaseline": true
         }
       },
       "static-brand-theme": {
         "bithire/dark/modern/both": {
-          "baseline": "74d7f4b2b4b22981d0e795ef301b9de37dddb17a0042ded741a762c5de8a1e42",
-          "mutation": "541a53d087efb07f5775999efc32e45c7ccc0cf81787510c8995eb2da0576587",
+          "baseline": "006ed5a882d3333112fb19f508de0eec3df42bbd4487fafb4a54ee4f5700dc01",
+          "mutation": "2fc9065f4c4f069b6aa2e9d73121d0cece4519351cb7a0c325bb5c54f1a35df9",
           "mutationDifferedFromBaseline": true,
-          "removal": "74d7f4b2b4b22981d0e795ef301b9de37dddb17a0042ded741a762c5de8a1e42",
+          "removal": "006ed5a882d3333112fb19f508de0eec3df42bbd4487fafb4a54ee4f5700dc01",
           "removalIsByteIdenticalToBaseline": true
         },
         "bithire/light/modern/both": {
-          "baseline": "74d7f4b2b4b22981d0e795ef301b9de37dddb17a0042ded741a762c5de8a1e42",
-          "mutation": "541a53d087efb07f5775999efc32e45c7ccc0cf81787510c8995eb2da0576587",
+          "baseline": "006ed5a882d3333112fb19f508de0eec3df42bbd4487fafb4a54ee4f5700dc01",
+          "mutation": "2fc9065f4c4f069b6aa2e9d73121d0cece4519351cb7a0c325bb5c54f1a35df9",
           "mutationDifferedFromBaseline": true,
-          "removal": "74d7f4b2b4b22981d0e795ef301b9de37dddb17a0042ded741a762c5de8a1e42",
+          "removal": "006ed5a882d3333112fb19f508de0eec3df42bbd4487fafb4a54ee4f5700dc01",
           "removalIsByteIdenticalToBaseline": true
         }
       }

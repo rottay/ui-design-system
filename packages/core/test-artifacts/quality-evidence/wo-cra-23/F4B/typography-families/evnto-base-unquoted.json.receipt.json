@@ -5,7 +5,7 @@
   "scenarioId": "typography.families/base-unquoted/evnto/static-and-db",
   "evidenceKind": "static-db-computed-parity",
   "commandOrTool": "node src/tooling/resolution-probe/public/cli/index.mjs causal",
-  "toolVersion": "resolution-probe@471baf755c2a",
+  "toolVersion": "resolution-probe@c96c110b3cfb",
   "exitCode": 0,
   "sourceFiles": [
     "packages/core/dist/build-stamp.json",
@@ -18,6 +18,7 @@
     "packages/core/src/foundation/tokens/css/facade/artifacts/evnto/index.css",
     "packages/core/src/foundation/tokens/css/facade/entrypoints/base.css",
     "packages/core/src/foundation/tokens/css/foundation/base/typography.css",
+    "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
     "packages/core/src/foundation/tokens/css/runtime/engines/modern/compiled.css",
     "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css",
     "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/typography.css",
@@ -64,10 +65,10 @@
     "packages/core/src/ui/primitives/display/Typography/tests/Typography.test.tsx",
     "packages/core/src/ui/primitives/display/Typography/tests/Typography.type-roles.test.tsx"
   ],
-  "sourceDigest": "ea139cf23e6c9c7159fc34afe66f418901de281cd715aba391f4007a5a542585",
+  "sourceDigest": "bd042653827d6f9521d2048fdaa4841eccc0b864c4349181a6cf997d18844afc",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/typography-families/evnto-base-unquoted.json",
-  "artifactSha256": "f396d60529b798cbf86b83ff4ee8ac1fb61f1ec55681925f2fece06b0f9a8f1c",
-  "createdAt": "2026-08-25T12:55:54.875Z",
+  "artifactSha256": "ab976c24f2f01cdff3bc3ad3567eb94fa046836ffc9f15dfe4d9a5af50e32953",
+  "createdAt": "2026-08-25T17:12:59.269Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,
