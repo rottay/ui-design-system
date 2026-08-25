@@ -1477,6 +1477,21 @@ const TRANSITIVE_SUITES = [
 ];
 
 test("A11: los tres suites nuevos son blocking por transporte, y pasan en proceso limpio", () => {
+  // CONTENCION, DICHA EN EL FALLO (diagnostico pcheck-test-hang, 2026-08-25):
+  // `cascade-producers.test.mjs` re-deriva un inventario de 215.942 leaves
+  // desde el arbol VIVO (TC-7/T-21 recomputan y comparan contra lo
+  // commiteado). Si otro carril edita .ts/.tsx MIENTRAS este test corre, la
+  // divergencia medida es real pero no es un defecto del inventario -- es el
+  // mismo arbol visto en dos instantes. Medido: 217/217 en ventana tranquila;
+  // exactamente T-21 y TC-7 rojos con un build en vuelo en el mismo carril.
+  const CONTENTION_NOTE =
+    "\n\n(este drill exige arbol QUIETO: los suites transitivos leen el arbol " +
+    "vivo, no un snapshot. Si hay otro carril escribiendo -- build en vuelo, " +
+    "ediciones .ts/.tsx sin commitear -- el rojo es CONTENCION ESPERADA, no " +
+    "un defecto del inventario: re-correr en ventana tranquila antes de " +
+    "adjudicar. Causa medida, no hipotetica: T-21/TC-7 reproducibles con un " +
+    "build en vuelo; 217/217 en ventana tranquila. Ver " +
+    "pcheck-test-hang-opus-diagnosis.md §4.)";
   for (const suite of TRANSITIVE_SUITES) {
     const abs = join(LIVE, suite);
     assert.ok(existsSync(abs), `${suite} debe existir para ser alcanzable`);
@@ -1487,20 +1502,46 @@ test("A11: los tres suites nuevos son blocking por transporte, y pasan en proces
     const childEnv = { ...process.env };
     delete childEnv.NODE_TEST_CONTEXT;
     delete childEnv.NODE_OPTIONS;
+    // Falla FUERTE, no muda (diagnostico pcheck-test-hang, 2026-08-25):
+    // `cascade-producers.test.mjs` solo mide 334 s (5m34s) en ventana
+    // tranquila -- el suite mas caro de los tres, y el 99% del costo de este
+    // drill entero. Sin `timeout` un carril trabado deja este `spawnSync`
+    // bloqueando el hilo principal en silencio: el reporter no puede vaciar
+    // su salida mientras tanto, asi que la ULTIMA LINEA VISIBLE queda muy
+    // atras del punto donde el proceso realmente trabaja -- la ilusion
+    // exacta que se leyo como "cuelga en el test 45". 900_000 ms (15 min) da
+    // holgura 2,5x sobre los 334 s medidos. `maxBuffer` generoso porque 217
+    // tests en TAP producen bastante stdout y un buffer corto tronca
+    // silenciosamente la salida que este mismo assert necesita mostrar.
+    // Progreso por stderr, ANTES del spawn (diagnostico pcheck-test-hang):
+    // el `node --test` runner SI re-emite esta escritura como comentario TAP
+    // (`# [a11] running ...`) dentro del mismo stdout -- medido con una
+    // probe aislada (spawnSync sync de 4s), y no como un stream crudo de
+    // stderr al margen del reporter. Lo que importa se mide igual: la linea
+    // se vacia AL TOQUE, ANTES de que el spawnSync bloqueante empiece a
+    // correr -- confirmado leyendo el archivo de salida A MITAD del sleep de
+    // la probe, mientras el proceso seguia bloqueado. Sin esto los 5m43s de
+    // cascade-producers son silencio total; con esto, la ultima linea del
+    // stream ya dice "running cascade-producers.test.mjs" antes de que
+    // arranque el bloqueo, no despues de que termine.
+    process.stderr.write(`[a11] running ${suite} (may take minutes)...\n`);
     const run = spawnSync(process.execPath, ["--test", abs], {
       cwd: join(LIVE, "packages/core"),
       encoding: "utf8",
       env: childEnv,
+      timeout: 900_000,
+      maxBuffer: 64 * 1024 * 1024,
     });
+    process.stderr.write(`[a11] ${suite} exited status=${run.status} signal=${run.signal ?? "none"}\n`);
     assert.equal(
       run.status,
       0,
-      `${suite} salio ${run.status}\n--- stdout ---\n${run.stdout ?? ""}\n--- stderr ---\n${run.stderr ?? ""}`,
+      `${suite} salio ${run.status}${run.signal ? ` (signal ${run.signal}, probable timeout)` : ""}\n--- stdout ---\n${run.stdout ?? ""}\n--- stderr ---\n${run.stderr ?? ""}${CONTENTION_NOTE}`,
     );
     assert.match(
       run.stdout ?? "",
       /^# fail 0$/m,
-      `${suite} debe reportar 0 fallas\n--- stdout (cola) ---\n${(run.stdout ?? "").split("\n").slice(-40).join("\n")}\n--- stderr ---\n${run.stderr ?? ""}`,
+      `${suite} debe reportar 0 fallas\n--- stdout (cola) ---\n${(run.stdout ?? "").split("\n").slice(-40).join("\n")}\n--- stderr ---\n${run.stderr ?? ""}${CONTENTION_NOTE}`,
     );
   }
 });

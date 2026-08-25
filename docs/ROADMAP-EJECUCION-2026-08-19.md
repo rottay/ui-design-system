@@ -4199,6 +4199,25 @@ es el estado normal de un worktree con lanes). (3) derivar una vez a nivel
 de módulo queda registrado para cuando se mida cuántos de los 217
 re-derivan (sin medir, no se toca). CI-4 va a Sonnet tras F4B-12.
 
+**CI-4 — el drill A11 endurecido (2026-08-25; Sonnet; postaudit Fable:
+ACCEPT con validación de fuego real — su propia corrida ejercitó la rama de
+FALLO y el diseño funcionó de punta a punta).** Un archivo
+(`program-check.test.mjs`): (1) `timeout: 900_000` + `maxBuffer: 64MB` en el
+`spawnSync` (15 min = 2,5× los 334 s medidos) — un suite trabado FALLA con
+su stdout en vez de parecer colgado; (2) progreso `[a11] running/exited`
+por suite — los 5m43s dejan de ser silencio (con la precisión honesta
+medida: el runner SÍ captura stderr como comentario TAP pero lo vacía de
+inmediato, que es lo que el objetivo necesitaba; el comentario de código
+quedó corregido al mecanismo medido, no al asumido); (3) `CONTENTION_NOTE`
+en ambos mensajes de aserción: el drill exige árbol quieto, y un rojo con
+un carril escribiendo fuente es contención esperada, no defecto del
+inventario (causa medida citada: T-21/TC-7 reproducibles con build en
+vuelo; 217/217 en ventana tranquila). Verificado: 48/48 dos veces (~6 min
+cada una, progreso visible), timeout greppeado, render sintético del
+mensaje. El hallazgo de entorno que arrastraba el programa desde F4B-11 (6
+corridas, 1 verde) queda cerrado con causa medida, síntoma corregido y
+fallo que dice la verdad.
+
 **F4B-11 — typography.pairing CIERRA SOURCE_BOUND (2026-08-24; Sonnet;
 postaudit Fable: ACCEPT — "el falso-verde más peligroso del censo quedó
 cerrado con el keypath real").** Keypath corregido (el de OTRO control →
