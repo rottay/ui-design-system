@@ -4099,6 +4099,37 @@ correctamente re-derivar `producers.json` con el registry de F4B-12 en
 vuelo (habría horneado trabajo ajeno en su atestación — la clase que el
 programa mata).
 
+**F4B-12 — postaudit Fable: REJECT local (texto) + RULING DT de anchura:
+ENSANCHAR a los 6 canales (2026-08-25).** La mecánica del packet estaba bien
+(keypath `chrome.sidebar.tone` contra `SIDEBAR_TONE_FIELD`, canal
+`--ds-sidebar-item-color-active`, drill fail-closed que parsea el fuente —
+nunca import, por el ruling de capas; 9 corridas verdaderas para lo que
+medían; la predicción B-2 de Fable cumplida: drill 6 disparó con la segunda
+intersección real — la cerca funcionando como se diseñó). Lo que no cerró:
+**la prosa declaraba 6 canales mientras los artifacts prueban 2 declarados**
+(los otros 4 tone leaves nunca se movieron — el harness sólo aplica lo
+declarado): la clase "medición correcta, prosa inventada al redactar el
+asiento", por segunda vez en el programa (R-2/F4B-10). **RULING DT: (a)
+ensanchar** — la autoridad del control ES la tabla cerrada de 6
+(`SIDEBAR_TONE_LEAF_FIELDS`) y el objetivo del programa es controles que
+gobiernan múltiples canales; declarar 2 de 6 sub-declara la superficie real.
+El fixture ya lee los 7 (6 del tono + el vecino itemColor como medición
+directa), el drill ya fija declarados ⊆ tabla: se re-corren los 9 escenarios
+con los 6 declarados (evidencia causal REAL — no re-atestación) y el testigo
+del vecino pasa a probar exactamente lo que dice (los 6 del tono se mueven,
+el vecino no). Correcciones de texto asociadas: F2 (layout-sidebar.css SÍ
+existe — es el skin de geometría; la evidencia correcta es que no produce
+ninguno de los 6 canales del tono ni los 3 sockets fantasma), F3 (la tabla
+de rangos colapsa NO porque los verticales no autoren leaves — los 3 autoran
+los 6 tone leaves — sino porque `tenantAuthoredPaths` lleva SÓLO el path del
+stop: ningún leaf es tenant-authored — la ley B-2), F4 ("imports" →
+"parses"), F5 (62 → 72 re-stamps). Nota de vara de Fable asentada: un
+chequeo mecánico de consistencia manifest-vs-receipts (canales declarados
+vs glosas numéricas) atraparía la mitad de esta clase — entra en el diseño
+de CI-2. Y atribución pendiente de verificar: `capability-propagation`
+(rojo del backlog desde D-1) quedó verde con este registry en el árbol — si
+el fix del wildcard es la causa, ese rojo se cierra con este packet.
+
 **F4B-11 — typography.pairing CIERRA SOURCE_BOUND (2026-08-24; Sonnet;
 postaudit Fable: ACCEPT — "el falso-verde más peligroso del censo quedó
 cerrado con el keypath real").** Keypath corregido (el de OTRO control →
