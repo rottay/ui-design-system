@@ -3998,6 +3998,33 @@ rojos antes, el throw los tapaba); 3 pins rancios más del backlog (~56
 restantes tras CI-1+D-1: 18 clase drenaje cerrados + sentinel + los pins de
 CI-1).
 
+**F4B-11 — typography.pairing: el "apagado total" era ARTEFACTO DE MEDICIÓN
+(diagnóstico Opus, 2026-08-24; pausa levantada, cierre en vuelo).** Sonnet
+midió `typePairing` parcheado DENTRO del BrandTheme (la selección muere en
+`:889/:891`, donde la familia literal del tema pisa la expansión — conducta
+querida) y reportó apagado total en las 3 verticales. Con la forma REAL de la
+sonda (wiring literal del CLI: `loadCompilerArms` + `loadStaticBaselines` +
+`verticalDefaultMode` + `lowerStop`), el stop viaja como `tenantPatch` y el
+piso escribe DESPUÉS (`:1094`, único escritor posterior a `:889`): **el
+estático mueve los 2 canales en los 4 stops de las 3 verticales, 12/12**.
+H-2 pasa en AMBOS brazos sin excepción (las colisiones intra-pairing
+`technical.heading==sober.heading` / `technical.base==geometric.base` son
+reales pero cada par de stops se distingue en al menos un canal), y la
+paridad entre puertas es **24/24 byte-exacta**. La ley "an explicit family
+still wins" cubre la familia explícita DEL TENANT contra la selección de
+pairing DEL MISMO TENANT (el texto se declara DB-only; el commit que la
+escribió, `cfd42c2df`, no tocó el compilador estático — la ruta no existía):
+**no hay que acotar la ley ni tocar el compilador**. Confirmación colateral
+valiosa: el brazo DB funciona POR E-1 — antes de E-1 la ruta DB tenía la
+forma A (el tema resuelto lleva las literales del vertical + el typePairing
+del tenant, y moría en `:889`); el piso que E-1 instaló es lo que lo salva.
+**Lección de vara asentada:** medir SIEMPRE con la forma real de la sonda
+(wiring copiado del CLI), nunca con una llamada armada a mano — un resultado
+de instrumento reportado contra otra forma de llamada es un artefacto, y el
+costo de la pausa es real. Corolario para briefs futuros: cuando un control
+"mide cero" en un brazo, la primera pregunta es la forma de la llamada, no el
+compilador.
+
 **F0 — CERRADO (2026-08-19).** Criterio de cierre cumplido:
 `ci-gates OK — 78 blocking gate(s) passed` (2 excluded visibles con razón y
 dueño: channel-liveness y lane-control-drills, ambos esperan a F2); `find src -type d -empty` vacío salvo el inbox
