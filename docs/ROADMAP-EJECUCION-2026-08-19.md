@@ -4345,6 +4345,48 @@ dos escenarios distintos y ambos deben medirse** — la ley declarada en un
 caso no se extiende al otro sin medición (la misma clase que la partición de
 scope de palette.seeds).
 
+**E-2 — el piso del tenant gana su segunda mitad (2026-08-25; Opus; preaudit
+Fable ACCEPT con W-A/W-B; implementado y verificado en cadena completa).**
+El sitio del defecto es el piso (`brand-theme:1093-1094`), no el puente ni
+la resolución (probado por la tercera ruta: composed-in-theme sin patch
+funciona — el mecanismo base está sano). **Atribución honesta asentada: la
+mitad DB del defecto nació en E-1** (`bae71c705` — antes de E-1 la puerta DB
+no pasaba `tenantPatch`, el piso no corría, y el literal era el último
+escritor: la explícita ganaba; E-1 arregló elevation y extendió el defecto a
+la puerta DB). **El fix:** después de `Object.assign(vars,
+appearancePostureToVariables(tenantPosture))`, el piso re-aplica los
+literales que el TENANT autoró, **cada campo con el trato idéntico al del
+cuerpo** (familias con `withArabicSafeFallback`; mono/letterSpacing crudos;
+lineHeight con `String(...)`) — el detalle que distingue corrección
+invariante de regresión silenciosa, asertado (aislado byte-idéntico).
+Gatillo: sólo lo que viaja en el patch → el literal de la VERTICAL no viaja
+ahí y el pairing del tenant la sigue pisando (opción B y F4B-11 intactas,
+con drill propio). **W-A:** la puerta DB pasa las familias por la PROYECCIÓN
+(`tenantPostureFloors` proyecta además `fontFamilyBase`/`fontFamilyHeading`
+— los dos que el schema v1 admite; sin ella el fix arreglaba sólo el
+estático, la inversa exacta de la asimetría que E-1 creó); el docblock se
+actualizó a la verdad nueva (lección F4B-13). **W-B medido:** el piso
+también pisaba `letterSpacing.heading` (0.09em → 0) y `lineHeight.display`
+(1.42 → 1.2 — nadie lo había medido; Opus lo midió antes de escribirlo);
+van en el fix por el estático (el schema v1 los rechaza, así que ese
+compuesto sólo existe ahí — asimetría asentada con mediciones). **El fence:
+9/9** (compuesto en ambas puertas byte-exacto al literal con fallback;
+`technical`+mono sin wrapper como el cuerpo; `editorial`+LS/LH sobreviviendo;
+la preservación explícita de F4B-11; aislado idéntico pre/post; el overlay
+re-corre las dos mitades). **`capability-propagation:573` VERDE** — el rojo
+que motivó el packet. **Anclas escritos por el DT** (autorizados por el
+owner; los 5 subpaths con comentarios: provider 2003638, typography 1705960,
+skeleton 1707364, dashboard-header 2304283, collection-workspace 3552241 —
+medidos con el medidor del gate, dos corridas deterministas; el piso
+irreducible con CERO comentarios seguía 563 B por encima del ancla viejo, la
+razón escrita; aterrizan con cero aire, decrease-only desde ahí).
+`hooks-manifest.json` entra al write-set como consecuencia derivada probada
+(+5 emisiones concretas del fix; el revert prueba que la causa es E-2 y no
+el archivo ajeno en vuelo). Cadena: build EXIT=0, dist-freshness OK,
+`[needs dist]` 240/240, provenance 24/24. Rojo preexistente registrado:
+`capability-propagation:546` (pin rancio de F4B-13 — el set alcanzado creció
+legítimamente con motion.dial; lo arregla Sonnet en el cierre fusionado).
+
 **F4B-11 — typography.pairing CIERRA SOURCE_BOUND (2026-08-24; Sonnet;
 postaudit Fable: ACCEPT — "el falso-verde más peligroso del censo quedó
 cerrado con el keypath real").** Keypath corregido (el de OTRO control →
