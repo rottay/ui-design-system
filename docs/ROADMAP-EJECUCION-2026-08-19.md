@@ -4317,6 +4317,34 @@ re-atestación de Sonnet. Con esto, typography.families (el control más
 barato de la cola: ambos keypaths limpios) queda desbloqueado para su
 calibración — F4B-14 sigue.
 
+**F4B-14 — STOP y RULING DT: el caso compuesto es un defecto real de
+compilador, y E-2 entra EN F4B-14 (2026-08-25; escalado por el owner).**
+Sonnet midió lo que el brief pedía verificar: la ley "explicit family wins"
+se cumple en el caso AISLADO (la familia explícita del tenant gana limpio)
+pero **es falsa en el caso COMPUESTO** (documento con `typePairing` Y
+`fontFamilyHeading` a la vez — la forma realista conjunta de las dos
+features): mutar la familia explícita no mueve nada, el canal compila a la
+expansión del pairing en ambos — **el pairing gana sobre la familia
+explícita del tenant**. Es un defecto de producción (un tenant que declara
+un preset y además un override explícito ve su override pisado por el
+preset), y es exactamente el rojo de `capability-propagation:573` ("does
+not let one capability move another capability's exclusive channel") — que
+NO se explica por ninguna adjudicación de precedencia (la precedencia
+declarada es cierta sólo en el aislado). **Ruling DT (coincide con la
+escalada del owner):** E-2 entra EN F4B-14 (el patrón E-1 dentro de F4B-10):
+Opus diagnostica el sitio exacto → ruling → preaudit → fix del compilador
+dentro del write-set (disjunto: compilador solamente) → Sonnet agrega las
+corridas del caso compuesto (un documento con typePairing + familia
+explícita, probando que la explícita gana en AMBOS brazos) → cierre. Los 12
+receipts del caso aislado quedan como evidencia válida de lo que midieron
+(nunca certificaron el compuesto — declarado en el manifest, cuya nota de
+precedencia ya fue reescrita a la verdad medida por Sonnet). `assessmentState`
+queda en SOURCE_BOUND hasta que el compuesto esté receipteado. La nota de
+método que se repite y queda asentada: **el caso aislado y el compuesto son
+dos escenarios distintos y ambos deben medirse** — la ley declarada en un
+caso no se extiende al otro sin medición (la misma clase que la partición de
+scope de palette.seeds).
+
 **F4B-11 — typography.pairing CIERRA SOURCE_BOUND (2026-08-24; Sonnet;
 postaudit Fable: ACCEPT — "el falso-verde más peligroso del censo quedó
 cerrado con el keypath real").** Keypath corregido (el de OTRO control →
