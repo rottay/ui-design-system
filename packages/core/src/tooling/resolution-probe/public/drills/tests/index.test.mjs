@@ -272,3 +272,125 @@ test('the applied-sheet canary certifies each layer a scope actually has', async
     'the tenant-layer canary must be present in a tenanted bundle',
   );
 });
+
+
+/* ==========================================================================
+ * PACKET 1 (DATA) — the descriptor that parameterises the DATA runner.
+ *
+ * The runner used to BE responsive.posture: its document shape, artifact field,
+ * equality surface, fail-closed default and bypass were literals in the
+ * function body. These drills fence the refactor that moved them into a
+ * per-control descriptor.
+ * ========================================================================== */
+
+import { execFileSync } from 'node:child_process';
+import { mkdtempSync, readFileSync, rmSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join, resolve as resolvePath } from 'node:path';
+
+import { CORE_ROOT } from '../../../foundation/paths/index.mjs';
+
+const DATA_CLI = 'src/tooling/resolution-probe/public/cli/index.mjs';
+
+/**
+ * DRILL 1 — INVARIANCE, and it is the guard against a false green.
+ *
+ * A refactor of an instrument is only honest if the instrument still says the
+ * same thing. The three live `responsive.posture` receipts pin artifacts that
+ * were produced by the OLD hardcoded runner; if the descriptor changed the
+ * document by one key, the equality surface by one entry, or the witness order,
+ * the artifact would move and those receipts would be silently describing a
+ * scene nobody measures any more.
+ *
+ * So: re-run the control through the NEW runner and compare the bytes to the
+ * artifact on disk, ignoring only the fields that are volatile by construction.
+ */
+test('PACKET-1 drill 1: the descriptor reproduces the live artifact byte-identically', () => {
+  const box = mkdtempSync(join(tmpdir(), 'packet1-data-'));
+  try {
+    for (const vertical of ['rottay', 'bithire', 'evnto']) {
+      const committedPath = resolvePath(
+        CORE_ROOT,
+        `test-artifacts/quality-evidence/wo-cra-23/F4B/responsive-posture/${vertical}.json`,
+      );
+      const committed = JSON.parse(readFileSync(committedPath, 'utf8'));
+      const out = join(box, `${vertical}.json`);
+      /* The invocation is read off the artifact itself rather than hardcoded:
+       * the committed run asked the bypass question (`bypass.requestedId`), and
+       * a re-run that skipped it would differ for a reason that has nothing to
+       * do with the refactor -- which is exactly the false comparison this
+       * drill exists to prevent. */
+      const bypassId = committed.bypass?.requestedId ?? null;
+      execFileSync(
+        process.execPath,
+        [
+          DATA_CLI,
+          'data-causal',
+          '--control-manifest',
+          'manifest/controls/responsive.posture.json',
+          '--vertical',
+          vertical,
+          ...(bypassId === null ? [] : ['--bypass-id', bypassId]),
+          '--out',
+          out,
+          '--quiet',
+        ],
+        { cwd: CORE_ROOT, encoding: 'utf8' },
+      );
+      const produced = JSON.parse(readFileSync(out, 'utf8'));
+      // `provenance.browser` and any timestamp are volatile by construction;
+      // everything the report ASSERTS is not.
+      const strip = (artifact) => {
+        const copy = JSON.parse(JSON.stringify(artifact));
+        delete copy.provenance;
+        return copy;
+      };
+      assert.deepEqual(
+        strip(produced),
+        strip(committed),
+        `${vertical}: the descriptor changed what the runner reports`,
+      );
+      assert.equal(produced.verdict.pass, committed.verdict.pass, `${vertical}: verdict moved`);
+    }
+  } finally {
+    rmSync(box, { recursive: true, force: true });
+  }
+});
+
+/**
+ * DRILL 2 — FAIL-CLOSED.
+ *
+ * A control with no descriptor must break the run and NAME itself. Falling back
+ * to a default would run one control's document under another control's id and
+ * publish the result as that control's evidence -- a false green with a receipt
+ * attached.
+ */
+test('PACKET-1 drill 2: a control with no descriptor is refused, by name', () => {
+  let stderr = '';
+  let exitCode = 0;
+  try {
+    execFileSync(
+      process.execPath,
+      [
+        DATA_CLI,
+        'data-causal',
+        // A real manifest with real stops, but no DATA descriptor: the DATA
+        // runner has no idea what document this control's tenant writes.
+        '--control-manifest',
+        'manifest/controls/density.mode.json',
+        '--vertical',
+        'bithire',
+        '--quiet',
+      ],
+      { cwd: CORE_ROOT, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] },
+    );
+  } catch (error) {
+    exitCode = error.status;
+    stderr = String(error.stderr ?? '');
+  }
+  assert.notEqual(exitCode, 0, 'a control with no descriptor must not exit 0');
+  assert.match(stderr, /no DATA-terminal descriptor for control "density\.mode"/);
+  // It names the law and the way out, not just the symptom.
+  assert.match(stderr, /refuses to guess/);
+  assert.match(stderr, /Declared: responsive\.posture/);
+});

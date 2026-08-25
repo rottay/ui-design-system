@@ -4317,6 +4317,49 @@ re-atestación de Sonnet. Con esto, typography.families (el control más
 barato de la cola: ambos keypaths limpios) queda desbloqueado para su
 calibración — F4B-14 sigue.
 
+**PACKET 1 DATA — el runner DATA queda parametrizado por descriptor
+(2026-08-25; Opus; postaudit Fable: ACCEPT — "la invariancia la probé con mis
+propias manos: los 3 artifacts vivos se reproducen byte-idénticos bajo el
+runner nuevo"; write-set exacto verificado).** Habilitador de instrumento
+para los controles DATA (profiles.icon, chrome.anatomy), SIN controles.
+`commandDataCausal` era responsive.posture con literales cableados; ahora una
+tabla `DATA_TERMINAL_DESCRIPTORS` (Object.freeze) declara por control:
+`document(stopId)`, `fieldPath`, `equalitySurface`, `witnesses`,
+`failClosedDefault`, `bypass` (opcional — un `--bypass-id` sobre un control
+sin bypass declarado es RECHAZADO: ausencia, no false). Desviación declarada
+y aceptada: fueron SEIS literales, no cinco — `failClosedDefault` bajó al
+descriptor por la razón que su propio comentario ya daba (no puede ser
+constante). `buildDataCausalReport`, `writeEvidence` y el contrato de
+evidencia: intactos. **Drill 1 (la guarda): los 3 artifacts vivos de
+responsive.posture se reproducen BYTE-IDÉNTICOS con el runner parametrizado**
+(rottay/bithire/evnto, payload y archivo entero), contra un `dist`
+certificado por UN build limpio bajo la ley del lock; la invocación del
+re-run se reconstruye DESDE el artifact (el bypass.requestedId no se
+hardcodea — bug del propio drill encontrado y corregido por el
+implementador). **Drill 2: un controlId sin descriptor TIRA nombrando el
+control y la ley** ("refuses to guess; Declared: responsive.posture") — un
+fallback correría el documento de un control bajo el id de otro. Write-set:
+2 archivos (`public/cli/index.mjs` +157/-35,
+`public/drills/tests/index.test.mjs` +122). **LEY NUEVA DEL PROGRAMA
+(owner, 2026-08-25): `heavyBuildOrTest.maximum = 1` GLOBAL** — nació de un
+incidente real: dos `pnpm build` concurrentes sobre el mismo `dist` dejaron
+evidencia no certificable; se retiró y se re-corrió entera. El lock es
+`/private/tmp/modern-rescue-heavy.lock` (una cosa pesada por toma; >30 min
+tomado se escala al DT, no se borra); paralelizar análisis y writes
+disjuntos sí, builds/tests pesados no. **Deuda transitoria declarada que
+este commit carga (ley (i): el packet con re-emisión total cierra último y
+salda todo):** `public/cli/index.mjs` está en `sourceFiles` de los 113
+receipts → quedan stale en digest (los 112 hallazgos de frescura +
+program-check.test `:180` rojo) hasta que F4B-16 re-emita; el rojo A11 de
+program-check.test visto en la verificación era el drift del registry de
+F4B-16 en vuelo (cascade: 1 leaf srcTsx, 0 colecciones — NO entra a este
+commit). El rojo de `ingress` visto en las suites (`type-geometric` de
+profiles.expressive) es trabajo de F4B-16 a mitad de camino (0 ocurrencias
+en HEAD), probado dos veces; tampoco entra a este commit. Verificación DT:
+drills 20/20, suites del probe 241/242 (único rojo = el ajeno probado),
+program-check 119 hallazgos todos clasificados, program-check.test 46/48
+(los 2 triagiados arriba), GAT-07 resellado (926b0ada…).
+
 **F4B-15 — recipe-profile CIERRA SOURCE_BOUND (2026-08-25; Sonnet; fix del
 instrumento ratificado por ruling DT; postaudit Fable: ACCEPT — "el primer
 control del espacio advanced medido end-to-end; FASE-A queda viva en evidencia

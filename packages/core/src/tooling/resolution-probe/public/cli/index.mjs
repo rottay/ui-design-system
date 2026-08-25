@@ -511,6 +511,91 @@ function causalFreshnessSourceFiles({
  * command REFUSES such a control by construction (empty declaredOutputs), which
  * is why this is a separate command and not a flag.
  */
+/* ==========================================================================
+ * THE DATA-TERMINAL DESCRIPTORS
+ *
+ * A DATA control paints nothing, so its causal question is asked of a FIELD and
+ * of the production reader that consumes it. Those two things are all that
+ * differs between one DATA control and the next -- the report shape, the guards,
+ * the equality surface algebra and the receipt are already generic
+ * (`buildDataCausalReport`). Until now they were literals inside the runner, so
+ * the runner WAS responsive.posture.
+ *
+ * A descriptor states, per control:
+ *   `document`        how the tenant writes the stop (the document shape)
+ *   `fieldPath`       where the compiled artifact carries it
+ *   `equalitySurface` the siblings held constant, so "only this moved" is a
+ *                     claim about a surface and not about one field
+ *   `witnesses`       the BEHAVIOURAL half: the production reader answering the
+ *                     consumer's own question off the compiled artifact
+ *
+ * Adding a control is adding a row. Nothing here decides whether the control is
+ * live, admissible or receipted -- the manifest does.
+ * ========================================================================== */
+const DATA_TERMINAL_DESCRIPTORS = Object.freeze({
+  'responsive.posture': {
+    /* The three siblings held constant are NON-COLOUR on purpose: an authored
+     * card colour trips the compiler's APCA validation in dark mode, and a probe
+     * that cannot compile its own baseline proves nothing about the field it
+     * came to measure. */
+    document: (stopId) => ({
+      visualFoundation: {
+        advanced: {
+          tokenOverrides: { '--ds-radius-md': '10px' },
+          chrome: { cardComponent: { anatomy: 'underline' } },
+          profiles: { edge: 'inset-double' },
+          ...(stopId === undefined ? {} : { responsivePosture: stopId }),
+        },
+      },
+    }),
+    fieldPath: ['normalizedAppearance', 'advanced', 'responsivePosture'],
+    equalitySurface: ['chrome', 'tokenOverrides', 'profiles', 'responsivePosture'],
+    witnesses: measurePostureBehaviour,
+    failClosedDefault: ({ resolveResponsivePosture }) =>
+      resolveResponsivePosture(undefined)?.id ?? null,
+    bypass: ({ bypassId, compile, documentFor, failClosedDefaultId, resolveActiveResponsivePosture }) => {
+      let threw = false;
+      try {
+        compile(documentFor(bypassId));
+      } catch {
+        threw = true;
+      }
+      const rendered = resolveActiveResponsivePosture({
+        appearance: { advanced: { responsivePosture: bypassId } },
+      });
+      return {
+        requestedId: bypassId,
+        writeTime: { threw },
+        renderTime: { resolvedId: rendered?.id ?? null },
+        expectedDefaultId: failClosedDefaultId,
+      };
+    },
+  },
+});
+
+/**
+ * The descriptor for a control, or a refusal that names it.
+ *
+ * FAIL-CLOSED ON PURPOSE, and this is the half that matters: falling back to a
+ * default descriptor would run SOME control's document under ANOTHER control's
+ * id and report the result as that control's evidence. A missing descriptor is
+ * a gap in this table, not a stop that cannot lower.
+ */
+function dataTerminalDescriptor(controlId) {
+  const descriptor = DATA_TERMINAL_DESCRIPTORS[controlId];
+  if (!descriptor) {
+    throw new Error(
+      `resolution-probe: no DATA-terminal descriptor for control ${JSON.stringify(controlId)}. ` +
+        'A DATA run is defined by the document its tenant writes, the artifact field that ' +
+        'carries it and the production reader that consumes it, and this runner refuses to ' +
+        'guess any of the three. Declared: ' +
+        `${Object.keys(DATA_TERMINAL_DESCRIPTORS).join(', ')}. Add a descriptor rather than ` +
+        'running this control through another control\'s shape.',
+    );
+  }
+  return descriptor;
+}
+
 async function commandDataCausal(options) {
   const controlManifest = options.controlManifest
     ? readManifest(resolve(process.cwd(), options.controlManifest))
@@ -525,6 +610,14 @@ async function commandDataCausal(options) {
     process.stderr.write(
       'resolution-probe: the control declares no normalized stops, so there is nothing to vary.\n',
     );
+    return 2;
+  }
+  // What this control's DATA run IS. Fail-closed: no descriptor, no run.
+  let descriptor;
+  try {
+    descriptor = dataTerminalDescriptor(controlManifest.controlId);
+  } catch (error) {
+    process.stderr.write(`${error.message}\n`);
     return 2;
   }
 
@@ -553,24 +646,13 @@ async function commandDataCausal(options) {
       verticalEnvelope,
     });
 
-  // The document the tenant writes. `visualFoundation.advanced.responsivePosture`
-  // is the path the control manifest declares; the siblings are present so the
-  // equality-except-the-field assertion has something real to hold constant.
-  const documentFor = (posture) => ({
+  // The document the tenant writes, from the descriptor. The runner supplies
+  // only the envelope every DATA document shares; the shape under it is the
+  // control's own.
+  const documentFor = (stopId) => ({
     schemaVersion,
     mode: 'advanced',
-    visualFoundation: {
-      advanced: {
-        // The three siblings the equality surface holds constant. Chosen to be
-        // NON-COLOUR on purpose: an authored card colour trips the compiler's
-        // APCA contrast validation in dark mode, and a probe that cannot compile
-        // its own baseline proves nothing about the field it came to measure.
-        tokenOverrides: { '--ds-radius-md': '10px' },
-        chrome: { cardComponent: { anatomy: 'underline' } },
-        profiles: { edge: 'inset-double' },
-        ...(posture === undefined ? {} : { responsivePosture: posture }),
-      },
-    },
+    ...descriptor.document(stopId),
   });
 
   const compiled = (posture) => compile(documentFor(posture));
@@ -582,32 +664,37 @@ async function commandDataCausal(options) {
   const main = await import(pathToFileURL(resolve(CORE_ROOT, 'dist/index.js')).href);
   const { resolveActiveResponsivePosture, resolveResponsivePosture, resolveAdaptiveLayout } = main;
 
-  // MEASURED, never asserted: the fail-closed default is whatever the resolver
-  // answers when asked for nothing. Hardcoding 'balanced' here would make the
+  // MEASURED, never asserted: the fail-closed default is whatever the control's
+  // own resolver answers when asked for nothing. Hardcoding it would make the
   // bypass guard agree with a constant instead of with the resolver, and it
   // would keep agreeing after somebody changed the resolver's default.
-  const failClosedDefaultId = resolveResponsivePosture(undefined)?.id ?? null;
+  const failClosedDefaultId = descriptor.failClosedDefault
+    ? descriptor.failClosedDefault({ resolveResponsivePosture })
+    : null;
 
+  /* The bypass guard asks a question only some controls can be asked: "can a
+   * value the WRITE path refuses still reach the RENDER path?". A control whose
+   * descriptor declares no bypass simply does not answer it -- absent, not
+   * false, so a reader cannot mistake "not asked" for "asked and held". */
   let bypass = null;
   if (options.bypassId) {
-    let threw = false;
-    try {
-      compile(documentFor(options.bypassId));
-    } catch {
-      threw = true;
+    if (!descriptor.bypass) {
+      process.stderr.write(
+        `resolution-probe: --bypass-id was given but ${JSON.stringify(controlManifest.controlId)} ` +
+          'declares no bypass probe, so there is no write/render pair to compare.\n',
+      );
+      return 2;
     }
-    const rendered = resolveActiveResponsivePosture({
-      appearance: { advanced: { responsivePosture: options.bypassId } },
+    bypass = descriptor.bypass({
+      bypassId: options.bypassId,
+      compile,
+      documentFor,
+      failClosedDefaultId,
+      resolveActiveResponsivePosture,
     });
-    bypass = {
-      requestedId: options.bypassId,
-      writeTime: { threw },
-      renderTime: { resolvedId: rendered?.id ?? null },
-      expectedDefaultId: failClosedDefaultId,
-    };
   }
 
-  const behaviouralWitnesses = measurePostureBehaviour({
+  const behaviouralWitnesses = descriptor.witnesses({
     stops,
     compiledStops,
     failClosedDefaultId,
@@ -619,8 +706,8 @@ async function commandDataCausal(options) {
   const report = buildDataCausalReport({
     controlId: controlManifest.controlId,
     vertical,
-    fieldPath: ['normalizedAppearance', 'advanced', 'responsivePosture'],
-    equalitySurface: ['chrome', 'tokenOverrides', 'profiles', 'responsivePosture'],
+    fieldPath: descriptor.fieldPath,
+    equalitySurface: descriptor.equalitySurface,
     stops: compiledStops,
     baseline,
     removal,
