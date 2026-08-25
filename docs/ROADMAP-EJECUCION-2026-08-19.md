@@ -4333,6 +4333,69 @@ verificación previa). La primera aplicación (compound-editorial de F4B-14,
 fence `capability-propagation:573` + `e2-composed-pairing.test.ts`) cumple
 ambas y quedó evaluada por Fable como "fortalece el programa".
 
+**F4B-17 — token-overrides CIERRA SOURCE_BOUND con la puerta DB medida
+directa y el hueco de domain.kind adjudicado (2026-08-25; Sonnet; postaudit
+Fable: ACCEPT — "la puerta estática está sellada con la evidencia más
+fuerte de la clase (cero lectores, probado por censo Y por conducta), las
+mediciones DB directas se reproducen calcadas, y la adjudicación del hueco
+de kind es la forma honesta"; write-set exacto verificado. Registros para el
+packet del kind: el mensaje del throw terminal enumera 4 kinds y quedó
+rancio desde FASE-B — con el kind nuevo serán 6; de los 290
+TENANT_THEME_OVERRIDE_TOKENS la puerta aceptó 267 y rechazó 23 con valor
+uniforme — F4B-17B debe caracterizar el dominio de claves REAL antes de
+elegir stops).** Primer control cuyo dominio es un mapa heterogéneo.
+**Puerta estática `STRUCTURALLY_UNREACHABLE` con evidencia más fuerte que el
+precedente:** `BrandTheme.tokenOverrides` (`themes/index.ts:3331`) está
+declarado en el tipo pero tiene CERO lectores en todo `brand-theme/index.ts`
+— no sólo inalcanzable como el slot de responsive.posture: SIN lector en
+absoluto. El slot parecido que el compilador SÍ lee
+(`BrandCompilerInput.verticalTokenOverrides`, `:3378`) es un parámetro
+SEPARADO que carga el baseline estructural del vertical
+(`TenantTokenOverrides`: surface/motion — tipo distinto, nunca el mapa crudo
+`--ds-*`), suministrado por quien llama a `compileBrandTheme`, nunca por
+`BrandTheme` — un stop escribiendo ahí mediría el actor equivocado (clase
+H-1). Artifact asentado con la forma del precedente (question/answer/cases/
+chain, `receipted: false`). **Mediciones directas DB (sin receipts causales
+todavía — ver el hueco):** `--ds-color-error` mueve limpio en las 3
+verticales (rottay mueve también `--ds-color-on-error`; bithire/evnto generan
+una rampa de 11 pasos desde la MISMA entrada — asimetría real, no defecto:
+rottay no tiene rama de generación de rampa para semánticos autorados);
+`--ds-color-bg-overlay` limpio, un canal, sin cascada; ambos baselinean
+`undefined` (sin riesgo default-coincidente); clave fuera del allowlist
+RECHAZADA de plano (`TenantThemeValidationError`, documento completo);
+allowlist exactamente 200; los 2 canales FUERA de `TEXT_CONTRAST_PAIRINGS`
+(sin riesgo APCA para estos 2 — la preocupación P3 queda real para el
+control completo: el allowlist SÍ contiene canales pareados).
+`--ds-surface-card` medido y NO elegido (cascada a 8 canales incluyendo 10
+series de chart — demasiado ancho para atribución de una entrada).
+**ADJUDICACIÓN DT — el hueco de `domain.kind`:** `token-map` (y `chrome-map`)
+no son kinds de `ingressValueForStop` (existen 5) → `DOMAIN_KIND_NOT_LOWERED`;
+ningún dominio-mapa bajó nunca por el causal CLI. **Se EXTIENDE el
+instrumento con un kind nuevo para dominios-mapa** (cubre token-map y
+chrome-map — 2 controles, un diseño; Opus diseña, Fable preaudita, packet
+propio tras el Packet 3; después F4B-17B corre la matriz causal de este
+control con el kind nuevo). DESCARTADA la vía `color-set`: sería mentir el
+dominio público (mapa heterogéneo de 200 entradas: colores, font-stacks,
+números). `nextAction` honesto en el manifest:
+`OBTAIN_DT_ADJUDICATION_ON_DOMAIN_KIND_GAP_THEN_RUN_CAUSAL_MATRIX` (la
+adjudicación ya ocurrió; la matriz espera el kind). Celda en `alert.json`
+(no `button.json`): `--ds-color-error`/`-on-error` son chrome de
+alerta/peligro; SOURCE_BOUND; ESCAPE_HATCH intacto. fixtures.json extendido
+con los 2 canales (esa edición staleó los 134 receipts — saldada por la
+re-emisión total del Packet 3, que entra a SU commit). **Colisión
+inter-lane del día (causa raíz: coordinación MÍA — prohibí simultaneidad
+pero no declaré la ventana de cierre de Opus al otro lane):** la escritura
+de fixtures.json de este packet cayó a mitad de la re-emisión de Opus →
+131/134 corridas fallaron y el driver de Opus dañó 26 receipts (exitCode 1 +
+sha inconsistente; artifacts intactos). Adjudicado: reparación por
+re-emisión (NUNCA git restore; los 26 re-emitidos correctos, verificados
+0 exitCode≠0 y 0 sha mismatch sobre 134); los dañados NO entraron a ningún
+commit rotos. **LEY NUEVA (DT, 2026-08-25): TODA ventana de cierre o
+re-emisión de un lane se le declara al otro lane ANTES de arrancar** — el
+que no cierra queda en pausa de escrituras en `packages/core/**` durante la
+ventana (análisis y redacción en /tmp libres). CI-2 la hará parte del gate
+de secuencia.
+
 **PACKET 2 DATA — profiles.icon CIERRA SOURCE_BOUND (2026-08-25; Opus;
 postaudit Fable: ACCEPT — "la clase nueva la medí en sus cuatro patas;
 `STRUCTURALLY_UNREACHABLE` habría sido FALSO"; corrección vinculante (i)

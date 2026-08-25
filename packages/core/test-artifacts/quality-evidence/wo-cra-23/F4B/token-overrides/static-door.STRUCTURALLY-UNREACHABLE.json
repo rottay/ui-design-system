@@ -1,0 +1,36 @@
+{
+  "artifactVersion": 1,
+  "receipted": false,
+  "whyNotReceipted": "This artifact records a path production DOES NOT TAKE. Receipting it would enter it into the evidence chain as a certified arm of this control, and the whole point of the measurement is that the arm never runs for any first-party vertical, nor for any other caller either -- stronger than the responsive.posture precedent (test-artifacts/quality-evidence/wo-cra-23/F4B/responsive-posture/static-door.STRUCTURALLY-UNREACHABLE.json), whose unreachable arm was at least readable by a caller that skipped the provider's projection. Here the read side does not exist at all.",
+  "controlId": "token-overrides",
+  "arm": "static-brand-theme",
+  "vertical": "all (architectural fact, not vertical-specific)",
+  "question": "The control manifest declares ingress.staticBrandThemePath = \"tokenOverrides\". Does a value authored at BrandTheme.tokenOverrides reach the compiled CSS through compileBrandTheme?",
+  "answer": "NO. BrandTheme.tokenOverrides (the raw --ds-* allowlist map the keypath names, contracts/composition/tenants/themes/index.ts:3331) is declared on the type but never read anywhere in the static compiler: zero property-access occurrences of `.tokenOverrides` in the whole of infrastructure/compilers/kernel/runtime/brand-theme/index.ts, and zero occurrences of `brandTheme.tokenOverrides` / `bt.tokenOverrides` / `theme.tokenOverrides` anywhere in production src/. The only slot the compiler DOES read under a similar name, BrandCompilerInput.verticalTokenOverrides (themes/index.ts:3378), is a SEPARATE compiler-input parameter carrying the VERTICAL's own baseline structural overrides (a different type, TenantTokenOverrides: surface/borderRadius/shadows/glass/gradients/overlays/densityScale/motion -- never a raw --ds-* map), supplied by whoever CALLS compileBrandTheme, not by BrandTheme itself. A stop that wrote there to make this control's static arm produce SOME movement would measure the wrong actor: the vertical re-authoring its own baseline, exactly the class H-1 closed.",
+  "cases": {
+    "A_brandThemeFieldNeverRead": {
+      "fieldExists": true,
+      "fieldPath": "BrandTheme.tokenOverrides (themes/index.ts:3331)",
+      "readByCompiler": false,
+      "grepConfirmed": "0 occurrences of the property access '.tokenOverrides' anywhere in infrastructure/compilers/kernel/runtime/brand-theme/index.ts; 0 occurrences of 'brandTheme.tokenOverrides' / 'bt.tokenOverrides' / 'theme.tokenOverrides' anywhere in production src/"
+    },
+    "B_verticalTokenOverridesIsTheWrongActor": {
+      "slotPath": "BrandCompilerInput.verticalTokenOverrides (themes/index.ts:3378)",
+      "slotType": "TenantTokenOverrides (surface/borderRadius/shadows/glass/gradients/overlays/densityScale/motion) -- structurally unrelated to the raw --ds-* map this control's DB door writes",
+      "populatedFrom": "brandThemeToTokenOverrides(brandTheme) reads bt.surfaces and bt.motion (brand-theme/index.ts:127-149) -- never bt.tokenOverrides -- then deepMergeTokenOverrides(verticalTokenOverrides ?? {}, btOverrides) merges the CALLER-supplied vertical baseline with that (brand-theme/index.ts:2013,2026-2030)",
+      "whoSuppliesIt": "the CALLER of compileBrandTheme (the vertical's own baseline resolution), never BrandTheme, never a tenant patch",
+      "writingHereMeasures": "whether the vertical's own baseline structural overrides win -- a different capability's territory entirely (recipe-profile / surfaces.elevation-posture / motion.dial), not this control's"
+    }
+  },
+  "chain": [
+    "packages/core/src/foundation/contracts/composition/tenants/themes/index.ts:3331 -- BrandTheme.tokenOverrides declared: 'Allowlisted raw token overrides. Keys must start with --ds-. Max 200.' This is the field the registry's staticBrandThemePath ('tokenOverrides') names.",
+    "packages/core/src/foundation/contracts/composition/tenants/themes/index.ts:3370-3381 -- BrandCompilerInput carries verticalTokenOverrides as a SEPARATE field from brandTheme: 'Resolved vertical baseline token overrides (layered before BrandTheme)'.",
+    "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts:2006-2030 -- compileBrandTheme destructures verticalTokenOverrides and brandTheme separately; btOverrides = brandThemeToTokenOverrides(brandTheme); tokenOverrides = deepMergeTokenOverrides(verticalTokenOverrides ?? {}, btOverrides). brandTheme.tokenOverrides itself never appears on the right-hand side of any assignment in this function.",
+    "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts:127-149 -- brandThemeToTokenOverrides(bt) reads ONLY bt.surfaces (surface/borderRadius/shadows/glass/gradients/overlays/densityScale) and bt.motion (spring easing) -- bt.tokenOverrides is not referenced.",
+    "grep -n \"\\.tokenOverrides\\b\" packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts -- 0 matches (run this packet, 2026-08-25).",
+    "grep -rn \"brandTheme\\.tokenOverrides|bt\\.tokenOverrides|theme\\.tokenOverrides\" packages/core/src --include=*.ts --include=*.tsx -- 0 matches outside this artifact's own citation (run this packet, 2026-08-25)."
+  ],
+  "measurementNote": "Pure source-reachability fact, verified by direct reading and grep against the live tree -- no build, no Chromium, no compile needed to establish that a property is never accessed. The DB door (visualFoundation.advanced.tokenOverrides) was separately measured live via dist/server.js; see the receipted matrix in this same directory.",
+  "precision": "DECLARED ON THE TYPE, NEVER CONSUMED -- stronger than responsive.posture's 'unreachable in a first-party vertical render' class. There the field was read by a real function (resolveActiveResponsivePosture) that a non-projected caller could still reach; here the read side does not exist in the compiler at all, for any caller, in any context. The type field is a promise the compiler never keeps.",
+  "consequence": "A static-arm scenario for this control would do one of two things, both false witnesses. (a) Write to BrandTheme.tokenOverrides and measure zero-diff on every value, every channel, every vertical -- a control that never lowers through its declared static door is indistinguishable from a broken harness, and the CLI's own empty-lowering guard would have to be silenced to let it pass, hiding the defect rather than reporting it. (b) Write to verticalTokenOverrides and measure a DIFFERENT capability's territory (a vertical's own surface/motion baseline), attributing that movement to this control instead of to recipe-profile / surfaces.elevation-posture / motion.dial -- a false positive, not a false negative, and the more dangerous of the two because it would report success."
+}

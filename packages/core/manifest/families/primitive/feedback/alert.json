@@ -3624,10 +3624,16 @@
     {
       "controlId": "token-overrides",
       "disposition": "UNKNOWN",
-      "verificationState": "UNKNOWN",
-      "unknownReason": "NOT_ASSESSED",
+      "verificationState": "SOURCE_BOUND",
+      "unknownReason": "F4B-17: the static door (BrandTheme.tokenOverrides) is STRUCTURALLY_UNREACHABLE -- never read by compileBrandTheme, verified this packet by direct grep (0 occurrences of the property access anywhere in brand-theme/index.ts). The DB door (visualFoundation.advanced.tokenOverrides) DOES compile real CSS -- --ds-color-error and --ds-color-bg-overlay both measured moving cleanly, all 3 verticals, via a direct dist/server.js compile -- but no receipted causal matrix exists yet: `domain.kind: 'token-map'` has no branch in the resolution-probe harness's `ingressValueForStop` (same unrecognised state as chrome.families' own `chrome-map`, still UNKNOWN), so the standard causal CLI cannot lower a stop for this control at all without either touching the instrument (forbidden) or reclassifying the control's registry `valueType` (a domain-taxonomy decision, escalated to the DT rather than made here). Full measurement and the exact gap: manifest/controls/token-overrides.json calibration (dbSideMeasuredNote, domainKindGapNote, staticDoorNote). This cell is seated here (not button.json) because --ds-color-error/--ds-color-on-error are alert/danger-state chrome; the ESCAPE_HATCH targetBinding below is unchanged from the universal scaffold every family carries for this control.",
       "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "nextAction": "OBTAIN_DT_ADJUDICATION_ON_DOMAIN_KIND_GAP_THEN_RUN_CAUSAL_MATRIX",
+      "sourceBindings": [
+        "packages/core/src/foundation/contracts/composition/tenants/themes/index.ts",
+        "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
+        "packages/core/src/infrastructure/compilers/composition/tenant-theme/index.ts",
+        "packages/core/manifest/controls/token-overrides.json"
+      ],
       "targetBinding": {
         "status": "ESCAPE_HATCH",
         "why": "es la valvula de escape, no el modelo -- textual del canon: \"escape hatch, not the model: every recurring override is a candidate for a real capability\". Alcanza cualquier canal por construccion (allowlist cerrada, max 200, falla cerrado) y por eso no declara nada por familia.",
