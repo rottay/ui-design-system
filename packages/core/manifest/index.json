@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "generatedBy": "node packages/core/manifest/generator/index.mjs --sync",
   "authorityLaw": "Controls own semantics, groups own recipe vocabularies, families own applicability edges, and this index owns generated rollups.",
-  "inputsDigest": "aacf5811055c61727f66dea4b470d21cb034e29463bc741ae3c76c8c85d9c9d1",
+  "inputsDigest": "a056590d50396c3d882cf052ee88f984fafe03637774ecf90294f170810395c7",
   "denominators": {
     "canonicalFamilies": 255,
     "activeStandardControls": 13,
@@ -440,13 +440,29 @@
       },
       {
         "controlId": "typography.families",
-        "declaredFamilies": 4,
-        "unknownCells": 251,
+        "declaredFamilies": 5,
+        "unknownCells": 250,
         "applicableFamilyIds": [],
         "parts": [],
         "propertyGroups": [],
-        "channels": [],
+        "channels": [
+          "--ds-font-family-display",
+          "--ds-font-family-mono"
+        ],
         "families": [
+          {
+            "familyId": "primitive/display/typography",
+            "layer": "primitive",
+            "disposition": "UNKNOWN",
+            "verificationState": "SOURCE_BOUND",
+            "stableParts": [],
+            "propertyGroups": [],
+            "computedProperties": [],
+            "channels": [
+              "--ds-font-family-display",
+              "--ds-font-family-mono"
+            ]
+          },
           {
             "familyId": "primitive/layout/flex",
             "layer": "primitive",
@@ -1812,102 +1828,102 @@
     {
       "controlId": "palette.seeds",
       "path": "manifest/controls/palette.seeds.json",
-      "digest": "0c04e1e23334e5e65680eedbdaef4a93b1b5530c7b38c4dc7cce1732bb8c71fa"
+      "digest": "5d264218dc80b696adb722c8914740c3f046d5bf73ce86406a59dd76a08bac5f"
     },
     {
       "controlId": "typography.pairing",
       "path": "manifest/controls/typography.pairing.json",
-      "digest": "32a69bee6bfa114e454408a9e220a7e7514bfb90d8090e6e9de05db2862864cd"
+      "digest": "d1957ab1ec9c4925b7ac4a7c988e748bd1532ed17fe752a0d88434abae68cf00"
     },
     {
       "controlId": "typography.families",
       "path": "manifest/controls/typography.families.json",
-      "digest": "fd5590b2a6121a4c1feacf883907a979e16c6f7bbad592792c2c32b76e5e2a8a"
+      "digest": "6aca22565cdd8a468d2de67fa2eebf852b3afa093f8155c63630bca326b56070"
     },
     {
       "controlId": "typography.scale",
       "path": "manifest/controls/typography.scale.json",
-      "digest": "75de5c4c5837d953cc08aa8eb964d51d6c2e3b397994ab4452bec26a84c3dfbe"
+      "digest": "76475e1401c1b2ce327e358bd5225b04304a5e0b27d2d2b23f662da448edbaf6"
     },
     {
       "controlId": "shape.radius-scale",
       "path": "manifest/controls/shape.radius-scale.json",
-      "digest": "330a897d23657691e0a6ecbfc93fddff9be9dbaecdc0f3f5c8f2ec8b2d63352b"
+      "digest": "56eb04a29cdb2ad6d8ad67cfe9c0edba892ba748b566afd2ca9ab848f5b05630"
     },
     {
       "controlId": "shape.button-style",
       "path": "manifest/controls/shape.button-style.json",
-      "digest": "7b1c47ff1289351cd02150d20d769ef0ff53b973ca3f64ceaee22aee51b5f142"
+      "digest": "d0a850c9fa42a4c924846747831a2a26837bac311bd51b8c0b4227eba4bce120"
     },
     {
       "controlId": "density.mode",
       "path": "manifest/controls/density.mode.json",
-      "digest": "199886fb42a4f33de35e0d0b53f8fb76fc10a574861642d8bce6d3ef4b8d19d0"
+      "digest": "847bf775a36f83d8876f8cd8f19b4baf036fe6b720244b7d53618d3e656bd177"
     },
     {
       "controlId": "spacing.rhythm",
       "path": "manifest/controls/spacing.rhythm.json",
-      "digest": "93167bd15590397d919a873cc9330cf1c444c679ac04cbe006edbc5b801a4b6d"
+      "digest": "4993fa287935e48607852526399e3fef5faa650079f1ee803bc50eac08d69405"
     },
     {
       "controlId": "motion.dial",
       "path": "manifest/controls/motion.dial.json",
-      "digest": "d381a8063a5828ca35bb83fa14fb09ae5f00f7976fc1f2e86fc8be806852a024"
+      "digest": "dd357e1d78507382d7989a71b5c6fb36e7f05210ec136ab4a36a5f3dd9b90519"
     },
     {
       "controlId": "surfaces.elevation-posture",
       "path": "manifest/controls/surfaces.elevation-posture.json",
-      "digest": "686a6d231e79f34f1dbe21c039f80fee9ee9eec90fc1239316481f313e44c09a"
+      "digest": "8e764b2e482b2b0d85213ff8fba2e6c13dba7b0d8b1b2a3f7b1cb9b294e09cc3"
     },
     {
       "controlId": "surfaces.effect-intensity",
       "path": "manifest/controls/surfaces.effect-intensity.json",
-      "digest": "e8869d1a31e0908e413ae5e8cb910347e8b61ed17d4209e7da48e138cefc701e"
+      "digest": "63d695716a3b997022e1a318c3176e7f2f7a8441b42f9adb222fdec5d3d743fb"
     },
     {
       "controlId": "navigation.sidebar-tone",
       "path": "manifest/controls/navigation.sidebar-tone.json",
-      "digest": "cc25e3991d57ce8fa1795e15ba7e76750a81a024198b00a3777edb782bf797db"
+      "digest": "60f70c40b16d108ea53a221c6bee1605ec204f6edfda561223d6f4b5146151bd"
     },
     {
       "controlId": "experience.profile",
       "path": "manifest/controls/experience.profile.json",
-      "digest": "e805932bf3b3f5886bea5ca6e74ebdd80fd84edf1ab327b13f858f3cd163c8fd"
+      "digest": "1023b1b049a11b8c8bcabf02439c061998f8be76313c379e96c3f1f957ae48a8"
     },
     {
       "controlId": "chrome.families",
       "path": "manifest/controls/chrome.families.json",
-      "digest": "aa95d8e41bef2996bc8bd2a3f49dc11d2054a3e13f52fde47a9de6f5fcb04c64"
+      "digest": "7b012b21aadc71a615012120c1f24fc18d9fb6da1dd4d13138a5f9d967073710"
     },
     {
       "controlId": "chrome.anatomy",
       "path": "manifest/controls/chrome.anatomy.json",
-      "digest": "1e7dffb34b66119a3cede74fbb071c523b2db89e091d064eb364504ad11a48e7"
+      "digest": "b6763d343825eb8460d3072528bb2c5e15808e6ceabe0ab3ab53aa947f6efc4c"
     },
     {
       "controlId": "token-overrides",
       "path": "manifest/controls/token-overrides.json",
-      "digest": "db253cd82143d8d189d2a4c434114a09b690b8488fa53f1b89c1db696347671a"
+      "digest": "f026d9ac2f18602b5e9868a916272e775a09d84b535f5524fd1e9b9cb93b6d8e"
     },
     {
       "controlId": "recipe-profile",
       "path": "manifest/controls/recipe-profile.json",
-      "digest": "78dc9f265877829d37a8c231cfe9ebd2e62b3dde4c9c7e488e43254c2ada79de"
+      "digest": "8424b78fdfee1940369e278f28e69ea088bb3691e158dfcab52373c2a1d36b5e"
     },
     {
       "controlId": "profiles.expressive",
       "path": "manifest/controls/profiles.expressive.json",
-      "digest": "053cb158adac200cb9ffcc2830efabf742fca71e475c70097ca8f17a0698df38"
+      "digest": "2e0b026c800078cdd362d3d9ccf9128986fa9c9c09b16f02bdaf2bb68e0b6ff3"
     },
     {
       "controlId": "profiles.icon",
       "path": "manifest/controls/profiles.icon.json",
-      "digest": "efab8171f7fbf41c555e7bb109bb0097f351dd6335cbba0c30611ab27ef592f4"
+      "digest": "c4a126b1cd06cb391c04790a8b9fd23abe0412f7979907b57b02204b23e067ff"
     },
     {
       "controlId": "responsive.posture",
       "path": "manifest/controls/responsive.posture.json",
-      "digest": "a5d249beb4bd442b51ff9039b5fdb726ca5355c14acbb25b96ea8359f4adc014"
+      "digest": "b12f06438969b7a0cc1d596b5ee72d9090de297f14fe0b7fe49c0b1a612e2714"
     }
   ],
   "groups": [
@@ -2617,7 +2633,7 @@
     {
       "familyId": "primitive/display/typography",
       "path": "manifest/families/primitive/display/typography.json",
-      "digest": "774a9db2c5c2fc9994e59b04c5aabdece7fdf6e0a238db52e6c89c9cb58eb1c5",
+      "digest": "1bf467dfe3b26031961f8f73a8f7a97dee6347cd9f885b9f7ff13237aa5c150e",
       "maximumClaim": "SOURCE_BOUND",
       "reviewVerdict": null
     },

@@ -74,6 +74,15 @@ const CLOSURE_MEMBERS = [
   // same copy-boundary artefact the comment above describes, wearing the
   // "source digest is stale" message.
   "packages/core/styles",
+  // R-1 (F4B-14 close): typography.families' compound-case receipt is the
+  // first to compile directly against the FIRST_PARTY_THEMES/rottayBrandTheme
+  // exports (compileBrandTheme needs the raw BrandTheme, not the tenant-theme
+  // compiler's own baseline loader), so it is the first to name this dist
+  // module as a sourceBinding. Same copy-boundary artefact as the four dist
+  // files above -- absent from the sandbox, receipts.mjs hashes it 'MISSING'
+  // and a receipt that is genuinely fresh reads as stale for a reason that is
+  // about the copy, not the manifest.
+  "packages/core/dist/foundation/tokens/ts/presentation/brand-themes/index.js",
   "packages/showroom/src",
   "packages/showroom/e2e/whitelabel/density-authority-matrix.spec.ts",
 ];

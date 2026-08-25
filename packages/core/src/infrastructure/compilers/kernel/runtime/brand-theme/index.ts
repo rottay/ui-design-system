@@ -693,7 +693,9 @@ function omitUndefined<T extends object>(source: T | undefined): Partial<T> {
 function brandThemeToCssVariables(
   bt: BrandTheme,
   surface: RampSurface = brandThemeRampSurface(bt),
-  tenantPosture?: AppearancePostureFields
+  tenantPosture?: AppearancePostureFields,
+  // E-2: the floor's second half -- the tenant's OWN typography slice.
+  tenantTypography?: BrandTheme["typography"]
 ): Record<string, string> {
   // C1b expressive expansion — resolved HERE (not in compileBrandTheme) so
   // compileModeBlocks, which re-invokes this function per authored mode
@@ -1092,6 +1094,22 @@ function brandThemeToCssVariables(
   // selection reaching both modes, which is what option B says.
   if (tenantPosture) {
     Object.assign(vars, appearancePostureToVariables(tenantPosture));
+  }
+  /* E-2: the tenant's own literal over the tenant's own pairing (the posture
+   * above rewrites these five). Each field keeps the body's treatment (`:888+`):
+   * wrapped, mono raw, line-height String()-ed. A VERTICAL literal is not in
+   * the patch, so a tenant pairing still outranks it (option B / F4B-11). */
+  if (tenantTypography) {
+    const tl = tenantTypography;
+    if (tl.fontFamilyBase)
+      vars["--ds-font-family-base"] = withArabicSafeFallback(tl.fontFamilyBase);
+    if (tl.fontFamilyHeading)
+      vars["--ds-font-family-heading"] = withArabicSafeFallback(tl.fontFamilyHeading);
+    if (tl.fontFamilyMono) vars["--ds-font-family-mono"] = tl.fontFamilyMono;
+    if (tl.letterSpacing?.heading)
+      vars["--ds-letter-spacing-heading"] = tl.letterSpacing.heading;
+    if (tl.lineHeight?.display != null)
+      vars["--ds-line-height-display"] = String(tl.lineHeight.display);
   }
   return vars;
 }
@@ -1710,7 +1728,9 @@ function compileModeBlocks(
   authoredPaths: TenantAuthoredPaths | undefined,
   // The overlay re-runs the whole lowering: without this a moved channel would
   // revert inside `data-mode="dark"`.
-  tenantPosture?: AppearancePostureFields
+  tenantPosture?: AppearancePostureFields,
+  // E-2: the overlay re-runs the whole lowering, so both halves travel together.
+  tenantTypography?: BrandTheme["typography"]
 ): CompiledBrandModeBlock[] {
   const modes = bt.modes;
   if (!modes) return [];
@@ -1731,7 +1751,7 @@ function compileModeBlocks(
     const merged = applyModeOverlay(bt, overlay);
     const modePrefix = `modes.${mode}.`;
     const modeVars = {
-      ...brandThemeToCssVariables(merged, mode, tenantPosture),
+      ...brandThemeToCssVariables(merged, mode, tenantPosture, tenantTypography),
       ...brandThemeToChromeVariables(merged, mode, authoredPaths, modePrefix),
     };
     // The seed this block compiles from is `merged.palette.primaryColor`. It is
@@ -2018,12 +2038,15 @@ export const compileBrandTheme: CompileBrandTheme = (
   const tenantPosture = tenantPatch
     ? resolveTenantPosture(tenantPatch)
     : undefined;
+  // E-2: the other half of the same floor, from the same patch.
+  const tenantTypography = tenantPatch?.typography;
 
   // CSS variables from palette + typography + surfaces + chrome
   const paletteVars = brandThemeToCssVariables(
     effectiveTheme,
     undefined,
-    tenantPosture
+    tenantPosture,
+    tenantTypography
   );
   const chromeVars = brandThemeToChromeVariables(
     effectiveTheme,
@@ -2083,7 +2106,8 @@ export const compileBrandTheme: CompileBrandTheme = (
     effectiveTheme,
     cssVariables,
     tenantAuthoredPaths,
-    tenantPosture
+    tenantPosture,
+    tenantTypography
   );
   for (const block of modeBlocks) {
     // A mode may restyle type; it may not drop the mandatory fallback while

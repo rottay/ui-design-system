@@ -174,8 +174,22 @@ export const TENANT_CAPABILITY_REGISTRY = Object.freeze([
       valueType: 'font-stack',
       defaultBehavior: 'pairing (or vertical baseline) decides',
       documentPath: 'appearance.general.typography.{fontFamilyBase,fontFamilyHeading}',
+      // F4B-14 fix: derivedChannels under-declared the real surface. The
+      // static ingress path already names 4 members
+      // (fontFamilyBase/Heading/Mono/Display), and the compiler emits all 4
+      // as real CSS channels (brand-theme/index.ts:889-897) -- mono/display
+      // simply have NO DB door (documentPath only carries base/heading), so
+      // they are static-only, same class as an identity-only stop. Widened
+      // to the full 4-channel real surface the control governs, matching
+      // the F4B-12 DT ruling for navigation.sidebar-tone (declare the real
+      // table, not a subset).
       brandThemePath: 'typography.{fontFamilyBase,fontFamilyHeading,fontFamilyMono,fontFamilyDisplay}',
-      derivedChannels: ['--ds-font-family-base', '--ds-font-family-heading'],
+      derivedChannels: [
+        '--ds-font-family-base',
+        '--ds-font-family-heading',
+        '--ds-font-family-mono',
+        '--ds-font-family-display',
+      ],
       compat: 'additive; Arabic-safe tail is a compiler invariant either way',
     },
     {

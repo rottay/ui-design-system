@@ -347,6 +347,15 @@ const CONSUMER_REACHED = new Set([
   'surfaces.elevation-posture',
   'surfaces.effect-intensity',
   'navigation.sidebar-tone',
+  // R-1 (F4B-14 close): motion.dial became reachable in 48cd4d347 (F4B-13) --
+  // its registry evidence.consumer was corrected from button.css (read only
+  // DERIVED motion channels, never the declared ones) to alert.css (reads
+  // --ds-motion-intensity directly). The set growing when a capability
+  // legitimately becomes reachable is not a regression; a pin left stale
+  // across that landing is. Re-measured against the live tree this packet
+  // (2026-08-25): the received set is exactly this set plus motion.dial,
+  // nothing else moved.
+  'motion.dial',
 ]);
 
 /**

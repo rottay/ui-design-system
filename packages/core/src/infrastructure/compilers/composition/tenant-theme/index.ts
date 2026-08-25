@@ -1796,6 +1796,8 @@ function isoLowering<T>(run: () => T, path: string): T {
  * the artifact is the direct lowering; a private copy there would be a second
  * authority for the same projection, and the two would drift.
  *
+ * E-2 widened it: the floor also lowers the tenant's own font families.
+ *
  * NOT the whole patch, and the compiler settled that: a `ThemePatch` makes every
  * nested leaf optional where `Partial<BrandTheme>` keeps it required, so the
  * whole patch does not assign (`appearance.defaultMode`, then
@@ -1838,7 +1840,14 @@ export function tenantPostureFloors(patch: ThemePatch): Partial<BrandTheme> {
   const su = patch.surfaces;
   const mo = patch.motion;
   return {
-    typography: { typePairing: ty?.typePairing, scale: ty?.scale },
+    typography: {
+      typePairing: ty?.typePairing,
+      scale: ty?.scale,
+      /* E-2: the floor's second half reads these two; schema v1 rejects
+       * mono/letterSpacing/lineHeight, so those come only via the static arm. */
+      fontFamilyBase: ty?.fontFamilyBase,
+      fontFamilyHeading: ty?.fontFamilyHeading,
+    },
     surfaces: {
       buttonStyle: su?.buttonStyle,
       radiusScale: su?.radiusScale,

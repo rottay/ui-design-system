@@ -1,0 +1,68 @@
+{
+  "scenario": "E-2 composed case: typePairing + explicit fontFamilyHeading in ONE document, both doors",
+  "controlId": "typography.families",
+  "relatedControlId": "typography.pairing",
+  "law": "explicit family wins over the tenant's own pairing selection when both are authored in the same document (E-2 fix, brand-theme/index.ts + tenant-theme/index.ts).",
+  "method": "Direct compile via compileBrandTheme (static door) and compileTenantThemeConfig (DB door), both from the built dist/, no Chromium measurement needed: the compiler produces the CSS custom-property STRING value directly in its own JS output object, so a computed-DOM read would only re-confirm string equality already visible here.",
+  "verticals": {
+    "rottay": {
+      "literal": "'Zilla Slab', Georgia, serif",
+      "expected": "'Zilla Slab', Georgia, \"Noto Sans Arabic\", serif",
+      "staticDoor": {
+        "value": "'Zilla Slab', Georgia, \"Noto Sans Arabic\", serif",
+        "matchesExpected": true
+      },
+      "dbDoor": {
+        "value": "'Zilla Slab', Georgia, \"Noto Sans Arabic\", serif",
+        "matchesExpected": true
+      },
+      "ingressEquivalence": {
+        "identical": true
+      },
+      "baseUnaffectedByThisScenario": {
+        "static": "var(--ds-font-pack-editorial-text, Georgia, 'Times New Roman', serif), \"Noto Sans Arabic\", sans-serif",
+        "db": "var(--ds-font-pack-editorial-text, Georgia, 'Times New Roman', serif), \"Noto Sans Arabic\", sans-serif"
+      }
+    },
+    "bithire": {
+      "literal": "'Zilla Slab', Georgia, serif",
+      "expected": "'Zilla Slab', Georgia, \"Noto Sans Arabic\", serif",
+      "staticDoor": {
+        "value": "'Zilla Slab', Georgia, \"Noto Sans Arabic\", serif",
+        "matchesExpected": true
+      },
+      "dbDoor": {
+        "value": "'Zilla Slab', Georgia, \"Noto Sans Arabic\", serif",
+        "matchesExpected": true
+      },
+      "ingressEquivalence": {
+        "identical": true
+      },
+      "baseUnaffectedByThisScenario": {
+        "static": "var(--ds-font-pack-editorial-text, Georgia, 'Times New Roman', serif), \"Noto Sans Arabic\", sans-serif",
+        "db": "var(--ds-font-pack-editorial-text, Georgia, 'Times New Roman', serif), \"Noto Sans Arabic\", sans-serif"
+      }
+    },
+    "evnto": {
+      "literal": "'Zilla Slab', Georgia, serif",
+      "expected": "'Zilla Slab', Georgia, \"Noto Sans Arabic\", serif",
+      "staticDoor": {
+        "value": "'Zilla Slab', Georgia, \"Noto Sans Arabic\", serif",
+        "matchesExpected": true
+      },
+      "dbDoor": {
+        "value": "'Zilla Slab', Georgia, \"Noto Sans Arabic\", serif",
+        "matchesExpected": true
+      },
+      "ingressEquivalence": {
+        "identical": true
+      },
+      "baseUnaffectedByThisScenario": {
+        "static": "var(--ds-font-pack-editorial-text, Georgia, 'Times New Roman', serif), \"Noto Sans Arabic\", sans-serif",
+        "db": "var(--ds-font-pack-editorial-text, Georgia, 'Times New Roman', serif), \"Noto Sans Arabic\", sans-serif"
+      }
+    }
+  },
+  "allPass": true,
+  "compiledAt": "F4B-14 close, post E-2"
+}

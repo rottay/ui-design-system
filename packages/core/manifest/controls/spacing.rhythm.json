@@ -7,7 +7,7 @@
   "semanticOwner": {
     "owner": "design-system",
     "registryPath": "packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts",
-    "registryDigest": "2bee31fb91d4ff55454f5dcb3575034f4aa58e8d40d45da1b1f41cdcb0d8dc7b"
+    "registryDigest": "428ce6aaccc3d87427da63f6ad3b9b66eaf778c010843d920372a2ba87d9cc4a"
   },
   "title": "Layout rhythm",
   "valueType": "enum",

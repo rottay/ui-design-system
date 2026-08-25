@@ -4387,6 +4387,39 @@ el archivo ajeno en vuelo). Cadena: build EXIT=0, dist-freshness OK,
 `capability-propagation:546` (pin rancio de F4B-13 — el set alcanzado creció
 legítimamente con motion.dial; lo arregla Sonnet en el cierre fusionado).
 
+**F4B-14 — typography.families CIERRA SOURCE_BOUND (2026-08-25; packet
+fusionado Sonnet+Opus; postaudit Fable: ACCEPT — "la ley 'an explicit family
+still wins' queda VERDADERA en sus dos mitades (cuerpo Y piso, ambas
+puertas)").** La primera calibración sobre la rama `font-stack` de Fase B:
+**12 receipts aislados** (4 stops × 3 verticales: base/heading con
+comillas y sin — ambos válidos por `isSafeFontFamily`; discriminación +
+contiene-la-familia-líder, nunca igualdad — el compilador inserta el
+fallback de script) + **el caso compuesto receipteado** (editorial +
+`'Zilla Slab'` explícita en UN documento: 13/13 comparaciones byte-exactas
+al literal CON su cola Arabic-safe, en los 3 verticales y ambas puertas;
+el control negativo prueba el scoping al campo realmente autorado —
+`data-field-delta`, porque un stop del control no puede cargar dos campos a
+la vez en su ingress path). Widening de declaredOutputs 2 → 4 (los 4 se
+emiten realmente; el scaffold de familia ya esperaba los 4). mono/display
+verificados por compilación directa fuera de banda (mono emite VERBATIM sin
+cola Arabic-safe; display SÍ la lleva) — documentados static-only no
+receipteados (el schema v1 los rechaza). **Corrección de cardinalidad
+medida:** `internalChannels` queda scoped a los 2 canales que el control
+posee en exclusiva (mono, display) — base/heading ya tienen semanticOwner
+(typography.pairing; la ley es global por-channelId, no por-familia); la
+superficie compartida vive correctamente en `targetBinding.sharedChannels`.
+**Los 2 R-1:** pin `:546` (`motion.dial` entró al set alcanzado en F4B-13
+sin actualizarlo — crecimiento legítimo con nota; suite 8/8) y la extensión
+de `CLOSURE_MEMBERS` del sandbox de program-check.test (el receipt del
+compuesto es el primero en citar `dist/.../brand-themes/index.js` como
+sourceBinding — ausente de la lista cerrada: staleness de FRONTERA DE COPIA,
+no de contenido; agregada con el formato "Measured, not guessed"). Cadena
+completa: 106/106 VALID, CONSTITUTION_READY, program-check.test 48/48,
+probe 240/0, provenance 24/24, producers --check OK, anclas exactos con
+cero aire, build EXIT=0, tsc limpio. Cierre en SOURCE_BOUND por la misma
+nota de anatomía (propertyGroups sin ratificar — dependencia ya registrada
+para F4B 20/20).
+
 **F4B-11 — typography.pairing CIERRA SOURCE_BOUND (2026-08-24; Sonnet;
 postaudit Fable: ACCEPT — "el falso-verde más peligroso del censo quedó
 cerrado con el keypath real").** Keypath corregido (el de OTRO control →

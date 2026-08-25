@@ -3384,10 +3384,80 @@
     {
       "controlId": "typography.families",
       "disposition": "UNKNOWN",
-      "verificationState": "UNKNOWN",
-      "unknownReason": "NOT_ASSESSED",
-      "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "verificationState": "SOURCE_BOUND",
+      "unknownReason": "NOT_ASSESSED_PAST_SOURCE_BOUND. Causal measurement complete and positive on both declared-channel roles with a DB door (13 receipted scenarios: 4 stops x 3 verticals x rottay only on staticDbParityEvidenceIds per convention -- full 12 receipted under evidenceIds below -- plus 1 compound scenario x 3 verticals in one receipt, all both ingress arms; F4B-14, 2026-08-25). mono/display are static-only by construction (no DB door at all, TenantAppearanceGeneral.typography only carries base/heading) and identity for base/heading is static-only by the F4B-8/W-A/W-B law -- both documented on the control's own calibration as directly-compiled facts, not receipts (single-arm runs cannot pass this evidence kind). The compound scenario (typePairing + explicit family in ONE document) closes E-2 (WO-CRA-23 preaudit): before the fix, pairing silently won over an explicit family authored in the same document -- a real compiler defect, not a precedence misreading -- fixed in brand-theme/index.ts + tenant-theme/index.ts (tenantPostureFloors re-projects the tenant's OWN explicit family LAST, after the pairing expansion already ran) and re-measured here byte-exact to the literal with its Arabic-safe fallback tail, both doors, all 3 verticals. NOT raised to IMPLEMENTED here: that rank requires non-empty `stableParts`/`propertyGroups`/`computedProperties`, and every `propertyGroups` entry must be OWNED by this family's own `anatomy.propertyGroups` -- which is `[]` right now, the same program-wide propertyGroups-vocabulary blocker F4B-11/F4B-12/F4B-13 already documented.",
+      "evidenceIds": [
+        "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/typography-families/rottay-base-quoted.json.receipt.json",
+        "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/typography-families/rottay-base-unquoted.json.receipt.json",
+        "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/typography-families/bithire-base-quoted.json.receipt.json",
+        "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/typography-families/bithire-base-unquoted.json.receipt.json",
+        "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/typography-families/evnto-base-quoted.json.receipt.json",
+        "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/typography-families/evnto-base-unquoted.json.receipt.json",
+        "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/typography-families/rottay-heading-quoted.json.receipt.json",
+        "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/typography-families/rottay-heading-unquoted.json.receipt.json",
+        "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/typography-families/bithire-heading-quoted.json.receipt.json",
+        "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/typography-families/bithire-heading-unquoted.json.receipt.json",
+        "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/typography-families/evnto-heading-quoted.json.receipt.json",
+        "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/typography-families/evnto-heading-unquoted.json.receipt.json",
+        "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/typography-families/compound-editorial-plus-explicit-heading.json.receipt.json"
+      ],
+      "nextAction": "PROPERTY_GROUPS_VOCABULARY_RATIFICATION_THEN_IMPLEMENTED",
+      "sourceBindings": [
+        "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css",
+        "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
+        "packages/core/src/infrastructure/compilers/composition/tenant-theme/index.ts",
+        "packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts",
+        "packages/core/manifest/controls/typography.families.json"
+      ],
+      "negativeControls": [
+        "control height remains fixed",
+        "color remains fixed",
+        "border remains fixed",
+        "motion remains fixed"
+      ],
+      "negativeControlsScopeNote": "The same four the control declares, restated on this root so the cell is self-describing; the effective set is the union, same as typography.pairing's own cell in this family. `control height remains fixed` bound to card-modern-md/title (same target typography.pairing already used, F4B-11).",
+      "stressCases": [
+        "Shares its 2 primary channels with typography.pairing (--ds-font-family-base, --ds-font-family-heading) -- not a collision, ONE output surface with a written precedence ('explicit family wins', TenantAppearanceGeneral's own source comment). Isolated case (no typePairing in the document) verified true from the start of this packet.",
+        "COMPOUND case (typePairing + explicit family in the SAME document) was measured FALSE before E-2: pairing's expansion silently won, an explicit fontFamilyHeading mutation produced ZERO channel movement on either door, byte-identical before/after. This was the real, measured cause of capability-propagation's own `does not let one capability move another capability's exclusive channel` (index.test.ts:573) going red -- not explained by the declared precedence, a genuine defect, escalated to the DT as a STOP rather than papered over. E-2 fixed it (tenantPostureFloors re-projects the explicit family LAST); re-measured this packet, both doors, all 3 verticals, byte-exact to literal+fallback, receipted.",
+        "Declaring mono/display as regular (non-identity) causal-probe stops crashes `assertStopDiscrimination` on the DB arm for the WHOLE control (their role has zero members on the DB path's 2-member set, and that throw is not on the closed STOP_EXCLUSION_CLASSES list) -- fixed within this packet's own write-set by NOT declaring them as normalizedStops at all, verified instead by direct out-of-band compile (same technique as an identity stop), never touching the frozen instrument.",
+        "The `CONSUMER_REACHED` pin in capability-propagation (index.test.ts:341) went stale for a DIFFERENT control, motion.dial, when F4B-13 (48cd4d347) made it reachable without updating the pin -- fixed alongside this close (R-1 class: legitimate growth, not a regression) since it shared the same test file as the E-2 verification.",
+        "internalChannels below does NOT list --ds-font-family-base/--ds-font-family-heading: the manifest's own cardinality law (customization-model.json, enforced in manifest/rules/index.mjs:767-784, 'internal channels may have many productive consumers but never competing semantic owners') is global and per-channelId, not per-family -- typography.pairing is ALREADY the recognised semanticOwner for both channels (this same family's own typography.pairing cell, plus a second cell under chart/basic/area-chart), so a second semanticOwner for the same channelId fails --check outright (measured: attempted it, got exactly that error). The shared surface is represented instead where the schema already supports it without a conflict -- targetBinding.sharedChannels below (pre-existing, unedited) already lists all 4 real channels for this reason. internalChannels here is scoped to the 2 channels typography.families exclusively owns (mono, display -- typography.pairing declares neither)."
+      ],
+      "restoreRequirements": [
+        "Unsetting the control through either door restores the baseline font-family exactly (measured: restore.exact true on all 12 isolated receipted scenarios, byte-identical rows). The compound scenario is a same-document composition proof, not a restore drill -- restore semantics for it are the same as typography.pairing's own (unsetting both fields returns to the vertical baseline)."
+      ],
+      "internalChannels": [
+        {
+          "channelId": "--ds-font-family-mono",
+          "semanticOwner": "typography.families",
+          "producer": "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/display/typography"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/foundation/themes/default.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--ds-font-family-display",
+          "semanticOwner": "typography.families",
+          "producer": "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/display/typography"
+          ],
+          "sourceBindings": [
+            "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        }
+      ],
       "targetBinding": {
         "status": "MUST_REACH",
         "bindings": [

@@ -4,7 +4,7 @@
   "scope": "Phase-0 exact proof and minimal public-claim floor; not DS-IMP-060 completion",
   "reproducibility": {
     "classification": "deterministic same-input runs",
-    "authorityDigest": "dc22b1bddf334e069fff53ffe6c71d887552c21d73642a20c3117056613bb93c",
+    "authorityDigest": "d6807977637d38c0e4c3693ec747e0ba93363e8206bd7e37a6cedfd42ae87a00",
     "sourceHeadIsAuthority": false,
     "toolchain": {
       "node": {
@@ -1383,8 +1383,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 38608,
-        "sha256": "2bee31fb91d4ff55454f5dcb3575034f4aa58e8d40d45da1b1f41cdcb0d8dc7b"
+        "bytes": 39317,
+        "sha256": "428ce6aaccc3d87427da63f6ad3b9b66eaf778c010843d920372a2ba87d9cc4a"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/contracts/composition/tenants/index.ts",
@@ -12074,8 +12074,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 80712,
-        "sha256": "90d6c575ab8a56bf0fc75165ab91925df2f10a53ddd55eb6c46b48e3ea89ba4b"
+        "bytes": 81050,
+        "sha256": "5153ff427de2bbc401e51cf867626a5bd70e180dcfb67c1b95c56a4867046cd5"
       },
       {
         "path": "ui-design-system/packages/core/src/infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts",
@@ -12498,8 +12498,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 91707,
-        "sha256": "32d3b8713a5d7d1691a508fb8793c29ba7be08310fe69c6241aa0443e7b6832c"
+        "bytes": 93033,
+        "sha256": "0e5480d02fe782b358aa1950cf8143bb6bd3a9370769aed3446b3dcb52b55122"
       },
       {
         "path": "ui-design-system/packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/tests/brand-compiler.test.ts",
@@ -12532,6 +12532,14 @@
         ],
         "bytes": 15135,
         "sha256": "9a6ce3e25514a207e66a6c926b15bd974bd21fd715850c1f09a3088735260272"
+      },
+      {
+        "path": "ui-design-system/packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/tests/e2-composed-pairing.test.ts",
+        "roles": [
+          "audit-input"
+        ],
+        "bytes": 8177,
+        "sha256": "653e3e451a983eaa9ed5445ef7c6fc0db0f284e8753a321acb38c1d4a3ff8022"
       },
       {
         "path": "ui-design-system/packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/tests/extended-palette-floor.test.ts",
@@ -15581,8 +15589,8 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 31633,
-        "sha256": "196397f0985e9d507e3eb78f78cf274f26fecdb9dd95c1c8e2985cad38c3a823"
+        "bytes": 32769,
+        "sha256": "c9b459316bd35ed2ea5c321141e9e945be1be9b33c0502eea6abd5f8fccd1195"
       },
       {
         "path": "ui-design-system/packages/core/src/tooling/resolution-probe/foundation/roster/tests/index.test.tsx",
@@ -15829,8 +15837,8 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 24972,
-        "sha256": "11d98ac69f3b0d2bf54729bb0ca594885d6d6659ccfcf7a1c2d8ee6a7c807ad1"
+        "bytes": 25540,
+        "sha256": "fbf6aa6abde3d0bc1c7be089d97e0fe7ac7ffe398916efba85bc95b073d0de61"
       },
       {
         "path": "ui-design-system/packages/core/src/tooling/testing/integration/fixture-visual-authority/tests/index.test.tsx",
@@ -40511,7 +40519,7 @@
         "sha256": "d2a99efed33922a4a699ea033538b677022ddaccf0cdbb25ece0a7295bdc4812"
       }
     ],
-    "digest": "dc22b1bddf334e069fff53ffe6c71d887552c21d73642a20c3117056613bb93c"
+    "digest": "d6807977637d38c0e4c3693ec747e0ba93363e8206bd7e37a6cedfd42ae87a00"
   },
   "paintAudit": {
     "output": "engine-token-audit --check OK (3326 counters; 3226 completed zeros locked exactly; 91 decrease-only ceilings; 2 positive exact invariants; 7 positive minimum floors)",
@@ -113892,8 +113900,8 @@
   "deterministicRuns": {
     "count": 2,
     "hashes": [
-      "b36586ca3b07ddc2f2f53464be138a70932aef576e419ae9ce6c3633a118fb32",
-      "b36586ca3b07ddc2f2f53464be138a70932aef576e419ae9ce6c3633a118fb32"
+      "070cbb86334701e3ae079ab83205977547ef09dc253428a10bf65695eff499db",
+      "070cbb86334701e3ae079ab83205977547ef09dc253428a10bf65695eff499db"
     ],
     "agree": true
   }
