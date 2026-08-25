@@ -5,7 +5,7 @@
   "scenarioId": "surfaces.elevation-posture/elevated/evnto/static-and-db",
   "evidenceKind": "exact-restore",
   "commandOrTool": "node src/tooling/resolution-probe/public/cli/index.mjs causal",
-  "toolVersion": "resolution-probe@e6f5bed27982",
+  "toolVersion": "resolution-probe@5c36010317ba",
   "exitCode": 0,
   "sourceFiles": [
     "packages/core/dist/build-stamp.json",
@@ -66,10 +66,10 @@
     "packages/core/src/ui/primitives/display/Card/engines/rustic/index.tsx",
     "packages/core/src/ui/primitives/display/Card/index.tsx"
   ],
-  "sourceDigest": "72ccc104df410fc904f0dfa7adb8515aea571418929ce3d430375ef140a74b77",
+  "sourceDigest": "0a226b17c94034eb8e8b3b6c72070ebe14d26946c2f24ce39f6c4d697479a26d",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/surfaces-elevation-posture/evnto-elevated.json",
   "artifactSha256": "1cd6c6fe5699eb5fec4c646793766fe77707d3b57b72cd15dfc20eb2d6bce1cd",
-  "createdAt": "2026-08-25T08:29:53.496Z",
+  "createdAt": "2026-08-25T09:12:12.527Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

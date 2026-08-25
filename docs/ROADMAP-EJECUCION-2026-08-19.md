@@ -4285,6 +4285,38 @@ nombrado. Suites 234/234, build EXIT=0, 0 trackeados movidos. Con esto, la
 puerta DB de los 6 controles PRO (`visualFoundation.*`) queda
 estructuralmente alcanzable — su calibración es la cola que sigue.
 
+**FASE-B — la rama `font-stack` + la ley del brace-en-medio construidas
+(2026-08-25; Opus; postaudit Fable: ACCEPT — "el instrumento queda con sus
+dos fases cerradas").** La rama escribe el string del stack TAL CUAL (sin
+trim ni normalización — trimear bajaría algo que la puerta DB nunca
+aceptaría) y `isLowerableFontStack` **replica `isSafeFontFamily` paso por
+paso y en el mismo orden** (longitud/trim → var() sólo font-pack → pack id
+contra la lista cerrada de 6 → charset sobre el residuo): **coinciden 8/8
+con el validador del producto en la puerta DB**; el brazo estático acepta
+los 8 (la asimetría de validación queda registrada en su familia, alcance
+honesto: autor de vertical / caller del compilador — no tenant). Las 3
+constantes copiadas (no importadas — el harness corre en tests que no
+cargan dist) y FENCEADAS contra las publicadas por drill (la deriva se pone
+roja en vez de silenciosa). **La corrección vinculante de Fable, verificada
+por Opus antes de escribirla y fenceada contra su reintroducción (drill
+B4): la asimetría es de EMISIÓN, no de movimiento** — el estático EMITE el
+heading sin moverlo (el literal del tema sobrevive el merge por-campo); la
+DB no lo emite (delta puro); la paridad reclamable es base byte-idéntico en
+ambos brazos con el heading declarado ciego por emisión. Y el hecho (1): el
+canal emitido NO es el string escrito (el compilador inserta el fallback de
+script) — la aserción es discriminación + contiene-la-familia-líder. **La
+ley del brace-en-medio:** un brace-set cuyos miembros comparten TODOS el
+último segmento es indiscriminable por construcción para cualquier rol →
+throw que nombra la ley (no el síntoma), medido en las DOS rutas de
+chrome.anatomy (estática y DB); NO publicable como exclusión (defecto de
+manifest, no stop inadmisible): re-lanza y rompe la corrida; el conjunto
+cerrado R-2 intacto. Invariancia probada por DOS vías independientes
+(ningún control receipteado usa kind font-stack; ninguno de los 13 tiene
+brace con sufijo compartido). Suites 240/240, build EXIT=0, 93/93 VALID por
+re-atestación de Sonnet. Con esto, typography.families (el control más
+barato de la cola: ambos keypaths limpios) queda desbloqueado para su
+calibración — F4B-14 sigue.
+
 **F4B-11 — typography.pairing CIERRA SOURCE_BOUND (2026-08-24; Sonnet;
 postaudit Fable: ACCEPT — "el falso-verde más peligroso del censo quedó
 cerrado con el keypath real").** Keypath corregido (el de OTRO control →

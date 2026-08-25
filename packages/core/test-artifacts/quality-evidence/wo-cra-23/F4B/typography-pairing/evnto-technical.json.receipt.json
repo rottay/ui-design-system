@@ -5,7 +5,7 @@
   "scenarioId": "typography.pairing/technical/evnto/static-and-db",
   "evidenceKind": "static-db-computed-parity",
   "commandOrTool": "node src/tooling/resolution-probe/public/cli/index.mjs causal",
-  "toolVersion": "resolution-probe@e6f5bed27982",
+  "toolVersion": "resolution-probe@5c36010317ba",
   "exitCode": 0,
   "sourceFiles": [
     "packages/core/dist/build-stamp.json",
@@ -64,10 +64,10 @@
     "packages/core/src/ui/primitives/display/Typography/tests/Typography.test.tsx",
     "packages/core/src/ui/primitives/display/Typography/tests/Typography.type-roles.test.tsx"
   ],
-  "sourceDigest": "f6604513013053be413c43554c1eb0fca3a0008a052a71df7d9eba4b2dbe4287",
+  "sourceDigest": "83c2d79a42949159f310f7b05c5cacb4973cc541fa2755d23b8f7bf75e2f1781",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/typography-pairing/evnto-technical.json",
   "artifactSha256": "07f75f215518ec9a6ad660b611ce3e34a1dcc6483b36a19f56f0da2ebad86d3c",
-  "createdAt": "2026-08-25T08:29:53.620Z",
+  "createdAt": "2026-08-25T09:12:12.658Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

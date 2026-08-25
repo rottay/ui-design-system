@@ -671,6 +671,33 @@ export function ingressPathMembers(declared) {
 export function resolveIngressMember(declared, role) {
   const members = ingressPathMembers(declared);
   if (members.length === 1 && members[0] === declared) return declared;
+  /* FASE-B -- THE BRACE-IN-THE-MIDDLE LAW, checked BEFORE the role.
+   *
+   * This harness selects a member by its LAST segment. That is an ASSUMPTION
+   * about the shape of a brace-set, and until now it was undeclared. When the
+   * brace sits mid-path and every member ends in the same segment
+   * (`chrome.{cardComponent,table,sidebar,layout}.anatomy`), the filter below
+   * matches 0 or N -- never exactly 1 -- for EVERY possible role. The generic
+   * "selects N members" throw then describes the SYMPTOM and reads as though
+   * the role were wrong, when what is wrong is the shape of the set.
+   *
+   * So the check is STRUCTURAL and comes first: it is a property of the set,
+   * not of the role, and it is a defect in the MANIFEST rather than a stop the
+   * compiler refused. Which is why it is a plain Error and NOT a
+   * `StopExclusionError`: `classifyStopExclusion` must return null for it so
+   * the R-2 hardening RE-THROWS and breaks the run, instead of publishing it as
+   * "this stop cannot lower" and shrinking the witness set. `STOP_EXCLUSION_CLASSES`
+   * stays untouched. */
+  const suffixes = new Set(members.map((member) => member.split('.').at(-1)));
+  if (suffixes.size === 1) {
+    throw new Error(
+      `resolution-probe: the ingress set "${declared}" cannot be discriminated by role: all ` +
+        `${members.length} members end in the same segment ("${[...suffixes][0]}"), so no role ` +
+        'can ever select exactly one. This harness selects a member by its LAST segment; a ' +
+        'brace-set whose discriminator sits mid-path needs a different ingress shape, not a ' +
+        `different stop. Members: ${members.join(', ')}`,
+    );
+  }
   if (typeof role !== 'string' || role.length === 0) {
     throw new Error(
       `resolution-probe: the ingress path "${declared}" is a SET of ${members.length} doors, so a ` +
@@ -845,6 +872,52 @@ export function buildIngressInput({ armId, controlManifest, stopId, base = {} })
  * cannot derive from the contract must not be lowered on a remembered
  * convention.
  */
+/* FASE-B -- the font-family contract, REPLICATED from the product validator.
+ *
+ * These three constants mirror `isSafeFontFamily`
+ * (`compilers/composition/tenant-theme`): the length limit lives in
+ * `TENANT_THEME_CONFIG_SCHEMA.limits.maxFontFamilyLength`, the pack ids in
+ * `TENANT_THEME_FONT_PACK_IDS`, and the residue charset in the validator body.
+ * They are COPIED rather than imported because this module is the pure half of
+ * the harness: `buildIngressInput` runs in tests that never load `dist/`, and
+ * importing the published schema here would make the ingress path depend on a
+ * build. The copy is not left to rot -- a drill asserts these three values
+ * against the PUBLISHED ones, so drift turns red instead of silent. */
+const FONT_STACK_MAX_LENGTH = 200;
+const FONT_STACK_PACK_IDS = Object.freeze([
+  'editorial-display',
+  'editorial-text',
+  'grotesk-display',
+  'humanist-text',
+  'geometric-display',
+  'plex-mono',
+]);
+const FONT_PACK_REFERENCE = /var\(--ds-font-pack-([a-z0-9](?:[a-z0-9-]{0,62}[a-z0-9])?)\)/g;
+const FONT_STACK_RESIDUE = /^[\p{L}\p{N}\s'",._-]+$/u;
+
+/**
+ * `isSafeFontFamily`, step for step and in the SAME ORDER as the product
+ * validator -- approximating it would be the divergence this replica exists to
+ * prevent.
+ */
+export function isLowerableFontStack(value) {
+  if (typeof value !== 'string') return false;
+  if (value.length === 0 || value.length > FONT_STACK_MAX_LENGTH || value !== value.trim()) {
+    return false;
+  }
+  const references = value.match(FONT_PACK_REFERENCE) ?? [];
+  const allVarFunctions = value.match(/var\s*\(/gi) ?? [];
+  // EVERY `var()` must be a font-pack reference: a count mismatch means the
+  // string names something else, which is the asset-channel the product closes.
+  if (references.length !== allVarFunctions.length) return false;
+  const allowed = new Set(FONT_STACK_PACK_IDS);
+  for (const reference of references) {
+    const packId = /^var\(--ds-font-pack-(.+)\)$/.exec(reference)?.[1];
+    if (!packId || !allowed.has(packId)) return false;
+  }
+  return FONT_STACK_RESIDUE.test(value.replace(FONT_PACK_REFERENCE, 'FontPack'));
+}
+
 function ingressValueForStop({ controlManifest, stop }) {
   const kind = controlManifest?.domain?.kind;
   const controlId = controlManifest?.controlId ?? 'unknown control';
@@ -903,6 +976,44 @@ function ingressValueForStop({ controlManifest, stop }) {
       );
     }
     return stop.id;
+  }
+  if (kind === 'font-stack') {
+    /* A tenant writes the FONT STACK verbatim at the role's keypath. Written as
+     * it stands: no trimming, no quoting, no normalisation -- the product
+     * validator refuses an untrimmed value outright, so trimming here would
+     * lower a string the DB door would never accept and call it a measurement.
+     *
+     * WHY THE HARNESS VALIDATES AT ALL, and it is not caution.
+     * `compileBrandTheme` validates font families NOWHERE (verified:
+     * `isSafeFontFamily` and the font-pack pattern do not appear in the static
+     * compiler), so the string reaches the serialised stylesheet RAW. Measured,
+     * a stop carrying a closing brace emits
+     * `--ds-font-family-base: Inter; } html { display:none } /*, ...` -- a
+     * declaration that terminates the rule. The DB door refuses the same string.
+     * So an unvalidated stop would produce a reading that looks ALIVE on one arm
+     * and throws on the other, and the divergence would have been invented by
+     * this instrument rather than found in the product.
+     *
+     * The asymmetry itself is a real finding and is NOT this packet's to fix: it
+     * is reachable by a code-owned BrandTheme or a caller of `compileBrandTheme`
+     * with a `tenantPatch`, not by a tenant document, and it is registered with
+     * the other door asymmetries for the owner.
+     *
+     * `DOMAIN_KIND_NOT_LOWERED` is the class `color-set` already uses for a
+     * value this harness will not lower -- same law, same failure shape. */
+    if (!isLowerableFontStack(stop.value)) {
+      throw new StopExclusionError(
+        STOP_EXCLUSION_CLASSES.DOMAIN_KIND_NOT_LOWERED,
+        `resolution-probe: ${controlId} has a font-stack domain, so a tenant writes a CSS ` +
+          `font-family list at the ingress path — but stop "${stop.id}" declares ` +
+          `${JSON.stringify(stop.value)}, which the product's own contract refuses ` +
+          '(1..200 chars, already trimmed, charset [letters digits space \' " , . _ -], and ' +
+          `var() only as var(--ds-font-pack-<id>) with <id> in ${FONT_STACK_PACK_IDS.join(', ')}). ` +
+          'The STATIC arm validates nothing and would emit it raw into the stylesheet, so ' +
+          'lowering it would invent a divergence instead of measuring one.',
+      );
+    }
+    return stop.value;
   }
   if (kind === 'color-set') {
     /* A tenant writes the COLOR at the role's keypath. Which keypath is

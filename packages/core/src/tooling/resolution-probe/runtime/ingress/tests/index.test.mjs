@@ -36,6 +36,7 @@ import {
   INGRESS_ARM_IDS,
   INGRESS_ARMS,
   advancedCompileOptions,
+  isLowerableFontStack,
   dbIngressSpace,
   DB_INGRESS_SPACES,
   IngressSpaceError,
@@ -3553,4 +3554,214 @@ test('A7 (W-A.2): the seal reaches the advanced space too -- synthetic palette d
   assert.equal(seen.visualFoundation.general.palette.backgroundMode, 'dark');
   assert.ok(seen.visualFoundation.general.palette.primaryColor, 'the seed travelled into general');
   assert.equal(lowered.producedBy.input.modeScope, 'dark', 'modeScope finds it in either space');
+});
+
+
+/* ==========================================================================
+ * FASE-B — the font-stack branch and the brace-in-the-middle law. B1..B4.
+ * ========================================================================== */
+
+/** The eight stops of the design's Q2.a table, with the verdict each arm gives. */
+const B1_STOPS = [
+  { value: 'Inter, system-ui, sans-serif', lowerable: true },
+  { value: '"IBM Plex Sans", Helvetica, sans-serif', lowerable: true },
+  { value: "'Fira Sans', Arial, sans-serif", lowerable: true },
+  // A font-pack id that does not exist: the real ids end in -display/-text/-mono.
+  { value: 'var(--ds-font-pack-grotesk), sans-serif', lowerable: false },
+  { value: '  Inter, sans-serif  ', lowerable: false },
+  { value: '', lowerable: false },
+  { value: 'url(https://evil/x.woff2)', lowerable: false },
+  { value: 'Inter; } html { display:none } /*', lowerable: false },
+];
+
+test('B1: the font-stack branch lowers exactly what the product contract admits', () => {
+  const manifest = {
+    ...CONTROL_MANIFEST,
+    controlId: 'typography.families',
+    domain: { kind: 'font-stack', enumValues: [] },
+    ingress: { dbTenantThemePath: 'appearance.general.typography.fontFamilyBase' },
+    declaredOutputs: { channels: ['--ds-font-family-base'] },
+  };
+  for (const { value, lowerable } of B1_STOPS) {
+    const stops = [{ id: 'stack', value, role: 'fontFamilyBase' }];
+    const run = () =>
+      lowerStop({
+        armId: 'db-tenant-theme',
+        controlManifest: { ...manifest, calibration: { normalizedStops: stops } },
+        stopId: 'stack',
+        compile: () => ({ variables: { '--ds-font-family-base': value } }),
+        vertical: 'rottay',
+        provenance: { schemaVersion: 1 },
+      });
+    if (lowerable) {
+      assert.equal(isLowerableFontStack(value), true, `${JSON.stringify(value)} must lower`);
+      assert.doesNotThrow(run);
+    } else {
+      assert.equal(isLowerableFontStack(value), false, `${JSON.stringify(value)} must be refused`);
+      let thrown = null;
+      try {
+        run();
+      } catch (error) {
+        thrown = error;
+      }
+      assert.ok(thrown instanceof StopExclusionError, `${JSON.stringify(value)} refuses by class`);
+      // Same class `color-set` uses for a value this harness will not lower.
+      assert.equal(thrown.exclusionClass, STOP_EXCLUSION_CLASSES.DOMAIN_KIND_NOT_LOWERED);
+      assert.match(thrown.message, /font-stack domain/);
+    }
+  }
+});
+
+test('B1b: the replica does not drift from the PUBLISHED product contract', async () => {
+  // The three constants are COPIED into the pure module on purpose (no dist on
+  // the ingress path). This is the drill that keeps the copy honest.
+  const server = await import(
+    pathToFileURL(resolve(CORE_ROOT, 'dist/server.js')).href
+  );
+  assert.deepEqual(
+    [...server.TENANT_THEME_FONT_PACK_IDS].sort(),
+    ['editorial-display', 'editorial-text', 'geometric-display', 'grotesk-display', 'humanist-text', 'plex-mono'],
+    'the pack id set the replica encodes is the published one',
+  );
+  assert.equal(server.TENANT_THEME_CONFIG_SCHEMA.limits.maxFontFamilyLength, 200);
+  // And the replica agrees with the product validator stop for stop, through
+  // the real DB door.
+  for (const { value, lowerable } of B1_STOPS) {
+    let dbAccepts = true;
+    try {
+      server.compileTenantThemeConfig({
+        schemaVersion: server.TENANT_THEME_SCHEMA_VERSION,
+        mode: 'simple',
+        appearance: { typography: { fontFamilyBase: value } },
+        tenantId: 'probe-tenant-bithire',
+        slug: 'probe-tenant-bithire',
+        verticalKey: 'bithire',
+        rowVersion: 1,
+      });
+    } catch {
+      dbAccepts = false;
+    }
+    assert.equal(dbAccepts, lowerable, `replica and product disagree on ${JSON.stringify(value)}`);
+    assert.equal(isLowerableFontStack(value), dbAccepts);
+  }
+});
+
+test('B2: the emitted channel is NOT the written string -- assert discrimination, never equality', async () => {
+  const main = await import(pathToFileURL(resolve(CORE_ROOT, 'dist/index.js')).href);
+  const written = 'Inter, system-ui, sans-serif';
+  const compiled = main.compileBrandTheme({
+    brandTheme: main.bithireBrandTheme,
+    tenantSlug: 'bithire',
+    tenantPatch: { typography: { fontFamilyBase: written } },
+    tenantAuthoredPaths: new Set(['typography.fontFamilyBase']),
+  });
+  const emitted = compiled.cssVariables['--ds-font-family-base'];
+  // The compiler INSERTS a script fallback, so equality is red by design.
+  assert.notEqual(emitted, written, 'the compiler adds a script fallback');
+  assert.match(emitted, /"Noto Sans Arabic"/);
+  // The two assertions that ARE correct: it carries the leading family, and it
+  // discriminates between stops.
+  assert.ok(emitted.startsWith('Inter,'), 'contains the leading family');
+  const other = main.compileBrandTheme({
+    brandTheme: main.bithireBrandTheme,
+    tenantSlug: 'bithire',
+    tenantPatch: { typography: { fontFamilyBase: "'Fira Sans', Arial, sans-serif" } },
+    tenantAuthoredPaths: new Set(['typography.fontFamilyBase']),
+  }).cssVariables['--ds-font-family-base'];
+  assert.notEqual(emitted, other, 'different stops discriminate');
+});
+
+test('B4: the asymmetry is of EMISSION, not of movement (all three verticals)', async () => {
+  const main = await import(pathToFileURL(resolve(CORE_ROOT, 'dist/index.js')).href);
+  const server = await import(pathToFileURL(resolve(CORE_ROOT, 'dist/server.js')).href);
+  const themes = {
+    rottay: main.rottayBrandTheme,
+    bithire: main.bithireBrandTheme,
+    evnto: main.evntoBrandTheme,
+  };
+  const stack = 'Inter, system-ui, sans-serif';
+  for (const [vertical, brandTheme] of Object.entries(themes)) {
+    const before = main.compileBrandTheme({ brandTheme, tenantSlug: vertical }).cssVariables;
+    const after = main.compileBrandTheme({
+      brandTheme,
+      tenantSlug: vertical,
+      tenantPatch: { typography: { fontFamilyBase: stack } },
+      tenantAuthoredPaths: new Set(['typography.fontFamilyBase']),
+    }).cssVariables;
+    // Base moves on the static arm.
+    assert.notEqual(after['--ds-font-family-base'], before['--ds-font-family-base'], vertical);
+    /* AND THE HEADING DOES NOT MOVE. The design said the static arm "moves both,
+     * the heading re-derived from the pairing"; measured on all three verticals
+     * that is FALSE. The theme's own literal survives the per-field merge (the
+     * base-only patch never touches `fontFamilyHeading`), so the static arm
+     * EMITS the heading without moving it. */
+    assert.equal(after['--ds-font-family-heading'], before['--ds-font-family-heading'], vertical);
+    assert.notEqual(after['--ds-font-family-heading'], undefined, `${vertical} static EMITS heading`);
+    // The DB door does not emit it at all: its document is a pure delta.
+    const artifact = server.compileTenantThemeConfig({
+      schemaVersion: server.TENANT_THEME_SCHEMA_VERSION,
+      mode: 'simple',
+      appearance: { typography: { fontFamilyBase: stack } },
+      tenantId: `probe-tenant-${vertical}`,
+      slug: `probe-tenant-${vertical}`,
+      verticalKey: vertical,
+      rowVersion: 1,
+    });
+    assert.equal(artifact.variables['--ds-font-family-heading'], undefined, `${vertical} DB blind`);
+    // The parity that CAN be claimed: base, on both arms, identical.
+    assert.equal(artifact.variables['--ds-font-family-base'], after['--ds-font-family-base'], vertical);
+  }
+});
+
+test('B3: a brace-set whose discriminator sits mid-path is refused, by BOTH of its doors', () => {
+  const chromeAnatomyStatic = 'chrome.{cardComponent,table,sidebar,layout}.anatomy';
+  const chromeAnatomyDb = 'visualFoundation.advanced.chrome.{cardComponent,table,sidebar,layout}.anatomy';
+  for (const declared of [chromeAnatomyStatic, chromeAnatomyDb]) {
+    let thrown = null;
+    try {
+      resolveIngressMember(declared, 'sidebar');
+    } catch (error) {
+      thrown = error;
+    }
+    assert.match(thrown.message, /all 4 members end in the same segment \("anatomy"\)/);
+    assert.match(thrown.message, /needs a different ingress shape, not a different stop/);
+    // A manifest defect is NOT publishable as an exclusion: unclassified, so the
+    // R-2 hardening re-throws and the run breaks.
+    assert.ok(!(thrown instanceof StopExclusionError));
+    assert.equal(classifyStopExclusion(thrown), null);
+  }
+  // And nothing functional is caught by it.
+  assert.equal(resolveIngressMember('palette.{primaryColor,secondaryColor}', 'primary'), 'palette.primaryColor');
+  assert.equal(
+    resolveIngressMember('typography.{fontFamilyBase,fontFamilyHeading}', 'fontFamilyHeading'),
+    'typography.fontFamilyHeading',
+  );
+  assert.equal(resolveIngressMember('appearance.general.rhythm'), 'appearance.general.rhythm');
+});
+
+test('B: the font-family door does not intersect CONSULTED_PROVENANCE_FIELDS', () => {
+  /* Read from the CONTRACT SOURCE, exactly as B-2 drill 6 does: the compiler
+   * publishes this set through no package entrypoint (verified: absent from
+   * both dist/index.js and dist/server.js), and copying it here would be the
+   * second authority that drill exists to prevent. */
+  const isoSource = readFileSync(
+    resolve(CORE_ROOT, 'src/foundation/contracts/composition/tenants/themes/iso/index.ts'),
+    'utf8',
+  );
+  const marker = 'export const CONSULTED_PROVENANCE_FIELDS: ReadonlySet<string> = new Set([';
+  const open = isoSource.indexOf(marker);
+  assert.notEqual(open, -1, 'the contract no longer declares CONSULTED_PROVENANCE_FIELDS this way');
+  const close = isoSource.indexOf(']);', open);
+  const fields = [...isoSource.slice(open + marker.length, close).matchAll(/"([^"]+)"/g)].map((m) => m[1]);
+  // The reader proves itself before anything is concluded from it.
+  assert.ok(fields.length >= 12, `parsed only ${fields.length} consulted fields`);
+  assert.ok(fields.includes('palette.primaryColor'));
+  const doors = [
+    'typography.fontFamilyBase',
+    'typography.fontFamilyHeading',
+    'typography.fontFamilyMono',
+    'typography.fontFamilyDisplay',
+  ];
+  for (const door of doors) assert.ok(!fields.includes(door), `${door} must not be consulted`);
+  assert.equal(fields.filter((f) => f.startsWith('typography.')).length, 0, 'no typography.* at all');
 });

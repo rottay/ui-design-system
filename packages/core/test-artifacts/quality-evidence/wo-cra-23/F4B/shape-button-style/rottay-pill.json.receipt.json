@@ -5,7 +5,7 @@
   "scenarioId": "shape.button-style/pill/rottay/static-and-db",
   "evidenceKind": "exact-restore",
   "commandOrTool": "node src/tooling/resolution-probe/public/cli/index.mjs causal",
-  "toolVersion": "resolution-probe@e6f5bed27982",
+  "toolVersion": "resolution-probe@5c36010317ba",
   "exitCode": 0,
   "sourceFiles": [
     "packages/core/dist/build-stamp.json",
@@ -64,10 +64,10 @@
     "packages/core/styles/index.css",
     "packages/core/styles/rottay.css"
   ],
-  "sourceDigest": "ffda8e5cf3fc92adbc3258e9d1b95236eeafaae37c43d557b880ad27e7b4ff4b",
+  "sourceDigest": "f03397ae5f7152ab5715981970359f86a2e22e954a2164a0e58ed503bcd678d1",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/shape-button-style/rottay-pill.json",
   "artifactSha256": "7077e6c01a3965174850e303514a0a5c15f91382ef397933c36c77b5cfab76ba",
-  "createdAt": "2026-08-25T08:29:53.167Z",
+  "createdAt": "2026-08-25T09:12:12.232Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,
