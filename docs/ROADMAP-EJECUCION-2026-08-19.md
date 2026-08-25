@@ -4333,6 +4333,37 @@ verificación previa). La primera aplicación (compound-editorial de F4B-14,
 fence `capability-propagation:573` + `e2-composed-pairing.test.ts`) cumple
 ambas y quedó evaluada por Fable como "fortalece el programa".
 
+**chrome.families — el último control de F4B cierra como PARAGUAS asentado
+(2026-08-25; Sonnet; postaudit Fable: ACCEPT — "el paraguas es verdadero,
+sus miembros están donde la nota dice, y UNKNOWN+nota es la forma honesta
+bajo el vocabulario real del generador"; P2 de una palabra corregida al
+commitear: el kind literal de sidebar-tone es `closed-enum`, no `enum`).**
+El asiento declara lo que el control ES: el NOMBRE del espacio compartido
+que `chromeToVariables` (un solo emisor, ~45 familias) y el schema DB
+`chrome = object({...})` cubren — NO una unidad medible por sí misma. Su
+`brandThemePath: 'chrome.*'` es un wildcard que el harness no resuelve
+(misma clase que sidebar-tone antes de F4B-12) y NO hay un campo real al que
+corregirlo (dominio heterogéneo: passthrough en la mayoría, postura derivada
+en `tone`, enum cerrado en `.anatomy`, envoltura `applyRadiusDial` en todo
+`-radius`). `assessmentState` queda `UNKNOWN` A PROPÓSITO — declarado
+BY_REFERENCE por diseño (el vocabulario del generador no admite un estado
+paraguas dedicado; no se extendió el schema). `nextAction`:
+`SURFACE_REVIEW_DEFERRED_TO_F5` (la revisión de las ~250 celdas con el
+scaffold ESCAPE_HATCH compartido — explícitamente F5). Miembros citados con
+sus commits verificados: `navigation.sidebar-tone` (F4B-12) y
+`chrome.anatomy` (Packet 3, `12d664e99`). El hueco del passthrough genérico
+(las ~30 familias planas + las grandes escritas a mano) es exactamente lo
+que el kind `map-entry` existe para cerrar (diseño de Opus en curso; hasta
+que exista, este control no tiene miembro propio para esa porción — dicho
+en la nota). Sin registry ni celdas tocadas; sin re-emisión (el manifest no
+está en la superficie de frescura de ningún receipt — verificado).
+**Con este asiento, los 20/20 controles de F4B quedan ASENTADOS: 19 con
+medición completa (9 COMPUTED_VERIFIED + 10 SOURCE_BOUND) + chrome.families
+como paraguas BY_REFERENCE; la única evidencia causal pendiente dentro del
+perímetro es la matriz de token-overrides (F4B-17B), que espera el kind
+`map-entry` — deuda adjudicada con su packet ya ordenado, no una
+calibración olvidada.**
+
 **PACKET 3 DATA — chrome.anatomy CIERRA SOURCE_BOUND y la serie DATA queda
 completa (2026-08-25; Opus; postaudit Fable: ACCEPT — "la serie DATA cierra
 completa (posture + icon + anatomy en una tabla), la reparación de la

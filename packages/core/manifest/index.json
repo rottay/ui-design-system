@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "generatedBy": "node packages/core/manifest/generator/index.mjs --sync",
   "authorityLaw": "Controls own semantics, groups own recipe vocabularies, families own applicability edges, and this index owns generated rollups.",
-  "inputsDigest": "eeac7c65b780311ef241800cf1cae4b2f4c9c1455c1f845c839256628a0078d2",
+  "inputsDigest": "93c3c0b3550d6f840add2ad3f69d12a6c1c6253c13319231bf4a2ea235eb7299",
   "denominators": {
     "canonicalFamilies": 255,
     "activeStandardControls": 13,
@@ -1923,7 +1923,7 @@
     {
       "controlId": "chrome.families",
       "path": "manifest/controls/chrome.families.json",
-      "digest": "10d5ad544d9ea4ca6af808ec37a09099cbc5bddad3062b78791bdd95796c3ed4"
+      "digest": "8963e07b12742278d3fc857c9653c400e705078f44f4941ae66babbf268329d4"
     },
     {
       "controlId": "chrome.anatomy",
