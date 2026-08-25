@@ -191,7 +191,14 @@ describe('MarkdownView remediation (K4-B)', () => {
     expect(skin).toContain('text-decoration: underline');
     expect(skin).toContain('text-decoration-thickness: 0.05em');
     expect(skin).toContain('text-underline-offset: 0.15em');
-    expect(skin).not.toContain('!important');
+    // CI-1 checker fix: same exclusion as CodeBlock.pass1-premium.test.tsx --
+    // the skin's `@media (prefers-reduced-motion: reduce)` block uses
+    // `!important` for the standard accessibility motion-kill (449ad4ba95,
+    // 2026-08-10), not link-underline styling, which is what this assertion
+    // actually guards and still catches everywhere else in the file.
+    expect(
+      skin.replace(/@media \(prefers-reduced-motion: reduce\) \{[\s\S]*?\n\}/, ''),
+    ).not.toContain('!important');
   });
 
   it('gives links skin-owned hover and focus-visible states (Pass 2)', () => {

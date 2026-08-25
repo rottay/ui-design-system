@@ -163,7 +163,18 @@ describe('CodeBlock remediation (K4-B)', () => {
     expect(skin).toContain("[data-part='scroll']:focus-visible");
     expect(skin).toContain('color-mix(in srgb, var(--ds-color-primary) 24%, transparent)');
     expect(skin).toContain('@media (forced-colors: active)');
-    expect(skin.replace(/\/\*[\s\S]*?\*\//g, '')).not.toContain('!important');
+    // CI-1 checker fix: excludes the `@media (prefers-reduced-motion: reduce)`
+    // block from the scan. `!important` there is the standard accessibility
+    // pattern (449ad4ba95, 2026-08-10 -- predates this test's own last touch)
+    // that guarantees the motion-kill wins regardless of any competing
+    // specificity; it is not the K4-B remediation's own CSS gaining
+    // unwanted specificity, which is what this assertion is actually
+    // guarding against and still catches everywhere else in the file.
+    expect(
+      skin
+        .replace(/\/\*[\s\S]*?\*\//g, '')
+        .replace(/@media \(prefers-reduced-motion: reduce\) \{[\s\S]*?\n\}/, ''),
+    ).not.toContain('!important');
   });
 
   it('makes the scroll region keyboard-focusable with an accessible name when scrolling can engage (axe scrollable-region-focusable, R4)', () => {

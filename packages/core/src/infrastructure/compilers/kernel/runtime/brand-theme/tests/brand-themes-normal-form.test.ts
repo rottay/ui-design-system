@@ -111,9 +111,22 @@ function skeletonKeysOf(text: string): string[] {
  * reference: a colour, a dimension, a shadow, a font name, a bare number, a
  * quoted enum, or any string literal at all.
  */
+// CI-1 checker fix: this only stripped `//` line comments, not JSDoc block
+// comments (`/** ... */`, continuation lines starting with `*`). The
+// `@governor` documentation comments landed on 2026-08-21 (556b4fe548) below
+// the fence -- legitimate governance prose, not values -- contain digits at a
+// word boundary (e.g. "F4A-3b") that trip `\b\d`, a false positive this gap
+// let through. A line whose trimmed form is a block-comment marker or
+// continuation (`/**`, `*/`, or starts with `*`) is now excluded from the
+// scan, same as a `//` line always was. This does not weaken the rule for
+// real code: the two drill tests below inject their raw value/colour as
+// actual skeleton content, not as prose inside a comment, so both still turn
+// this rule red exactly as before.
 function literalsBelowFence(text: string): string[] {
   const lines = text.split("\n").slice(fences(text).close);
   return lines.filter((line) => {
+    const trimmed = line.trim();
+    if (/^\/?\*/.test(trimmed) || trimmed === "/**") return false;
     const code = line.replace(/\/\/.*$/, "");
     if (!code.trim()) return false;
     return (

@@ -22,12 +22,26 @@ const readSkin = (name: string) => readSource(`foundation/tokens/css/presentatio
 const readEngineSkin = (name: string) =>
   readSource(`foundation/tokens/css/runtime/engines/modern/skin/${name}`);
 
+// CI-1 re-pin: data-table-interactions.css's hash moved (6c9f6ccf1e, 2026-08-05,
+// dropped the non-rendering <tr> box-shadow -- see the ruleContract re-pin
+// below -- this test file's own last touch predates it, a97ddd736 2026-08-03).
+// Verified against the tree today with `shasum -a 256` before writing.
 const SKIN_HASHES = {
-  'data-table-interactions.css': '9953c5f5f05eba406f82eb6ffbbcb5298417d704913f9d6465fa9b0ee86980aa',
-  'form-placeholders.css': 'c26b0d68812a0b668f5992cfa868ce8ee1c9b9047c7e7cbfe91b110d82ab2a8f',
+  'data-table-interactions.css': '41eeae3e2bcc8a9602d509e1f3f671328bc7328ec9aced15c52495ffc12279f3',
+  // CI-1 re-pin: same commit as the paint-count and rule-content re-pins
+  // below (4afa74b353, 2026-08-11) -- the file's whole content changed when
+  // the Input placeholder rule and its header comment moved out. Verified
+  // with `shasum -a 256` against the tree today before writing.
+  'form-placeholders.css': 'a78148b905f491e1ad561ea34455a623a47a4375e1c0a2c648cfd8ed3961437b',
   'navigation-static.css': 'a35d19035d60d802a89771759fe3a584deea6e982ac4fba08bfd6a52f5884d12',
   'primitive-motion.css': '6b88cc713c2552a668c6c056bbf8ba1dae05d44a827078a0e942b74a7d847e7a',
-  'scroll-area.css': '70fbd93d168e046b039a0e68995fbc98f94e8d9e032ca1c1ee7ef20a06692e93',
+  // CI-1 re-pin: 449ad4ba9 (2026-08-10) added a `@media
+  // (prefers-reduced-motion: reduce)` block for the classic thumb -- purely
+  // additive, no PAINT_PROPERTIES member touched (transition/animation
+  // timing only), so `paintCount` and every individual `ruleContract` below
+  // are unaffected; only this byte-exact hash moves. Verified with
+  // `shasum -a 256` against the tree today.
+  'scroll-area.css': '6dfac96aa06cb593864c66d9993da7564a2c340c8f9af62d5c6ccaedba277ded',
   'toast-animation-keyframes.css': 'a18d974060652fda28e40aa14d46173de1f766ac067cec4a689b43124c33c62a',
 } as const;
 
@@ -159,6 +173,7 @@ const SKINS = {
 const RELOCATED = {
   scrollAreaModern: readEngineSkin('scroll-area.css'),
   tabsModern: readEngineSkin('tabs.css'),
+  inputModern: readEngineSkin('input.css'),
   foundationKeyframes: readSource('foundation/tokens/css/foundation/animations/keyframes.css'),
 };
 
@@ -193,7 +208,14 @@ describe('WO-SKIN-06 embedded CSS recovery — exact static payload', () => {
       toast: 20,
       scrollArea: 18,
       navigation: 3,
-      formPlaceholders: 2,
+      // CI-1 re-pin: 4afa74b353 (2026-08-11) removed the modern Input's
+      // `::placeholder` rule from this file (superseded by
+      // `runtime/engines/modern/skin/input.css`, a LATER layer with a strict
+      // superset colour chain -- see that file's own header comment). Only
+      // the Select search-input placeholder's `color` declaration remains
+      // paint-countable here (`opacity` is not a PAINT_PROPERTIES member).
+      // Verified with the exact `paintCount` logic against the tree today: 1.
+      formPlaceholders: 1,
     });
 
     // Preserve the recovered 15-declaration floor while accounting for the
@@ -268,11 +290,19 @@ describe('WO-SKIN-06 embedded CSS recovery — exact static payload', () => {
       'outline-offset': '-2px',
       'border-radius': 'var(--ds-table-control-radius, var(--ds-radius-md, 0.5rem))',
     });
+    // CI-1 re-pin: 6c9f6ccf1e (2026-08-05) dropped the `box-shadow` from this
+    // rule -- it is dead paint under `border-collapse`: a box-shadow on a
+    // `<tr>` does not render there (verified against the tree today, the
+    // rule's own trailing comment at data-table-interactions.css:67 names
+    // this exactly). "The ring itself paints per cell" instead -- the very
+    // next rule in this same file,
+    // `tr[data-row-index]:focus-visible > td { box-shadow: ... }`. Removed,
+    // not relocated onto THIS selector: there is nothing to re-point this
+    // particular contract at without asserting a different selector.
     expect(
       ruleContract(SKINS.dataTable, '.ds-engine-modern:where(.ds-pattern-data-table) tr[data-row-index]:focus-visible')
     ).toEqual({
       outline: 'none',
-      'box-shadow': 'inset 0 0 0 1px color-mix(in srgb, var(--ds-color-primary) 48%, transparent)',
       'background-color':
         'var(--ds-table-row-bg-selected, color-mix(in srgb, var(--ds-color-primary) 6%, transparent))',
     });
@@ -370,10 +400,26 @@ describe('WO-SKIN-06 embedded CSS recovery — exact static payload', () => {
   });
 
   it('pins the independent Input and Select placeholder contracts', () => {
-    expect(ruleContract(SKINS.formPlaceholders, '.rottay-input--modern::placeholder')).toEqual({
+    // CI-1 re-pin: 4afa74b353 (2026-08-11) moved the modern Input's
+    // `::placeholder` rule out of this shared file entirely and into
+    // `runtime/engines/modern/skin/input.css` (a LATER cascade layer), where
+    // it is now declared jointly for two selectors -- the wrapped control and
+    // the standalone `<input>` branch -- and `opacity` reads a token
+    // (`--ds-input-placeholder-opacity`) instead of a hardcoded `1`. Verified
+    // against the tree today: this exact multi-selector rule, this exact
+    // value pair.
+    const inputPlaceholder = {
       color: 'var(--ds-input-color-placeholder, var(--ds-color-text-muted))',
-      opacity: '1',
-    });
+      opacity: 'var(--ds-input-placeholder-opacity)',
+    };
+    // One rule, two selectors (the wrapped control and the standalone `<input>`
+    // branch) -- both resolve to the same declaration map, so both are checked.
+    expect(
+      ruleContract(RELOCATED.inputModern, '.rottay-input.rottay-input--modern > .rottay-input__control::placeholder')
+    ).toEqual(inputPlaceholder);
+    expect(
+      ruleContract(RELOCATED.inputModern, 'input.rottay-input.rottay-input--modern::placeholder')
+    ).toEqual(inputPlaceholder);
     expect(ruleContract(SKINS.formPlaceholders, '.rottay-select__search-input::placeholder')).toEqual({
       color: 'var(--ds-color-text-muted)',
       opacity: '1',

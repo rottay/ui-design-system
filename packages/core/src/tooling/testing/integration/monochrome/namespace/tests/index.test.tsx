@@ -61,7 +61,18 @@ describe("TextureBackdrop opacity bridge — --rt-texture-opacity migrated to --
 const SCAN_EXTENSIONS = new Set([".ts", ".tsx", ".css"]);
 /** Fixtures are excluded: a test string would otherwise masquerade as a new production
  *  capability, or a deliberate negative lookalike would false-flag. */
-const EXCLUDED_DIR_NAMES = new Set(["tests"]);
+// CI-1 checker fix: `tests` was the only excluded directory name, but this
+// package also uses `__tests__` (e.g. `foundation/tokens/__tests__/`) --
+// unexcluded, the scan picked up `--rt-premium-card-grid` as a fresh mint
+// because the ONLY place that literal string exists today is inside
+// `brand-authored-residue-retirement.test.ts` (a test asserting the name's
+// own retirement, confirmed against the tree: zero occurrences anywhere
+// else in `.ts`/`.tsx`/`.css` production source). The name itself is real
+// retired debt, not a false positive to paper over -- see
+// `residual-adjudication.json`'s SEV-DEAD-21 entry, and
+// `brand-authored-residue-retirement.test.ts` (green today) proves the
+// retirement from bithire's authored source already landed.
+const EXCLUDED_DIR_NAMES = new Set(["tests", "__tests__"]);
 /** Tenant artifacts are the one place `--rt-*` is SANCTIONED rather than forbidden: they are
  *  generated snapshots of a tenant's own extension CSS, and the tenant owns that prefix. Four
  *  such names live under bithire's artifact today; scanning them would turn a core-mint ratchet

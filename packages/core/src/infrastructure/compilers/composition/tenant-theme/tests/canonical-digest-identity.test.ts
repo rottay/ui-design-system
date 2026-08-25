@@ -322,6 +322,17 @@ describe("digest identity across the canonicalization extraction", () => {
     const POST_ROTTAY_T3_DB_MIRROR_CONFIG_DIGEST =
       "sha256-73eef2348a5fa534c6ed4f2b58e3be4fb7dfd0527d57f82f6de8b3d0b8e3f9cb";
 
+    // CI-1 re-anchor (F4A-6/K3, 3393f70d4, 2026-08-21): the schema PUBLISHES
+    // referenceTokens and gained --ds-color-text-page -- an AMPLIATION of the
+    // closed field set, not a narrowing, same law as the sentinel note in
+    // tenant-theme-compiler.test.ts (the primary site for this exact move).
+    // Both values re-derived from the tree and verified directly against
+    // dist/server.js today, not copied from that other file's pins blind.
+    const POST_F4A6_TEXT_PAGE_ROOT_DOCUMENT_DIGEST =
+      "sha256-9b9d5b8d32a90805d9a52998d9e94b2fa586491063a19055d94b713a8b53a739";
+    const POST_F4A6_TEXT_PAGE_ROOT_CONFIG_DIGEST =
+      "sha256-e893268074cc59e4acdeaf27a0986d71104c98df67c12bf643031ed615caa952";
+
     expect(TENANT_THEME_DOCUMENT_SCHEMA_DIGEST).not.toBe(
       PINNED.documentSchemaDigest
     );
@@ -344,11 +355,17 @@ describe("digest identity across the canonicalization extraction", () => {
     expect(TENANT_THEME_CONFIG_SCHEMA_DIGEST).not.toBe(
       POST_ROTTAY_T2_DB_MIRROR_CONFIG_DIGEST
     );
-    expect(TENANT_THEME_DOCUMENT_SCHEMA_DIGEST).toBe(
+    expect(TENANT_THEME_DOCUMENT_SCHEMA_DIGEST).not.toBe(
       POST_ROTTAY_T3_DB_MIRROR_DOCUMENT_DIGEST
     );
-    expect(TENANT_THEME_CONFIG_SCHEMA_DIGEST).toBe(
+    expect(TENANT_THEME_CONFIG_SCHEMA_DIGEST).not.toBe(
       POST_ROTTAY_T3_DB_MIRROR_CONFIG_DIGEST
+    );
+    expect(TENANT_THEME_DOCUMENT_SCHEMA_DIGEST).toBe(
+      POST_F4A6_TEXT_PAGE_ROOT_DOCUMENT_DIGEST
+    );
+    expect(TENANT_THEME_CONFIG_SCHEMA_DIGEST).toBe(
+      POST_F4A6_TEXT_PAGE_ROOT_CONFIG_DIGEST
     );
   });
 

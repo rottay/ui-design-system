@@ -152,13 +152,20 @@ describe('DataTerminalCard elevation', () => {
       expect(roots, engine).toHaveLength(1);
       expect(roots[0].getAttribute('data-variant'), engine).toBe(String(variant));
 
-      // The capped rule keys on the root's contract attributes plus a
-      // `[data-part='value']` carried by a composed `Text` — and only MODERN
-      // forwards a caller's part. Under classic and rustic the ENTIRE
-      // hero-value block was already unreachable, which is also why the
-      // clipping this cap fixes only ever happened under modern.
+      // CI-1 re-pin (2026-08-18, dcc65ca34d "checkpoint del manifiesto de
+      // variables y gates asociados"): the Typography engines' `data-part`
+      // fallback (`data-part={dataPart ?? "root"}`) now ships on all three
+      // engines (Typography/engines/{classic,modern,rustic}/index.tsx), so a
+      // caller's `data-part` is forwarded under every engine, not only
+      // modern. Measured directly with an isolated per-engine probe (not
+      // inferred from the source grep alone, and not from this very loop's
+      // own first pass -- `expect()` throwing on the first failing engine
+      // silently skips the remaining engines in the same `it.each` variant,
+      // which is why the pre-fix failure only ever NAMED "classic" even
+      // though rustic's own expectation was equally stale): heroParts=1 for
+      // classic, modern AND rustic alike, uniformly.
       const heroParts = container.querySelectorAll('[data-part="value"]').length;
-      expect(heroParts, engine).toBe(engine === 'modern' ? 1 : 0);
+      expect(heroParts, engine).toBe(1);
 
       unmount();
     }

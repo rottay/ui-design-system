@@ -181,7 +181,14 @@ describe('ModernButton Pass 1 contract', () => {
     expect(vars['--ds-button-font-family']).toBe('var(--tenant-font)');
     expect(vars['--ds-button-text-transform']).toBe('uppercase');
     expect(vars['--ds-button-md-gap']).toBe('0.625rem');
-    expect(vars['--ds-button-md-radius']).toBe('0.875rem');
+    // CI-1 re-pin: 7162bb446 (2026-08-11, "let the authored control ramp
+    // paint, and stop the probe measuring a shape nothing renders") wired the
+    // radius-dial (shape.radius-scale) so the baseline literal is wrapped in
+    // `calc(literal * var(--ds-radius-scale, 1))`, byte-identical to the old
+    // literal only when the scale is at its default of 1. This test is from
+    // 2026-07-25, 17 days before that landed. Verified against the tree
+    // today: the received value is exactly this wrapper.
+    expect(vars['--ds-button-md-radius']).toBe('calc(0.875rem * var(--ds-radius-scale, 1))');
     expect(vars['--ds-button-border-width']).toBe('2px');
     expect(vars['--ds-button-touch-target-min']).toBe('48px');
     expect(vars['--ds-button-hover-transform']).toBe('translateY(-2px)');

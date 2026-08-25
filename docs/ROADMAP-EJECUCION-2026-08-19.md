@@ -3935,6 +3935,37 @@ F4B-9): **toda edición tardía re-corre TODA la cadena de derivados antes de
 cerrar** (receipts, index, producers, dist) — el cierre de un packet no
 termina en el código, termina en la cadena verde.
 
+**CI-1 — burn-down mecánico del backlog CI (2026-08-24; Sonnet; postaudit
+Fable: ACCEPT del contenido con UNA corrección vinculante de secuencia).** 12
+archivos de test: 26 pins re-anclados (cada uno verificado contra el árbol de
+HOY + comentario de protocolo con el commit atribuido — nunca copiado del
+triage) + 3 gaps de checker corregidos (normal-form: strip de comentarios de
+bloque, los `@governor` intactos y los drills de mutación siguen rojos donde
+deben; CodeBlock/MarkdownView: el `!important` dentro de
+`@media (prefers-reduced-motion: reduce)` excluido del ban;
+monochrome/namespace: `__tests__` a EXCLUDED_DIR_NAMES). Hallazgo de vara de
+Sonnet (asentado): **el `for` con `expect().toBe()` corta en el primer rojo y
+esconde los siguientes** — 4 archivos necesitaron re-pins adicionales al
+triage por ese enmascaramiento; la respuesta correcta es medir el archivo
+COMPLETO. `semantic-typography.test.ts` fue MOVIDO a la lane D-1 por
+adjudicación DT (sus 3 digests son content-derived sobre los themes que D-1
+editó en vuelo — pins content-derived + lanes paralelas = la clase frescura
+un nivel abajo; D-1 los re-pinea al cerrar). La exclusión de theme-iso
+(`TEXT_PAGE_COLOR_MODE_ASYMMETRY`) queda CON constante nombrada + comentario
+de la forma medida completa (3 formas: rottay sólo-light, bithire sólo-dark,
+evnto ninguno) — INTERIM, no ley: el packet T0 (tras la decisión A/B del
+owner) re-aprieta el mirror. **La corrección de secuencia de Fable
+(adjudicada, orden (i)):** CI-1 commitea SIN re-emisión — los 8 receipts de
+spacing llevan en superficie el test de CI-1 Y los artifacts de D-1 sin
+commitear; re-emitirlos ahora atestaría contenido ajeno no commiteado. Su
+staleness queda ledgereada como deuda en tránsito y la salda D-1 al cerrar
+(su W-C ya presupone la re-emisión total conducida por artifacts): una sola
+pasada, un solo deudor efectivo, cero cruce. **Cuarta instancia de la clase
+secuencia/frescura, primera INTER-lane — es el ejemplo canónico de la ley
+CI-2.** Las 13 suites quedan verdes salvo 3 rojos ajenos declarados
+(reduced-motion = WO de producto para el owner; W4-absent + negative-mutant
+de theme-iso = D-1).
+
 **F0 — CERRADO (2026-08-19).** Criterio de cierre cumplido:
 `ci-gates OK — 78 blocking gate(s) passed` (2 excluded visibles con razón y
 dueño: channel-liveness y lane-control-drills, ambos esperan a F2); `find src -type d -empty` vacío salvo el inbox

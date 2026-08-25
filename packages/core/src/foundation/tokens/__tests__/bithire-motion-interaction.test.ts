@@ -72,9 +72,16 @@ describe('bithire artifact carries the ledger interaction defaults (§8.2)', () 
     // what keeps a stale release from shipping a mixed interaction identity —
     // asserting the paint would only re-pin one engine's selector vocabulary.
     expect(artifact).toContain('--ds-text-detail-size: 0.75rem');
-    expect(artifact).toMatch(/--ds-tint-8: color-mix\(in oklch, var\(--ds-color-primary\) 8%/);
-    expect(artifact).toMatch(/--ds-tint-success-8: color-mix\(in oklch, var\(--ds-color-success\) 8%/);
-    expect(artifact).toMatch(/--ds-tint-success-24: color-mix\(in oklch, var\(--ds-color-success\) 24%/);
+    // CI-1 re-pin: 6a4a78b29a (2026-08-10) fixed the tint ramp's colour space to
+    // `oklab` (this test predates it, last touched 2026-07-28); `oklab` is the
+    // authoritative, currently-enforced convention, not a drift -- see
+    // bithire-tint-scale.test.ts, which documents and asserts `oklab` for the
+    // whole ramp and is green today. Verified against the live artifact before
+    // writing: all three lines below are `oklab` in
+    // css/facade/artifacts/bithire/index.css:1116,1129,1131, byte for byte.
+    expect(artifact).toMatch(/--ds-tint-8: color-mix\(in oklab, var\(--ds-color-primary\) 8%/);
+    expect(artifact).toMatch(/--ds-tint-success-8: color-mix\(in oklab, var\(--ds-color-success\) 8%/);
+    expect(artifact).toMatch(/--ds-tint-success-24: color-mix\(in oklab, var\(--ds-color-success\) 24%/);
   });
 
   it('keeps engine and product vocabulary out of the vertical extension', () => {

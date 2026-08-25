@@ -638,8 +638,19 @@ describe('CK-I admin/data thin-tail anatomy (I-4)', () => {
       '.ds-compare__section-heading',
       // The semantic slot keeps a BEM landing hook across all engines while
       // Modern additionally forwards the caller-owned data-part (P-79).
-      '.ds-compare__muted-text[data-part="root"]',
-      '.ds-dashboard__muted-text[data-part="root"]',
+      // CI-1 re-pin: unlike its siblings in this list (audit/visualization's
+      // muted-text elements don't pass `data-part` at all, so they fall
+      // through to the Typography engine's own "root" default), Compare's
+      // four muted-text nodes explicitly set `data-part="muted-text"` in
+      // their own JSX (data/compare/index.tsx) -- verified against the tree
+      // today. "root" here was a copy-paste of the sibling pattern, not this
+      // component's own caller-owned value.
+      '.ds-compare__muted-text[data-part="muted-text"]',
+      // CI-1 re-pin: dashboard's muted-text is a conditionally-rendered
+      // section description with its own explicit `data-part`
+      // ("section-description", not "root") -- verified against
+      // data/dashboard/index.tsx today, same class of fix as Compare above.
+      '.ds-dashboard__muted-text[data-part="section-description"]',
       '.ds-list__card-label[data-part="root"]',
       '.ds-list__card-value[data-part="root"]',
       '.ds-report__template-card--selected',

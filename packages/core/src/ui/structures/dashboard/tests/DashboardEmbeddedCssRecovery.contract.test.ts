@@ -38,7 +38,13 @@ const CSS_CONTRACTS = [
   {
     name: 'dashboard metrics interactions',
     path: METRICS_CSS_PATH,
-    expectedPaintDeclarations: 47,
+    // CI-1 re-pin: 6c9f6ccf1e (2026-08-05) added 3 RTL keyframe variants (see
+    // EXPECTED_KEYFRAMES below), each with 2 `transform` declarations
+    // (from/to) -- 6 new paint-relevant declarations, genuine new content,
+    // not a drift (the `[dir='rtl'] { animation: none }` selector block
+    // itself adds no paint property). Verified with the same paint-count
+    // logic this test itself uses, against the tree today: 53.
+    expectedPaintDeclarations: 53,
   },
   {
     name: 'DataTerminalCard keyframes',
@@ -64,10 +70,17 @@ const EXPECTED_KEYFRAMES = [
   'ds-metrics-cards-dot-glow',
   'ds-metrics-chart-glow',
   'ds-metrics-chart-slide-in',
+  // CI-1 re-pin: 6c9f6ccf1e (2026-08-05) added an RTL mirror keyframe for
+  // each of the three metrics "slide-in" entrance animations (chart,
+  // minimal, rows) -- genuine new keyframes, not relocations. Verified
+  // against the tree today: `grep -c '@keyframes ds-metrics-.*-rtl'` = 3.
+  'ds-metrics-chart-slide-in-rtl',
   'ds-metrics-minimal-glow',
   'ds-metrics-minimal-slide-in',
+  'ds-metrics-minimal-slide-in-rtl',
   'ds-metrics-rows-dot-glow',
   'ds-metrics-rows-row-slide-in',
+  'ds-metrics-rows-row-slide-in-rtl',
   'ds-metrics-rows-shimmer',
   'dtc-blink',
   'dtc-breathe',
@@ -179,12 +192,22 @@ const LIVE_ANIMATION_CONSUMERS = [
     selector: ':where(.ds-activity-cards) .time-dot',
     animation: 'ds-activity-cards-dot-pulse 2s ease-in-out infinite',
   },
+  // CI-1 re-pin (this entry and the three below it): the metrics "slide-in"/
+  // "card-enter" entrance animations moved from a literal duration+easing to
+  // the tokenized `var(--ds-motion-reveal) var(--ds-motion-ease-enter,
+  // ease-out)` pair -- verified per-selector against the tree today, not
+  // just the one name the pre-fix loop happened to stop on (`expect().toBe`
+  // throws on the first mismatch inside this same `for` loop, which is why
+  // only "ds-metrics-minimal-slide-in" ever NAMED itself in the failure even
+  // though three siblings were equally stale). The infinite "glow"/"shimmer"
+  // loops elsewhere in this same array are untouched -- checked individually,
+  // not assumed from this one family's shape.
   {
     kind: 'css',
     name: 'ds-metrics-minimal-slide-in',
     path: METRICS_CSS_PATH,
     selector: ':where(.ds-metrics-minimal) .minimal-metric-row',
-    animation: 'ds-metrics-minimal-slide-in 0.4s ease-out both',
+    animation: 'ds-metrics-minimal-slide-in var(--ds-motion-reveal) var(--ds-motion-ease-enter, ease-out) both',
   },
   {
     kind: 'css',
@@ -193,12 +216,23 @@ const LIVE_ANIMATION_CONSUMERS = [
     selector: ':where(.ds-metrics-minimal) .live-dot',
     animation: 'ds-metrics-minimal-glow 2s ease-in-out infinite',
   },
+  // CI-1: new keyframe (6c9f6ccf1e, 2026-08-05) -- RTL mirror, invoked on its
+  // own `[dir='rtl']`-prefixed rule via the `animation-name` longhand (see
+  // the `property` field above).
+  {
+    kind: 'css',
+    name: 'ds-metrics-minimal-slide-in-rtl',
+    path: METRICS_CSS_PATH,
+    selector: "[dir='rtl'] :where(.ds-metrics-minimal) .minimal-metric-row",
+    property: 'animation-name',
+    animation: 'ds-metrics-minimal-slide-in-rtl',
+  },
   {
     kind: 'css',
     name: 'ds-metrics-cards-card-enter',
     path: METRICS_CSS_PATH,
     selector: ':where(.ds-metrics-cards) .metric-card-v3',
-    animation: 'ds-metrics-cards-card-enter 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) both',
+    animation: 'ds-metrics-cards-card-enter var(--ds-motion-reveal) var(--ds-motion-ease-enter, ease-out) both',
   },
   {
     kind: 'css',
@@ -212,7 +246,7 @@ const LIVE_ANIMATION_CONSUMERS = [
     name: 'ds-metrics-chart-slide-in',
     path: METRICS_CSS_PATH,
     selector: ':where(.ds-metrics-chart) .metric-chart-row-v3',
-    animation: 'ds-metrics-chart-slide-in 0.4s ease-out both',
+    animation: 'ds-metrics-chart-slide-in var(--ds-motion-reveal) var(--ds-motion-ease-enter, ease-out) both',
   },
   {
     kind: 'css',
@@ -223,10 +257,26 @@ const LIVE_ANIMATION_CONSUMERS = [
   },
   {
     kind: 'css',
+    name: 'ds-metrics-chart-slide-in-rtl',
+    path: METRICS_CSS_PATH,
+    selector: "[dir='rtl'] :where(.ds-metrics-chart) .metric-chart-row-v3",
+    property: 'animation-name',
+    animation: 'ds-metrics-chart-slide-in-rtl',
+  },
+  {
+    kind: 'css',
     name: 'ds-metrics-rows-row-slide-in',
     path: METRICS_CSS_PATH,
     selector: ':where(.ds-metrics-rows) .metric-row-v3',
-    animation: 'ds-metrics-rows-row-slide-in 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both',
+    animation: 'ds-metrics-rows-row-slide-in var(--ds-motion-reveal) var(--ds-motion-ease-enter, ease-out) both',
+  },
+  {
+    kind: 'css',
+    name: 'ds-metrics-rows-row-slide-in-rtl',
+    path: METRICS_CSS_PATH,
+    selector: "[dir='rtl'] :where(.ds-metrics-rows) .metric-row-v3",
+    property: 'animation-name',
+    animation: 'ds-metrics-rows-row-slide-in-rtl',
   },
   {
     kind: 'css',
@@ -370,9 +420,14 @@ const KEYFRAME_FRAME_SEMANTICS = {
         '0 0 8px var(--ds-signal-card-badge-color, var(--ds-color-success)), 0 0 16px var(--ds-signal-card-badge-color, var(--ds-color-success))',
     },
   },
+  // CI-1 re-pin: 6c9f6ccf1e (2026-08-05) simplified this frame body alongside
+  // the motion-token change to its `animation:` shorthand -- the scale term
+  // is gone, the translate distance shrank 30px -> 10px. Verified against
+  // the tree today by parsing the live @keyframes rule, not assumed from the
+  // shorthand re-pin alone.
   'ds-metrics-cards-card-enter': {
-    from: { opacity: '0', transform: 'translateY(30px) scale(0.9)' },
-    to: { opacity: '1', transform: 'translateY(0) scale(1)' },
+    from: { opacity: '0', transform: 'translateY(10px)' },
+    to: { opacity: '1', transform: 'translateY(0)' },
   },
   'ds-metrics-cards-dot-glow': {
     '0%, 100%': {
@@ -398,8 +453,11 @@ const KEYFRAME_FRAME_SEMANTICS = {
         '0 0 6px var(--ds-signal-card-badge-color, var(--ds-color-success)), 0 0 12px var(--ds-signal-card-badge-color, var(--ds-color-success))',
     },
   },
+  // CI-1 re-pin: 6c9f6ccf1e (2026-08-05), same class as
+  // ds-metrics-cards-card-enter above -- the translate distance shrank
+  // 30px -> 12px. Verified against the tree today.
   'ds-metrics-rows-row-slide-in': {
-    from: { opacity: '0', transform: 'translateX(-30px)' },
+    from: { opacity: '0', transform: 'translateX(-12px)' },
     to: { opacity: '1', transform: 'translateX(0)' },
   },
   'ds-metrics-rows-shimmer': {
@@ -539,6 +597,9 @@ const CRITICAL_RULE_SEMANTICS = [
       transform: 'translateX(4px)',
     },
   },
+  // CI-1 re-pin: same simplification sweep as the two keyframe re-pins above
+  // (6c9f6ccf1e, 2026-08-05) -- the hover transform's fallback dropped its
+  // scale term and shrank -6px -> -2px. Verified against the tree today.
   {
     path: METRICS_CSS_PATH,
     selector: ':where(.ds-metrics-cards) .metric-card-v3:hover',
@@ -546,7 +607,7 @@ const CRITICAL_RULE_SEMANTICS = [
       'border-color':
         'var(--ds-metric-card-border-hover, var(--ds-signal-card-border-hover, var(--ds-color-primary-200)))',
       transform:
-        'var(--ds-metric-card-hover-transform, translateY(-6px) scale(1.02))',
+        'var(--ds-metric-card-hover-transform, translateY(-2px))',
       'box-shadow':
         'var(--ds-metric-card-shadow-hover, var(--ds-metric-card-shadow, var(--ds-signal-card-shadow-hover, none)))',
     },
@@ -686,7 +747,11 @@ describe('dashboard embedded CSS recovery contract', () => {
     }
   });
 
-  it('reconciles all 121 recovered and direction-aware paint declarations by stylesheet', () => {
+  // CI-1 re-pin: the 6 additions (121 -> 127) are the metrics RTL keyframe
+  // trio's own `transform` declarations (2 per keyframe -- see
+  // expectedPaintDeclarations above), same "explicit RTL mirror" class the
+  // original 11 in this comment already named, not a new authority.
+  it('reconciles all 127 recovered and direction-aware paint declarations by stylesheet', () => {
     const counts = CSS_CONTRACTS.map((contract) => ({
       name: contract.name,
       actual: countPaintDeclarations(contract.path),
@@ -697,11 +762,11 @@ describe('dashboard embedded CSS recovery contract', () => {
       expect(count.actual, count.name).toBe(count.expected);
     }
 
-    // The 11 additions are not new visual authorities: they are the explicit
+    // The 17 additions are not new visual authorities: they are the explicit
     // RTL mirrors of directional transforms/shadows added when the physical
     // interaction vocabulary became logical and hover-capability-gated.
-    expect(counts.reduce((total, count) => total + count.actual, 0)).toBe(121);
-    expect(counts.map(({ actual }) => actual)).toEqual([51, 47, 20, 3]);
+    expect(counts.reduce((total, count) => total + count.actual, 0)).toBe(127);
+    expect(counts.map(({ actual }) => actual)).toEqual([51, 53, 20, 3]);
   });
 
   it('keeps every recovered interaction scope wired to its component and live class hooks', () => {
@@ -732,7 +797,11 @@ describe('dashboard embedded CSS recovery contract', () => {
     }
   });
 
-  it('accounts for 28 live keyframes and preserves the three known dead DTC definitions explicitly', () => {
+  // CI-1 re-pin: 6c9f6ccf1e (2026-08-05) added 3 new live keyframes (the RTL
+  // mirrors), each with its own consumer entry above -- 28 -> 31. Verified
+  // against the tree today: `EXPECTED_KEYFRAMES.length` (34) minus
+  // `INTENTIONALLY_DEAD_KEYFRAMES.length` (3) = 31.
+  it('accounts for 31 live keyframes and preserves the three known dead DTC definitions explicitly', () => {
     const definitionNames = new Set<string>();
     for (const contract of CSS_CONTRACTS) {
       parseRelativeCss(contract.path).walkAtRules('keyframes', (rule) => {
@@ -740,15 +809,22 @@ describe('dashboard embedded CSS recovery contract', () => {
       });
     }
 
-    expect(LIVE_ANIMATION_CONSUMERS).toHaveLength(28);
+    expect(LIVE_ANIMATION_CONSUMERS).toHaveLength(31);
     const consumerNames = LIVE_ANIMATION_CONSUMERS.map((consumer) => consumer.name);
-    expect(new Set(consumerNames).size).toBe(28);
+    expect(new Set(consumerNames).size).toBe(31);
 
     for (const consumer of LIVE_ANIMATION_CONSUMERS) {
       expect(definitionNames.has(consumer.name), consumer.name).toBe(true);
 
       if (consumer.kind === 'css') {
-        expect(declarationsForSelector(consumer.path, consumer.selector).animation, consumer.name).toBe(
+        // CI-1: the three RTL mirrors set the keyframe via the LONGHAND
+        // `animation-name` on their own `[dir='rtl']`-prefixed rule (the base
+        // rule's `animation` shorthand still carries the duration/easing);
+        // `property` lets a consumer entry name that longhand instead of the
+        // shorthand every other entry checks. Default preserves every
+        // existing entry's behavior unchanged.
+        const property = 'property' in consumer ? consumer.property : 'animation';
+        expect(declarationsForSelector(consumer.path, consumer.selector)[property], consumer.name).toBe(
           consumer.animation
         );
       } else {
