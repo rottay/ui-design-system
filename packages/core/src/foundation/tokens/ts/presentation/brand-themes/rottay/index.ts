@@ -1647,6 +1647,9 @@ const OVERLAY: BrandThemeModeOverlay = {
       bg: OVERLAY_SEED.surface.card,
       border: OVERLAY_SEED.edge.strong,
       headerBg: OVERLAY_SEED.surface.wash,
+      // Literal on purpose: an alias equal to the body emits NOTHING in a mode
+      // block (diff-by-values) -- that is how F4A-6 drained this shield. D-1b.
+      headerColor: "#6B6B6B",
       rowBg: OVERLAY_SEED.surface.card,
       rowBgHover: OVERLAY_SEED.surface.wash,
       rowBgStriped: OVERLAY_SEED.surface.wash,
@@ -1770,6 +1773,9 @@ const OVERLAY: BrandThemeModeOverlay = {
        * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
        */
       iconSize: "16px",
+      // Literal on purpose: an alias equal to the body emits NOTHING in a mode
+      // block (diff-by-values) -- that is how F2.4 drained this shield. D-1b.
+      footerBg: "#F4F4F3",
       /**
        * @domicile seed
        * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
@@ -3037,11 +3043,6 @@ const OVERLAY: BrandThemeModeOverlay = {
      * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
      */
     /**
-     * @placeholder OVERLAY.chrome.sidebar.footerBg
-     * @domicile unassigned
-     * @governor none — gap aceptado: el modo no diverge en este slot; CHROME lo autora en el cuerpo y su valor sirve a los dos modos (posture unassigned, roster F4A-1c)
-     */
-    /**
      * @placeholder OVERLAY.chrome.sidebar.itemColorActive
      * @domicile unassigned
      * @governor none — gap aceptado: el modo no diverge en este slot; CHROME lo autora en el cuerpo y su valor sirve a los dos modos (posture unassigned, roster F4A-1c)
@@ -3105,11 +3106,6 @@ const OVERLAY: BrandThemeModeOverlay = {
      * @placeholder OVERLAY.chrome.table.headerBgHover
      * @domicile unassigned
      * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
-     */
-    /**
-     * @placeholder OVERLAY.chrome.table.headerColor
-     * @domicile unassigned
-     * @governor none — gap aceptado: el modo no diverge en este slot; CHROME lo autora en el cuerpo y su valor sirve a los dos modos (posture unassigned, roster F4A-1c)
      */
     /**
      * @placeholder OVERLAY.chrome.table.headerFontSize

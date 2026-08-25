@@ -943,17 +943,31 @@ describe("H3 contract: bithire", () => {
       expect(artifact).toContain("--ds-shell-grid-size: 0px");
       // gridOpacity removed from CSS — alpha baked into gridLine color
     });
-    it("artifact has BitHire premium DS-only chrome vars", () => {
+    // R-1 retirement (D-1b): this test used to assert four premium DS-only
+    // chrome vars. All four are ABSENT from the artifact today, and the tree
+    // says why -- so the honest move is to retire the claims, not re-anchor
+    // them to values nothing emits.
+    //   - `--ds-premium-card-header-top-line-display`,
+    //     `--ds-table-header-bubble-bg` and `--ds-shell-breadcrumb-height`
+    //     were RETIRED by SEV-DEAD-21 (`residual-adjudication.json`:
+    //     "PARTIALLY RETIRED source-only by SEV-DEAD-21 (7 of 8 names)").
+    //     `brand-authored-residue-retirement.test.ts` asserts that retirement
+    //     and is green, so re-anchoring here would contradict a passing test.
+    //     For the top-line specifically the owner already adjudicated
+    //     (`premium-dead-adjudication.json`, `--ds-signal-card-top-line-display`,
+    //     OWNER_DECISION): "NO top-line part exists anywhere [...] wiring it
+    //     would require inventing an element nothing renders."
+    //   - `--ds-global-search-results-width` is NOT part of SEV-DEAD-21. The
+    //     same adjudication says it "stays listed, goes with THEME-ISO"; it is
+    //     a live member of STRUCTURAL_WIDTH_CHANNELS but left every vertical
+    //     artifact in `ddefb7e41`. Its disposition belongs to THEME-ISO, so
+    //     its absence is recorded here rather than adjudicated by this test.
+    // What survives is the invariant that never depended on those channels.
+    it("artifact carries no vendor-prefixed chrome vars", () => {
       const artifact = readFileSync(
         resolve(CSS_SRC, "facade/artifacts/bithire/index.css"),
         "utf-8"
       );
-      expect(artifact).toContain(
-        "--ds-premium-card-header-top-line-display: none"
-      );
-      expect(artifact).toContain("--ds-table-header-bubble-bg: transparent");
-      expect(artifact).toContain("--ds-shell-breadcrumb-height: 28px");
-      expect(artifact).toContain("--ds-global-search-results-width");
       expect(artifact).not.toContain("--bithire-");
     });
     it("artifact has buttonDefault + buttonGhost", () => {

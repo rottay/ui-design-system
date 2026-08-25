@@ -126394,6 +126394,7 @@ html[lang]:lang(ar) {
   --ds-sidebar-bg: #F4F4F3;
   --ds-sidebar-border: #E5E5E3;
   --ds-sidebar-child-padding-inline: initial;
+  --ds-sidebar-footer-bg: #F4F4F3;
   --ds-sidebar-group-color: #9C9C9C;
   --ds-sidebar-group-font-size: 11px;
   --ds-sidebar-group-letter-spacing: 0.04em;
@@ -126464,6 +126465,7 @@ html[lang]:lang(ar) {
   --ds-table-bg: #FFFFFF;
   --ds-table-border: #E5E5E3;
   --ds-table-header-bg: #FAFAF9;
+  --ds-table-header-color: #6B6B6B;
   --ds-table-loading-overlay-bg: rgba(255, 255, 255, 0.7);
   --ds-table-row-bg: #FFFFFF;
   --ds-table-row-bg-hover: #FAFAF9;

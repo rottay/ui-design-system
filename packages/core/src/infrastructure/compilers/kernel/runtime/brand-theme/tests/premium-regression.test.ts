@@ -376,7 +376,16 @@ describe('shared pipeline: chrome vars NOW generated (G1)', () => {
     expect(rottayCss).toContain('--ds-sidebar-text: #ECECEC');
     expect(rottayCss).toContain('--ds-sidebar-width: 296px');
     expect(rottayCss).toContain('--ds-sidebar-item-color: #A0A0A5');
-    expect(rottayCss).toContain('--ds-sidebar-footer-bg: #0D0D10');
+    // R-1 re-anchor (D-1b): F2.4 (8f58229e3) rewired the BASE footer ground
+    // from the literal to the governed root; the base literal does not come
+    // back. D-1b restitutes the LIGHT overlay (asserted below). Colour truth
+    // kept the A2-16 way: the alias, and what the root resolves to.
+    expect(rottayCss).toContain('--ds-sidebar-footer-bg: var(--ds-sidebar-bg)');
+    expect(rottayCss).toContain('--ds-sidebar-bg: #0D0D10');
+    // D-1b also restitutes the LIGHT overlay ground (#F4F4F3) so a tenant moving
+    // --ds-sidebar-bg cannot govern light through the alias. Not asserted here:
+    // this fixture holds only the base block (`html[data-tenant='rottay']`), and
+    // the overlay lives in the mode block. The artifact carries it.
   });
 
   it('bithire generates button variant vars with correct values', () => {
@@ -631,7 +640,13 @@ describe('shared pipeline: chrome vars NOW generated (G1)', () => {
     // says -- and the note beside the old expectation already recorded that
     // "the authored value still reaches the static artifact unchanged". With
     // the generator gone, the static value is the only one, and it is this.
-    expect(rottayCss).toContain('--ds-table-header-color: #A0A0A5');
+    // R-1 re-anchor (D-1b): F4A-6 (3393f70d4) authored the --ds-color-text-page
+    // root and rewired this BASE ink onto it, so the literal above is now the
+    // ROOT's value, not the channel's. Same A2-16 idiom: alias + resolution.
+    expect(rottayCss).toContain('--ds-table-header-color: var(--ds-color-text-page)');
+    expect(rottayCss).toContain('--ds-color-text-page: #A0A0A5');
+    // D-1b restitutes the LIGHT overlay ink (#6B6B6B) for the same reason; like
+    // the sidebar footer it is not visible in this base-block fixture.
   });
 
   it('bithire generates table vars with correct values', () => {

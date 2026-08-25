@@ -4071,6 +4071,34 @@ comentario de protocolo. `SvgRenderers:711` (geometría) registrado aparte.
 el artifact y pasar. Refina la pregunta de producto (a) de F5: la asimetría
 del predicado es aún más profunda de lo medido.
 
+**D-1b — el quinto y sexto escudo restituidos (2026-08-24/25; Opus; postaudit
+Fable: ACCEPT — "las seis hojas de la clase escudo-de-overlay quedan
+restituidas").** rottay `OVERLAY.chrome.sidebar.footerBg #F4F4F3` (drenado
+por `8f58229e3`; mi brief traía el literal al revés — `#0D0D10` era la BASE,
+el overlay light llevaba `#F4F4F3`, coherente con rottay dark-default;
+corregido por medición del implementador) y rottay
+`OVERLAY.chrome.table.headerColor #6B6B6B` (drenado por `3393f70d4` — **otra
+ola, F4A-6**, mismo mecanismo: la lección asentada es que **F4A-6 también
+probó cero-delta del lado del vertical y también retiró un escudo del lado
+del tenant — es un patrón de olas, no una ola**). Ley de 3 partes verificada
+por hoja; T0 byte-idéntico; techo intacto (−161 B, pagado por el retiro de
+2 `@placeholder` con la falsedad refutada, patrón D-1). **515 aserciones:
+3 → 0 rojas, 0 regresiones.** Los 3 pines resueltos cada uno por su verdad:
+2 re-anclados (idiom A2-16 + commit nombrado; la restitución NO los volvía
+verdes — pinean literales de BASE, no de overlay); **pin 1 = RETIRO** (las 4
+aserciones premium están adjudicadas muertas: SEV-DEAD-21 con test verde que
+aserta el retiro + la top-line con OWNER_DECISION que prohíbe inventarla; el
+invariante `--bithire-` conservado; el `it()` renombrado para no mentir);
+semantic-typography rottay re-pineado con cross-check (los otros 2 verticales
+intactos). **Adjudicación de secuencia (orden (i) de CI-1, segunda
+aplicación):** D-1b commitea sus 7 archivos SIN la cadena derivada
+(rebuild/producers/receipts) — deuda en tránsito declarada que salda
+F4B-12 al cerrar (su secuencia ya incluye la re-emisión total; en su cierre
+todo lo atestado está commiteado en D-1b o en F4B-12). Opus declinó
+correctamente re-derivar `producers.json` con el registry de F4B-12 en
+vuelo (habría horneado trabajo ajeno en su atestación — la clase que el
+programa mata).
+
 **F4B-11 — typography.pairing CIERRA SOURCE_BOUND (2026-08-24; Sonnet;
 postaudit Fable: ACCEPT — "el falso-verde más peligroso del censo quedó
 cerrado con el keypath real").** Keypath corregido (el de OTRO control →

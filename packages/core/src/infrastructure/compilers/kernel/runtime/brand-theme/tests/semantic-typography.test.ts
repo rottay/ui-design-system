@@ -71,6 +71,17 @@ const FIRST_PARTY = [
  * per leaf), the rest of the compile is identical, and the three tenant
  * artifacts changed in exactly those four lines and nothing else.
  *
+ * D-1b re-anchor, ROTTAY ONLY (2026-08-24, same protocol): D-1b restitutes the
+ * fifth and sixth overlay shields -- rottay's light `--ds-sidebar-footer-bg`
+ * (#F4F4F3, drained by F2.4 `8f58229e3`) and `--ds-table-header-color`
+ * (#6B6B6B, drained by F4A-6 `3393f70d4`). Only rottay's leg-A compile moves,
+ * and bithire/evnto are NOT re-anchored -- verified: their digests still equal
+ * the pins above, which is the same evidence the compile census gives (rottay
+ * light 680 -> 682 channels, the other two byte-identical). Same protocol as
+ * the two rows above: real added content, no zero-pixel claim; the proof D-1b
+ * carries is per-leaf chained resolution + rest-identical + a two-line artifact
+ * diff.
+ *
  * SHAPE-BASE re-anchor, ROTTAY ONLY: `applyModeOverlay` now completes the chrome
  * merge base to the canonical shape, so an overlay-ONLY key lands in its shape
  * slot instead of being appended after the authored base keys. That closed the
@@ -88,7 +99,7 @@ const FIRST_PARTY = [
  * re-anchored.
  */
 const LEG_A_SURFACE_DIGEST: Record<string, string> = {
-  rottay: "f3ab760aab5f478d6716625701858228c20720c44da328e1d4449959ed39e15b",
+  rottay: "07cd0f14943ffeb78202ad70409e9e4dfbe1c52a8a503b1a42f5fca31ec21113",
   bithire: "621205167d0261ce960f4fb160965311282ea206f28c57ea031afca3dffb19e6",
   evnto: "7e545d8968466f17a3b7b347da9f3a6a68ee80580b85b1ed0e7f1c5e6b45e980",
 };
