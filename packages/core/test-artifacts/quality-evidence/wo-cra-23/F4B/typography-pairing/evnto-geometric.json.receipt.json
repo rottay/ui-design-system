@@ -5,7 +5,7 @@
   "scenarioId": "typography.pairing/geometric/evnto/static-and-db",
   "evidenceKind": "static-db-computed-parity",
   "commandOrTool": "node src/tooling/resolution-probe/public/cli/index.mjs causal",
-  "toolVersion": "resolution-probe@77460ac31305",
+  "toolVersion": "resolution-probe@471baf755c2a",
   "exitCode": 0,
   "sourceFiles": [
     "packages/core/dist/build-stamp.json",
@@ -64,10 +64,10 @@
     "packages/core/src/ui/primitives/display/Typography/tests/Typography.test.tsx",
     "packages/core/src/ui/primitives/display/Typography/tests/Typography.type-roles.test.tsx"
   ],
-  "sourceDigest": "7dfe186bf49a525326e44a3d2f1654512a0d2c5efbc95ae8404f669297fa67d8",
+  "sourceDigest": "73c3436499478b032b199669afbb382be54543cade579610eb300d7f85089465",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/typography-pairing/evnto-geometric.json",
   "artifactSha256": "dc22025c8b96fe4a6096cba999ecf4f0f2caee6addfcd81eb38708cb65b8ba97",
-  "createdAt": "2026-08-25T11:25:44.655Z",
+  "createdAt": "2026-08-25T12:55:55.025Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

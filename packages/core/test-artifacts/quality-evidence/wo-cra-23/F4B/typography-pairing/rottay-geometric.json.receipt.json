@@ -5,7 +5,7 @@
   "scenarioId": "typography.pairing/geometric/rottay/static-and-db",
   "evidenceKind": "static-db-computed-parity",
   "commandOrTool": "node src/tooling/resolution-probe/public/cli/index.mjs causal",
-  "toolVersion": "resolution-probe@77460ac31305",
+  "toolVersion": "resolution-probe@471baf755c2a",
   "exitCode": 0,
   "sourceFiles": [
     "packages/core/dist/build-stamp.json",
@@ -64,10 +64,10 @@
     "packages/core/src/ui/primitives/display/Typography/tests/Typography.test.tsx",
     "packages/core/src/ui/primitives/display/Typography/tests/Typography.type-roles.test.tsx"
   ],
-  "sourceDigest": "63a63ca818d188161bcdb074b874c45cb314c5f329b819a2091628ce27b32075",
+  "sourceDigest": "96d295670f549e2a5fe562562b8a54afb98219c35f7b3dd6d1803c6102bba47f",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/typography-pairing/rottay-geometric.json",
   "artifactSha256": "64e05786856b87f5083bfae75a8fe9e5c6aa133060fb741b525491d7736b1236",
-  "createdAt": "2026-08-25T11:25:44.702Z",
+  "createdAt": "2026-08-25T12:55:55.083Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

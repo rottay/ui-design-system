@@ -5,7 +5,7 @@
   "scenarioId": "shape.radius-scale/amplio/rottay/static-and-db",
   "evidenceKind": "exact-restore",
   "commandOrTool": "node src/tooling/resolution-probe/public/cli/index.mjs causal",
-  "toolVersion": "resolution-probe@77460ac31305",
+  "toolVersion": "resolution-probe@471baf755c2a",
   "exitCode": 0,
   "sourceFiles": [
     "packages/core/dist/build-stamp.json",
@@ -66,10 +66,10 @@
     "packages/core/src/ui/primitives/display/Card/engines/rustic/index.tsx",
     "packages/core/src/ui/primitives/display/Card/index.tsx"
   ],
-  "sourceDigest": "2249eb839c0c2b64052de05dec8e7ddc0085d886c3e837153d397b93c9f70354",
+  "sourceDigest": "506c3b745b8a39283aee80c3c4076675f0aab12b7367adf4d089dc701aa86c4b",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/shape-radius-scale/rottay-amplio.json",
   "artifactSha256": "17454f1907ae7bb90f706f6d630d9cabe90755135f11072beba27426f5da3096",
-  "createdAt": "2026-08-25T11:25:44.173Z",
+  "createdAt": "2026-08-25T12:55:54.490Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

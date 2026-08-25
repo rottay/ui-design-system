@@ -5,7 +5,7 @@
   "scenarioId": "typography.families/compound-editorial-plus-explicit-heading/all-verticals/static-and-db",
   "evidenceKind": "data-field-delta",
   "commandOrTool": "node /private/tmp/f4b14-compound-case.mjs (direct compile, composition/receipt writeEvidence)",
-  "toolVersion": "resolution-probe@77460ac31305",
+  "toolVersion": "resolution-probe@471baf755c2a",
   "exitCode": 0,
   "sourceFiles": [
     "packages/core/dist/build-stamp.json",
@@ -44,10 +44,10 @@
     "packages/core/src/tooling/resolution-probe/runtime/ingress/index.mjs",
     "packages/core/src/tooling/resolution-probe/runtime/measure/index.mjs"
   ],
-  "sourceDigest": "520dca7b200782c921d813344e579a3ac253583fd09372d2ca37691e9327e704",
+  "sourceDigest": "5054d6aaa50c73bb9b93e7c47c77c09bbebe2fe0428583aa09e016f10a901194",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/typography-families/compound-editorial-plus-explicit-heading.json",
   "artifactSha256": "a7c05b8467095a2694fb73cc45024c0e9e1b39273d34214ba4678dc60bfcd270",
-  "createdAt": "2026-08-25T11:25:44.508Z",
+  "createdAt": "2026-08-25T12:55:54.855Z",
   "negativeDrill": {
     "violation": "the explicit-wins fix silently overrides the whole typography family instead of only the field the document actually authored",
     "failsClosed": true,

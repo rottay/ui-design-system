@@ -5,7 +5,7 @@
   "scenarioId": "navigation.sidebar-tone/subtle/bithire/static-and-db",
   "evidenceKind": "static-db-computed-parity",
   "commandOrTool": "node src/tooling/resolution-probe/public/cli/index.mjs causal",
-  "toolVersion": "resolution-probe@77460ac31305",
+  "toolVersion": "resolution-probe@471baf755c2a",
   "exitCode": 0,
   "sourceFiles": [
     "packages/core/dist/build-stamp.json",
@@ -48,10 +48,10 @@
     "packages/core/src/tooling/resolution-probe/runtime/measure/index.mjs",
     "packages/core/src/ui/structures/shell/navigation/sidebar-surface/index.tsx"
   ],
-  "sourceDigest": "7a773ec074b77259028b919f02b2140f8d86909589e40df6b2eaffab967d4673",
+  "sourceDigest": "216c3d99ea10a9812963c8690f1ad51f7611a010839073897697c52f1add3e56",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/navigation-sidebar-tone/bithire-subtle.json",
   "artifactSha256": "9a99e01e6516d5c0a719b80bb4a90a9de796e554f6caf914cad457d8d401186b",
-  "createdAt": "2026-08-25T11:25:43.728Z",
+  "createdAt": "2026-08-25T12:55:53.967Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

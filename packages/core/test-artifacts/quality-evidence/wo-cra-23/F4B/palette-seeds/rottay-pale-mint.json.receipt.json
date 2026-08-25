@@ -5,7 +5,7 @@
   "scenarioId": "palette.seeds/pale-mint/rottay/static-and-db",
   "evidenceKind": "exact-restore",
   "commandOrTool": "node src/tooling/resolution-probe/public/cli/index.mjs causal",
-  "toolVersion": "resolution-probe@77460ac31305",
+  "toolVersion": "resolution-probe@471baf755c2a",
   "exitCode": 0,
   "sourceFiles": [
     "packages/core/dist/build-stamp.json",
@@ -63,10 +63,10 @@
     "packages/core/styles/index.css",
     "packages/core/styles/rottay.css"
   ],
-  "sourceDigest": "4df79b21d758938d3f4146f920286a0395350838e675fc8c84e8b8f6935e7dcc",
+  "sourceDigest": "bed385180e8d1419d0c9847ee808a7d602a2d2e6ba01d2d91013acb4633568e3",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/palette-seeds/rottay-pale-mint.json",
   "artifactSha256": "8916530ba57a436989afbb37dc2e80ee460e1c151b757cef684c172c85934b4f",
-  "createdAt": "2026-08-25T11:25:43.915Z",
+  "createdAt": "2026-08-25T12:55:54.170Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

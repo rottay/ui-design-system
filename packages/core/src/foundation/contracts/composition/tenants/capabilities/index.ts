@@ -601,9 +601,38 @@ export const TENANT_CAPABILITY_REGISTRY = Object.freeze([
       version: 1,
       tier: 'pro',
       status: 'active',
+      // F4B-15 fix (false-INERT by PATH, same class as F4B-7/F4B-12/F4B-13):
+      // `brandThemePath: 'recipeProfile'` named a field that does not exist
+      // on BrandTheme -- the only two 'recipeProfile' occurrences in
+      // themes/index.ts are OUTPUT shapes (TenantAppearance.recipeProfile,
+      // CompiledBrand.recipeProfile), never the INPUT a stop writes. The real
+      // field is nested: `recipes.profile` (BrandRecipeSelection.profile,
+      // themes/index.ts:72-77). A stop written to `patch.recipeProfile`
+      // landed on a key nothing reads.
+      //
+      // Witness fix (DT ruling, F4B-15): the prior witness
+      // (RecipeProfileProvider, symbol 'RecipeProfileProvider') implied the
+      // declared channel --ds-recipe-profile reaches production. Measured:
+      // it does not, on EITHER surface. (a) --ds-recipe-profile (CSS) has
+      // NO production reader -- grep-confirmed, only compilers and compiled
+      // artifacts reference it; the compiler's own comment calls it
+      // provenance of the selection, not paint
+      // (brand-theme/index.ts:2071-2072). (b) RecipeProfileProvider IS a
+      // real consumer, but of `resolvedRuntimeConfig.appearance?.recipeProfile`
+      // (the DB-normalized shape), never of the CSS channel -- and for the 3
+      // code-owned verticals (today's production, no tenant DB) it NEVER
+      // receives a value at all: `getCodeOwnedRuntimeConfig`
+      // (tenant/foundation/configuration/registry/index.ts:155-162)
+      // destructures `appearance` OUT and never restores it, and
+      // `governedBehavior` (the one alternate channel motion/expressive ride)
+      // does not carry `recipes` either. The two surfaces are architecturally
+      // decoupled, not a bug this control can fix. Kept RecipeProfileProvider
+      // as the witness (the only real functional consumer that exists) and
+      // corrected `symbol` to what it actually reads -- the calibration's own
+      // notes carry the full two-surface truth with citations.
       evidence: {
         consumer: 'src/infrastructure/runtime/bootstrap/facade/react/provider/index.tsx',
-        symbol: 'RecipeProfileProvider',
+        symbol: 'resolvedRuntimeConfig.appearance?.recipeProfile',
       },
       scope: 'tenant',
       owner: 'design-system',
@@ -611,7 +640,7 @@ export const TENANT_CAPABILITY_REGISTRY = Object.freeze([
       valueType: 'profile-id',
       defaultBehavior: 'no profile: family recipe defaults apply',
       documentPath: 'visualFoundation.recipeProfile',
-      brandThemePath: 'recipeProfile',
+      brandThemePath: 'recipes.profile',
       derivedChannels: ['--ds-recipe-profile'],
       compat:
         'closed registry of typed per-family axes (recipe-profiles); caller props always win',

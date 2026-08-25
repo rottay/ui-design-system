@@ -4317,6 +4317,63 @@ re-atestación de Sonnet. Con esto, typography.families (el control más
 barato de la cola: ambos keypaths limpios) queda desbloqueado para su
 calibración — F4B-14 sigue.
 
+**F4B-15 — recipe-profile CIERRA SOURCE_BOUND (2026-08-25; Sonnet; fix del
+instrumento ratificado por ruling DT; postaudit Fable: ACCEPT — "el primer
+control del espacio advanced medido end-to-end; FASE-A queda viva en evidencia
+real: el récord A6 (digest + verticalKey) está en los artifacts"; write-set
+exacto verificado por el auditor, 106/106 re-stamps sólo frescura).** Fix del
+registry clase false-INERT by PATH (la de F4B-7/12/13): `brandThemePath:
+'recipeProfile'` nombraba un campo que no existe en BrandTheme (las dos
+ocurrencias de `recipeProfile` en `themes/index.ts` son shapes de OUTPUT —
+TenantAppearance/CompiledBrand) → `'recipes.profile'`
+(`BrandRecipeSelection.profile`, el input que un stop escribe). **Witness
+corregido por ruling DT:** el symbol anterior (`RecipeProfileProvider`)
+implicaba que el canal CSS `--ds-recipe-profile` llega a producción; medido,
+las DOS superficies quedan documentadas con sus alcances exactos — (a) el
+canal CSS no tiene lector de producción (grep; el propio comentario del
+compilador lo llama provenance de la selección, no paint); (b)
+`RecipeProfileProvider` es consumidor real pero de
+`resolvedRuntimeConfig.appearance?.recipeProfile` (la forma DB-normalizada),
+que para las 3 verticales code-owned NUNCA llega
+(`getCodeOwnedRuntimeConfig` destructura y descarta `appearance`;
+`governedBehavior` no lleva `recipes`). No se inventó consumidor (ley D-1b).
+**Stops:** el catálogo cerrado de 3 ids + 2 identity (rottay autora
+`rottay/technical-sharp@1`; bithire autora `rottay/network-professional@1` —
+el namespace nombra la provenance del REGISTRO, no qué vertical puede
+seleccionarlo; evnto no autora `recipes`: gap explícito, sin identity stop).
+Identity = hecho compilado, no receipteado (ley F4B-8: la CLI exige ≥2
+brazos comparables). **Matriz causal 7/9, medida no anticipada:** las 2
+combinaciones restantes (`technical-sharp`×rottay, `network-professional`×
+bithire) son la identidad PROPIA de ese vertical — escribir el mismo valor
+por el documento DB hace que el compilador ELIDA el canal por completo
+(`StopExclusionError`, clase `COMPILER_ELIDES_VERTICAL_DEFAULT`,
+publicable); el brazo estático muestra el mismo hecho como `moved=0`,
+byte-idéntico al baseline. Clase más fuerte que bithire/sober de F4B-11
+(ahí el brazo DB emitía sin mover; acá no emite). Documentado en
+`coincidentalIdentityExclusionNote`. **`tenantPostureFloors` no proyecta
+`recipes`:** la composición DB depende íntegra del `mergeDeep` genérico de
+`resolveTheme`; suficiente por el argumento W-B (no hay ladder de vertical
+que compita post-merge para una selección simple) — asimetría real contra
+los campos con piso, nombrada en `recipesFloorAsymmetryNote`. **Fix del
+instrumento (ruling DT, write-set ampliado a UN archivo):** `discriminate()`
+en `runtime/ingress/tests/index.test.mjs` reenvía ahora
+`verticalEnvelopeFor` del propio arm — la wiring que el CLI siempre hizo
+(FASE-A). Hueco preexistente expuesto, no causado, por este packet:
+recipe-profile es el PRIMER control receipteado con `dbTenantThemePath` en
+`visualFoundation.*` (documento modo `advanced`), y el drill H-2 drill 5
+(que auto-descubre controles receipteados) nunca había compilado en
+`advanced`; el drill no cambió su ley ("H-2 may not invalidate receipted
+work" exige lo mismo), el fix habilita la medición. 17 receipts re-emitidos
+por frescura (el archivo de test está en `ownedSourceFiles` del instrumento),
+cero cambios de VALOR en los 113. **Asiento de familia button.json:**
+MUST_NOT_REACH re-confirmado (la receta rebindea RAÍCES, los componentes
+leen sus sockets; grep cero lectores de `--ds-recipe-profile` en
+tokens/css) → SOURCE_BOUND, mismo techo de anatomía (propertyGroups sin
+ratificar — dependencia registrada). Cadena completa: 113/113 VALID,
+CONSTITUTION_READY, program-check.test 48/48, probe 240/240 (drill 5 ok con
+recipe-profile descubierto), provenance 24/24, css-staleness 5/5,
+producers --check OK. Cierre en SOURCE_BOUND por la misma nota de anatomía.
+
 **F4B-14 — STOP y RULING DT: el caso compuesto es un defecto real de
 compilador, y E-2 entra EN F4B-14 (2026-08-25; escalado por el owner).**
 Sonnet midió lo que el brief pedía verificar: la ley "explicit family wins"

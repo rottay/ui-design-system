@@ -14765,10 +14765,39 @@
     {
       "controlId": "recipe-profile",
       "disposition": "UNKNOWN",
-      "verificationState": "UNKNOWN",
-      "unknownReason": "NOT_ASSESSED",
-      "evidenceIds": [],
-      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "verificationState": "SOURCE_BOUND",
+      "unknownReason": "NOT_ASSESSED_PAST_SOURCE_BOUND. Causal measurement complete and positive on the declared channel's ingress (7 of 9 stop x vertical combinations receipted, both arms; the other 2 are a measured, named structural exclusion -- see the control's own calibration.coincidentalIdentityExclusionNote -- not a gap in this family's own evidence). This cell's PRE-EXISTING `targetBinding.status: MUST_NOT_REACH` (anatomy census, before this packet) is independently confirmed rather than contradicted: `--ds-recipe-profile` genuinely has no component-level consumer -- neither this family's own button skin nor any other CSS file reads it (grep-confirmed this packet across src/foundation/tokens/css), matching the anatomy's own reasoning that the recipe rebinds OTHER root channels and components read those, not the provenance channel itself. NOT raised to IMPLEMENTED: MUST_NOT_REACH cells have no `internalChannels`/socket to own by design, and the same program-wide propertyGroups-vocabulary blocker (F4B-11/12/13/14) applies regardless.",
+      "evidenceIds": [
+        "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/recipe-profile/bithire-technical-sharp.json.receipt.json",
+        "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/recipe-profile/evnto-technical-sharp.json.receipt.json",
+        "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/recipe-profile/rottay-network-professional.json.receipt.json",
+        "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/recipe-profile/evnto-network-professional.json.receipt.json",
+        "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/recipe-profile/rottay-editorial-round.json.receipt.json",
+        "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/recipe-profile/bithire-editorial-round.json.receipt.json",
+        "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/recipe-profile/evnto-editorial-round.json.receipt.json"
+      ],
+      "nextAction": "PROPERTY_GROUPS_VOCABULARY_RATIFICATION_THEN_IMPLEMENTED",
+      "sourceBindings": [
+        "packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts",
+        "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
+        "packages/core/src/infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts",
+        "packages/core/src/foundation/tokens/ts/presentation/recipe-profiles/index.ts",
+        "packages/core/manifest/controls/recipe-profile.json"
+      ],
+      "negativeControls": [
+        "control height remains fixed",
+        "color remains fixed",
+        "border remains fixed",
+        "motion remains fixed"
+      ],
+      "negativeControlsScopeNote": "The same four the control declares, restated on this root so the cell is self-describing. `font metrics remain fixed` deliberately not declared, same reason as the control's own note: this channel is pure selection provenance with no paint mechanism of its own to assert a boundary against.",
+      "stressCases": [
+        "2 of the 9 (stop x vertical) combinations are structurally excluded from the DB arm, not receipted: a vertical's OWN authored identity written back through the DB document (rottay x technical-sharp, bithire x network-professional) makes the compiler's artifact-diff elide the channel entirely (StopExclusionError, COMPILER_ELIDES_VERTICAL_DEFAULT) rather than emit it unmoved. See the control's own calibration.coincidentalIdentityExclusionNote for the measured detail on both doors.",
+        "This cell's targetBinding (MUST_NOT_REACH, anatomy census predating this packet) was independently re-confirmed rather than assumed: grepped src/foundation/tokens/css this packet, zero files read --ds-recipe-profile directly, matching the anatomy's own 'the recipe rebinds roots, components read their own sockets' reasoning."
+      ],
+      "restoreRequirements": [
+        "Unsetting the control through either door restores the vertical baseline exactly (measured: restore.exact true on all 7 receipted scenarios)."
+      ],
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "reasons": [

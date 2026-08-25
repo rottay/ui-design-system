@@ -7,7 +7,7 @@
   "semanticOwner": {
     "owner": "design-system",
     "registryPath": "packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts",
-    "registryDigest": "428ce6aaccc3d87427da63f6ad3b9b66eaf778c010843d920372a2ba87d9cc4a"
+    "registryDigest": "2081d156ee6241676e4ade123971df20acccc70caf1190466529c16ae3645a4b"
   },
   "title": "Experience profile",
   "valueType": "profile-id",

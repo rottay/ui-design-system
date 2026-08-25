@@ -4,7 +4,7 @@
   "scope": "Phase-0 exact proof and minimal public-claim floor; not DS-IMP-060 completion",
   "reproducibility": {
     "classification": "deterministic same-input runs",
-    "authorityDigest": "d6807977637d38c0e4c3693ec747e0ba93363e8206bd7e37a6cedfd42ae87a00",
+    "authorityDigest": "7a18ee902d27b4197d9d575bc31c20228e4223b10edfba710be1a4e5bc4417ce",
     "sourceHeadIsAuthority": false,
     "toolchain": {
       "node": {
@@ -1383,8 +1383,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 39317,
-        "sha256": "428ce6aaccc3d87427da63f6ad3b9b66eaf778c010843d920372a2ba87d9cc4a"
+        "bytes": 41364,
+        "sha256": "2081d156ee6241676e4ade123971df20acccc70caf1190466529c16ae3645a4b"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/contracts/composition/tenants/index.ts",
@@ -15589,8 +15589,8 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 32769,
-        "sha256": "c9b459316bd35ed2ea5c321141e9e945be1be9b33c0502eea6abd5f8fccd1195"
+        "bytes": 33430,
+        "sha256": "c775ed389b7f14ddf2bb21e5af1606ac541fcaa05702fb83d0c5565c780a5713"
       },
       {
         "path": "ui-design-system/packages/core/src/tooling/resolution-probe/foundation/roster/tests/index.test.tsx",
@@ -40519,7 +40519,7 @@
         "sha256": "d2a99efed33922a4a699ea033538b677022ddaccf0cdbb25ece0a7295bdc4812"
       }
     ],
-    "digest": "d6807977637d38c0e4c3693ec747e0ba93363e8206bd7e37a6cedfd42ae87a00"
+    "digest": "7a18ee902d27b4197d9d575bc31c20228e4223b10edfba710be1a4e5bc4417ce"
   },
   "paintAudit": {
     "output": "engine-token-audit --check OK (3326 counters; 3226 completed zeros locked exactly; 91 decrease-only ceilings; 2 positive exact invariants; 7 positive minimum floors)",
@@ -113900,8 +113900,8 @@
   "deterministicRuns": {
     "count": 2,
     "hashes": [
-      "070cbb86334701e3ae079ab83205977547ef09dc253428a10bf65695eff499db",
-      "070cbb86334701e3ae079ab83205977547ef09dc253428a10bf65695eff499db"
+      "fd4fe39bbb2c2b212073833ab07857d24fd9d3302306638bbeb51b84834971ec",
+      "fd4fe39bbb2c2b212073833ab07857d24fd9d3302306638bbeb51b84834971ec"
     ],
     "agree": true
   }

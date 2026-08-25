@@ -5,7 +5,7 @@
   "scenarioId": "typography.families/base-quoted/bithire/static-and-db",
   "evidenceKind": "static-db-computed-parity",
   "commandOrTool": "node src/tooling/resolution-probe/public/cli/index.mjs causal",
-  "toolVersion": "resolution-probe@77460ac31305",
+  "toolVersion": "resolution-probe@471baf755c2a",
   "exitCode": 0,
   "sourceFiles": [
     "packages/core/dist/build-stamp.json",
@@ -64,10 +64,10 @@
     "packages/core/src/ui/primitives/display/Typography/tests/Typography.test.tsx",
     "packages/core/src/ui/primitives/display/Typography/tests/Typography.type-roles.test.tsx"
   ],
-  "sourceDigest": "16c7f0472d754910614af5822cbbbb84e7d4386cb03c01dee5485d38746fae53",
+  "sourceDigest": "9a45c2ed11d06fd67f1de9281977288baf3668e655b4b3ef1064a644976e5dfe",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/typography-families/bithire-base-quoted.json",
   "artifactSha256": "8049de0637ff98422bc870a2ab889f8eeb8a0bcc598c69d896606a83b664f8a2",
-  "createdAt": "2026-08-25T11:25:44.451Z",
+  "createdAt": "2026-08-25T12:55:54.809Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

@@ -1432,6 +1432,11 @@ const discriminate = async (manifest, armId, vertical, overrides = {}) => {
      * every non-palette control this is inert: the stamp only reaches documents
      * that already write a palette node. */
     defaultMode: verticalDefaultMode(baselines[vertical], vertical),
+    /* FASE-A: the vertical policy envelope resolver, from the SAME arm the
+     * compiler came from; inert for `simple` documents (appearance.general.*),
+     * required for `advanced` (visualFoundation.*). Same wiring the CLI
+     * already does (public/cli/index.mjs, verticalEnvelopeFor: loaded.verticalEnvelopeFor). */
+    verticalEnvelopeFor: arms[armId].verticalEnvelopeFor,
     ...overrides,
   });
 };

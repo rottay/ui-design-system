@@ -5,7 +5,7 @@
   "scenarioId": "surfaces.elevation-posture/elevated/bithire/static-and-db",
   "evidenceKind": "exact-restore",
   "commandOrTool": "node src/tooling/resolution-probe/public/cli/index.mjs causal",
-  "toolVersion": "resolution-probe@77460ac31305",
+  "toolVersion": "resolution-probe@471baf755c2a",
   "exitCode": 0,
   "sourceFiles": [
     "packages/core/dist/build-stamp.json",
@@ -66,10 +66,10 @@
     "packages/core/src/ui/primitives/display/Card/engines/rustic/index.tsx",
     "packages/core/src/ui/primitives/display/Card/index.tsx"
   ],
-  "sourceDigest": "4ed13e292a4c6b44727574348c7f4cd098076069355b15620ed588f5a35b38d4",
+  "sourceDigest": "05258e0880408f01fd5b445c55a403a7ef7ac1c284bf9f4d57e8ec03c6c53fba",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/surfaces-elevation-posture/bithire-elevated.json",
   "artifactSha256": "01746f4dc0ede4d564085b054534d1016ccd8f5d9dde801db1c156e382dbe24d",
-  "createdAt": "2026-08-25T11:25:44.378Z",
+  "createdAt": "2026-08-25T12:55:54.745Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,
