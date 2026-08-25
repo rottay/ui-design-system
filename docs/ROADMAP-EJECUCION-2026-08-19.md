@@ -471,6 +471,13 @@ histórico y no reaparece**.
     atómicamente en `AGENTS.md` y las autoridades/checkers de Modern Rescue;
     este Markdown no las sobreescribe por sí solo.
 
+**Tomadas (2026-08-25, relevo Codex → DT Kimi K3):**
+
+14. **F8 tiene alcance acotado:** sólo **BitHire** entra como vertical activo;
+    app-platform/Rottay y Evnto quedan en **HOLD**. Esto NO reduce las 5100
+    celdas de F9 ni permite declarar F8 globalmente completo: el cierre de F8
+    se reporta como "F8-BitHire", nunca como F8 entero.
+
 **Regla de alcance vigente (del dueño, 2026-08-19):** el DS primero; las apps
 después, vertical por vertical. Libertad para **publicar versiones**; **push
 prohibido**. Las ventanas de rotura de apps (§1) dejan de bloquear la
@@ -1201,11 +1208,11 @@ paso de esa cadena está autorizado por este checkpoint.
 | C4 brecha PRE_F4B | 100% REGULARIZADA (doble postaudit Codex DEFECTS 5/5 + Fable REGULARIZA; T-11 anclado, T-12 narrativa, frescura producers.json; D1 aceptado con asiento) |
 | PRE_F4B | CERRADO por regularización C4 (ver asiento C4); inventario mecánico `INVENTORY_READY` histórico |
 | H-1 brazo estático con baseline | 100%; `base` del vertical publicado sólo en el brazo estático; preaudit Fable `ACCEPT` V1–V5; drills 47/47; los 20 receipts spacing/effect/radius invariantes |
-| F4B | **5/20 controles** — `spacing.rhythm`, `surfaces.effect-intensity`, `shape.radius-scale` y `density.mode` en `COMPUTED_VERIFIED` (rank 3), **ninguno `SIGHTED_ACCEPTED`**; `experience.profile` DEGRADADO a `IMPLEMENTED` (su re-medición pintada refutó la equivalencia de brazos bajo el instrumento corregido — asimetría real, `OPEN_ARM_ASYMMETRY` = decisión de PRODUCTO del owner con prueba; receipts R4 re-emitidos sólo por frescura). 30 receipts válidos y frescos bajo validador v2 (R2×14, R3×6, R4×4, R5×6). Escenarios: 8 layout × {tight,airy} + 6 card × {mate,sobrio} + 6 card × {sutil,amplio} + 4 card × {technical,editorial} (supersedidos en conclusión, no en números) + 6 space × {compact,spacious}. Los 15 restantes siguen `UNKNOWN`; `typography.scale` arrastra anti-door + semilla incondicional (anotado para su packet) |
+| F4B | **20/20 controles ASENTADOS** (2026-08-25) — 9 `COMPUTED_VERIFIED` (spacing.rhythm, surfaces.effect-intensity, shape.radius-scale, density.mode, responsive.posture, typography.scale, experience.profile, palette.seeds, surfaces.elevation-posture) + 10 `SOURCE_BOUND` (button-style, typography.pairing, sidebar-tone, motion.dial, typography.families, recipe-profile, profiles.expressive, profiles.icon, token-overrides, chrome.anatomy) + `chrome.families` paraguas BY_REFERENCE (`UNKNOWN` a propósito, `SURFACE_REVIEW_DEFERRED_TO_F5`). **0 `SIGHTED_ACCEPTED`.** Única evidencia causal pendiente dentro del perímetro: matriz de token-overrides (F4B-17B), que espera el kind `map-entry` (diseño entregado, preaudit despachado). 134 receipts bajo validador v2 (133 válidos; único stale declarado: compound-editorial, `SUPERSEDED_BY_LIVE_FENCE`) |
 | F2 asimétrico | 0% |
 | F3/F4C/F5-F8 pendientes | 0% del tramo pendiente |
 | F9 | 0/5100 celdas aceptadas |
-| Programa completo | estimación prudente 39–43% realizado; 57–61% pendiente. Cerrar F4A **no certifica** F4B ni F9: ambos con gate/celdas propios, aún pendientes |
+| Programa completo | estimación prudente **55–60% realizado** (ingeniería; sube de 39–43% con F4B 20/20 asentado); preparación comercial visible ~41%. Cerrar F4A/F4B **no certifica** F9: 0/5100 celdas aceptadas, gate y calibración de celdas propios, aún pendientes |
 
 **Regla de reporte:** el porcentaje sólo cambia por implementación o aceptación
 real; producir memos read-only no infla progreso.
@@ -4316,6 +4323,79 @@ brace con sufijo compartido). Suites 240/240, build EXIT=0, 93/93 VALID por
 re-atestación de Sonnet. Con esto, typography.families (el control más
 barato de la cola: ambos keypaths limpios) queda desbloqueado para su
 calibración — F4B-14 sigue.
+
+**PACKET K fase 1 — el kind `map-entry` está DISEÑADO y acotado (2026-08-25;
+Opus read-only; preaudit Fable despachado; DT: 5 rulings).** El diseño
+(`/private/tmp/packetk-map-entry-design-opus.md`, copia limpia `-clean.md`)
+mide que el kind es más chico de lo supuesto: pertenece a la familia que baja
+`stop.value` (como `font-stack`/`color-set`); la forma `{id, role, value}` YA
+existe (`motion.dial`) y `normalizedStops` no cambia de esquema; el brace-set
++ `role` existente resuelve el DÓNDE y el kind sólo valida el QUÉ contra un
+catálogo cerrado por entrada. Leyes medidas que quedan como contrato del
+diseño: **(a) ley del matcher** — `resolveIngressMember` compara contra el
+ÚLTIMO segmento; un brace-set map-entry es admisible sólo si los últimos
+segmentos de sus miembros son únicos entre sí (un rol compuesto
+`'sidebar.bg'` selecciona 0; la recomendación previa de Sonnet queda refutada
+por medición); **(b) el 267/23 de Fable se descompone 23 = 15 + 8**: 15
+rechazos de TIPO del schema (4 font-family + 7 número + 4 visual-value, sanan
+15/15 con el tipo correcto — NINGUNO es rechazo de clave) + 8 rechazos del
+piso APCA en el compilador; el rechazo de clave es un tercer mecanismo
+(`unknown_key`) que las 290 no producen por SER el allowlist; **(c) H-2
+funciona tal cual** — el centinela `'absent'` modela la ausencia como valor y
+el predicado EXISTS discrimina stops de canales distintos sin forma de
+testigo propia; **(d) las dos puertas de chrome-map** miden paridad
+byte-exacta donde ambas aceptan (`modal.bg`, `table.radius`) y divergencia de
+CLASE conocida en los apareados por APCA (estático emite crudo / DB rechaza —
+misma clase que `font-stack`); la envoltura `applyRadiusDial` es SIMÉTRICA en
+ambas puertas (cerco por drill, no exclusión). **Rulings DT (formalizados,
+el R1 nace de línea del owner en pane):** **R1 — alcance de fase 2:
+`map-entry` SÓLO para `token-overrides`.** NO se crea control chrome narrower
+nuevo, NO se toca `capabilities/index.ts`, el denominador queda 20×255=5100;
+el control chrome narrower queda diferido a F5 junto con la revisión de
+superficie del paraguas (la alternativa del diseño, adoptada). **R2 — el
+catálogo vive en un campo NUEVO `calibration.entryCatalog`** (array de
+`{role, valueType, channel}`); `calibration.catalog` queda intacto como
+array-de-strings exclusivo de `profile-id`. **R3 — CERO clases nuevas** en
+`STOP_EXCLUSION_CLASSES`: APCA → `GOVERNED_CONTRAST_FLOOR`; tipo equivocado →
+`DOMAIN_KIND_NOT_LOWERED`; rol inexistente en el schema → `Error` llano con
+`classifyStopExclusion` → null (defecto de manifest, misma forma que
+brace-en-medio). **R4 — el throw terminal se actualiza a 6 kinds**,
+reparando la omisión rancia de `font-stack` (registro de Fable desde
+FASE-B). **R5 — taxonomía:** una línea en el generator mapea los
+valueType-mapa a `'map-entry'`; `valueType` (dominio público) y `domain.kind`
+(estrategia de bajada) siguen siendo campos distintos; el registry no cambia.
+**Costo presupuestado de antemano (medido por Opus):** regenerar el manifest
+de token-overrides re-stalea los 12 receipts de motion-dial que lo cargan en
+sourceFiles → la re-emisión entra en el write-set de fase 2, no se descubre
+al final. Pendientes declarados del diseño para fase 2: medir celdas/estado
+del control antes de fijar `assessmentState` (techo mecánico, misma regla del
+Packet 3) y la pregunta abierta del matcher (dos familias con el mismo campo
+requerirían ensanchar `resolveIngressMember` — packet propio, fuera de
+alcance).
+
+**Ruling del owner para F8 asentado (2026-08-25; relevo vía auditoría Codex,
+aceptado por el owner):** F8 entra con alcance acotado — sólo **BitHire** es
+vertical activo; app-platform/Rottay y Evnto quedan en **HOLD**. NO reduce
+las 5100 celdas de F9 ni habilita a declarar F8 global: los reportes dirán
+"F8-BitHire", nunca "F8 completo". Asentado también como decisión 14 de §12.
+
+**P0 — el cierre del paraguas dejó el índice stale (2026-08-25; detectado por
+auditoría externa de Codex, verificado por el DT).** `bdaab012c` aplicó al
+commitear la corrección P2 de una palabra (`enum`→`closed-enum`) sobre
+`chrome.families.json` DESPUÉS de la última regeneración del índice →
+`program-check.mjs` quedó BLOCKED ("manifest/index.json is stale").
+Correctivo aplicado con el productor canónico
+(`manifest/generator/index.mjs --write`): el único delta material es
+`manifest/index.json` (2 hunks: `inputsDigest` + digest de chrome.families);
+0 receipts citan `manifest/index.json` en sourceFiles (ninguno se re-stalea);
+gates post-fix: generator `--check` OK + `CONSTITUTION_READY`. Postaudit
+Fable: ACCEPT (los dos hunks exactos, 0 citas en receipts, ambos gates verdes
+en SU corrida; nota de vara: quinta instancia de la clase secuencia/frescura,
+la primera nacida de un commit del propio DT — CI-2 la hará roja pre-commit).
+Commit correctivo separado: **`fd725246a`** (sólo `manifest/index.json`). **Lección de
+secuencia asentada: TODA edición de un manifest — incluso de una palabra de
+prosa — exige re-correr el generator ANTES del commit; el índice es derivado
+y no perdona ni la última palabra.**
 
 **LEY DE ADMISIÓN de `SUPERSEDED_BY_LIVE_FENCE` (DT, 2026-08-25, sobre la
 evaluación vinculada de Fable en el postaudit de F4B-16 — escrita UNA vez,
