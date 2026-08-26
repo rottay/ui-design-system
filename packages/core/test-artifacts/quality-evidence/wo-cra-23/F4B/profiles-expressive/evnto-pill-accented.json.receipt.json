@@ -69,10 +69,10 @@
     "packages/core/src/ui/primitives/display/Card/engines/rustic/index.tsx",
     "packages/core/src/ui/primitives/display/Card/index.tsx"
   ],
-  "sourceDigest": "db86fcd4fa012c2670a7b5b9f0a71f18389825c91378297bed1d32554518d423",
+  "sourceDigest": "63bedfba19418be0b67e3ae92ffb3bfad5d7d4382d0a7b725c9659c010746aa7",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/profiles-expressive/evnto-pill-accented.json",
-  "artifactSha256": "e85776b2d3ae37e78ca087b733fbe4a63bfc2b5d732eea9ae58bf252cb7c26d1",
-  "createdAt": "2026-08-26T00:01:14.751Z",
+  "artifactSha256": "c2899b80c3fe0b748a9bba23ef3fe8cfd10a34bdedffd6ae62ed0f32f7bab977",
+  "createdAt": "2026-08-26T04:27:53.252Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

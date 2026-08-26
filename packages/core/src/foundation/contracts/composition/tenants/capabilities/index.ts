@@ -608,7 +608,23 @@ export const TENANT_CAPABILITY_REGISTRY = Object.freeze([
       documentPath:
         'visualFoundation.advanced.tokenOverrides.{--ds-color-error,--ds-color-bg-overlay}',
       brandThemePath: 'tokenOverrides',
-      derivedChannels: ['--ds-color-error', '--ds-surface-card', '--ds-color-bg-overlay'],
+      /* F4B-17B (DT adjudication, owner ruling): `derivedChannels` IS
+       * `declaredOutputs.channels` -- its ONLY consumer is
+       * manifest/generator/index.mjs:278, nothing else in src reads it -- and
+       * that field is the harness's CALIBRATION SURFACE (K, "and nothing
+       * wider"): `directControlFixtureIds` requires `every()` declared
+       * channel to be readable on one fixture target, precisely so a stop
+       * cannot attribute a channel it never wrote. `--ds-surface-card` was
+       * removed because no stop in this control's calibration ever writes it
+       * (measured in F4B-17: authoring it cascades to 8 channels including
+       * 10 chart-category series, too broad for a single-entry causal
+       * attribution) -- keeping it declared here while unreachable by any
+       * fixture violated K. The PUBLIC domain is untouched: a tenant can
+       * still author `--ds-surface-card` through the same door (schema,
+       * TENANT_THEME_OVERRIDE_TOKENS, 290 names, `valueType: 'token-map'`)
+       * -- only this control's CALIBRATED, ATTRIBUTABLE surface narrows to
+       * the 2 channels its 2 stops actually exercise. */
+      derivedChannels: ['--ds-color-error', '--ds-color-bg-overlay'],
       compat:
         'escape hatch, not the model: every recurring override is a candidate for a real capability',
     },

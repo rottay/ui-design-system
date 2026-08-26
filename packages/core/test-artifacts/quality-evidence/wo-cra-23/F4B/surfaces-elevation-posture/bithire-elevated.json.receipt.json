@@ -68,10 +68,10 @@
     "packages/core/src/ui/primitives/display/Card/engines/rustic/index.tsx",
     "packages/core/src/ui/primitives/display/Card/index.tsx"
   ],
-  "sourceDigest": "7b4b877de32ef72243233288e4315b0f99962e14b06fdd6eaebabae1a621ca3f",
+  "sourceDigest": "8c54a35630dd33b3423f2544976248e129448706ee77452836e716e0dc4bfb28",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/surfaces-elevation-posture/bithire-elevated.json",
-  "artifactSha256": "607257fde7db925c5ec0b5b6684501d8602aa85fa118bfe4cc60a63640870b9b",
-  "createdAt": "2026-08-26T00:06:48.881Z",
+  "artifactSha256": "b2671142a2dba362677acbc93104df09678ec451f4aac8eb0f01b7afb3b04603",
+  "createdAt": "2026-08-26T04:33:20.058Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

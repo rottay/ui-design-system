@@ -66,10 +66,10 @@
     "packages/core/src/ui/primitives/display/Typography/tests/Typography.test.tsx",
     "packages/core/src/ui/primitives/display/Typography/tests/Typography.type-roles.test.tsx"
   ],
-  "sourceDigest": "63853ed53675607db4d67e19ddd9015ad70728574e6b456518e8f6dd21c3563b",
+  "sourceDigest": "7772c2427b2379728d681f807badcddbaff315c22ec53f528724731f1f1a1c28",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/typography-pairing/rottay-geometric.json",
-  "artifactSha256": "bfd69d322dfd365d00e97e5158045db272d3a4451c9e55d1ff5c3d1d0bd349da",
-  "createdAt": "2026-08-26T00:10:11.826Z",
+  "artifactSha256": "2d9c23bc37d321d9d6cf812e6e27c80d5ca1366195ead0eeda1cececc36c164e",
+  "createdAt": "2026-08-26T04:36:33.347Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

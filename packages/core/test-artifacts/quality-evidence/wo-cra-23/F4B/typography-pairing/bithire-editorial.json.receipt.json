@@ -66,10 +66,10 @@
     "packages/core/src/ui/primitives/display/Typography/tests/Typography.test.tsx",
     "packages/core/src/ui/primitives/display/Typography/tests/Typography.type-roles.test.tsx"
   ],
-  "sourceDigest": "d16e86b4564b05505f57d3c051ffc0a4c93160db9ae701789b4e968d72971dc4",
+  "sourceDigest": "c2a89b8336ad12f32c27c864a094334db602436a48cea71fb8dd3371f255e2f6",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/typography-pairing/bithire-editorial.json",
-  "artifactSha256": "4f7e266772f3399fcbc91a84e3bd457293726a678f64d5232a4d4b3ccacdbc97",
-  "createdAt": "2026-08-26T00:09:11.203Z",
+  "artifactSha256": "fb42cea2f1468dd745af9396c085d70f215c801940cc696206b382ba0b2dbd12",
+  "createdAt": "2026-08-26T04:35:34.714Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

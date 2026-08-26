@@ -67,10 +67,10 @@
     "packages/core/styles/index.css",
     "packages/core/styles/rottay.css"
   ],
-  "sourceDigest": "e5a28557758b328bbbf8ff4d77c54ce1af7039f79d9fc782e3610ade587d4a81",
+  "sourceDigest": "97f62594d74885af9e315331c696fe866bc95b285f2cc0a6decd7de2f97097e3",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/shape-button-style/evnto-pill.json",
-  "artifactSha256": "e0b99e018565260963ec077d9ad20f38ec3a8da413c2bf91eb81781df364e5ee",
-  "createdAt": "2026-08-26T00:03:23.128Z",
+  "artifactSha256": "1cd423d617d07320be0e89a3cfa140c41a47a5231bd5cdca342225638df6ea45",
+  "createdAt": "2026-08-26T04:29:52.448Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

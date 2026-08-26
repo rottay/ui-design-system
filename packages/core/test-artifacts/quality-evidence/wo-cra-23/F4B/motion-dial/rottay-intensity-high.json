@@ -12263,10 +12263,10 @@
       }
     },
     "sourceFreshness": {
-      "declaredDigest": "5aced683994749c6b7e9a4c61f2f8aa4bbb84742b8792da79441ff5179b5b031",
-      "observedDigest": "5aced683994749c6b7e9a4c61f2f8aa4bbb84742b8792da79441ff5179b5b031",
-      "postMeasurementDigest": "5aced683994749c6b7e9a4c61f2f8aa4bbb84742b8792da79441ff5179b5b031",
-      "preMeasurementDigest": "5aced683994749c6b7e9a4c61f2f8aa4bbb84742b8792da79441ff5179b5b031",
+      "declaredDigest": "49f82f7303d450bfff8d78f4c126633dce6fea9d43f9c950b0ca8868a0f721cb",
+      "observedDigest": "49f82f7303d450bfff8d78f4c126633dce6fea9d43f9c950b0ca8868a0f721cb",
+      "postMeasurementDigest": "49f82f7303d450bfff8d78f4c126633dce6fea9d43f9c950b0ca8868a0f721cb",
+      "preMeasurementDigest": "49f82f7303d450bfff8d78f4c126633dce6fea9d43f9c950b0ca8868a0f721cb",
       "sourceFiles": [
         "packages/core/dist/build-stamp.json",
         "packages/core/dist/infrastructure/compilers/kernel/runtime/brand-theme/index.js",

@@ -4,7 +4,7 @@
   "scope": "Phase-0 exact proof and minimal public-claim floor; not DS-IMP-060 completion",
   "reproducibility": {
     "classification": "deterministic same-input runs",
-    "authorityDigest": "f9f690e9daa53ccfc2508d7f40befe553f81f8faf13fe02565da231c795323cf",
+    "authorityDigest": "ec4bc60f91a12e58e0e44c3cf83ed7c09ffe44a10697ff2607094851a0889156",
     "sourceHeadIsAuthority": false,
     "toolchain": {
       "node": {
@@ -1383,8 +1383,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 46668,
-        "sha256": "7f611c74a7d63df500f7dc2f7d1f06e547a02a79625756deab9f785bf682f9bc"
+        "bytes": 47811,
+        "sha256": "88f89891614e8f29cb79611c9c81e22e05084cf9569c376d51a6fcc453bfa5ad"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/contracts/composition/tenants/index.ts",
@@ -40519,7 +40519,7 @@
         "sha256": "d2a99efed33922a4a699ea033538b677022ddaccf0cdbb25ece0a7295bdc4812"
       }
     ],
-    "digest": "f9f690e9daa53ccfc2508d7f40befe553f81f8faf13fe02565da231c795323cf"
+    "digest": "ec4bc60f91a12e58e0e44c3cf83ed7c09ffe44a10697ff2607094851a0889156"
   },
   "paintAudit": {
     "output": "engine-token-audit --check OK (3326 counters; 3226 completed zeros locked exactly; 91 decrease-only ceilings; 2 positive exact invariants; 7 positive minimum floors)",
@@ -113900,8 +113900,8 @@
   "deterministicRuns": {
     "count": 2,
     "hashes": [
-      "34fbb62971b71510b568dba3c6749a5138e2b5ce1b0000f0365020937f51a1b9",
-      "34fbb62971b71510b568dba3c6749a5138e2b5ce1b0000f0365020937f51a1b9"
+      "c2042decc0fcce201acfb814d995cdd49895d5f11f352459c2674b12197288f2",
+      "c2042decc0fcce201acfb814d995cdd49895d5f11f352459c2674b12197288f2"
     ],
     "agree": true
   }

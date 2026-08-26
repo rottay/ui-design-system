@@ -478,6 +478,20 @@ histórico y no reaparece**.
     celdas de F9 ni permite declarar F8 globalmente completo: el cierre de F8
     se reporta como "F8-BitHire", nunca como F8 entero.
 
+**Tomadas (2026-08-25/26, F4B-17B, formalizadas por el DT):**
+
+15. **Opción 2 del STOP #1:** `--ds-surface-card` sale de `derivedChannels`
+    (3→2). La superficie de atribución de calibración se alinea con la ley K
+    ("and nothing wider"); el dominio público de 290 claves queda intacto —
+    el canal sigue siendo autorable por tenants.
+16. **Opción 3 del STOP #2:** `token-overrides` acepta **SOURCE_BOUND como
+    techo permanente** de su clase (CSS-terminal + puerta estática sellada)
+    bajo el instrumento actual, documentado — sin fabricar receipts contra la
+    ley de equivalencia. La rama de veredicto single-arm para la clase
+    sealed-door queda como candidato F5
+    (`F5_INSTRUMENT_SEALED_DOOR_SINGLE_ARM_VERDICT`) con las dos condiciones
+    de admisión de Fable.
+
 **Regla de alcance vigente (del dueño, 2026-08-19):** el DS primero; las apps
 después, vertical por vertical. Libertad para **publicar versiones**; **push
 prohibido**. Las ventanas de rotura de apps (§1) dejan de bloquear la
@@ -1208,8 +1222,8 @@ paso de esa cadena está autorizado por este checkpoint.
 | C4 brecha PRE_F4B | 100% REGULARIZADA (doble postaudit Codex DEFECTS 5/5 + Fable REGULARIZA; T-11 anclado, T-12 narrativa, frescura producers.json; D1 aceptado con asiento) |
 | PRE_F4B | CERRADO por regularización C4 (ver asiento C4); inventario mecánico `INVENTORY_READY` histórico |
 | H-1 brazo estático con baseline | 100%; `base` del vertical publicado sólo en el brazo estático; preaudit Fable `ACCEPT` V1–V5; drills 47/47; los 20 receipts spacing/effect/radius invariantes |
-| F4B | **20/20 controles ASENTADOS** (2026-08-25) — 9 `COMPUTED_VERIFIED` (spacing.rhythm, surfaces.effect-intensity, shape.radius-scale, density.mode, responsive.posture, typography.scale, experience.profile, palette.seeds, surfaces.elevation-posture) + 10 `SOURCE_BOUND` (button-style, typography.pairing, sidebar-tone, motion.dial, typography.families, recipe-profile, profiles.expressive, profiles.icon, token-overrides, chrome.anatomy) + `chrome.families` paraguas BY_REFERENCE (`UNKNOWN` a propósito, `SURFACE_REVIEW_DEFERRED_TO_F5`). **0 `SIGHTED_ACCEPTED`.** Única evidencia causal pendiente dentro del perímetro: matriz de token-overrides (F4B-17B), que espera el kind `map-entry` (diseño entregado, preaudit despachado). 134 receipts bajo validador v2 (133 válidos; único stale declarado: compound-editorial, `SUPERSEDED_BY_LIVE_FENCE`) |
-| F2 asimétrico | 0% |
+| F4B | **20/20 controles ASENTADOS — FASE COMPLETA en su forma honesta (2026-08-26)** — 9 `COMPUTED_VERIFIED` (spacing.rhythm, surfaces.effect-intensity, shape.radius-scale, density.mode, responsive.posture, typography.scale, experience.profile, palette.seeds, surfaces.elevation-posture) + 10 `SOURCE_BOUND` (button-style, typography.pairing, sidebar-tone, motion.dial, typography.families, recipe-profile, profiles.expressive, profiles.icon, token-overrides, chrome.anatomy) + `chrome.families` paraguas BY_REFERENCE (`UNKNOWN` a propósito, `SURFACE_REVIEW_DEFERRED_TO_F5`). **0 `SIGHTED_ACCEPTED`.** Cero evidencia alcanzable pendiente: token-overrides cerró con techo estructural documentado (clase CSS-terminal + puerta sellada ⇒ sin camino a pass:true; candidato F5 `F5_INSTRUMENT_SEALED_DOOR_SINGLE_ARM_VERDICT` con 2 condiciones de admisión Fable). Lo que falta para que los SOURCE_BOUND suban (ratificación propertyGroup, calibración de celdas) es F4C/F5. 134 receipts bajo validador v2 (133 válidos; único stale declarado: compound-editorial, `SUPERSEDED_BY_LIVE_FENCE`) |
+| F2 asimétrico | 0% — **PRÓXIMO FRENTE** (censo corregido: 16 raíces con tema en cero enumeradas en `docs/f4a/medicion-f4a0/baseline.md:88-93` + 18 asimétricas sin cero, derivables de `manifest/cascade/root-catalog.json`; evnto en cero en 11/16; desbloqueo disyuntivo: valor de theme o cero-delta estricto) |
 | F3/F4C/F5-F8 pendientes | 0% del tramo pendiente |
 | F9 | 0/5100 celdas aceptadas |
 | Programa completo | estimación prudente **55–60% realizado** (ingeniería; sube de 39–43% con F4B 20/20 asentado); preparación comercial visible ~41%. Cerrar F4A/F4B **no certifica** F9: 0/5100 celdas aceptadas, gate y calibración de celdas propios, aún pendientes |
@@ -4323,6 +4337,58 @@ brace con sufijo compartido). Suites 240/240, build EXIT=0, 93/93 VALID por
 re-atestación de Sonnet. Con esto, typography.families (el control más
 barato de la cola: ambos keypaths limpios) queda desbloqueado para su
 calibración — F4B-14 sigue.
+
+**F4B-17B + CIERRE DE FASE F4B — token-overrides alcanza su techo
+estructural documentado y la fase queda con TODA la evidencia que el
+instrumento actual puede producir (2026-08-26; Sonnet; dos STOPs honestos;
+dos rulings del owner formalizados; postaudit Fable: ACCEPT con ruling
+expreso + dos condiciones de admisión para el candidato F5).** La secuencia:
+**STOP #1** (hueco de completitud heredado de F4B-17: declaredOutputs
+declaraba 3 canales, el fixture leía 2 → `every()` insatisfecho →
+`no-controls` para cualquier stop). **Ruling opción 2** (owner; verificado
+por el DT antes de formalizar: `derivedChannels` tiene UN consumidor — el
+generator :278 — y declarar 3 con 2 calibrables violaba la ley K "and
+nothing wider" que PACKET K acababa de fijar): `derivedChannels` 3→2 con el
+comentario de ley; el dominio público de 290 claves intacto (un tenant puede
+seguir autorando `--ds-surface-card`; lo que se estrecha es la superficie de
+ATRIBUCIÓN de calibración). **STOP #2** (estructural, la clase descubierta):
+con la ley K restaurada, los 6 escenarios alcanzan `controlLiveness:
+harness-live` con el canal moviéndose, y los 6 mueren SÓLO en
+`ingressEquivalenceHeld` — **un control CSS-terminal con puerta estática
+STRUCTURALLY_UNREACHABLE no tiene camino a un receipt pass:true**: un solo
+brazo → `comparable:false` ("a claim that was never tested is not a claim
+that held", `composition/run/index.mjs:511-512`); dos brazos → el guard
+anti-false-INERT rehúsa el brazo estático sellado (Fable lo REPRODUJO EN
+VIVO en el postaudit). **Ruling opción 3** (owner; análisis DT coincidente):
+la ley del instrumento es CORRECTA y no se dobla para fabricar un verde;
+`assessmentState` queda **SOURCE_BOUND como techo permanente de esta clase
+bajo el instrumento actual**, documentado en `structuralCeilingNote` (triple
+bloqueo con líneas + la evidencia que SÍ tiene el control: drill 7 de PACKET
+K end-to-end contra el compilador real, las mediciones F4B-17, el sello
+censo+conducta, los 6 harness-live — como medición, no como receipt; los
+receipts pass:false se borraron: un harness-suspect no es evidencia).
+`nextAction` → **`F5_INSTRUMENT_SEALED_DOOR_SINGLE_ARM_VERDICT`**, con las
+**DOS CONDICIONES DE ADMISIÓN de Fable que el candidato llevará escritas**:
+(i) la rama sólo admite veredicto de un brazo cuando la inalcanzabilidad del
+OTRO brazo esté probada por censo Y conducta con artifact sellado (la vara
+F4B-17, no una declaración); (ii) la equivalencia no se EXIME — se REEMPLAZA
+por una ley de un-brazo explícita (guards, restore, discriminación
+mono-brazo), diseñada y preauditada. El fix de la cita P3 quedó honrado
+(líneas 65/82, ruta completa, sobreviviendo la regeneración — condición §5
+del postaudit PACKET K). Re-emisión del universo (124 CLI + 9 DATA manual;
+133/134 con el compound declarado). Gates (corridas DT): validador 133/134 /
+0 non-fresh, CONSTITUTION_READY, 5100 intacto, program-check.test 48/48
+(449 s), producers.json re-derivado por el DT, GAT-07 resellado por el DT
+(`c2042dec…`), suites 122/122 + 26/26, instrumento byte-quieto. **Commit:
+<HASH17B>.** **Con este cierre, F4B queda COMPLETA en su forma honesta:
+20/20 controles asentados (9 COMPUTED_VERIFIED + 10 SOURCE_BOUND +
+chrome.families paraguas BY_REFERENCE) y cero evidencia alcanzable
+pendiente — lo que falta para que los SOURCE_BOUND suban (ratificación
+propertyGroup, calibración de celdas) y lo que falta para la clase
+sealed-door (rama de veredicto) son trabajo de F4C/F5, no de esta fase.**
+El techo estructural queda como PRECEDENTE de clase (Fable: "el próximo
+CSS-terminal con puerta sellada ya tiene su forma"). Rulings del owner
+asentados como decisiones 15 y 16 de §12.
 
 **PACKET K — el kind `map-entry` EXISTE, vive en vocabulario y queda
 cerrado (2026-08-25; Opus; preaudit Fable: ACCEPT con corrección §3; postaudit

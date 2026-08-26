@@ -69,10 +69,10 @@
     "packages/core/src/ui/primitives/display/Card/engines/rustic/index.tsx",
     "packages/core/src/ui/primitives/display/Card/index.tsx"
   ],
-  "sourceDigest": "72289cf0a062f39435072ce26f79f668c110047fe680182932d526b5f3980fe4",
+  "sourceDigest": "e5a96b75c58402151a32dc1b0915f414341204c76a3ee30ac6b882264e0b4993",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/typography-scale/bithire-amplia.json",
-  "artifactSha256": "4e1c1fa97f798f951c4dc62169fb126fd3c7d6032b18275cd001a31c9da9aa92",
-  "createdAt": "2026-08-26T00:10:36.092Z",
+  "artifactSha256": "cecafc075355462d05a9182073f6ff095c08e3b8755ed3bcfee593497638cccb",
+  "createdAt": "2026-08-26T04:37:00.847Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

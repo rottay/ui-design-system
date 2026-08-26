@@ -65,10 +65,10 @@
     "packages/core/styles/index.css",
     "packages/core/styles/rottay.css"
   ],
-  "sourceDigest": "5265acffd0af5cadf99b8969ea03b5df2f646d9a9d7c1090f2203c174400fe8a",
+  "sourceDigest": "022a01e3604f440a16f6f9bcf236d35af2fe08d93681ceb401e5fb7b81231987",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/palette-seeds/bithire-indigo.json",
-  "artifactSha256": "88c135d4c9bc8ed58542a6050b1395e73083c65596c107b3c53bc385ce18637f",
-  "createdAt": "2026-08-25T23:59:30.116Z",
+  "artifactSha256": "37aabbf7d26043ddf9d4e454b8abfe26f64384d988221fcb8db093c4f4004643",
+  "createdAt": "2026-08-26T04:26:15.139Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

@@ -48,10 +48,10 @@
     "packages/core/src/tooling/resolution-probe/runtime/measure/index.mjs",
     "packages/core/src/ui/structures/shell/navigation/sidebar-surface/index.tsx"
   ],
-  "sourceDigest": "e6a92b970a9d1e5121b22b3b55e701d09a88f3b65fd1d7485c6246937da04f07",
+  "sourceDigest": "03d3fcdd980ce88e18329882084f5361663adb568aee809670e8732850f0f709",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/navigation-sidebar-tone/evnto-inverse.json",
-  "artifactSha256": "66cb961916893f32e997bc3396c2f8363e990cfa2c6df711850fb6f121040885",
-  "createdAt": "2026-08-25T23:58:38.380Z",
+  "artifactSha256": "203696936475989bf3b6e9206c2d16b930d86fb0cfdf74e95b39ecf3dff67e4c",
+  "createdAt": "2026-08-26T04:25:22.957Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

@@ -66,10 +66,10 @@
     "packages/core/src/ui/primitives/display/Typography/tests/Typography.test.tsx",
     "packages/core/src/ui/primitives/display/Typography/tests/Typography.type-roles.test.tsx"
   ],
-  "sourceDigest": "93bb8bbe5dcb34f2f2f5fb36342eb4466aa60294e60a455d720a4b6a08ae0ce2",
+  "sourceDigest": "11a3353076183923ea924729b51942485341b5dce1c6a502dfa07a83394ca8e0",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/typography-pairing/evnto-editorial.json",
-  "artifactSha256": "e9112737439f87e5a564dd55617426509d4d189c57b031590664c72ce0c8b75e",
-  "createdAt": "2026-08-26T00:09:35.340Z",
+  "artifactSha256": "858a613f67a7a731f8b8494837c017b1c6714b2d6f35b86294d3983749bc0863",
+  "createdAt": "2026-08-26T04:35:57.964Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,
