@@ -532,6 +532,26 @@ histórico y no reaparece**.
     pero no puede congelar el resultado terminal de un control público sin una
     excepción explícita y visible. Ejecución: Lote F′ de F2A.
 
+**Tomadas (2026-08-26, sobre el inventario medido de los 28 congelamientos pendientes):**
+
+20. **Autorizado el Lote F″ sobre los 28 pendientes del dial-authority, con
+    cuatro condiciones** (texto aprobado por el owner sobre la revisión Codex):
+    (i) los 14 de `type-scale` y los 11 de `rhythm` se vuelven causales con
+    **cero-delta a factor 1, por canal y por modo**, escalando
+    **individualmente cada componente** (en paddings de dos/tres valores y
+    `clamp()` no se multiplica la cadena como texto opaco; se conserva el
+    comportamiento responsive y se prueba contra doble escalado);
+    (ii) `glass-bg` y `glass-border` **conservan sus semillas cromáticas
+    BitHire** multiplicadas en intensidad por el dial — aceptada la delta
+    visible en baseline 0.58, sujeta a A/B sighted light/dark (evidencia Fable,
+    aceptación DT) y control de contraste — y **prohibido** caer a los valores
+    glass genéricos o introducir doble escalado; (iii) `badge-radius` queda
+    como **excepción owner-visible** (primera entrada del registro
+    `exceptions` del dial-authority-gate): un pill permanece `radius-full`,
+    INVARIANT_WITH_REASON, con prueba negativa de que sigue siendo pill cuando
+    `radius-scale` se mueve; (iv) nada de esto autoriza caer a los genéricos
+    ni doble escalado.
+
 **Regla de alcance vigente (del dueño, 2026-08-19):** el DS primero; las apps
 después, vertical por vertical. Libertad para **publicar versiones**; **push
 prohibido**. Las ventanas de rotura de apps (§1) dejan de bloquear la
