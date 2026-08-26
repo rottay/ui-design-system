@@ -4324,6 +4324,54 @@ re-atestación de Sonnet. Con esto, typography.families (el control más
 barato de la cola: ambos keypaths limpios) queda desbloqueado para su
 calibración — F4B-14 sigue.
 
+**PACKET K — el kind `map-entry` EXISTE, vive en vocabulario y queda
+cerrado (2026-08-25; Opus; preaudit Fable: ACCEPT con corrección §3; postaudit
+Fable: ACCEPT con tres rulings expresos).** El sexto kind del instrumento:
+rama en `ingressValueForStop` que valida el VALOR contra
+`calibration.entryCatalog` (tabla cerrada `MAP_ENTRY_VALUE_TYPES`: hex-color /
+color / font-family / number con min-max / visual-value — cada restricción con
+su razón medida escrita) y devuelve `stop.value`; el DÓNDE lo sigue resolviendo
+`resolveIngressMember` (walker intacto). Throw terminal reparado a 6 kinds
+(P2 de Fable desde FASE-B saldado VERBATIM). **Adjudicaciones DT tomadas una
+vez:** **(3.1)** `capabilities/index.ts:593` gana el brace
+`tokenOverrides.{--ds-color-error,--ds-color-bg-overlay}` con guarda de 18
+líneas — sin él los stops no bajan (el generator deriva el ingress de
+`documentPath`); costo marginal de frescura CERO medido (el registry ya estaba
+en 134/134); motivo de R1 intacto (ningún control chrome nuevo, denominador
+5100, ninguna línea chrome del registry tocada); precedente `palette` :94; el
+estrechamiento 2-de-290 pagado en la guarda + `entryCatalogNote` (290/275/15/8
+/267, cero rechazos de clave). **(3.2)** `map-entry` entra al vocabulario
+gobernado (`DOMAIN_KINDS` + `vocabulary.domainKinds`, espejo 12/12 verificado
+por Fable; `token-map`/`chrome-map` QUEDAN); el diseño enumeró 3 sitios de
+kinds y eran 5 — Opus paró y reportó en vez de tocar fuera del write-set
+(procedimiento ejemplar). **Rulings de Fable en el postaudit:** **(i)** la
+letra "byte-quieto" de su §3 queda ENMENDADA a "sin cambios sustantivos —
+exceptuado el ripple compartido de `registryDigest` que toda edición del
+registry produce en los 20"; la imprecisión era de SU redacción, sin cargo a
+la implementación; **(ii)** vara sobre el §5.3 de Opus: conclusión FALSA con
+observaciones ciertas — la superficie de GAT-07 la define el WALK de
+`src/**/*.ts(x)`, no las menciones literales; clase grep-ceguera nombrada y a
+la lista de lecciones de vara (P2 de método al reporte; crédito a su instinto
+de no resellar deuda ajena); **(iii)** el diferimiento del fix de la cita P3 a
+F4B-17B queda ACEPTADO con condición de ledger (el brief de 17B ya la lleva
+explícita). **Cadena de presupuesto asentada en orden letra→enmienda→pago:**
+preaudit presupuestó 12 bajo R1-como-escrito; la enmienda 3.1 ensanchó el
+ripple a 133; pagado con `identical: 133 | moved: 0`. **Cierre ejecutado:**
+stops autorados (`#B4231F` / `#1E2833`, verificados dos vías: fuera de
+`TEXT_CONTRAST_PAIRINGS` con control positivo, y por conducta en los 3
+verticales con baseline `undefined`; asimetría real declarada 2/11/8 canales
+— no defecto); 8 drills nuevos + 1 re-legislado; `assessmentState`/
+`nextAction` NO tocados (la matriz receipteada es F4B-17B — fliparlos sin
+receipts violaría el techo). Gates (corridas DT): suites 256/256 (re-corrí
+122/122 + 26/26), re-emisión 133/133, integridad por archivo 134/134,
+validador 133 válidos + 0 non-fresh + único inválido declarado,
+CONSTITUTION_READY, 5100 intacto, program-check.test 48/48 (338 s),
+producers.json re-derivado por el DT (causa: digest srcTsx por el edit
+autorizado), GAT-07 resellado por el DT (`34fbb629…`, 2 corridas
+deterministas). **Commit: <HASH>.** F4B queda a UN packet de su evidencia
+causal completa: F4B-17B (Sonnet) corre la matriz, flipa el estado con
+receipts, corrige la cita P3 y salda el nextAction.
+
 **PACKET K fase 1 — el kind `map-entry` está DISEÑADO y acotado (2026-08-25;
 Opus read-only; preaudit Fable despachado; DT: 5 rulings).** El diseño
 (`/private/tmp/packetk-map-entry-design-opus.md`, copia limpia `-clean.md`)

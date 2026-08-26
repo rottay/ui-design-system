@@ -5,7 +5,7 @@
   "scenarioId": "typography.scale/amplia/evnto/static-and-db",
   "evidenceKind": "exact-restore",
   "commandOrTool": "node src/tooling/resolution-probe/public/cli/index.mjs causal",
-  "toolVersion": "resolution-probe@009c8df5b7f4",
+  "toolVersion": "resolution-probe@cc010704a6aa",
   "exitCode": 0,
   "sourceFiles": [
     "packages/core/dist/build-stamp.json",
@@ -69,10 +69,10 @@
     "packages/core/src/ui/primitives/display/Card/engines/rustic/index.tsx",
     "packages/core/src/ui/primitives/display/Card/index.tsx"
   ],
-  "sourceDigest": "9fbf580dce9df2e9b6b524bab170ba9cddc3ff1c118a0a262977b6a0952c85a1",
+  "sourceDigest": "d19385bafc0863d663d73e802c288a2360500505fdae1613b878b81461772712",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/typography-scale/evnto-amplia.json",
-  "artifactSha256": "94989b2acb1c1dc435b448572c17f9fbfd576f30b18b2f4ebf2e04ea51696bc0",
-  "createdAt": "2026-08-25T19:07:36.831Z",
+  "artifactSha256": "3a2a75d3cf3c1448e6233fec8f36eefb3243ab9589214e4df9c02c9a27a3619d",
+  "createdAt": "2026-08-26T00:10:53.805Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

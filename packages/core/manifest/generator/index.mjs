@@ -222,6 +222,28 @@ function defaultCalibration() {
   };
 }
 
+/**
+ * The registry `valueType`s whose lowering strategy is `map-entry`.
+ *
+ * `valueType` and `domain.kind` answer different questions and are allowed to
+ * differ — they already do: `closed-enum` and `bounded` are not valueTypes
+ * either, they are derived below. `valueType` names the PUBLIC domain shape, and
+ * `token-map` is the truth about it (a heterogeneous 200-entry map of colours,
+ * font stacks and numbers). `domain.kind` names how the resolution probe LOWERS
+ * a stop into that domain. Renaming the public valueType to suit the harness
+ * would reclassify the control system-wide to describe an instrument detail.
+ *
+ * `chrome-map` is DELIBERATELY ABSENT and this is load-bearing (Fable, preaudit
+ * of PACKET K §3). Adding it here would make `--write` regenerate
+ * `manifest/controls/chrome.families.json` with a flipped `domain.kind` and a new
+ * digest — a manifest the umbrella seating of 2026-08-25 settled as BY_REFERENCE
+ * with its surface review deferred to F5, whose ingress path is a wildcard the
+ * probe cannot lower anyway, and whose freshness cascade is unbudgeted. It joins
+ * this set in F5, together with the narrower chrome control that gives the
+ * generic passthrough slice a real keypath.
+ */
+const MAP_DOMAIN_VALUE_TYPES = new Set(['token-map']);
+
 function buildControl(entry, existing = {}) {
   return {
     schemaVersion: 1,
@@ -237,7 +259,13 @@ function buildControl(entry, existing = {}) {
     title: entry.title,
     valueType: entry.valueType,
     domain: {
-      kind: entry.enumValues?.length ? 'closed-enum' : entry.bounds ? 'bounded' : entry.valueType,
+      kind: entry.enumValues?.length
+        ? 'closed-enum'
+        : entry.bounds
+          ? 'bounded'
+          : MAP_DOMAIN_VALUE_TYPES.has(entry.valueType)
+            ? 'map-entry'
+            : entry.valueType,
       enumValues: entry.enumValues ?? [],
       bounds: entry.bounds ?? null,
       defaultBehavior: entry.defaultBehavior,

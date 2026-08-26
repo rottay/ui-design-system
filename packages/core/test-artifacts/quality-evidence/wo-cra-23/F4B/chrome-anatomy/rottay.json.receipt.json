@@ -5,7 +5,7 @@
   "scenarioId": "chrome.anatomy/all-stops/rottay/db-data-terminal",
   "evidenceKind": "data-field-delta",
   "commandOrTool": "node src/tooling/resolution-probe/public/cli/index.mjs data-causal",
-  "toolVersion": "resolution-probe@009c8df5b7f4",
+  "toolVersion": "resolution-probe@cc010704a6aa",
   "exitCode": 0,
   "sourceFiles": [
     "packages/core/dist/build-stamp.json",
@@ -37,10 +37,10 @@
     "packages/core/src/tooling/resolution-probe/runtime/ingress/index.mjs",
     "packages/core/src/tooling/resolution-probe/runtime/measure/index.mjs"
   ],
-  "sourceDigest": "27ec4d628083b204f1b05029d274acbc4dd60bf3c1fb9f5c429751b3ae7ad8fa",
+  "sourceDigest": "a09fa8f18dcf2264cfc68b57399d4365549b9505184a0ad3ec9ecbb8ea4d1713",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/chrome-anatomy/rottay.json",
   "artifactSha256": "a9e98a2a0f2b6bfdc02807e35014f00d53af9f2a4534d54df14c0e189ce75ce4",
-  "createdAt": "2026-08-25T18:51:09.947Z",
+  "createdAt": "2026-08-25T23:54:18.225Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

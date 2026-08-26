@@ -7,19 +7,19 @@
   "semanticOwner": {
     "owner": "design-system",
     "registryPath": "packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts",
-    "registryDigest": "08fbe40fd643224faf86e79d53e34c47c4a05c0ae424f99d3a34721a42658e9b"
+    "registryDigest": "7f611c74a7d63df500f7dc2f7d1f06e547a02a79625756deab9f785bf682f9bc"
   },
   "title": "Bounded raw channel overrides",
   "valueType": "token-map",
   "domain": {
-    "kind": "token-map",
+    "kind": "map-entry",
     "enumValues": [],
     "bounds": null,
     "defaultBehavior": "none; closed allowlist, max 200 entries, fails closed"
   },
   "ingress": {
     "staticBrandThemePath": "tokenOverrides",
-    "dbTenantThemePath": "visualFoundation.advanced.tokenOverrides"
+    "dbTenantThemePath": "visualFoundation.advanced.tokenOverrides.{--ds-color-error,--ds-color-bg-overlay}"
   },
   "declaredOutputs": {
     "channels": [
@@ -38,7 +38,32 @@
   },
   "calibration": {
     "assessmentState": "SOURCE_BOUND",
-    "normalizedStops": [],
+    "normalizedStops": [
+      {
+        "id": "error-hex",
+        "role": "--ds-color-error",
+        "value": "#B4231F"
+      },
+      {
+        "id": "overlay-hex",
+        "role": "--ds-color-bg-overlay",
+        "value": "#1E2833"
+      }
+    ],
+    "entryCatalog": [
+      {
+        "role": "--ds-color-error",
+        "valueType": "color",
+        "channel": "--ds-color-error"
+      },
+      {
+        "role": "--ds-color-bg-overlay",
+        "valueType": "color",
+        "channel": "--ds-color-bg-overlay"
+      }
+    ],
+    "entryCatalogNote": "PACKET K. The catalogue is a PROJECTION of the live product gate, not a copy of it: the closed source is TENANT_THEME_OVERRIDE_TOKENS (290 published names) typed by `tokenValueRules` (compilers/kernel/foundation/schemas/tenant-theme/index.ts:1892-1909, type by prefix). Only the entries this control actually exercises are declared, because the catalogue bounds STOPS -- declaring all 290 would assert 288 doors no evidence covers, which is the inverse of the ceiling law. Both declared entries are `color`, and both are ABSENT from TEXT_CONTRAST_PAIRINGS, so neither can trip the governed APCA floor at any authored hex. Measured this packet across all 290 with a uniform #123456: the schema accepts 275 and refuses 15 (4 `unsafe_value: Invalid or unsafe font-family`, 7 `invalid_type: Expected a finite number`, 4 `unsafe_value: Invalid or unsafe visual-value`); of those 275 the compiler then refuses 8 more at the contrast floor, leaving 267. All 15 are accepted once the value carries its declared type, so NONE of the 23 is a rejected KEY -- an unpublished key is a third, distinct mechanism (`unknown_key: Field is not part of TenantThemeConfig v1`). The declared types are pinned against the live gate behaviourally by PACKET-K drill 1, never re-derived here.",
+    "normalizedStopsNote": "PACKET K. Two stops, one per catalogued entry, each writing a DIFFERENT channel -- which is the shape a map domain always has and the reason H-2 still holds for it: `assertStopDiscrimination` maps an ABSENT channel to a sentinel value, so each declared channel reads {authored, absent} across the set and discriminates without an exception. Fenced by PACKET-K drill 7 against the real compiler. Values verified before they were fixed, two ways: (a) neither role appears in TEXT_CONTRAST_PAIRINGS (foundation/kernel/accessibility/branding-contrast/text-contrast-autocorrect), so neither can trip the governed dark-mode APCA floor at any authored hex -- positive control: all 8 channels that DO get refused at that floor are present in the same table; (b) compiled on all three verticals, both baseline to `undefined` (no coincidental-default risk) and both move. The per-vertical cascade asymmetry F4B-17 documented is reproduced exactly and is NOT a defect: --ds-color-error moves 2 channels on rottay (with --ds-color-on-error), 11 on bithire and 8 on evnto (each vertical's own shade-ramp generation), while --ds-color-bg-overlay moves exactly 1 channel on all three. The receipted causal matrix for these stops is F4B-17B and is NOT run by this packet, so `assessmentState` and `nextAction` stay where F4B-17 left them: flipping them without receipts would let the control outrank its own evidence.",
     "staticDbParityEvidenceIds": [],
     "exactRestoreEvidenceIds": [],
     "negativeControls": [],

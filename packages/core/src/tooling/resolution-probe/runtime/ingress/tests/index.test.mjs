@@ -860,8 +860,18 @@ test('negative drill: a domain kind this harness cannot write fails closed', () 
   // list — both are supported shapes, drilled positively elsewhere. AGED
   // EXPECTATION, re-legislated rather than weakened: what the drill defends is
   // that an UNKNOWN kind refuses instead of falling back to writing the stop id,
-  // and `color-set` stopped being unknown. Every kind still outside the four
+  // and `color-set` stopped being unknown. Every kind still outside the SIX
   // must refuse.
+  //
+  // PACKET K re-legislates it a second time, the same way and for the same
+  // reason. `font-stack` had been a supported kind since FASE-B while the
+  // terminal message still enumerated four (Fable's registered P2), and
+  // `map-entry` now joins it — so the enumeration this drill matches is the
+  // corrected six. `token-map` and `chrome-map` STAY on the unknown list on
+  // purpose: the generator now DERIVES `map-entry` from the `token-map`
+  // valueType, but a manifest that declares the raw domain name itself is still
+  // naming a kind this harness does not lower, and must still refuse rather than
+  // guess which map it meant.
   for (const kind of ['token-map', 'scale', 'chrome-map', undefined]) {
     assert.throws(
       () =>
@@ -870,7 +880,7 @@ test('negative drill: a domain kind this harness cannot write fails closed', () 
           controlManifest: { ...BOUNDED_CONTROL_MANIFEST, domain: { kind } },
           stopId: 'sobrio',
         }),
-      /a profile-id registry id, or a color-set hex colour/,
+      /a color-set hex colour, or a map-entry typed catalogue value/,
       `domain kind ${String(kind)} must fail closed rather than write the stop id`,
     );
   }
@@ -3854,4 +3864,287 @@ test('B: the font-family door does not intersect CONSULTED_PROVENANCE_FIELDS', (
   ];
   for (const door of doors) assert.ok(!fields.includes(door), `${door} must not be consulted`);
   assert.equal(fields.filter((f) => f.startsWith('typography.')).length, 0, 'no typography.* at all');
+});
+
+/* =====================================================================
+ * PACKET K -- the `map-entry` kind (map domains).
+ *
+ * The kind covers BOTH map domains with one design: `token-overrides` (a flat
+ * ~200-key `--ds-*` catalogue, type by prefix) and the chrome map (nested
+ * family x field). Per DT ruling R1 only `token-overrides` is CALIBRATED in this
+ * packet; the chrome-map drills below run on SYNTHETIC manifests, so they
+ * document the kind's behaviour for the future narrower control without touching
+ * `chrome.families.json` or the registry.
+ *
+ * The manifests here are synthetic on purpose in a second sense too: a brace-set
+ * ingress path can be declared in a test object without the registry entry that
+ * a receipted matrix would need, which is what lets these drills fence the kind
+ * end-to-end while the registry question is still adjudicated.
+ * ===================================================================== */
+
+/** A synthetic map-entry control: one catalogue, one stop, one door. */
+const mapEntryManifest = ({
+  role,
+  valueType,
+  value,
+  /* The door must CONTAIN the role, or `resolveIngressMember` refuses the run
+   * before the kind is ever consulted -- a member set is selected by its last
+   * segment. Deriving the path from the role keeps each scene about the value
+   * type it is testing rather than about door shape, which drill 4 covers. */
+  path = `visualFoundation.advanced.tokenOverrides.{${role},--ds-other-entry}`,
+  catalog,
+  channels = [],
+  min,
+  max,
+}) => ({
+  controlId: 'synthetic.map-entry',
+  domain: { kind: 'map-entry', enumValues: [], bounds: null },
+  ingress: { dbTenantThemePath: path, staticBrandThemePath: path },
+  declaredOutputs: { channels, rootAttributes: [], representativeOnly: true },
+  calibration: {
+    entryCatalog: catalog ?? [{ role, valueType, channel: role, ...(min !== undefined ? { min } : {}), ...(max !== undefined ? { max } : {}) }],
+    normalizedStops: [{ id: 'k', role, value }],
+  },
+});
+
+const lowerK = (manifest) =>
+  buildIngressInput({ armId: 'db-tenant-theme', controlManifest: manifest, stopId: 'k' });
+
+test('PACKET-K drill 2: a mistyped entry value is REFUSED, not lowered', () => {
+  /* The three type classes measured on the 290 published tokens this packet:
+   * font-family (4 rejects), number (7), visual-value (4). All 15 accept once
+   * the value carries its declared type, so the schema's refusal is about the
+   * VALUE, never the key -- which is why the kind refuses to lower rather than
+   * publishing an exclusion about a door. */
+  const mistyped = [
+    { role: '--ds-font-family-base', valueType: 'font-family', value: '#123456' },
+    { role: '--ds-line-height-body', valueType: 'number', value: '#123456' },
+    { role: '--ds-radius-md', valueType: 'visual-value', value: 'red; } html { display:none' },
+    { role: '--ds-color-error', valueType: 'color', value: 'rebeccapurple' },
+    { role: '--ds-density-scale', valueType: 'number', value: 9, min: 0.75, max: 1.25 },
+  ];
+  for (const scene of mistyped) {
+    assert.throws(
+      () => lowerK(mapEntryManifest(scene)),
+      (error) => {
+        assert.ok(error instanceof StopExclusionError, `${scene.role}: publishable exclusion`);
+        assert.equal(error.exclusionClass, STOP_EXCLUSION_CLASSES.DOMAIN_KIND_NOT_LOWERED);
+        assert.match(error.message, /invent a divergence/);
+        return true;
+      },
+      scene.role,
+    );
+  }
+  /* And the same entries DO lower once the value carries its type -- the drill
+   * would pass vacuously if the branch simply refused everything. */
+  const typed = [
+    { role: '--ds-font-family-base', valueType: 'font-family', value: 'Inter, sans-serif' },
+    { role: '--ds-line-height-body', valueType: 'number', value: 1.5 },
+    { role: '--ds-radius-md', valueType: 'visual-value', value: '8px' },
+    { role: '--ds-color-error', valueType: 'color', value: '#123456' },
+    { role: '--ds-density-scale', valueType: 'number', value: 1.1, min: 0.75, max: 1.25 },
+  ];
+  for (const scene of typed) {
+    const built = lowerK(mapEntryManifest(scene));
+    assert.equal(
+      built.document.visualFoundation.advanced.tokenOverrides[scene.role],
+      scene.value,
+      `${scene.role} lowers its typed value`,
+    );
+  }
+});
+
+test('PACKET-K drill 4: a CATALOGUE defect is a plain Error and is NOT publishable', () => {
+  /* The closed-set law of R-2: only a declared exclusion class may shrink the
+   * witness set. A missing catalogue, an unknown role, an unknown type name and a
+   * role-less stop are all defects in the MANIFEST -- so `classifyStopExclusion`
+   * must return null and the R-2 hardening must re-throw, exactly as it does for
+   * the brace-in-the-middle law. If any of these ever became a StopExclusionError
+   * the run would publish "this stop cannot lower" about a manifest mistake. */
+  const defects = [
+    {
+      why: 'no catalogue at all',
+      manifest: {
+        controlId: 'synthetic.map-entry',
+        domain: { kind: 'map-entry' },
+        ingress: { dbTenantThemePath: 'visualFoundation.advanced.tokenOverrides.{--ds-color-error,--ds-x}' },
+        calibration: { normalizedStops: [{ id: 'k', role: '--ds-color-error', value: '#123456' }] },
+      },
+      match: /no `calibration.entryCatalog`/,
+    },
+    {
+      why: 'a role the catalogue does not carry',
+      manifest: mapEntryManifest({
+        role: '--ds-color-error',
+        value: '#123456',
+        catalog: [{ role: '--ds-color-bg-overlay', valueType: 'color', channel: '--ds-color-bg-overlay' }],
+      }),
+      match: /not an entry of the declared catalogue/,
+    },
+    {
+      why: 'a value type this harness does not know',
+      manifest: mapEntryManifest({ role: '--ds-color-error', valueType: 'chromatic-vibes', value: '#123456' }),
+      match: /does not know how to lower/,
+    },
+    {
+      why: 'a stop with no role at all',
+      manifest: {
+        controlId: 'synthetic.map-entry',
+        domain: { kind: 'map-entry' },
+        ingress: { dbTenantThemePath: 'visualFoundation.advanced.tokenOverrides.{--ds-color-error,--ds-x}' },
+        calibration: {
+          entryCatalog: [{ role: '--ds-color-error', valueType: 'color', channel: '--ds-color-error' }],
+          normalizedStops: [{ id: 'k', value: '#123456' }],
+        },
+      },
+      match: /declares no role|must name which role/,
+    },
+  ];
+  for (const defect of defects) {
+    assert.throws(
+      () => lowerK(defect.manifest),
+      (error) => {
+        assert.ok(!(error instanceof StopExclusionError), `${defect.why}: NOT a StopExclusionError`);
+        assert.equal(classifyStopExclusion(error), null, `${defect.why}: not publishable`);
+        assert.match(error.message, defect.match);
+        return true;
+      },
+      defect.why,
+    );
+  }
+});
+
+test('PACKET-K drill 7 [needs dist]: two entries discriminate through the ABSENCE sentinel', async () => {
+  /* H-2 is EXISTS over `declaredOutputs.channels`. A map domain is the one shape
+   * where every stop writes a DIFFERENT channel, so the predicate only works if
+   * an ABSENT channel counts as a value distinct from a present one. It does:
+   * the sentinel is NUL + "absent" (`'\u0000absent'`), and the NUL prefix is the
+   * anti-collision guard -- no real CSS value can begin with it.
+   *
+   * P4 (Fable): the literal is asserted here against the SOURCE, because a
+   * cleaned copy of the design memo had the NUL stripped, and anyone "fixing"
+   * the predicate from that copy would silently break every map domain. */
+  const source = readFileSync(resolve(CORE_ROOT, 'src/tooling/resolution-probe/runtime/ingress/index.mjs'), 'utf8');
+  assert.match(source, /'\\u0000absent'/, 'the sentinel keeps its NUL prefix');
+  assert.doesNotMatch(source, /: 'absent'/, 'the sentinel is never the bare word');
+
+  const manifest = {
+    controlId: 'synthetic.map-entry',
+    domain: { kind: 'map-entry', enumValues: [], bounds: null },
+    ingress: {
+      dbTenantThemePath:
+        'visualFoundation.advanced.tokenOverrides.{--ds-color-error,--ds-color-bg-overlay}',
+    },
+    declaredOutputs: {
+      channels: ['--ds-color-error', '--ds-color-bg-overlay'],
+      rootAttributes: [],
+      representativeOnly: true,
+    },
+    calibration: {
+      entryCatalog: [
+        { role: '--ds-color-error', valueType: 'color', channel: '--ds-color-error' },
+        { role: '--ds-color-bg-overlay', valueType: 'color', channel: '--ds-color-bg-overlay' },
+      ],
+      normalizedStops: [
+        { id: 'error-hex', role: '--ds-color-error', value: '#123456' },
+        { id: 'overlay-hex', role: '--ds-color-bg-overlay', value: '#654321' },
+      ],
+    },
+  };
+  const verdict = await discriminate(manifest, 'db-tenant-theme', 'rottay');
+  /* Each channel is authored by ONE stop and absent under the other, so each is
+   * {value, absent} -- size 2 -- and discriminates. Neither needs the other. */
+  assert.deepEqual(
+    [...verdict.discriminating].sort(),
+    ['--ds-color-bg-overlay', '--ds-color-error'],
+    'both declared channels discriminate',
+  );
+  assert.equal(verdict.constant.length, 0, 'no declared channel is constant across the set');
+});
+
+/* ---------------------------------------------------------------------
+ * The chrome half of the map domain. R1 keeps `chrome.families.json` and the
+ * registry BYTE-QUIET, so these three drills compile the doors DIRECTLY and
+ * assert compiler behaviour. They are the written record of what the future
+ * narrower chrome control will face, measured now rather than remembered later.
+ * ------------------------------------------------------------------- */
+
+/** Both doors, same chrome entry, for one vertical. */
+const chromeDoors = async (family, field, value, vertical = 'rottay') => {
+  const main = await import(pathToFileURL(resolve(CORE_ROOT, 'dist/index.js')).href);
+  const server = await import(pathToFileURL(resolve(CORE_ROOT, 'dist/server.js')).href);
+  const chrome = { [family]: { [field]: value } };
+  const staticArm = (nested) =>
+    main.compileBrandTheme({ brandTheme: { chrome: nested }, tenantSlug: `probe-tenant-${vertical}` })
+      .cssVariables;
+  const dbArm = (nested) => {
+    const cfg = server.hydrateTenantThemeConfig(
+      { schemaVersion: 1, mode: 'advanced', visualFoundation: { advanced: { chrome: nested } } },
+      { tenantId: `probe-tenant-${vertical}`, slug: `probe-tenant-${vertical}`, verticalKey: vertical, rowVersion: 1 },
+    );
+    return server.compileTenantThemeConfig(cfg, {
+      verticalEnvelope: server.TENANT_THEME_VERTICAL_ENVELOPES[vertical],
+    }).variables;
+  };
+  const moved = (before, after) =>
+    Object.fromEntries(Object.keys(after).filter((k) => before[k] !== after[k]).map((k) => [k, after[k]]));
+  let db = null;
+  let dbError = null;
+  try {
+    db = moved(dbArm({}), dbArm(chrome));
+  } catch (error) {
+    dbError = String(error.message);
+  }
+  return { static: moved(staticArm({}), staticArm(chrome)), db, dbError };
+};
+
+test('PACKET-K drill 3 [needs dist]: applyRadiusDial wraps a -radius entry IDENTICALLY on both doors', async () => {
+  /* Measured: `chrome.table.radius = '8px'` does NOT emit `--ds-table-radius: 8px`.
+   * `applyRadiusDial` runs AFTER the per-family passthrough and wraps every
+   * channel whose name ends in `-radius`, from ANY family, in a calc() sharing
+   * the dial with `shape.radius-scale`.
+   *
+   * The half that decides how a drill must be written: the wrap is the SAME on
+   * both doors, so it is NOT a divergence -- only an exact-restore drill that
+   * compared the emitted string to the AUTHORED string would call this a channel
+   * that "did not lower cleanly". This drill asserts the wrapped form, so the
+   * trap is fenced rather than rediscovered. */
+  const doors = await chromeDoors('table', 'radius', '8px');
+  const expected = 'calc(8px * var(--ds-radius-scale, 1))';
+  assert.equal(doors.static['--ds-table-radius'], expected, 'static wraps');
+  assert.equal(doors.dbError, null, 'the DB door accepts a radius entry');
+  assert.equal(doors.db['--ds-table-radius'], expected, 'DB wraps identically');
+  assert.notEqual(doors.static['--ds-table-radius'], '8px', 'the authored string is NOT what is emitted');
+});
+
+test('PACKET-K drill 5 [needs dist]: a non-paired chrome entry has byte-exact parity on both doors', async () => {
+  /* `modal.bg` is the honest shape of a chrome-map stop: one field, one channel,
+   * identical on both doors. It is the positive control for drill 6 -- without it
+   * "the DB door refused" would be indistinguishable from "the DB door refuses
+   * chrome". */
+  const doors = await chromeDoors('modal', 'bg', '#abcdef');
+  assert.equal(doors.dbError, null, 'the DB door accepts a non-paired colour entry');
+  assert.equal(doors.static['--ds-modal-bg'], '#abcdef');
+  assert.equal(doors.db['--ds-modal-bg'], '#abcdef');
+  assert.deepEqual(Object.keys(doors.static), ['--ds-modal-bg'], 'one field, one channel');
+});
+
+test('PACKET-K drill 6 [needs dist]: an APCA-paired chrome entry DIVERGES between the doors', async () => {
+  /* The asymmetry a chrome-map stop must not walk into: the static door validates
+   * NOTHING and emits the colour raw; the DB door runs the governed contrast floor
+   * and refuses the WHOLE document, because authoring one side of a paired couple
+   * moves it against a foreground the tenant never authored.
+   *
+   * Same class as the font-stack asymmetry already registered (static raw / DB
+   * strict). A stop chosen here would produce one live arm and one throwing arm,
+   * so the future chrome control picks non-paired fields -- or declares the stop
+   * excluded with GOVERNED_CONTRAST_FLOOR, which already exists for exactly this. */
+  const doors = await chromeDoors('sidebar', 'bg', '#654321');
+  assert.equal(doors.static['--ds-sidebar-bg'], '#654321', 'the static door emits it unvalidated');
+  assert.notEqual(doors.dbError, null, 'the DB door refuses the document');
+  assert.match(doors.dbError, /APCA/, 'and refuses it at the governed contrast floor');
+  assert.ok(
+    Object.hasOwn(STOP_EXCLUSION_CLASSES, 'GOVERNED_CONTRAST_FLOOR'),
+    'the class this refusal maps to already exists -- no new class is needed',
+  );
 });

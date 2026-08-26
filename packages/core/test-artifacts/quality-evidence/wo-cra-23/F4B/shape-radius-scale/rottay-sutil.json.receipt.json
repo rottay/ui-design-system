@@ -5,7 +5,7 @@
   "scenarioId": "shape.radius-scale/sutil/rottay/static-and-db",
   "evidenceKind": "static-db-computed-parity",
   "commandOrTool": "node src/tooling/resolution-probe/public/cli/index.mjs causal",
-  "toolVersion": "resolution-probe@009c8df5b7f4",
+  "toolVersion": "resolution-probe@cc010704a6aa",
   "exitCode": 0,
   "sourceFiles": [
     "packages/core/dist/build-stamp.json",
@@ -70,10 +70,10 @@
     "packages/core/src/ui/primitives/display/Card/engines/rustic/index.tsx",
     "packages/core/src/ui/primitives/display/Card/index.tsx"
   ],
-  "sourceDigest": "6de8653052570a572765d2c50788e184b5e3a8c77b06bc9cb094c3da7375e580",
+  "sourceDigest": "f7d29f790374e9eff24ea4bf9eff64ad7ee8d3cf7f8513e3978b039bc76a7580",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/shape-radius-scale/rottay-sutil.json",
-  "artifactSha256": "cc84a0f5ec945feece722dea8f012a1082d17ad1554fdbc32f573f9eaf361057",
-  "createdAt": "2026-08-25T19:01:21.193Z",
+  "artifactSha256": "1617fd5f22d80ad211a4424a159ddd149a60d5abe38f2300f40717415bee68aa",
+  "createdAt": "2026-08-26T00:04:35.555Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

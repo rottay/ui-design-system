@@ -590,7 +590,23 @@ export const TENANT_CAPABILITY_REGISTRY = Object.freeze([
       title: 'Bounded raw channel overrides',
       valueType: 'token-map',
       defaultBehavior: 'none; closed allowlist, max 200 entries, fails closed',
-      documentPath: 'visualFoundation.advanced.tokenOverrides',
+      /* PACKET K — the brace names the harness's CALIBRATION SURFACE, not the
+       * domain. This control's domain is the whole 290-name allowlist; what the
+       * resolution probe calibrates is 2 of them, and a door it can select a
+       * member of is the only shape it can attribute a stop to
+       * (`resolveIngressMember` picks a member by its LAST segment, and these two
+       * are complete `--ds-*` keys, so they are unique by construction).
+       *
+       * The narrowing is deliberate and is paid for in the manifest rather than
+       * hidden: `calibration.entryCatalog` carries the full characterisation of
+       * the domain (290 published, 275 admitted by the schema, 15 refused on
+       * VALUE type, 8 more refused at the governed APCA floor, 267 through both;
+       * no key rejections among them). The PUBLIC domain stays described by
+       * `valueType: 'token-map'` and by the document schema, neither of which
+       * this line touches. Precedent: `palette` names 4 of its members (:94).
+       */
+      documentPath:
+        'visualFoundation.advanced.tokenOverrides.{--ds-color-error,--ds-color-bg-overlay}',
       brandThemePath: 'tokenOverrides',
       derivedChannels: ['--ds-color-error', '--ds-surface-card', '--ds-color-bg-overlay'],
       compat:

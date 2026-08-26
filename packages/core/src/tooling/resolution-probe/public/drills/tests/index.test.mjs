@@ -608,3 +608,126 @@ test('PACKET-3 drill: the vocabulary and attribute map match the compiler', asyn
     );
   }
 });
+
+/* =====================================================================
+ * PACKET K -- the two fences the `map-entry` kind cannot live without.
+ *
+ * Drill 1 pins the DECLARED catalogue against the LIVE product gate, and drill 8
+ * pins the kinds that already existed against the branch the new one joins.
+ * Together they answer the two ways this kind could rot: a catalogue that drifts
+ * from the schema it projects, and a refactor that quietly changes what an older
+ * kind writes.
+ * ===================================================================== */
+
+test('PACKET-K drill 1 [needs dist]: the declared entryCatalog agrees with the LIVE product gate', async () => {
+  /* A catalogue nobody re-derives is exactly the "remembered convention" the
+   * terminal throw refuses to act on. So this drill does NOT re-implement
+   * `tokenValueRules`' prefix table -- a second copy of the rules would be a
+   * second authority, free to agree with itself while both drift from the schema.
+   * It asks the REAL gate instead, behaviourally, per entry:
+   *
+   *   - the role must be a published override token;
+   *   - a value OF the declared type must be ACCEPTED at that key;
+   *   - a value of a deliberately foreign type must be REJECTED at that key.
+   *
+   * The second and third together are what make the declared `valueType` a claim
+   * about the product rather than a label. */
+  const { readFileSync } = await import('node:fs');
+  const { resolve } = await import('node:path');
+  const { pathToFileURL } = await import('node:url');
+  const { CORE_ROOT } = await import('../../../foundation/paths/index.mjs');
+  const server = await import(pathToFileURL(resolve(CORE_ROOT, 'dist/server.js')).href);
+
+  const manifest = JSON.parse(
+    readFileSync(resolve(CORE_ROOT, 'manifest/controls/token-overrides.json'), 'utf8'),
+  );
+  const catalog = manifest.calibration?.entryCatalog ?? [];
+  assert.ok(catalog.length > 0, 'token-overrides declares an entryCatalog');
+
+  const published = new Set(server.TENANT_THEME_OVERRIDE_TOKENS);
+  const accepts = (key, value) =>
+    server.validateTenantThemeDocument({
+      schemaVersion: 1,
+      mode: 'advanced',
+      visualFoundation: { advanced: { tokenOverrides: { [key]: value } } },
+    }).success;
+
+  /* One in-type and one out-of-type probe value per declared type. The out-of-type
+   * value is chosen to be valid FOR SOME OTHER type, so a gate that accepted
+   * anything would be caught. */
+  const probes = {
+    color: { good: '#123456', bad: 1.5 },
+    'hex-color': { good: '#123456', bad: 1.5 },
+    'font-family': { good: 'Inter, sans-serif', bad: 1.5 },
+    number: { good: 1.5, bad: '#123456' },
+    'visual-value': { good: '8px', bad: 1.5 },
+  };
+
+  for (const entry of catalog) {
+    assert.ok(published.has(entry.role), `${entry.role} is a published override token`);
+    const probe = probes[entry.valueType];
+    assert.ok(probe, `${entry.role}: "${entry.valueType}" is a probeable declared type`);
+    assert.equal(accepts(entry.role, probe.good), true, `${entry.role} accepts a ${entry.valueType}`);
+    assert.equal(accepts(entry.role, probe.bad), false, `${entry.role} refuses a foreign type`);
+  }
+
+  /* And the catalogue does not claim entries the allowlist never published --
+   * the failure mode where a role is invented rather than projected. */
+  const invented = catalog.filter((entry) => !published.has(entry.role));
+  assert.deepEqual(invented, [], 'no catalogue entry is invented');
+});
+
+test('PACKET-K drill 8: the kinds that already existed still lower the SAME field', async () => {
+  /* The map-entry branch joins a chain of `if (kind === ...)` returns. The way a
+   * change there goes wrong is silent: a kind starts lowering `stop.id` where it
+   * used to lower `stop.value`, the document still has a value at the path, and
+   * every downstream reading stays plausible.
+   *
+   * So this fences the DIVISION rather than any one value: `closed-enum` and
+   * `profile-id` lower the stop's ID; `bounded` lowers its numeric VALUE. Read off
+   * real manifests, so a manifest that changed shape fails here rather than in a
+   * matrix three steps later. */
+  const { readFileSync } = await import('node:fs');
+  const { resolve } = await import('node:path');
+  const { CORE_ROOT } = await import('../../../foundation/paths/index.mjs');
+  const { buildIngressInput } = await import('../../../runtime/ingress/index.mjs');
+
+  const read = (id) =>
+    JSON.parse(readFileSync(resolve(CORE_ROOT, `manifest/controls/${id}.json`), 'utf8'));
+  const valueAt = (document, path) =>
+    path.split('.').reduce((cursor, segment) => cursor?.[segment], document);
+
+  /* Read off the manifests rather than assumed: `spacing.rhythm` LOOKS like a
+   * numeric control (its stops carry `value: 0.85`) but its kind is `closed-enum`,
+   * so the door receives the stop NAME and the number is documentation. That near
+   * miss is exactly what this drill exists to catch, so the bounded case uses
+   * `motion.dial`, whose kind really is `bounded`. */
+  const cases = [
+    { id: 'density.mode', lowers: 'id' },
+    { id: 'recipe-profile', lowers: 'id' },
+    { id: 'spacing.rhythm', lowers: 'id' },
+    { id: 'motion.dial', lowers: 'value' },
+  ];
+  for (const scene of cases) {
+    const manifest = read(scene.id);
+    const stop = (manifest.calibration?.normalizedStops ?? []).find((s) => !s.identity);
+    assert.ok(stop, `${scene.id} declares a non-identity stop`);
+    const built = buildIngressInput({
+      armId: 'db-tenant-theme',
+      controlManifest: manifest,
+      stopId: stop.id,
+    });
+    const written = valueAt(
+      built.patch,
+      // the member the stop's role selected, or the single declared door
+      manifest.ingress.dbTenantThemePath.includes('{')
+        ? manifest.ingress.dbTenantThemePath.replace(/\{[^}]*\}/, stop.role)
+        : manifest.ingress.dbTenantThemePath,
+    );
+    assert.equal(
+      written,
+      scene.lowers === 'id' ? stop.id : stop.value,
+      `${scene.id} (kind ${manifest.domain.kind}) still lowers the stop ${scene.lowers}`,
+    );
+  }
+});

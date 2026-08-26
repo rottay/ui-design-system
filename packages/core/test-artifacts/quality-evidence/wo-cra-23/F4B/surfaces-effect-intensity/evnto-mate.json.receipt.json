@@ -5,7 +5,7 @@
   "scenarioId": "surfaces.effect-intensity/mate/evnto/static-and-db",
   "evidenceKind": "static-db-computed-parity",
   "commandOrTool": "node src/tooling/resolution-probe/public/cli/index.mjs causal",
-  "toolVersion": "resolution-probe@009c8df5b7f4",
+  "toolVersion": "resolution-probe@cc010704a6aa",
   "exitCode": 0,
   "sourceFiles": [
     "packages/core/dist/build-stamp.json",
@@ -70,10 +70,10 @@
     "packages/core/src/ui/primitives/display/Card/engines/rustic/index.tsx",
     "packages/core/src/ui/primitives/display/Card/index.tsx"
   ],
-  "sourceDigest": "f412c279ba6236c26709b5c664080115f43c05fd24e8f9d5f3c039f86eaa5258",
+  "sourceDigest": "c3f633530b7a78ce2970a70ce5930803f8b1ff262eb07c174ac8832d5b77553f",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/surfaces-effect-intensity/evnto-mate.json",
-  "artifactSha256": "7ffe9a8f5662eb21e0b4f2ef2b5eb39c04b42eaf839408802d77b8e3d15217e9",
-  "createdAt": "2026-08-25T19:02:57.922Z",
+  "artifactSha256": "e004a0ce6eecf5b542abee9f215cb7c69f339b24eacfd013cfec86358e127487",
+  "createdAt": "2026-08-26T00:06:12.887Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

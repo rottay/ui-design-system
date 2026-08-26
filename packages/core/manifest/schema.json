@@ -205,6 +205,7 @@
       "color-set",
       "chrome-map",
       "token-map",
+      "map-entry",
       "font-stack",
       "profile-id",
       "enum-map",

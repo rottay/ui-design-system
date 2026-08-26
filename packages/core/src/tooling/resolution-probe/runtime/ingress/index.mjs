@@ -918,6 +918,45 @@ export function isLowerableFontStack(value) {
   return FONT_STACK_RESIDUE.test(value.replace(FONT_PACK_REFERENCE, 'FontPack'));
 }
 
+/**
+ * The value types a `map-entry` catalogue may declare, and what this harness is
+ * willing to lower for each.
+ *
+ * The set is CLOSED and small on purpose. It is not a re-implementation of the
+ * document schema — the schema is the product's authority and stays that way.
+ * It is the smaller question this instrument has to answer: "is this value one
+ * whose meaning I can predict on BOTH arms?" Where the schema is stricter than
+ * this table, the drills pin the difference; where this table is stricter than
+ * the schema, it is for a measured reason recorded at the entry.
+ *
+ * `color` is HEX-ONLY even though the DB schema accepts functional colour
+ * syntax, and the reason is the one the `color-set` branch already measured:
+ * `hexToRgbFloat` reads a non-hex seed as NaN, `NaN >> 16 & 255` is 0, and the
+ * ramp derives from BLACK. The channel moves, so a probe asking "did it move?"
+ * answers yes about a value the compiler discarded.
+ *
+ * `visual-value` is the loosest type the schema declares, but it is NOT a free
+ * string — measured this packet: `--ds-radius-md: "#123456"` is refused with
+ * `unsafe_value: Invalid or unsafe visual-value`. This harness cannot reproduce
+ * the product's safety validator without importing it, so it refuses the class
+ * it CAN name: a value that could terminate the declaration it is written into.
+ * That is the FASE-B brace law, applied to the one door that validates nothing —
+ * the static chrome arm emits the string raw (measured), so a value carrying `;`
+ * or a brace would end the rule rather than paint it.
+ */
+const MAP_ENTRY_VALUE_TYPES = Object.freeze({
+  'hex-color': (value) => typeof value === 'string' && HEX_COLOR.test(value),
+  color: (value) => typeof value === 'string' && HEX_COLOR.test(value),
+  'font-family': (value) => isLowerableFontStack(value),
+  number: (value, entry) =>
+    typeof value === 'number' &&
+    Number.isFinite(value) &&
+    (typeof entry?.min !== 'number' || value >= entry.min) &&
+    (typeof entry?.max !== 'number' || value <= entry.max),
+  'visual-value': (value) =>
+    typeof value === 'string' && value.length > 0 && value === value.trim() && !/[;{}]/.test(value),
+});
+
 function ingressValueForStop({ controlManifest, stop }) {
   const kind = controlManifest?.domain?.kind;
   const controlId = controlManifest?.controlId ?? 'unknown control';
@@ -1050,12 +1089,99 @@ function ingressValueForStop({ controlManifest, stop }) {
     }
     return stop.value;
   }
+  if (kind === 'map-entry') {
+    /* A MAP DOMAIN. The tenant writes ONE typed entry of a closed catalogue: a
+     * `{key, value}` pair for the flat token map, a `{(family, field), value}`
+     * triple for the nested chrome map. Both reduce to the same act — "write this
+     * value at this named entry" — which is why ONE kind covers both.
+     *
+     * WHERE the entry is written is NOT this branch's job. `resolveIngressMember`
+     * already selects the member by the stop's `role`, exactly as it does for
+     * `palette.{...}`, and it selects by the member's LAST SEGMENT. This decides
+     * only WHAT is written — the same division of labour the `color-set` branch
+     * states above. A map domain therefore needs no second coordinate here: the
+     * brace-set carries it.
+     *
+     * THE CLOSURE IS PER ENTRY, AND THAT IS THE WHOLE DIFFERENCE. `closed-enum`
+     * closes over a set of VALUES; `profile-id` over a set of registry IDS; a map
+     * domain closes over a set of KEYS, and each key carries its OWN expected
+     * type. The product already derives exactly that: `tokenValueRules`
+     * (compilers/kernel/foundation/schemas/tenant-theme/index.ts:1892-1909) builds
+     * the document schema by mapping every published token name to a type by
+     * prefix. So `entryCatalog` is a PROJECTION of a real closed source, never a
+     * convention — and its drill pins it against that source, because a projection
+     * nobody re-derives is exactly the "remembered convention" the terminal throw
+     * below refuses to act on.
+     *
+     * WHY A MISTYPED VALUE IS REFUSED RATHER THAN LOWERED. Measured this packet
+     * across the 290 published tokens with a uniform `#123456`: the DB door
+     * refuses the WHOLE DOCUMENT for 15 of them — 4 `unsafe_value: Invalid or
+     * unsafe font-family`, 7 `invalid_type: Expected a finite number`, 4
+     * `unsafe_value: Invalid or unsafe visual-value` — and all 15 are accepted
+     * once the value carries its declared type, so none of them is a rejected
+     * KEY. The static chrome door validates NOTHING and emits the string raw
+     * (measured: `chrome.table.headerBg` lowers verbatim). Lowering a mistyped
+     * value would therefore produce one arm that lives and one arm that throws,
+     * and the divergence would have been INVENTED by this instrument rather than
+     * found in the product. Same law and same failure shape as `font-stack`.
+     *
+     * A CATALOGUE DEFECT IS NOT A STOP EXCLUSION. A missing catalogue, a role the
+     * catalogue does not carry, or a type name this harness does not know are all
+     * defects in the MANIFEST, not reasons a tenant could not write the entry. So
+     * they throw a plain Error: `classifyStopExclusion` returns null for it, the
+     * R-2 hardening RE-THROWS, and the run breaks instead of publishing a shrunken
+     * witness set as a measurement. This is the same choice, for the same reason,
+     * that the brace-in-the-middle law makes in `resolveIngressMember`.
+     */
+    if (typeof stop.role !== 'string' || stop.role.length === 0) {
+      throw new Error(
+        `resolution-probe: ${controlId} has a map-entry domain, so a stop names WHICH entry of ` +
+          `the map it writes — but stop "${stop.id}" declares no role. Picking an entry for it ` +
+          'would measure a door nobody declared.',
+      );
+    }
+    const catalog = controlManifest?.calibration?.entryCatalog ?? [];
+    if (!Array.isArray(catalog) || catalog.length === 0) {
+      throw new Error(
+        `resolution-probe: ${controlId} declares a map-entry domain but no ` +
+          '`calibration.entryCatalog`, so the closed catalogue that bounds it — and the type each ' +
+          'entry expects — is unreadable. Refusing to lower an unbounded map entry.',
+      );
+    }
+    const entry = catalog.find((candidate) => candidate?.role === stop.role);
+    if (!entry) {
+      throw new Error(
+        `resolution-probe: stop "${stop.id}" of ${controlId} names role "${stop.role}", which is ` +
+          `not an entry of the declared catalogue (${catalog.map((c) => c?.role).join(', ')}). ` +
+          'A role the catalogue does not carry is a defect in the manifest, not a stop the ' +
+          'compiler refused.',
+      );
+    }
+    const admits = MAP_ENTRY_VALUE_TYPES[entry.valueType];
+    if (!admits) {
+      throw new Error(
+        `resolution-probe: entry "${entry.role}" of ${controlId} declares value type ` +
+          `"${entry.valueType ?? 'none'}", which this harness does not know how to lower. The set ` +
+          `is closed: ${Object.keys(MAP_ENTRY_VALUE_TYPES).join(', ')}.`,
+      );
+    }
+    if (!admits(stop.value, entry)) {
+      throw new StopExclusionError(
+        STOP_EXCLUSION_CLASSES.DOMAIN_KIND_NOT_LOWERED,
+        `resolution-probe: entry "${entry.role}" of ${controlId} expects a ${entry.valueType} ` +
+          `value, but stop "${stop.id}" declares ${JSON.stringify(stop.value)}. The DB door ` +
+          'refuses the whole document for a mistyped entry and the static door emits it raw, so ' +
+          'lowering it would invent a divergence between the arms instead of measuring one.',
+      );
+    }
+    return stop.value;
+  }
   throw new StopExclusionError(
     STOP_EXCLUSION_CLASSES.DOMAIN_KIND_NOT_LOWERED,
     `resolution-probe: ${controlId} declares domain kind "${kind ?? 'none'}", and this harness ` +
       'only knows how to write a closed-enum stop id, a bounded stop value, a profile-id ' +
-      'registry id, or a color-set hex colour at an ingress path. Refusing to lower a stop on a ' +
-      'remembered convention.',
+      'registry id, a font-stack family list, a color-set hex colour, or a map-entry typed ' +
+      'catalogue value at an ingress path. Refusing to lower a stop on a remembered convention.',
   );
 }
 

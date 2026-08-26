@@ -5,7 +5,7 @@
   "scenarioId": "typography.scale/amplia/bithire/static-and-db",
   "evidenceKind": "exact-restore",
   "commandOrTool": "node src/tooling/resolution-probe/public/cli/index.mjs causal",
-  "toolVersion": "resolution-probe@009c8df5b7f4",
+  "toolVersion": "resolution-probe@cc010704a6aa",
   "exitCode": 0,
   "sourceFiles": [
     "packages/core/dist/build-stamp.json",
@@ -69,10 +69,10 @@
     "packages/core/src/ui/primitives/display/Card/engines/rustic/index.tsx",
     "packages/core/src/ui/primitives/display/Card/index.tsx"
   ],
-  "sourceDigest": "96b8a2a0cfc5e89db043da1c5b43b7259c1a1222ceee6ce9cff9715b6f357ca6",
+  "sourceDigest": "72289cf0a062f39435072ce26f79f668c110047fe680182932d526b5f3980fe4",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/typography-scale/bithire-amplia.json",
-  "artifactSha256": "d0917a428ee4f9ef5032f46ee7b5c860340a87c3f96389cb240ce6acf5270a81",
-  "createdAt": "2026-08-25T19:07:18.568Z",
+  "artifactSha256": "4e1c1fa97f798f951c4dc62169fb126fd3c7d6032b18275cd001a31c9da9aa92",
+  "createdAt": "2026-08-26T00:10:36.092Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

@@ -303,6 +303,13 @@ export const DOMAIN_KINDS = Object.freeze([
   'color-set',
   'chrome-map',
   'token-map',
+  /* PACKET K. The lowering strategy for a MAP domain: one typed entry of a closed
+   * catalogue, selected by the stop's role and validated against
+   * `calibration.entryCatalog`. `token-map` and `chrome-map` STAY: they are the
+   * public `valueType`s the generator derives this kind FROM, and a manifest that
+   * declares a raw domain name as its `domain.kind` must still be rejectable by
+   * the harness rather than guessed at. */
+  'map-entry',
   'font-stack',
   'profile-id',
   'enum-map',

@@ -5,7 +5,7 @@
   "scenarioId": "motion.dial/duration-scale-high/bithire/static-and-db",
   "evidenceKind": "static-db-computed-parity",
   "commandOrTool": "node src/tooling/resolution-probe/public/cli/index.mjs causal",
-  "toolVersion": "resolution-probe@009c8df5b7f4",
+  "toolVersion": "resolution-probe@cc010704a6aa",
   "exitCode": 0,
   "sourceFiles": [
     "packages/core/dist/build-stamp.json",
@@ -53,10 +53,10 @@
     "packages/core/src/ui/primitives/feedback/Alert/engines/rustic/index.tsx",
     "packages/core/src/ui/primitives/feedback/Alert/index.tsx"
   ],
-  "sourceDigest": "05541101f5b7e09881e278af3294a1aa1a00c555fb53bcef7e738d40ad4cf77c",
+  "sourceDigest": "71d1bd2041a3b4a63b2215d5d30cdf70f0cb029c99662a1a3d5fd6c308a91d51",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/motion-dial/bithire-duration-scale-high.json",
-  "artifactSha256": "6436fe3388a8a84c6f72965c54db4c754380bbc0a2869c8e657711801d526e97",
-  "createdAt": "2026-08-25T18:53:35.689Z",
+  "artifactSha256": "c941d28d52c8af908d7c4dfb6f17d58e74db620286ab419d9fb37c8e37206bb6",
+  "createdAt": "2026-08-25T23:56:46.374Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

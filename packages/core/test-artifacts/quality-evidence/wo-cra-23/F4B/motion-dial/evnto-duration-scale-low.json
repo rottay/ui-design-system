@@ -9054,10 +9054,10 @@
       }
     },
     "sourceFreshness": {
-      "declaredDigest": "f0db2ec87c1d01ad6b03491367ec7cf6f342c6c7975806651814855ac1fe0933",
-      "observedDigest": "f0db2ec87c1d01ad6b03491367ec7cf6f342c6c7975806651814855ac1fe0933",
-      "postMeasurementDigest": "f0db2ec87c1d01ad6b03491367ec7cf6f342c6c7975806651814855ac1fe0933",
-      "preMeasurementDigest": "f0db2ec87c1d01ad6b03491367ec7cf6f342c6c7975806651814855ac1fe0933",
+      "declaredDigest": "311bb67ef9a44c7a6299153e225bc824d9e413c9f13885b249a4e854ae4dd4f1",
+      "observedDigest": "311bb67ef9a44c7a6299153e225bc824d9e413c9f13885b249a4e854ae4dd4f1",
+      "postMeasurementDigest": "311bb67ef9a44c7a6299153e225bc824d9e413c9f13885b249a4e854ae4dd4f1",
+      "preMeasurementDigest": "311bb67ef9a44c7a6299153e225bc824d9e413c9f13885b249a4e854ae4dd4f1",
       "sourceFiles": [
         "packages/core/dist/build-stamp.json",
         "packages/core/dist/infrastructure/compilers/kernel/runtime/brand-theme/index.js",

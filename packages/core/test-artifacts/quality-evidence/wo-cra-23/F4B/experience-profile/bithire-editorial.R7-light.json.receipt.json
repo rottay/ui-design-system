@@ -5,7 +5,7 @@
   "scenarioId": "experience.profile/editorial/bithire/static-and-db/light",
   "evidenceKind": "exact-restore",
   "commandOrTool": "node src/tooling/resolution-probe/public/cli/index.mjs causal",
-  "toolVersion": "resolution-probe@009c8df5b7f4",
+  "toolVersion": "resolution-probe@cc010704a6aa",
   "exitCode": 0,
   "sourceFiles": [
     "packages/core/dist/build-stamp.json",
@@ -71,10 +71,10 @@
     "packages/core/src/ui/primitives/display/Card/engines/rustic/index.tsx",
     "packages/core/src/ui/primitives/display/Card/index.tsx"
   ],
-  "sourceDigest": "419d88dc8a74a32f4771fbb45e4abdced818f718ae7f4d6be0ffe381e12511e6",
+  "sourceDigest": "fdf6acada15f1fae3bc00e580179d17a07d5bd9e29a194cf87cba78b283a5e9a",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/experience-profile/bithire-editorial.R7-light.json",
-  "artifactSha256": "f1e17aa9ee3e19c143a5c8208e8a3ad36fd505ab910c9e4097e463ee45d55bee",
-  "createdAt": "2026-08-25T18:52:18.664Z",
+  "artifactSha256": "2d41b91a750b9e6801e0fe8f39689daa810594854432f6a4cc59e1564c03c3e0",
+  "createdAt": "2026-08-25T23:55:31.040Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

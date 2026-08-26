@@ -5,7 +5,7 @@
   "scenarioId": "shape.button-style/pill/evnto/static-and-db",
   "evidenceKind": "exact-restore",
   "commandOrTool": "node src/tooling/resolution-probe/public/cli/index.mjs causal",
-  "toolVersion": "resolution-probe@009c8df5b7f4",
+  "toolVersion": "resolution-probe@cc010704a6aa",
   "exitCode": 0,
   "sourceFiles": [
     "packages/core/dist/build-stamp.json",
@@ -67,10 +67,10 @@
     "packages/core/styles/index.css",
     "packages/core/styles/rottay.css"
   ],
-  "sourceDigest": "63bb14ec58898a6eab26e5c9ae660d59d363e11dc0ba8509923c2b954160a743",
+  "sourceDigest": "e5a28557758b328bbbf8ff4d77c54ce1af7039f79d9fc782e3610ade587d4a81",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/shape-button-style/evnto-pill.json",
-  "artifactSha256": "3901ca69fed868e6b1d5078a923ade1296896b3a559f884ae3513a5e03ad7ebd",
-  "createdAt": "2026-08-25T19:00:01.995Z",
+  "artifactSha256": "e0b99e018565260963ec077d9ad20f38ec3a8da413c2bf91eb81781df364e5ee",
+  "createdAt": "2026-08-26T00:03:23.128Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

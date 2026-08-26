@@ -5,7 +5,7 @@
   "scenarioId": "density.mode/compact/bithire/static-and-db",
   "evidenceKind": "static-db-computed-parity",
   "commandOrTool": "node src/tooling/resolution-probe/public/cli/index.mjs causal",
-  "toolVersion": "resolution-probe@009c8df5b7f4",
+  "toolVersion": "resolution-probe@cc010704a6aa",
   "exitCode": 0,
   "sourceFiles": [
     "packages/core/dist/build-stamp.json",
@@ -58,10 +58,10 @@
     "packages/core/src/ui/primitives/layout/Space/tests/Space.modern-fragment-children.test.tsx",
     "packages/core/src/ui/primitives/layout/Space/tests/Space.test.tsx"
   ],
-  "sourceDigest": "96abf2ae43927c7ee63c1aa3a70586ac0fae512d3a951d876b7f0f3154270085",
+  "sourceDigest": "a6ffcb9f9700486d6b099e41d6fe759873c199b6fb479a9864d2ebbdc3935d90",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/density-mode/bithire-compact.json",
-  "artifactSha256": "0f45533e97b5c5f6ef7aa519be1595af7b66a51e217bb48c7c5ed44aee5bdaf2",
-  "createdAt": "2026-08-25T18:51:22.588Z",
+  "artifactSha256": "11aee5a402d0299d9b97584f317b2a58bb364a08d60b9bb72e0c67a560092f6c",
+  "createdAt": "2026-08-25T23:54:31.068Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

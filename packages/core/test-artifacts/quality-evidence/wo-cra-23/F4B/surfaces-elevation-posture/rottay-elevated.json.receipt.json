@@ -5,7 +5,7 @@
   "scenarioId": "surfaces.elevation-posture/elevated/rottay/static-and-db",
   "evidenceKind": "exact-restore",
   "commandOrTool": "node src/tooling/resolution-probe/public/cli/index.mjs causal",
-  "toolVersion": "resolution-probe@009c8df5b7f4",
+  "toolVersion": "resolution-probe@cc010704a6aa",
   "exitCode": 0,
   "sourceFiles": [
     "packages/core/dist/build-stamp.json",
@@ -68,10 +68,10 @@
     "packages/core/src/ui/primitives/display/Card/engines/rustic/index.tsx",
     "packages/core/src/ui/primitives/display/Card/index.tsx"
   ],
-  "sourceDigest": "a0966cd1b060eba0cde714bf6ab985e93c23cd38ece77762e8b6fe1e471c2b68",
+  "sourceDigest": "8a40aaa6acfa2e157db5be5274869f91ef328c41c8ce27f7fe6b12979e93f887",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/surfaces-elevation-posture/rottay-elevated.json",
-  "artifactSha256": "36086637781399e66f65e8a89872b9063166d7fcb785eb1f3f1bb9b2dd976991",
-  "createdAt": "2026-08-25T19:04:05.318Z",
+  "artifactSha256": "4ee4590ecd693de43dbbd3951a0a51fac5e9dc38d438aa58d22a3aef1a88aad9",
+  "createdAt": "2026-08-26T00:07:19.571Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

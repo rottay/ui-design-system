@@ -5,7 +5,7 @@
   "scenarioId": "surfaces.effect-intensity/sobrio/bithire/static-and-db",
   "evidenceKind": "exact-restore",
   "commandOrTool": "node src/tooling/resolution-probe/public/cli/index.mjs causal",
-  "toolVersion": "resolution-probe@009c8df5b7f4",
+  "toolVersion": "resolution-probe@cc010704a6aa",
   "exitCode": 0,
   "sourceFiles": [
     "packages/core/dist/build-stamp.json",
@@ -70,10 +70,10 @@
     "packages/core/src/ui/primitives/display/Card/engines/rustic/index.tsx",
     "packages/core/src/ui/primitives/display/Card/index.tsx"
   ],
-  "sourceDigest": "bb53c95278027fffbf19faf535a54d191c3fcfd8b4ee0d2b799a5c30d39c3402",
+  "sourceDigest": "cc3a3498daef98ccaadd782e105c475b07af74fb6ca46b640993c18143bcfe5c",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/surfaces-effect-intensity/bithire-sobrio.json",
-  "artifactSha256": "7cee8f31c59ec9de0c0cda1bec6949d5e94cf1de921c74a8bf90ac9412c2194d",
-  "createdAt": "2026-08-25T19:02:46.807Z",
+  "artifactSha256": "78a8706b1fa0c8717c96a1bfb2be74a180c4c367bcab116ed7c910776646efe9",
+  "createdAt": "2026-08-26T00:06:02.220Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

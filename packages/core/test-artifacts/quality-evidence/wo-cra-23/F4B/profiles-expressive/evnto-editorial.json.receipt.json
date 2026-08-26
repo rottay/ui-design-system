@@ -5,7 +5,7 @@
   "scenarioId": "profiles-expressive-evnto-editorial",
   "evidenceKind": "static-db-computed-parity",
   "commandOrTool": "node src/tooling/resolution-probe/public/cli/index.mjs causal",
-  "toolVersion": "resolution-probe@009c8df5b7f4",
+  "toolVersion": "resolution-probe@cc010704a6aa",
   "exitCode": 0,
   "sourceFiles": [
     "packages/core/dist/build-stamp.json",
@@ -69,10 +69,10 @@
     "packages/core/src/ui/primitives/display/Card/engines/rustic/index.tsx",
     "packages/core/src/ui/primitives/display/Card/index.tsx"
   ],
-  "sourceDigest": "52c4fb115cdf1d2f7d6dda8c7daa20c010844eb06aef406652827e98a61e06be",
+  "sourceDigest": "db86fcd4fa012c2670a7b5b9f0a71f18389825c91378297bed1d32554518d423",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/profiles-expressive/evnto-editorial.json",
-  "artifactSha256": "d6ca75efe6c6ec75bde74813bb9fe7c9b3dbf64b88d18eabd82960ebfe2cde5d",
-  "createdAt": "2026-08-25T18:57:37.592Z",
+  "artifactSha256": "7621f1247aa1378698a9821893fe8125a7eac1f9f080c8227baf7e2da7bd9be2",
+  "createdAt": "2026-08-26T00:00:55.459Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

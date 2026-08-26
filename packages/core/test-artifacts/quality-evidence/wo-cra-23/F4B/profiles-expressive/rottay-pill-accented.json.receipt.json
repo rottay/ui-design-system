@@ -5,7 +5,7 @@
   "scenarioId": "profiles-expressive-rottay-pill-accented",
   "evidenceKind": "static-db-computed-parity",
   "commandOrTool": "node src/tooling/resolution-probe/public/cli/index.mjs causal",
-  "toolVersion": "resolution-probe@009c8df5b7f4",
+  "toolVersion": "resolution-probe@cc010704a6aa",
   "exitCode": 0,
   "sourceFiles": [
     "packages/core/dist/build-stamp.json",
@@ -69,10 +69,10 @@
     "packages/core/src/ui/primitives/display/Card/engines/rustic/index.tsx",
     "packages/core/src/ui/primitives/display/Card/index.tsx"
   ],
-  "sourceDigest": "7caa7be183d03a232f43b3e4699435a8ed9f10f5aa5d7518676a1b2a626fc1bb",
+  "sourceDigest": "7f8f3c0fa2e5731a273edeb5162f04bad038045e16789d3f4964076a95fc6b6d",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/profiles-expressive/rottay-pill-accented.json",
-  "artifactSha256": "b25d9c1e0805d7742c9f866bcb4e84bdfac3fcf946b0e0f3d6f3dc9b191e324a",
-  "createdAt": "2026-08-25T18:58:35.709Z",
+  "artifactSha256": "321ef72f9e297c152a755fff2e75d72e3905a1e3bc9391f9a15f07115d4a9fbd",
+  "createdAt": "2026-08-26T00:01:57.270Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,
