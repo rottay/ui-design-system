@@ -4380,7 +4380,7 @@ del postaudit PACKET K). Re-emisión del universo (124 CLI + 9 DATA manual;
 0 non-fresh, CONSTITUTION_READY, 5100 intacto, program-check.test 48/48
 (449 s), producers.json re-derivado por el DT, GAT-07 resellado por el DT
 (`c2042dec…`), suites 122/122 + 26/26, instrumento byte-quieto. **Commit:
-<HASH17B>.** **Con este cierre, F4B queda COMPLETA en su forma honesta:
+`afcfb5718`.** **Con este cierre, F4B queda COMPLETA en su forma honesta:
 20/20 controles asentados (9 COMPUTED_VERIFIED + 10 SOURCE_BOUND +
 chrome.families paraguas BY_REFERENCE) y cero evidencia alcanzable
 pendiente — lo que falta para que los SOURCE_BOUND suban (ratificación
