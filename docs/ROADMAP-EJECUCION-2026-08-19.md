@@ -4497,7 +4497,34 @@ ni lecturas de fixture). Registrado acá para que esa divergencia futura no se
 lea como defecto. Hallazgo estructural asentado: toda recompilación de
 artefacto rota `dist/build-stamp.json`, presente en los `sourceFiles` de los
 134 receipts ⇒ el re-firma quirúrgico es parte fija del costo de cualquier
+lote que recompila. Hallazgo estructural asentado: toda recompilación de
+artefacto rota `dist/build-stamp.json`, presente en los `sourceFiles` de los
+134 receipts ⇒ el re-firma quirúrgico es parte fija del costo de cualquier
 lote que recompila.
+
+**F2A-1 Lote F commiteado (2026-08-26, `96b610162`; postaudit Fable ACCEPT
+con 5 correcciones aplicadas — 2 propias + 3 de la revisión Codex de hito,
+todas reproducidas de primera mano).** Deuda muerta confirmada y removida:
+`tier.overlay.bg` (ambos modos, duplicado byte-idéntico) y `tier.raised.fg`
+(dark idéntico; light equivalente por valor). **Cláusula de provenance (Fable):**
+los receipts F4B de escena bithire conservan snapshots pre-remoción con los 4
+campos retirados (`compilerInput.brandTheme.surfaceRoles.*`, digest de
+`dist#bithireBrandTheme`, shas de hojas baseline bithire) — una re-corrida
+futura reproduce veredictos, no bytes; la divergencia es provenance-only.
+Asimétricas 33→31 (31 simétricas; `tier.overlay.fg` queda condicional-anotada:
+su remoción exige A/B renderizado del fallback `inherit` de
+`semantic-surface.css:223`). **Leyes operativas nuevas asentadas:** (i) la
+batería de cierre de TODO lote es el barrido fail-continue de los 74 gates
+(adiós a las listas a mano — dos gates se habían escapado por eso:
+root-checklists y fanout-facts); (ii) el pin de contadores congelados del
+suite producers se re-ancla con razón escrita cuando un tranche lo mueve
+intencionalmente (10313→10310, −3 = las hojas removidas), nunca en silencio;
+(iii) el comentario fuente que acompaña una remoción dice "equivalente por
+valor en reposo + comportamiento bajo override", nunca "texto idéntico" si no
+lo es. Codex (revisión de hito, 2026-08-26): dirección correcta; adoptadas
+sus dos mejoras — el instrumento de consumidores se corrige UNA vez al censo
+AST canónico (universo core+showroom nombrado) antes de C/D/E, y la decisión
+19 sube a `customization-model.json` + gate ejecutable dentro del Lote F′.
 
 **F4B-17B + CIERRE DE FASE F4B — token-overrides alcanza su techo
 estructural documentado y la fase queda con TODA la evidencia que el
