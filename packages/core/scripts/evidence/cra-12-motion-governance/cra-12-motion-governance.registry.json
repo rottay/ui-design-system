@@ -290,9 +290,9 @@
         {
           "repo": "ui-design-system",
           "scope": "test",
-          "maxCount": 47,
+          "maxCount": 43,
           "maxFiles": 16,
-          "digest": "ee691eaf562169f7134ddc4266c9e0295dd214f75a1debdb8edd5c74aa463723"
+          "digest": "29123ac6d7afed6db9f94a90d74cf9be6a2de5a630610934fd3181ec5d278d31"
         }
       ],
       "reanchor": {
@@ -376,6 +376,15 @@
             "retained": "Its history stays in place and is not rewritten. The scanner exemption it introduced is still live and still correct; its finding that the 2 alert-dialog/confirm-dialog `animation-duration: 1ms` rows are genuine new debt keyed off `html[data-ds-motion='reduced']` rather than a media query still stands; and its ds-internal snapshot is the very tree this entry compares against."
           }
         ]
+      },
+      "gateDebt3TestRowDrain": {
+        "kind": "removal-only-drain",
+        "comparisonSha": "aee0d5daaa00ac3025abd5fe95d46c8cc926934b^",
+        "snapshotDate": "2026-08-26",
+        "owner": "claude/gate-debt-3",
+        "verifiedBy": "scanSource() run against the pre-commit content of packages/core/src/ui/structures/dashboard/tests/DashboardEmbeddedCssRecovery.contract.test.ts (extracted via `git show aee0d5daaa^:<path>`) compared to the working tree's current content of the same single file -- the only file in this row whose content changed since the last anchor (confirmed: the other 15 files in the ui-design-system/test row are unchanged since 2026-07-17..2026-08-24, none touching raw-motion-timing-relevant syntax). Exact finding multiset (kind, symbol, evidence) for that one file: 28 -> 24, 4 removals, 0 additions: `animation: 'ds-metrics-minimal-slide-in 0.4s ease-out both'` (line 187), `animation: 'ds-metrics-cards-card-enter 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) both'` (line 201), `animation: 'ds-metrics-chart-slide-in 0.4s ease-out both'` (line 215), `animation: 'ds-metrics-rows-row-slide-in 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both'` (line 229). The row-wide count moves 47 -> 43 (-4), exactly matching this one file's delta; maxFiles stays 16 (no file entered or left the row).",
+        "reason": "Already-committed CI-1 work (test(modern-rescue): CI-1 -- mechanical burn-down of the CI backlog, aee0d5daaa, 2026-08-24) moved four metrics entrance-animation shorthand values from a literal duration+easing pair to the tokenized `var(--ds-motion-reveal) var(--ds-motion-ease-enter, ease-out)` form, three new RTL keyframe mirrors were added alongside them (bare keyframe-name values, no raw duration literal, so they do not enter this channel), and nobody ran gates:ci end-to-end since the 2026-08-23 DT succession to re-anchor this row against that legitimate change. This entry closes that gap. The DT's initial hypothesis for this row (a resolution-probe/C5 test file) was checked and rejected before writing: none of the C5-touched resolution-probe files contain any transition/animation-timing syntax at all, and none appear anywhere in this channel's 16-file ui-design-system/test set.",
+        "notAnImprovement": "43 ui-design-system/test raw-motion-timing findings remain inherited debt across the same 16 files. The lower row is a permanent ratchet, not a claim that these tests' motion coverage is complete, and not permission to add a raw timing literal to any of the 16 files."
       }
     },
     "transition-all": {

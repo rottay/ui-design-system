@@ -59,8 +59,12 @@ test('the live snapshot is the measured one, not a guess', () => {
   const counts = countByExposure(JSON.parse(readFileSync(CATALOG_PATH, 'utf8')).roots);
   // F4A-6 (K3): entra `tier.page.ink` (--ds-color-text-page) como cabeza
   // interna — internal-head hasta que F4B le de dial, que es lo que hacen sus
-  // cinco hermanas de tinta. tenant-dial y gap no se mueven.
-  assert.deepEqual(counts, { 'tenant-dial': 26, 'internal-head': 28, gap: 10 });
+  // cinco hermanas de tinta. tenant-dial y gap no se mueven en ese packet.
+  // Adjudicacion DT 2026-08-26 (gate-debt, ajena a C5): type.family.mono y
+  // type.family.display reclasificados gap->tenant-dial bajo
+  // typography.families (medido; calibrado F4B-14) -- 10->8 gaps, 26->28
+  // tenant-dial.
+  assert.deepEqual(counts, { 'tenant-dial': 28, 'internal-head': 28, gap: 8 });
 });
 
 /* ---------------- LAW 1: a dial with no owner ---------------- */
@@ -167,7 +171,7 @@ test('LAW 3: gap is decrease-only -- growth fails', () => {
       doc.reconciliation.byExposure.counts['internal-head'] -= 1;
       doc.reconciliation.byExposure.counts.gap += 1;
     },
-    (findings) => expectFinding(findings, 'snapshot: gap moved from 10 to 11', 'gap may never grow'),
+    (findings) => expectFinding(findings, 'snapshot: gap moved from 8 to 9', 'gap may never grow'),
   );
 });
 
@@ -181,7 +185,7 @@ test('LAW 3: a gap that closes still fails until the snapshot is updated', () =>
       doc.reconciliation.byExposure.counts['tenant-dial'] += 1;
     },
     (findings) =>
-      expectFinding(findings, 'snapshot: gap shrank from 10 to 9', 'good news still has to be written down'),
+      expectFinding(findings, 'snapshot: gap shrank from 8 to 7', 'good news still has to be written down'),
   );
 });
 
@@ -192,7 +196,7 @@ test('the catalog must agree with its own reconciliation counts', () => {
     (doc) => {
       doc.reconciliation.byExposure.counts.gap = 99;
     },
-    (findings) => expectFinding(findings, 'but roots[] holds 10', 'a catalog that miscounts itself must fail'),
+    (findings) => expectFinding(findings, 'but roots[] holds 8', 'a catalog that miscounts itself must fail'),
   );
 });
 

@@ -6,63 +6,63 @@
     "artifacts": [
       {
         "file": "src/foundation/tokens/css/facade/artifacts/rottay/index.css",
-        "bytes": 90678,
-        "lines": 1895,
-        "sha256": "dac73bb2d3880490662510c01d48fd05afe646709f100674cfdc0580e2def2ae"
+        "bytes": 90764,
+        "lines": 1896,
+        "sha256": "73399df536f70b04e9e2d723a35f6268be64480ff525af898d23a18fe61ca593"
       },
       {
         "file": "src/foundation/tokens/css/facade/artifacts/bithire/index.css",
-        "bytes": 97051,
-        "lines": 1735,
-        "sha256": "e8787707f9c62e4da656b983bbfdbae8198df605d3ecee2867a6bce63b14e50a"
+        "bytes": 96849,
+        "lines": 1730,
+        "sha256": "06c0e1cdc24aec39769b4661aefb232f025e4a651f8fc8803d68cf3b2f469ed4"
       },
       {
         "file": "src/foundation/tokens/css/facade/artifacts/evnto/index.css",
-        "bytes": 30270,
-        "lines": 583,
-        "sha256": "263208d88fac1f82fd5d58dc3ab087f51e2475c6187e862887af5d5a16a281a5"
+        "bytes": 30322,
+        "lines": 584,
+        "sha256": "809813402990d7858d044e30a21e1e5f4f8808ca980ccd3584d63dd9323e2b02"
       }
     ],
     "sources": [
       {
         "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-        "bytes": 342978,
-        "lines": 9317,
-        "sha256": "a69b839254271a3ae57cde068381355f462adb345ef67c9ef34637274eb7b91b"
+        "bytes": 342000,
+        "lines": 9295,
+        "sha256": "2e9315e2c6aa65492dd7d9dbd8e66c19317c0659f2f13c71a57e343ffa255fd1"
       },
       {
         "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-        "bytes": 335737,
-        "lines": 9309,
-        "sha256": "d2b597ab89f0943a7662b380d903c57dd535d29647cf28e9b836c33d196e126a"
+        "bytes": 335915,
+        "lines": 9284,
+        "sha256": "e64163adcaeffe7f16689eaec9d67ab74476dc00316a8f5fb3408937073bb4fa"
       },
       {
         "file": "src/foundation/tokens/ts/presentation/brand-themes/evnto/index.ts",
-        "bytes": 218738,
-        "lines": 5015,
-        "sha256": "dcf3d470e7580093b8b2234b5a7d81edf65ed9a2d4140400ef39353f9da5fff9"
+        "bytes": 217518,
+        "lines": 4990,
+        "sha256": "05f42d96e550dcd24be2d679fe6860932a07b31f5a843b52e26605d27e292b37"
       }
     ],
     "mtimeExcluded": "Se registra sha256 y no mtime: el mtime cambia con un clon o un touch y rompe --check sin que el contenido se mueva."
   },
   "occurrenceTrap": {
     "rottay": {
-      "occurrences": 1873,
+      "occurrences": 1874,
       "distinctChannels": 1212
     },
     "bithire": {
-      "occurrences": 1711,
-      "distinctChannels": 1235
+      "occurrences": 1706,
+      "distinctChannels": 1234
     },
     "evnto": {
-      "occurrences": 561,
+      "occurrences": 562,
       "distinctChannels": 470
     }
   },
   "surface": {
     "declares": {
       "rottay": 1212,
-      "bithire": 1235,
+      "bithire": 1234,
       "evnto": 470
     },
     "union": 1762,
@@ -71,10 +71,10 @@
     "intersectionPctOfSmallest": 91.9,
     "pairwise": {
       "rottay+bithire": {
-        "shared": 685,
+        "shared": 684,
         "union": 1762,
-        "pctOfUnion": 38.9,
-        "pctOfSmaller": 56.5
+        "pctOfUnion": 38.8,
+        "pctOfSmaller": 56.4
       },
       "rottay+evnto": {
         "shared": 468,
@@ -84,8 +84,8 @@
       },
       "bithire+evnto": {
         "shared": 434,
-        "union": 1271,
-        "pctOfUnion": 34.1,
+        "union": 1270,
+        "pctOfUnion": 34.2,
         "pctOfSmaller": 92.3
       }
     },
@@ -471,6 +471,7 @@
         "--ds-switch-label-color",
         "--ds-switch-thumb-bg",
         "--ds-switch-thumb-shadow",
+        "--ds-table-loading-overlay-bg",
         "--ds-tabs-badge-bg",
         "--ds-tabs-icon-bg",
         "--ds-tabs-icon-bg-active",
@@ -1351,7 +1352,6 @@
         "--ds-table-cell-padding",
         "--ds-table-header-block-size",
         "--ds-table-header-letter-spacing",
-        "--ds-table-loading-overlay-bg",
         "--ds-table-row-bg",
         "--ds-table-row-bg-hover",
         "--ds-table-row-bg-selected",
@@ -1871,8 +1871,8 @@
     "commonChannels": 432,
     "identicalValue": 157,
     "divergentValue": 275,
-    "identicalRoleShape": 286,
-    "divergentRoleShape": 146,
+    "identicalRoleShape": 288,
+    "divergentRoleShape": 144,
     "divergentRoleShapeChannels": [
       {
         "channel": "--ds-button-default-bg",
@@ -1960,14 +1960,6 @@
           "rottay": "base,overlay-mode",
           "bithire": "base,overlay-mode",
           "evnto": "base"
-        }
-      },
-      {
-        "channel": "--ds-card-bg",
-        "roles": {
-          "rottay": "base,overlay-mode",
-          "bithire": "base",
-          "evnto": "base,overlay-mode"
         }
       },
       {
@@ -2579,14 +2571,6 @@
         }
       },
       {
-        "channel": "--ds-layout-sider-bg",
-        "roles": {
-          "rottay": "base",
-          "bithire": "base,overlay-mode",
-          "evnto": "base"
-        }
-      },
-      {
         "channel": "--ds-letter-spacing-display",
         "roles": {
           "rottay": "base",
@@ -3021,8 +3005,8 @@
       {
         "channel": "--ds-table-header-color",
         "roles": {
-          "rottay": "base",
-          "bithire": "base,overlay-mode",
+          "rottay": "base,overlay-mode",
+          "bithire": "base",
           "evnto": "base,overlay-mode"
         }
       },
@@ -6593,7 +6577,7 @@
     "perTenant": {
       "rottay": {
         "declaredInCascade": 154,
-        "severedTotal": 51,
+        "severedTotal": 50,
         "rootPinned": {
           "count": 9,
           "byReason": {
@@ -6727,7 +6711,7 @@
           ]
         },
         "severs": {
-          "count": 49,
+          "count": 48,
           "channels": [
             {
               "channel": "--ds-autocomplete-dropdown-shadow",
@@ -7034,12 +7018,6 @@
               ]
             },
             {
-              "channel": "--ds-table-cell-font-size",
-              "values": [
-                "base=0.875rem"
-              ]
-            },
-            {
               "channel": "--ds-toggle-focus-ring",
               "values": [
                 "base=0 0 0 2px rgba(255, 255, 255, 0.20)",
@@ -7070,7 +7048,7 @@
           ]
         },
         "reDerives": {
-          "count": 94,
+          "count": 95,
           "reachingRoot": 45,
           "reachingLiveRoot": 45,
           "mixedRoleValues": 12,
@@ -7789,6 +7767,16 @@
               "reachesRoot": true,
               "mixed": false,
               "reachesLiveRoot": true,
+              "blockedUpstream": false
+            },
+            {
+              "channel": "--ds-table-cell-font-size",
+              "reads": [
+                "--ds-text-body-size"
+              ],
+              "reachesRoot": false,
+              "mixed": false,
+              "reachesLiveRoot": false,
               "blockedUpstream": false
             },
             {
@@ -11304,20 +11292,20 @@
     "notDuplication": "Variante de modo (claro/oscuro), no duplicacion. Ver `valueParity`, que compara por rol de scope.",
     "perTenant": {
       "rottay": {
-        "channelsDeclaredMoreThanOnce": 661,
-        "allInDistinctRoles": 661,
+        "channelsDeclaredMoreThanOnce": 662,
+        "allInDistinctRoles": 662,
         "sameRoleTwice": 0,
         "sameRoleTwiceChannels": []
       },
       "bithire": {
-        "channelsDeclaredMoreThanOnce": 476,
-        "allInDistinctRoles": 476,
+        "channelsDeclaredMoreThanOnce": 472,
+        "allInDistinctRoles": 472,
         "sameRoleTwice": 0,
         "sameRoleTwiceChannels": []
       },
       "evnto": {
-        "channelsDeclaredMoreThanOnce": 91,
-        "allInDistinctRoles": 91,
+        "channelsDeclaredMoreThanOnce": 92,
+        "allInDistinctRoles": 92,
         "sameRoleTwice": 0,
         "sameRoleTwiceChannels": []
       }
@@ -11327,37 +11315,37 @@
     "unit": "authored-decision-leaf-path",
     "note": "Unidad distinta de la del artefacto. NUNCA fusionar con `surface`.",
     "authors": {
-      "rottay": 1756,
-      "bithire": 1504,
-      "evnto": 395
+      "rottay": 1757,
+      "bithire": 1499,
+      "evnto": 396
     },
-    "union": 2559,
-    "intersection": 342,
-    "intersectionPct": 13.4,
-    "intersectionPctOfSmallest": 86.6,
+    "union": 2554,
+    "intersection": 344,
+    "intersectionPct": 13.5,
+    "intersectionPctOfSmallest": 86.9,
     "pairwise": {
       "rottay+bithire": {
-        "shared": 704,
-        "union": 2556,
-        "pctOfUnion": 27.5,
-        "pctOfSmaller": 46.8
+        "shared": 705,
+        "union": 2551,
+        "pctOfUnion": 27.6,
+        "pctOfSmaller": 47
       },
       "rottay+evnto": {
-        "shared": 387,
+        "shared": 389,
         "union": 1764,
-        "pctOfUnion": 21.9,
-        "pctOfSmaller": 98
+        "pctOfUnion": 22.1,
+        "pctOfSmaller": 98.2
       },
       "bithire+evnto": {
-        "shared": 347,
-        "union": 1552,
-        "pctOfUnion": 22.4,
-        "pctOfSmaller": 87.8
+        "shared": 348,
+        "union": 1547,
+        "pctOfUnion": 22.5,
+        "pctOfSmaller": 87.9
       }
     },
     "exclusive": {
       "rottay": 1007,
-      "bithire": 795,
+      "bithire": 790,
       "evnto": 3
     },
     "exclusiveSamples": {

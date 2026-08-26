@@ -2151,10 +2151,10 @@
       },
       "derivation": "Semilla pura.",
       "evidence": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:508",
-      "governedBy": null,
-      "governanceScope": "ninguna",
-      "exposure": "gap",
-      "exposureNote": "Ni typography.families ni typography.pairing declaran --ds-font-family-mono: los dos controles nombran solo base y heading. El canal existe y los tres temas lo autoran; la perilla no llega. Perilla faltante barata (1 canal por tema).",
+      "governedBy": "typography.families",
+      "governanceScope": "total",
+      "exposure": "tenant-dial",
+      "exposureNote": "Declarado por typography.families. El control lo declara en declaredOutputs.channels (medido 2026-08-26; calibrado F4B-14); el hueco documentado quedo cerrado. typography.pairing sigue sin nombrarlo.",
       "derivationDebt": false
     },
     {
@@ -2187,10 +2187,10 @@
       },
       "derivation": "Semilla pura.",
       "evidence": "packages/core/src/foundation/tokens/css/foundation/base/typography.css:16",
-      "governedBy": null,
-      "governanceScope": "ninguna",
-      "exposure": "gap",
-      "exposureNote": "Mismo hueco que mono: canal existente, dos controles de tipografia que no lo nombran.",
+      "governedBy": "typography.families",
+      "governanceScope": "total",
+      "exposure": "tenant-dial",
+      "exposureNote": "Declarado por typography.families. Mismo cierre que mono: el control lo declara en declaredOutputs.channels (medido 2026-08-26; calibrado F4B-14); el hueco documentado quedo cerrado. typography.pairing sigue sin nombrarlo.",
       "derivationDebt": false
     },
     {
@@ -2399,15 +2399,15 @@
     "byExposure": {
       "counts": {
         "internal-head": 28,
-        "tenant-dial": 26,
-        "gap": 10
+        "tenant-dial": 28,
+        "gap": 8
       },
       "channels": {
         "internal-head": 1512,
-        "tenant-dial": 1302,
-        "gap": 496
+        "tenant-dial": 1308,
+        "gap": 490
       },
-      "reading": "De las 64 raices, 26 tienen control o dial declarado (1302 canales), 28 son cabezas internas correctas sin perilla (1512 canales) y 10 son huecos de perilla (496 canales). El grueso de la pintura NO deberia ser perilla nunca: deberia ser cascada. Ese es el hallazgo estructural, no el numero de gaps. F4A-6 sumo tier.page.ink (--ds-color-text-page, 35 canales) como cabeza interna: su dial aterriza en F4B y ahi se reclasifica a tenant-dial."
+      "reading": "De las 64 raices, 28 tienen control o dial declarado (1308 canales), 28 son cabezas internas correctas sin perilla (1512 canales) y 8 son huecos de perilla (490 canales). El grueso de la pintura NO deberia ser perilla nunca: deberia ser cascada. Ese es el hallazgo estructural, no el numero de gaps. F4A-6 sumo tier.page.ink (--ds-color-text-page, 35 canales) como cabeza interna: su dial aterriza en F4B y ahi se reclasifica a tenant-dial. Adjudicacion DT 2026-08-26 (deuda de gate preexistente, ajena a C5): type.family.mono y type.family.display reclasificados gap->tenant-dial bajo typography.families -- medido 2026-08-26, calibrado F4B-14 -- 10->8 gaps, 26->28 tenant-dial (6 canales movidos)."
     },
     "byGroup": {
       "superficie-por-nivel": 18,
@@ -2441,7 +2441,7 @@
       ]
     },
     "gapBacklog": {
-      "statement": "EL BACKLOG REAL DE PERILLAS FALTANTES. 10 raices, 496 canales de tema.",
+      "statement": "EL BACKLOG REAL DE PERILLAS FALTANTES. 8 raices, 490 canales de tema.",
       "items": [
         {
           "rootId": "ramp.seed.neutral",
@@ -2490,26 +2490,13 @@
           "channels": 45,
           "channelStatus": "--ds-color-warning",
           "why": "Mismo frontier palette.status-seeds (packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts:507)."
-        },
-        {
-          "rootId": "type.family.mono",
-          "channels": 3,
-          "channelStatus": "--ds-font-family-mono",
-          "why": "Ni typography.families ni typography.pairing declaran --ds-font-family-mono: los dos controles nombran solo base y heading. El canal existe y los tres temas lo autoran; la perilla no llega. Perilla faltante barata (1 canal por tema)."
-        },
-        {
-          "rootId": "type.family.display",
-          "channels": 3,
-          "channelStatus": "--ds-font-family-display",
-          "why": "Mismo hueco que mono: canal existente, dos controles de tipografia que no lo nombran."
         }
       ],
       "priority": [
         "PRIMERO ramp.seed.neutral (132 canales, el mayor). Certificado en fuente: el compilador dice que neutral no tiene semilla de la que derivar (packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts:353-356). Sin semilla no hay rampa, y sin rampa cada tema escribe 10 pasos por rol.",
         "SEGUNDO las cuatro semillas de estado (success/warning/error/info, 189 canales juntos). NO ES UN HALLAZGO NUEVO: el repo YA lo tiene registrado como frontier palette.status-seeds (packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts:507-522), con el defaultBehavior que nombra la asimetria estatico/DB. Este catalogo solo lo cuantifica.",
         "TERCERO el nivel acento sin cabeza (tier.accent.bg, 63 canales): --ds-badge-bg, --ds-tag-bg y --ds-alert-bg tienen cero declaraciones en todo src/.",
-        "CUARTO los dos bordes sin gobierno (tier.raised.border 56 + tier.page.border 50 = 106 canales). El de nivel elevado es especialmente caro porque bithire declara EN FUENTE que su identidad es borde-fuerte contra elevacion-fuerte (packages/core/src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts:912-913) y no hay perilla que exprese esa eleccion.",
-        "ULTIMO los dos huecos baratos de tipografia (mono y display, 3 canales cada uno): el canal existe y los tres temas lo autoran; los dos controles de tipografia nombran solo base y heading."
+        "CUARTO los dos bordes sin gobierno (tier.raised.border 56 + tier.page.border 50 = 106 canales). El de nivel elevado es especialmente caro porque bithire declara EN FUENTE que su identidad es borde-fuerte contra elevacion-fuerte (packages/core/src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts:912-913) y no hay perilla que exprese esa eleccion."
       ]
     },
     "derivationDebtBacklog": {

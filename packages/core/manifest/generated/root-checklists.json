@@ -31,10 +31,10 @@
       "rootChannel": "data-anatomy-card",
       "declaredAt": "manifest/cascade/roots/chrome.anatomy.json:6",
       "reasonCode": "attribute-not-custom-property",
-      "notMeasurableReason": "La cabeza declarada \"data-anatomy-card\" es un ATRIBUTO de raiz, no una custom property: manifest/cascade/roots/chrome.anatomy.json:6. La emision real esta en src/infrastructure/compilers/composition/tenant-theme/index.ts:1300. El fan-out se mide sobre lecturas var(--*); un atributo no puede tener una sola arista de cascada, asi que medirlo daria 0 por construccion.",
+      "notMeasurableReason": "La cabeza declarada \"data-anatomy-card\" es un ATRIBUTO de raiz, no una custom property: manifest/cascade/roots/chrome.anatomy.json:6. La emision real esta en src/infrastructure/compilers/composition/tenant-theme/index.ts:1305. El fan-out se mide sobre lecturas var(--*); un atributo no puede tener una sola arista de cascada, asi que medirlo daria 0 por construccion.",
       "evidence": [
         "manifest/cascade/roots/chrome.anatomy.json:6",
-        "src/infrastructure/compilers/composition/tenant-theme/index.ts:1300"
+        "src/infrastructure/compilers/composition/tenant-theme/index.ts:1305"
       ]
     },
     {
@@ -1065,8 +1065,8 @@
         "foreignCustomPropertyCuts": 4,
         "discardedLookupKeys": 19,
         "resolvedBy": {
-          "binding": 143,
-          "binding-multi": 10,
+          "binding": 139,
+          "binding-multi": 14,
           "class+binding": 251,
           "class": 32,
           "source-owner": 5,
@@ -4905,9 +4905,10 @@
               "line": 308,
               "prop": "color",
               "families": [
-                "primitive/navigation/menu"
+                "primitive/navigation/menu",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "modern-skin-css",
@@ -4915,9 +4916,10 @@
               "line": 309,
               "prop": "background",
               "families": [
-                "primitive/navigation/menu"
+                "primitive/navigation/menu",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "modern-skin-css",
@@ -4925,9 +4927,10 @@
               "line": 310,
               "prop": "border-color",
               "families": [
-                "primitive/navigation/menu"
+                "primitive/navigation/menu",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "modern-skin-css",
@@ -4935,9 +4938,10 @@
               "line": 315,
               "prop": "color",
               "families": [
-                "primitive/navigation/menu"
+                "primitive/navigation/menu",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "modern-skin-css",
@@ -10887,6 +10891,7 @@
           "manifestFamily": true,
           "channels": 1,
           "properties": [
+            "background",
             "border-color",
             "color"
           ],
@@ -10894,12 +10899,14 @@
             {
               "channel": "--ds-color-error",
               "props": [
+                "background",
                 "border-color",
                 "color"
               ],
               "files": [
                 "src/foundation/tokens/css/presentation/components/skin/import-export.css",
-                "src/foundation/tokens/css/presentation/components/skin/record-workbench.css"
+                "src/foundation/tokens/css/presentation/components/skin/record-workbench.css",
+                "src/foundation/tokens/css/runtime/engines/modern/skin/menu.css"
               ]
             }
           ]
@@ -12152,8 +12159,8 @@
         "foreignCustomPropertyCuts": 34,
         "discardedLookupKeys": 8,
         "resolvedBy": {
-          "binding": 641,
-          "binding-multi": 213,
+          "binding": 619,
+          "binding-multi": 235,
           "class+binding": 1149,
           "class": 135,
           "source-owner": 15,
@@ -12532,7 +12539,8 @@
           "paints": true,
           "paintsInModern": true,
           "families": [
-            "primitive/navigation/menu"
+            "primitive/navigation/menu",
+            "structure/shell/sidebar-surface"
           ],
           "sites": [
             {
@@ -12541,9 +12549,10 @@
               "line": 375,
               "prop": "background",
               "families": [
-                "primitive/navigation/menu"
+                "primitive/navigation/menu",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             }
           ]
         },
@@ -12555,7 +12564,8 @@
           "paints": true,
           "paintsInModern": true,
           "families": [
-            "primitive/navigation/menu"
+            "primitive/navigation/menu",
+            "structure/shell/sidebar-surface"
           ],
           "sites": [
             {
@@ -12564,9 +12574,10 @@
               "line": 365,
               "prop": "background",
               "families": [
-                "primitive/navigation/menu"
+                "primitive/navigation/menu",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             }
           ]
         },
@@ -18775,9 +18786,10 @@
               "line": 51,
               "prop": "outline",
               "families": [
-                "structure/shell/app-shell"
+                "structure/shell/app-shell",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "presentation-css",
@@ -18785,9 +18797,10 @@
               "line": 508,
               "prop": "outline",
               "families": [
-                "structure/shell/app-shell"
+                "structure/shell/app-shell",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "presentation-css",
@@ -26040,9 +26053,10 @@
               "line": 174,
               "prop": "background",
               "families": [
-                "primitive/navigation/menu"
+                "primitive/navigation/menu",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "modern-skin-css",
@@ -26050,9 +26064,10 @@
               "line": 299,
               "prop": "background",
               "families": [
-                "primitive/navigation/menu"
+                "primitive/navigation/menu",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "modern-skin-css",
@@ -26060,9 +26075,10 @@
               "line": 302,
               "prop": "border-color",
               "families": [
-                "primitive/navigation/menu"
+                "primitive/navigation/menu",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "modern-skin-css",
@@ -26070,9 +26086,10 @@
               "line": 329,
               "prop": "background",
               "families": [
-                "primitive/navigation/menu"
+                "primitive/navigation/menu",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "modern-skin-css",
@@ -26080,9 +26097,10 @@
               "line": 335,
               "prop": "color",
               "families": [
-                "primitive/navigation/menu"
+                "primitive/navigation/menu",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "modern-skin-css",
@@ -26090,9 +26108,10 @@
               "line": 340,
               "prop": "background",
               "families": [
-                "primitive/navigation/menu"
+                "primitive/navigation/menu",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "modern-skin-css",
@@ -26100,9 +26119,10 @@
               "line": 343,
               "prop": "border-color",
               "families": [
-                "primitive/navigation/menu"
+                "primitive/navigation/menu",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "modern-skin-css",
@@ -26110,9 +26130,10 @@
               "line": 365,
               "prop": "background",
               "families": [
-                "primitive/navigation/menu"
+                "primitive/navigation/menu",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "modern-skin-css",
@@ -26120,9 +26141,10 @@
               "line": 375,
               "prop": "background",
               "families": [
-                "primitive/navigation/menu"
+                "primitive/navigation/menu",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "modern-skin-css",
@@ -26130,9 +26152,10 @@
               "line": 386,
               "prop": "background",
               "families": [
-                "primitive/navigation/menu"
+                "primitive/navigation/menu",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "modern-skin-css",
@@ -26140,9 +26163,10 @@
               "line": 389,
               "prop": "border-color",
               "families": [
-                "primitive/navigation/menu"
+                "primitive/navigation/menu",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "modern-skin-css",
@@ -26150,9 +26174,10 @@
               "line": 464,
               "prop": "outline",
               "families": [
-                "primitive/navigation/menu"
+                "primitive/navigation/menu",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "modern-skin-css",
@@ -33043,6 +33068,7 @@
             "structure/record/record-panel",
             "structure/shell/app-shell",
             "structure/shell/bottom-tab-bar",
+            "structure/shell/sidebar-surface",
             "structure/workspace/column-menu",
             "structure/workspace/field-filters-panel",
             "structure/workspace/search-command-bar",
@@ -33057,9 +33083,10 @@
               "line": 34,
               "prop": "box-shadow",
               "families": [
-                "structure/shell/app-shell"
+                "structure/shell/app-shell",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "presentation-css",
@@ -33067,9 +33094,10 @@
               "line": 402,
               "prop": "box-shadow",
               "families": [
-                "structure/shell/app-shell"
+                "structure/shell/app-shell",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "presentation-css",
@@ -33603,6 +33631,7 @@
             "primitive/overlay/sheet",
             "primitive/overlay/tour",
             "structure/shell/app-shell",
+            "structure/shell/sidebar-surface",
             "structure/workspace/action-dock",
             "surface/workspace/collection-workspace"
           ],
@@ -33613,9 +33642,10 @@
               "line": 106,
               "prop": "box-shadow",
               "families": [
-                "structure/shell/app-shell"
+                "structure/shell/app-shell",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "presentation-css",
@@ -39887,6 +39917,7 @@
             "primitive/feedback/alert",
             "primitive/inputs/date-picker",
             "primitive/navigation/menu",
+            "structure/shell/sidebar-surface",
             "unattributed/src/foundation/tokens/css/runtime/engines/rustic/skin/confirm-dialog.css",
             "unattributed/src/ui/surfaces/foundation/common/story-helpers/index.tsx"
           ],
@@ -39957,9 +39988,10 @@
               "line": 345,
               "prop": "box-shadow",
               "families": [
-                "primitive/navigation/menu"
+                "primitive/navigation/menu",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "rustic-css",
@@ -40252,6 +40284,7 @@
             "primitive/navigation/segmented",
             "primitive/navigation/stepper",
             "primitive/navigation/steps",
+            "structure/shell/sidebar-surface",
             "unattributed/src/foundation/tokens/css/presentation/components/patterns-paint.css"
           ],
           "sites": [
@@ -40322,9 +40355,10 @@
               "line": 122,
               "prop": "box-shadow",
               "families": [
-                "primitive/navigation/menu"
+                "primitive/navigation/menu",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "modern-skin-css",
@@ -40332,9 +40366,10 @@
               "line": 303,
               "prop": "box-shadow",
               "families": [
-                "primitive/navigation/menu"
+                "primitive/navigation/menu",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "modern-skin-css",
@@ -59347,16 +59382,35 @@
         {
           "family": "structure/shell/sidebar-surface",
           "manifestFamily": true,
-          "channels": 7,
+          "channels": 13,
           "properties": [
             "background",
             "background-image",
             "border",
             "border-color",
             "box-shadow",
-            "color"
+            "color",
+            "outline"
           ],
           "rows": [
+            {
+              "channel": "--_ds-menu-current-rule-ink",
+              "props": [
+                "background"
+              ],
+              "files": [
+                "src/foundation/tokens/css/runtime/engines/modern/skin/menu.css"
+              ]
+            },
+            {
+              "channel": "--_ds-menu-current-tick-ink",
+              "props": [
+                "background"
+              ],
+              "files": [
+                "src/foundation/tokens/css/runtime/engines/modern/skin/menu.css"
+              ]
+            },
             {
               "channel": "--ds-card-border",
               "props": [
@@ -59381,13 +59435,17 @@
                 "background",
                 "background-image",
                 "border",
+                "border-color",
                 "box-shadow",
-                "color"
+                "color",
+                "outline"
               ],
               "files": [
+                "src/foundation/tokens/css/presentation/components/skin/app-shell.css",
                 "src/foundation/tokens/css/presentation/components/skin/collection-shell.css",
                 "src/foundation/tokens/css/presentation/components/skin/record-workbench.css",
-                "src/foundation/tokens/css/presentation/components/skin/surface-section-card.css"
+                "src/foundation/tokens/css/presentation/components/skin/surface-section-card.css",
+                "src/foundation/tokens/css/runtime/engines/modern/skin/menu.css"
               ]
             },
             {
@@ -59397,6 +59455,42 @@
               ],
               "files": [
                 "src/foundation/tokens/css/presentation/components/skin/surface-section-card.css"
+              ]
+            },
+            {
+              "channel": "--ds-elevation-2",
+              "props": [
+                "box-shadow"
+              ],
+              "files": [
+                "src/foundation/tokens/css/presentation/components/skin/app-shell.css"
+              ]
+            },
+            {
+              "channel": "--ds-elevation-3",
+              "props": [
+                "box-shadow"
+              ],
+              "files": [
+                "src/foundation/tokens/css/presentation/components/skin/app-shell.css"
+              ]
+            },
+            {
+              "channel": "--ds-shadow-sm",
+              "props": [
+                "box-shadow"
+              ],
+              "files": [
+                "src/foundation/tokens/css/runtime/engines/modern/skin/menu.css"
+              ]
+            },
+            {
+              "channel": "--ds-shadow-xs",
+              "props": [
+                "box-shadow"
+              ],
+              "files": [
+                "src/foundation/tokens/css/runtime/engines/modern/skin/menu.css"
               ]
             },
             {
@@ -64764,8 +64858,8 @@
         "foreignCustomPropertyCuts": 2,
         "discardedLookupKeys": 27,
         "resolvedBy": {
-          "binding": 538,
-          "binding-multi": 39,
+          "binding": 501,
+          "binding-multi": 76,
           "class+binding": 1258,
           "class": 155,
           "source-owner": 70,
@@ -68819,6 +68913,7 @@
             "structure/record/edit-fields",
             "structure/record/form-sections",
             "structure/record/record-panel",
+            "structure/shell/sidebar-surface",
             "structure/workspace/column-menu",
             "structure/workspace/field-filters-panel",
             "structure/workspace/search-command-bar",
@@ -70101,9 +70196,10 @@
               "line": 113,
               "prop": "gap",
               "families": [
-                "primitive/navigation/menu"
+                "primitive/navigation/menu",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "modern-skin-css",
@@ -70111,9 +70207,10 @@
               "line": 115,
               "prop": "padding",
               "families": [
-                "primitive/navigation/menu"
+                "primitive/navigation/menu",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "modern-skin-css",
@@ -70121,9 +70218,10 @@
               "line": 116,
               "prop": "padding",
               "families": [
-                "primitive/navigation/menu"
+                "primitive/navigation/menu",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "modern-skin-css",
@@ -70131,9 +70229,10 @@
               "line": 232,
               "prop": "block-size",
               "families": [
-                "primitive/navigation/menu"
+                "primitive/navigation/menu",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "modern-skin-css",
@@ -70141,9 +70240,10 @@
               "line": 233,
               "prop": "padding-inline",
               "families": [
-                "primitive/navigation/menu"
+                "primitive/navigation/menu",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "modern-skin-css",
@@ -70151,9 +70251,10 @@
               "line": 240,
               "prop": "block-size",
               "families": [
-                "primitive/navigation/menu"
+                "primitive/navigation/menu",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "modern-skin-css",
@@ -70161,9 +70262,10 @@
               "line": 243,
               "prop": "padding-inline-start",
               "families": [
-                "primitive/navigation/menu"
+                "primitive/navigation/menu",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "modern-skin-css",
@@ -70171,9 +70273,10 @@
               "line": 395,
               "prop": "inline-size",
               "families": [
-                "primitive/navigation/menu"
+                "primitive/navigation/menu",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "modern-skin-css",
@@ -70181,9 +70284,10 @@
               "line": 396,
               "prop": "block-size",
               "families": [
-                "primitive/navigation/menu"
+                "primitive/navigation/menu",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "modern-skin-css",
@@ -70191,9 +70295,10 @@
               "line": 401,
               "prop": "font-size",
               "families": [
-                "primitive/navigation/menu"
+                "primitive/navigation/menu",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "modern-skin-css",
@@ -70201,9 +70306,10 @@
               "line": 504,
               "prop": "inset-inline-start",
               "families": [
-                "primitive/navigation/menu"
+                "primitive/navigation/menu",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "modern-skin-css",
@@ -70211,9 +70317,10 @@
               "line": 513,
               "prop": "padding-block",
               "families": [
-                "primitive/navigation/menu"
+                "primitive/navigation/menu",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "modern-skin-css",
@@ -70221,9 +70328,10 @@
               "line": 514,
               "prop": "padding-inline",
               "families": [
-                "primitive/navigation/menu"
+                "primitive/navigation/menu",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "modern-skin-css",
@@ -73152,7 +73260,8 @@
             "primitive/display/qr-code",
             "primitive/display/tree",
             "primitive/layout/collapse",
-            "primitive/navigation/menu"
+            "primitive/navigation/menu",
+            "structure/shell/sidebar-surface"
           ],
           "sites": [
             {
@@ -73161,9 +73270,10 @@
               "line": 195,
               "prop": "gap",
               "families": [
-                "primitive/navigation/menu"
+                "primitive/navigation/menu",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "modern-skin-css",
@@ -73199,7 +73309,8 @@
           "paints": true,
           "paintsInModern": true,
           "families": [
-            "primitive/navigation/menu"
+            "primitive/navigation/menu",
+            "structure/shell/sidebar-surface"
           ],
           "sites": [
             {
@@ -73208,9 +73319,10 @@
               "line": 233,
               "prop": "padding-inline",
               "families": [
-                "primitive/navigation/menu"
+                "primitive/navigation/menu",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "modern-skin-css",
@@ -73218,9 +73330,10 @@
               "line": 514,
               "prop": "padding-inline",
               "families": [
-                "primitive/navigation/menu"
+                "primitive/navigation/menu",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             }
           ]
         },
@@ -73249,7 +73362,8 @@
             "primitive/layout/divider",
             "primitive/layout/layout",
             "primitive/layout/splitter",
-            "structure/shell/app-shell"
+            "structure/shell/app-shell",
+            "structure/shell/sidebar-surface"
           ],
           "sites": [
             {
@@ -73258,9 +73372,10 @@
               "line": 191,
               "prop": "padding",
               "families": [
-                "structure/shell/app-shell"
+                "structure/shell/app-shell",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "classic-css",
@@ -73538,9 +73653,10 @@
               "line": 338,
               "prop": "gap",
               "families": [
-                "structure/shell/app-shell"
+                "structure/shell/app-shell",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "presentation-css",
@@ -76655,6 +76771,7 @@
             "pattern/workflow/approval-inbox",
             "pattern/workflow/shift-matrix",
             "primitive/navigation/menu",
+            "structure/shell/sidebar-surface",
             "surface/workspace/collection-workspace"
           ],
           "sites": [
@@ -76684,9 +76801,10 @@
               "line": 553,
               "prop": "block-size",
               "families": [
-                "primitive/navigation/menu"
+                "primitive/navigation/menu",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "modern-skin-css",
@@ -77123,9 +77241,10 @@
               "line": 207,
               "prop": "padding",
               "families": [
-                "structure/shell/app-shell"
+                "structure/shell/app-shell",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "presentation-css",
@@ -77133,9 +77252,10 @@
               "line": 228,
               "prop": "padding",
               "families": [
-                "structure/shell/app-shell"
+                "structure/shell/app-shell",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "presentation-css",
@@ -77143,9 +77263,10 @@
               "line": 403,
               "prop": "margin",
               "families": [
-                "structure/shell/app-shell"
+                "structure/shell/app-shell",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "presentation-css",
@@ -82821,9 +82942,10 @@
               "line": 19,
               "prop": "inset-block-start",
               "families": [
-                "structure/shell/app-shell"
+                "structure/shell/app-shell",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "presentation-css",
@@ -82831,9 +82953,10 @@
               "line": 20,
               "prop": "inset-inline-start",
               "families": [
-                "structure/shell/app-shell"
+                "structure/shell/app-shell",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "presentation-css",
@@ -82841,9 +82964,10 @@
               "line": 124,
               "prop": "gap",
               "families": [
-                "structure/shell/app-shell"
+                "structure/shell/app-shell",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "presentation-css",
@@ -82851,9 +82975,10 @@
               "line": 127,
               "prop": "padding",
               "families": [
-                "structure/shell/app-shell"
+                "structure/shell/app-shell",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "presentation-css",
@@ -82861,9 +82986,10 @@
               "line": 192,
               "prop": "padding",
               "families": [
-                "structure/shell/app-shell"
+                "structure/shell/app-shell",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "presentation-css",
@@ -82871,9 +82997,10 @@
               "line": 193,
               "prop": "padding",
               "families": [
-                "structure/shell/app-shell"
+                "structure/shell/app-shell",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "presentation-css",
@@ -82881,9 +83008,10 @@
               "line": 207,
               "prop": "padding",
               "families": [
-                "structure/shell/app-shell"
+                "structure/shell/app-shell",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "presentation-css",
@@ -82891,9 +83019,10 @@
               "line": 214,
               "prop": "padding",
               "families": [
-                "structure/shell/app-shell"
+                "structure/shell/app-shell",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "presentation-css",
@@ -82901,9 +83030,10 @@
               "line": 228,
               "prop": "padding",
               "families": [
-                "structure/shell/app-shell"
+                "structure/shell/app-shell",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "presentation-css",
@@ -82911,9 +83041,10 @@
               "line": 319,
               "prop": "margin-inline-end",
               "families": [
-                "structure/shell/app-shell"
+                "structure/shell/app-shell",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "presentation-css",
@@ -86526,9 +86657,10 @@
               "line": 26,
               "prop": "padding",
               "families": [
-                "structure/shell/app-shell"
+                "structure/shell/app-shell",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "presentation-css",
@@ -89100,9 +89232,10 @@
               "line": 127,
               "prop": "padding",
               "families": [
-                "structure/shell/app-shell"
+                "structure/shell/app-shell",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "presentation-css",
@@ -89110,9 +89243,10 @@
               "line": 167,
               "prop": "padding",
               "families": [
-                "structure/shell/app-shell"
+                "structure/shell/app-shell",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "presentation-css",
@@ -89984,9 +90118,10 @@
               "line": 198,
               "prop": "scroll-padding-block-end",
               "families": [
-                "structure/shell/app-shell"
+                "structure/shell/app-shell",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "presentation-css",
@@ -89994,9 +90129,10 @@
               "line": 287,
               "prop": "padding-inline",
               "families": [
-                "structure/shell/app-shell"
+                "structure/shell/app-shell",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "presentation-css",
@@ -106225,19 +106361,26 @@
         {
           "family": "structure/shell/sidebar-surface",
           "manifestFamily": true,
-          "channels": 11,
+          "channels": 16,
           "properties": [
+            "block-size",
+            "font-size",
             "gap",
+            "inline-size",
             "inset-block-start",
+            "inset-inline-start",
+            "margin",
             "margin-block",
             "margin-block-end",
             "margin-block-start",
+            "margin-inline-end",
             "margin-inline-start",
             "padding",
             "padding-block",
             "padding-block-start",
             "padding-inline",
-            "padding-inline-start"
+            "padding-inline-start",
+            "scroll-padding-block-end"
           ],
           "rows": [
             {
@@ -106259,21 +106402,77 @@
               ]
             },
             {
+              "channel": "--ds-density-effective-scale",
+              "props": [
+                "block-size",
+                "font-size",
+                "gap",
+                "inline-size",
+                "inset-inline-start",
+                "padding",
+                "padding-block",
+                "padding-inline",
+                "padding-inline-start"
+              ],
+              "files": [
+                "src/foundation/tokens/css/runtime/engines/modern/skin/menu.css"
+              ]
+            },
+            {
+              "channel": "--ds-sidebar-item-gap",
+              "props": [
+                "gap"
+              ],
+              "files": [
+                "src/foundation/tokens/css/runtime/engines/modern/skin/menu.css"
+              ]
+            },
+            {
+              "channel": "--ds-sidebar-item-padding-inline",
+              "props": [
+                "padding-inline"
+              ],
+              "files": [
+                "src/foundation/tokens/css/runtime/engines/modern/skin/menu.css"
+              ]
+            },
+            {
+              "channel": "--ds-sidebar-shell-padding-inline",
+              "props": [
+                "padding"
+              ],
+              "files": [
+                "src/foundation/tokens/css/presentation/components/skin/app-shell.css"
+              ]
+            },
+            {
               "channel": "--ds-spacing-1",
               "props": [
+                "gap",
                 "margin-block-end",
                 "margin-block-start",
                 "padding-block"
               ],
               "files": [
+                "src/foundation/tokens/css/presentation/components/skin/app-shell.css",
                 "src/foundation/tokens/css/presentation/components/skin/command-center.css",
                 "src/foundation/tokens/css/presentation/components/skin/record-workbench.css"
+              ]
+            },
+            {
+              "channel": "--ds-spacing-11",
+              "props": [
+                "block-size"
+              ],
+              "files": [
+                "src/foundation/tokens/css/runtime/engines/modern/skin/menu.css"
               ]
             },
             {
               "channel": "--ds-spacing-2",
               "props": [
                 "gap",
+                "margin",
                 "margin-block",
                 "margin-block-end",
                 "margin-block-start",
@@ -106283,6 +106482,7 @@
                 "padding-inline"
               ],
               "files": [
+                "src/foundation/tokens/css/presentation/components/skin/app-shell.css",
                 "src/foundation/tokens/css/presentation/components/skin/command-center.css",
                 "src/foundation/tokens/css/presentation/components/skin/file-browser.css",
                 "src/foundation/tokens/css/presentation/components/skin/import-export.css",
@@ -106294,12 +106494,16 @@
               "channel": "--ds-spacing-3",
               "props": [
                 "gap",
+                "inset-block-start",
+                "inset-inline-start",
                 "margin-block-end",
                 "margin-block-start",
+                "margin-inline-end",
                 "padding",
                 "padding-inline"
               ],
               "files": [
+                "src/foundation/tokens/css/presentation/components/skin/app-shell.css",
                 "src/foundation/tokens/css/presentation/components/skin/command-center.css",
                 "src/foundation/tokens/css/presentation/components/skin/file-browser.css",
                 "src/foundation/tokens/css/presentation/components/skin/record-workbench.css"
@@ -106314,6 +106518,7 @@
                 "padding"
               ],
               "files": [
+                "src/foundation/tokens/css/presentation/components/skin/app-shell.css",
                 "src/foundation/tokens/css/presentation/components/skin/detail-form-surface.css",
                 "src/foundation/tokens/css/presentation/components/skin/file-browser.css",
                 "src/foundation/tokens/css/presentation/components/skin/pricing-surface.css",
@@ -106329,6 +106534,7 @@
                 "padding-inline-start"
               ],
               "files": [
+                "src/foundation/tokens/css/presentation/components/skin/app-shell.css",
                 "src/foundation/tokens/css/presentation/components/skin/record-workbench.css",
                 "src/foundation/tokens/css/presentation/components/skin/surface-section-card.css"
               ]
@@ -106336,9 +106542,12 @@
             {
               "channel": "--ds-spacing-6",
               "props": [
-                "gap"
+                "gap",
+                "padding-inline",
+                "scroll-padding-block-end"
               ],
               "files": [
+                "src/foundation/tokens/css/presentation/components/skin/app-shell.css",
                 "src/foundation/tokens/css/presentation/components/skin/layout-sidebar.css"
               ]
             },
@@ -112666,8 +112875,8 @@
         "foreignCustomPropertyCuts": 2,
         "discardedLookupKeys": 27,
         "resolvedBy": {
-          "binding": 538,
-          "binding-multi": 39,
+          "binding": 501,
+          "binding-multi": 76,
           "class+binding": 1286,
           "class": 155,
           "source-owner": 70,
@@ -117079,6 +117288,7 @@
             "structure/record/edit-fields",
             "structure/record/form-sections",
             "structure/record/record-panel",
+            "structure/shell/sidebar-surface",
             "structure/workspace/column-menu",
             "structure/workspace/field-filters-panel",
             "structure/workspace/search-command-bar",
@@ -118361,9 +118571,10 @@
               "line": 113,
               "prop": "gap",
               "families": [
-                "primitive/navigation/menu"
+                "primitive/navigation/menu",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "modern-skin-css",
@@ -118371,9 +118582,10 @@
               "line": 115,
               "prop": "padding",
               "families": [
-                "primitive/navigation/menu"
+                "primitive/navigation/menu",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "modern-skin-css",
@@ -118381,9 +118593,10 @@
               "line": 116,
               "prop": "padding",
               "families": [
-                "primitive/navigation/menu"
+                "primitive/navigation/menu",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "modern-skin-css",
@@ -118391,9 +118604,10 @@
               "line": 232,
               "prop": "block-size",
               "families": [
-                "primitive/navigation/menu"
+                "primitive/navigation/menu",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "modern-skin-css",
@@ -118401,9 +118615,10 @@
               "line": 233,
               "prop": "padding-inline",
               "families": [
-                "primitive/navigation/menu"
+                "primitive/navigation/menu",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "modern-skin-css",
@@ -118411,9 +118626,10 @@
               "line": 240,
               "prop": "block-size",
               "families": [
-                "primitive/navigation/menu"
+                "primitive/navigation/menu",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "modern-skin-css",
@@ -118421,9 +118637,10 @@
               "line": 243,
               "prop": "padding-inline-start",
               "families": [
-                "primitive/navigation/menu"
+                "primitive/navigation/menu",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "modern-skin-css",
@@ -118431,9 +118648,10 @@
               "line": 395,
               "prop": "inline-size",
               "families": [
-                "primitive/navigation/menu"
+                "primitive/navigation/menu",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "modern-skin-css",
@@ -118441,9 +118659,10 @@
               "line": 396,
               "prop": "block-size",
               "families": [
-                "primitive/navigation/menu"
+                "primitive/navigation/menu",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "modern-skin-css",
@@ -118451,9 +118670,10 @@
               "line": 401,
               "prop": "font-size",
               "families": [
-                "primitive/navigation/menu"
+                "primitive/navigation/menu",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "modern-skin-css",
@@ -118461,9 +118681,10 @@
               "line": 504,
               "prop": "inset-inline-start",
               "families": [
-                "primitive/navigation/menu"
+                "primitive/navigation/menu",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "modern-skin-css",
@@ -118471,9 +118692,10 @@
               "line": 513,
               "prop": "padding-block",
               "families": [
-                "primitive/navigation/menu"
+                "primitive/navigation/menu",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "modern-skin-css",
@@ -118481,9 +118703,10 @@
               "line": 514,
               "prop": "padding-inline",
               "families": [
-                "primitive/navigation/menu"
+                "primitive/navigation/menu",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "modern-skin-css",
@@ -121422,7 +121645,8 @@
             "primitive/display/qr-code",
             "primitive/display/tree",
             "primitive/layout/collapse",
-            "primitive/navigation/menu"
+            "primitive/navigation/menu",
+            "structure/shell/sidebar-surface"
           ],
           "sites": [
             {
@@ -121431,9 +121655,10 @@
               "line": 195,
               "prop": "gap",
               "families": [
-                "primitive/navigation/menu"
+                "primitive/navigation/menu",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "modern-skin-css",
@@ -121469,7 +121694,8 @@
           "paints": true,
           "paintsInModern": true,
           "families": [
-            "primitive/navigation/menu"
+            "primitive/navigation/menu",
+            "structure/shell/sidebar-surface"
           ],
           "sites": [
             {
@@ -121478,9 +121704,10 @@
               "line": 233,
               "prop": "padding-inline",
               "families": [
-                "primitive/navigation/menu"
+                "primitive/navigation/menu",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "modern-skin-css",
@@ -121488,9 +121715,10 @@
               "line": 514,
               "prop": "padding-inline",
               "families": [
-                "primitive/navigation/menu"
+                "primitive/navigation/menu",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             }
           ]
         },
@@ -121519,7 +121747,8 @@
             "primitive/layout/divider",
             "primitive/layout/layout",
             "primitive/layout/splitter",
-            "structure/shell/app-shell"
+            "structure/shell/app-shell",
+            "structure/shell/sidebar-surface"
           ],
           "sites": [
             {
@@ -121528,9 +121757,10 @@
               "line": 191,
               "prop": "padding",
               "families": [
-                "structure/shell/app-shell"
+                "structure/shell/app-shell",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "classic-css",
@@ -121808,9 +122038,10 @@
               "line": 338,
               "prop": "gap",
               "families": [
-                "structure/shell/app-shell"
+                "structure/shell/app-shell",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "presentation-css",
@@ -124925,6 +125156,7 @@
             "pattern/workflow/approval-inbox",
             "pattern/workflow/shift-matrix",
             "primitive/navigation/menu",
+            "structure/shell/sidebar-surface",
             "surface/workspace/collection-workspace"
           ],
           "sites": [
@@ -124954,9 +125186,10 @@
               "line": 553,
               "prop": "block-size",
               "families": [
-                "primitive/navigation/menu"
+                "primitive/navigation/menu",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "modern-skin-css",
@@ -125393,9 +125626,10 @@
               "line": 207,
               "prop": "padding",
               "families": [
-                "structure/shell/app-shell"
+                "structure/shell/app-shell",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "presentation-css",
@@ -125403,9 +125637,10 @@
               "line": 228,
               "prop": "padding",
               "families": [
-                "structure/shell/app-shell"
+                "structure/shell/app-shell",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "presentation-css",
@@ -125413,9 +125648,10 @@
               "line": 403,
               "prop": "margin",
               "families": [
-                "structure/shell/app-shell"
+                "structure/shell/app-shell",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "presentation-css",
@@ -131091,9 +131327,10 @@
               "line": 19,
               "prop": "inset-block-start",
               "families": [
-                "structure/shell/app-shell"
+                "structure/shell/app-shell",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "presentation-css",
@@ -131101,9 +131338,10 @@
               "line": 20,
               "prop": "inset-inline-start",
               "families": [
-                "structure/shell/app-shell"
+                "structure/shell/app-shell",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "presentation-css",
@@ -131111,9 +131349,10 @@
               "line": 124,
               "prop": "gap",
               "families": [
-                "structure/shell/app-shell"
+                "structure/shell/app-shell",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "presentation-css",
@@ -131121,9 +131360,10 @@
               "line": 127,
               "prop": "padding",
               "families": [
-                "structure/shell/app-shell"
+                "structure/shell/app-shell",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "presentation-css",
@@ -131131,9 +131371,10 @@
               "line": 192,
               "prop": "padding",
               "families": [
-                "structure/shell/app-shell"
+                "structure/shell/app-shell",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "presentation-css",
@@ -131141,9 +131382,10 @@
               "line": 193,
               "prop": "padding",
               "families": [
-                "structure/shell/app-shell"
+                "structure/shell/app-shell",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "presentation-css",
@@ -131151,9 +131393,10 @@
               "line": 207,
               "prop": "padding",
               "families": [
-                "structure/shell/app-shell"
+                "structure/shell/app-shell",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "presentation-css",
@@ -131161,9 +131404,10 @@
               "line": 214,
               "prop": "padding",
               "families": [
-                "structure/shell/app-shell"
+                "structure/shell/app-shell",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "presentation-css",
@@ -131171,9 +131415,10 @@
               "line": 228,
               "prop": "padding",
               "families": [
-                "structure/shell/app-shell"
+                "structure/shell/app-shell",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "presentation-css",
@@ -131181,9 +131426,10 @@
               "line": 319,
               "prop": "margin-inline-end",
               "families": [
-                "structure/shell/app-shell"
+                "structure/shell/app-shell",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "presentation-css",
@@ -134796,9 +135042,10 @@
               "line": 26,
               "prop": "padding",
               "families": [
-                "structure/shell/app-shell"
+                "structure/shell/app-shell",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "presentation-css",
@@ -137370,9 +137617,10 @@
               "line": 127,
               "prop": "padding",
               "families": [
-                "structure/shell/app-shell"
+                "structure/shell/app-shell",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "presentation-css",
@@ -137380,9 +137628,10 @@
               "line": 167,
               "prop": "padding",
               "families": [
-                "structure/shell/app-shell"
+                "structure/shell/app-shell",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "presentation-css",
@@ -138254,9 +138503,10 @@
               "line": 198,
               "prop": "scroll-padding-block-end",
               "families": [
-                "structure/shell/app-shell"
+                "structure/shell/app-shell",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "presentation-css",
@@ -138264,9 +138514,10 @@
               "line": 287,
               "prop": "padding-inline",
               "families": [
-                "structure/shell/app-shell"
+                "structure/shell/app-shell",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "presentation-css",
@@ -154561,19 +154812,26 @@
         {
           "family": "structure/shell/sidebar-surface",
           "manifestFamily": true,
-          "channels": 11,
+          "channels": 16,
           "properties": [
+            "block-size",
+            "font-size",
             "gap",
+            "inline-size",
             "inset-block-start",
+            "inset-inline-start",
+            "margin",
             "margin-block",
             "margin-block-end",
             "margin-block-start",
+            "margin-inline-end",
             "margin-inline-start",
             "padding",
             "padding-block",
             "padding-block-start",
             "padding-inline",
-            "padding-inline-start"
+            "padding-inline-start",
+            "scroll-padding-block-end"
           ],
           "rows": [
             {
@@ -154595,21 +154853,77 @@
               ]
             },
             {
+              "channel": "--ds-density-effective-scale",
+              "props": [
+                "block-size",
+                "font-size",
+                "gap",
+                "inline-size",
+                "inset-inline-start",
+                "padding",
+                "padding-block",
+                "padding-inline",
+                "padding-inline-start"
+              ],
+              "files": [
+                "src/foundation/tokens/css/runtime/engines/modern/skin/menu.css"
+              ]
+            },
+            {
+              "channel": "--ds-sidebar-item-gap",
+              "props": [
+                "gap"
+              ],
+              "files": [
+                "src/foundation/tokens/css/runtime/engines/modern/skin/menu.css"
+              ]
+            },
+            {
+              "channel": "--ds-sidebar-item-padding-inline",
+              "props": [
+                "padding-inline"
+              ],
+              "files": [
+                "src/foundation/tokens/css/runtime/engines/modern/skin/menu.css"
+              ]
+            },
+            {
+              "channel": "--ds-sidebar-shell-padding-inline",
+              "props": [
+                "padding"
+              ],
+              "files": [
+                "src/foundation/tokens/css/presentation/components/skin/app-shell.css"
+              ]
+            },
+            {
               "channel": "--ds-spacing-1",
               "props": [
+                "gap",
                 "margin-block-end",
                 "margin-block-start",
                 "padding-block"
               ],
               "files": [
+                "src/foundation/tokens/css/presentation/components/skin/app-shell.css",
                 "src/foundation/tokens/css/presentation/components/skin/command-center.css",
                 "src/foundation/tokens/css/presentation/components/skin/record-workbench.css"
+              ]
+            },
+            {
+              "channel": "--ds-spacing-11",
+              "props": [
+                "block-size"
+              ],
+              "files": [
+                "src/foundation/tokens/css/runtime/engines/modern/skin/menu.css"
               ]
             },
             {
               "channel": "--ds-spacing-2",
               "props": [
                 "gap",
+                "margin",
                 "margin-block",
                 "margin-block-end",
                 "margin-block-start",
@@ -154619,6 +154933,7 @@
                 "padding-inline"
               ],
               "files": [
+                "src/foundation/tokens/css/presentation/components/skin/app-shell.css",
                 "src/foundation/tokens/css/presentation/components/skin/command-center.css",
                 "src/foundation/tokens/css/presentation/components/skin/file-browser.css",
                 "src/foundation/tokens/css/presentation/components/skin/import-export.css",
@@ -154630,12 +154945,16 @@
               "channel": "--ds-spacing-3",
               "props": [
                 "gap",
+                "inset-block-start",
+                "inset-inline-start",
                 "margin-block-end",
                 "margin-block-start",
+                "margin-inline-end",
                 "padding",
                 "padding-inline"
               ],
               "files": [
+                "src/foundation/tokens/css/presentation/components/skin/app-shell.css",
                 "src/foundation/tokens/css/presentation/components/skin/command-center.css",
                 "src/foundation/tokens/css/presentation/components/skin/file-browser.css",
                 "src/foundation/tokens/css/presentation/components/skin/record-workbench.css"
@@ -154650,6 +154969,7 @@
                 "padding"
               ],
               "files": [
+                "src/foundation/tokens/css/presentation/components/skin/app-shell.css",
                 "src/foundation/tokens/css/presentation/components/skin/detail-form-surface.css",
                 "src/foundation/tokens/css/presentation/components/skin/file-browser.css",
                 "src/foundation/tokens/css/presentation/components/skin/pricing-surface.css",
@@ -154665,6 +154985,7 @@
                 "padding-inline-start"
               ],
               "files": [
+                "src/foundation/tokens/css/presentation/components/skin/app-shell.css",
                 "src/foundation/tokens/css/presentation/components/skin/record-workbench.css",
                 "src/foundation/tokens/css/presentation/components/skin/surface-section-card.css"
               ]
@@ -154672,9 +154993,12 @@
             {
               "channel": "--ds-spacing-6",
               "props": [
-                "gap"
+                "gap",
+                "padding-inline",
+                "scroll-padding-block-end"
               ],
               "files": [
+                "src/foundation/tokens/css/presentation/components/skin/app-shell.css",
                 "src/foundation/tokens/css/presentation/components/skin/layout-sidebar.css"
               ]
             },
@@ -161052,8 +161376,8 @@
         "foreignCustomPropertyCuts": 2,
         "discardedLookupKeys": 27,
         "resolvedBy": {
-          "binding": 538,
-          "binding-multi": 39,
+          "binding": 501,
+          "binding-multi": 76,
           "class+binding": 1286,
           "class": 155,
           "source-owner": 70,
@@ -165465,6 +165789,7 @@
             "structure/record/edit-fields",
             "structure/record/form-sections",
             "structure/record/record-panel",
+            "structure/shell/sidebar-surface",
             "structure/workspace/column-menu",
             "structure/workspace/field-filters-panel",
             "structure/workspace/search-command-bar",
@@ -166747,9 +167072,10 @@
               "line": 113,
               "prop": "gap",
               "families": [
-                "primitive/navigation/menu"
+                "primitive/navigation/menu",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "modern-skin-css",
@@ -166757,9 +167083,10 @@
               "line": 115,
               "prop": "padding",
               "families": [
-                "primitive/navigation/menu"
+                "primitive/navigation/menu",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "modern-skin-css",
@@ -166767,9 +167094,10 @@
               "line": 116,
               "prop": "padding",
               "families": [
-                "primitive/navigation/menu"
+                "primitive/navigation/menu",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "modern-skin-css",
@@ -166777,9 +167105,10 @@
               "line": 232,
               "prop": "block-size",
               "families": [
-                "primitive/navigation/menu"
+                "primitive/navigation/menu",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "modern-skin-css",
@@ -166787,9 +167116,10 @@
               "line": 233,
               "prop": "padding-inline",
               "families": [
-                "primitive/navigation/menu"
+                "primitive/navigation/menu",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "modern-skin-css",
@@ -166797,9 +167127,10 @@
               "line": 240,
               "prop": "block-size",
               "families": [
-                "primitive/navigation/menu"
+                "primitive/navigation/menu",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "modern-skin-css",
@@ -166807,9 +167138,10 @@
               "line": 243,
               "prop": "padding-inline-start",
               "families": [
-                "primitive/navigation/menu"
+                "primitive/navigation/menu",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "modern-skin-css",
@@ -166817,9 +167149,10 @@
               "line": 395,
               "prop": "inline-size",
               "families": [
-                "primitive/navigation/menu"
+                "primitive/navigation/menu",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "modern-skin-css",
@@ -166827,9 +167160,10 @@
               "line": 396,
               "prop": "block-size",
               "families": [
-                "primitive/navigation/menu"
+                "primitive/navigation/menu",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "modern-skin-css",
@@ -166837,9 +167171,10 @@
               "line": 401,
               "prop": "font-size",
               "families": [
-                "primitive/navigation/menu"
+                "primitive/navigation/menu",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "modern-skin-css",
@@ -166847,9 +167182,10 @@
               "line": 504,
               "prop": "inset-inline-start",
               "families": [
-                "primitive/navigation/menu"
+                "primitive/navigation/menu",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "modern-skin-css",
@@ -166857,9 +167193,10 @@
               "line": 513,
               "prop": "padding-block",
               "families": [
-                "primitive/navigation/menu"
+                "primitive/navigation/menu",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "modern-skin-css",
@@ -166867,9 +167204,10 @@
               "line": 514,
               "prop": "padding-inline",
               "families": [
-                "primitive/navigation/menu"
+                "primitive/navigation/menu",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "modern-skin-css",
@@ -169818,7 +170156,8 @@
             "primitive/display/qr-code",
             "primitive/display/tree",
             "primitive/layout/collapse",
-            "primitive/navigation/menu"
+            "primitive/navigation/menu",
+            "structure/shell/sidebar-surface"
           ],
           "sites": [
             {
@@ -169827,9 +170166,10 @@
               "line": 195,
               "prop": "gap",
               "families": [
-                "primitive/navigation/menu"
+                "primitive/navigation/menu",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "modern-skin-css",
@@ -169865,7 +170205,8 @@
           "paints": true,
           "paintsInModern": true,
           "families": [
-            "primitive/navigation/menu"
+            "primitive/navigation/menu",
+            "structure/shell/sidebar-surface"
           ],
           "sites": [
             {
@@ -169874,9 +170215,10 @@
               "line": 233,
               "prop": "padding-inline",
               "families": [
-                "primitive/navigation/menu"
+                "primitive/navigation/menu",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "modern-skin-css",
@@ -169884,9 +170226,10 @@
               "line": 514,
               "prop": "padding-inline",
               "families": [
-                "primitive/navigation/menu"
+                "primitive/navigation/menu",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             }
           ]
         },
@@ -169915,7 +170258,8 @@
             "primitive/layout/divider",
             "primitive/layout/layout",
             "primitive/layout/splitter",
-            "structure/shell/app-shell"
+            "structure/shell/app-shell",
+            "structure/shell/sidebar-surface"
           ],
           "sites": [
             {
@@ -169924,9 +170268,10 @@
               "line": 191,
               "prop": "padding",
               "families": [
-                "structure/shell/app-shell"
+                "structure/shell/app-shell",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "classic-css",
@@ -170204,9 +170549,10 @@
               "line": 338,
               "prop": "gap",
               "families": [
-                "structure/shell/app-shell"
+                "structure/shell/app-shell",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "presentation-css",
@@ -173321,6 +173667,7 @@
             "pattern/workflow/approval-inbox",
             "pattern/workflow/shift-matrix",
             "primitive/navigation/menu",
+            "structure/shell/sidebar-surface",
             "surface/workspace/collection-workspace"
           ],
           "sites": [
@@ -173350,9 +173697,10 @@
               "line": 553,
               "prop": "block-size",
               "families": [
-                "primitive/navigation/menu"
+                "primitive/navigation/menu",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "modern-skin-css",
@@ -173789,9 +174137,10 @@
               "line": 207,
               "prop": "padding",
               "families": [
-                "structure/shell/app-shell"
+                "structure/shell/app-shell",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "presentation-css",
@@ -173799,9 +174148,10 @@
               "line": 228,
               "prop": "padding",
               "families": [
-                "structure/shell/app-shell"
+                "structure/shell/app-shell",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "presentation-css",
@@ -173809,9 +174159,10 @@
               "line": 403,
               "prop": "margin",
               "families": [
-                "structure/shell/app-shell"
+                "structure/shell/app-shell",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "presentation-css",
@@ -179487,9 +179838,10 @@
               "line": 19,
               "prop": "inset-block-start",
               "families": [
-                "structure/shell/app-shell"
+                "structure/shell/app-shell",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "presentation-css",
@@ -179497,9 +179849,10 @@
               "line": 20,
               "prop": "inset-inline-start",
               "families": [
-                "structure/shell/app-shell"
+                "structure/shell/app-shell",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "presentation-css",
@@ -179507,9 +179860,10 @@
               "line": 124,
               "prop": "gap",
               "families": [
-                "structure/shell/app-shell"
+                "structure/shell/app-shell",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "presentation-css",
@@ -179517,9 +179871,10 @@
               "line": 127,
               "prop": "padding",
               "families": [
-                "structure/shell/app-shell"
+                "structure/shell/app-shell",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "presentation-css",
@@ -179527,9 +179882,10 @@
               "line": 192,
               "prop": "padding",
               "families": [
-                "structure/shell/app-shell"
+                "structure/shell/app-shell",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "presentation-css",
@@ -179537,9 +179893,10 @@
               "line": 193,
               "prop": "padding",
               "families": [
-                "structure/shell/app-shell"
+                "structure/shell/app-shell",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "presentation-css",
@@ -179547,9 +179904,10 @@
               "line": 207,
               "prop": "padding",
               "families": [
-                "structure/shell/app-shell"
+                "structure/shell/app-shell",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "presentation-css",
@@ -179557,9 +179915,10 @@
               "line": 214,
               "prop": "padding",
               "families": [
-                "structure/shell/app-shell"
+                "structure/shell/app-shell",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "presentation-css",
@@ -179567,9 +179926,10 @@
               "line": 228,
               "prop": "padding",
               "families": [
-                "structure/shell/app-shell"
+                "structure/shell/app-shell",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "presentation-css",
@@ -179577,9 +179937,10 @@
               "line": 319,
               "prop": "margin-inline-end",
               "families": [
-                "structure/shell/app-shell"
+                "structure/shell/app-shell",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "presentation-css",
@@ -183192,9 +183553,10 @@
               "line": 26,
               "prop": "padding",
               "families": [
-                "structure/shell/app-shell"
+                "structure/shell/app-shell",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "presentation-css",
@@ -185766,9 +186128,10 @@
               "line": 127,
               "prop": "padding",
               "families": [
-                "structure/shell/app-shell"
+                "structure/shell/app-shell",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "presentation-css",
@@ -185776,9 +186139,10 @@
               "line": 167,
               "prop": "padding",
               "families": [
-                "structure/shell/app-shell"
+                "structure/shell/app-shell",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "presentation-css",
@@ -186650,9 +187014,10 @@
               "line": 198,
               "prop": "scroll-padding-block-end",
               "families": [
-                "structure/shell/app-shell"
+                "structure/shell/app-shell",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "presentation-css",
@@ -186660,9 +187025,10 @@
               "line": 287,
               "prop": "padding-inline",
               "families": [
-                "structure/shell/app-shell"
+                "structure/shell/app-shell",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "presentation-css",
@@ -202957,19 +203323,26 @@
         {
           "family": "structure/shell/sidebar-surface",
           "manifestFamily": true,
-          "channels": 11,
+          "channels": 16,
           "properties": [
+            "block-size",
+            "font-size",
             "gap",
+            "inline-size",
             "inset-block-start",
+            "inset-inline-start",
+            "margin",
             "margin-block",
             "margin-block-end",
             "margin-block-start",
+            "margin-inline-end",
             "margin-inline-start",
             "padding",
             "padding-block",
             "padding-block-start",
             "padding-inline",
-            "padding-inline-start"
+            "padding-inline-start",
+            "scroll-padding-block-end"
           ],
           "rows": [
             {
@@ -202991,21 +203364,77 @@
               ]
             },
             {
+              "channel": "--ds-density-effective-scale",
+              "props": [
+                "block-size",
+                "font-size",
+                "gap",
+                "inline-size",
+                "inset-inline-start",
+                "padding",
+                "padding-block",
+                "padding-inline",
+                "padding-inline-start"
+              ],
+              "files": [
+                "src/foundation/tokens/css/runtime/engines/modern/skin/menu.css"
+              ]
+            },
+            {
+              "channel": "--ds-sidebar-item-gap",
+              "props": [
+                "gap"
+              ],
+              "files": [
+                "src/foundation/tokens/css/runtime/engines/modern/skin/menu.css"
+              ]
+            },
+            {
+              "channel": "--ds-sidebar-item-padding-inline",
+              "props": [
+                "padding-inline"
+              ],
+              "files": [
+                "src/foundation/tokens/css/runtime/engines/modern/skin/menu.css"
+              ]
+            },
+            {
+              "channel": "--ds-sidebar-shell-padding-inline",
+              "props": [
+                "padding"
+              ],
+              "files": [
+                "src/foundation/tokens/css/presentation/components/skin/app-shell.css"
+              ]
+            },
+            {
               "channel": "--ds-spacing-1",
               "props": [
+                "gap",
                 "margin-block-end",
                 "margin-block-start",
                 "padding-block"
               ],
               "files": [
+                "src/foundation/tokens/css/presentation/components/skin/app-shell.css",
                 "src/foundation/tokens/css/presentation/components/skin/command-center.css",
                 "src/foundation/tokens/css/presentation/components/skin/record-workbench.css"
+              ]
+            },
+            {
+              "channel": "--ds-spacing-11",
+              "props": [
+                "block-size"
+              ],
+              "files": [
+                "src/foundation/tokens/css/runtime/engines/modern/skin/menu.css"
               ]
             },
             {
               "channel": "--ds-spacing-2",
               "props": [
                 "gap",
+                "margin",
                 "margin-block",
                 "margin-block-end",
                 "margin-block-start",
@@ -203015,6 +203444,7 @@
                 "padding-inline"
               ],
               "files": [
+                "src/foundation/tokens/css/presentation/components/skin/app-shell.css",
                 "src/foundation/tokens/css/presentation/components/skin/command-center.css",
                 "src/foundation/tokens/css/presentation/components/skin/file-browser.css",
                 "src/foundation/tokens/css/presentation/components/skin/import-export.css",
@@ -203026,12 +203456,16 @@
               "channel": "--ds-spacing-3",
               "props": [
                 "gap",
+                "inset-block-start",
+                "inset-inline-start",
                 "margin-block-end",
                 "margin-block-start",
+                "margin-inline-end",
                 "padding",
                 "padding-inline"
               ],
               "files": [
+                "src/foundation/tokens/css/presentation/components/skin/app-shell.css",
                 "src/foundation/tokens/css/presentation/components/skin/command-center.css",
                 "src/foundation/tokens/css/presentation/components/skin/file-browser.css",
                 "src/foundation/tokens/css/presentation/components/skin/record-workbench.css"
@@ -203046,6 +203480,7 @@
                 "padding"
               ],
               "files": [
+                "src/foundation/tokens/css/presentation/components/skin/app-shell.css",
                 "src/foundation/tokens/css/presentation/components/skin/detail-form-surface.css",
                 "src/foundation/tokens/css/presentation/components/skin/file-browser.css",
                 "src/foundation/tokens/css/presentation/components/skin/pricing-surface.css",
@@ -203061,6 +203496,7 @@
                 "padding-inline-start"
               ],
               "files": [
+                "src/foundation/tokens/css/presentation/components/skin/app-shell.css",
                 "src/foundation/tokens/css/presentation/components/skin/record-workbench.css",
                 "src/foundation/tokens/css/presentation/components/skin/surface-section-card.css"
               ]
@@ -203068,9 +203504,12 @@
             {
               "channel": "--ds-spacing-6",
               "props": [
-                "gap"
+                "gap",
+                "padding-inline",
+                "scroll-padding-block-end"
               ],
               "files": [
+                "src/foundation/tokens/css/presentation/components/skin/app-shell.css",
                 "src/foundation/tokens/css/presentation/components/skin/layout-sidebar.css"
               ]
             },
@@ -209457,8 +209896,8 @@
         "foreignCustomPropertyCuts": 2,
         "discardedLookupKeys": 27,
         "resolvedBy": {
-          "binding": 538,
-          "binding-multi": 39,
+          "binding": 501,
+          "binding-multi": 76,
           "class+binding": 1286,
           "class": 155,
           "source-owner": 70,
@@ -213870,6 +214309,7 @@
             "structure/record/edit-fields",
             "structure/record/form-sections",
             "structure/record/record-panel",
+            "structure/shell/sidebar-surface",
             "structure/workspace/column-menu",
             "structure/workspace/field-filters-panel",
             "structure/workspace/search-command-bar",
@@ -215152,9 +215592,10 @@
               "line": 113,
               "prop": "gap",
               "families": [
-                "primitive/navigation/menu"
+                "primitive/navigation/menu",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "modern-skin-css",
@@ -215162,9 +215603,10 @@
               "line": 115,
               "prop": "padding",
               "families": [
-                "primitive/navigation/menu"
+                "primitive/navigation/menu",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "modern-skin-css",
@@ -215172,9 +215614,10 @@
               "line": 116,
               "prop": "padding",
               "families": [
-                "primitive/navigation/menu"
+                "primitive/navigation/menu",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "modern-skin-css",
@@ -215182,9 +215625,10 @@
               "line": 232,
               "prop": "block-size",
               "families": [
-                "primitive/navigation/menu"
+                "primitive/navigation/menu",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "modern-skin-css",
@@ -215192,9 +215636,10 @@
               "line": 233,
               "prop": "padding-inline",
               "families": [
-                "primitive/navigation/menu"
+                "primitive/navigation/menu",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "modern-skin-css",
@@ -215202,9 +215647,10 @@
               "line": 240,
               "prop": "block-size",
               "families": [
-                "primitive/navigation/menu"
+                "primitive/navigation/menu",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "modern-skin-css",
@@ -215212,9 +215658,10 @@
               "line": 243,
               "prop": "padding-inline-start",
               "families": [
-                "primitive/navigation/menu"
+                "primitive/navigation/menu",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "modern-skin-css",
@@ -215222,9 +215669,10 @@
               "line": 395,
               "prop": "inline-size",
               "families": [
-                "primitive/navigation/menu"
+                "primitive/navigation/menu",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "modern-skin-css",
@@ -215232,9 +215680,10 @@
               "line": 396,
               "prop": "block-size",
               "families": [
-                "primitive/navigation/menu"
+                "primitive/navigation/menu",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "modern-skin-css",
@@ -215242,9 +215691,10 @@
               "line": 401,
               "prop": "font-size",
               "families": [
-                "primitive/navigation/menu"
+                "primitive/navigation/menu",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "modern-skin-css",
@@ -215252,9 +215702,10 @@
               "line": 504,
               "prop": "inset-inline-start",
               "families": [
-                "primitive/navigation/menu"
+                "primitive/navigation/menu",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "modern-skin-css",
@@ -215262,9 +215713,10 @@
               "line": 513,
               "prop": "padding-block",
               "families": [
-                "primitive/navigation/menu"
+                "primitive/navigation/menu",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "modern-skin-css",
@@ -215272,9 +215724,10 @@
               "line": 514,
               "prop": "padding-inline",
               "families": [
-                "primitive/navigation/menu"
+                "primitive/navigation/menu",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "modern-skin-css",
@@ -218223,7 +218676,8 @@
             "primitive/display/qr-code",
             "primitive/display/tree",
             "primitive/layout/collapse",
-            "primitive/navigation/menu"
+            "primitive/navigation/menu",
+            "structure/shell/sidebar-surface"
           ],
           "sites": [
             {
@@ -218232,9 +218686,10 @@
               "line": 195,
               "prop": "gap",
               "families": [
-                "primitive/navigation/menu"
+                "primitive/navigation/menu",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "modern-skin-css",
@@ -218270,7 +218725,8 @@
           "paints": true,
           "paintsInModern": true,
           "families": [
-            "primitive/navigation/menu"
+            "primitive/navigation/menu",
+            "structure/shell/sidebar-surface"
           ],
           "sites": [
             {
@@ -218279,9 +218735,10 @@
               "line": 233,
               "prop": "padding-inline",
               "families": [
-                "primitive/navigation/menu"
+                "primitive/navigation/menu",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "modern-skin-css",
@@ -218289,9 +218746,10 @@
               "line": 514,
               "prop": "padding-inline",
               "families": [
-                "primitive/navigation/menu"
+                "primitive/navigation/menu",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             }
           ]
         },
@@ -218320,7 +218778,8 @@
             "primitive/layout/divider",
             "primitive/layout/layout",
             "primitive/layout/splitter",
-            "structure/shell/app-shell"
+            "structure/shell/app-shell",
+            "structure/shell/sidebar-surface"
           ],
           "sites": [
             {
@@ -218329,9 +218788,10 @@
               "line": 191,
               "prop": "padding",
               "families": [
-                "structure/shell/app-shell"
+                "structure/shell/app-shell",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "classic-css",
@@ -218609,9 +219069,10 @@
               "line": 338,
               "prop": "gap",
               "families": [
-                "structure/shell/app-shell"
+                "structure/shell/app-shell",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "presentation-css",
@@ -221726,6 +222187,7 @@
             "pattern/workflow/approval-inbox",
             "pattern/workflow/shift-matrix",
             "primitive/navigation/menu",
+            "structure/shell/sidebar-surface",
             "surface/workspace/collection-workspace"
           ],
           "sites": [
@@ -221755,9 +222217,10 @@
               "line": 553,
               "prop": "block-size",
               "families": [
-                "primitive/navigation/menu"
+                "primitive/navigation/menu",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "modern-skin-css",
@@ -222194,9 +222657,10 @@
               "line": 207,
               "prop": "padding",
               "families": [
-                "structure/shell/app-shell"
+                "structure/shell/app-shell",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "presentation-css",
@@ -222204,9 +222668,10 @@
               "line": 228,
               "prop": "padding",
               "families": [
-                "structure/shell/app-shell"
+                "structure/shell/app-shell",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "presentation-css",
@@ -222214,9 +222679,10 @@
               "line": 403,
               "prop": "margin",
               "families": [
-                "structure/shell/app-shell"
+                "structure/shell/app-shell",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "presentation-css",
@@ -227892,9 +228358,10 @@
               "line": 19,
               "prop": "inset-block-start",
               "families": [
-                "structure/shell/app-shell"
+                "structure/shell/app-shell",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "presentation-css",
@@ -227902,9 +228369,10 @@
               "line": 20,
               "prop": "inset-inline-start",
               "families": [
-                "structure/shell/app-shell"
+                "structure/shell/app-shell",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "presentation-css",
@@ -227912,9 +228380,10 @@
               "line": 124,
               "prop": "gap",
               "families": [
-                "structure/shell/app-shell"
+                "structure/shell/app-shell",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "presentation-css",
@@ -227922,9 +228391,10 @@
               "line": 127,
               "prop": "padding",
               "families": [
-                "structure/shell/app-shell"
+                "structure/shell/app-shell",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "presentation-css",
@@ -227932,9 +228402,10 @@
               "line": 192,
               "prop": "padding",
               "families": [
-                "structure/shell/app-shell"
+                "structure/shell/app-shell",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "presentation-css",
@@ -227942,9 +228413,10 @@
               "line": 193,
               "prop": "padding",
               "families": [
-                "structure/shell/app-shell"
+                "structure/shell/app-shell",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "presentation-css",
@@ -227952,9 +228424,10 @@
               "line": 207,
               "prop": "padding",
               "families": [
-                "structure/shell/app-shell"
+                "structure/shell/app-shell",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "presentation-css",
@@ -227962,9 +228435,10 @@
               "line": 214,
               "prop": "padding",
               "families": [
-                "structure/shell/app-shell"
+                "structure/shell/app-shell",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "presentation-css",
@@ -227972,9 +228446,10 @@
               "line": 228,
               "prop": "padding",
               "families": [
-                "structure/shell/app-shell"
+                "structure/shell/app-shell",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "presentation-css",
@@ -227982,9 +228457,10 @@
               "line": 319,
               "prop": "margin-inline-end",
               "families": [
-                "structure/shell/app-shell"
+                "structure/shell/app-shell",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "presentation-css",
@@ -231597,9 +232073,10 @@
               "line": 26,
               "prop": "padding",
               "families": [
-                "structure/shell/app-shell"
+                "structure/shell/app-shell",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "presentation-css",
@@ -234171,9 +234648,10 @@
               "line": 127,
               "prop": "padding",
               "families": [
-                "structure/shell/app-shell"
+                "structure/shell/app-shell",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "presentation-css",
@@ -234181,9 +234659,10 @@
               "line": 167,
               "prop": "padding",
               "families": [
-                "structure/shell/app-shell"
+                "structure/shell/app-shell",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "presentation-css",
@@ -235055,9 +235534,10 @@
               "line": 198,
               "prop": "scroll-padding-block-end",
               "families": [
-                "structure/shell/app-shell"
+                "structure/shell/app-shell",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "presentation-css",
@@ -235065,9 +235545,10 @@
               "line": 287,
               "prop": "padding-inline",
               "families": [
-                "structure/shell/app-shell"
+                "structure/shell/app-shell",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "presentation-css",
@@ -251362,19 +251843,26 @@
         {
           "family": "structure/shell/sidebar-surface",
           "manifestFamily": true,
-          "channels": 11,
+          "channels": 16,
           "properties": [
+            "block-size",
+            "font-size",
             "gap",
+            "inline-size",
             "inset-block-start",
+            "inset-inline-start",
+            "margin",
             "margin-block",
             "margin-block-end",
             "margin-block-start",
+            "margin-inline-end",
             "margin-inline-start",
             "padding",
             "padding-block",
             "padding-block-start",
             "padding-inline",
-            "padding-inline-start"
+            "padding-inline-start",
+            "scroll-padding-block-end"
           ],
           "rows": [
             {
@@ -251396,21 +251884,77 @@
               ]
             },
             {
+              "channel": "--ds-density-effective-scale",
+              "props": [
+                "block-size",
+                "font-size",
+                "gap",
+                "inline-size",
+                "inset-inline-start",
+                "padding",
+                "padding-block",
+                "padding-inline",
+                "padding-inline-start"
+              ],
+              "files": [
+                "src/foundation/tokens/css/runtime/engines/modern/skin/menu.css"
+              ]
+            },
+            {
+              "channel": "--ds-sidebar-item-gap",
+              "props": [
+                "gap"
+              ],
+              "files": [
+                "src/foundation/tokens/css/runtime/engines/modern/skin/menu.css"
+              ]
+            },
+            {
+              "channel": "--ds-sidebar-item-padding-inline",
+              "props": [
+                "padding-inline"
+              ],
+              "files": [
+                "src/foundation/tokens/css/runtime/engines/modern/skin/menu.css"
+              ]
+            },
+            {
+              "channel": "--ds-sidebar-shell-padding-inline",
+              "props": [
+                "padding"
+              ],
+              "files": [
+                "src/foundation/tokens/css/presentation/components/skin/app-shell.css"
+              ]
+            },
+            {
               "channel": "--ds-spacing-1",
               "props": [
+                "gap",
                 "margin-block-end",
                 "margin-block-start",
                 "padding-block"
               ],
               "files": [
+                "src/foundation/tokens/css/presentation/components/skin/app-shell.css",
                 "src/foundation/tokens/css/presentation/components/skin/command-center.css",
                 "src/foundation/tokens/css/presentation/components/skin/record-workbench.css"
+              ]
+            },
+            {
+              "channel": "--ds-spacing-11",
+              "props": [
+                "block-size"
+              ],
+              "files": [
+                "src/foundation/tokens/css/runtime/engines/modern/skin/menu.css"
               ]
             },
             {
               "channel": "--ds-spacing-2",
               "props": [
                 "gap",
+                "margin",
                 "margin-block",
                 "margin-block-end",
                 "margin-block-start",
@@ -251420,6 +251964,7 @@
                 "padding-inline"
               ],
               "files": [
+                "src/foundation/tokens/css/presentation/components/skin/app-shell.css",
                 "src/foundation/tokens/css/presentation/components/skin/command-center.css",
                 "src/foundation/tokens/css/presentation/components/skin/file-browser.css",
                 "src/foundation/tokens/css/presentation/components/skin/import-export.css",
@@ -251431,12 +251976,16 @@
               "channel": "--ds-spacing-3",
               "props": [
                 "gap",
+                "inset-block-start",
+                "inset-inline-start",
                 "margin-block-end",
                 "margin-block-start",
+                "margin-inline-end",
                 "padding",
                 "padding-inline"
               ],
               "files": [
+                "src/foundation/tokens/css/presentation/components/skin/app-shell.css",
                 "src/foundation/tokens/css/presentation/components/skin/command-center.css",
                 "src/foundation/tokens/css/presentation/components/skin/file-browser.css",
                 "src/foundation/tokens/css/presentation/components/skin/record-workbench.css"
@@ -251451,6 +252000,7 @@
                 "padding"
               ],
               "files": [
+                "src/foundation/tokens/css/presentation/components/skin/app-shell.css",
                 "src/foundation/tokens/css/presentation/components/skin/detail-form-surface.css",
                 "src/foundation/tokens/css/presentation/components/skin/file-browser.css",
                 "src/foundation/tokens/css/presentation/components/skin/pricing-surface.css",
@@ -251466,6 +252016,7 @@
                 "padding-inline-start"
               ],
               "files": [
+                "src/foundation/tokens/css/presentation/components/skin/app-shell.css",
                 "src/foundation/tokens/css/presentation/components/skin/record-workbench.css",
                 "src/foundation/tokens/css/presentation/components/skin/surface-section-card.css"
               ]
@@ -251473,9 +252024,12 @@
             {
               "channel": "--ds-spacing-6",
               "props": [
-                "gap"
+                "gap",
+                "padding-inline",
+                "scroll-padding-block-end"
               ],
               "files": [
+                "src/foundation/tokens/css/presentation/components/skin/app-shell.css",
                 "src/foundation/tokens/css/presentation/components/skin/layout-sidebar.css"
               ]
             },
@@ -258262,6 +258816,7 @@
               "line": 673,
               "prop": "box-shadow",
               "families": [
+                "primitive/feedback/alert",
                 "primitive/layout/flex",
                 "primitive/layout/grid",
                 "primitive/layout/space",
@@ -260241,6 +260796,7 @@
                 "box-shadow"
               ],
               "files": [
+                "src/foundation/tokens/css/foundation/animations/transitions.css",
                 "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css"
               ]
             },
@@ -261600,8 +262156,8 @@
         "foreignCustomPropertyCuts": 4,
         "discardedLookupKeys": 0,
         "resolvedBy": {
-          "binding": 49,
-          "binding-multi": 15,
+          "binding": 46,
+          "binding-multi": 18,
           "class+binding": 97,
           "class": 11,
           "source-owner": 1,
@@ -263883,6 +264439,7 @@
             "primitive/feedback/alert",
             "primitive/inputs/date-picker",
             "primitive/navigation/menu",
+            "structure/shell/sidebar-surface",
             "unattributed/src/foundation/tokens/css/runtime/engines/rustic/skin/confirm-dialog.css",
             "unattributed/src/ui/surfaces/foundation/common/story-helpers/index.tsx"
           ],
@@ -263953,9 +264510,10 @@
               "line": 345,
               "prop": "box-shadow",
               "families": [
-                "primitive/navigation/menu"
+                "primitive/navigation/menu",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "rustic-css",
@@ -264125,6 +264683,7 @@
             "primitive/navigation/segmented",
             "primitive/navigation/stepper",
             "primitive/navigation/steps",
+            "structure/shell/sidebar-surface",
             "unattributed/src/foundation/tokens/css/presentation/components/patterns-paint.css"
           ],
           "sites": [
@@ -264195,9 +264754,10 @@
               "line": 122,
               "prop": "box-shadow",
               "families": [
-                "primitive/navigation/menu"
+                "primitive/navigation/menu",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "modern-skin-css",
@@ -264205,9 +264765,10 @@
               "line": 303,
               "prop": "box-shadow",
               "families": [
-                "primitive/navigation/menu"
+                "primitive/navigation/menu",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "modern-skin-css",
@@ -266983,7 +267544,7 @@
         {
           "family": "structure/shell/sidebar-surface",
           "manifestFamily": true,
-          "channels": 2,
+          "channels": 4,
           "properties": [
             "box-shadow"
           ],
@@ -267004,6 +267565,24 @@
               ],
               "files": [
                 "src/foundation/tokens/css/presentation/components/skin/surface-section-card.css"
+              ]
+            },
+            {
+              "channel": "--ds-shadow-sm",
+              "props": [
+                "box-shadow"
+              ],
+              "files": [
+                "src/foundation/tokens/css/runtime/engines/modern/skin/menu.css"
+              ]
+            },
+            {
+              "channel": "--ds-shadow-xs",
+              "props": [
+                "box-shadow"
+              ],
+              "files": [
+                "src/foundation/tokens/css/runtime/engines/modern/skin/menu.css"
               ]
             }
           ]
@@ -268032,8 +268611,8 @@
         "foreignCustomPropertyCuts": 0,
         "discardedLookupKeys": 0,
         "resolvedBy": {
-          "binding": 42,
-          "binding-multi": 8,
+          "binding": 41,
+          "binding-multi": 9,
           "class+binding": 73,
           "class": 10,
           "source-owner": 41,
@@ -268914,9 +269493,10 @@
               "line": 119,
               "prop": "font-family",
               "families": [
-                "primitive/navigation/menu"
+                "primitive/navigation/menu",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "modern-skin-css",
@@ -272773,7 +273353,8 @@
                 "font-family"
               ],
               "files": [
-                "src/foundation/tokens/css/presentation/components/skin/surface-section-card.css"
+                "src/foundation/tokens/css/presentation/components/skin/surface-section-card.css",
+                "src/foundation/tokens/css/runtime/engines/modern/skin/menu.css"
               ]
             }
           ]
@@ -275956,7 +276537,7 @@
         "channelsPaintingDs": 22,
         "channelsUnreached": 3,
         "channelsUnreachedDs": 3,
-        "manifestFamilies": 97,
+        "manifestFamilies": 98,
         "manifestDenominator": 255,
         "unattributedFiles": 1,
         "unattributedSites": 2,
@@ -275964,8 +276545,8 @@
         "foreignCustomPropertyCuts": 0,
         "discardedLookupKeys": 0,
         "resolvedBy": {
-          "binding": 74,
-          "binding-multi": 49,
+          "binding": 58,
+          "binding-multi": 65,
           "class+binding": 151,
           "class": 7,
           "source-owner": 3,
@@ -276909,6 +277490,7 @@
             "structure/record/edit-fields",
             "structure/record/form-sections",
             "structure/record/record-panel",
+            "structure/shell/sidebar-surface",
             "structure/workspace/column-menu",
             "structure/workspace/field-filters-panel",
             "structure/workspace/search-command-bar",
@@ -276984,9 +277566,10 @@
               "line": 447,
               "prop": "transition",
               "families": [
-                "primitive/navigation/menu"
+                "primitive/navigation/menu",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "modern-skin-css",
@@ -276994,9 +277577,10 @@
               "line": 484,
               "prop": "animation",
               "families": [
-                "primitive/navigation/menu"
+                "primitive/navigation/menu",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             }
           ]
         },
@@ -277483,9 +278067,10 @@
               "line": 472,
               "prop": "transition",
               "families": [
-                "structure/shell/app-shell"
+                "structure/shell/app-shell",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "presentation-css",
@@ -277493,9 +278078,10 @@
               "line": 473,
               "prop": "transition",
               "families": [
-                "structure/shell/app-shell"
+                "structure/shell/app-shell",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "presentation-css",
@@ -277503,9 +278089,10 @@
               "line": 479,
               "prop": "transition",
               "families": [
-                "structure/shell/app-shell"
+                "structure/shell/app-shell",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "presentation-css",
@@ -277513,9 +278100,10 @@
               "line": 480,
               "prop": "transition",
               "families": [
-                "structure/shell/app-shell"
+                "structure/shell/app-shell",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "presentation-css",
@@ -278387,9 +278975,10 @@
               "line": 209,
               "prop": "transition",
               "families": [
-                "primitive/navigation/menu"
+                "primitive/navigation/menu",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "modern-skin-css",
@@ -278397,9 +278986,10 @@
               "line": 210,
               "prop": "transition",
               "families": [
-                "primitive/navigation/menu"
+                "primitive/navigation/menu",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "modern-skin-css",
@@ -278407,9 +278997,10 @@
               "line": 211,
               "prop": "transition",
               "families": [
-                "primitive/navigation/menu"
+                "primitive/navigation/menu",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "modern-skin-css",
@@ -278417,9 +279008,10 @@
               "line": 212,
               "prop": "transition",
               "families": [
-                "primitive/navigation/menu"
+                "primitive/navigation/menu",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "modern-skin-css",
@@ -278427,9 +279019,10 @@
               "line": 213,
               "prop": "transition",
               "families": [
-                "primitive/navigation/menu"
+                "primitive/navigation/menu",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "modern-skin-css",
@@ -278437,9 +279030,10 @@
               "line": 405,
               "prop": "transition",
               "families": [
-                "primitive/navigation/menu"
+                "primitive/navigation/menu",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "modern-skin-css",
@@ -278447,9 +279041,10 @@
               "line": 406,
               "prop": "transition",
               "families": [
-                "primitive/navigation/menu"
+                "primitive/navigation/menu",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "modern-skin-css",
@@ -278853,6 +279448,7 @@
             "structure/record/form-sections",
             "structure/record/record-panel",
             "structure/shell/bottom-tab-bar",
+            "structure/shell/sidebar-surface",
             "structure/workspace/column-menu",
             "structure/workspace/field-filters-panel",
             "structure/workspace/search-command-bar",
@@ -279098,9 +279694,10 @@
               "line": 124,
               "prop": "transition",
               "families": [
-                "primitive/navigation/menu"
+                "primitive/navigation/menu",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "modern-skin-css",
@@ -279108,9 +279705,10 @@
               "line": 125,
               "prop": "transition",
               "families": [
-                "primitive/navigation/menu"
+                "primitive/navigation/menu",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "modern-skin-css",
@@ -279118,9 +279716,10 @@
               "line": 126,
               "prop": "transition",
               "families": [
-                "primitive/navigation/menu"
+                "primitive/navigation/menu",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "modern-skin-css",
@@ -279182,6 +279781,7 @@
           "paints": true,
           "paintsInModern": true,
           "families": [
+            "primitive/feedback/alert",
             "primitive/layout/flex",
             "primitive/layout/grid",
             "primitive/layout/space",
@@ -279194,6 +279794,7 @@
               "line": 442,
               "prop": "animation",
               "families": [
+                "primitive/feedback/alert",
                 "primitive/layout/flex",
                 "primitive/layout/grid",
                 "primitive/layout/space",
@@ -279207,6 +279808,7 @@
               "line": 448,
               "prop": "animation",
               "families": [
+                "primitive/feedback/alert",
                 "primitive/layout/flex",
                 "primitive/layout/grid",
                 "primitive/layout/space",
@@ -280570,6 +281172,25 @@
           ]
         },
         {
+          "family": "primitive/feedback/alert",
+          "manifestFamily": true,
+          "channels": 1,
+          "properties": [
+            "animation"
+          ],
+          "rows": [
+            {
+              "channel": "--ds-page-transition-duration",
+              "props": [
+                "animation"
+              ],
+              "files": [
+                "src/foundation/tokens/css/foundation/animations/transitions.css"
+              ]
+            }
+          ]
+        },
+        {
           "family": "primitive/feedback/message",
           "manifestFamily": true,
           "channels": 1,
@@ -281421,7 +282042,7 @@
         {
           "family": "structure/shell/sidebar-surface",
           "manifestFamily": true,
-          "channels": 2,
+          "channels": 4,
           "properties": [
             "animation",
             "transition"
@@ -281438,12 +282059,33 @@
               ]
             },
             {
+              "channel": "--ds-motion-disclosure",
+              "props": [
+                "animation",
+                "transition"
+              ],
+              "files": [
+                "src/foundation/tokens/css/runtime/engines/modern/skin/menu.css"
+              ]
+            },
+            {
               "channel": "--ds-motion-feedback",
               "props": [
                 "transition"
               ],
               "files": [
-                "src/foundation/tokens/css/presentation/components/skin/scheduler-surface.css"
+                "src/foundation/tokens/css/presentation/components/skin/app-shell.css",
+                "src/foundation/tokens/css/presentation/components/skin/scheduler-surface.css",
+                "src/foundation/tokens/css/runtime/engines/modern/skin/menu.css"
+              ]
+            },
+            {
+              "channel": "--ds-motion-reveal",
+              "props": [
+                "transition"
+              ],
+              "files": [
+                "src/foundation/tokens/css/runtime/engines/modern/skin/menu.css"
               ]
             }
           ]
@@ -282778,8 +283420,8 @@
         "foreignCustomPropertyCuts": 3,
         "discardedLookupKeys": 16,
         "resolvedBy": {
-          "binding": 221,
-          "binding-multi": 74,
+          "binding": 211,
+          "binding-multi": 84,
           "class+binding": 564,
           "class": 83,
           "source-owner": 5,
@@ -285503,7 +286145,8 @@
           "paints": true,
           "paintsInModern": true,
           "families": [
-            "primitive/navigation/menu"
+            "primitive/navigation/menu",
+            "structure/shell/sidebar-surface"
           ],
           "sites": [
             {
@@ -285512,9 +286155,10 @@
               "line": 197,
               "prop": "border-radius",
               "families": [
-                "primitive/navigation/menu"
+                "primitive/navigation/menu",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             }
           ]
         },
@@ -286583,9 +287227,10 @@
               "line": 401,
               "prop": "border-radius",
               "families": [
-                "structure/shell/app-shell"
+                "structure/shell/app-shell",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "presentation-css",
@@ -288098,9 +288743,10 @@
               "line": 197,
               "prop": "border-radius",
               "families": [
-                "primitive/navigation/menu"
+                "primitive/navigation/menu",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "modern-skin-css",
@@ -288108,9 +288754,10 @@
               "line": 480,
               "prop": "border-radius",
               "families": [
-                "primitive/navigation/menu"
+                "primitive/navigation/menu",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "modern-skin-css",
@@ -289437,9 +290084,10 @@
               "line": 27,
               "prop": "border-radius",
               "families": [
-                "structure/shell/app-shell"
+                "structure/shell/app-shell",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "presentation-css",
@@ -289447,9 +290095,10 @@
               "line": 469,
               "prop": "border-radius",
               "families": [
-                "structure/shell/app-shell"
+                "structure/shell/app-shell",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "presentation-css",
@@ -289457,9 +290106,10 @@
               "line": 477,
               "prop": "border-radius",
               "families": [
-                "structure/shell/app-shell"
+                "structure/shell/app-shell",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "presentation-css",
@@ -291284,9 +291934,10 @@
               "line": 399,
               "prop": "border-radius",
               "families": [
-                "primitive/navigation/menu"
+                "primitive/navigation/menu",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "modern-skin-css",
@@ -293098,6 +293749,7 @@
             "structure/record/edit-fields",
             "structure/record/form-sections",
             "structure/record/record-panel",
+            "structure/shell/sidebar-surface",
             "surface/forms/guided-draft-form",
             "surface/workspace/collection-workspace",
             "unattributed/src/foundation/tokens/css/presentation/components/patterns-paint.css",
@@ -294170,9 +294822,10 @@
               "line": 515,
               "prop": "border-radius",
               "families": [
-                "primitive/navigation/menu"
+                "primitive/navigation/menu",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "modern-skin-css",
@@ -295728,9 +296381,10 @@
               "line": 121,
               "prop": "border-radius",
               "families": [
-                "primitive/navigation/menu"
+                "primitive/navigation/menu",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "modern-skin-css",
@@ -305510,7 +306164,7 @@
         {
           "family": "structure/shell/sidebar-surface",
           "manifestFamily": true,
-          "channels": 6,
+          "channels": 8,
           "properties": [
             "border-radius"
           ],
@@ -305534,15 +306188,26 @@
               ]
             },
             {
+              "channel": "--ds-menu-item-radius",
+              "props": [
+                "border-radius"
+              ],
+              "files": [
+                "src/foundation/tokens/css/runtime/engines/modern/skin/menu.css"
+              ]
+            },
+            {
               "channel": "--ds-radius-lg",
               "props": [
                 "border-radius"
               ],
               "files": [
+                "src/foundation/tokens/css/presentation/components/skin/app-shell.css",
                 "src/foundation/tokens/css/presentation/components/skin/collection-shell.css",
                 "src/foundation/tokens/css/presentation/components/skin/file-browser.css",
                 "src/foundation/tokens/css/presentation/components/skin/pricing-surface.css",
-                "src/foundation/tokens/css/presentation/components/skin/surface-section-card.css"
+                "src/foundation/tokens/css/presentation/components/skin/surface-section-card.css",
+                "src/foundation/tokens/css/runtime/engines/modern/skin/menu.css"
               ]
             },
             {
@@ -305551,10 +306216,21 @@
                 "border-radius"
               ],
               "files": [
+                "src/foundation/tokens/css/presentation/components/skin/app-shell.css",
                 "src/foundation/tokens/css/presentation/components/skin/command-center.css",
                 "src/foundation/tokens/css/presentation/components/skin/file-browser.css",
                 "src/foundation/tokens/css/presentation/components/skin/pricing-surface.css",
-                "src/foundation/tokens/css/presentation/components/skin/scheduler-surface.css"
+                "src/foundation/tokens/css/presentation/components/skin/scheduler-surface.css",
+                "src/foundation/tokens/css/runtime/engines/modern/skin/menu.css"
+              ]
+            },
+            {
+              "channel": "--ds-radius-sm",
+              "props": [
+                "border-radius"
+              ],
+              "files": [
+                "src/foundation/tokens/css/runtime/engines/modern/skin/menu.css"
               ]
             },
             {
@@ -305563,7 +306239,8 @@
                 "border-radius"
               ],
               "files": [
-                "src/foundation/tokens/css/presentation/components/skin/collection-shell.css"
+                "src/foundation/tokens/css/presentation/components/skin/collection-shell.css",
+                "src/foundation/tokens/css/runtime/engines/modern/skin/menu.css"
               ]
             },
             {
@@ -316940,7 +317617,7 @@
         "channelsPaintingDs": 1,
         "channelsUnreached": 0,
         "channelsUnreachedDs": 0,
-        "manifestFamilies": 1,
+        "manifestFamilies": 2,
         "manifestDenominator": 255,
         "unattributedFiles": 0,
         "unattributedSites": 0,
@@ -316948,7 +317625,7 @@
         "foreignCustomPropertyCuts": 0,
         "discardedLookupKeys": 0,
         "resolvedBy": {
-          "binding": 3
+          "binding-multi": 3
         }
       },
       "channels": [
@@ -316960,7 +317637,8 @@
           "paints": true,
           "paintsInModern": true,
           "families": [
-            "structure/shell/app-shell"
+            "structure/shell/app-shell",
+            "structure/shell/sidebar-surface"
           ],
           "sites": [
             {
@@ -316969,9 +317647,10 @@
               "line": 70,
               "prop": "background",
               "families": [
-                "structure/shell/app-shell"
+                "structure/shell/app-shell",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "presentation-css",
@@ -316979,9 +317658,10 @@
               "line": 95,
               "prop": "background",
               "families": [
-                "structure/shell/app-shell"
+                "structure/shell/app-shell",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "presentation-css",
@@ -316989,9 +317669,10 @@
               "line": 217,
               "prop": "background",
               "families": [
-                "structure/shell/app-shell"
+                "structure/shell/app-shell",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             }
           ]
         }
@@ -316999,6 +317680,25 @@
       "families": [
         {
           "family": "structure/shell/app-shell",
+          "manifestFamily": true,
+          "channels": 1,
+          "properties": [
+            "background"
+          ],
+          "rows": [
+            {
+              "channel": "--ds-sidebar-bg",
+              "props": [
+                "background"
+              ],
+              "files": [
+                "src/foundation/tokens/css/presentation/components/skin/app-shell.css"
+              ]
+            }
+          ]
+        },
+        {
+          "family": "structure/shell/sidebar-surface",
           "manifestFamily": true,
           "channels": 1,
           "properties": [
@@ -318425,8 +319125,8 @@
         "foreignCustomPropertyCuts": 0,
         "discardedLookupKeys": 19,
         "resolvedBy": {
-          "binding": 139,
-          "binding-multi": 27,
+          "binding": 136,
+          "binding-multi": 30,
           "class+binding": 518,
           "class": 54,
           "source-owner": 213,
@@ -331542,7 +332242,8 @@
           "families": [
             "pattern/data/saved-views",
             "primitive/navigation/menu",
-            "structure/headers/collection-header"
+            "structure/headers/collection-header",
+            "structure/shell/sidebar-surface"
           ],
           "sites": [
             {
@@ -331591,9 +332292,10 @@
               "line": 234,
               "prop": "font-size",
               "families": [
-                "primitive/navigation/menu"
+                "primitive/navigation/menu",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "modern-skin-css",
@@ -331601,9 +332303,10 @@
               "line": 246,
               "prop": "font-size",
               "families": [
-                "primitive/navigation/menu"
+                "primitive/navigation/menu",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "modern-skin-css",
@@ -331611,9 +332314,10 @@
               "line": 518,
               "prop": "font-size",
               "families": [
-                "primitive/navigation/menu"
+                "primitive/navigation/menu",
+                "structure/shell/sidebar-surface"
               ],
-              "resolvedBy": "binding"
+              "resolvedBy": "binding-multi"
             },
             {
               "plane": "modern-skin-css",
@@ -340324,7 +341028,7 @@
         {
           "family": "structure/shell/sidebar-surface",
           "manifestFamily": true,
-          "channels": 4,
+          "channels": 5,
           "properties": [
             "font-size"
           ],
@@ -340364,6 +341068,15 @@
               "files": [
                 "src/foundation/tokens/css/presentation/components/skin/record-workbench.css",
                 "src/foundation/tokens/css/presentation/components/skin/surface-section-card.css"
+              ]
+            },
+            {
+              "channel": "--ds-type-scale",
+              "props": [
+                "font-size"
+              ],
+              "files": [
+                "src/foundation/tokens/css/runtime/engines/modern/skin/menu.css"
               ]
             }
           ]

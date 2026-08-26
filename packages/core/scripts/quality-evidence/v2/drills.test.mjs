@@ -46,7 +46,7 @@ import {
   toPersistedInventoryRow,
 } from './inventory-correspondence.mjs';
 import { evaluateFamilyEligibility } from './eligibility.mjs';
-import { computeSourceDigest, validateReceipt } from './receipts.mjs';
+import { computeSourceDigest, sightedApprovers, validateReceipt } from './receipts.mjs';
 import { validateRoundEvidence } from './round-evidence.mjs';
 
 const contracts = loadProgramContracts();
@@ -152,7 +152,7 @@ test('a family with a resolved profile clears its threshold and reports the sigh
   assert.deepEqual(verdict.blockers, []);
   assert.equal(verdict.binaryEligible, true);
   assert.equal(verdict.craftScore, 100);
-  assert.equal(verdict.sightedAuthority, 'Codex (DT)');
+  assert.equal(verdict.sightedAuthority, contracts.rubric.eligibility.finalSightedAuthority);
   assert.equal(verdict.maximumClaim, 'IMPLEMENTED_PENDING_CODEX_AUDIT');
 });
 
@@ -1141,8 +1141,10 @@ test('NEGATIVE DRILL: a receipt whose artifact hash is stale is rejected', () =>
 });
 
 test('NEGATIVE DRILL: the sighted approver may not be the evidence producer', () => {
-  const result = validateReceipt({ producer: 'Codex (DT)', sourceFiles: [] });
-  assert.ok(result.failures.some((failure) => failure.includes('producer must not be the sighted approver')));
+  for (const approver of sightedApprovers(contracts)) {
+    const result = validateReceipt({ producer: approver, sourceFiles: [] });
+    assert.ok(result.failures.some((failure) => failure.includes('producer must not be the sighted approver')));
+  }
 });
 
 test('NEGATIVE DRILL: an empty artifact is not evidence', () => {

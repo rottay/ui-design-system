@@ -45,7 +45,7 @@ const registryPath = resolve(HERE, 'cra-12-motion-governance.registry.json');
 // the corpus, built once per module in `test.before` and reused by every
 // drill via `--workspace-root`; the real tree is asserted absent of the plant
 // at every step (D-4).
-const CORPUS_FILE_COUNT = 4329; // packages/core/src (3975) + packages/showroom/src (354)
+const CORPUS_FILE_COUNT = 4338; // packages/core/src (3984) + packages/showroom/src (354) -- gate-debt 3 (2026-08-26): 9 legitimate F4B additions to packages/core/src, confirmed by direct recount against the tree, showroom unchanged
 
 let SANDBOX_TMP;
 let WS;
