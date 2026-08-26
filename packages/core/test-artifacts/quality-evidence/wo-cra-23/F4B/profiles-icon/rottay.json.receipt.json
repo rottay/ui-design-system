@@ -40,10 +40,10 @@
     "packages/core/src/tooling/resolution-probe/runtime/ingress/index.mjs",
     "packages/core/src/tooling/resolution-probe/runtime/measure/index.mjs"
   ],
-  "sourceDigest": "42cd76307e3e99cb6a5bc9eb3a569dbc25e1c2659ddaef83881ed8b9d8b5efc0",
+  "sourceDigest": "898ec1db081b58f00b258e928f3e3f09c8b263cb6b9f144be16f50ee9201386c",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/profiles-icon/rottay.json",
   "artifactSha256": "68455fefa95b4bca969271ef4835dc2ae47e7504756a111ca26726116a665d15",
-  "createdAt": "2026-08-26T04:38:57.677Z",
+  "createdAt": "2026-08-26T15:27:16.367Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

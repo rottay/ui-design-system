@@ -70,10 +70,10 @@
     "packages/core/src/ui/primitives/display/Card/engines/rustic/index.tsx",
     "packages/core/src/ui/primitives/display/Card/index.tsx"
   ],
-  "sourceDigest": "6b39cac826a8df66aa6b98db4057bcde5d86c47fc715ef15bf36eeec1a3c3a2c",
+  "sourceDigest": "ae728b52a764ab1227c845a3cbb7762c516571200e53c3528fe67b3f1430b8e1",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/surfaces-effect-intensity/bithire-mate.json",
   "artifactSha256": "090617225a5a67e27d2ea45a9a2705b90a7579645c089078de91e0cbb68ee6f4",
-  "createdAt": "2026-08-26T04:32:29.309Z",
+  "createdAt": "2026-08-26T15:27:16.367Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

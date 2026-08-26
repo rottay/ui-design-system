@@ -7,7 +7,7 @@
   "semanticOwner": {
     "owner": "design-system",
     "registryPath": "packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts",
-    "registryDigest": "88f89891614e8f29cb79611c9c81e22e05084cf9569c376d51a6fcc453bfa5ad"
+    "registryDigest": "79ba7a0ba67f6d2560654122285d068c64677af4d7dd3b0103981c15bba8959f"
   },
   "title": "Explicit expressive axes",
   "valueType": "enum",
@@ -189,7 +189,15 @@
         "solid-active"
       ]
     },
-    "catalogLaw": "F4B-16 UPDATE: `domain.enumValues` ahora SI existe (28 valores, la union plana deduplicada de los 6 ejes -- ver capabilities/index.ts, comentario junto a `enumValues`) porque es lo unico que hace que domain.kind resuelva a `closed-enum` en vez del `enum` sin reconocer que `ingressValueForStop` no sabe bajar (ver manifest/generator/index.mjs:186). Esa union es CIEGA POR ROL (`enumValues.includes(stop.id)`, runtime/ingress/index.mjs:925, nunca mira A QUE EJE pertenece un valor) -- NO es el verdadero cierre. El catalogo de abajo, por miembro, sigue siendo la UNICA fuente de verdad de que valor es valido para que eje; TenantCapabilityDeclaration.enumValues es `readonly string[]` plano (capabilities/index.ts:47), incapaz de expresar un mapa de ejes por si solo. Mapa de los 7 ejes con vocabulario cerrado propio, copiado literal de packages/core/src/foundation/tokens/ts/presentation/expressive-profiles/index.ts: type :31-36, geometry :39-44, edge :48-54, material :57-63, elevation :67-73, motif :77-85, icon :88-93. ExpressiveAxes declara dos ejes mas, density (:111) y motion (:112-116), que NO entran en este mapa: la fuente dice explicitamente que reusan el vocabulario tenant existente en vez de crear enums de perfil paralelos (:96-101), asi que su dominio lo poseen los controles `density.mode` y `motion.dial`. motif lista los 7 valores ADMITIDOS aunque solo 4 tienen filas de expansion v1: `dots`, `deco-fan` y `ambient-orbs` resuelven y expanden a nada hasta la K-wave (MOTIF_PROFILE_VARIABLES, packages/core/src/foundation/tokens/ts/presentation/expressive-profiles/expansion/index.ts:345-370). El vocabulario admitido es el dominio; la cobertura de expansion es calibracion."
+    "catalogLaw": "F4B-16 UPDATE: `domain.enumValues` ahora SI existe (28 valores, la union plana deduplicada de los 6 ejes -- ver capabilities/index.ts, comentario junto a `enumValues`) porque es lo unico que hace que domain.kind resuelva a `closed-enum` en vez del `enum` sin reconocer que `ingressValueForStop` no sabe bajar (ver manifest/generator/index.mjs:186). Esa union es CIEGA POR ROL (`enumValues.includes(stop.id)`, runtime/ingress/index.mjs:925, nunca mira A QUE EJE pertenece un valor) -- NO es el verdadero cierre. El catalogo de abajo, por miembro, sigue siendo la UNICA fuente de verdad de que valor es valido para que eje; TenantCapabilityDeclaration.enumValues es `readonly string[]` plano (capabilities/index.ts:47), incapaz de expresar un mapa de ejes por si solo. Mapa de los 7 ejes con vocabulario cerrado propio, copiado literal de packages/core/src/foundation/tokens/ts/presentation/expressive-profiles/index.ts: type :31-36, geometry :39-44, edge :48-54, material :57-63, elevation :67-73, motif :77-85, icon :88-93. ExpressiveAxes declara dos ejes mas, density (:111) y motion (:112-116), que NO entran en este mapa: la fuente dice explicitamente que reusan el vocabulario tenant existente en vez de crear enums de perfil paralelos (:96-101), asi que su dominio lo poseen los controles `density.mode` y `motion.dial`. motif lista los 7 valores ADMITIDOS aunque solo 4 tienen filas de expansion v1: `dots`, `deco-fan` y `ambient-orbs` resuelven y expanden a nada hasta la K-wave (MOTIF_PROFILE_VARIABLES, packages/core/src/foundation/tokens/ts/presentation/expressive-profiles/expansion/index.ts:345-370). El vocabulario admitido es el dominio; la cobertura de expansion es calibracion.",
+    "channels": [
+      "--ds-select-group-text-transform",
+      "--ds-radius-scale",
+      "--ds-edge-emphasis-width",
+      "--ds-material-card-highlight",
+      "--ds-elevation-lift-strength",
+      "--ds-material-canvas-texture"
+    ]
   },
   "retiredAliases": []
 }

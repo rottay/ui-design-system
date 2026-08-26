@@ -70,10 +70,10 @@
     "packages/core/src/ui/primitives/display/Card/engines/rustic/index.tsx",
     "packages/core/src/ui/primitives/display/Card/index.tsx"
   ],
-  "sourceDigest": "771a7be93fe86c8fb7166866a2da7f517cb127370b232192e02919593ed92146",
+  "sourceDigest": "78e4631cdf4a52fcbd97888f027067707c10a1a108871d79c0b2ccf3cd77a26a",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/shape-radius-scale/evnto-amplio.json",
   "artifactSha256": "e44accc205399d0fdffac7e91686f69146909ca402f2f1a6f1122bb004a2d976",
-  "createdAt": "2026-08-26T04:30:42.729Z",
+  "createdAt": "2026-08-26T15:27:16.367Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

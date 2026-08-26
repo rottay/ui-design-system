@@ -7,7 +7,7 @@
   "semanticOwner": {
     "owner": "design-system",
     "registryPath": "packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts",
-    "registryDigest": "88f89891614e8f29cb79611c9c81e22e05084cf9569c376d51a6fcc453bfa5ad"
+    "registryDigest": "79ba7a0ba67f6d2560654122285d068c64677af4d7dd3b0103981c15bba8959f"
   },
   "title": "Sidebar tone",
   "valueType": "enum",
@@ -106,7 +106,15 @@
       "motion remains fixed"
     ],
     "negativeControlsScopeNote": "`color remains fixed` is deliberately NOT declared -- this control's entire job is moving colour channels (background/text/item colours), so a blanket colour negative control would assert against the very channels the tone legitimately moves. No vocabulary phrase exists for 'one specific colour channel among many stays fixed' (checked negative-controls/vocabulary.json; the write-set does not extend it), so the neighbouring-leaf proof is NOT a formal negativeControls entry -- it is a direct measurement instead: `--ds-sidebar-item-color` (chrome-variables/index.ts:1351, `s.itemColor`, a DIFFERENT leaf, the exact channel the registry's prior declaredOutputs entry mistakenly named) was added to token-readout/tokens and read directly on every scenario; see measuredResult.negativeWitness for the result.",
-    "nextAction": "PROPERTY_GROUPS_VOCABULARY_RATIFICATION_THEN_IMPLEMENTED. Causal measurement is complete on both arms (see measuredResult); nothing left to run. Blocked purely on the family-cell ceiling (structure/shell/sidebar-surface's anatomy.propertyGroups, same program-wide blocker F4B-11 raised)."
+    "nextAction": "PROPERTY_GROUPS_VOCABULARY_RATIFICATION_THEN_IMPLEMENTED. Causal measurement is complete on both arms (see measuredResult); nothing left to run. Blocked purely on the family-cell ceiling (structure/shell/sidebar-surface's anatomy.propertyGroups, same program-wide blocker F4B-11 raised).",
+    "channels": [
+      "--ds-sidebar-bg",
+      "--ds-sidebar-text",
+      "--ds-sidebar-text-muted",
+      "--ds-sidebar-item-bg-hover",
+      "--ds-sidebar-item-bg-active",
+      "--ds-sidebar-item-color-active"
+    ]
   },
   "retiredAliases": []
 }

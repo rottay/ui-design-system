@@ -7,7 +7,7 @@
   "semanticOwner": {
     "owner": "design-system",
     "registryPath": "packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts",
-    "registryDigest": "88f89891614e8f29cb79611c9c81e22e05084cf9569c376d51a6fcc453bfa5ad"
+    "registryDigest": "79ba7a0ba67f6d2560654122285d068c64677af4d7dd3b0103981c15bba8959f"
   },
   "title": "Decoration intensity",
   "valueType": "scale",
@@ -137,6 +137,9 @@
       "Responsive divergence. The probe pins one viewport (1280x800, dpr 1), so no claim is made about this control at another breakpoint. Recorded as honest debt, not as a passing row.",
       "Every consumer of --ds-effect-intensity other than Card. 21 CSS owners under runtime/engines/modern/skin read this channel; this calibration measured ONE family, primitive/display/card, and the manifest's own productiveConsumerWitness (overlay-modal.css) has no roster fixture and was not measured. The control-level claim is therefore about the channel and the two doors, not about every surface the channel decorates.",
       "The keyline half of the Card's own decoration (see knownDefects), measured as non-responding and deliberately not diagnosed in this packet."
+    ],
+    "channels": [
+      "--ds-effect-intensity"
     ]
   },
   "retiredAliases": []

@@ -67,10 +67,10 @@
     "packages/core/styles/index.css",
     "packages/core/styles/rottay.css"
   ],
-  "sourceDigest": "97f62594d74885af9e315331c696fe866bc95b285f2cc0a6decd7de2f97097e3",
+  "sourceDigest": "d0c71305f4e6c696d4ec825a5dc3e7517cbf5a6da6f21d1e81921b54be8ecf42",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/shape-button-style/evnto-sharp.json",
   "artifactSha256": "c720736b8b8412f44867e835b558a011ac3e133cde22040b308554bdbdfb5473",
-  "createdAt": "2026-08-26T04:29:58.083Z",
+  "createdAt": "2026-08-26T15:27:16.367Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

@@ -7,7 +7,7 @@
   "semanticOwner": {
     "owner": "design-system",
     "registryPath": "packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts",
-    "registryDigest": "88f89891614e8f29cb79611c9c81e22e05084cf9569c376d51a6fcc453bfa5ad"
+    "registryDigest": "79ba7a0ba67f6d2560654122285d068c64677af4d7dd3b0103981c15bba8959f"
   },
   "title": "Responsive posture profile",
   "valueType": "profile-id",
@@ -119,7 +119,8 @@
         "closedBy": "L-1 (ladder DATA-terminal amendment)"
       }
     ],
-    "assessmentStateNote": "COMPUTED_VERIFIED under the ladder amendment (L-1), whose DATA branch demands its own complete conjunction -- a cited terminalReason, fieldPath, a closed equalitySurface containing the governed field, behavioural witnesses, and a data-field-delta receipt -- instead of the five CSS-shaped fields this control has none of by design. CORRECTION OF AN EARLIER PHRASE HERE: this note previously said that no gate validated a control's calibration.assessmentState. That was imprecise, and the full characterisation is: manifest/generator/index.mjs:568-586 validates the value against the vocabulary and requires non-empty sourceBindings from SOURCE_BOUND up; manifest/rules/index.mjs:1071-1095 validates the assessmentState of family SECTIONS; what did not exist was a CEILING against the cells. L-1 adds it (validateControlAssessmentCeiling), so this claim is now gated: it is legal here only because pattern/data/widget-board carries COMPUTED_VERIFIED for this control."
+    "assessmentStateNote": "COMPUTED_VERIFIED under the ladder amendment (L-1), whose DATA branch demands its own complete conjunction -- a cited terminalReason, fieldPath, a closed equalitySurface containing the governed field, behavioural witnesses, and a data-field-delta receipt -- instead of the five CSS-shaped fields this control has none of by design. CORRECTION OF AN EARLIER PHRASE HERE: this note previously said that no gate validated a control's calibration.assessmentState. That was imprecise, and the full characterisation is: manifest/generator/index.mjs:568-586 validates the value against the vocabulary and requires non-empty sourceBindings from SOURCE_BOUND up; manifest/rules/index.mjs:1071-1095 validates the assessmentState of family SECTIONS; what did not exist was a CEILING against the cells. L-1 adds it (validateControlAssessmentCeiling), so this claim is now gated: it is legal here only because pattern/data/widget-board carries COMPUTED_VERIFIED for this control.",
+    "channels": []
   },
   "retiredAliases": []
 }

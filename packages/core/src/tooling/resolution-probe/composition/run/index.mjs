@@ -40,6 +40,7 @@ import {
   resolveNegativeControls,
 } from '../../foundation/negative-controls/index.mjs';
 import { resolveBundle, sha256 } from '../../runtime/bundle/index.mjs';
+import { calibrationChannels } from '../../runtime/ingress/index.mjs';
 import {
   directControlFixtureIds,
   getFixtures,
@@ -474,7 +475,7 @@ export function buildCausalReport({
     perArm,
     armIds,
     controlFixtures ?? [],
-    controlManifest?.declaredOutputs?.channels ?? [],
+    calibrationChannels(controlManifest),
   );
 
   const guardFailures = Object.values(perArm).flatMap((arm) =>
@@ -673,7 +674,7 @@ export async function runCausalProbe({
     controlFixtures ??
     directControlFixtureIds({
       fixtures: selectedFixtures,
-      channels: controlManifest?.declaredOutputs?.channels ?? [],
+      channels: calibrationChannels(controlManifest),
     });
   const bundles = {};
   for (const vertical of verticals) {

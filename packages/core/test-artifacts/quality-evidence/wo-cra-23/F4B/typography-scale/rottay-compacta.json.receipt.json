@@ -69,10 +69,10 @@
     "packages/core/src/ui/primitives/display/Card/engines/rustic/index.tsx",
     "packages/core/src/ui/primitives/display/Card/index.tsx"
   ],
-  "sourceDigest": "9e1a0ac432db2e3bbdc0db7fe8e155d7ebc70fc7dfd2f27066f6c4ae760f7a39",
+  "sourceDigest": "b71b4d7ecd24bea734a82bd26e8d6b47a9d3d220ddcd03316e25738208973f73",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/typography-scale/rottay-compacta.json",
   "artifactSha256": "606e530a2cf0ed3fbc263a6cc905fe21fd7c98ee756af9d5f2150d939489baa8",
-  "createdAt": "2026-08-26T04:37:41.392Z",
+  "createdAt": "2026-08-26T15:27:16.367Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

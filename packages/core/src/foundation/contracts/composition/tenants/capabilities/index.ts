@@ -55,6 +55,29 @@ export interface TenantCapabilityDeclaration {
   readonly brandThemePath: string;
   /** Representative derived channels, never an exhaustive list. */
   readonly derivedChannels: readonly string[];
+  /**
+   * The subset of `derivedChannels` the resolution probe CALIBRATES.
+   *
+   * Two different questions were sharing one field, and C5 separates them.
+   * `derivedChannels` answers "what does authoring this capability move?" — the
+   * impact radius, read by the impact map, the controls catalogue, the tokens
+   * catalogue and the surface census. This field answers the narrower one the
+   * harness asks: "which channels may a stop be held to?" — K in the H-2 law,
+   * "and nothing wider", where `directControlFixtureIds` requires EVERY declared
+   * channel to be readable on one fixture target so a stop can never attribute a
+   * channel it did not write.
+   *
+   * They coincide for every capability whose stops exercise its whole radius,
+   * which is why this is OPTIONAL: absent, the calibration surface IS
+   * `derivedChannels`, and nothing changes for the capabilities that never
+   * needed the distinction. Declare it only where a real seed is deliberately
+   * outside the calibrated set, and state why at the entry.
+   *
+   * Fenced: `calibrationChannels` must be a SUBSET of `derivedChannels` — a
+   * surface cannot calibrate a channel the capability does not even claim to
+   * move.
+   */
+  readonly calibrationChannels?: readonly string[];
   /** Representative provider-owned root attributes, for non-CSS outputs. */
   readonly derivedRootAttributes?: readonly string[];
   readonly dependsOn?: readonly string[];
@@ -608,23 +631,46 @@ export const TENANT_CAPABILITY_REGISTRY = Object.freeze([
       documentPath:
         'visualFoundation.advanced.tokenOverrides.{--ds-color-error,--ds-color-bg-overlay}',
       brandThemePath: 'tokenOverrides',
-      /* F4B-17B (DT adjudication, owner ruling): `derivedChannels` IS
-       * `declaredOutputs.channels` -- its ONLY consumer is
-       * manifest/generator/index.mjs:278, nothing else in src reads it -- and
-       * that field is the harness's CALIBRATION SURFACE (K, "and nothing
-       * wider"): `directControlFixtureIds` requires `every()` declared
-       * channel to be readable on one fixture target, precisely so a stop
-       * cannot attribute a channel it never wrote. `--ds-surface-card` was
-       * removed because no stop in this control's calibration ever writes it
-       * (measured in F4B-17: authoring it cascades to 8 channels including
-       * 10 chart-category series, too broad for a single-entry causal
-       * attribution) -- keeping it declared here while unreachable by any
-       * fixture violated K. The PUBLIC domain is untouched: a tenant can
-       * still author `--ds-surface-card` through the same door (schema,
-       * TENANT_THEME_OVERRIDE_TOKENS, 290 names, `valueType: 'token-map'`)
-       * -- only this control's CALIBRATED, ATTRIBUTABLE surface narrows to
-       * the 2 channels its 2 stops actually exercise. */
-      derivedChannels: ['--ds-color-error', '--ds-color-bg-overlay'],
+      /* C5 — TWO SEMANTICS, TWO FIELDS. This entry previously carried a
+       * comment claiming `derivedChannels`' "ONLY consumer is
+       * manifest/generator/index.mjs:278, nothing else in src reads it". That
+       * sentence was materially FALSE, and the way it was false is the lesson:
+       * it scoped its own claim to `src/` and the other consumers live in
+       * `scripts/`. Membership in a surface is adjudicated by sweeping the REAL
+       * surface, never the scope the claim declares of itself.
+       *
+       * The real consumers of `derivedChannels`, by repo-wide grep:
+       *   - manifest/generator/index.mjs:278            (-> declaredOutputs.channels)
+       *   - scripts/tokens/controls-catalog/index.mjs   :147,149,155,179,253,262,272
+       *   - scripts/tokens/catalog/index.mjs            :878,940,941,942,943,948,1146,1299
+       *       (criterion: CODE READS. A raw grep of that file also hits
+       *        :566,761,959,975,979 -- the name inside markdown template
+       *        literals, i.e. GENERATED PROSE, not reads. Disclosed so this
+       *        census reconciles against the grep instead of contradicting it.)
+       *   - the customization-surface census, and scripts/tokens/root-exposure-gate:78
+       *   - scripts/quality-evidence/programs/modern-rescue/cascade-materialize.mjs:175
+       * Narrowing this field to 2 therefore did not narrow "the harness's view";
+       * it made three blocking catalogue gates disagree with the tree.
+       *
+       * So the two questions are split. `derivedChannels` states the IMPACT
+       * RADIUS and is restored to 3: this control really does move
+       * `--ds-surface-card` -- measured in F4B-17, authoring it cascades to 8
+       * channels including 10 chart-category series. An impact map that omitted
+       * it would under-declare the radius of the one control whose entire point
+       * IS its radius.
+       *
+       * `calibrationChannels` states K, "and nothing wider": the 2 channels this
+       * control's 2 stops actually write, which is what
+       * `directControlFixtureIds` may hold a stop to. `--ds-surface-card` stays
+       * OUT of it for the reason F4B-17 measured -- an 8-channel cascade is too
+       * broad for a single-entry causal attribution -- not because the control
+       * fails to move it.
+       *
+       * The PUBLIC domain is untouched either way: a tenant authors any of the
+       * 290 `TENANT_THEME_OVERRIDE_TOKENS` through the same door
+       * (`valueType: 'token-map'` + the document schema). */
+      derivedChannels: ['--ds-color-error', '--ds-surface-card', '--ds-color-bg-overlay'],
+      calibrationChannels: ['--ds-color-error', '--ds-color-bg-overlay'],
       compat:
         'escape hatch, not the model: every recurring override is a candidate for a real capability',
     },

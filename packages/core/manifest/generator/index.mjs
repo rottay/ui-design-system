@@ -282,7 +282,19 @@ function buildControl(entry, existing = {}) {
     dependsOn: entry.dependsOn ?? [],
     compatibility: entry.compat,
     productiveConsumerWitness: entry.evidence ?? null,
-    calibration: existing.calibration ?? defaultCalibration(),
+    /* C5. `calibration.channels` is DERIVED from the registry, never authored
+     * here and never hand-edited in the manifest: it is the mirror of
+     * `calibrationChannels`, falling back to `derivedChannels` for every
+     * capability that never needed the distinction. Deriving it (rather than
+     * letting the harness keep a table of exceptions) keeps the contract's
+     * authorship in one place — the registry — which is the same rule that put
+     * `domain.kind` here instead of in the probe. The subset law
+     * (`calibrationChannels ⊆ derivedChannels`) is fenced by the registry
+     * drills. */
+    calibration: {
+      ...(existing.calibration ?? defaultCalibration()),
+      channels: entry.calibrationChannels ?? entry.derivedChannels ?? [],
+    },
     retiredAliases: existing.retiredAliases ?? [],
   };
 }

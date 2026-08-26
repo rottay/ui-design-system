@@ -7,7 +7,7 @@
   "semanticOwner": {
     "owner": "design-system",
     "registryPath": "packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts",
-    "registryDigest": "88f89891614e8f29cb79611c9c81e22e05084cf9569c376d51a6fcc453bfa5ad"
+    "registryDigest": "79ba7a0ba67f6d2560654122285d068c64677af4d7dd3b0103981c15bba8959f"
   },
   "title": "Family recipe profile",
   "valueType": "profile-id",
@@ -86,7 +86,10 @@
       "rottay/network-professional@1",
       "rottay/editorial-round@1"
     ],
-    "catalogLaw": "catalogo en calibration, NO en enumValues: cerrado por registro (recipe-profiles/index.ts:74-111)"
+    "catalogLaw": "catalogo en calibration, NO en enumValues: cerrado por registro (recipe-profiles/index.ts:74-111)",
+    "channels": [
+      "--ds-recipe-profile"
+    ]
   },
   "retiredAliases": []
 }

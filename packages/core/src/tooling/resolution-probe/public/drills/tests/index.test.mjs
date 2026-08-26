@@ -731,3 +731,119 @@ test('PACKET-K drill 8: the kinds that already existed still lower the SAME fiel
     );
   }
 });
+
+/* =====================================================================
+ * C5 — the calibration surface is a SEPARATE field from the impact radius.
+ *
+ * `derivedChannels` answers "what does authoring this capability move?"; the
+ * registry's new `calibrationChannels` answers "which channels may a stop be
+ * held to?" (K, "and nothing wider"). They coincide everywhere except where a
+ * real seed is deliberately outside the calibrated set, which today is
+ * `token-overrides` and its 8-channel `--ds-surface-card` cascade.
+ *
+ * Two fences, one per binding correction of the preaudit.
+ * ===================================================================== */
+
+test('C5 drill W-A: ONE resolver owns the calibration surface, and the harness has no second reader', async () => {
+  const { readFileSync } = await import('node:fs');
+  const { resolve } = await import('node:path');
+  const { CORE_ROOT } = await import('../../../foundation/paths/index.mjs');
+  const { calibrationChannels } = await import('../../../runtime/ingress/index.mjs');
+
+  /* (i) The resolver's contract, including the fallback that keeps this a no-op
+   * for every capability that never needed the distinction. */
+  assert.deepEqual(
+    calibrationChannels({ calibration: { channels: ['a'] }, declaredOutputs: { channels: ['a', 'b'] } }),
+    ['a'],
+    'a declared calibration surface wins',
+  );
+  assert.deepEqual(
+    calibrationChannels({ declaredOutputs: { channels: ['a', 'b'] } }),
+    ['a', 'b'],
+    'absent calibration surface falls back to the declared radius',
+  );
+  assert.deepEqual(calibrationChannels({}), [], 'neither present is empty, not a throw');
+
+  /* (ii) NO SECOND READER. Four sites asked this question before C5; if any one
+   * of them kept reading `declaredOutputs.channels` directly, a control whose
+   * two surfaces differ would be calibrated against one set and RECORDED against
+   * the other -- the artifact would gain declared/omitted rows for a channel no
+   * stop writes, and every receipt over it would stop being re-attestable. So
+   * the fence is on the source: the only surviving direct read is the fallback
+   * inside the resolver itself. */
+  const sources = [
+    'src/tooling/resolution-probe/runtime/ingress/index.mjs',
+    'src/tooling/resolution-probe/composition/run/index.mjs',
+  ];
+  let directReads = 0;
+  for (const relative of sources) {
+    const text = readFileSync(resolve(CORE_ROOT, relative), 'utf8');
+    for (const line of text.split('\n')) {
+      if (line.trimStart().startsWith('*') || line.trimStart().startsWith('//')) continue;
+      if (line.includes('declaredOutputs?.channels') || line.includes('declaredOutputs.channels')) {
+        directReads += 1;
+      }
+    }
+  }
+  assert.equal(directReads, 1, 'exactly one direct read survives: the resolver’s own fallback');
+
+  /* (iii) And the separation is REAL for the control that motivated it: the
+   * calibrated surface is the 2 channels its stops write, while the declared
+   * radius keeps the third the control genuinely moves. */
+  const manifest = JSON.parse(
+    readFileSync(resolve(CORE_ROOT, 'manifest/controls/token-overrides.json'), 'utf8'),
+  );
+  const calibrated = calibrationChannels(manifest);
+  assert.equal(calibrated.length, 2, 'token-overrides calibrates 2 channels');
+  assert.ok(!calibrated.includes('--ds-surface-card'), '--ds-surface-card is NOT calibrated');
+  assert.ok(
+    manifest.declaredOutputs.channels.includes('--ds-surface-card'),
+    'but it IS declared: the control really does move it (F4B-17, 8-channel cascade)',
+  );
+});
+
+test('C5 drill W-B [needs dist]: calibrationChannels ⊆ derivedChannels, and the manifest mirrors the registry exactly', async () => {
+  const { readFileSync, existsSync } = await import('node:fs');
+  const { resolve } = await import('node:path');
+  const { pathToFileURL } = await import('node:url');
+  const { CORE_ROOT } = await import('../../../foundation/paths/index.mjs');
+  const main = await import(pathToFileURL(resolve(CORE_ROOT, 'dist/index.js')).href);
+
+  const registry = main.TENANT_CAPABILITY_REGISTRY;
+  assert.ok(Array.isArray(registry) && registry.length > 0, 'the registry is readable');
+
+  let mirrored = 0;
+  for (const entry of registry) {
+    const derived = entry.derivedChannels ?? [];
+    const calibration = entry.calibrationChannels;
+
+    /* THE SUBSET LAW. A surface cannot calibrate a channel the capability does
+     * not even claim to move: that would attribute a stop to a channel outside
+     * the control's own declared radius, which is the failure `directControlFixtureIds`
+     * exists to prevent, one level up. */
+    if (calibration !== undefined) {
+      const orphans = calibration.filter((channel) => !derived.includes(channel));
+      assert.deepEqual(orphans, [], `${entry.id}: calibrationChannels ⊆ derivedChannels`);
+      assert.ok(calibration.length > 0, `${entry.id}: an empty calibration surface calibrates nothing`);
+    }
+
+    /* THE MIRROR. `calibration.channels` is GENERATED from the registry, so a
+     * hand-edit of the manifest must fail here rather than silently become a
+     * second authority for the same fact. */
+    const manifestPath = resolve(CORE_ROOT, `manifest/controls/${entry.id}.json`);
+    if (!existsSync(manifestPath)) continue;
+    const manifest = JSON.parse(readFileSync(manifestPath, 'utf8'));
+    assert.deepEqual(
+      manifest.declaredOutputs?.channels ?? [],
+      [...derived],
+      `${entry.id}: declaredOutputs mirrors derivedChannels`,
+    );
+    assert.deepEqual(
+      manifest.calibration?.channels ?? [],
+      [...(calibration ?? derived)],
+      `${entry.id}: calibration.channels mirrors the registry`,
+    );
+    mirrored += 1;
+  }
+  assert.ok(mirrored >= 20, `every control manifest was mirrored (checked ${mirrored})`);
+});

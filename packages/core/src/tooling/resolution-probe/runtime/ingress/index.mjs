@@ -657,6 +657,42 @@ export function ingressPathMembers(declared) {
 }
 
 /**
+ * K — the channels a stop may be held to. THE single reader of the calibration
+ * surface, and the reason it is single.
+ *
+ * C5 separated two questions that had been sharing `declaredOutputs.channels`:
+ * the IMPACT RADIUS of a capability (what authoring it moves — read by the
+ * impact map, the controls/tokens catalogues, the surface census and the
+ * root-exposure gate) and the CALIBRATION SURFACE (which channels a stop may be
+ * attributed to — K in the H-2 law, "and nothing wider"). The registry now
+ * states them separately and the generator mirrors the second into
+ * `calibration.channels`.
+ *
+ * The fallback is what keeps this a no-op for everything else: a manifest with
+ * no `calibration.channels` calibrates its whole declared radius, exactly as
+ * before, so the nineteen capabilities that never needed the distinction see no
+ * change at all.
+ *
+ * WHY ONE FUNCTION AND NOT FOUR READS. The harness asks this question in four
+ * places — the extraction inside `lowerStop`, the empty-lowering guard beside
+ * it, the H-2 discrimination guard, and `directControlFixtureIds`' `every()`
+ * law. If any one of them kept reading `declaredOutputs.channels` directly, a
+ * control whose two surfaces differ would be calibrated against one set and
+ * recorded against another: the artifact's declared/omitted rows would gain a
+ * channel no stop writes, every receipt over it would stop being re-attestable,
+ * and the divergence would look like a measurement rather than a wiring
+ * mistake. Four readers of one fact is three chances to disagree.
+ *
+ * @param {object} controlManifest
+ * @returns {readonly string[]}
+ */
+export function calibrationChannels(controlManifest) {
+  return (
+    controlManifest?.calibration?.channels ?? controlManifest?.declaredOutputs?.channels ?? []
+  );
+}
+
+/**
  * Which member of a declared set a ROLE selects.
  *
  * The two doors spell the same role differently — `palette.primaryColor` on the
@@ -1708,7 +1744,7 @@ export function lowerStop({
       `resolution-probe: ${armId} compiler returned no variable map for stop "${stopId}".`,
     );
   }
-  const channels = controlManifest?.declaredOutputs?.channels ?? [];
+  const channels = calibrationChannels(controlManifest);
   if (channels.length === 0) {
     throw new Error(
       'resolution-probe: the control manifest declares no output channels, so there is nothing ' +
@@ -2123,7 +2159,7 @@ export function assertStopDiscrimination({
     );
   }
 
-  const channels = controlManifest?.declaredOutputs?.channels ?? [];
+  const channels = calibrationChannels(controlManifest);
   if (channels.length === 0) {
     throw new Error(
       'resolution-probe: the control manifest declares no output channels, so there is no vector ' +

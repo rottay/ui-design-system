@@ -7,7 +7,7 @@
   "semanticOwner": {
     "owner": "design-system",
     "registryPath": "packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts",
-    "registryDigest": "88f89891614e8f29cb79611c9c81e22e05084cf9569c376d51a6fcc453bfa5ad"
+    "registryDigest": "79ba7a0ba67f6d2560654122285d068c64677af4d7dd3b0103981c15bba8959f"
   },
   "title": "Experience profile",
   "valueType": "profile-id",
@@ -133,7 +133,14 @@
       }
     ],
     "armEquivalenceCriterion": "THE OPERATIONALISATION OF THE OWNER'S \"static and DB must produce exactly the same result\", written before it was measured (Z-2). Equality is of COMPUTED VALUES over the real cascade, never of emitted-map size: the static arm emits a COMPLETE compiled theme while the DB arm emits a tenant-scoped DELTA that overlays the vertical's base CSS, so the two are different KINDS of output and a map-size or key-set comparison is a category error. Measured: 52 variables on the DB arm against 1231 on the static arm for the same tenant and profile, with --ds-color-primary absent from the DB map entirely. The comparison is therefore: for every declared channel the DB arm emits, the value it emits must equal the value the static arm emits; a channel the DB arm does not emit is resolved by the cascade to the vertical base, which the static arm already carries, so it cannot disagree. Reading the DB delta as if it were a whole theme is the false-red this criterion exists to prevent, and comparing only the intersection without saying so is the false-green.",
-    "armEquivalenceResult": "6/6 painted cases equivalent at --theme light, ZERO differing rows, selfCheck harness-live, per-vertical source digests declared (a single digest reused across verticals trips the stale-source guard, because each vertical's compiled artifact is in its own freshness surface). The static arm MOVES --ds-letter-spacing-heading on 3/3 verticals where H-1 measured it inert on 6/6, and both arms land on the pairing vocabulary. At the variable level, 22/22 channel readings agree. The two surviving rows are BOTH dark-scope letter-spacing on bithire, and they are ledgered against OPEN_VERTICAL_CASCADE_DEFECT -- a packet of the vertical generator/cascade, not of this control. Its cause is written and measured: bithire's artifact declares the channel TWICE (src/foundation/tokens/css/facade/artifacts/bithire/index.css:644 '-0.025em' and :1496 '-0.01em' inside the higher-specificity dark block). Compounding it, the probe never applies compiled MODE BLOCKS -- the string 'modeBlocks' appears nowhere in src/tooling/resolution-probe -- so a dark-scope reading measures the shipped artifact CSS rather than the compile. The compile is correct there and was measured: with a tenant floor bithire's base emits --ds-letter-spacing-heading '0' and the dark block emits NOTHING, so dark inherits the tenant value; without one, base emits '-0.025em' and dark restates '-0.01em'. Dark is therefore measured-and-NOT-receipted (bithire-editorial.RESIDUAL-DARK-SCOPE.json), never claimed as parity."
+    "armEquivalenceResult": "6/6 painted cases equivalent at --theme light, ZERO differing rows, selfCheck harness-live, per-vertical source digests declared (a single digest reused across verticals trips the stale-source guard, because each vertical's compiled artifact is in its own freshness surface). The static arm MOVES --ds-letter-spacing-heading on 3/3 verticals where H-1 measured it inert on 6/6, and both arms land on the pairing vocabulary. At the variable level, 22/22 channel readings agree. The two surviving rows are BOTH dark-scope letter-spacing on bithire, and they are ledgered against OPEN_VERTICAL_CASCADE_DEFECT -- a packet of the vertical generator/cascade, not of this control. Its cause is written and measured: bithire's artifact declares the channel TWICE (src/foundation/tokens/css/facade/artifacts/bithire/index.css:644 '-0.025em' and :1496 '-0.01em' inside the higher-specificity dark block). Compounding it, the probe never applies compiled MODE BLOCKS -- the string 'modeBlocks' appears nowhere in src/tooling/resolution-probe -- so a dark-scope reading measures the shipped artifact CSS rather than the compile. The compile is correct there and was measured: with a tenant floor bithire's base emits --ds-letter-spacing-heading '0' and the dark block emits NOTHING, so dark inherits the tenant value; without one, base emits '-0.025em' and dark restates '-0.01em'. Dark is therefore measured-and-NOT-receipted (bithire-editorial.RESIDUAL-DARK-SCOPE.json), never claimed as parity.",
+    "channels": [
+      "--ds-experience-profile",
+      "--ds-letter-spacing-heading",
+      "--ds-edge-standard-width",
+      "--ds-material-canvas-texture",
+      "--ds-elevation-lift-strength"
+    ]
   },
   "retiredAliases": []
 }

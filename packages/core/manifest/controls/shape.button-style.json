@@ -7,7 +7,7 @@
   "semanticOwner": {
     "owner": "design-system",
     "registryPath": "packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts",
-    "registryDigest": "88f89891614e8f29cb79611c9c81e22e05084cf9569c376d51a6fcc453bfa5ad"
+    "registryDigest": "79ba7a0ba67f6d2560654122285d068c64677af4d7dd3b0103981c15bba8959f"
   },
   "title": "Button silhouette",
   "valueType": "enum",
@@ -120,6 +120,9 @@
         "disposition": "OPEN_DT",
         "remediation": "Not touched here: adjudicating whether bithire's authored 9px leaf should defer to a tenant's surfaces.buttonStyle selection is a product/design decision (does a tenant override win over the vertical's own hand-tuned button corner?), owned by a future wave, same class as shape.radius-scale's own bithire compensation note."
       }
+    ],
+    "channels": [
+      "--ds-radius-button"
     ]
   },
   "retiredAliases": []

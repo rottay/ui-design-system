@@ -1,9 +1,9 @@
 {
  "schemaVersion": 1,
- "generatedBy": "tokens-catalog gate re-derivation, 2026-08-20 (F4A-4) — digest re-projected from the current census report; figures still project (deadWriters 266=266); adjudications unchanged",
- "basedOnReportDigest": "e15e3be77249db802058c6fc51471dcc9aaef34c9b0a9076215653f68c002409",
+ "generatedBy": "tokens-catalog gate re-derivation, 2026-08-26 (C5) — digest re-projected from the current census report after the C5 reemission (customization-surface-census --write); figures re-mirrored (writers 4668->4669 from unrelated tree drift since F4A-4, deadWriters 266=266 unchanged); adjudications unchanged",
+ "basedOnReportDigest": "f169f69ff2c54db9482599cbb199cceb9b288809c84944498be28f973d85c4a0",
  "normative": {
-  "writers": 4668,
+  "writers": 4669,
   "deadWriters": 266,
   "definition": "customization-surface-census.mjs header — writer = manifest sets ∪ authored-CSS decls ∪ AST TS write-sites ∪ artifact emissions; productive read = PostCSS var() ∪ AST-classified TS read; metadata never counts"
  },

@@ -7,7 +7,7 @@
   "semanticOwner": {
     "owner": "design-system",
     "registryPath": "packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts",
-    "registryDigest": "88f89891614e8f29cb79611c9c81e22e05084cf9569c376d51a6fcc453bfa5ad"
+    "registryDigest": "79ba7a0ba67f6d2560654122285d068c64677af4d7dd3b0103981c15bba8959f"
   },
   "title": "Icon posture profile",
   "valueType": "enum",
@@ -83,7 +83,8 @@
       "packages/core/src/infrastructure/runtime/bootstrap/facade/react/provider/index.tsx",
       "packages/core/src/graphics/icons/runtime/semantic/create-icon/index.tsx"
     ],
-    "assessmentStateNote": "La evidencia DATA de la puerta DB esta COMPLETA y receipteada (3 verticales x 4 stops, verdict.pass=true, witness S2 del lector de produccion: cada stop pedido es el que el consumidor resuelve). El ruling DT del 2026-08-25 adjudico cerrar en COMPUTED_VERIFIED. NO se puede hoy y la razon es mecanica, no de evidencia: program-check aplica 'a control may not outrank its own evidence' y las celdas de familia de este control estan en UNKNOWN -- son 255 family manifests (medido: grep de celdas controlId=profiles.icon), fuera del write-set de este packet. Subirlas es una decision de alcance propio, no un detalle de este control: el precedente responsive.posture tenia UNA familia (pattern/data/widget-board) y por eso su packet pudo subir la celda. Queda SOURCE_BOUND con los receipts adjuntos; el ascenso a COMPUTED_VERIFIED es un cambio de una linea cuando el DT despache el packet de celdas."
+    "assessmentStateNote": "La evidencia DATA de la puerta DB esta COMPLETA y receipteada (3 verticales x 4 stops, verdict.pass=true, witness S2 del lector de produccion: cada stop pedido es el que el consumidor resuelve). El ruling DT del 2026-08-25 adjudico cerrar en COMPUTED_VERIFIED. NO se puede hoy y la razon es mecanica, no de evidencia: program-check aplica 'a control may not outrank its own evidence' y las celdas de familia de este control estan en UNKNOWN -- son 255 family manifests (medido: grep de celdas controlId=profiles.icon), fuera del write-set de este packet. Subirlas es una decision de alcance propio, no un detalle de este control: el precedente responsive.posture tenia UNA familia (pattern/data/widget-board) y por eso su packet pudo subir la celda. Queda SOURCE_BOUND con los receipts adjuntos; el ascenso a COMPUTED_VERIFIED es un cambio de una linea cuando el DT despache el packet de celdas.",
+    "channels": []
   },
   "retiredAliases": []
 }

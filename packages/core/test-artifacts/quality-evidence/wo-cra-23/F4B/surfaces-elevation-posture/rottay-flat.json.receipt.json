@@ -68,10 +68,10 @@
     "packages/core/src/ui/primitives/display/Card/engines/rustic/index.tsx",
     "packages/core/src/ui/primitives/display/Card/index.tsx"
   ],
-  "sourceDigest": "129008152c92bcfd506880e80bb70434eead34a57fea5db35d44729180286fa1",
+  "sourceDigest": "46ea4593354924286d6c7cf4229a0ddb998da815012aa9ca3caaac69e0197219",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/surfaces-elevation-posture/rottay-flat.json",
   "artifactSha256": "783cacd8fc953d85417c23f5b7bc10889fc65f781ef59884f3f2a18618b51a59",
-  "createdAt": "2026-08-26T04:33:55.312Z",
+  "createdAt": "2026-08-26T15:27:16.367Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

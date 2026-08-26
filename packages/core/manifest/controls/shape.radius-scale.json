@@ -7,7 +7,7 @@
   "semanticOwner": {
     "owner": "design-system",
     "registryPath": "packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts",
-    "registryDigest": "88f89891614e8f29cb79611c9c81e22e05084cf9569c376d51a6fcc453bfa5ad"
+    "registryDigest": "79ba7a0ba67f6d2560654122285d068c64677af4d7dd3b0103981c15bba8959f"
   },
   "title": "Radius scale dial",
   "valueType": "scale",
@@ -108,6 +108,10 @@
       "Every consumer of --ds-radius-scale other than Card. This calibration measured ONE family, primitive/display/card. The control-level claim is about the channel and the two doors, not about every surface the ramp rounds.",
       "The four non-lg steps of the ramp (--ds-radius-{sm,md,xl}) and --ds-radius-full. token-readout shows them resolving, but no painted fixture in this packet consumes them, so they are inventoried rather than proven.",
       "recto (0.75) has no receipt on either arm by design: it is below the tenant envelope on all three verticals (DB rejects it) and is a vertical-only stop, so forcing a static-only receipt would publish a parity row that has no counterpart. The rejection itself is proven in the preflight refutation artifact."
+    ],
+    "channels": [
+      "--ds-radius-scale",
+      "--ds-radius-md"
     ]
   },
   "retiredAliases": []
