@@ -4354,7 +4354,28 @@ re-atestación de Sonnet. Con esto, typography.families (el control más
 barato de la cola: ambos keypaths limpios) queda desbloqueado para su
 calibración — F4B-14 sigue.
 
-**APERTURA F2 ASIMÉTRICO + C5 ABIERTO — decisiones 17/18 del owner asentadas y
+**F2A-0 ✅ `fb8ff25b6` (Sonnet, medición mecánica; verificación DT propia;
+postaudit Fable: ACCEPT con reproducción numérica por los comandos del propio
+baseline).** Censo medido de las 34 asimétricas + los 6 ítems del residuo F2,
+en `docs/f2a/medicion-f2a0/{data.json,baseline.md}`. Reproducen exacto:
+Σassignments 261 = 95+96+70; 34 = 16 con-cero + 18 sin-cero; las 10 `por-crear`
+inertes (0 declaraciones, 0 lectores ×3 temas); `--ds-color-primary` 6
+declaraciones literales. **Dos cifras históricas mueren oficiales (Fable, nota
+2):** el "11/16" de evnto (real: **16/16**) y el "42" de `tier.page.fg` (real
+hoy: **13 canales + cabeza**, `#A0A0A5` en rottay; el árbol se movió desde
+F4A-0 — quedan supersedidas por este packet, no re-citar). El "15" del "6+15"
+de `--ds-color-primary` tampoco reproduce bajo 3 lecturas (§A.2 del baseline).
+El par border/border-primary ya NO está invertido en evnto: los tres temas
+declaran `--ds-color-border-primary: var(--ds-color-border)` en base (rottay
+:343, bithire :273, evnto :114). **Hallazgo estructural (§A.3):** assignment
+del catálogo ≠ declaración del artefacto (ej. `alpha.ladder`: assignments 2/0/0
+con 0 declaraciones en los 3). **Material de clasificación para F2A-1 (medido
+por raíz en data.json):** 7 raíces `por-crear` inertes (0d/0c en los 3 temas);
+8 con declaraciones pero 0 consumidores; `tier.overlay.border` con consumidores
+reales (2d/9-80c — caso compensación, análisis profundo); `effect.intensity`
+1d/0c ×3 con assignments 0/1/0 (patrón default-compartido + override bithire).
+
+
 defecto de integración del cierre F4B en corrección (2026-08-26; DT Kimi K3).**
 Tras el cierre de F4B (`44c5883f9`) se abrió F2 asimétrico: el DT reprodujo el
 censo contra `root-catalog.json` (16 raíces con tema en cero + 18 asimétricas
