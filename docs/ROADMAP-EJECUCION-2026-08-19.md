@@ -4368,7 +4368,7 @@ validador 133 válidos + 0 non-fresh + único inválido declarado,
 CONSTITUTION_READY, 5100 intacto, program-check.test 48/48 (338 s),
 producers.json re-derivado por el DT (causa: digest srcTsx por el edit
 autorizado), GAT-07 resellado por el DT (`34fbb629…`, 2 corridas
-deterministas). **Commit: <HASH>.** F4B queda a UN packet de su evidencia
+deterministas). **Commit: `90e2bfce4`.** F4B queda a UN packet de su evidencia
 causal completa: F4B-17B (Sonnet) corre la matriz, flipa el estado con
 receipts, corrige la cita P3 y salda el nextAction.
 
