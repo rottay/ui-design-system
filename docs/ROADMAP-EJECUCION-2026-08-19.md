@@ -492,6 +492,22 @@ histórico y no reaparece**.
     (`F5_INSTRUMENT_SEALED_DOOR_SINGLE_ARM_VERDICT`) con las dos condiciones
     de admisión de Fable.
 
+**Tomadas (2026-08-26, relevo Kimi K3 ya en el asiento; formalizadas por el DT):**
+
+17. **evnto dark `palette.textPageColor` = opción B: `#A8A898`** — el
+    text-secondary dark propio de evnto (contraste 7.77:1). No se conserva el
+    par accidental de 1.72:1 (opción A, espejo puro). Esto DESBLOQUEA el packet
+    T0 (re-apriete del mirror theme-iso; la exclusión
+    `TEXT_PAGE_COLOR_MODE_ASYMMETRY` es INTERIM hasta T0) y cambia el render de
+    evnto dark: la tinta de página recibe scope dark autoral por primera vez.
+    Domicilio: F2 asimétrico (packet T0 propio).
+18. **El seed global del tenant impacta TODOS los modos, incluido el
+    no-default, en los canales públicos expuestos.** La vertical es baseline,
+    no invariante. La derivación será mode-aware con el piso APCA compartido;
+    un override explícito del tenant para un modo específico prevalece sobre su
+    seed global. Implementación: **F5**. Cierra la pregunta de producto abierta
+    en la re-adjudicación M-1 de la clase `OPEN_VERTICAL_CASCADE_DEFECT`.
+
 **Regla de alcance vigente (del dueño, 2026-08-19):** el DS primero; las apps
 después, vertical por vertical. Libertad para **publicar versiones**; **push
 prohibido**. Las ventanas de rotura de apps (§1) dejan de bloquear la
@@ -1222,8 +1238,8 @@ paso de esa cadena está autorizado por este checkpoint.
 | C4 brecha PRE_F4B | 100% REGULARIZADA (doble postaudit Codex DEFECTS 5/5 + Fable REGULARIZA; T-11 anclado, T-12 narrativa, frescura producers.json; D1 aceptado con asiento) |
 | PRE_F4B | CERRADO por regularización C4 (ver asiento C4); inventario mecánico `INVENTORY_READY` histórico |
 | H-1 brazo estático con baseline | 100%; `base` del vertical publicado sólo en el brazo estático; preaudit Fable `ACCEPT` V1–V5; drills 47/47; los 20 receipts spacing/effect/radius invariantes |
-| F4B | **20/20 controles ASENTADOS — FASE COMPLETA en su forma honesta (2026-08-26)** — 9 `COMPUTED_VERIFIED` (spacing.rhythm, surfaces.effect-intensity, shape.radius-scale, density.mode, responsive.posture, typography.scale, experience.profile, palette.seeds, surfaces.elevation-posture) + 10 `SOURCE_BOUND` (button-style, typography.pairing, sidebar-tone, motion.dial, typography.families, recipe-profile, profiles.expressive, profiles.icon, token-overrides, chrome.anatomy) + `chrome.families` paraguas BY_REFERENCE (`UNKNOWN` a propósito, `SURFACE_REVIEW_DEFERRED_TO_F5`). **0 `SIGHTED_ACCEPTED`.** Cero evidencia alcanzable pendiente: token-overrides cerró con techo estructural documentado (clase CSS-terminal + puerta sellada ⇒ sin camino a pass:true; candidato F5 `F5_INSTRUMENT_SEALED_DOOR_SINGLE_ARM_VERDICT` con 2 condiciones de admisión Fable). Lo que falta para que los SOURCE_BOUND suban (ratificación propertyGroup, calibración de celdas) es F4C/F5. 134 receipts bajo validador v2 (133 válidos; único stale declarado: compound-editorial, `SUPERSEDED_BY_LIVE_FENCE`) |
-| F2 asimétrico | 0% — **PRÓXIMO FRENTE** (censo corregido: 16 raíces con tema en cero enumeradas en `docs/f4a/medicion-f4a0/baseline.md:88-93` + 18 asimétricas sin cero, derivables de `manifest/cascade/root-catalog.json`; evnto en cero en 11/16; desbloqueo disyuntivo: valor de theme o cero-delta estricto) |
+| F4B | **20/20 controles ASENTADOS — FASE COMPLETA en su forma honesta (2026-08-26)** — 9 `COMPUTED_VERIFIED` (spacing.rhythm, surfaces.effect-intensity, shape.radius-scale, density.mode, responsive.posture, typography.scale, experience.profile, palette.seeds, surfaces.elevation-posture) + 10 `SOURCE_BOUND` (button-style, typography.pairing, sidebar-tone, motion.dial, typography.families, recipe-profile, profiles.expressive, profiles.icon, token-overrides, chrome.anatomy) + `chrome.families` paraguas BY_REFERENCE (`UNKNOWN` a propósito, `SURFACE_REVIEW_DEFERRED_TO_F5`). **0 `SIGHTED_ACCEPTED`.** Cero evidencia alcanzable pendiente: token-overrides cerró con techo estructural documentado (clase CSS-terminal + puerta sellada ⇒ sin camino a pass:true; candidato F5 `F5_INSTRUMENT_SEALED_DOOR_SINGLE_ARM_VERDICT` con 2 condiciones de admisión Fable). Lo que falta para que los SOURCE_BOUND suban (ratificación propertyGroup, calibración de celdas) es F4C/F5. 134 receipts bajo validador v2 (133 válidos; único stale declarado: compound-editorial, `SUPERSEDED_BY_LIVE_FENCE`). **C5 ABIERTO (2026-08-26):** defecto de integración del cierre — comentario de `derivedChannels` con claim falso de consumidor único y 3 gates blocking (`controls-catalog`, `tokens-catalog`, `customization-surface-census`) FAIL-stale; corrección en curso (ver asiento de apertura F2A/C5) |
+| F2 asimétrico | 0% — **FRENTE ABIERTO (2026-08-26)**: F2A-0 (medición) en curso con Sonnet (censo corregido: 16 raíces con tema en cero enumeradas en `docs/f4a/medicion-f4a0/baseline.md:88-93` + 18 asimétricas sin cero, derivables de `manifest/cascade/root-catalog.json`; evnto en cero en las 16 — recomputo DT del catálogo, corrige el "11/16" histórico; desbloqueo disyuntivo: valor de theme o cero-delta estricto; decisión 17 desbloquea T0 dentro de esta fase) |
 | F3/F4C/F5-F8 pendientes | 0% del tramo pendiente |
 | F9 | 0/5100 celdas aceptadas |
 | Programa completo | estimación prudente **55–60% realizado** (ingeniería; sube de 39–43% con F4B 20/20 asentado); preparación comercial visible ~41%. Cerrar F4A/F4B **no certifica** F9: 0/5100 celdas aceptadas, gate y calibración de celdas propios, aún pendientes |
@@ -4337,6 +4353,40 @@ brace con sufijo compartido). Suites 240/240, build EXIT=0, 93/93 VALID por
 re-atestación de Sonnet. Con esto, typography.families (el control más
 barato de la cola: ambos keypaths limpios) queda desbloqueado para su
 calibración — F4B-14 sigue.
+
+**APERTURA F2 ASIMÉTRICO + C5 ABIERTO — decisiones 17/18 del owner asentadas y
+defecto de integración del cierre F4B en corrección (2026-08-26; DT Kimi K3).**
+Tras el cierre de F4B (`44c5883f9`) se abrió F2 asimétrico: el DT reprodujo el
+censo contra `root-catalog.json` (16 raíces con tema en cero + 18 asimétricas
+sin cero = 34; Σassignments 261 = 95+96+70 ✓; dato corregido: evnto está en
+cero en las 16, no 11/16 como decía una cifra histórica) y despachó **F2A-0**
+(Sonnet; medición mecánica de las 34 + los 6 ítems del residuo F2; write-set
+`docs/f2a/medicion-f2a0/`; entrega con reporte + señal). El owner tomó las dos
+decisiones pendientes (§12, 17 y 18): evnto dark `textPageColor = #A8A898`
+(desbloquea T0 dentro de esta fase) y el seed del tenant teñirá todos los modos
+(implementación F5; cierra la pregunta de producto de la clase
+`OPEN_VERTICAL_CASCADE_DEFECT`). **C5 (ABIERTO):** una auditoría externa del
+owner (Codex) encontró un defecto real de integración en el commit de cierre
+F4B-17B — el comentario de `capabilities/index.ts:611` afirmó que
+`derivedChannels` tenía UN SOLO consumidor (generator :278), falso en lo
+material: también lo consumen `controls-catalog` (:147, digest de vista),
+`tokens/catalog` (:940 ss., seeds EXACT del impact-map) y el census; los tres
+gates (`controls-catalog`, `tokens-catalog`, `customization-surface-census`,
+todos `[blocking]` en gates:ci) quedaron FAIL-stale en el commit de cierre y la
+batería del DT no los incluía. Verificado por el DT contra el árbol, no de
+palabra (los tres FAIL reproducidos). Triple falla asentada: comentario del
+writer (grep-ceguera: la afirmación "único consumidor" se verificó sólo en
+`src/`), scope del auditor (misma limitación), batería de cierre del DT
+(subconjunto en vez de gates:ci). **Leyes nuevas (efectivas ya):** (i) la
+batería de cierre de TODO packet incluye `gates:ci` completo o, como piso, los
+gates de catálogo/census cuando el write-set toca contratos/registry/manifest;
+(ii) toda afirmación de "único consumidor/lector" exige grep citado sobre
+`src/` + `scripts/` + `manifest/`. Corrección: packet C5 propio (preaudit
+Fable → Opus → re-emisión declarada → postaudit → commit separado); la
+adjudicación DT sometida a preaudit es α1: restaurar `derivedChannels` a sus 3
+seeds reales y mover la superficie de calibración a un campo propio — la
+decisión 15 conserva su INTENT (superficie de calibración estrecha; dominio
+público 290 intacto) y se enmendará su formulación al cerrar C5.
 
 **F4B-17B + CIERRE DE FASE F4B — token-overrides alcanza su techo
 estructural documentado y la fase queda con TODA la evidencia que el
