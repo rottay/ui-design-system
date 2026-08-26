@@ -301,7 +301,7 @@
       "governedBy": null,
       "governanceScope": "ninguna",
       "exposure": "internal-head",
-      "exposureNote": "VERIFICADO: --ds-color-bg-active tiene cero declaraciones en packages/core/src. 118 canales a mano.",
+      "exposureNote": "VERIFICADO: --ds-color-bg-active tiene cero declaraciones en packages/core/src. 118 canales a mano. Clase 1 congelada (F2A-1 Lote A, medido 2026-08-26): cero ocurrencias de cualquier tipo -- ni var(), ni declaracion, ni espejo TS, ni estampado inline JSX, ni fixture -- en packages/core/src + packages/showroom/src (prod=0, test=0, showroom=0), y tampoco en los 3 artefactos compilados ni en packages/core/styles/*.css. Disposicion por-crear queda congelada por esta medicion. Fuente: docs/f2a/medicion-f2a0/data.json + /private/tmp/opus-f2a1-tabla-medida.md (Verificacion 1). VETO REGISTRADO (foundation/tokens/residual-adjudication.json:1326-1332): \"Only the two HOVER sites were touched. The sibling active sites use 7% and were left alone: a --ds-state-active-shift swap was not authorised.\" El sitio de aterrizaje es conocido -- los sitios `active` que hoy llevan el literal 7%, hermanos de los sitios `hover` ya cableados a --ds-state-hover-shift (default.css:875, leido en :342 y :394) -- asi que el canal queda por-crear por VETO explicito, no por falta de sitio identificado.",
       "derivationDebt": true
     },
     {
@@ -748,7 +748,7 @@
       "governedBy": null,
       "governanceScope": "ninguna",
       "exposure": "gap",
-      "exposureNote": "VERIFICADO EN FUENTE: --ds-badge-bg, --ds-tag-bg y --ds-alert-bg tienen CERO declaraciones en todo packages/core/src. El nivel acento no tiene ni cabeza ni perilla: 63 canales escritos uno por uno.",
+      "exposureNote": "VERIFICADO EN FUENTE: --ds-badge-bg, --ds-tag-bg y --ds-alert-bg tienen CERO declaraciones en todo packages/core/src. El nivel acento no tiene ni cabeza ni perilla: 63 canales escritos uno por uno. Clase 1 congelada (F2A-1 Lote A, medido 2026-08-26): cero ocurrencias de cualquier tipo -- ni var(), ni declaracion, ni espejo TS, ni estampado inline JSX, ni fixture -- en packages/core/src + packages/showroom/src (prod=0, test=0, showroom=0), y tampoco en los 3 artefactos compilados ni en packages/core/styles/*.css. Disposicion por-crear queda congelada por esta medicion. Fuente: docs/f2a/medicion-f2a0/data.json + /private/tmp/opus-f2a1-tabla-medida.md (Verificacion 1).",
       "derivationDebt": false
     },
     {
@@ -1280,7 +1280,7 @@
       "governedBy": null,
       "governanceScope": "ninguna",
       "exposure": "internal-head",
-      "exposureNote": "Deberia derivar de tier.accent.bg. Como esa raiz tampoco tiene cabeza, esta hereda el hueco: 38 canales a mano.",
+      "exposureNote": "Deberia derivar de tier.accent.bg. Como esa raiz tampoco tiene cabeza, esta hereda el hueco: 38 canales a mano. Clase 1 congelada (F2A-1 Lote A, medido 2026-08-26): cero ocurrencias de cualquier tipo -- ni var(), ni declaracion, ni espejo TS, ni estampado inline JSX, ni fixture -- en packages/core/src + packages/showroom/src (prod=0, test=0, showroom=0), y tampoco en los 3 artefactos compilados ni en packages/core/styles/*.css. Disposicion por-crear queda congelada por esta medicion. Fuente: docs/f2a/medicion-f2a0/data.json + /private/tmp/opus-f2a1-tabla-medida.md (Verificacion 1).",
       "derivationDebt": true
     },
     {
@@ -1387,7 +1387,7 @@
       "governedBy": null,
       "governanceScope": "ninguna",
       "exposure": "internal-head",
-      "exposureNote": "NO ES PERILLA POR DISENO: la razon es geometria, no identidad. Falta la cabeza -- no existe ningun --ds-*-padding-ratio en src/. Rottay ya heredo la ley escribiendo calc(); bithire la reimplementa como 10 literales por familia.",
+      "exposureNote": "NO ES PERILLA POR DISENO: la razon es geometria, no identidad. Falta la cabeza -- no existe ningun --ds-*-padding-ratio en src/. Rottay ya heredo la ley escribiendo calc(); bithire la reimplementa como 10 literales por familia. Revision de catalogo (F2A-1 Lote A, medido 2026-08-26, misma clase Sec A.3 que la correccion de type.leading): --ds-control-padding-ratio-label no existe bajo NINGUNA grafia en el arbol CSS -- sondeo de vecindad, cero '--ds-control-*ratio*' en todo src/. El sufijo '-label' delata un nombre de FILA DE CATALOGO, no un canal CSS real; a diferencia de las otras 9 raices de Clase 1 (nombres de canal plausibles aun no escritos), esta puede estar nombrando una entrada de catalogo en vez de una perilla. Queda por-crear con esta salvedad explicita en vez de asumida como canal. Clase 1 congelada (F2A-1 Lote A, medido 2026-08-26): cero ocurrencias de cualquier tipo -- ni var(), ni declaracion, ni espejo TS, ni estampado inline JSX, ni fixture -- en packages/core/src + packages/showroom/src (prod=0, test=0, showroom=0), y tampoco en los 3 artefactos compilados ni en packages/core/styles/*.css. Disposicion por-crear queda congelada por esta medicion. Fuente: docs/f2a/medicion-f2a0/data.json + /private/tmp/opus-f2a1-tabla-medida.md (Verificacion 1).",
       "derivationDebt": true
     },
     {
@@ -1498,7 +1498,7 @@
       "governedBy": null,
       "governanceScope": "ninguna",
       "exposure": "internal-head",
-      "exposureNote": "VERIFICADO: --ds-color-bg-selected tiene cero declaraciones en src/.",
+      "exposureNote": "VERIFICADO: --ds-color-bg-selected tiene cero declaraciones en src/. Clase 1 congelada (F2A-1 Lote A, medido 2026-08-26): cero ocurrencias de cualquier tipo -- ni var(), ni declaracion, ni espejo TS, ni estampado inline JSX, ni fixture -- en packages/core/src + packages/showroom/src (prod=0, test=0, showroom=0), y tampoco en los 3 artefactos compilados ni en packages/core/styles/*.css. Disposicion por-crear queda congelada por esta medicion. Fuente: docs/f2a/medicion-f2a0/data.json + /private/tmp/opus-f2a1-tabla-medida.md (Verificacion 1).",
       "derivationDebt": true
     },
     {
@@ -1707,12 +1707,12 @@
           ]
         }
       },
-      "derivation": "Dos o tres pasos de interlineado (tight / normal / relaxed) sobre la misma rampa (packages/core/src/foundation/tokens/css/foundation/themes/default.css:631, :633).",
-      "evidence": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:633",
+      "derivation": "Dos o tres pasos de interlineado (tight / normal / relaxed) sobre la misma rampa (packages/core/src/foundation/tokens/css/foundation/themes/default.css:638, :640). Cita anterior (:631, :633) era incorrecta: esas lineas caen en el bloque de font-weight (no en la rampa line-height).",
+      "evidence": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:640",
       "governedBy": null,
       "governanceScope": "ninguna",
       "exposure": "internal-head",
-      "exposureNote": "Derivacion tipografica, no dial. Rottay ya la usa por referencia en las cinco filas de campo.",
+      "exposureNote": "Derivacion tipografica, no dial. Rottay ya la usa por referencia en las cinco filas de campo. CORREGIDO (F2A-1 Lote A, medido 2026-08-26, ley Sec A.3): esta raiz NO es Clase 1/asimetrica y sale del set con razon escrita -- el canal esta VIVO en la capa base (default.css:640, valor 1.5) y lo leen 27 sitios de produccion en 16 archivos (typography, card, modal, timeline, meter, collapse, semantic-surface, 3 skins modern, classic theme, 2 en tokens/ts, ui/primitives/display/Typography/runtime/index.ts:40) -- medicion independiente cruzada contra el DT (28/28 por metodo distinto, comentarios/tests; sin diferencia de sustancia). Que NINGUN tema lo re-declare por vertical es cascada INTENCIONAL de la capa base, no un hueco de declaracion: por eso `collapses`/`assignments` de esta fila (pensados para medir asimetria de autoria POR VERTICAL) no describen la capa real donde vive el canal, que es la capa base compartida, consumida por var() a lo ancho del arbol -- no re-declararlo es la senal correcta, no la ausencia que el resto de esta tabla busca. Fuente: /private/tmp/opus-f2a1-tabla-medida.md.",
       "derivationDebt": true
     },
     {
@@ -1824,7 +1824,7 @@
       "governedBy": null,
       "governanceScope": "ninguna",
       "exposure": "internal-head",
-      "exposureNote": "Misma familia que control.ratio.padding: razon del sistema sin cabeza.",
+      "exposureNote": "Misma familia que control.ratio.padding: razon del sistema sin cabeza. Revision de catalogo (F2A-1 Lote A, medido 2026-08-26, misma clase Sec A.3 que la correccion de type.leading): --ds-control-gap-ratio no existe bajo NINGUNA grafia en el arbol CSS -- sondeo de vecindad, cero '--ds-control-*ratio*' en todo src/. El nombre delata una fila de catalogo, no un canal CSS real; a diferencia de las otras 9 raices de Clase 1, esta puede estar nombrando una entrada de catalogo en vez de una perilla. Queda por-crear con esta salvedad explicita en vez de asumida como canal. Clase 1 congelada (F2A-1 Lote A, medido 2026-08-26): cero ocurrencias de cualquier tipo -- ni var(), ni declaracion, ni espejo TS, ni estampado inline JSX, ni fixture -- en packages/core/src + packages/showroom/src (prod=0, test=0, showroom=0), y tampoco en los 3 artefactos compilados ni en packages/core/styles/*.css. Disposicion por-crear queda congelada por esta medicion. Fuente: docs/f2a/medicion-f2a0/data.json + /private/tmp/opus-f2a1-tabla-medida.md (Verificacion 1).",
       "derivationDebt": true
     },
     {
@@ -2259,7 +2259,7 @@
       "governedBy": null,
       "governanceScope": "ninguna",
       "exposure": "internal-head",
-      "exposureNote": "Solo bithire lo autora (3 canales). Sin cabeza.",
+      "exposureNote": "Solo bithire lo autora (3 canales). Sin cabeza. Clase 1 congelada (F2A-1 Lote A, medido 2026-08-26): cero ocurrencias de cualquier tipo -- ni var(), ni declaracion, ni espejo TS, ni estampado inline JSX, ni fixture -- en packages/core/src + packages/showroom/src (prod=0, test=0, showroom=0), y tampoco en los 3 artefactos compilados ni en packages/core/styles/*.css. Disposicion por-crear queda congelada por esta medicion. Fuente: docs/f2a/medicion-f2a0/data.json + /private/tmp/opus-f2a1-tabla-medida.md (Verificacion 1).",
       "derivationDebt": true
     },
     {
@@ -2292,7 +2292,7 @@
       "governedBy": null,
       "governanceScope": "ninguna",
       "exposure": "internal-head",
-      "exposureNote": "VERIFICADO: --ds-alpha-8 y familia tienen cero declaraciones en src/. No es perilla (un tenant no elige paradas de alfa) pero es la primitiva que hace baratos a los siete deltas de estado y a los tres bordes de nivel.",
+      "exposureNote": "VERIFICADO: --ds-alpha-8 y familia tienen cero declaraciones en src/. No es perilla (un tenant no elige paradas de alfa) pero es la primitiva que hace baratos a los siete deltas de estado y a los tres bordes de nivel. Clase 1 congelada (F2A-1 Lote A, medido 2026-08-26): cero ocurrencias de cualquier tipo -- ni var(), ni declaracion, ni espejo TS, ni estampado inline JSX, ni fixture -- en packages/core/src + packages/showroom/src (prod=0, test=0, showroom=0), y tampoco en los 3 artefactos compilados ni en packages/core/styles/*.css. Disposicion por-crear queda congelada por esta medicion. Fuente: docs/f2a/medicion-f2a0/data.json + /private/tmp/opus-f2a1-tabla-medida.md (Verificacion 1).",
       "derivationDebt": true
     },
     {
@@ -2325,7 +2325,7 @@
       "governedBy": null,
       "governanceScope": "ninguna",
       "exposure": "internal-head",
-      "exposureNote": "Solo rottay lo autora (2 canales). Sin cabeza.",
+      "exposureNote": "Solo rottay lo autora (2 canales). Sin cabeza. Clase 1 congelada (F2A-1 Lote A, medido 2026-08-26): cero ocurrencias de cualquier tipo -- ni var(), ni declaracion, ni espejo TS, ni estampado inline JSX, ni fixture -- en packages/core/src + packages/showroom/src (prod=0, test=0, showroom=0), y tampoco en los 3 artefactos compilados ni en packages/core/styles/*.css. Disposicion por-crear queda congelada por esta medicion. Fuente: docs/f2a/medicion-f2a0/data.json + /private/tmp/opus-f2a1-tabla-medida.md (Verificacion 1).",
       "derivationDebt": true
     },
     {
@@ -2358,7 +2358,7 @@
       "governedBy": null,
       "governanceScope": "ninguna",
       "exposure": "internal-head",
-      "exposureNote": "Solo bithire lo autora (2 canales). Sin cabeza.",
+      "exposureNote": "Solo bithire lo autora (2 canales). Sin cabeza. Clase 1 congelada (F2A-1 Lote A, medido 2026-08-26): cero ocurrencias de cualquier tipo -- ni var(), ni declaracion, ni espejo TS, ni estampado inline JSX, ni fixture -- en packages/core/src + packages/showroom/src (prod=0, test=0, showroom=0), y tampoco en los 3 artefactos compilados ni en packages/core/styles/*.css. Disposicion por-crear queda congelada por esta medicion. Fuente: docs/f2a/medicion-f2a0/data.json + /private/tmp/opus-f2a1-tabla-medida.md (Verificacion 1).",
       "derivationDebt": true
     },
     {
