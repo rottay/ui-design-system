@@ -4478,6 +4478,27 @@ fontSize 13px causal, con re-medición de los 2 controles en bithire).
 Pendiente del DT: asignación de dueño para lineHeight/iconSize (decisión 19,
 punto iii).
 
+**F2A-1 Lotes A y B commiteados (2026-08-26; `dfc39efcf` A, `2509bdd3d` B).**
+A: las 10 inertes congeladas con evidencia de cero-ocurrencia reproducida por
+Fable; `type.leading` fuera del set (vivo en la capa base) con su cita
+preexistente corregida dos veces (línea y nombre). B (T0, decisión 17): evnto
+dark gana `textPageColor #A8A898` (7.77:1 re-verificado), la exclusión
+`TEXT_PAGE_COLOR_MODE_ASYMMETRY` **muere por su causa raíz** (`textPageColor`
+entra a `DEFAULT_PALETTE_KEYS` — olvido de nacimiento F4A-6, encontrado por el
+writer al no poder morir la exclusión con la sola autoría; theme-iso 36/36 sin
+ella; artefactos fuera del dark de evnto byte-idénticos). Asimétricas 34→33.
+**Cláusula de provenance (postaudit Fable):** los 42 receipts F4B que poseen
+el artefacto de evnto conservan provenance pre-T0 en tres estratos (el snapshot
+`modes.dark.palette` sin `textPageColor`; el digest de `dist#evntoBrandTheme`;
+el sha256 de la hoja baseline dark) — una re-corrida futura diverge en BYTES
+sólo en provenance, con veredictos invariantes (el canal nuevo no entra en
+declaredOutputs/calibration de ningún control, 0/20, ni en rosters negativos
+ni lecturas de fixture). Registrado acá para que esa divergencia futura no se
+lea como defecto. Hallazgo estructural asentado: toda recompilación de
+artefacto rota `dist/build-stamp.json`, presente en los `sourceFiles` de los
+134 receipts ⇒ el re-firma quirúrgico es parte fija del costo de cualquier
+lote que recompila.
+
 **F4B-17B + CIERRE DE FASE F4B — token-overrides alcanza su techo
 estructural documentado y la fase queda con TODA la evidencia que el
 instrumento actual puede producir (2026-08-26; Sonnet; dos STOPs honestos;
