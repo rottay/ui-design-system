@@ -1,0 +1,1039 @@
+{
+  "meta": {
+    "generatedBy": "/private/tmp/f2a1-remedicion.mjs (F2A-1 remedicion, 2026-08-26, post-Lote F)",
+    "method": "core: customization-surface-report.json rows[channel].reads.{css,ts} (censo AST canonico, PostCSS + TS AST, ya fresco -- packages/core/src, excluye tests y facade/artifacts). showroom: mismo metodo re-ejecutado aqui sobre packages/showroom/src (excluye tests/stories/fixtures) reutilizando classifyTsLiterals importada del propio censo -- nunca reimplementada.",
+    "universe": "packages/core/src + packages/showroom/src (nombrado exacto, nunca \"global\", nunca los 3 artefactos renderizados)",
+    "coreShowroomFileCounts": {
+      "showroomCss": 2,
+      "showroomTs": 347,
+      "showroomTestFilesExcluded": 5
+    },
+    "rootsTotal": 64
+  },
+  "roots": [
+    {
+      "rootId": "tier.control.fg",
+      "channel": "--ds-color-text-primary",
+      "core": {
+        "css": 761,
+        "ts": 143,
+        "total": 904,
+        "tests": true
+      },
+      "showroom": {
+        "css": 3,
+        "ts": 125,
+        "total": 128
+      },
+      "prodTotal": 1032
+    },
+    {
+      "rootId": "state.delta.hover",
+      "channel": "--ds-state-hover-shift",
+      "core": {
+        "css": 2,
+        "ts": 0,
+        "total": 2,
+        "tests": false
+      },
+      "showroom": {
+        "css": 0,
+        "ts": 0,
+        "total": 0
+      },
+      "prodTotal": 2
+    },
+    {
+      "rootId": "tier.control.bg",
+      "channel": "--ds-surface-control",
+      "core": {
+        "css": 76,
+        "ts": 22,
+        "total": 98,
+        "tests": true
+      },
+      "showroom": {
+        "css": 0,
+        "ts": 0,
+        "total": 0
+      },
+      "prodTotal": 98
+    },
+    {
+      "rootId": "elevation.ladder",
+      "channel": "--ds-elevation-1",
+      "core": {
+        "css": 70,
+        "ts": 9,
+        "total": 79,
+        "tests": true
+      },
+      "showroom": {
+        "css": 0,
+        "ts": 1,
+        "total": 1
+      },
+      "prodTotal": 80
+    },
+    {
+      "rootId": "tier.control.border",
+      "channel": "--ds-color-border",
+      "core": {
+        "css": 483,
+        "ts": 119,
+        "total": 602,
+        "tests": true
+      },
+      "showroom": {
+        "css": 2,
+        "ts": 160,
+        "total": 162
+      },
+      "prodTotal": 764
+    },
+    {
+      "rootId": "ramp.seed.neutral",
+      "channel": "--ds-color-neutral-500",
+      "core": {
+        "css": 35,
+        "ts": 14,
+        "total": 49,
+        "tests": true
+      },
+      "showroom": {
+        "css": 0,
+        "ts": 0,
+        "total": 0
+      },
+      "prodTotal": 49
+    },
+    {
+      "rootId": "state.delta.active",
+      "channel": "--ds-state-active-shift",
+      "core": {
+        "css": 0,
+        "ts": 0,
+        "total": 0,
+        "tests": false
+      },
+      "showroom": {
+        "css": 0,
+        "ts": 0,
+        "total": 0
+      },
+      "prodTotal": 0
+    },
+    {
+      "rootId": "tier.raised.fg",
+      "channel": "--ds-material-raised-foreground",
+      "core": {
+        "css": 1,
+        "ts": 0,
+        "total": 1,
+        "tests": true
+      },
+      "showroom": {
+        "css": 0,
+        "ts": 0,
+        "total": 0
+      },
+      "prodTotal": 1
+    },
+    {
+      "rootId": "tier.base.bg",
+      "channel": "--ds-color-bg-primary",
+      "core": {
+        "css": 244,
+        "ts": 32,
+        "total": 276,
+        "tests": true
+      },
+      "showroom": {
+        "css": 1,
+        "ts": 113,
+        "total": 114
+      },
+      "prodTotal": 390
+    },
+    {
+      "rootId": "tier.page.bg",
+      "channel": "--ds-sidebar-bg",
+      "core": {
+        "css": 3,
+        "ts": 3,
+        "total": 6,
+        "tests": true
+      },
+      "showroom": {
+        "css": 0,
+        "ts": 10,
+        "total": 10
+      },
+      "prodTotal": 16
+    },
+    {
+      "rootId": "tier.raised.bg",
+      "channel": "--ds-surface-card",
+      "core": {
+        "css": 332,
+        "ts": 71,
+        "total": 403,
+        "tests": true
+      },
+      "showroom": {
+        "css": 0,
+        "ts": 64,
+        "total": 64
+      },
+      "prodTotal": 467
+    },
+    {
+      "rootId": "tier.page.fg",
+      "channel": "--ds-sidebar-item-color",
+      "core": {
+        "css": 1,
+        "ts": 0,
+        "total": 1,
+        "tests": true
+      },
+      "showroom": {
+        "css": 0,
+        "ts": 1,
+        "total": 1
+      },
+      "prodTotal": 2
+    },
+    {
+      "rootId": "tier.page.ink",
+      "channel": "--ds-color-text-page",
+      "core": {
+        "css": 0,
+        "ts": 36,
+        "total": 36,
+        "tests": true
+      },
+      "showroom": {
+        "css": 0,
+        "ts": 0,
+        "total": 0
+      },
+      "prodTotal": 36
+    },
+    {
+      "rootId": "tier.accent.fg",
+      "channel": "--ds-color-info-ink",
+      "core": {
+        "css": 6,
+        "ts": 0,
+        "total": 6,
+        "tests": true
+      },
+      "showroom": {
+        "css": 0,
+        "ts": 0,
+        "total": 0
+      },
+      "prodTotal": 6
+    },
+    {
+      "rootId": "spacing.step",
+      "channel": "--ds-spacing-2",
+      "core": {
+        "css": 518,
+        "ts": 30,
+        "total": 548,
+        "tests": true
+      },
+      "showroom": {
+        "css": 0,
+        "ts": 3,
+        "total": 3
+      },
+      "prodTotal": 551
+    },
+    {
+      "rootId": "tier.overlay.fg",
+      "channel": "--ds-material-overlay-foreground",
+      "core": {
+        "css": 4,
+        "ts": 0,
+        "total": 4,
+        "tests": true
+      },
+      "showroom": {
+        "css": 0,
+        "ts": 0,
+        "total": 0
+      },
+      "prodTotal": 4
+    },
+    {
+      "rootId": "type.scale",
+      "channel": "--ds-type-scale",
+      "core": {
+        "css": 33,
+        "ts": 11,
+        "total": 44,
+        "tests": true
+      },
+      "showroom": {
+        "css": 0,
+        "ts": 0,
+        "total": 0
+      },
+      "prodTotal": 44
+    },
+    {
+      "rootId": "control.height",
+      "channel": "--ds-input-md-height",
+      "core": {
+        "css": 19,
+        "ts": 13,
+        "total": 32,
+        "tests": true
+      },
+      "showroom": {
+        "css": 0,
+        "ts": 0,
+        "total": 0
+      },
+      "prodTotal": 32
+    },
+    {
+      "rootId": "tier.accent.bg",
+      "channel": "--ds-surface-accent",
+      "core": {
+        "css": 0,
+        "ts": 0,
+        "total": 0,
+        "tests": false
+      },
+      "showroom": {
+        "css": 0,
+        "ts": 0,
+        "total": 0
+      },
+      "prodTotal": 0
+    },
+    {
+      "rootId": "ramp.seed.primary",
+      "channel": "--ds-color-primary",
+      "core": {
+        "css": 1341,
+        "ts": 246,
+        "total": 1587,
+        "tests": true
+      },
+      "showroom": {
+        "css": 6,
+        "ts": 181,
+        "total": 187
+      },
+      "prodTotal": 1774
+    },
+    {
+      "rootId": "ramp.seed.secondary",
+      "channel": "--ds-color-secondary",
+      "core": {
+        "css": 36,
+        "ts": 12,
+        "total": 48,
+        "tests": true
+      },
+      "showroom": {
+        "css": 0,
+        "ts": 8,
+        "total": 8
+      },
+      "prodTotal": 56
+    },
+    {
+      "rootId": "tier.raised.border",
+      "channel": "--ds-color-border",
+      "core": {
+        "css": 483,
+        "ts": 119,
+        "total": 602,
+        "tests": true
+      },
+      "showroom": {
+        "css": 2,
+        "ts": 160,
+        "total": 162
+      },
+      "prodTotal": 764
+    },
+    {
+      "rootId": "tier.overlay.bg",
+      "channel": "--ds-material-overlay-background",
+      "core": {
+        "css": 14,
+        "ts": 0,
+        "total": 14,
+        "tests": true
+      },
+      "showroom": {
+        "css": 0,
+        "ts": 0,
+        "total": 0
+      },
+      "prodTotal": 14
+    },
+    {
+      "rootId": "state.delta.focus",
+      "channel": "--ds-focus-ring",
+      "core": {
+        "css": 57,
+        "ts": 1,
+        "total": 58,
+        "tests": true
+      },
+      "showroom": {
+        "css": 0,
+        "ts": 0,
+        "total": 0
+      },
+      "prodTotal": 58
+    },
+    {
+      "rootId": "tier.base.border",
+      "channel": "--ds-color-border",
+      "core": {
+        "css": 483,
+        "ts": 119,
+        "total": 602,
+        "tests": true
+      },
+      "showroom": {
+        "css": 2,
+        "ts": 160,
+        "total": 162
+      },
+      "prodTotal": 764
+    },
+    {
+      "rootId": "ramp.seed.info",
+      "channel": "--ds-color-info",
+      "core": {
+        "css": 72,
+        "ts": 21,
+        "total": 93,
+        "tests": true
+      },
+      "showroom": {
+        "css": 0,
+        "ts": 8,
+        "total": 8
+      },
+      "prodTotal": 101
+    },
+    {
+      "rootId": "tier.page.border",
+      "channel": "--ds-color-border-subtle",
+      "core": {
+        "css": 267,
+        "ts": 15,
+        "total": 282,
+        "tests": true
+      },
+      "showroom": {
+        "css": 1,
+        "ts": 61,
+        "total": 62
+      },
+      "prodTotal": 344
+    },
+    {
+      "rootId": "ramp.seed.accent",
+      "channel": "--ds-color-accent",
+      "core": {
+        "css": 4,
+        "ts": 2,
+        "total": 6,
+        "tests": true
+      },
+      "showroom": {
+        "css": 0,
+        "ts": 0,
+        "total": 0
+      },
+      "prodTotal": 6
+    },
+    {
+      "rootId": "ramp.seed.success",
+      "channel": "--ds-color-success",
+      "core": {
+        "css": 240,
+        "ts": 42,
+        "total": 282,
+        "tests": true
+      },
+      "showroom": {
+        "css": 0,
+        "ts": 17,
+        "total": 17
+      },
+      "prodTotal": 299
+    },
+    {
+      "rootId": "ramp.seed.error",
+      "channel": "--ds-color-error",
+      "core": {
+        "css": 366,
+        "ts": 56,
+        "total": 422,
+        "tests": true
+      },
+      "showroom": {
+        "css": 0,
+        "ts": 11,
+        "total": 11
+      },
+      "prodTotal": 433
+    },
+    {
+      "rootId": "ramp.seed.warning",
+      "channel": "--ds-color-warning",
+      "core": {
+        "css": 185,
+        "ts": 40,
+        "total": 225,
+        "tests": true
+      },
+      "showroom": {
+        "css": 0,
+        "ts": 14,
+        "total": 14
+      },
+      "prodTotal": 239
+    },
+    {
+      "rootId": "state.delta.disabled",
+      "channel": "--ds-state-disabled-opacity",
+      "core": {
+        "css": 6,
+        "ts": 0,
+        "total": 6,
+        "tests": true
+      },
+      "showroom": {
+        "css": 0,
+        "ts": 0,
+        "total": 0
+      },
+      "prodTotal": 6
+    },
+    {
+      "rootId": "tier.accent.border",
+      "channel": "--ds-color-border-accent",
+      "core": {
+        "css": 0,
+        "ts": 0,
+        "total": 0,
+        "tests": false
+      },
+      "showroom": {
+        "css": 0,
+        "ts": 0,
+        "total": 0
+      },
+      "prodTotal": 0
+    },
+    {
+      "rootId": "radius.base",
+      "channel": "--ds-radius-md",
+      "core": {
+        "css": 379,
+        "ts": 26,
+        "total": 405,
+        "tests": true
+      },
+      "showroom": {
+        "css": 0,
+        "ts": 20,
+        "total": 20
+      },
+      "prodTotal": 425
+    },
+    {
+      "rootId": "motion.intensity",
+      "channel": "--ds-motion-intensity",
+      "core": {
+        "css": 27,
+        "ts": 1,
+        "total": 28,
+        "tests": true
+      },
+      "showroom": {
+        "css": 0,
+        "ts": 0,
+        "total": 0
+      },
+      "prodTotal": 28
+    },
+    {
+      "rootId": "control.ratio.padding",
+      "channel": "--ds-control-padding-ratio-label",
+      "core": {
+        "css": 0,
+        "ts": 0,
+        "total": 0,
+        "tests": false
+      },
+      "showroom": {
+        "css": 0,
+        "ts": 0,
+        "total": 0
+      },
+      "prodTotal": 0
+    },
+    {
+      "rootId": "scrim.opacity",
+      "channel": "--ds-overlay-scrim",
+      "core": {
+        "css": 2,
+        "ts": 1,
+        "total": 3,
+        "tests": true
+      },
+      "showroom": {
+        "css": 0,
+        "ts": 0,
+        "total": 0
+      },
+      "prodTotal": 3
+    },
+    {
+      "rootId": "tier.overlay.border",
+      "channel": "--ds-color-border",
+      "core": {
+        "css": 483,
+        "ts": 119,
+        "total": 602,
+        "tests": true
+      },
+      "showroom": {
+        "css": 2,
+        "ts": 160,
+        "total": 162
+      },
+      "prodTotal": 764
+    },
+    {
+      "rootId": "state.delta.selected",
+      "channel": "--ds-state-selected-shift",
+      "core": {
+        "css": 0,
+        "ts": 0,
+        "total": 0,
+        "tests": false
+      },
+      "showroom": {
+        "css": 0,
+        "ts": 0,
+        "total": 0
+      },
+      "prodTotal": 0
+    },
+    {
+      "rootId": "control.ratio.fontSize",
+      "channel": "--ds-input-md-font-size",
+      "core": {
+        "css": 17,
+        "ts": 3,
+        "total": 20,
+        "tests": true
+      },
+      "showroom": {
+        "css": 0,
+        "ts": 0,
+        "total": 0
+      },
+      "prodTotal": 20
+    },
+    {
+      "rootId": "control.ratio.lineHeight",
+      "channel": "--ds-input-md-line-height",
+      "core": {
+        "css": 5,
+        "ts": 1,
+        "total": 6,
+        "tests": false
+      },
+      "showroom": {
+        "css": 0,
+        "ts": 0,
+        "total": 0
+      },
+      "prodTotal": 6
+    },
+    {
+      "rootId": "control.ratio.iconSize",
+      "channel": "--ds-input-md-icon-size",
+      "core": {
+        "css": 13,
+        "ts": 1,
+        "total": 14,
+        "tests": false
+      },
+      "showroom": {
+        "css": 0,
+        "ts": 0,
+        "total": 0
+      },
+      "prodTotal": 14
+    },
+    {
+      "rootId": "motion.duration",
+      "channel": "--ds-motion-duration-scale",
+      "core": {
+        "css": 10,
+        "ts": 6,
+        "total": 16,
+        "tests": true
+      },
+      "showroom": {
+        "css": 0,
+        "ts": 0,
+        "total": 0
+      },
+      "prodTotal": 16
+    },
+    {
+      "rootId": "tier.base.fg",
+      "channel": "--ds-color-text-primary",
+      "core": {
+        "css": 761,
+        "ts": 143,
+        "total": 904,
+        "tests": true
+      },
+      "showroom": {
+        "css": 3,
+        "ts": 125,
+        "total": 128
+      },
+      "prodTotal": 1032
+    },
+    {
+      "rootId": "type.leading",
+      "channel": "--ds-line-height-normal",
+      "core": {
+        "css": 25,
+        "ts": 2,
+        "total": 27,
+        "tests": true
+      },
+      "showroom": {
+        "css": 0,
+        "ts": 0,
+        "total": 0
+      },
+      "prodTotal": 27
+    },
+    {
+      "rootId": "experience.profile",
+      "channel": "--ds-experience-profile",
+      "core": {
+        "css": 0,
+        "ts": 0,
+        "total": 0,
+        "tests": true
+      },
+      "showroom": {
+        "css": 0,
+        "ts": 0,
+        "total": 0
+      },
+      "prodTotal": 0
+    },
+    {
+      "rootId": "gradient.recipe",
+      "channel": "--ds-gradient-primary",
+      "core": {
+        "css": 2,
+        "ts": 1,
+        "total": 3,
+        "tests": true
+      },
+      "showroom": {
+        "css": 0,
+        "ts": 0,
+        "total": 0
+      },
+      "prodTotal": 3
+    },
+    {
+      "rootId": "control.ratio.gap",
+      "channel": "--ds-control-gap-ratio",
+      "core": {
+        "css": 0,
+        "ts": 0,
+        "total": 0,
+        "tests": false
+      },
+      "showroom": {
+        "css": 0,
+        "ts": 0,
+        "total": 0
+      },
+      "prodTotal": 0
+    },
+    {
+      "rootId": "control.ratio.radius",
+      "channel": "--ds-button-md-radius",
+      "core": {
+        "css": 6,
+        "ts": 2,
+        "total": 8,
+        "tests": true
+      },
+      "showroom": {
+        "css": 0,
+        "ts": 0,
+        "total": 0
+      },
+      "prodTotal": 8
+    },
+    {
+      "rootId": "glass.recipe",
+      "channel": "--ds-glass-blur",
+      "core": {
+        "css": 3,
+        "ts": 3,
+        "total": 6,
+        "tests": true
+      },
+      "showroom": {
+        "css": 0,
+        "ts": 0,
+        "total": 0
+      },
+      "prodTotal": 6
+    },
+    {
+      "rootId": "motion.spring",
+      "channel": "--ds-motion-spring",
+      "core": {
+        "css": 2,
+        "ts": 1,
+        "total": 3,
+        "tests": true
+      },
+      "showroom": {
+        "css": 0,
+        "ts": 0,
+        "total": 0
+      },
+      "prodTotal": 3
+    },
+    {
+      "rootId": "type.tracking",
+      "channel": "--ds-letter-spacing-body",
+      "core": {
+        "css": 1,
+        "ts": 5,
+        "total": 6,
+        "tests": true
+      },
+      "showroom": {
+        "css": 0,
+        "ts": 0,
+        "total": 0
+      },
+      "prodTotal": 6
+    },
+    {
+      "rootId": "type.weight",
+      "channel": "--ds-font-weight-medium",
+      "core": {
+        "css": 79,
+        "ts": 8,
+        "total": 87,
+        "tests": true
+      },
+      "showroom": {
+        "css": 0,
+        "ts": 0,
+        "total": 0
+      },
+      "prodTotal": 87
+    },
+    {
+      "rootId": "chart.palette",
+      "channel": "--ds-chart-series-1",
+      "core": {
+        "css": 5,
+        "ts": 0,
+        "total": 5,
+        "tests": true
+      },
+      "showroom": {
+        "css": 0,
+        "ts": 0,
+        "total": 0
+      },
+      "prodTotal": 5
+    },
+    {
+      "rootId": "type.family.base",
+      "channel": "--ds-font-family-base",
+      "core": {
+        "css": 108,
+        "ts": 53,
+        "total": 161,
+        "tests": true
+      },
+      "showroom": {
+        "css": 0,
+        "ts": 2,
+        "total": 2
+      },
+      "prodTotal": 163
+    },
+    {
+      "rootId": "type.family.heading",
+      "channel": "--ds-font-family-heading",
+      "core": {
+        "css": 49,
+        "ts": 8,
+        "total": 57,
+        "tests": true
+      },
+      "showroom": {
+        "css": 0,
+        "ts": 1,
+        "total": 1
+      },
+      "prodTotal": 58
+    },
+    {
+      "rootId": "type.family.mono",
+      "channel": "--ds-font-family-mono",
+      "core": {
+        "css": 87,
+        "ts": 23,
+        "total": 110,
+        "tests": true
+      },
+      "showroom": {
+        "css": 0,
+        "ts": 8,
+        "total": 8
+      },
+      "prodTotal": 118
+    },
+    {
+      "rootId": "type.family.display",
+      "channel": "--ds-font-family-display",
+      "core": {
+        "css": 8,
+        "ts": 4,
+        "total": 12,
+        "tests": true
+      },
+      "showroom": {
+        "css": 0,
+        "ts": 0,
+        "total": 0
+      },
+      "prodTotal": 12
+    },
+    {
+      "rootId": "density.scale",
+      "channel": "--ds-density-effective-scale",
+      "core": {
+        "css": 319,
+        "ts": 7,
+        "total": 326,
+        "tests": true
+      },
+      "showroom": {
+        "css": 0,
+        "ts": 1,
+        "total": 1
+      },
+      "prodTotal": 327
+    },
+    {
+      "rootId": "state.delta.pressed",
+      "channel": "--ds-state-pressed-shift",
+      "core": {
+        "css": 0,
+        "ts": 0,
+        "total": 0,
+        "tests": false
+      },
+      "showroom": {
+        "css": 0,
+        "ts": 0,
+        "total": 0
+      },
+      "prodTotal": 0
+    },
+    {
+      "rootId": "alpha.ladder",
+      "channel": "--ds-alpha-8",
+      "core": {
+        "css": 0,
+        "ts": 0,
+        "total": 0,
+        "tests": false
+      },
+      "showroom": {
+        "css": 0,
+        "ts": 0,
+        "total": 0
+      },
+      "prodTotal": 0
+    },
+    {
+      "rootId": "state.delta.checked",
+      "channel": "--ds-state-checked-shift",
+      "core": {
+        "css": 0,
+        "ts": 0,
+        "total": 0,
+        "tests": false
+      },
+      "showroom": {
+        "css": 0,
+        "ts": 0,
+        "total": 0
+      },
+      "prodTotal": 0
+    },
+    {
+      "rootId": "state.delta.expanded",
+      "channel": "--ds-state-expanded-shift",
+      "core": {
+        "css": 0,
+        "ts": 0,
+        "total": 0,
+        "tests": false
+      },
+      "showroom": {
+        "css": 0,
+        "ts": 0,
+        "total": 0
+      },
+      "prodTotal": 0
+    },
+    {
+      "rootId": "effect.intensity",
+      "channel": "--ds-effect-intensity",
+      "core": {
+        "css": 47,
+        "ts": 15,
+        "total": 62,
+        "tests": true
+      },
+      "showroom": {
+        "css": 0,
+        "ts": 0,
+        "total": 0
+      },
+      "prodTotal": 62
+    }
+  ]
+}
