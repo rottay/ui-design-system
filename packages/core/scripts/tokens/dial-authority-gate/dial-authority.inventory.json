@@ -1,0 +1,388 @@
+{
+  "schemaVersion": 1,
+  "law": "Decision 19 del owner (2026-08-26): una vertical puede decidir su seed o coeficiente propio, pero no puede congelar el resultado terminal de un control publico sin una excepcion explicita y visible. Este inventario es el registro visible que la ley exige. `exceptions` son permisos del owner (hoy: ninguno). `pending` es deuda medida de la misma clase que ningun ruling cubre todavia: no es permiso, es una lista de trabajo que no puede crecer.",
+  "exceptions": [],
+  "pending": [
+    {
+      "channel": "--ds-badge-radius",
+      "dial": "--ds-radius-scale",
+      "vertical": "bithire",
+      "frozenAs": [
+        "var(--ds-radius-full)"
+      ],
+      "dialCarriedBy": [
+        "rottay"
+      ],
+      "reason": "SIN ADJUDICAR — misma clase anti-puerta que la decision 19, medida en F2A-1 Lote F-prima. El ruling del owner cubrio SOLO --ds-glass-blur y --ds-input-md-font-size; el resto se inventaria como deuda visible, NO como permiso. Decrece-solo: no puede crecer, y cada entrada sale cuando su control tenga dueño adjudicado y se corrija."
+    },
+    {
+      "channel": "--ds-button-lg-font-size",
+      "dial": "--ds-type-scale",
+      "vertical": "bithire",
+      "frozenAs": [
+        "14px"
+      ],
+      "dialCarriedBy": [
+        "base",
+        "rottay",
+        "evnto"
+      ],
+      "reason": "SIN ADJUDICAR — misma clase anti-puerta que la decision 19, medida en F2A-1 Lote F-prima. El ruling del owner cubrio SOLO --ds-glass-blur y --ds-input-md-font-size; el resto se inventaria como deuda visible, NO como permiso. Decrece-solo: no puede crecer, y cada entrada sale cuando su control tenga dueño adjudicado y se corrija."
+    },
+    {
+      "channel": "--ds-button-md-font-size",
+      "dial": "--ds-type-scale",
+      "vertical": "bithire",
+      "frozenAs": [
+        "13px"
+      ],
+      "dialCarriedBy": [
+        "base",
+        "rottay",
+        "evnto"
+      ],
+      "reason": "SIN ADJUDICAR — misma clase anti-puerta que la decision 19, medida en F2A-1 Lote F-prima. El ruling del owner cubrio SOLO --ds-glass-blur y --ds-input-md-font-size; el resto se inventaria como deuda visible, NO como permiso. Decrece-solo: no puede crecer, y cada entrada sale cuando su control tenga dueño adjudicado y se corrija."
+    },
+    {
+      "channel": "--ds-button-sm-font-size",
+      "dial": "--ds-type-scale",
+      "vertical": "bithire",
+      "frozenAs": [
+        "12px"
+      ],
+      "dialCarriedBy": [
+        "base",
+        "rottay",
+        "evnto"
+      ],
+      "reason": "SIN ADJUDICAR — misma clase anti-puerta que la decision 19, medida en F2A-1 Lote F-prima. El ruling del owner cubrio SOLO --ds-glass-blur y --ds-input-md-font-size; el resto se inventaria como deuda visible, NO como permiso. Decrece-solo: no puede crecer, y cada entrada sale cuando su control tenga dueño adjudicado y se corrija."
+    },
+    {
+      "channel": "--ds-button-xl-font-size",
+      "dial": "--ds-type-scale",
+      "vertical": "bithire",
+      "frozenAs": [
+        "15px"
+      ],
+      "dialCarriedBy": [
+        "base",
+        "rottay",
+        "evnto"
+      ],
+      "reason": "SIN ADJUDICAR — misma clase anti-puerta que la decision 19, medida en F2A-1 Lote F-prima. El ruling del owner cubrio SOLO --ds-glass-blur y --ds-input-md-font-size; el resto se inventaria como deuda visible, NO como permiso. Decrece-solo: no puede crecer, y cada entrada sale cuando su control tenga dueño adjudicado y se corrija."
+    },
+    {
+      "channel": "--ds-button-xs-font-size",
+      "dial": "--ds-type-scale",
+      "vertical": "bithire",
+      "frozenAs": [
+        "11px"
+      ],
+      "dialCarriedBy": [
+        "base",
+        "rottay",
+        "evnto"
+      ],
+      "reason": "SIN ADJUDICAR — misma clase anti-puerta que la decision 19, medida en F2A-1 Lote F-prima. El ruling del owner cubrio SOLO --ds-glass-blur y --ds-input-md-font-size; el resto se inventaria como deuda visible, NO como permiso. Decrece-solo: no puede crecer, y cada entrada sale cuando su control tenga dueño adjudicado y se corrija."
+    },
+    {
+      "channel": "--ds-card-title-font-size",
+      "dial": "--ds-type-scale",
+      "vertical": "bithire",
+      "frozenAs": [
+        "13px"
+      ],
+      "dialCarriedBy": [
+        "base",
+        "rottay",
+        "evnto"
+      ],
+      "reason": "SIN ADJUDICAR — misma clase anti-puerta que la decision 19, medida en F2A-1 Lote F-prima. El ruling del owner cubrio SOLO --ds-glass-blur y --ds-input-md-font-size; el resto se inventaria como deuda visible, NO como permiso. Decrece-solo: no puede crecer, y cada entrada sale cuando su control tenga dueño adjudicado y se corrija."
+    },
+    {
+      "channel": "--ds-collection-card-padding",
+      "dial": "--ds-rhythm-effective-scale",
+      "vertical": "bithire",
+      "frozenAs": [
+        "14px"
+      ],
+      "dialCarriedBy": [
+        "base",
+        "rottay",
+        "evnto"
+      ],
+      "reason": "SIN ADJUDICAR — misma clase anti-puerta que la decision 19, medida en F2A-1 Lote F-prima. El ruling del owner cubrio SOLO --ds-glass-blur y --ds-input-md-font-size; el resto se inventaria como deuda visible, NO como permiso. Decrece-solo: no puede crecer, y cada entrada sale cuando su control tenga dueño adjudicado y se corrija."
+    },
+    {
+      "channel": "--ds-command-home-console-padding",
+      "dial": "--ds-rhythm-effective-scale",
+      "vertical": "bithire",
+      "frozenAs": [
+        "clamp(20px, 3vw, 34px) clamp(16px, 4vw, 56px) 24px"
+      ],
+      "dialCarriedBy": [
+        "base",
+        "rottay",
+        "evnto"
+      ],
+      "reason": "SIN ADJUDICAR — misma clase anti-puerta que la decision 19, medida en F2A-1 Lote F-prima. El ruling del owner cubrio SOLO --ds-glass-blur y --ds-input-md-font-size; el resto se inventaria como deuda visible, NO como permiso. Decrece-solo: no puede crecer, y cada entrada sale cuando su control tenga dueño adjudicado y se corrija."
+    },
+    {
+      "channel": "--ds-command-home-gap",
+      "dial": "--ds-rhythm-effective-scale",
+      "vertical": "bithire",
+      "frozenAs": [
+        "16px"
+      ],
+      "dialCarriedBy": [
+        "base",
+        "rottay",
+        "evnto"
+      ],
+      "reason": "SIN ADJUDICAR — misma clase anti-puerta que la decision 19, medida en F2A-1 Lote F-prima. El ruling del owner cubrio SOLO --ds-glass-blur y --ds-input-md-font-size; el resto se inventaria como deuda visible, NO como permiso. Decrece-solo: no puede crecer, y cada entrada sale cuando su control tenga dueño adjudicado y se corrija."
+    },
+    {
+      "channel": "--ds-command-home-panel-gap",
+      "dial": "--ds-rhythm-effective-scale",
+      "vertical": "bithire",
+      "frozenAs": [
+        "14px"
+      ],
+      "dialCarriedBy": [
+        "base",
+        "rottay",
+        "evnto"
+      ],
+      "reason": "SIN ADJUDICAR — misma clase anti-puerta que la decision 19, medida en F2A-1 Lote F-prima. El ruling del owner cubrio SOLO --ds-glass-blur y --ds-input-md-font-size; el resto se inventaria como deuda visible, NO como permiso. Decrece-solo: no puede crecer, y cada entrada sale cuando su control tenga dueño adjudicado y se corrija."
+    },
+    {
+      "channel": "--ds-compact-card-gap",
+      "dial": "--ds-rhythm-effective-scale",
+      "vertical": "bithire",
+      "frozenAs": [
+        "8px"
+      ],
+      "dialCarriedBy": [
+        "base",
+        "rottay",
+        "evnto"
+      ],
+      "reason": "SIN ADJUDICAR — misma clase anti-puerta que la decision 19, medida en F2A-1 Lote F-prima. El ruling del owner cubrio SOLO --ds-glass-blur y --ds-input-md-font-size; el resto se inventaria como deuda visible, NO como permiso. Decrece-solo: no puede crecer, y cada entrada sale cuando su control tenga dueño adjudicado y se corrija."
+    },
+    {
+      "channel": "--ds-compact-card-padding",
+      "dial": "--ds-rhythm-effective-scale",
+      "vertical": "bithire",
+      "frozenAs": [
+        "10px 12px"
+      ],
+      "dialCarriedBy": [
+        "base",
+        "rottay",
+        "evnto"
+      ],
+      "reason": "SIN ADJUDICAR — misma clase anti-puerta que la decision 19, medida en F2A-1 Lote F-prima. El ruling del owner cubrio SOLO --ds-glass-blur y --ds-input-md-font-size; el resto se inventaria como deuda visible, NO como permiso. Decrece-solo: no puede crecer, y cada entrada sale cuando su control tenga dueño adjudicado y se corrija."
+    },
+    {
+      "channel": "--ds-glass-bg",
+      "dial": "--ds-effect-intensity",
+      "vertical": "bithire",
+      "frozenAs": [
+        "rgba(255, 255, 255, 0.84)"
+      ],
+      "dialCarriedBy": [
+        "base",
+        "rottay",
+        "evnto"
+      ],
+      "reason": "SIN ADJUDICAR — misma clase anti-puerta que la decision 19, medida en F2A-1 Lote F-prima. El ruling del owner cubrio SOLO --ds-glass-blur y --ds-input-md-font-size; el resto se inventaria como deuda visible, NO como permiso. Decrece-solo: no puede crecer, y cada entrada sale cuando su control tenga dueño adjudicado y se corrija."
+    },
+    {
+      "channel": "--ds-glass-border",
+      "dial": "--ds-effect-intensity",
+      "vertical": "bithire",
+      "frozenAs": [
+        "rgba(196, 210, 222, 0.86)"
+      ],
+      "dialCarriedBy": [
+        "base",
+        "rottay",
+        "evnto"
+      ],
+      "reason": "SIN ADJUDICAR — misma clase anti-puerta que la decision 19, medida en F2A-1 Lote F-prima. El ruling del owner cubrio SOLO --ds-glass-blur y --ds-input-md-font-size; el resto se inventaria como deuda visible, NO como permiso. Decrece-solo: no puede crecer, y cada entrada sale cuando su control tenga dueño adjudicado y se corrija."
+    },
+    {
+      "channel": "--ds-input-helper-font-size",
+      "dial": "--ds-type-scale",
+      "vertical": "bithire",
+      "frozenAs": [
+        "11px"
+      ],
+      "dialCarriedBy": [
+        "base",
+        "rottay",
+        "evnto"
+      ],
+      "reason": "SIN ADJUDICAR — misma clase anti-puerta que la decision 19, medida en F2A-1 Lote F-prima. El ruling del owner cubrio SOLO --ds-glass-blur y --ds-input-md-font-size; el resto se inventaria como deuda visible, NO como permiso. Decrece-solo: no puede crecer, y cada entrada sale cuando su control tenga dueño adjudicado y se corrija."
+    },
+    {
+      "channel": "--ds-input-label-font-size",
+      "dial": "--ds-type-scale",
+      "vertical": "bithire",
+      "frozenAs": [
+        "12px"
+      ],
+      "dialCarriedBy": [
+        "base",
+        "rottay",
+        "evnto"
+      ],
+      "reason": "SIN ADJUDICAR — misma clase anti-puerta que la decision 19, medida en F2A-1 Lote F-prima. El ruling del owner cubrio SOLO --ds-glass-blur y --ds-input-md-font-size; el resto se inventaria como deuda visible, NO como permiso. Decrece-solo: no puede crecer, y cada entrada sale cuando su control tenga dueño adjudicado y se corrija."
+    },
+    {
+      "channel": "--ds-input-lg-font-size",
+      "dial": "--ds-type-scale",
+      "vertical": "bithire",
+      "frozenAs": [
+        "14px"
+      ],
+      "dialCarriedBy": [
+        "rottay"
+      ],
+      "reason": "SIN ADJUDICAR — misma clase anti-puerta que la decision 19, medida en F2A-1 Lote F-prima. El ruling del owner cubrio SOLO --ds-glass-blur y --ds-input-md-font-size; el resto se inventaria como deuda visible, NO como permiso. Decrece-solo: no puede crecer, y cada entrada sale cuando su control tenga dueño adjudicado y se corrija."
+    },
+    {
+      "channel": "--ds-input-sm-font-size",
+      "dial": "--ds-type-scale",
+      "vertical": "bithire",
+      "frozenAs": [
+        "12px"
+      ],
+      "dialCarriedBy": [
+        "rottay"
+      ],
+      "reason": "SIN ADJUDICAR — misma clase anti-puerta que la decision 19, medida en F2A-1 Lote F-prima. El ruling del owner cubrio SOLO --ds-glass-blur y --ds-input-md-font-size; el resto se inventaria como deuda visible, NO como permiso. Decrece-solo: no puede crecer, y cada entrada sale cuando su control tenga dueño adjudicado y se corrija."
+    },
+    {
+      "channel": "--ds-input-xl-font-size",
+      "dial": "--ds-type-scale",
+      "vertical": "bithire",
+      "frozenAs": [
+        "15px"
+      ],
+      "dialCarriedBy": [
+        "rottay"
+      ],
+      "reason": "SIN ADJUDICAR — misma clase anti-puerta que la decision 19, medida en F2A-1 Lote F-prima. El ruling del owner cubrio SOLO --ds-glass-blur y --ds-input-md-font-size; el resto se inventaria como deuda visible, NO como permiso. Decrece-solo: no puede crecer, y cada entrada sale cuando su control tenga dueño adjudicado y se corrija."
+    },
+    {
+      "channel": "--ds-input-xs-font-size",
+      "dial": "--ds-type-scale",
+      "vertical": "bithire",
+      "frozenAs": [
+        "11px"
+      ],
+      "dialCarriedBy": [
+        "rottay"
+      ],
+      "reason": "SIN ADJUDICAR — misma clase anti-puerta que la decision 19, medida en F2A-1 Lote F-prima. El ruling del owner cubrio SOLO --ds-glass-blur y --ds-input-md-font-size; el resto se inventaria como deuda visible, NO como permiso. Decrece-solo: no puede crecer, y cada entrada sale cuando su control tenga dueño adjudicado y se corrija."
+    },
+    {
+      "channel": "--ds-listing-grid-card-gap",
+      "dial": "--ds-rhythm-effective-scale",
+      "vertical": "bithire",
+      "frozenAs": [
+        "10px"
+      ],
+      "dialCarriedBy": [
+        "base",
+        "rottay",
+        "evnto"
+      ],
+      "reason": "SIN ADJUDICAR — misma clase anti-puerta que la decision 19, medida en F2A-1 Lote F-prima. El ruling del owner cubrio SOLO --ds-glass-blur y --ds-input-md-font-size; el resto se inventaria como deuda visible, NO como permiso. Decrece-solo: no puede crecer, y cada entrada sale cuando su control tenga dueño adjudicado y se corrija."
+    },
+    {
+      "channel": "--ds-listing-grid-gap",
+      "dial": "--ds-rhythm-effective-scale",
+      "vertical": "bithire",
+      "frozenAs": [
+        "12px"
+      ],
+      "dialCarriedBy": [
+        "base",
+        "rottay",
+        "evnto"
+      ],
+      "reason": "SIN ADJUDICAR — misma clase anti-puerta que la decision 19, medida en F2A-1 Lote F-prima. El ruling del owner cubrio SOLO --ds-glass-blur y --ds-input-md-font-size; el resto se inventaria como deuda visible, NO como permiso. Decrece-solo: no puede crecer, y cada entrada sale cuando su control tenga dueño adjudicado y se corrija."
+    },
+    {
+      "channel": "--ds-table-cell-font-size",
+      "dial": "--ds-type-scale",
+      "vertical": "bithire",
+      "frozenAs": [
+        "0.8125rem",
+        "0.875rem"
+      ],
+      "dialCarriedBy": [
+        "base",
+        "evnto"
+      ],
+      "reason": "SIN ADJUDICAR — misma clase anti-puerta que la decision 19, medida en F2A-1 Lote F-prima. El ruling del owner cubrio SOLO --ds-glass-blur y --ds-input-md-font-size; el resto se inventaria como deuda visible, NO como permiso. Decrece-solo: no puede crecer, y cada entrada sale cuando su control tenga dueño adjudicado y se corrija."
+    },
+    {
+      "channel": "--ds-table-cell-font-size",
+      "dial": "--ds-type-scale",
+      "vertical": "rottay",
+      "frozenAs": [
+        "var(--ds-text-body-size)"
+      ],
+      "dialCarriedBy": [
+        "base",
+        "evnto"
+      ],
+      "reason": "SIN ADJUDICAR — misma clase anti-puerta que la decision 19, medida en F2A-1 Lote F-prima. El ruling del owner cubrio SOLO --ds-glass-blur y --ds-input-md-font-size; el resto se inventaria como deuda visible, NO como permiso. Decrece-solo: no puede crecer, y cada entrada sale cuando su control tenga dueño adjudicado y se corrija."
+    },
+    {
+      "channel": "--ds-tall-card-gap",
+      "dial": "--ds-rhythm-effective-scale",
+      "vertical": "bithire",
+      "frozenAs": [
+        "16px"
+      ],
+      "dialCarriedBy": [
+        "base",
+        "rottay",
+        "evnto"
+      ],
+      "reason": "SIN ADJUDICAR — misma clase anti-puerta que la decision 19, medida en F2A-1 Lote F-prima. El ruling del owner cubrio SOLO --ds-glass-blur y --ds-input-md-font-size; el resto se inventaria como deuda visible, NO como permiso. Decrece-solo: no puede crecer, y cada entrada sale cuando su control tenga dueño adjudicado y se corrija."
+    },
+    {
+      "channel": "--ds-tall-card-padding",
+      "dial": "--ds-rhythm-effective-scale",
+      "vertical": "bithire",
+      "frozenAs": [
+        "20px"
+      ],
+      "dialCarriedBy": [
+        "base",
+        "rottay",
+        "evnto"
+      ],
+      "reason": "SIN ADJUDICAR — misma clase anti-puerta que la decision 19, medida en F2A-1 Lote F-prima. El ruling del owner cubrio SOLO --ds-glass-blur y --ds-input-md-font-size; el resto se inventaria como deuda visible, NO como permiso. Decrece-solo: no puede crecer, y cada entrada sale cuando su control tenga dueño adjudicado y se corrija."
+    },
+    {
+      "channel": "--ds-workspace-card-padding",
+      "dial": "--ds-rhythm-effective-scale",
+      "vertical": "bithire",
+      "frozenAs": [
+        "16px"
+      ],
+      "dialCarriedBy": [
+        "base",
+        "rottay",
+        "evnto"
+      ],
+      "reason": "SIN ADJUDICAR — misma clase anti-puerta que la decision 19, medida en F2A-1 Lote F-prima. El ruling del owner cubrio SOLO --ds-glass-blur y --ds-input-md-font-size; el resto se inventaria como deuda visible, NO como permiso. Decrece-solo: no puede crecer, y cada entrada sale cuando su control tenga dueño adjudicado y se corrija."
+    }
+  ]
+}

@@ -17,14 +17,14 @@
   "inputsDigest": {
     "cssEdges": "574150a5adeda7dafd9521822da5e39f6a49a1dd056b41534ecdbaa5d22f4139",
     "cascadeRoots": "d1920ce06bb7e4b520828672d263351240d77c87f63ae6a7aab5dab7ac08c22e",
-    "rootCatalog": "732ee467853b61adfa507967c475385dab9334e5749d0ce59357c39cf3f05843",
-    "srcTsx": "c7536887bf3e6bb385c3466898f2a947738df03e35c01821875cd2600b1b1693",
+    "rootCatalog": "6ad1c5d0ee313471c10a99c19584fd76d3362049b49f221775d366e957289e52",
+    "srcTsx": "d88f741f9016caed8604cd0120d2df5797ba8943814e72bd94ccf5155f350a6f",
     "srcCompilers": "a21559392e51e1a32697e2a1289bcfeb714b093cb94daf6e2ff184a9f5b623a7",
-    "artifacts": "9899d43ee34c4c03d3cacf2138eb03d8df7004d07d92d509865b9f66f3d61d41"
+    "artifacts": "c638e72cf75b2c1af4820398d0f92929f75c17ce647ebcebe0c091c361df2a26"
   },
   "stats": {
     "producerSites": 4872,
-    "channelEmissions": 10310,
+    "channelEmissions": 10309,
     "distinctChannels": 4585,
     "byPlane": {
       "css": {
@@ -33,7 +33,7 @@
       },
       "ts-compilers": {
         "producerSites": 49,
-        "channelEmissions": 3844
+        "channelEmissions": 3843
       },
       "ts-chrome-variables": {
         "producerSites": 74,
@@ -45,7 +45,7 @@
       }
     },
     "emissionsByEngineScope": {
-      "modern+rustic+classic": 9719,
+      "modern+rustic+classic": 9718,
       "modern": 521,
       "rustic": 68,
       "classic": 2
@@ -2102,8 +2102,8 @@
   ],
   "digests": {
     "producerSites": "431c2c2a9a5c69f64ea73ba60cebb772afeb98ae875c9b7c79f11871e9f9228b",
-    "channelEmissions": "0f8d2361e4656b167e30128b7e8cf7564ddab4235d11728df92dbc16b665a66c",
-    "byChannel": "319ca02a63f6a2b0beda52dc34895af5398951e1035632ece4e4144b06caf43d",
+    "channelEmissions": "615dbded991c31b39cc85c8726172a716ed22129809c404818c42487d85b5c17",
+    "byChannel": "5004dd2b21a50357a8f223818585c89997d72c9456dc4ddea6fa88d5c9050ada",
     "unknownProvenance": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
     "closedNonObject": "f8323daf3a289fe396585e009896f3cba46cc9713413ace7ea4d59837c5b7d57",
     "closedZeroGoverned": "7f843d250d72ae7e797ea034ad26a0e6dede7ededd59774b8b70ba85f603b4ba",
@@ -5434,7 +5434,7 @@
     {"producerSiteId":"ad80f913dfff726c2a562be27c34c065558adf4201e0c7dc6a931ad04a3aa8a9","plane":"css","file":"packages/core/src/foundation/tokens/css/foundation/themes/default.css","line":631,"symbol":"--ds-font-weight-semibold","ordinal":0,"ownerId":"css-declaration","ownerEvidence":"packages/core/src/foundation/tokens/css/foundation/themes/default.css:631 declares --ds-font-weight-semibold"},
     {"producerSiteId":"ad850c5260b2f085eed7dfc5f901caa76990b0ab79eabc339835104f387f613e","plane":"css","file":"packages/core/src/foundation/tokens/css/presentation/components/avatar.css","line":47,"symbol":"--ds-avatar-2xl-status-size","ordinal":0,"ownerId":"css-declaration","ownerEvidence":"packages/core/src/foundation/tokens/css/presentation/components/avatar.css:47 declares --ds-avatar-2xl-status-size"},
     {"producerSiteId":"ad8b01299aa99d3073c17dd464ae5bc1771199cff281f06760c1b2a6365aad45","plane":"css","file":"packages/core/src/foundation/tokens/css/presentation/components/rate.css","line":18,"symbol":"--ds-rate-sm-size","ordinal":0,"ownerId":"css-declaration","ownerEvidence":"packages/core/src/foundation/tokens/css/presentation/components/rate.css:18 declares --ds-rate-sm-size"},
-    {"producerSiteId":"ad9536c8dee89a9717a8d4b2b4735ad42bc511e12805bc5abaf32162b445aa57","plane":"ts-compilers","file":"packages/core/src/foundation/tokens/css/facade/artifacts/bithire/index.css","line":1,"symbol":"<tenant-artifact:bithire>","ordinal":0,"ownerId":"declaration:tenant-artifact:bithire","ownerEvidence":"packages/core/src/foundation/tokens/css/facade/artifacts/bithire/index.css: compiled tenant snapshot declaring 1231 governed channels at its own :root/[data-tenant] scope"},
+    {"producerSiteId":"ad9536c8dee89a9717a8d4b2b4735ad42bc511e12805bc5abaf32162b445aa57","plane":"ts-compilers","file":"packages/core/src/foundation/tokens/css/facade/artifacts/bithire/index.css","line":1,"symbol":"<tenant-artifact:bithire>","ordinal":0,"ownerId":"declaration:tenant-artifact:bithire","ownerEvidence":"packages/core/src/foundation/tokens/css/facade/artifacts/bithire/index.css: compiled tenant snapshot declaring 1230 governed channels at its own :root/[data-tenant] scope"},
     {"producerSiteId":"adb74bc5bdba67ce1fe5f98240055d91a4ed5e252870bcd2526132ffbce5823a","plane":"css","file":"packages/core/src/foundation/tokens/css/presentation/components/modal.css","line":261,"symbol":"--ds-modal-loading-overlay-bg","ordinal":0,"ownerId":"css-declaration","ownerEvidence":"packages/core/src/foundation/tokens/css/presentation/components/modal.css:261 declares --ds-modal-loading-overlay-bg"},
     {"producerSiteId":"add6058c5de86f9f01f6164894797fe4ddecf6eefc28bdb8d953ac7e3ba9cb9a","plane":"css","file":"packages/core/src/foundation/tokens/css/foundation/themes/default.css","line":1503,"symbol":"--ds-inputnumber-lg-font-size","ordinal":0,"ownerId":"css-declaration","ownerEvidence":"packages/core/src/foundation/tokens/css/foundation/themes/default.css:1503 declares --ds-inputnumber-lg-font-size"},
     {"producerSiteId":"ade2fd926e9057ad528da59bf3350f175a5b72698be6b7c6483653f261d927c4","plane":"css","file":"packages/core/src/foundation/tokens/css/presentation/components/button.css","line":154,"symbol":"--ds-button-dashed-border-style","ordinal":0,"ownerId":"css-declaration","ownerEvidence":"packages/core/src/foundation/tokens/css/presentation/components/button.css:154 declares --ds-button-dashed-border-style"},
@@ -12981,7 +12981,6 @@
     {"channelEmissionId":"ddcf4d6eb133d0b8b4a7d994320cf9dcaeaad205283fa66d6f1c865ce082a08c","producerSiteId":"ad9536c8dee89a9717a8d4b2b4735ad42bc511e12805bc5abaf32162b445aa57","channel":"--ds-form-field-label-offset-y","engineScope":["modern","rustic","classic"],"applicabilityEvidence":"tenant artifact: a compiled snapshot applied at :root / [data-tenant] scope, with no engine branch","causalRootIds":[]},
     {"channelEmissionId":"1213b599bf3a4fcf56d74c1a492aee64497e4a5ed65cd471eb770851c1f374d8","producerSiteId":"ad9536c8dee89a9717a8d4b2b4735ad42bc511e12805bc5abaf32162b445aa57","channel":"--ds-form-field-required-gap","engineScope":["modern","rustic","classic"],"applicabilityEvidence":"tenant artifact: a compiled snapshot applied at :root / [data-tenant] scope, with no engine branch","causalRootIds":[]},
     {"channelEmissionId":"33f99ea1884e19565049b5b9b3dd7b36bc5d281db11463a436889e6bfc12df60","producerSiteId":"ad9536c8dee89a9717a8d4b2b4735ad42bc511e12805bc5abaf32162b445aa57","channel":"--ds-glass-bg","engineScope":["modern","rustic","classic"],"applicabilityEvidence":"tenant artifact: a compiled snapshot applied at :root / [data-tenant] scope, with no engine branch","causalRootIds":[]},
-    {"channelEmissionId":"60c2abd0c59445ef6de98e258d29644f675912499efb021a949644b8dac1a6f9","producerSiteId":"ad9536c8dee89a9717a8d4b2b4735ad42bc511e12805bc5abaf32162b445aa57","channel":"--ds-glass-blur","engineScope":["modern","rustic","classic"],"applicabilityEvidence":"tenant artifact: a compiled snapshot applied at :root / [data-tenant] scope, with no engine branch","causalRootIds":[]},
     {"channelEmissionId":"c3a1de848ba3b7aa49ea289619cbe2ba53c94328113990492da56d4af0a0dbf4","producerSiteId":"ad9536c8dee89a9717a8d4b2b4735ad42bc511e12805bc5abaf32162b445aa57","channel":"--ds-glass-border","engineScope":["modern","rustic","classic"],"applicabilityEvidence":"tenant artifact: a compiled snapshot applied at :root / [data-tenant] scope, with no engine branch","causalRootIds":[]},
     {"channelEmissionId":"1f8cbfb6481466c5fc14a3700d2c47e580d5b4fcd8fe7796c181bf0d4cb3b5d0","producerSiteId":"ad9536c8dee89a9717a8d4b2b4735ad42bc511e12805bc5abaf32162b445aa57","channel":"--ds-gradient-mesh","engineScope":["modern","rustic","classic"],"applicabilityEvidence":"tenant artifact: a compiled snapshot applied at :root / [data-tenant] scope, with no engine branch","causalRootIds":[]},
     {"channelEmissionId":"8b9bee9a4751a26e097f7ad09b8c6e21de2d1dcefee97586b0006c02d1df774b","producerSiteId":"ad9536c8dee89a9717a8d4b2b4735ad42bc511e12805bc5abaf32162b445aa57","channel":"--ds-gradient-primary","engineScope":["modern","rustic","classic"],"applicabilityEvidence":"tenant artifact: a compiled snapshot applied at :root / [data-tenant] scope, with no engine branch","causalRootIds":[]},
@@ -25635,7 +25634,6 @@
       "2dcffc9c332f5cb4f6541d0bc7a01ba842bc5b8ed3a648ae6db6165d0c68945f",
       "1d22f838b8ea531b2762bce2350b5311acb20cb486708d2c71ace4050d0453b7",
       "9d9e5eb8c192d2197cb7ac71f400981ef33f6f999ba215c2a396553437721f82",
-      "60c2abd0c59445ef6de98e258d29644f675912499efb021a949644b8dac1a6f9",
       "d12b96d970fabb60d4d791521f5ad4b12e06bd17d3c8dabfcf6dc8dc02a99dd8"
     ],
     "--ds-glass-blur-lg": [
@@ -37730,7 +37728,7 @@
     {"channel":"--ds-form-success-color","executionContext":["stylesheet cascade","compileTheme document"],"order":["stylesheet cascade","compileTheme document"],"evidence":"CSS cascade law: a declaration in a stylesheet is overridden by the tenant/theme document applied at :root/[data-tenant], and both are overridden by an inline style attribute. This orders EXECUTION only.","owners":["css-declaration","declaration:literal-token","declaration:tenant-artifact:rottay"],"note":"several owners legitimately emit this channel; ownership is NOT resolved here and no winner is named."},
     {"channel":"--ds-form-warning-color","executionContext":["stylesheet cascade","compileTheme document"],"order":["stylesheet cascade","compileTheme document"],"evidence":"CSS cascade law: a declaration in a stylesheet is overridden by the tenant/theme document applied at :root/[data-tenant], and both are overridden by an inline style attribute. This orders EXECUTION only.","owners":["css-declaration","declaration:literal-token","declaration:tenant-artifact:rottay"],"note":"several owners legitimately emit this channel; ownership is NOT resolved here and no winner is named."},
     {"channel":"--ds-glass-bg","executionContext":["stylesheet cascade","compileTheme document"],"order":["stylesheet cascade","compileTheme document"],"evidence":"CSS cascade law: a declaration in a stylesheet is overridden by the tenant/theme document applied at :root/[data-tenant], and both are overridden by an inline style attribute. This orders EXECUTION only.","owners":["css-declaration","declaration:TENANT_THEME_OVERRIDE_TOKENS","declaration:literal-token","declaration:tenant-artifact:bithire"],"note":"several owners legitimately emit this channel; ownership is NOT resolved here and no winner is named."},
-    {"channel":"--ds-glass-blur","executionContext":["stylesheet cascade","compileTheme document"],"order":["stylesheet cascade","compileTheme document"],"evidence":"CSS cascade law: a declaration in a stylesheet is overridden by the tenant/theme document applied at :root/[data-tenant], and both are overridden by an inline style attribute. This orders EXECUTION only.","owners":["css-declaration","declaration:TENANT_THEME_OVERRIDE_TOKENS","declaration:literal-token","declaration:tenant-artifact:bithire"],"note":"several owners legitimately emit this channel; ownership is NOT resolved here and no winner is named."},
+    {"channel":"--ds-glass-blur","executionContext":["stylesheet cascade","compileTheme document"],"order":["stylesheet cascade","compileTheme document"],"evidence":"CSS cascade law: a declaration in a stylesheet is overridden by the tenant/theme document applied at :root/[data-tenant], and both are overridden by an inline style attribute. This orders EXECUTION only.","owners":["css-declaration","declaration:TENANT_THEME_OVERRIDE_TOKENS","declaration:literal-token"],"note":"several owners legitimately emit this channel; ownership is NOT resolved here and no winner is named."},
     {"channel":"--ds-glass-border","executionContext":["stylesheet cascade","compileTheme document"],"order":["stylesheet cascade","compileTheme document"],"evidence":"CSS cascade law: a declaration in a stylesheet is overridden by the tenant/theme document applied at :root/[data-tenant], and both are overridden by an inline style attribute. This orders EXECUTION only.","owners":["css-declaration","declaration:TENANT_THEME_OVERRIDE_TOKENS","declaration:literal-token","declaration:tenant-artifact:bithire"],"note":"several owners legitimately emit this channel; ownership is NOT resolved here and no winner is named."},
     {"channel":"--ds-gradient-dark","executionContext":["stylesheet cascade","compileTheme document"],"order":["stylesheet cascade","compileTheme document"],"evidence":"CSS cascade law: a declaration in a stylesheet is overridden by the tenant/theme document applied at :root/[data-tenant], and both are overridden by an inline style attribute. This orders EXECUTION only.","owners":["css-declaration","declaration:literal-token","declaration:tenant-artifact:rottay"],"note":"several owners legitimately emit this channel; ownership is NOT resolved here and no winner is named."},
     {"channel":"--ds-gradient-mesh","executionContext":["stylesheet cascade","compileTheme document"],"order":["stylesheet cascade","compileTheme document"],"evidence":"CSS cascade law: a declaration in a stylesheet is overridden by the tenant/theme document applied at :root/[data-tenant], and both are overridden by an inline style attribute. This orders EXECUTION only.","owners":["css-declaration","declaration:TENANT_THEME_OVERRIDE_TOKENS","declaration:literal-token","declaration:tenant-artifact:bithire"],"note":"several owners legitimately emit this channel; ownership is NOT resolved here and no winner is named."},

@@ -12,9 +12,9 @@
       },
       {
         "file": "src/foundation/tokens/css/facade/artifacts/bithire/index.css",
-        "bytes": 96591,
-        "lines": 1725,
-        "sha256": "4f7077797376f890c39aca7022c1cada343afb00684836418ebb4d8b0b96ec54"
+        "bytes": 96598,
+        "lines": 1724,
+        "sha256": "c293c28235baa4019f386a8df84c7674524355368c8dc418e87d1adb95b1db8e"
       },
       {
         "file": "src/foundation/tokens/css/facade/artifacts/evnto/index.css",
@@ -32,9 +32,9 @@
       },
       {
         "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-        "bytes": 336478,
-        "lines": 9284,
-        "sha256": "8979e0857e2bd2f5455612847ecbfc984c96c62cc5e1b6cbc96191a98551008d"
+        "bytes": 338181,
+        "lines": 9304,
+        "sha256": "109a9127b7c73842f814f6dc738035e1f296bb43642e9a1fa2e009f9f186444e"
       },
       {
         "file": "src/foundation/tokens/ts/presentation/brand-themes/evnto/index.ts",
@@ -51,8 +51,8 @@
       "distinctChannels": 1212
     },
     "bithire": {
-      "occurrences": 1701,
-      "distinctChannels": 1231
+      "occurrences": 1700,
+      "distinctChannels": 1230
     },
     "evnto": {
       "occurrences": 563,
@@ -62,17 +62,17 @@
   "surface": {
     "declares": {
       "rottay": 1212,
-      "bithire": 1231,
+      "bithire": 1230,
       "evnto": 470
     },
-    "union": 1759,
+    "union": 1758,
     "intersection": 432,
     "intersectionPct": 24.6,
     "intersectionPctOfSmallest": 91.9,
     "pairwise": {
       "rottay+bithire": {
         "shared": 684,
-        "union": 1759,
+        "union": 1758,
         "pctOfUnion": 38.9,
         "pctOfSmaller": 56.4
       },
@@ -84,7 +84,7 @@
       },
       "bithire+evnto": {
         "shared": 434,
-        "union": 1267,
+        "union": 1266,
         "pctOfUnion": 34.3,
         "pctOfSmaller": 92.3
       }
@@ -760,7 +760,6 @@
         "--ds-form-field-label-offset-y",
         "--ds-form-field-required-gap",
         "--ds-glass-bg",
-        "--ds-glass-blur",
         "--ds-glass-border",
         "--ds-gradient-mesh",
         "--ds-gradient-primary",
@@ -3019,7 +3018,7 @@
   },
   "cascadePresence": {
     "notSeverity": "Presencia, NO severidad. Un canal declarado puede re-derivar y dejar pasar el dial. La severidad esta en `cascadeSeverance`.",
-    "distinctChannelsDeclared": 310,
+    "distinctChannelsDeclared": 309,
     "roots": [
       {
         "root": "--ds-alert-dialog-motion-scale",
@@ -5359,11 +5358,11 @@
       {
         "root": "--ds-effect-intensity",
         "channelsInCascade": 28,
-        "declaredByAny": 14,
+        "declaredByAny": 13,
         "declaredByAll": 1,
         "byTenant": {
           "rottay": 1,
-          "bithire": 14,
+          "bithire": 13,
           "evnto": 1
         },
         "channels": [
@@ -5383,12 +5382,6 @@
           },
           {
             "channel": "--ds-glass-bg",
-            "tenants": [
-              "bithire"
-            ]
-          },
-          {
-            "channel": "--ds-glass-blur",
             "tenants": [
               "bithire"
             ]
@@ -8060,8 +8053,8 @@
         }
       },
       "bithire": {
-        "declaredInCascade": 263,
-        "severedTotal": 103,
+        "declaredInCascade": 262,
+        "severedTotal": 101,
         "rootPinned": {
           "count": 11,
           "byReason": {
@@ -8261,7 +8254,7 @@
           ]
         },
         "severs": {
-          "count": 99,
+          "count": 97,
           "channels": [
             {
               "channel": "--ds-button-ghost-bg",
@@ -8531,12 +8524,6 @@
               ]
             },
             {
-              "channel": "--ds-glass-blur",
-              "values": [
-                "base=12px"
-              ]
-            },
-            {
               "channel": "--ds-glass-border",
               "values": [
                 "base=rgba(196, 210, 222, 0.86)"
@@ -8576,12 +8563,6 @@
               "channel": "--ds-input-lg-padding-y",
               "values": [
                 "base=8px"
-              ]
-            },
-            {
-              "channel": "--ds-input-md-font-size",
-              "values": [
-                "base=13px"
               ]
             },
             {
@@ -8868,9 +8849,9 @@
           ]
         },
         "reDerives": {
-          "count": 149,
-          "reachingRoot": 87,
-          "reachingLiveRoot": 86,
+          "count": 150,
+          "reachingRoot": 88,
+          "reachingLiveRoot": 87,
           "mixedRoleValues": 62,
           "blockedUpstream": 2,
           "channels": [
@@ -9396,6 +9377,16 @@
               ],
               "reachesRoot": true,
               "mixed": true,
+              "reachesLiveRoot": true,
+              "blockedUpstream": false
+            },
+            {
+              "channel": "--ds-input-md-font-size",
+              "reads": [
+                "--ds-type-scale"
+              ],
+              "reachesRoot": true,
+              "mixed": false,
               "reachesLiveRoot": true,
               "blockedUpstream": false
             },
@@ -11305,7 +11296,7 @@
     "note": "Unidad distinta de la del artefacto. NUNCA fusionar con `surface`.",
     "authors": {
       "rottay": 1757,
-      "bithire": 1495,
+      "bithire": 1494,
       "evnto": 397
     },
     "union": 2550,
@@ -11314,10 +11305,10 @@
     "intersectionPctOfSmallest": 86.9,
     "pairwise": {
       "rottay+bithire": {
-        "shared": 705,
+        "shared": 704,
         "union": 2547,
-        "pctOfUnion": 27.7,
-        "pctOfSmaller": 47.2
+        "pctOfUnion": 27.6,
+        "pctOfSmaller": 47.1
       },
       "rottay+evnto": {
         "shared": 390,
@@ -11327,13 +11318,13 @@
       },
       "bithire+evnto": {
         "shared": 349,
-        "union": 1543,
+        "union": 1542,
         "pctOfUnion": 22.6,
         "pctOfSmaller": 87.9
       }
     },
     "exclusive": {
-      "rottay": 1007,
+      "rottay": 1008,
       "bithire": 786,
       "evnto": 3
     },

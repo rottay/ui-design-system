@@ -8,7 +8,7 @@
 > Rollback: cada control es un INPUT — quitar la autoría restaura el baseline del vertical
 > (probado por los legs restore-equals-default del harness no-loss).
 
-digest: 8df65ffd44b6ed7242cb3f8d9dc688190c6c26576d00340a449661a67ff4b3e3
+digest: b05af7dc1eec0fd262d7139615e809937ed16844f681ccf146b543f431511319
 
 ## STANDARD — 13 controles (pocos diales, gran superficie)
 
@@ -17,7 +17,7 @@ digest: 8df65ffd44b6ed7242cb3f8d9dc688190c6c26576d00340a449661a67ff4b3e3
 | `palette.seeds` | Brand palette seeds | color-set | vertical baseline palette | 5 ch | `palette.{primaryColor,secondaryColor,accentColor,backgroundColor}` | `appearance.general.palette.{primary,secondary,accent,background}` | 1924 | `button.css` |
 | `typography.pairing` | Type pairing personality | enum | vertical baseline families | 2 ch | `typography.typePairing` | `appearance.general.typography.typePairing` | 218 | `typography.css` |
 | `typography.families` | Explicit font stacks | font-stack | pairing (or vertical baseline) decides | 4 ch | `typography.{fontFamilyBase,fontFamilyHeading,fontFamilyMono,fontFamilyDisplay}` | `appearance.general.typography.{fontFamilyBase,fontFamilyHeading}` | 340 | `default.css` |
-| `typography.scale` | Type scale dial | scale | 1 (vertical envelope may clamp tighter) | 1 ch | `typography.scale` | `appearance.general.typography.scale` | 44 | `index.ts` |
+| `typography.scale` | Type scale dial | scale | 1 (vertical envelope may clamp tighter) | 1 ch | `typography.scale` | `appearance.general.typography.scale` | 45 | `index.ts` |
 | `shape.radius-scale` | Radius scale dial | scale | 1 (vertical envelope may clamp tighter) | 2 ch | `surfaces.radiusScale` | `appearance.general.shape.radiusScale` | 423 | `card.css` |
 | `shape.button-style` | Button silhouette | enum | vertical baseline silhouette | 1 ch | `surfaces.buttonStyle` | `appearance.general.shape.buttonStyle` | 2 | `button.css` |
 | `density.mode` | Density posture | enum | normal (structural density scale is a separate channel) | 2 ch | `surfaces.density` | `appearance.general.density` | 8 | `index.ts` |

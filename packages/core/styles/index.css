@@ -127056,7 +127056,6 @@ html[lang]:lang(ar) {
   --ds-form-field-label-offset-y: 1px;
   --ds-form-field-required-gap: 0.25em;
   --ds-glass-bg: rgba(255, 255, 255, 0.84);
-  --ds-glass-blur: 12px;
   --ds-glass-border: rgba(196, 210, 222, 0.86);
   --ds-gradient-mesh: radial-gradient(circle at 84% 8%, rgba(58, 111, 176, 0.14), transparent 58%);
   --ds-gradient-primary: linear-gradient(135deg, #244D79 0%, #3A6FB0 54%, #86A6C2 100%);
@@ -127148,7 +127147,7 @@ html[lang]:lang(ar) {
   --ds-input-loading-duration: 700ms;
   --ds-input-loading-size: 16px;
   --ds-input-loading-stroke: 1.75;
-  --ds-input-md-font-size: 13px;
+  --ds-input-md-font-size: calc(13px * var(--ds-type-scale, 1));
   --ds-input-md-height: 36px;
   --ds-input-md-icon-size: 15px;
   --ds-input-md-line-height: 20px;

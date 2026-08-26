@@ -3980,7 +3980,18 @@ const SURFACES: BrandSurfaces = {
    * @governor dial: surfaces.effect-intensity
    */
   glass: {
-    blur: "12px",
+    /**
+     * @absent SURFACES.glass.blur
+     * @governor decision 19 del owner (F2A-1 Lote F-prima): el valor era el RESULTADO ya multiplicado y borraba el factor del dial; la capa base autora el canal CON el factor (premium.css, calc(12px * var(--ds-effect-intensity))), asi que no autorarlo aca no es gap sino devolverle el canal al dial — bithire pinta 6.96px con su propio effectIntensity 0.58
+     */
+    // F2A-1 Lote F-prima, decision 19 del owner: `blur: "12px"` removido. Era el
+    // RESULTADO ya multiplicado, y escribirlo aca borraba el factor: la capa base
+    // dice `calc(12px * var(--ds-effect-intensity))` (premium.css), asi que con
+    // este literal el dial surfaces.effect-intensity no movia el blur en bithire.
+    // Con la remocion la capa base gana y bithire pinta 6.96px (12 * 0.58), que
+    // es exactamente lo que su propio effectIntensity significa -- aceptado por el
+    // owner. background y border siguen congelados por la misma via y quedan
+    // inventariados como deuda en scripts/tokens/dial-authority-gate.
     background: "rgba(255, 255, 255, 0.84)",
     border: "rgba(196, 210, 222, 0.86)",
   },
@@ -5915,9 +5926,18 @@ const CHROME: BrandChrome = {
         paddingY: "7px",
         /**
          * @domicile seed
+         *
+         * F2A-1 Lote F-prima, decision 19 del owner: el valor era `"13px"`, el
+         * RESULTADO ya escalado. Este docblock ya declaraba typography.scale como
+         * su governor y el literal lo desmentia: el dial no movia la fuente de los
+         * inputs en bithire. Ahora el seed de 13px sigue siendo de bithire —no se
+         * copia la referencia de rottay, que valdria 14px— y el factor vuelve a la
+         * expresion, en la forma que el sistema ya usa para esto (default.css:542,
+         * `calc(0.875rem * var(--ds-type-scale, 1))`). Cero-delta con la escala en
+         * 1: 13px hoy, 13px despues.
          * @governor dial: typography.scale
          */
-        fontSize: "13px",
+        fontSize: "calc(13px * var(--ds-type-scale, 1))",
         /**
          * @domicile seed
          * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)

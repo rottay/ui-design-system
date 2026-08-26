@@ -826,6 +826,35 @@
         "declarar channel: null con emission vacia o con un site que no resuelve",
         "invocar --ds-experience-profile como precedente para un marcador nuevo"
       ]
+    },
+    "dialAuthority": {
+      "rulingDate": "2026-08-26",
+      "decision": "19",
+      "authority": "owner",
+      "law": "Una vertical puede decidir su seed o su coeficiente propio, pero no puede congelar el RESULTADO TERMINAL de un control publico sin una excepcion explicita y visible. Un dial publico debe producir un cambio observable: si un brand-theme escribe el producto ya multiplicado como literal, el factor desaparece de la expresion y el tenant que mueve el dial no ve nada, sin aviso.",
+      "whatIsProtected": "El seed y el coeficiente son de la vertical y la ley los protege por nombre. `--ds-badge-error-bg: #DC2626` no es anti-puerta: ningun dial lo multiplica, no se pierde ningun factor. La ley solo alcanza a los canales que un dial de FACTOR multiplica.",
+      "canonicalCases": [
+        {
+          "channel": "--ds-glass-blur",
+          "dial": "--ds-effect-intensity",
+          "control": "surfaces.effect-intensity",
+          "before": "bithire congelaba 12px; la capa base dice calc(12px * var(--ds-effect-intensity))",
+          "after": "bithire no lo declara; con su effectIntensity 0.58 pinta 6.96px — aceptado por el owner como el significado del dial",
+          "measured": "dial a 1 -> 12px; a 0.58 -> 6.96px; a 0.25 -> 3px"
+        },
+        {
+          "channel": "--ds-input-md-font-size",
+          "dial": "--ds-type-scale",
+          "control": "typography.scale",
+          "before": "bithire congelaba 13px; su propio docblock ya declaraba typography.scale como governor",
+          "after": "calc(13px * var(--ds-type-scale, 1)) — el seed de 13px sigue siendo de bithire; PROHIBIDO copiar la referencia de rottay, que valdria 14px",
+          "measured": "escala 1 -> 13px (cero-delta); 1.08 -> 14.04px; 0.92 -> 11.96px"
+        }
+      ],
+      "gate": "scripts/tokens/dial-authority-gate/index.mjs, con su drill index.test.mjs y su inventario dial-authority.inventory.json. La ley es ejecutable, no prosa: el gate se escribio ANTES del fix y fallo sobre los dos casos que el owner adjudico; el fix los apaga. Los drills 1 y 2 conservan ambos casos como fixtures para que la regla no se pueda ablandar en vez de corregir la fuente.",
+      "twoRegisters": "`exceptions` son permisos del OWNER, visibles y con razon — la escotilla que la ley misma exige; hoy esta vacia y ningun writer la escribe. `pending` es deuda MEDIDA de la misma clase que ningun ruling cubre: no es permiso, es una lista de trabajo decrece-solo que no puede crecer y de la que una entrada sale cuando su control tiene dueño adjudicado.",
+      "scopeMeasuredAtRuling": "El ruling nombro 2 casos. La medicion del gate sobre el arbol encontro 30 de la misma clase: 28 pendientes (27 en bithire, 1 en rottay) + 2 corregidos en este lote (ambos en bithire) (fuentes de boton, geometria de inputs, paddings y gaps de ritmo, glass bg/border). Quedan inventariados como pendientes, no como excepciones: la diferencia entre 2 y 30 es hallazgo de este lote y necesita adjudicacion propia.",
+      "outOfScope": "--ds-input-md-line-height y --ds-input-md-icon-size NO se tocan: primero hay que asignarles dueño (tipografia / densidad / perfil de iconos / invariante vertical) y despues calibrar. Prohibido inventar una dependencia por proximidad de bloque. --ds-button-md-radius esta intacto: conserva su factor, es identidad 9px y nunca fue anti-puerta."
     }
   }
 }

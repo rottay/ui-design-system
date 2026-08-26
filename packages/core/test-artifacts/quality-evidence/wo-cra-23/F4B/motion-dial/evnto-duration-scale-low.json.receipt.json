@@ -53,10 +53,10 @@
     "packages/core/src/ui/primitives/feedback/Alert/engines/rustic/index.tsx",
     "packages/core/src/ui/primitives/feedback/Alert/index.tsx"
   ],
-  "sourceDigest": "e83d7403a1c40e9a4ea36ee99af1a62d9cf5bb893176f572866becda7a007592",
+  "sourceDigest": "91f35c582ce97ed73fb2b384fda383367d2789ee24741c269f752a80d9f327a5",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/motion-dial/evnto-duration-scale-low.json",
   "artifactSha256": "ab1953458d88ab2c55cc43507ac3a9dc11aa87af80586df395672f14d6b10e7a",
-  "createdAt": "2026-08-26T21:22:26.666Z",
+  "createdAt": "2026-08-26T23:08:02.000Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

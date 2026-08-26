@@ -1528,7 +1528,7 @@
       "governedBy": null,
       "governanceScope": "ninguna",
       "exposure": "internal-head",
-      "exposureNote": "La perilla correcta es typography.scale y ya existe; el defecto es que el nivel 2 no lee la rampa. Una linea por canal nivel-2, no 23 literales.",
+      "exposureNote": "La perilla correcta es typography.scale y ya existe; el defecto es que el nivel 2 no lee la rampa. Una linea por canal nivel-2, no 23 literales. CORREGIDA CAUSALMENTE (F2A-1 Lote F-prima, decision 19 del owner, 2026-08-26): bithire congelaba --ds-input-md-font-size en 13px mientras su propio docblock ya declaraba typography.scale como governor — el literal desmentia la anotacion y el dial no movia la fuente de los inputs. Ahora se autora calc(13px * var(--ds-type-scale, 1)): el seed de 13px sigue siendo de bithire (el owner veto por nombre copiar la referencia de rottay, que valdria 14px) y el factor vuelve a la expresion, en la forma que el sistema ya usa (default.css:542). Cero-delta estricto en el estado por defecto: 13px antes, 13px despues. Medido tras el fix: escala 1 -> 13px, 1.08 -> 14.04px, 0.92 -> 11.96px. NOTA DE ALCANCE: lineHeight (20px) e iconSize (15px) de la misma familia NO se tocaron — su dueño (tipografia / densidad / perfil de iconos / invariante vertical) es un paso previo pendiente, y el ruling prohibe inventar la dependencia por proximidad de bloque.",
       "derivationDebt": true
     },
     {
@@ -1889,7 +1889,7 @@
       "governedBy": "surfaces.effect-intensity",
       "governanceScope": "total",
       "exposure": "tenant-dial",
-      "exposureNote": "El control declara --ds-effect-intensity, que es el modulador del trio.",
+      "exposureNote": "El control declara --ds-effect-intensity, que es el modulador del trio. CORREGIDA CAUSALMENTE (F2A-1 Lote F-prima, decision 19 del owner, 2026-08-26): bithire congelaba --ds-glass-blur en 12px, el resultado ya multiplicado, y con eso el dial surfaces.effect-intensity no movia el blur en esa vertical. El literal se removio del brand-theme; gana la capa base, calc(12px * var(--ds-effect-intensity)) en premium.css, asi que bithire pinta 6.96px con su propio effectIntensity 0.58 — el owner acepto ese delta explicitamente porque es lo que el dial significa. Medido tras el fix: dial a 1 -> 12px, a 0.58 -> 6.96px, a 0.25 -> 3px. NOTA DE ALCANCE: --ds-glass-bg y --ds-glass-border siguen congelados por la misma via en bithire y quedan inventariados como deuda pendiente en scripts/tokens/dial-authority-gate, no corregidos aca: el ruling cubrio el blur.",
       "derivationDebt": true
     },
     {
