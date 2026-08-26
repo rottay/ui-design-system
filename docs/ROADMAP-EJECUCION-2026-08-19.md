@@ -483,7 +483,13 @@ histórico y no reaparece**.
 15. **Opción 2 del STOP #1:** `--ds-surface-card` sale de `derivedChannels`
     (3→2). La superficie de atribución de calibración se alinea con la ley K
     ("and nothing wider"); el dominio público de 290 claves queda intacto —
-    el canal sigue siendo autorable por tenants.
+    el canal sigue siendo autorable por tenants. **ENMIENDA (2026-08-26,
+    cierre C5):** la formulación queda superseded por α1 — `--ds-surface-card`
+    VUELVE a `derivedChannels`, que pasa a significar radio de impacto
+    representativo real (3 seeds), y la superficie de calibración estrecha se
+    muda al campo nuevo `calibrationChannels` (2 canales, subconjunto
+    fail-closed drilleado). El INTENT se conserva entero: la sonda atribuye 2
+    canales y el dominio público de 290 sigue intacto.
 16. **Opción 3 del STOP #2:** `token-overrides` acepta **SOURCE_BOUND como
     techo permanente** de su clase (CSS-terminal + puerta estática sellada)
     bajo el instrumento actual, documentado — sin fabricar receipts contra la
@@ -507,6 +513,24 @@ histórico y no reaparece**.
     un override explícito del tenant para un modo específico prevalece sobre su
     seed global. Implementación: **F5**. Cierra la pregunta de producto abierta
     en la re-adjudicación M-1 de la clase `OPEN_VERTICAL_CASCADE_DEFECT`.
+
+**Tomadas (2026-08-26, F2A-1, clase anti-puerta descubierta por el consenso Opus):**
+
+19. **El dial público manda (opción A), con precisiones.** Ningún brand-theme
+    puede anular silenciosamente un dial gobernado con un literal terminal.
+    (i) `--ds-glass-blur`: aceptado que BitHire pase de 12px a 6.96px con su
+    effectIntensity 0.58 — es el significado del dial. (ii)
+    `--ds-input-md-font-size`: la identidad base de BitHire (13px @ escala 1)
+    se PRESERVA pero expresada causalmente (seed/base 13px ×
+    `--ds-type-scale`); prohibido copiar la referencia de Rottay (la llevaría
+    a 14px). (iii) `--ds-input-md-line-height` / `--ds-input-md-icon-size`: NO
+    se atribuyen automáticamente a `typography.scale` — primero se asigna el
+    dueño correcto (tipografía / densidad / perfil de iconos / invariante
+    vertical; paso DT pendiente) y después se calibra. (iv)
+    `--ds-button-md-radius` queda intacto (ya conserva el factor).
+    **Ley final:** una vertical puede decidir su seed o coeficiente propio,
+    pero no puede congelar el resultado terminal de un control público sin una
+    excepción explícita y visible. Ejecución: Lote F′ de F2A.
 
 **Regla de alcance vigente (del dueño, 2026-08-19):** el DS primero; las apps
 después, vertical por vertical. Libertad para **publicar versiones**; **push
@@ -1238,8 +1262,8 @@ paso de esa cadena está autorizado por este checkpoint.
 | C4 brecha PRE_F4B | 100% REGULARIZADA (doble postaudit Codex DEFECTS 5/5 + Fable REGULARIZA; T-11 anclado, T-12 narrativa, frescura producers.json; D1 aceptado con asiento) |
 | PRE_F4B | CERRADO por regularización C4 (ver asiento C4); inventario mecánico `INVENTORY_READY` histórico |
 | H-1 brazo estático con baseline | 100%; `base` del vertical publicado sólo en el brazo estático; preaudit Fable `ACCEPT` V1–V5; drills 47/47; los 20 receipts spacing/effect/radius invariantes |
-| F4B | **20/20 controles ASENTADOS — FASE COMPLETA en su forma honesta (2026-08-26)** — 9 `COMPUTED_VERIFIED` (spacing.rhythm, surfaces.effect-intensity, shape.radius-scale, density.mode, responsive.posture, typography.scale, experience.profile, palette.seeds, surfaces.elevation-posture) + 10 `SOURCE_BOUND` (button-style, typography.pairing, sidebar-tone, motion.dial, typography.families, recipe-profile, profiles.expressive, profiles.icon, token-overrides, chrome.anatomy) + `chrome.families` paraguas BY_REFERENCE (`UNKNOWN` a propósito, `SURFACE_REVIEW_DEFERRED_TO_F5`). **0 `SIGHTED_ACCEPTED`.** Cero evidencia alcanzable pendiente: token-overrides cerró con techo estructural documentado (clase CSS-terminal + puerta sellada ⇒ sin camino a pass:true; candidato F5 `F5_INSTRUMENT_SEALED_DOOR_SINGLE_ARM_VERDICT` con 2 condiciones de admisión Fable). Lo que falta para que los SOURCE_BOUND suban (ratificación propertyGroup, calibración de celdas) es F4C/F5. 134 receipts bajo validador v2 (133 válidos; único stale declarado: compound-editorial, `SUPERSEDED_BY_LIVE_FENCE`). **C5 ABIERTO (2026-08-26):** defecto de integración del cierre — comentario de `derivedChannels` con claim falso de consumidor único y 3 gates blocking (`controls-catalog`, `tokens-catalog`, `customization-surface-census`) FAIL-stale; corrección en curso (ver asiento de apertura F2A/C5) |
-| F2 asimétrico | 0% — **FRENTE ABIERTO (2026-08-26)**: F2A-0 (medición) en curso con Sonnet (censo corregido: 16 raíces con tema en cero enumeradas en `docs/f4a/medicion-f4a0/baseline.md:88-93` + 18 asimétricas sin cero, derivables de `manifest/cascade/root-catalog.json`; evnto en cero en las 16 — recomputo DT del catálogo, corrige el "11/16" histórico; desbloqueo disyuntivo: valor de theme o cero-delta estricto; decisión 17 desbloquea T0 dentro de esta fase) |
+| F4B | **20/20 controles ASENTADOS — FASE COMPLETA en su forma honesta (2026-08-26)** — 9 `COMPUTED_VERIFIED` (spacing.rhythm, surfaces.effect-intensity, shape.radius-scale, density.mode, responsive.posture, typography.scale, experience.profile, palette.seeds, surfaces.elevation-posture) + 10 `SOURCE_BOUND` (button-style, typography.pairing, sidebar-tone, motion.dial, typography.families, recipe-profile, profiles.expressive, profiles.icon, token-overrides, chrome.anatomy) + `chrome.families` paraguas BY_REFERENCE (`UNKNOWN` a propósito, `SURFACE_REVIEW_DEFERRED_TO_F5`). **0 `SIGHTED_ACCEPTED`.** Cero evidencia alcanzable pendiente: token-overrides cerró con techo estructural documentado (clase CSS-terminal + puerta sellada ⇒ sin camino a pass:true; candidato F5 `F5_INSTRUMENT_SEALED_DOOR_SINGLE_ARM_VERDICT` con 2 condiciones de admisión Fable). Lo que falta para que los SOURCE_BOUND suban (ratificación propertyGroup, calibración de celdas) es F4C/F5. 134 receipts bajo validador v2 (133 válidos; único stale declarado: compound-editorial, `SUPERSEDED_BY_LIVE_FENCE`). **C5 CERRADO (2026-08-26, commits `fd58f8ba4` gate-debt + `44b14f521` correctivo + docs-engineering `46960f2`):** α1 implementado (`derivedChannels` = radio de impacto de 3 seeds; `calibrationChannels` = superficie atribuible de 2, subconjunto fail-closed), cadena derivada re-emitida entera incluyendo el eslabón no enumerado (`producers.json`), gates:ci **89/89 blocking verdes** + 2 excluidos con owner, postaudit Fable ACCEPT (ver asiento de cierre C5) |
+| F2 asimétrico | F2A-0 cerrado; **F2A-1 ADJUDICADO (2026-08-26)**: ley de cinco clases con ACCEPT-para-adjudicación de Fable + tabla medida corregida por el consenso Opus (el censo de consumidores barre la superficie real, no sólo los 3 artefactos). Disposición de las 34: 10 inertes (Lote A) · 1 T0 `#A8A898` (Lote B) · 4 cascada gobernada (Lote C) · 4 anotación (Lote D) · 4 ramp.seed cerradas por dec.18/F5 (Lote E) · 2 deuda muerta + 1 condicional (Lote F) · 2 anti-puerta resueltas por dec.19 (Lote F′) · 5 identidad vertical (anotación) · 1 fuera del set (type.leading, vivo en la capa base). Lotes encolados post-C5 |
 | F3/F4C/F5-F8 pendientes | 0% del tramo pendiente |
 | F9 | 0/5100 celdas aceptadas |
 | Programa completo | estimación prudente **55–60% realizado** (ingeniería; sube de 39–43% con F4B 20/20 asentado); preparación comercial visible ~41%. Cerrar F4A/F4B **no certifica** F9: 0/5100 celdas aceptadas, gate y calibración de celdas propios, aún pendientes |
@@ -4408,6 +4432,51 @@ adjudicación DT sometida a preaudit es α1: restaurar `derivedChannels` a sus 3
 seeds reales y mover la superficie de calibración a un campo propio — la
 decisión 15 conserva su INTENT (superficie de calibración estrecha; dominio
 público 290 intacto) y se enmendará su formulación al cerrar C5.
+
+**C5 CERRADO + F2A-1 ADJUDICADO (2026-08-26; DT Kimi K3; commits `fd58f8ba4`
+gate-debt, `44b14f521` correctivo C5, docs-engineering `46960f2`; preaudit α1
+Fable DEFECTS-1 corregido; postaudit Fable del diff congelado ACCEPT con una
+enmienda de ley aplicada — vía sancionada de subida en el baseline
+variant-parity).** Secuencia ejecutada tras el reinicio del host (estado
+preservado en `/private/tmp/modern-rescue-post-reboot-c5.patch` antes de tocar
+nada): re-ratificación α1 de Fable contra el diff vivo (semántica exacta:
+`derivedChannels` = radio de impacto real de 3 seeds; `calibrationChannels` =
+subconjunto atribuible de 2, guarda fail-closed con drills W-A/W-B) → Opus
+corrige el defecto 1 (cita de ley con criterio explícito: 8 lecturas de código
++ 5 prosa generada, reconciliación 13=8+5) → Sonnet re-emite la cadena en 3
+olas (manifests, census, reconciliation, kimi-preservation, controls-catalog,
+tokens-catalog — 341 vistas, receipts 133/134 quirúrgicos, `producers.json`)
+→ 2 rebuilds de `dist` del DT (lección de orden asentada: **build primero,
+reemisión después** — la pasada paralela obligó a re-firmar receipts dos
+veces) → drills 28/28 → **gates:ci 89/89 blocking verdes** + 2 excluidos con
+owner. **La ley nueva (i) se probó a sí misma:** la primera corrida completa
+de `gates:ci` desde la sucesión DT peló seis capas de espejos stale latentes
+(era F4B/sucesión), todos clasificados AGED_EXPECTATION/regeneración con
+traza por nombre a commits asentados — ledger reads-adjudication (delta = 1
+contador de F4B-14), reclasificación mono/display (gap 10→8, adjudicación DT),
+2 drills envejecidos Codex→Kimi (ahora derivados del contrato vivo),
+producers.json, trío freshness, variant-parity, cra-12 (anchor 47→43
+removal-only + pin corpus 4329→4338 = 9 altas legítimas F4B). Ninguna lógica
+de producto tocada. La cadena derivada de cierre quedó medida entera:
+censo → reconciliation → kimi → controls → catalog → **producers** →
+trío freshness → variant-parity → cra-12, y gates:ci la audita completa.
+**F2A-1** cerrado en la misma ventana: ley de cinco clases con
+ACCEPT-para-adjudicación de Fable (2 rojos de tabla corregidos en v2) +
+adjudicación DT (Q1: gobernado ≠ exento; Q2: `type.leading` vive en la capa
+base — 27 lectores reales — y sale del set; Q3/Q4: propuesta de deuda muerta
+**refutada por el consenso Opus** con evidencia — el censo de F2A-0 medía
+consumidores sólo dentro de los 3 artefactos; sobre la superficie real las 10
+tienen lectores de producción) + decisión 19 del owner (§12) que resuelve la
+clase anti-puerta. Ley de medición corregida y adoptada: el censo de
+consumidores barre skins + components + TSX + contratos TS, excluyendo
+artefactos compilados. Tabla final de las 34 medida raíz por raíz
+(`/private/tmp` memos reproducibles: opus-f2a1-tabla-medida). Lotes
+encolados: A (10 inertes, catálogo), B (T0 `#A8A898`), C (4 cascada), D (4
+anotación), E (4 ramp.seed por dec.18/F5), F (2 deuda muerta + 1 condicional
+con A/B renderizado), F′ (anti-puerta: glass.recipe 12→6.96 aceptado +
+fontSize 13px causal, con re-medición de los 2 controles en bithire).
+Pendiente del DT: asignación de dueño para lineHeight/iconSize (decisión 19,
+punto iii).
 
 **F4B-17B + CIERRE DE FASE F4B — token-overrides alcanza su techo
 estructural documentado y la fase queda con TODA la evidencia que el
