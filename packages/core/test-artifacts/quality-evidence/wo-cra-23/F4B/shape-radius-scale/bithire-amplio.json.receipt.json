@@ -70,10 +70,10 @@
     "packages/core/src/ui/primitives/display/Card/engines/rustic/index.tsx",
     "packages/core/src/ui/primitives/display/Card/index.tsx"
   ],
-  "sourceDigest": "62deb15e0e16176edcd5951cefce776e7845e3351f22de632682210791f64a70",
+  "sourceDigest": "ddfeadcf7bd636d63ca336965188ec3c670e776712c3e342ba8bb26e9542add1",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/shape-radius-scale/bithire-amplio.json",
   "artifactSha256": "fc1cf2da6f57ee871687b3135ee48f7b9506db03d55a025889ce9e6f973f832e",
-  "createdAt": "2026-08-26T19:37:58.000Z",
+  "createdAt": "2026-08-26T21:22:26.666Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

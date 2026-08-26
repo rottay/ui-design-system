@@ -69,10 +69,10 @@
     "packages/core/src/ui/primitives/display/Card/engines/rustic/index.tsx",
     "packages/core/src/ui/primitives/display/Card/index.tsx"
   ],
-  "sourceDigest": "4db08b4b34058393a021ba6c999433a490d766c279c6b6ccf3e4ec8b21e7d7ab",
+  "sourceDigest": "bb45b761c7737cd92eb774371c7e191eca392f71aadd18c973158f6623b88b6a",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/profiles-expressive/rottay-paper.json",
   "artifactSha256": "3329d8e0e7657cea4c94895044abb4785170f1c80503683e26ce98e6f6836e1c",
-  "createdAt": "2026-08-26T19:37:58.000Z",
+  "createdAt": "2026-08-26T21:22:26.666Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

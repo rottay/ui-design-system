@@ -66,10 +66,10 @@
     "packages/core/styles/index.css",
     "packages/core/styles/rottay.css"
   ],
-  "sourceDigest": "2d66afd4515c0e7c6de4e7c183f42dc2a40d84fec5a0f0ad3153c4b4177e62a8",
+  "sourceDigest": "1a39557312196daffc9e85a6f4c22871e44166dcaff730ad6aec9d36a3da48a2",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/palette-seeds/rottay-warm-sand.json",
   "artifactSha256": "492cb94ac14a9d4ba905fd3980c354454dee5949df910f3a86b71acbfd68584d",
-  "createdAt": "2026-08-26T19:37:58.000Z",
+  "createdAt": "2026-08-26T21:22:26.666Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

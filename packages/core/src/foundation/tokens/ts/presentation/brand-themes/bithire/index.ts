@@ -948,11 +948,8 @@ const OVERLAY: BrandThemeModeOverlay = {
          * @governor deriva de: --ds-color-bg-elevated, --ds-color-bg-surface
          */
         background: "linear-gradient(180deg, var(--ds-color-bg-elevated) 0%, var(--ds-color-bg-surface) 100%)",
-        /**
-         * @domicile derived
-         * @governor deriva de: --ds-color-text-primary
-         */
-        foreground: "var(--ds-color-text-primary)",
+        // F2A-1 Lote F: foreground removido -- duplicado exacto de la capa base (default.css),
+        // que ya declara var(--ds-color-text-primary) para este rol; la capa base gana.
         /**
          * @domicile derived
          * @governor deriva de: --ds-color-border
@@ -965,11 +962,8 @@ const OVERLAY: BrandThemeModeOverlay = {
         shadow: "0 16px 36px -24px color-mix(in srgb, var(--ds-color-neutral-50) 80%, transparent), 0 4px 12px color-mix(in srgb, var(--ds-color-neutral-50) 58%, transparent)",
       },
       overlay: {
-        /**
-         * @domicile derived
-         * @governor deriva de: --ds-color-bg-elevated
-         */
-        background: "var(--ds-color-bg-elevated)",
+        // F2A-1 Lote F: background removido -- alias-derivado a var(--ds-surface-overlay)
+        // en todo modo, duplicado exacto de default.css; la capa base gana.
         /**
          * @domicile derived
          * @governor deriva de: --ds-color-text-primary
@@ -3961,7 +3955,12 @@ const SURFACES: BrandSurfaces = {
      */
     raised: {
       background: "linear-gradient(180deg, #FFFFFF 0%, #F8FBFD 100%)",
-      foreground: "#14283B",
+      // F2A-1 Lote F: foreground removido -- equivalencia por VALOR en reposo
+      // (la capa base declara var(--ds-color-text-primary), que resuelve al
+      // propio --ds-color-text-primary de bithire, #14283B), no texto
+      // identico; bajo override de tenant el rol pasa a seguir el override
+      // (--ds-color-text-primary esta en el allowlist de 290) en vez de
+      // quedar clavado en el literal removido.
       border: "#C7D6E2",
       shadow:
         "0 16px 36px -24px rgba(20, 40, 59, 0.36), 0 4px 12px rgba(20, 40, 59, 0.08)",
@@ -3971,7 +3970,8 @@ const SURFACES: BrandSurfaces = {
      * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
      */
     overlay: {
-      background: "#ffffff",
+      // F2A-1 Lote F: background removido -- alias-derivado a var(--ds-surface-overlay)
+      // en todo modo, duplicado exacto de default.css; la capa base gana.
       foreground: "#14283B",
     },
   },

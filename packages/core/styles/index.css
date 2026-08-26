@@ -127278,7 +127278,6 @@ html[lang]:lang(ar) {
   --ds-material-inset-background: var(--ds-surface-inset);
   --ds-material-inset-border: #D7E2EA;
   --ds-material-inset-foreground: #31506B;
-  --ds-material-overlay-background: var(--ds-surface-overlay);
   --ds-material-overlay-foreground: #14283B;
   --ds-material-panel-background: var(--ds-surface-panel);
   --ds-material-panel-background-active: linear-gradient(180deg, #F6FAFC 0%, #EBF3F8 100%);
@@ -127303,7 +127302,6 @@ html[lang]:lang(ar) {
   --ds-material-panel-texture: none;
   --ds-material-raised-background: var(--ds-surface-raised);
   --ds-material-raised-border: #C7D6E2;
-  --ds-material-raised-foreground: #14283B;
   --ds-material-raised-shadow: 0 16px 36px -24px rgba(20, 40, 59, 0.36), 0 4px 12px rgba(20, 40, 59, 0.08);
   --ds-material-shell-background: var(--ds-surface-shell);
   --ds-material-shell-border: #D4E0EA;
@@ -127527,7 +127525,6 @@ html[lang]:lang(ar) {
   --ds-surface-icon-bg: color-mix(in srgb, var(--ds-color-primary) 8%, var(--ds-surface-card));
   --ds-surface-icon-border: color-mix(in srgb, var(--ds-color-primary) 24%, var(--ds-color-border));
   --ds-surface-inset: #EDF3F7;
-  --ds-surface-overlay: #ffffff;
   --ds-surface-panel: #f4f8fd;
   --ds-surface-panel-bg: var(--ds-surface-panel);
   --ds-surface-radius-md: var(--ds-radius-md);
@@ -128128,7 +128125,6 @@ html[lang]:lang(ar) {
   --ds-material-panel-shadow-hover: 0 10px 28px -22px color-mix(in srgb, var(--ds-color-neutral-50) 72%, transparent), 0 2px 6px color-mix(in srgb, var(--ds-color-neutral-50) 50%, transparent);
   --ds-material-panel-shadow-selected: 0 8px 24px -20px color-mix(in srgb, var(--ds-color-neutral-50) 68%, transparent), 0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 30%, transparent);
   --ds-material-raised-border: var(--ds-color-border);
-  --ds-material-raised-foreground: var(--ds-color-text-primary);
   --ds-material-raised-shadow: 0 16px 36px -24px color-mix(in srgb, var(--ds-color-neutral-50) 80%, transparent), 0 4px 12px color-mix(in srgb, var(--ds-color-neutral-50) 58%, transparent);
   --ds-material-shell-border: var(--ds-color-border-secondary);
   --ds-material-shell-foreground: var(--ds-color-text-secondary);
@@ -128226,7 +128222,6 @@ html[lang]:lang(ar) {
   --ds-surface-icon-bg: linear-gradient(145deg, color-mix(in srgb, var(--ds-color-primary) 12%, var(--ds-surface-card-bg)), color-mix(in srgb, var(--ds-color-secondary) 10%, var(--ds-surface-card-bg)));
   --ds-surface-icon-border: color-mix(in srgb, var(--ds-color-primary) 22%, var(--ds-surface-card-border));
   --ds-surface-inset: var(--ds-color-neutral-50);
-  --ds-surface-overlay: var(--ds-color-bg-elevated);
   --ds-surface-panel: var(--ds-color-bg-primary);
   --ds-surface-raised: linear-gradient(180deg, var(--ds-color-bg-elevated) 0%, var(--ds-color-bg-surface) 100%);
   --ds-surface-shadow: var(--ds-shadow-sm);

@@ -12,9 +12,9 @@
       },
       {
         "file": "src/foundation/tokens/css/facade/artifacts/bithire/index.css",
-        "bytes": 96849,
-        "lines": 1730,
-        "sha256": "06c0e1cdc24aec39769b4661aefb232f025e4a651f8fc8803d68cf3b2f469ed4"
+        "bytes": 96591,
+        "lines": 1725,
+        "sha256": "4f7077797376f890c39aca7022c1cada343afb00684836418ebb4d8b0b96ec54"
       },
       {
         "file": "src/foundation/tokens/css/facade/artifacts/evnto/index.css",
@@ -32,9 +32,9 @@
       },
       {
         "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-        "bytes": 335915,
+        "bytes": 336478,
         "lines": 9284,
-        "sha256": "e64163adcaeffe7f16689eaec9d67ab74476dc00316a8f5fb3408937073bb4fa"
+        "sha256": "8979e0857e2bd2f5455612847ecbfc984c96c62cc5e1b6cbc96191a98551008d"
       },
       {
         "file": "src/foundation/tokens/ts/presentation/brand-themes/evnto/index.ts",
@@ -51,8 +51,8 @@
       "distinctChannels": 1212
     },
     "bithire": {
-      "occurrences": 1706,
-      "distinctChannels": 1234
+      "occurrences": 1701,
+      "distinctChannels": 1231
     },
     "evnto": {
       "occurrences": 563,
@@ -62,18 +62,18 @@
   "surface": {
     "declares": {
       "rottay": 1212,
-      "bithire": 1234,
+      "bithire": 1231,
       "evnto": 470
     },
-    "union": 1762,
+    "union": 1759,
     "intersection": 432,
-    "intersectionPct": 24.5,
+    "intersectionPct": 24.6,
     "intersectionPctOfSmallest": 91.9,
     "pairwise": {
       "rottay+bithire": {
         "shared": 684,
-        "union": 1762,
-        "pctOfUnion": 38.8,
+        "union": 1759,
+        "pctOfUnion": 38.9,
         "pctOfSmaller": 56.4
       },
       "rottay+evnto": {
@@ -84,8 +84,8 @@
       },
       "bithire+evnto": {
         "shared": 434,
-        "union": 1270,
-        "pctOfUnion": 34.2,
+        "union": 1267,
+        "pctOfUnion": 34.3,
         "pctOfSmaller": 92.3
       }
     },
@@ -894,7 +894,6 @@
         "--ds-material-inset-background",
         "--ds-material-inset-border",
         "--ds-material-inset-foreground",
-        "--ds-material-overlay-background",
         "--ds-material-overlay-foreground",
         "--ds-material-panel-background",
         "--ds-material-panel-background-active",
@@ -919,7 +918,6 @@
         "--ds-material-panel-texture",
         "--ds-material-raised-background",
         "--ds-material-raised-border",
-        "--ds-material-raised-foreground",
         "--ds-material-raised-shadow",
         "--ds-material-shell-background",
         "--ds-material-shell-border",
@@ -1034,7 +1032,6 @@
         "--ds-surface-control",
         "--ds-surface-control-bg",
         "--ds-surface-inset",
-        "--ds-surface-overlay",
         "--ds-surface-panel",
         "--ds-surface-panel-bg",
         "--ds-surface-raised",
@@ -11290,8 +11287,8 @@
         "sameRoleTwiceChannels": []
       },
       "bithire": {
-        "channelsDeclaredMoreThanOnce": 472,
-        "allInDistinctRoles": 472,
+        "channelsDeclaredMoreThanOnce": 470,
+        "allInDistinctRoles": 470,
         "sameRoleTwice": 0,
         "sameRoleTwiceChannels": []
       },
@@ -11308,19 +11305,19 @@
     "note": "Unidad distinta de la del artefacto. NUNCA fusionar con `surface`.",
     "authors": {
       "rottay": 1757,
-      "bithire": 1499,
+      "bithire": 1495,
       "evnto": 397
     },
-    "union": 2554,
+    "union": 2550,
     "intersection": 345,
     "intersectionPct": 13.5,
     "intersectionPctOfSmallest": 86.9,
     "pairwise": {
       "rottay+bithire": {
         "shared": 705,
-        "union": 2551,
-        "pctOfUnion": 27.6,
-        "pctOfSmaller": 47
+        "union": 2547,
+        "pctOfUnion": 27.7,
+        "pctOfSmaller": 47.2
       },
       "rottay+evnto": {
         "shared": 390,
@@ -11330,14 +11327,14 @@
       },
       "bithire+evnto": {
         "shared": 349,
-        "union": 1547,
+        "union": 1543,
         "pctOfUnion": 22.6,
         "pctOfSmaller": 87.9
       }
     },
     "exclusive": {
       "rottay": 1007,
-      "bithire": 790,
+      "bithire": 786,
       "evnto": 3
     },
     "exclusiveSamples": {

@@ -66,10 +66,10 @@
     "packages/core/styles/index.css",
     "packages/core/styles/rottay.css"
   ],
-  "sourceDigest": "2a069ec50949b057fedeee40f0fb06084605ddf94426e1e8236fac9ffc172fb5",
+  "sourceDigest": "ccd8eadf718a2b1359e5cb40476f8465c97117ab8ab89df9ea8ce205f1e0adbc",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/palette-seeds/evnto-indigo.json",
   "artifactSha256": "fdc32ff58ff196ca968a36afde3bcd6eb618bc3362353fc2f2b89c818b35b77f",
-  "createdAt": "2026-08-26T19:37:58.000Z",
+  "createdAt": "2026-08-26T21:22:26.666Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

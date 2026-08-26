@@ -4,7 +4,7 @@
   "scope": "Phase-0 exact proof and minimal public-claim floor; not DS-IMP-060 completion",
   "reproducibility": {
     "classification": "deterministic same-input runs",
-    "authorityDigest": "eee15889fe0edeaabd07200bf9961de5519a4de60c5806126cbf3ac73122fe88",
+    "authorityDigest": "3815260e58b87234cf5d9d89d43065c76afc80273eae8420c695bc9c5eed936b",
     "sourceHeadIsAuthority": false,
     "toolchain": {
       "node": {
@@ -2658,8 +2658,8 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 96849,
-        "sha256": "06c0e1cdc24aec39769b4661aefb232f025e4a651f8fc8803d68cf3b2f469ed4"
+        "bytes": 96591,
+        "sha256": "4f7077797376f890c39aca7022c1cada343afb00684836418ebb4d8b0b96ec54"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/tokens/css/facade/artifacts/evnto/index.css",
@@ -7507,8 +7507,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 335915,
-        "sha256": "e64163adcaeffe7f16689eaec9d67ab74476dc00316a8f5fb3408937073bb4fa"
+        "bytes": 336478,
+        "sha256": "8979e0857e2bd2f5455612847ecbfc984c96c62cc5e1b6cbc96191a98551008d"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/tokens/ts/presentation/brand-themes/bithire/seeds.json",
@@ -36995,8 +36995,8 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 5380949,
-        "sha256": "006ed5a882d3333112fb19f508de0eec3df42bbd4487fafb4a54ee4f5700dc01"
+        "bytes": 5380691,
+        "sha256": "900dc3dd2f9e866e12521c31d56f0a5fd6df481890884ee038e598b25e0c7e38"
       },
       {
         "path": "ui-design-system/packages/core/styles/evnto.css",
@@ -37011,8 +37011,8 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 5503728,
-        "sha256": "9fc819a2220acb110631be69939ce98a719753829a6e9aa2c0a839cb83f4cb22"
+        "bytes": 5503470,
+        "sha256": "d623a2bf21fad1dc94347d6981c7bb25fd92ce39bad19d617d12c671f29708f2"
       },
       {
         "path": "ui-design-system/packages/core/styles/modern.css",
@@ -40519,7 +40519,7 @@
         "sha256": "d2a99efed33922a4a699ea033538b677022ddaccf0cdbb25ece0a7295bdc4812"
       }
     ],
-    "digest": "eee15889fe0edeaabd07200bf9961de5519a4de60c5806126cbf3ac73122fe88"
+    "digest": "3815260e58b87234cf5d9d89d43065c76afc80273eae8420c695bc9c5eed936b"
   },
   "paintAudit": {
     "output": "engine-token-audit --check OK (3326 counters; 3226 completed zeros locked exactly; 91 decrease-only ceilings; 2 positive exact invariants; 7 positive minimum floors)",
@@ -113900,8 +113900,8 @@
   "deterministicRuns": {
     "count": 2,
     "hashes": [
-      "af023685139fafd7b862c1de1896ba093ae56e6ee60509a43b1d9ab036a3bd32",
-      "af023685139fafd7b862c1de1896ba093ae56e6ee60509a43b1d9ab036a3bd32"
+      "3097caec41408d2e0834872fd5aa47957a73543fba77d6807ce912031af334e8",
+      "3097caec41408d2e0834872fd5aa47957a73543fba77d6807ce912031af334e8"
     ],
     "agree": true
   }

@@ -1,7 +1,7 @@
 {
  "schemaVersion": 1,
- "generatedBy": "tokens-catalog gate re-derivation, 2026-08-26 (cross-repo post-Lote B) — digest re-projected from the current census report after Lote B's tree edits (evnto brand-theme + artifacts); figures unchanged (writers 4669=4669, deadWriters 266=266); adjudications unchanged",
- "basedOnReportDigest": "6a0b237ea3b36852cd4a1a3a314db53ef9c71aacd9807da61f3d267feed7eb91",
+ "generatedBy": "tokens-catalog gate re-derivation, 2026-08-26 (F2A-1 Lote F paso 3, postaudit Fable) — digest re-projected from the current census report after the 5 postaudit corrections (root-catalog.json citations/assignments + bithire comment fix); figures unchanged (writers 4669=4669, deadWriters 266=266); adjudications unchanged",
+ "basedOnReportDigest": "e8c8f28d9fb061739e6ed8adeca208ed08c203b8d52dac6ddb406febf7c01ea3",
  "normative": {
   "writers": 4669,
   "deadWriters": 266,

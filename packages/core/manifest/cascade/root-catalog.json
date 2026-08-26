@@ -316,16 +316,13 @@
         "evnto": 0
       },
       "assignments": {
-        "total": 2,
+        "total": 0,
         "rottay": 0,
-        "bithire": 2,
+        "bithire": 0,
         "evnto": 0,
         "modes": {
           "rottay": [],
-          "bithire": [
-            "base",
-            "dark"
-          ],
+          "bithire": [],
           "evnto": []
         }
       },
@@ -334,7 +331,7 @@
       "governedBy": null,
       "governanceScope": "ninguna",
       "exposure": "internal-head",
-      "exposureNote": "Autoridad on-tone-ink (packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts:593-606). Bithire autora 73 de estos 93 canales a mano: es la deuda de derivacion mas concentrada del nivel elevado.",
+      "exposureNote": "Autoridad on-tone-ink (packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts:593-606). Bithire autora 73 de estos 93 canales a mano: es la deuda de derivacion mas concentrada del nivel elevado. REMOVIDO en bithire (F2A-1 Lote F, 2026-08-26): las 2 asignaciones (base + dark) retiradas de surfaceRoles.raised.foreground en ambos brazos (SURFACES y OVERLAY.surfaces.surfaceRoles), artefacto compilado por el pipeline canonico. Base: literal #14283B removido -- identico a var(--ds-color-text-primary) resuelto contra la capa base (default.css:433) via el propio --ds-color-text-primary de bithire (#14283B) -- duplicado por VALOR, no por texto. Dark: var(--ds-color-text-primary) removido -- expresion byte-identica a la que la capa base ya resuelve, duplicado por TEXTO. Cambio de comportamiento declarado, no firmado como sin-efecto: bajo override de tenant, --ds-color-text-primary esta en el allowlist de 290 (token-overrides); tras esta remocion, la mitad light de raised-foreground SIGUE al texto que el tenant autore (antes quedaba clavado en #14283B) -- reduce riesgo de contraste, casi seguro mejora, pero es un cambio de comportamiento real bajo esa condicion, no un cero-delta universal. CORREGIDO (postaudit Fable, condicion ACCEPT, 2026-08-26): `assignments` recomputado -- bithire 2->0, `modes.bithire` vaciado, total 2->0 -- la autoridad maquina no puede seguir afirmando 2 asignaciones que ya no existen, aunque la prosa lo confesara. `collapses` (73 bithire, mide cableado, no cambia con la remocion de la cabeza) NO se recomputa en este lote -- re-medicion estilo F2A-0 pendiente, dueño DT, fecha objetivo a asentar en el commit de cierre.",
       "derivationDebt": true
     },
     {
@@ -638,7 +635,7 @@
       "governedBy": null,
       "governanceScope": "ninguna",
       "exposure": "internal-head",
-      "exposureNote": "Autoridad on-tone-ink (packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts:593-606). Nota obligatoria (K4): src/ui/primitives/overlay/Tour/tests/Tour.overlay-material.test.ts:55-64 pinea la AUSENCIA de este canal (expect(decl).not.toContain('--ds-material-overlay-foreground')), con el incidente en su propio comentario: \"The overlay-foreground arm is unauthored on some tenants, so the chain fell through to the dark on-primary base and painted black on black.\" No materializar nunca.",
+      "exposureNote": "Autoridad on-tone-ink (packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts:593-606). Nota obligatoria (K4): src/ui/primitives/overlay/Tour/tests/Tour.overlay-material.test.ts:55-64 pinea la AUSENCIA de este canal (expect(decl).not.toContain('--ds-material-overlay-foreground')), con el incidente en su propio comentario: \"The overlay-foreground arm is unauthored on some tenants, so the chain fell through to the dark on-primary base and painted black on black.\" No materializar nunca. CONDICIONAL, NO REMOVIDO (F2A-1 Lote F, 2026-08-26): sale a anotacion documental, no a remocion, porque este lote no produjo evidencia A/B renderizada del rol overlay para semantic-surface.css:223 (fallback inherit, que cambiaria el contrato del rol si se remueve la fuente). foreground se dejo intacto en ambos brazos de bithire (SURFACES y OVERLAY.surfaces.surfaceRoles.overlay) -- unicamente background se retiro (ver tier.overlay.bg). Queda pendiente del A/B renderizado en un lote posterior.",
       "derivationDebt": true
     },
     {
@@ -881,19 +878,17 @@
         "evnto": 0
       },
       "assignments": {
-        "total": 1,
+        "total": 0,
         "rottay": 0,
-        "bithire": 1,
+        "bithire": 0,
         "evnto": 0,
         "modes": {
           "rottay": [],
-          "bithire": [
-            "base"
-          ],
+          "bithire": [],
           "evnto": []
         }
       },
-      "derivation": "La autoridad overlay-panel-scrim-split lo declara textual (packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts:627-634): \"overlay ROLE is a floating panel derived from the elevated ground; the veil is --ds-overlay-scrim over --ds-color-bg-overlay; reduced-transparency collapses to the opaque pair\". Semantica de asignacion declarada (K4, F4A-14a, instruccion del DT 2026-08-21): esta reparacion cuenta EMISION DEL CANAL CABEZA POR MODO, no hoja autorada por modo -- bithire autora la hoja en los dos brazos (SURFACES.surfaceRoles.overlay.background y OVERLAY.surfaces.surfaceRoles.overlay.background), pero el canal cabeza --ds-material-overlay-background solo se emite en base (artifacts/bithire/index.css:716); el modo dark emite unicamente el canal secundario --ds-surface-overlay (:1664, contra :965 en base). Bajo la semantica de posicion autorada por modo esto daria x2; bajo emision del canal cabeza por modo da x1 -- esta es la semantica elegida. Segundo canal (informativo, no un segundo root ni una entrada de collapses): --ds-surface-overlay, autorado por bithire solo en modo dark. Nota: materializar esta raiz en rottay/evnto produce la declaracion circular --ds-surface-overlay: var(--ds-surface-overlay) -- no materializar.",
+      "derivation": "La autoridad overlay-panel-scrim-split lo declara textual (packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts:627-634): \"overlay ROLE is a floating panel derived from the elevated ground; the veil is --ds-overlay-scrim over --ds-color-bg-overlay; reduced-transparency collapses to the opaque pair\". Semantica de asignacion declarada (K4, F4A-14a, instruccion del DT 2026-08-21): esta reparacion cuenta EMISION DEL CANAL CABEZA POR MODO, no hoja autorada por modo -- bithire autora la hoja en los dos brazos (SURFACES.surfaceRoles.overlay.background y OVERLAY.surfaces.surfaceRoles.overlay.background), pero el canal cabeza --ds-material-overlay-background solo se emite en base (artifacts/bithire/index.css:716); el modo dark emite unicamente el canal secundario --ds-surface-overlay (:1664, contra :965 en base). Bajo la semantica de posicion autorada por modo esto daria x2; bajo emision del canal cabeza por modo da x1 -- esta es la semantica elegida. Segundo canal (informativo, no un segundo root ni una entrada de collapses): --ds-surface-overlay, autorado por bithire solo en modo dark. Nota: materializar esta raiz en rottay/evnto produce la declaracion circular --ds-surface-overlay: var(--ds-surface-overlay) -- no materializar. REMOVIDO (F2A-1 Lote F, 2026-08-26): duplicado byte-identico contra la capa base (default.css:434, var(--ds-surface-overlay)) -- bithire retiro `overlay.background` de ambos brazos (SURFACES y OVERLAY.surfaces.surfaceRoles), eliminando 5 lineas del artefacto compilado por el pipeline canonico (tsc+vite build+build-vertical-artifacts+build-css): --ds-material-overlay-background (base :716), --ds-surface-overlay (base :965 y dark :1664), mas las 2 lineas hermanas de tier.raised.fg. Cero agregadas. Cero-delta probado por cadena completa: base resuelve var(--ds-surface-overlay) -> var(--ds-color-bg-elevated, var(--ds-surface-card)) -> bithire --ds-color-bg-elevated=#ffffff (identico al literal removido); dark resuelve por la misma cadena -> #1f2940 (identico a la expresion var() removida). `channelStatus` no se toco: el canal sigue existiendo via la capa base (root-catalog-freshness-gate re-verificado OK tras la remocion). CORREGIDO (postaudit Fable, condicion ACCEPT, 2026-08-26): `assignments` recomputado -- bithire 1->0, `modes.bithire` vaciado, total 1->0. `collapses` (14 bithire, mide cableado, no cambia con la remocion de la cabeza) NO se recomputa en este lote -- re-medicion estilo F2A-0 pendiente, dueño DT, fecha objetivo a asentar en el commit de cierre.",
       "evidence": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:278",
       "governedBy": "token-overrides",
       "governanceScope": "canal-por-canal",
