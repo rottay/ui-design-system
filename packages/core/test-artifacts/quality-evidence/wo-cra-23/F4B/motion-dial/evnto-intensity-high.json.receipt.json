@@ -53,10 +53,10 @@
     "packages/core/src/ui/primitives/feedback/Alert/engines/rustic/index.tsx",
     "packages/core/src/ui/primitives/feedback/Alert/index.tsx"
   ],
-  "sourceDigest": "e41ef19c2f54cd23681626deea7be21d15fe3c1053f1f14fa1e56069a62ffcbc",
+  "sourceDigest": "b895896671ba6d44eefe5dd1fcaa604df38e52cc242ccc9619a21e24fdd7c297",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/motion-dial/evnto-intensity-high.json",
   "artifactSha256": "5c379f56551c8960fd01267245002107adc77c064fccaad08172125549de4a14",
-  "createdAt": "2026-08-26T15:27:16.367Z",
+  "createdAt": "2026-08-26T19:37:58.000Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

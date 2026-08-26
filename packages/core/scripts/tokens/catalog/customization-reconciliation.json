@@ -1,7 +1,7 @@
 {
  "schemaVersion": 1,
- "generatedBy": "tokens-catalog gate re-derivation, 2026-08-26 (C5) — digest re-projected from the current census report after the C5 reemission (customization-surface-census --write); figures re-mirrored (writers 4668->4669 from unrelated tree drift since F4A-4, deadWriters 266=266 unchanged); adjudications unchanged",
- "basedOnReportDigest": "f169f69ff2c54db9482599cbb199cceb9b288809c84944498be28f973d85c4a0",
+ "generatedBy": "tokens-catalog gate re-derivation, 2026-08-26 (cross-repo post-Lote B) — digest re-projected from the current census report after Lote B's tree edits (evnto brand-theme + artifacts); figures unchanged (writers 4669=4669, deadWriters 266=266); adjudications unchanged",
+ "basedOnReportDigest": "6a0b237ea3b36852cd4a1a3a314db53ef9c71aacd9807da61f3d267feed7eb91",
  "normative": {
   "writers": 4669,
   "deadWriters": 266,

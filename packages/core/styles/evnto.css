@@ -125202,6 +125202,7 @@ html[lang]:lang(ar) {
   --ds-color-text-disabled: #484838;
   --ds-color-text-muted: #686858;
   --ds-color-text-on-primary: #131210;
+  --ds-color-text-page: #A8A898;
   --ds-color-text-primary: #E8E8E0;
   --ds-color-text-secondary: #A8A898;
   --ds-color-text-tertiary: var(--ds-color-neutral-600);

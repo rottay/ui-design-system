@@ -37,10 +37,10 @@
     "packages/core/src/tooling/resolution-probe/runtime/ingress/index.mjs",
     "packages/core/src/tooling/resolution-probe/runtime/measure/index.mjs"
   ],
-  "sourceDigest": "b8b8da5872bc43ed92d607f0ed60c78e1f0ce89b5c21795b2d745562f7c18d31",
+  "sourceDigest": "7d8bb8d33a1a72ff2eb9e7fbe1c5979e07d9bf35c30f3435a57c83eb5eb4f49b",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/chrome-anatomy/evnto.json",
   "artifactSha256": "8a5ecaab07b72b89662c66d88a51c2ee7239e917b5fa28cc6132fc5f97654c20",
-  "createdAt": "2026-08-26T15:27:16.367Z",
+  "createdAt": "2026-08-26T19:37:58.000Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

@@ -790,32 +790,12 @@ describe("T0 structural mirror (three Themes)", () => {
     }
   });
 
-  // CI-1: `textPageColor` (F4A-6/K3, 3393f70d4, 2026-08-21) is authored
-  // asymmetrically across all three first-party themes, measured directly
-  // (not assumed from source alone) via `collectThemeKeypaths` on each
-  // theme's own canonicalized output: rottay carries
-  // `modes.light.palette.textPageColor` only, bithire carries
-  // `modes.dark.palette.textPageColor` only, and evnto carries NEITHER
-  // (its PALETTE.textPageColor is authored as a single mode-independent
-  // seed -- see its own `@governor` note, "el modo no diverge en este
-  // slot" -- but that seed does not currently canonicalize into either
-  // per-mode keypath). Whether every vertical SHOULD project this root
-  // into both modes is a T0/owner authorship question, not decided here;
-  // both keypaths are excluded from the exact-mirror comparison below so
-  // this known, measured asymmetry does not mask a DIFFERENT, unmeasured
-  // one arising later in the same key ordering.
-  const TEXT_PAGE_COLOR_MODE_ASYMMETRY = new Set([
-    "modes.light.palette.textPageColor",
-    "modes.dark.palette.textPageColor",
-  ]);
-
   it("all first-party Themes share the exact same nested keypath set", () => {
     const keypaths = Object.values(FIRST_PARTY_THEMES).map(
       (theme) =>
         new Set(
           collectThemeKeypaths(canonicalizeTheme(theme))
             .filter((p) => p !== "id" && p !== "name")
-            .filter((p) => !TEXT_PAGE_COLOR_MODE_ASYMMETRY.has(p))
         )
     );
     const [first, ...rest] = keypaths;

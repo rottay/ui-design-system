@@ -140,6 +140,27 @@ const OVERLAY: BrandThemeModeOverlay = {
      */
     textPrimaryColor: "#E8E8E0",
     /**
+     * Raiz de tinta del tier de pagina (K3, F4A-6): sidebar, headers de tabla,
+     * labels de formulario — el mobiliario de pagina, no el contenido.
+     *
+     * F2A-1 Lote B, decision 17 del owner: este slot SI diverge por modo y el
+     * modo dark lo autora. La anotacion anterior ("gap aceptado: el modo no
+     * diverge en este slot; PALETTE lo autora y su valor sirve a los dos
+     * modos") describia una asimetria de cableado, no una decision: PALETTE
+     * autora `#3d3d3d`, una tinta de pagina para fondo claro, y servirla al
+     * modo dark dejaba el mobiliario de pagina sin tinta propia. Rottay y
+     * bithire ya autoran los dos modos; evnto era el unico que no.
+     *
+     * Valor `#A8A898`, contraste medido 7.77:1 sobre el fondo dark del propio
+     * tema (OVERLAY.palette.backgroundColor `#131210`) — AA para texto normal
+     * y AAA para texto grande. Coincide con `textSecondaryColor` del mismo
+     * modo, la misma relacion que rottay (#6B6B6B) y bithire (#9aacbf)
+     * mantienen entre estos dos slots.
+     * @domicile seed
+     * @governor dial: tenant-dial (tinta de pagina); calibracion en F4B
+     */
+    textPageColor: "#A8A898",
+    /**
      * @domicile seed
      * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
      */
@@ -526,11 +547,6 @@ const OVERLAY: BrandThemeModeOverlay = {
    * @placeholder OVERLAY.palette.textInverseColor
    * @domicile unassigned
    * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
-   */
-  /**
-   * @placeholder OVERLAY.palette.textPageColor
-   * @domicile unassigned
-   * @governor none — gap aceptado: el modo no diverge en este slot; PALETTE lo autora y su valor sirve a los dos modos (posture unassigned, roster F4A-1c)
    */
   /**
    * @placeholder OVERLAY.palette.warningBorderColor

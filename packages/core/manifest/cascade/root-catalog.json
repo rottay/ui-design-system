@@ -505,10 +505,10 @@
         "evnto": 0
       },
       "assignments": {
-        "total": 5,
+        "total": 6,
         "rottay": 2,
         "bithire": 2,
-        "evnto": 1,
+        "evnto": 2,
         "modes": {
           "rottay": [
             "base",
@@ -519,7 +519,8 @@
             "dark"
           ],
           "evnto": [
-            "base"
+            "base",
+            "dark"
           ]
         }
       },
@@ -528,7 +529,7 @@
       "governedBy": null,
       "governanceScope": "ninguna",
       "exposure": "internal-head",
-      "exposureNote": "Raiz NUEVA de F4A-6 (nudo K3). internal-head hasta F4B: es lo que hacen sus cinco hermanas de tinta (tier.control/base/raised/overlay/accent.fg, todas internal-head con governedBy null), y meterla como tenant-dial sin control habria roto la invariante que las 26 tenant-dial cumplen sin excepcion. F4B la reclasifica a tenant-dial cuando el dial aterrice. Valor por tema = el computado de hoy (cero-delta por construccion): rottay #A0A0A5 base / #6B6B6B light, bithire #53697E base / #9aacbf dark, evnto #3d3d3d base SIN dark — agregarle un dark a evnto no seria cero-delta. Bithire la autora aunque hoy coincide con su --ds-color-text-secondary: son dos diales independientes desde F4B. channelStatus es solo-artefacto (no existe): el canal nace al compilar el tenant y no tiene declaracion en la base DS de src/ — lo dijo root-catalog-freshness en F4A-6.",
+      "exposureNote": "Raiz NUEVA de F4A-6 (nudo K3). internal-head hasta F4B: es lo que hacen sus cinco hermanas de tinta (tier.control/base/raised/overlay/accent.fg, todas internal-head con governedBy null), y meterla como tenant-dial sin control habria roto la invariante que las 26 tenant-dial cumplen sin excepcion. F4B la reclasifica a tenant-dial cuando el dial aterrice. Valor por tema = el computado de hoy (cero-delta por construccion): rottay #A0A0A5 base / #6B6B6B light, bithire #53697E base / #9aacbf dark, evnto #3d3d3d base / #A8A898 dark. La clausula anterior de esta nota decia \"evnto #3d3d3d base SIN dark — agregarle un dark a evnto no seria cero-delta\": cierto como medicion en F4A-6 y SUPERSEDIDO por la decision 17 del owner (F2A-1 Lote B), que autora el dark de evnto precisamente porque el delta era el punto — servir la tinta de pagina clara al modo oscuro dejaba el mobiliario de pagina sin tinta propia. Contraste medido 7.77:1 sobre el fondo dark del propio tema (OVERLAY.palette.backgroundColor #131210). Bithire la autora aunque hoy coincide con su --ds-color-text-secondary: son dos diales independientes desde F4B. channelStatus es solo-artefacto (no existe): el canal nace al compilar el tenant y no tiene declaracion en la base DS de src/ — lo dijo root-catalog-freshness en F4A-6. EXCLUSION MUERTA (F2A-1 Lote B-2, 2026-08-26): el Set TEXT_PAGE_COLOR_MODE_ASYMMETRY de theme-iso.test.ts — que sacaba modes.light/dark.palette.textPageColor del espejo exacto de keypaths desde F4A-6/K3 — fue retirado, sin residuo, y el test pasa 36/36 sin el. La causa raiz NO era autoria, y por eso la decision 17 sola no lo cerraba: `textPageColor` faltaba en DEFAULT_PALETTE_KEYS (contracts/composition/tenants/themes/iso/index.ts), la lista que withAllKeys materializa en AMBOS overlays de modo de todo tema; sus cinco hermanas de la familia text* si estaban. Sin el nombre en esa lista la clave solo existia en el modo que el overlay de cada tema autora — rottay light, bithire y evnto dark — y ninguna cantidad de autoria por tema lo arreglaba. B-2 agrega la linea. Medido: la clave se materializa como `undefined` en el modo no autorado y NO emite CSS — los 3 artefactos y los 5 bundles quedan byte-identicos tras el rebuild, verificado por sha256 antes y despues. Nota de alcance para quien lea esta fila: lo que quedo simetrico es la DECLARACION (assignments 2/2/2 y el espejo de keypaths); el CABLEADO sigue asimetrico y este campo lo dice arriba — collapses 35/0/0, o sea evnto declara hoy una tinta de pagina que ningun canal suyo consume todavia. Eso es autoria posterior, no deuda de este lote.",
       "derivationDebt": false
     },
     {

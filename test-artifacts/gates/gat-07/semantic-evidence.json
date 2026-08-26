@@ -4,7 +4,7 @@
   "scope": "Phase-0 exact proof and minimal public-claim floor; not DS-IMP-060 completion",
   "reproducibility": {
     "classification": "deterministic same-input runs",
-    "authorityDigest": "e28c650885b95544550f97580e6cd17b9ab615fcaafe56763f1894bc94eee59d",
+    "authorityDigest": "eee15889fe0edeaabd07200bf9961de5519a4de60c5806126cbf3ac73122fe88",
     "sourceHeadIsAuthority": false,
     "toolchain": {
       "node": {
@@ -102,7 +102,7 @@
   "documentationAuthority": {
     "path": "ui-design-system/packages/core/scripts/evidence/gat-07-exact-proof/gat-07-exact-proof.documentation-seal.json",
     "requirementsRevision": "969205380fd24eb45947bf3748db5a6cacd798f8",
-    "documentationRevision": "d7203c08eb76f1011e1771a0088c07b50ed21569",
+    "documentationRevision": "46960f2298fb4672959b13e536c3c15d23fa7136",
     "inspectedDocsMatchRevision": true,
     "sealed": true,
     "sealingErrors": []
@@ -284,7 +284,7 @@
           "documentation-seal"
         ],
         "bytes": 166,
-        "sha256": "3a593c167fb99c1e3e4f849d8654cc6aa50006c662ccda5294cc73c682b97a31"
+        "sha256": "2e548829b1e66961db6c26a456e5bcc8e6a9986060849e3f7a29875cae6f403b"
       },
       {
         "path": "ui-design-system/packages/core/scripts/evidence/gat-07-exact-proof/gat-07-exact-proof.public-claim-floor.json",
@@ -1423,8 +1423,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 35346,
-        "sha256": "76eaec64006c5174ebc968fa82655cff68afa1b91b32e49fd84b8d017af8ad84"
+        "bytes": 35365,
+        "sha256": "9f369581255c3ddf3032036b698b125f78587b3f72bda8e247877430e8436344"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/contracts/composition/tenants/themes/iso/shape/index.ts",
@@ -2666,8 +2666,8 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 30322,
-        "sha256": "809813402990d7858d044e30a21e1e5f4f8808ca980ccd3584d63dd9323e2b02"
+        "bytes": 30355,
+        "sha256": "f5fff985a6e995225407e7cb36f95ed14678e5874be7db9749c9bade1371232f"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/tokens/css/facade/artifacts/rottay/index.css",
@@ -7525,8 +7525,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 217518,
-        "sha256": "05f42d96e550dcd24be2d679fe6860932a07b31f5a843b52e26605d27e292b37"
+        "bytes": 218458,
+        "sha256": "60d35e7556169ed58b27f16f41d1c829523a785b40b4f1af9f5e21e9d9b00f89"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/tokens/ts/presentation/brand-themes/evnto/seeds.json",
@@ -12690,8 +12690,8 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 46595,
-        "sha256": "4a6cca9b6cb6db69a9e3937630fa50eca44b95298df0a142d1caac43e92fc2a5"
+        "bytes": 45421,
+        "sha256": "9282d28ae880a842d7d005d33a02a0e095f3a089b0b8d7998aee239bc13f92bc"
       },
       {
         "path": "ui-design-system/packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/tests/torture-fixtures.test.ts",
@@ -37003,16 +37003,16 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 5314768,
-        "sha256": "597fbc188d0403eb48939f6f948d02c02dcf4b8c5bed1cc8e487868df70bf48a"
+        "bytes": 5314801,
+        "sha256": "61c7811f311a7e1d23acf0fa20de9ac60a53bfb561b7ae5650e68ddcbf13c76d"
       },
       {
         "path": "ui-design-system/packages/core/styles/index.css",
         "roles": [
           "audit-input"
         ],
-        "bytes": 5503695,
-        "sha256": "a303912284e82ebba1017286e48904f235b780567667550519739839dd62e98c"
+        "bytes": 5503728,
+        "sha256": "9fc819a2220acb110631be69939ce98a719753829a6e9aa2c0a839cb83f4cb22"
       },
       {
         "path": "ui-design-system/packages/core/styles/modern.css",
@@ -40519,7 +40519,7 @@
         "sha256": "d2a99efed33922a4a699ea033538b677022ddaccf0cdbb25ece0a7295bdc4812"
       }
     ],
-    "digest": "e28c650885b95544550f97580e6cd17b9ab615fcaafe56763f1894bc94eee59d"
+    "digest": "eee15889fe0edeaabd07200bf9961de5519a4de60c5806126cbf3ac73122fe88"
   },
   "paintAudit": {
     "output": "engine-token-audit --check OK (3326 counters; 3226 completed zeros locked exactly; 91 decrease-only ceilings; 2 positive exact invariants; 7 positive minimum floors)",
@@ -113900,8 +113900,8 @@
   "deterministicRuns": {
     "count": 2,
     "hashes": [
-      "ea0631238be7bd25c183902bcb57a1c156fbbb670e69be46b225fbb93d535e8d",
-      "ea0631238be7bd25c183902bcb57a1c156fbbb670e69be46b225fbb93d535e8d"
+      "af023685139fafd7b862c1de1896ba093ae56e6ee60509a43b1d9ab036a3bd32",
+      "af023685139fafd7b862c1de1896ba093ae56e6ee60509a43b1d9ab036a3bd32"
     ],
     "agree": true
   }

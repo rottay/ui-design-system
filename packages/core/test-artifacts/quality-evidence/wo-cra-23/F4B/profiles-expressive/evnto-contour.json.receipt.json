@@ -69,10 +69,10 @@
     "packages/core/src/ui/primitives/display/Card/engines/rustic/index.tsx",
     "packages/core/src/ui/primitives/display/Card/index.tsx"
   ],
-  "sourceDigest": "8424a122bfbeca751b8f0303d4592f4152e827b45867debe1ec0486e7464952a",
+  "sourceDigest": "a87bcb3f7ecd47387b0d87cbe4cb6874205ea9f39b5c991c64c7d17dfa5355b7",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/profiles-expressive/evnto-contour.json",
   "artifactSha256": "a37b853de81fb001f077dcaa2faa9635d865dc45f47177c5f3f717005cd4d386",
-  "createdAt": "2026-08-26T15:27:16.367Z",
+  "createdAt": "2026-08-26T19:37:58.000Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

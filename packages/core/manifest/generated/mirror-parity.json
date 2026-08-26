@@ -18,9 +18,9 @@
       },
       {
         "file": "src/foundation/tokens/css/facade/artifacts/evnto/index.css",
-        "bytes": 30322,
-        "lines": 584,
-        "sha256": "809813402990d7858d044e30a21e1e5f4f8808ca980ccd3584d63dd9323e2b02"
+        "bytes": 30355,
+        "lines": 585,
+        "sha256": "f5fff985a6e995225407e7cb36f95ed14678e5874be7db9749c9bade1371232f"
       }
     ],
     "sources": [
@@ -38,9 +38,9 @@
       },
       {
         "file": "src/foundation/tokens/ts/presentation/brand-themes/evnto/index.ts",
-        "bytes": 217518,
-        "lines": 4990,
-        "sha256": "05f42d96e550dcd24be2d679fe6860932a07b31f5a843b52e26605d27e292b37"
+        "bytes": 218458,
+        "lines": 5006,
+        "sha256": "60d35e7556169ed58b27f16f41d1c829523a785b40b4f1af9f5e21e9d9b00f89"
       }
     ],
     "mtimeExcluded": "Se registra sha256 y no mtime: el mtime cambia con un clon o un touch y rompe --check sin que el contenido se mueva."
@@ -55,7 +55,7 @@
       "distinctChannels": 1234
     },
     "evnto": {
-      "occurrences": 562,
+      "occurrences": 563,
       "distinctChannels": 470
     }
   },
@@ -1871,8 +1871,8 @@
     "commonChannels": 432,
     "identicalValue": 157,
     "divergentValue": 275,
-    "identicalRoleShape": 288,
-    "divergentRoleShape": 144,
+    "identicalRoleShape": 289,
+    "divergentRoleShape": 143,
     "divergentRoleShapeChannels": [
       {
         "channel": "--ds-button-default-bg",
@@ -2480,14 +2480,6 @@
           "rottay": "base,overlay-mode",
           "bithire": "base",
           "evnto": "base,overlay-mode"
-        }
-      },
-      {
-        "channel": "--ds-color-text-page",
-        "roles": {
-          "rottay": "base,overlay-mode",
-          "bithire": "base,overlay-mode",
-          "evnto": "base"
         }
       },
       {
@@ -11304,8 +11296,8 @@
         "sameRoleTwiceChannels": []
       },
       "evnto": {
-        "channelsDeclaredMoreThanOnce": 92,
-        "allInDistinctRoles": 92,
+        "channelsDeclaredMoreThanOnce": 93,
+        "allInDistinctRoles": 93,
         "sameRoleTwice": 0,
         "sameRoleTwiceChannels": []
       }
@@ -11317,10 +11309,10 @@
     "authors": {
       "rottay": 1757,
       "bithire": 1499,
-      "evnto": 396
+      "evnto": 397
     },
     "union": 2554,
-    "intersection": 344,
+    "intersection": 345,
     "intersectionPct": 13.5,
     "intersectionPctOfSmallest": 86.9,
     "pairwise": {
@@ -11331,15 +11323,15 @@
         "pctOfSmaller": 47
       },
       "rottay+evnto": {
-        "shared": 389,
+        "shared": 390,
         "union": 1764,
         "pctOfUnion": 22.1,
         "pctOfSmaller": 98.2
       },
       "bithire+evnto": {
-        "shared": 348,
+        "shared": 349,
         "union": 1547,
-        "pctOfUnion": 22.5,
+        "pctOfUnion": 22.6,
         "pctOfSmaller": 87.9
       }
     },

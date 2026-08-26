@@ -190,6 +190,7 @@ const DEFAULT_PALETTE_KEYS: readonly (keyof BrandPalette)[] = [
   "onPrimaryColor",
   "primaryForegroundColor",
   "textPrimaryColor",
+  "textPageColor",
   "textSecondaryColor",
   "textMutedColor",
   "textTertiaryColor",

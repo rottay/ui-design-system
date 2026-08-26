@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "generatedBy": "node packages/core/manifest/generator/index.mjs --sync",
   "authorityLaw": "Controls own semantics, groups own recipe vocabularies, families own applicability edges, and this index owns generated rollups.",
-  "inputsDigest": "7094edd6d5e529be1cbe81541416169041d40862dad30e184046839659915527",
+  "inputsDigest": "3b43e9da38e9c0ba44018658a09523a65486c2cd28c5414999c6f28012f7e1a4",
   "denominators": {
     "canonicalFamilies": 255,
     "activeStandardControls": 13,
