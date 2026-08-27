@@ -340,7 +340,7 @@
       "budget": {
         "maxDirectSources": 6,
         "maxReachableModules": 187,
-        "maxSourceBytes": 1750000,
+        "maxSourceBytes": 1782000,
         "_note": "Con aire 2026-08-21 en F4A-12, aviso del worker (§8) adjudicado por el DT: cierre del frente — proyeccion 39285 B para las 181 hojas restantes a 217 B/hoja medidos en F4A-12, con 1,5x de aire (58928) para no volver a parar; los subpath mueren en F6. Techo previo: 1700000."
       },
       "symbols": [
@@ -368,7 +368,8 @@
           "name": "useInView",
           "kind": "value"
         }
-      ]
+      ],
+      "budgetNote": "E-2-2026-08-27: ver _budgetGovernance (raiz del manifiesto)"
     },
     "./runtime/navigation": {
       "owner": "runtime",
@@ -437,7 +438,7 @@
       "budget": {
         "maxDirectSources": 1,
         "maxReachableModules": 196,
-        "maxSourceBytes": 2009590,
+        "maxSourceBytes": 2041590,
         "_note": "Con aire 2026-08-21 en F4A-10, parada del worker 18/18 adjudicada por el DT: dimensionado del frente COMPLETO de una vez (proyeccion 325017 B para las 1394 hojas restantes a 233 B/hoja medidos en OVERLAY.chrome + 25% de aire = 406271) — subir solo el cuello de botella nos paro tres lotes seguidos (16/17/18); estos subpath mueren en F6. Techo previo: 1900000. B-1 opcion B (2026-08-23): el fix de precedencia tenant>vertical del owner suma +4715 B de fuente en tres archivos (brand-theme +3906, expressive-profiles/expansion +468, expressive-profiles +341). typography, el mas ajustado, tenia 1306 B de holgura en HEAD, asi que el fix no entra recortando: la prosa ya se recorto dos veces (brand-theme venia de +6868) y lo que queda es codigo. Incremento UNICO al valor MEDIDO, sin aire: 2000000 -> 2001087. Decrece-solo desde este ancla nuevo; estos subpath siguen condenados a morir en F6. Autorizado por el DT tras el bloqueante escrito del packet B-1. E-1 piso del tenant por la puerta DB (2026-08-24): el fix que entrega tenantPatch a compileTheme (la seleccion de postura del tenant deja de ser indistinguible de autoria vertical en la ruta DB — opcion B) suma +1465 B en brand-theme/index.ts (parametro + reenvio + re-asiento de la clausula envejecida de la escalera + asiento de la adjudicacion). El piso irreducible del fix, con el docblock entero borrado, seguia 90 B por encima del techo viejo: no es prosa, es que el techo no tiene aire. Incremento UNICO al valor MEDIDO, sin aire: 2001087 -> 2002540. Decrece-solo desde este ancla nuevo; estos subpath siguen condenados a morir en F6. Autorizado por el DT (Kimi K3) tras el bloqueante escrito del packet E-1. E-2 caso compuesto (2026-08-25): el piso del tenant gana su segunda mitad (re-aplica los literales de familia que el tenant autoro, con el trato identico al del cuerpo, para que la familia explicita gane tambien sobre su propio pairing — la ley explicit-family-wins vigente en el compuesto) suma +1326 B en brand-theme/index.ts. El piso irreducible del fix con CERO comentarios sigue 563 B por encima del ancla viejo (medido con el medidor del gate, dos corridas deterministas): no es prosa, es que no hay aire. Incremento UNICO al valor MEDIDO, sin aire: 2002540 -> 2003638. Decrece-solo desde este ancla nuevo; estos subpath siguen condenados a morir en F6. Autorizado por el owner; escrito por el DT (Kimi K3) tras el bloqueante escrito del packet E-2. T0+B-2 (F2A-1, 2026-08-26): incremento unico al valor MEDIDO, sin aire: 2003638 -> 2004597 (+959 B = +940 B del TS de evnto por la decision 17 del owner —OVERLAY.palette.textPageColor mas su anotacion— y +19 B de DEFAULT_PALETTE_KEYS en contracts/.../themes/iso, la linea que mata la exclusion T0 TEXT_PAGE_COLOR_MODE_ASYMMETRY). Se aplico en dos re-anclajes dentro del mismo lote (B y B-2); esta cronica los asienta juntos. Verificado programaticamente en ambos: ningun otro entry movido, maxDirectSources y maxReachableModules intactos —no hay fan-out nuevo, solo bytes—. Decrece-solo desde este ancla nuevo; estos subpath siguen condenados a morir en F6. Autorizado: DT; postaudit Fable ACCEPT. F-prima (F2A-1, 2026-08-26): incremento unico al valor MEDIDO, sin aire: 2004597 -> 2006863 (+2266 B, el valor que el medidor del gate reporta hoy, verificado con el gate: bytes == techo, cero aire. Atribucion medida de lo que este lote toca: +1292 B del TS de bithire —la correccion anti-puerta de la decision 19, glass.blur removido y controls.fieldGeometry.md.fontSize expresado causalmente, mas las dos anotaciones que citan el ruling— y +411 B de la disposicion @absent SURFACES.glass.blur que la parity de variantes exige por la remocion, mas los bytes del artefacto de bithire recompilado. Los 556 B restantes NO los atribuyo archivo por archivo en este lote: el ancla anterior venia de los lotes B/B-2 y el Lote F intermedio movio fuente de bithire sin re-anclar (sus remociones bajaban bytes y no rompian el gate), asi que el ancla vieja habia dejado de ser la medicion. Se ancla a la medicion de hoy, no a la aritmetica de un delta.) Verificado programaticamente: ningun otro entry movido, maxDirectSources y maxReachableModules intactos. Decrece-solo desde este ancla nuevo; estos subpath siguen condenados a morir en F6. Autorizado: decision 19 del owner; ejecutado en el Lote F-prima. F-2 close-out (F2A-1, 2026-08-26): incremento unico al valor MEDIDO, sin aire: 2006863 -> 2008216 (+1353 B del TS de bithire: se RESTAURA surfaceRoles.overlay.background en los dos planos —el Lote F lo habia removido como duplicado y portaba la particion por modo de la ruta de override DB— mas la razon escrita en ambos sitios). Verificado programaticamente: ningun otro entry movido, maxDirectSources y maxReachableModules intactos. Decrece-solo desde este ancla nuevo; estos subpath siguen condenados a morir en F6. Autorizado: adjudicacion DT del cierre F-2. F-segunda / decision 20 (F2A-1, 2026-08-26): incremento unico al valor MEDIDO, sin aire: 2008216 -> 2009590 (+1374 B, todos del TS de los temas: las 27 correcciones causales de los pendientes del dial-authority —14 type-scale, 11 rhythm, 2 effect-intensity— que pasan literales terminales a la forma `seed x var(dial)`). Verificado programaticamente: ningun otro entry movido, maxDirectSources y maxReachableModules intactos. Decrece-solo desde este ancla nuevo; estos subpath siguen condenados a morir en F6. Autorizado: decision 20 del owner."
       },
       "symbols": [
@@ -445,7 +446,8 @@
           "name": "DesignSystemProvider",
           "kind": "value"
         }
-      ]
+      ],
+      "budgetNote": "E-2-2026-08-27: ver _budgetGovernance (raiz del manifiesto)"
     },
     "./runtime/root-attributes": {
       "owner": "runtime",
@@ -511,7 +513,7 @@
       "budget": {
         "maxDirectSources": 2,
         "maxReachableModules": 48,
-        "maxSourceBytes": 1100000,
+        "maxSourceBytes": 1132000,
         "_note": "Con aire 2026-08-21 en F4A-12, aviso del worker (§8) adjudicado por el DT: cierre del frente — proyeccion 39285 B para las 181 hojas restantes a 217 B/hoja medidos en F4A-12, con 1,5x de aire (58928) para no volver a parar; los subpath mueren en F6. Techo previo: 1050000."
       },
       "symbols": [
@@ -523,7 +525,8 @@
           "name": "useTenant",
           "kind": "value"
         }
-      ]
+      ],
+      "budgetNote": "E-2-2026-08-27: ver _budgetGovernance (raiz del manifiesto)"
     },
     "./runtime/visual-authority": {
       "owner": "runtime",
@@ -574,7 +577,7 @@
       "budget": {
         "maxDirectSources": 1,
         "maxReachableModules": 589,
-        "maxSourceBytes": 2300000,
+        "maxSourceBytes": 2332000,
         "_note": "Con aire 2026-08-21 en F4A-10, parada del worker 18/18 adjudicada por el DT: dimensionado del frente COMPLETO de una vez (proyeccion 325017 B para las 1394 hojas restantes a 233 B/hoja medidos en OVERLAY.chrome + 25% de aire = 406271) — subir solo el cuello de botella nos paro tres lotes seguidos (16/17/18); estos subpath mueren en F6. Techo previo: 2050000."
       },
       "symbols": [
@@ -582,7 +585,8 @@
           "name": "Button",
           "kind": "value"
         }
-      ]
+      ],
+      "budgetNote": "E-2-2026-08-27: ver _budgetGovernance (raiz del manifiesto)"
     },
     "./primitives/checkbox": {
       "owner": "primitives",
@@ -898,7 +902,7 @@
       "budget": {
         "maxDirectSources": 1,
         "maxReachableModules": 132,
-        "maxSourceBytes": 1600000,
+        "maxSourceBytes": 1632000,
         "_note": "Con aire 2026-08-21 en F4A-10, parada del worker 18/18 adjudicada por el DT: dimensionado del frente COMPLETO de una vez (proyeccion 325017 B para las 1394 hojas restantes a 233 B/hoja medidos en OVERLAY.chrome + 25% de aire = 406271) — subir solo el cuello de botella nos paro tres lotes seguidos (16/17/18); estos subpath mueren en F6. Techo previo: 1350000."
       },
       "symbols": [
@@ -906,7 +910,8 @@
           "name": "Divider",
           "kind": "value"
         }
-      ]
+      ],
+      "budgetNote": "E-2-2026-08-27: ver _budgetGovernance (raiz del manifiesto)"
     },
     "./primitives/flex": {
       "owner": "primitives",
@@ -1013,7 +1018,7 @@
       "budget": {
         "maxDirectSources": 1,
         "maxReachableModules": 133,
-        "maxSourceBytes": 1650000,
+        "maxSourceBytes": 1682000,
         "_note": "Con aire 2026-08-21 en F4A-12, aviso del worker (§8) adjudicado por el DT: cierre del frente — proyeccion 39285 B para las 181 hojas restantes a 217 B/hoja medidos en F4A-12, con 1,5x de aire (58928) para no volver a parar; los subpath mueren en F6. Techo previo: 1600000."
       },
       "symbols": [
@@ -1021,7 +1026,8 @@
           "name": "Badge",
           "kind": "value"
         }
-      ]
+      ],
+      "budgetNote": "E-2-2026-08-27: ver _budgetGovernance (raiz del manifiesto)"
     },
     "./primitives/card": {
       "owner": "primitives",
@@ -1033,7 +1039,7 @@
       "budget": {
         "maxDirectSources": 1,
         "maxReachableModules": 146,
-        "maxSourceBytes": 1650000,
+        "maxSourceBytes": 1682000,
         "_note": "Con aire 2026-08-21 en F4A-10, parada del worker 18/18 adjudicada por el DT: dimensionado del frente COMPLETO de una vez (proyeccion 325017 B para las 1394 hojas restantes a 233 B/hoja medidos en OVERLAY.chrome + 25% de aire = 406271) — subir solo el cuello de botella nos paro tres lotes seguidos (16/17/18); estos subpath mueren en F6. Techo previo: 1400000."
       },
       "symbols": [
@@ -1041,7 +1047,8 @@
           "name": "Card",
           "kind": "value"
         }
-      ]
+      ],
+      "budgetNote": "E-2-2026-08-27: ver _budgetGovernance (raiz del manifiesto)"
     },
     "./primitives/empty": {
       "owner": "primitives",
@@ -1110,7 +1117,7 @@
       "budget": {
         "maxDirectSources": 1,
         "maxReachableModules": 137,
-        "maxSourceBytes": 1650000,
+        "maxSourceBytes": 1682000,
         "_note": "Con aire 2026-08-21 en F4A-12, aviso del worker (§8) adjudicado por el DT: cierre del frente — proyeccion 39285 B para las 181 hojas restantes a 217 B/hoja medidos en F4A-12, con 1,5x de aire (58928) para no volver a parar; los subpath mueren en F6. Techo previo: 1600000."
       },
       "symbols": [
@@ -1118,7 +1125,8 @@
           "name": "Tag",
           "kind": "value"
         }
-      ]
+      ],
+      "budgetNote": "E-2-2026-08-27: ver _budgetGovernance (raiz del manifiesto)"
     },
     "./primitives/tooltip": {
       "owner": "primitives",
@@ -1149,7 +1157,7 @@
       "budget": {
         "maxDirectSources": 3,
         "maxReachableModules": 142,
-        "maxSourceBytes": 1714069,
+        "maxSourceBytes": 1746069,
         "_note": "Con aire 2026-08-21 en F4A-10, parada del worker 18/18 adjudicada por el DT: dimensionado del frente COMPLETO de una vez (proyeccion 325017 B para las 1394 hojas restantes a 233 B/hoja medidos en OVERLAY.chrome + 25% de aire = 406271) — subir solo el cuello de botella nos paro tres lotes seguidos (16/17/18); estos subpath mueren en F6. Techo previo: 1650000. B-1 opcion B (2026-08-23): el fix de precedencia tenant>vertical del owner suma +4715 B de fuente en tres archivos (brand-theme +3906, expressive-profiles/expansion +468, expressive-profiles +341). typography, el mas ajustado, tenia 1306 B de holgura en HEAD, asi que el fix no entra recortando: la prosa ya se recorto dos veces (brand-theme venia de +6868) y lo que queda es codigo. Incremento UNICO al valor MEDIDO, sin aire: 1700000 -> 1703409. Decrece-solo desde este ancla nuevo; estos subpath siguen condenados a morir en F6. Autorizado por el DT tras el bloqueante escrito del packet B-1. E-1 piso del tenant por la puerta DB (2026-08-24): el fix que entrega tenantPatch a compileTheme (la seleccion de postura del tenant deja de ser indistinguible de autoria vertical en la ruta DB — opcion B) suma +1465 B en brand-theme/index.ts (parametro + reenvio + re-asiento de la clausula envejecida de la escalera + asiento de la adjudicacion). El piso irreducible del fix, con el docblock entero borrado, seguia 90 B por encima del techo viejo: no es prosa, es que el techo no tiene aire. Incremento UNICO al valor MEDIDO, sin aire: 1703409 -> 1704862. Decrece-solo desde este ancla nuevo; estos subpath siguen condenados a morir en F6. Autorizado por el DT (Kimi K3) tras el bloqueante escrito del packet E-1. E-2 caso compuesto (2026-08-25): el piso del tenant gana su segunda mitad (la familia explicita del tenant gana tambien sobre su propio pairing) suma +1326 B en brand-theme/index.ts; el piso irreducible con CERO comentarios sigue 563 B por encima del ancla viejo (medido con el medidor del gate, dos corridas deterministas). Incremento UNICO al valor MEDIDO, sin aire: 1704862 -> 1705960. Decrece-solo desde este ancla nuevo; estos subpath siguen condenados a morir en F6. Autorizado por el owner; escrito por el DT (Kimi K3) tras el bloqueante escrito del packet E-2. T0+B-2 (F2A-1, 2026-08-26): incremento unico al valor MEDIDO, sin aire: 1705960 -> 1706919 (+959 B = +940 B del TS de evnto por la decision 17 del owner —OVERLAY.palette.textPageColor mas su anotacion— y +19 B de DEFAULT_PALETTE_KEYS en contracts/.../themes/iso, la linea que mata la exclusion T0 TEXT_PAGE_COLOR_MODE_ASYMMETRY). Se aplico en dos re-anclajes dentro del mismo lote (B y B-2); esta cronica los asienta juntos. Verificado programaticamente en ambos: ningun otro entry movido, maxDirectSources y maxReachableModules intactos —no hay fan-out nuevo, solo bytes—. Decrece-solo desde este ancla nuevo; estos subpath siguen condenados a morir en F6. Autorizado: DT; postaudit Fable ACCEPT. F-prima (F2A-1, 2026-08-26): incremento unico al valor MEDIDO, sin aire: 1706919 -> 1709185 (+2266 B, el valor que el medidor del gate reporta hoy, verificado con el gate: bytes == techo, cero aire. Atribucion medida de lo que este lote toca: +1292 B del TS de bithire —la correccion anti-puerta de la decision 19, glass.blur removido y controls.fieldGeometry.md.fontSize expresado causalmente, mas las dos anotaciones que citan el ruling— y +411 B de la disposicion @absent SURFACES.glass.blur que la parity de variantes exige por la remocion, mas los bytes del artefacto de bithire recompilado. Los 556 B restantes NO los atribuyo archivo por archivo en este lote: el ancla anterior venia de los lotes B/B-2 y el Lote F intermedio movio fuente de bithire sin re-anclar (sus remociones bajaban bytes y no rompian el gate), asi que el ancla vieja habia dejado de ser la medicion. Se ancla a la medicion de hoy, no a la aritmetica de un delta.) Verificado programaticamente: ningun otro entry movido, maxDirectSources y maxReachableModules intactos. Decrece-solo desde este ancla nuevo; estos subpath siguen condenados a morir en F6. Autorizado: decision 19 del owner; ejecutado en el Lote F-prima. F-2 close-out (F2A-1, 2026-08-26): incremento unico al valor MEDIDO, sin aire: 1709185 -> 1710538 (+1353 B del TS de bithire: se RESTAURA surfaceRoles.overlay.background en los dos planos —el Lote F lo habia removido como duplicado y portaba la particion por modo de la ruta de override DB— mas la razon escrita en ambos sitios). Verificado programaticamente: ningun otro entry movido, maxDirectSources y maxReachableModules intactos. Decrece-solo desde este ancla nuevo; estos subpath siguen condenados a morir en F6. Autorizado: adjudicacion DT del cierre F-2. F-segunda / decision 20 (F2A-1, 2026-08-26): incremento unico al valor MEDIDO, sin aire: 1710538 -> 1711912 (+1374 B, todos del TS de los temas: las 27 correcciones causales de los pendientes del dial-authority —14 type-scale, 11 rhythm, 2 effect-intensity— que pasan literales terminales a la forma `seed x var(dial)`). Verificado programaticamente: ningun otro entry movido, maxDirectSources y maxReachableModules intactos. Decrece-solo desde este ancla nuevo; estos subpath siguen condenados a morir en F6. Autorizado: decision 20 del owner. F3 cohorte 2 (Typography, 2026-08-27): incremento unico al valor MEDIDO, sin aire: 1711912 -> 1714069 (+2157 B). La matriz de rol sale del inline del engine modern por un flag interno del options-bag (`includeRoleMatrix`, default true): UNA sola funcion, sin export nuevo ni helper. La factorizacion en dos productores se probo y se descarto con medicion — un productor certificado `zeroPaint` no puede delegar, porque el contador de pintura valida su contrato re-contando el cuerpo aislado. El delta son el flag, su razon escrita y las llamadas del engine. Verificado programaticamente: ningun otro entry movido, maxDirectSources y maxReachableModules intactos. Decrece-solo desde este ancla nuevo. Autorizado: brief ejecutable del DT para F3 cohorte 2."
       },
       "symbols": [
@@ -1165,7 +1173,8 @@
           "name": "Text",
           "kind": "value"
         }
-      ]
+      ],
+      "budgetNote": "E-2-2026-08-27: ver _budgetGovernance (raiz del manifiesto)"
     },
     "./primitives/alert": {
       "owner": "primitives",
@@ -1253,7 +1262,7 @@
       "budget": {
         "maxDirectSources": 1,
         "maxReachableModules": 155,
-        "maxSourceBytes": 1713316,
+        "maxSourceBytes": 1745316,
         "_note": "Con aire 2026-08-21 en F4A-10, parada del worker 18/18 adjudicada por el DT: dimensionado del frente COMPLETO de una vez (proyeccion 325017 B para las 1394 hojas restantes a 233 B/hoja medidos en OVERLAY.chrome + 25% de aire = 406271) — subir solo el cuello de botella nos paro tres lotes seguidos (16/17/18); estos subpath mueren en F6. Techo previo: 1650000. A1 CHROME.table (2026-08-22): los valores de SEED/OVERLAY_SEED viven en brand-themes/{rottay,bithire,evnto}/seeds.json y el gate solo cuenta .ts/.tsx/.mts/.cts, asi que el delta TS del tranche queda en +1384 B sobre los tres themes; con el techo previo el conteo medido daba 1700506 B (margen HEAD 878 B, faltaban 506). Techo 1700000 -> 1702000. Unico subpath tocado en este lote; ningun otro techo ni campo se movio. B-1 opcion B (2026-08-23): el fix de precedencia tenant>vertical del owner suma +4715 B de fuente en tres archivos (brand-theme +3906, expressive-profiles/expansion +468, expressive-profiles +341). typography, el mas ajustado, tenia 1306 B de holgura en HEAD, asi que el fix no entra recortando: la prosa ya se recorto dos veces (brand-theme venia de +6868) y lo que queda es codigo. Incremento UNICO al valor MEDIDO, sin aire: 1702000 -> 1704813. Decrece-solo desde este ancla nuevo; estos subpath siguen condenados a morir en F6. Autorizado por el DT tras el bloqueante escrito del packet B-1. E-1 piso del tenant por la puerta DB (2026-08-24): el fix que entrega tenantPatch a compileTheme (la seleccion de postura del tenant deja de ser indistinguible de autoria vertical en la ruta DB — opcion B) suma +1465 B en brand-theme/index.ts (parametro + reenvio + re-asiento de la clausula envejecida de la escalera + asiento de la adjudicacion). El piso irreducible del fix, con el docblock entero borrado, seguia 90 B por encima del techo viejo: no es prosa, es que el techo no tiene aire. Incremento UNICO al valor MEDIDO, sin aire: 1704813 -> 1706266. Decrece-solo desde este ancla nuevo; estos subpath siguen condenados a morir en F6. Autorizado por el DT (Kimi K3) tras el bloqueante escrito del packet E-1. E-2 caso compuesto (2026-08-25): el piso del tenant gana su segunda mitad (la familia explicita del tenant gana tambien sobre su propio pairing) suma +1326 B en brand-theme/index.ts; el piso irreducible con CERO comentarios sigue 563 B por encima del ancla viejo (medido con el medidor del gate, dos corridas deterministas). Incremento UNICO al valor MEDIDO, sin aire: 1706266 -> 1707364. Decrece-solo desde este ancla nuevo; estos subpath siguen condenados a morir en F6. Autorizado por el owner; escrito por el DT (Kimi K3) tras el bloqueante escrito del packet E-2. T0+B-2 (F2A-1, 2026-08-26): incremento unico al valor MEDIDO, sin aire: 1707364 -> 1708323 (+959 B = +940 B del TS de evnto por la decision 17 del owner —OVERLAY.palette.textPageColor mas su anotacion— y +19 B de DEFAULT_PALETTE_KEYS en contracts/.../themes/iso, la linea que mata la exclusion T0 TEXT_PAGE_COLOR_MODE_ASYMMETRY). Se aplico en dos re-anclajes dentro del mismo lote (B y B-2); esta cronica los asienta juntos. Verificado programaticamente en ambos: ningun otro entry movido, maxDirectSources y maxReachableModules intactos —no hay fan-out nuevo, solo bytes—. Decrece-solo desde este ancla nuevo; estos subpath siguen condenados a morir en F6. Autorizado: DT; postaudit Fable ACCEPT. F-prima (F2A-1, 2026-08-26): incremento unico al valor MEDIDO, sin aire: 1708323 -> 1710589 (+2266 B, el valor que el medidor del gate reporta hoy, verificado con el gate: bytes == techo, cero aire. Atribucion medida de lo que este lote toca: +1292 B del TS de bithire —la correccion anti-puerta de la decision 19, glass.blur removido y controls.fieldGeometry.md.fontSize expresado causalmente, mas las dos anotaciones que citan el ruling— y +411 B de la disposicion @absent SURFACES.glass.blur que la parity de variantes exige por la remocion, mas los bytes del artefacto de bithire recompilado. Los 556 B restantes NO los atribuyo archivo por archivo en este lote: el ancla anterior venia de los lotes B/B-2 y el Lote F intermedio movio fuente de bithire sin re-anclar (sus remociones bajaban bytes y no rompian el gate), asi que el ancla vieja habia dejado de ser la medicion. Se ancla a la medicion de hoy, no a la aritmetica de un delta.) Verificado programaticamente: ningun otro entry movido, maxDirectSources y maxReachableModules intactos. Decrece-solo desde este ancla nuevo; estos subpath siguen condenados a morir en F6. Autorizado: decision 19 del owner; ejecutado en el Lote F-prima. F-2 close-out (F2A-1, 2026-08-26): incremento unico al valor MEDIDO, sin aire: 1710589 -> 1711942 (+1353 B del TS de bithire: se RESTAURA surfaceRoles.overlay.background en los dos planos —el Lote F lo habia removido como duplicado y portaba la particion por modo de la ruta de override DB— mas la razon escrita en ambos sitios). Verificado programaticamente: ningun otro entry movido, maxDirectSources y maxReachableModules intactos. Decrece-solo desde este ancla nuevo; estos subpath siguen condenados a morir en F6. Autorizado: adjudicacion DT del cierre F-2. F-segunda / decision 20 (F2A-1, 2026-08-26): incremento unico al valor MEDIDO, sin aire: 1711942 -> 1713316 (+1374 B, todos del TS de los temas: las 27 correcciones causales de los pendientes del dial-authority —14 type-scale, 11 rhythm, 2 effect-intensity— que pasan literales terminales a la forma `seed x var(dial)`). Verificado programaticamente: ningun otro entry movido, maxDirectSources y maxReachableModules intactos. Decrece-solo desde este ancla nuevo; estos subpath siguen condenados a morir en F6. Autorizado: decision 20 del owner."
       },
       "symbols": [
@@ -1261,7 +1270,8 @@
           "name": "Skeleton",
           "kind": "value"
         }
-      ]
+      ],
+      "budgetNote": "E-2-2026-08-27: ver _budgetGovernance (raiz del manifiesto)"
     },
     "./primitives/spinner": {
       "owner": "primitives",
@@ -1292,7 +1302,7 @@
       "budget": {
         "maxDirectSources": 4,
         "maxReachableModules": 179,
-        "maxSourceBytes": 1800000,
+        "maxSourceBytes": 1832000,
         "_note": "Con aire 2026-08-21 en F4A-12, aviso del worker (§8) adjudicado por el DT: cierre del frente — proyeccion 39285 B para las 181 hojas restantes a 217 B/hoja medidos en F4A-12, con 1,5x de aire (58928) para no volver a parar; los subpath mueren en F6. Techo previo: 1750000."
       },
       "symbols": [
@@ -1316,7 +1326,8 @@
           "name": "useToast",
           "kind": "value"
         }
-      ]
+      ],
+      "budgetNote": "E-2-2026-08-27: ver _budgetGovernance (raiz del manifiesto)"
     },
     "./primitives/dropdown": {
       "owner": "primitives",
@@ -1347,7 +1358,7 @@
       "budget": {
         "maxDirectSources": 1,
         "maxReachableModules": 179,
-        "maxSourceBytes": 1850000,
+        "maxSourceBytes": 1882000,
         "_note": "Con aire 2026-08-21 en F4A-12, aviso del worker (§8) adjudicado por el DT: cierre del frente — proyeccion 39285 B para las 181 hojas restantes a 217 B/hoja medidos en F4A-12, con 1,5x de aire (58928) para no volver a parar; los subpath mueren en F6. Techo previo: 1800000."
       },
       "symbols": [
@@ -1355,7 +1366,8 @@
           "name": "PresenceBar",
           "kind": "value"
         }
-      ]
+      ],
+      "budgetNote": "E-2-2026-08-27: ver _budgetGovernance (raiz del manifiesto)"
     },
     "./patterns/data-table": {
       "owner": "patterns",
@@ -1367,7 +1379,7 @@
       "budget": {
         "maxDirectSources": 1,
         "maxReachableModules": 656,
-        "maxSourceBytes": 2650000,
+        "maxSourceBytes": 2682000,
         "_note": "Con aire 2026-08-21 en F4A-10, parada del worker 18/18 adjudicada por el DT: dimensionado del frente COMPLETO de una vez (proyeccion 325017 B para las 1394 hojas restantes a 233 B/hoja medidos en OVERLAY.chrome + 25% de aire = 406271) — subir solo el cuello de botella nos paro tres lotes seguidos (16/17/18); estos subpath mueren en F6. Techo previo: 2400000."
       },
       "symbols": [
@@ -1375,7 +1387,8 @@
           "name": "PatternDataTable",
           "kind": "value"
         }
-      ]
+      ],
+      "budgetNote": "E-2-2026-08-27: ver _budgetGovernance (raiz del manifiesto)"
     },
     "./patterns/list-toolbar": {
       "owner": "patterns",
@@ -1581,7 +1594,7 @@
       "budget": {
         "maxDirectSources": 10,
         "maxReachableModules": 242,
-        "maxSourceBytes": 2450000,
+        "maxSourceBytes": 2482000,
         "_note": "Con aire 2026-08-21 en F4A-10, parada del worker 18/18 adjudicada por el DT: dimensionado del frente COMPLETO de una vez (proyeccion 325017 B para las 1394 hojas restantes a 233 B/hoja medidos en OVERLAY.chrome + 25% de aire = 406271) — subir solo el cuello de botella nos paro tres lotes seguidos (16/17/18); estos subpath mueren en F6. Techo previo: 2350000."
       },
       "symbols": [
@@ -1657,7 +1670,8 @@
           "name": "WaterfallChart",
           "kind": "value"
         }
-      ]
+      ],
+      "budgetNote": "E-2-2026-08-27: ver _budgetGovernance (raiz del manifiesto)"
     },
     "./structures/dashboard-header": {
       "owner": "structures",
@@ -1669,7 +1683,7 @@
       "budget": {
         "maxDirectSources": 1,
         "maxReachableModules": 601,
-        "maxSourceBytes": 2310235,
+        "maxSourceBytes": 2342235,
         "_note": "Con aire 2026-08-21 en F4A-10, parada del worker 18/18 adjudicada por el DT: dimensionado del frente COMPLETO de una vez (proyeccion 325017 B para las 1394 hojas restantes a 233 B/hoja medidos en OVERLAY.chrome + 25% de aire = 406271) — subir solo el cuello de botella nos paro tres lotes seguidos (16/17/18); estos subpath mueren en F6. Techo previo: 2101503. B-1 opcion B (2026-08-23): el fix de precedencia tenant>vertical del owner suma +4715 B de fuente en tres archivos (brand-theme +3906, expressive-profiles/expansion +468, expressive-profiles +341). typography, el mas ajustado, tenia 1306 B de holgura en HEAD, asi que el fix no entra recortando: la prosa ya se recorto dos veces (brand-theme venia de +6868) y lo que queda es codigo. Incremento UNICO al valor MEDIDO, sin aire: 2300000 -> 2301732. Decrece-solo desde este ancla nuevo; estos subpath siguen condenados a morir en F6. Autorizado por el DT tras el bloqueante escrito del packet B-1. E-1 piso del tenant por la puerta DB (2026-08-24): el fix que entrega tenantPatch a compileTheme (la seleccion de postura del tenant deja de ser indistinguible de autoria vertical en la ruta DB — opcion B) suma +1465 B en brand-theme/index.ts (parametro + reenvio + re-asiento de la clausula envejecida de la escalera + asiento de la adjudicacion). El piso irreducible del fix, con el docblock entero borrado, seguia 90 B por encima del techo viejo: no es prosa, es que el techo no tiene aire. Incremento UNICO al valor MEDIDO, sin aire: 2301732 -> 2303185. Decrece-solo desde este ancla nuevo; estos subpath siguen condenados a morir en F6. Autorizado por el DT (Kimi K3) tras el bloqueante escrito del packet E-1. E-2 caso compuesto (2026-08-25): el piso del tenant gana su segunda mitad (la familia explicita del tenant gana tambien sobre su propio pairing) suma +1326 B en brand-theme/index.ts; el piso irreducible con CERO comentarios sigue 563 B por encima del ancla viejo (medido con el medidor del gate, dos corridas deterministas). Incremento UNICO al valor MEDIDO, sin aire: 2303185 -> 2304283. Decrece-solo desde este ancla nuevo; estos subpath siguen condenados a morir en F6. Autorizado por el owner; escrito por el DT (Kimi K3) tras el bloqueante escrito del packet E-2. T0+B-2 (F2A-1, 2026-08-26): incremento unico al valor MEDIDO, sin aire: 2304283 -> 2305242 (+959 B = +940 B del TS de evnto por la decision 17 del owner —OVERLAY.palette.textPageColor mas su anotacion— y +19 B de DEFAULT_PALETTE_KEYS en contracts/.../themes/iso, la linea que mata la exclusion T0 TEXT_PAGE_COLOR_MODE_ASYMMETRY). Se aplico en dos re-anclajes dentro del mismo lote (B y B-2); esta cronica los asienta juntos. Verificado programaticamente en ambos: ningun otro entry movido, maxDirectSources y maxReachableModules intactos —no hay fan-out nuevo, solo bytes—. Decrece-solo desde este ancla nuevo; estos subpath siguen condenados a morir en F6. Autorizado: DT; postaudit Fable ACCEPT. F-prima (F2A-1, 2026-08-26): incremento unico al valor MEDIDO, sin aire: 2305242 -> 2307508 (+2266 B, el valor que el medidor del gate reporta hoy, verificado con el gate: bytes == techo, cero aire. Atribucion medida de lo que este lote toca: +1292 B del TS de bithire —la correccion anti-puerta de la decision 19, glass.blur removido y controls.fieldGeometry.md.fontSize expresado causalmente, mas las dos anotaciones que citan el ruling— y +411 B de la disposicion @absent SURFACES.glass.blur que la parity de variantes exige por la remocion, mas los bytes del artefacto de bithire recompilado. Los 556 B restantes NO los atribuyo archivo por archivo en este lote: el ancla anterior venia de los lotes B/B-2 y el Lote F intermedio movio fuente de bithire sin re-anclar (sus remociones bajaban bytes y no rompian el gate), asi que el ancla vieja habia dejado de ser la medicion. Se ancla a la medicion de hoy, no a la aritmetica de un delta.) Verificado programaticamente: ningun otro entry movido, maxDirectSources y maxReachableModules intactos. Decrece-solo desde este ancla nuevo; estos subpath siguen condenados a morir en F6. Autorizado: decision 19 del owner; ejecutado en el Lote F-prima. F-2 close-out (F2A-1, 2026-08-26): incremento unico al valor MEDIDO, sin aire: 2307508 -> 2308861 (+1353 B del TS de bithire: se RESTAURA surfaceRoles.overlay.background en los dos planos —el Lote F lo habia removido como duplicado y portaba la particion por modo de la ruta de override DB— mas la razon escrita en ambos sitios). Verificado programaticamente: ningun otro entry movido, maxDirectSources y maxReachableModules intactos. Decrece-solo desde este ancla nuevo; estos subpath siguen condenados a morir en F6. Autorizado: adjudicacion DT del cierre F-2. F-segunda / decision 20 (F2A-1, 2026-08-26): incremento unico al valor MEDIDO, sin aire: 2308861 -> 2310235 (+1374 B, todos del TS de los temas: las 27 correcciones causales de los pendientes del dial-authority —14 type-scale, 11 rhythm, 2 effect-intensity— que pasan literales terminales a la forma `seed x var(dial)`). Verificado programaticamente: ningun otro entry movido, maxDirectSources y maxReachableModules intactos. Decrece-solo desde este ancla nuevo; estos subpath siguen condenados a morir en F6. Autorizado: decision 20 del owner."
       },
       "symbols": [
@@ -1677,7 +1691,8 @@
           "name": "DashboardHeader",
           "kind": "value"
         }
-      ]
+      ],
+      "budgetNote": "E-2-2026-08-27: ver _budgetGovernance (raiz del manifiesto)"
     },
     "./structures/record-summary": {
       "owner": "structures",
@@ -1689,14 +1704,15 @@
       "budget": {
         "maxDirectSources": 1,
         "maxReachableModules": 700,
-        "maxSourceBytes": 2486403
+        "maxSourceBytes": 2518403
       },
       "symbols": [
         {
           "name": "RecordSummaryStrip",
           "kind": "value"
         }
-      ]
+      ],
+      "budgetNote": "E-2-2026-08-27: ver _budgetGovernance (raiz del manifiesto)"
     },
     "./structures/app-shell": {
       "owner": "structures",
@@ -1746,7 +1762,7 @@
       "budget": {
         "maxDirectSources": 1,
         "maxReachableModules": 643,
-        "maxSourceBytes": 2600000,
+        "maxSourceBytes": 2632000,
         "_note": "Con aire 2026-08-21 en F4A-12, aviso del worker (§8) adjudicado por el DT: cierre del frente — proyeccion 39285 B para las 181 hojas restantes a 217 B/hoja medidos en F4A-12, con 1,5x de aire (58928) para no volver a parar; los subpath mueren en F6. Techo previo: 2550000."
       },
       "symbols": [
@@ -1754,7 +1770,8 @@
           "name": "ColumnMenu",
           "kind": "value"
         }
-      ]
+      ],
+      "budgetNote": "E-2-2026-08-27: ver _budgetGovernance (raiz del manifiesto)"
     },
     "./surfaces/collection-workspace": {
       "owner": "surfaces",
@@ -1766,7 +1783,7 @@
       "budget": {
         "maxDirectSources": 1,
         "maxReachableModules": 778,
-        "maxSourceBytes": 3560350,
+        "maxSourceBytes": 3592350,
         "_note": "Con aire 2026-08-21 en F4A-10, parada del worker 18/18 adjudicada por el DT: dimensionado del frente COMPLETO de una vez (proyeccion 325017 B para las 1394 hojas restantes a 233 B/hoja medidos en OVERLAY.chrome + 25% de aire = 406271) — subir solo el cuello de botella nos paro tres lotes seguidos (16/17/18); estos subpath mueren en F6. Techo previo: 3300000. E-1 piso del tenant por la puerta DB (2026-08-24): el fix que entrega tenantPatch a compileTheme (la seleccion de postura del tenant deja de ser indistinguible de autoria vertical en la ruta DB — opcion B) suma +1465 B en brand-theme/index.ts (parametro + reenvio + re-asiento de la clausula envejecida de la escalera + asiento de la adjudicacion); este subpath tenia aire y crece menos (+1143). El piso irreducible del fix, con el docblock entero borrado, seguia 90 B por encima del techo viejo en los otros cuatro grafos: no es prosa, es que el techo no tiene aire. Incremento UNICO al valor MEDIDO, sin aire: 3550000 -> 3551143. Decrece-solo desde este ancla nuevo; estos subpath siguen condenados a morir en F6. Autorizado por el DT (Kimi K3) tras el bloqueante escrito del packet E-1. E-2 caso compuesto (2026-08-25): el piso del tenant gana su segunda mitad (la familia explicita del tenant gana tambien sobre su propio pairing) suma +1326 B en brand-theme/index.ts; el piso irreducible con CERO comentarios sigue 563 B por encima del ancla viejo (medido con el medidor del gate, dos corridas deterministas). Incremento UNICO al valor MEDIDO, sin aire: 3551143 -> 3552241. Decrece-solo desde este ancla nuevo; estos subpath siguen condenados a morir en F6. Autorizado por el owner; escrito por el DT (Kimi K3) tras el bloqueante escrito del packet E-2. T0+B-2 (F2A-1, 2026-08-26): incremento unico al valor MEDIDO, sin aire: 3552241 -> 3553200 (+959 B = +940 B del TS de evnto por la decision 17 del owner —OVERLAY.palette.textPageColor mas su anotacion— y +19 B de DEFAULT_PALETTE_KEYS en contracts/.../themes/iso, la linea que mata la exclusion T0 TEXT_PAGE_COLOR_MODE_ASYMMETRY). Se aplico en dos re-anclajes dentro del mismo lote (B y B-2); esta cronica los asienta juntos. Verificado programaticamente en ambos: ningun otro entry movido, maxDirectSources y maxReachableModules intactos —no hay fan-out nuevo, solo bytes—. Decrece-solo desde este ancla nuevo; estos subpath siguen condenados a morir en F6. Autorizado: DT; postaudit Fable ACCEPT. F-prima (F2A-1, 2026-08-26): incremento unico al valor MEDIDO, sin aire: 3553200 -> 3555466 (+2266 B, el valor que el medidor del gate reporta hoy, verificado con el gate: bytes == techo, cero aire. Atribucion medida de lo que este lote toca: +1292 B del TS de bithire —la correccion anti-puerta de la decision 19, glass.blur removido y controls.fieldGeometry.md.fontSize expresado causalmente, mas las dos anotaciones que citan el ruling— y +411 B de la disposicion @absent SURFACES.glass.blur que la parity de variantes exige por la remocion, mas los bytes del artefacto de bithire recompilado. Los 556 B restantes NO los atribuyo archivo por archivo en este lote: el ancla anterior venia de los lotes B/B-2 y el Lote F intermedio movio fuente de bithire sin re-anclar (sus remociones bajaban bytes y no rompian el gate), asi que el ancla vieja habia dejado de ser la medicion. Se ancla a la medicion de hoy, no a la aritmetica de un delta.) Verificado programaticamente: ningun otro entry movido, maxDirectSources y maxReachableModules intactos. Decrece-solo desde este ancla nuevo; estos subpath siguen condenados a morir en F6. Autorizado: decision 19 del owner; ejecutado en el Lote F-prima. F-2 close-out (F2A-1, 2026-08-26): incremento unico al valor MEDIDO, sin aire: 3555466 -> 3556819 (+1353 B del TS de bithire: se RESTAURA surfaceRoles.overlay.background en los dos planos —el Lote F lo habia removido como duplicado y portaba la particion por modo de la ruta de override DB— mas la razon escrita en ambos sitios). Verificado programaticamente: ningun otro entry movido, maxDirectSources y maxReachableModules intactos. Decrece-solo desde este ancla nuevo; estos subpath siguen condenados a morir en F6. Autorizado: adjudicacion DT del cierre F-2. F-segunda / decision 20 (F2A-1, 2026-08-26): incremento unico al valor MEDIDO, sin aire: 3556819 -> 3558193 (+1374 B, todos del TS de los temas: las 27 correcciones causales de los pendientes del dial-authority —14 type-scale, 11 rhythm, 2 effect-intensity— que pasan literales terminales a la forma `seed x var(dial)`). Verificado programaticamente: ningun otro entry movido, maxDirectSources y maxReachableModules intactos. Decrece-solo desde este ancla nuevo; estos subpath siguen condenados a morir en F6. Autorizado: decision 20 del owner. F3 cohorte 2 (Typography, 2026-08-27): incremento unico al valor MEDIDO, sin aire: 3558193 -> 3560350 (+2157 B). La matriz de rol sale del inline del engine modern por un flag interno del options-bag (`includeRoleMatrix`, default true): UNA sola funcion, sin export nuevo ni helper. La factorizacion en dos productores se probo y se descarto con medicion — un productor certificado `zeroPaint` no puede delegar, porque el contador de pintura valida su contrato re-contando el cuerpo aislado. El delta son el flag, su razon escrita y las llamadas del engine. Verificado programaticamente: ningun otro entry movido, maxDirectSources y maxReachableModules intactos. Decrece-solo desde este ancla nuevo. Autorizado: brief ejecutable del DT para F3 cohorte 2."
       },
       "symbols": [
@@ -1774,7 +1791,8 @@
           "name": "CollectionWorkspaceSurface",
           "kind": "value"
         }
-      ]
+      ],
+      "budgetNote": "E-2-2026-08-27: ver _budgetGovernance (raiz del manifiesto)"
     },
     "./surfaces/oauth-transition": {
       "owner": "surfaces",
@@ -1816,5 +1834,6 @@
     "runtimeSymbols": 112,
     "typeSymbols": 47,
     "totalSymbols": 159
-  }
+  },
+  "_budgetGovernance": "E-2 (2026-08-27): re-ancla UNICA de +32.000 B en maxSourceBytes de los 18 subpaths cuyo grafo lleva los 3 brand-themes (listados con tag budgetNote). Autorizada por el owner tras la consulta Codex de hito (punto 3: \"ampliacion unica... calculada desde los bytes vivos, trazada a la proyeccion, marcada para desaparecer en F6, decrease-only inmediatamente; no habilita posteriores re-anclas hacia arriba\"). Motivo: la cohorte 2B colapsa literales a var() y el artefacto/fuente crece ~17,9 B por sitio (proyeccion del frente +24.418 B; +32.000 con ~25% de aire, UNA sola vez, leccion F4A-10). Estos subpaths mueren en F6: la ampliacion expira ahi. Desde este commit el techo vuelve a ser decrease-only. Traza completa (tabla de bytes vivos por subpath): docs/ROADMAP-EJECUCION-2026-08-19.md §13, asiento E-2."
 }
