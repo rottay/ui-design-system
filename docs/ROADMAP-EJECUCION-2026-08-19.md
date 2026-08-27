@@ -4568,6 +4568,53 @@ seeds reales y mover la superficie de calibración a un campo propio — la
 decisión 15 conserva su INTENT (superficie de calibración estrecha; dominio
 público 290 intacto) y se enmendará su formulación al cerrar C5.
 
+**F3 — COHORTE 2 CERRADA (Typography/runtime; 2026-08-27; commit `32fdd4583`;
+writer Opus en 3 vueltas; preaudit Fable del diseño: DEFECTS-2 de enunciado,
+incorporados → ACCEPT; postaudit Fable del diff congelado: **ACCEPT**).** La
+matriz de rol (las 7 propiedades `--ds-type-<role>-*`) sale del inline del
+engine modern: la pinta el skin sobre `data-text-style` (ancla ya estampada por
+spread en los 4 exports — `typographyDataAttributes`), así que hoy el inline
+SOMBREABA al skin en cada render. **La forma final es el flag
+`includeRoleMatrix` (default `true`) en el options-bag del resolver
+compartido**, y la historia importa: el diseño aprobado era factorizar en dos
+productores; al ejecutarlo, `engine-token-audit` enrojeció (modern=1, rustic=1
+contra baseline 0) y el writer lo reportó como "deuda heredada" — **refutado
+por medición DT** (worktree limpio a HEAD: gate verde; bisección: engines a
+HEAD + sólo el runtime nuevo → rojo: la causa era la factorización, porque el
+lexer certifica `zeroPaint` re-contando el cuerpo AISLADO de la función
+(`inline-paint-counter:804-808`) y **un productor certificado no puede delegar**:
+la delegación queda opaca y suma +1 fail-closed). El ruling DT "no flag" (7b)
+quedó **revocado por esa evidencia**; la cirugía del lexer quedó descartada para
+esta cohorte (su fail-closed es ley de diseño explícita; si el patrón
+"factorizar productor certificado" se repite, la vía es un packet de tooling
+con drills propios). El docblock del flag cita el mecanismo para que nadie lo
+deshaga (verificado por la auditora). **Pruebas:** 43.200 combinaciones del
+resolver byte-idénticas vs HEAD con el flag en default (classic/rustic intactos
+por medición, no por argumento); 2.160 escenarios con `false` (brazos idénticos;
+las 7 claves ausentes SALVO `fontFamily`/`fontSize` cuando los brazos
+`family`/`fluid` las aportan — aserción falsable); red focal **7 suites/141**
+(sin `--project unit` — la corrección del preaudit) verde antes/después y
+re-corrida por la auditora; 3 tests re-expresados afirmando contrato (ancla +
+NO-duplicación inline, fallan en las dos direcciones), no debilitados.
+**Re-ancla S-8 del DT con razón escrita:** los ordinales pineados de las 8 filas
+`resolveTypeRoleStyle` se movieron +177/+354/+531 bytes (el flag + comentario
+por call-site; la auditora recompuso 173+4=177 exacto); identidades invariantes
+(control contrafáctico intacto); cascade-producers 217/217 en limpio.
+**Números:** `gates:ci` **91/91 blocking** en corrida limpia de la auditora
+(más los 2 excluidos de siempre); ratchet cascade-wiring **2171→2171**;
+receipts **134/134** frescos con `artifactSha256` intacto; GAT-07 resellado por
+el DT (`dac4fb3d…`); reconciliation re-proyectada (cifras invariantes);
+docs-engineering **sin commit** (vistas regeneradas byte-idénticas — el lote no
+toca tokens); perímetro 148 declarado y verificado exacto (lección del piloto
+consumada). **Deuda diferida con dueño:** la restricción de delegación del
+lexer queda documentada en el docblock del flag; su relajación (si se quiere) es
+packet de tooling propio. **Próximo paso (cola §6):** el micro-fix C-02 del
+clear-button de `skin/textarea.css:211-212` (consume sin el factor de densidad
+que sus gemelos cumplen) con mini-lote propio; y la evaluación de `presence`
+(2 sitios, el último candidato sin verificar de la clasificación). Porcentaje
+sin movimiento: **62%** ingeniería / ~43% comercial (la superficie F3 genuina
+era de un dígito; van 2 de sus sitios drenados).
+
 **R-3 (Codex §1.4) — las autoridades de status narran el presente
 (2026-08-27; DT Kimi K3, packet de la línea authority; commit `eb39afd86`).**
 El punto 1.4 de la revisión Codex del cierre F2A — el único no listado entre
