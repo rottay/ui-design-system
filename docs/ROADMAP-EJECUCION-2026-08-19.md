@@ -4569,6 +4569,35 @@ seeds reales y mover la superficie de calibración a un campo propio — la
 decisión 15 conserva su INTENT (superficie de calibración estrecha; dominio
 público 290 intacto) y se enmendará su formulación al cerrar C5.
 
+**COHORTE 2 — DISEÑO con división 2A/2B (2026-08-27; diseño Opus `/private/tmp/opus-norm-c2-design.md`;
+preaudit Fable: DEFECTS-2 integrados como Addendum §11 → ACCEPT sin nueva ronda).** El diseño midió
+que la cohorte de colapso tal como se enunció NO podía cumplir la directiva (de 850 elegibles solo
+162 colapsan puros; 230 sin cabeza emitida; 458 cambiarían el valor; los contadores del gate no se
+moverían: 214→214 y 152→152). **Adjudicaciones asentadas:** (i) **división 2A/2B** (ratificada por
+Fable): 2A promueve el **eje `paso`** a raíces — el vocabulario ya existe AUTORADO en
+`BrandPalette` (8 tintas, 6 bordes) contra una sola raíz por tier; sin tocar temas, cero riesgo
+visual; 2B colapsa POR RAÍZ cuando la aritmética permita cerrar grupos enteros. (ii) **La ley de
+aceptación §5.1 se sustituye para cohortes de colapso: de byte-identidad a CERO-DELTA RESUELTO**
+(ratificada): el artefacto conserva `var()` como texto (656 líneas ya lo hacen), así que el diff de
+bytes pasa a ser el REGISTRO del trabajo (toda línea literal→var() es una unidad; cualquier otra
+forma de cambio es adjudicación línea por línea) y la verdad es el mapa resuelto idéntico.
+(iii) **LEY NUEVA del frente (ratificada por Fable): colapsar hacia una raíz `exposure: gap` es
+STOP** — un gap es una perilla que FALTA; engordarla deja canales inalcanzables sin escape literal
+y contradice el decrease-only de `root-exposure-gate`; excepcionarla es decisión del owner.
+(iv) **La re-ancla de bytes de entrypoints SUBE AL OWNER** (ruling Fable): proyección honesta
+medida — los 162 sitios puros solos suman +2.906 B que revientan 7 de 18 techos (5 en headroom 0 +
+divider 543 + button 623); el frente completo proyecta +24.418 B → **+32.000 B con 25% de aire**,
+UNA sola re-ancla dimensionada (lección F4A-10: "subir sólo el cuello de botella nos paró tres
+lotes seguidos"), con razón y traza, nota de que esos subpaths mueren en F6. **Forma E-2: el owner
+autoriza, el DT escribe y ejecuta.** No bloquea 2A (no toca temas); bloquea 2B. (v) Productores
+`purity` y `resolved-map-diff` entran al repo en 2A con `--check` y drills (remedio Fable R1 —
+las cifras de scouting no se citan hasta su re-emisión); (vi) las re-anclas por re-atribución del
+eje paso se anticipan como legales con razón (remedio R2); (vii) hueco detectado por el DT y
+agregado al alcance de 2A: la evidencia legal del paso es una **segunda tabla autorada
+`owner-step-rules.json`** (owner × propiedad → paso, adjudicada por el DT en lotes, null legítimo)
+— la coincidencia de valor queda como VERIFICACIÓN post-hoc (cero-delta resuelto), jamás como
+ruta. **Cohorte 2A fase A despachada a Opus.** Métrica sin mover: 62%/~43%.
+
 **PUERTA DEL FRENTE EN PIE — `normalization-contract-gate` BLOCKING (2026-08-27; commit
 `1c5037903`; writer Opus; postaudit Fable: ACCEPT con 4 rulings favorables).** Las 5 leyes de la
 enmienda del owner quedan ejecutables y cableadas (99 gates / 97 blocking; orden
