@@ -38,7 +38,7 @@ Sesiones vivas (server tmux sobrevive a esta terminal):
 | `modern-rescue-opus` | trabajo arquitectónico/intermedio (writer actual) | ejecutando el piloto F3 v3 |
 | `modern-rescue-sonnet` | mecánico/derivados | idle |
 | `modern-rescue-fable` | auditor independiente read-only | idle |
-| `modern-rescue-codex` | consultor read-only (hito F2A en curso) | revisando |
+| `modern-rescue-codex` | consultor read-only | CERRADA por el DT saliente (quedó trabada en un permiso de escritura sin bypass; su revisión del hito F2A ya llegó por el owner y está integrada — no la confundas con un canal vivo ni con tu propia terminal DT) |
 | `modern-rescue-sonnet-f2a1` | auxiliar (hizo el draft F2A-1) | idle, reutilizable o cerrable |
 
 Observar: `tmux attach -t <sesión>`. Despachar: `tmux send-keys -t <sesión> -l
