@@ -58,10 +58,10 @@
     "packages/core/src/ui/primitives/layout/Space/tests/Space.modern-fragment-children.test.tsx",
     "packages/core/src/ui/primitives/layout/Space/tests/Space.test.tsx"
   ],
-  "sourceDigest": "ae233d61911428797710e7af4504c2194e809f7346ed8821d217a3b3e4ee50b7",
+  "sourceDigest": "7f02b65c4c515b010c92f82b8a5f550f47172eb732ce7fe10810523b9f5627a1",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/density-mode/bithire-spacious.json",
   "artifactSha256": "19c557b8fabd2886a924b536160bb5be116f6bd4cce01bf3e77b7b80ee2044ae",
-  "createdAt": "2026-08-26T23:34:15.000Z",
+  "createdAt": "2026-08-27T01:02:02.000Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

@@ -6,15 +6,15 @@
     "artifacts": [
       {
         "file": "src/foundation/tokens/css/facade/artifacts/rottay/index.css",
-        "bytes": 90764,
+        "bytes": 90796,
         "lines": 1896,
-        "sha256": "73399df536f70b04e9e2d723a35f6268be64480ff525af898d23a18fe61ca593"
+        "sha256": "717ef13eef798f7acedced2d9319a1f346b15bee980bedad76d73955bf1c10eb"
       },
       {
         "file": "src/foundation/tokens/css/facade/artifacts/bithire/index.css",
-        "bytes": 96747,
+        "bytes": 98057,
         "lines": 1727,
-        "sha256": "c3c1201aba91ebc15108f68d43f95c9b99b9ae73db89a73665d1a4be8b8b4f96"
+        "sha256": "ea301cd03eb410bb08caba39ce55bf0444f7160ef46fd9a51a79ee2470851a5b"
       },
       {
         "file": "src/foundation/tokens/css/facade/artifacts/evnto/index.css",
@@ -26,15 +26,15 @@
     "sources": [
       {
         "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-        "bytes": 342000,
+        "bytes": 342032,
         "lines": 9295,
-        "sha256": "2e9315e2c6aa65492dd7d9dbd8e66c19317c0659f2f13c71a57e343ffa255fd1"
+        "sha256": "de45d9a5c94568c4f22ff2f766485ffafcc2d9085838c4c66a65246970eb2e92"
       },
       {
         "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-        "bytes": 339534,
-        "lines": 9310,
-        "sha256": "ea45460b873d60a35bb0d58074d6fc000de86036367d037ae6138fcd60cc4471"
+        "bytes": 340876,
+        "lines": 9312,
+        "sha256": "822faf36c5fa6044b8886162482b3e6587cfe973889ad9453c91281260c3fae2"
       },
       {
         "file": "src/foundation/tokens/ts/presentation/brand-themes/evnto/index.ts",
@@ -7033,8 +7033,8 @@
         },
         "reDerives": {
           "count": 95,
-          "reachingRoot": 45,
-          "reachingLiveRoot": 45,
+          "reachingRoot": 46,
+          "reachingLiveRoot": 46,
           "mixedRoleValues": 12,
           "blockedUpstream": 0,
           "channels": [
@@ -7756,11 +7756,12 @@
             {
               "channel": "--ds-table-cell-font-size",
               "reads": [
-                "--ds-text-body-size"
+                "--ds-text-body-size",
+                "--ds-type-scale"
               ],
-              "reachesRoot": false,
+              "reachesRoot": true,
               "mixed": false,
-              "reachesLiveRoot": false,
+              "reachesLiveRoot": true,
               "blockedUpstream": false
             },
             {
@@ -8056,7 +8057,7 @@
       },
       "bithire": {
         "declaredInCascade": 262,
-        "severedTotal": 101,
+        "severedTotal": 79,
         "rootPinned": {
           "count": 11,
           "byReason": {
@@ -8256,7 +8257,7 @@
           ]
         },
         "severs": {
-          "count": 97,
+          "count": 75,
           "channels": [
             {
               "channel": "--ds-button-ghost-bg",
@@ -8265,40 +8266,10 @@
               ]
             },
             {
-              "channel": "--ds-button-lg-font-size",
-              "values": [
-                "base=14px"
-              ]
-            },
-            {
-              "channel": "--ds-button-md-font-size",
-              "values": [
-                "base=13px"
-              ]
-            },
-            {
               "channel": "--ds-button-primary-bg-hover",
               "values": [
                 "base=#2C5587",
                 "overlay-mode=#2b8fef"
-              ]
-            },
-            {
-              "channel": "--ds-button-sm-font-size",
-              "values": [
-                "base=12px"
-              ]
-            },
-            {
-              "channel": "--ds-button-xl-font-size",
-              "values": [
-                "base=15px"
-              ]
-            },
-            {
-              "channel": "--ds-button-xs-font-size",
-              "values": [
-                "base=11px"
               ]
             },
             {
@@ -8338,12 +8309,6 @@
               ]
             },
             {
-              "channel": "--ds-card-title-font-size",
-              "values": [
-                "base=13px"
-              ]
-            },
-            {
               "channel": "--ds-card-xl-padding",
               "values": [
                 "base=1.5rem"
@@ -8353,12 +8318,6 @@
               "channel": "--ds-collection-card-border-hover",
               "values": [
                 "base=color-mix(in srgb, #3A6FB0 26%, #D4E0EA)"
-              ]
-            },
-            {
-              "channel": "--ds-collection-card-padding",
-              "values": [
-                "base=14px"
               ]
             },
             {
@@ -8430,21 +8389,9 @@
               ]
             },
             {
-              "channel": "--ds-command-home-console-padding",
-              "values": [
-                "base=clamp(20px, 3vw, 34px) clamp(16px, 4vw, 56px) 24px"
-              ]
-            },
-            {
               "channel": "--ds-command-home-control-hover-border",
               "values": [
                 "base=color-mix(in srgb, #3A6FB0 42%, #D4E0EA)"
-              ]
-            },
-            {
-              "channel": "--ds-command-home-gap",
-              "values": [
-                "base=16px"
               ]
             },
             {
@@ -8457,12 +8404,6 @@
               "channel": "--ds-command-home-meter-fill",
               "values": [
                 "base=linear-gradient(90deg, #315F86, #6F98BC)"
-              ]
-            },
-            {
-              "channel": "--ds-command-home-panel-gap",
-              "values": [
-                "base=14px"
               ]
             },
             {
@@ -8481,18 +8422,6 @@
               "channel": "--ds-compact-card-border-hover",
               "values": [
                 "base=color-mix(in srgb, #3A6FB0 22%, #D4E0EA)"
-              ]
-            },
-            {
-              "channel": "--ds-compact-card-gap",
-              "values": [
-                "base=8px"
-              ]
-            },
-            {
-              "channel": "--ds-compact-card-padding",
-              "values": [
-                "base=10px 12px"
               ]
             },
             {
@@ -8520,18 +8449,6 @@
               ]
             },
             {
-              "channel": "--ds-glass-bg",
-              "values": [
-                "base=rgba(255, 255, 255, 0.84)"
-              ]
-            },
-            {
-              "channel": "--ds-glass-border",
-              "values": [
-                "base=rgba(196, 210, 222, 0.86)"
-              ]
-            },
-            {
               "channel": "--ds-gradient-primary",
               "values": [
                 "base=linear-gradient(135deg, #244D79 0%, #3A6FB0 54%, #86A6C2 100%)"
@@ -8547,18 +8464,6 @@
               "channel": "--ds-input-group-gap-separated",
               "values": [
                 "base=8px"
-              ]
-            },
-            {
-              "channel": "--ds-input-helper-font-size",
-              "values": [
-                "base=11px"
-              ]
-            },
-            {
-              "channel": "--ds-input-label-font-size",
-              "values": [
-                "base=12px"
               ]
             },
             {
@@ -8610,21 +8515,9 @@
               ]
             },
             {
-              "channel": "--ds-listing-grid-card-gap",
-              "values": [
-                "base=10px"
-              ]
-            },
-            {
               "channel": "--ds-listing-grid-card-shadow",
               "values": [
                 "base=0 1px 2px rgba(20, 40, 59, 0.05)"
-              ]
-            },
-            {
-              "channel": "--ds-listing-grid-gap",
-              "values": [
-                "base=12px"
               ]
             },
             {
@@ -8776,13 +8669,6 @@
               ]
             },
             {
-              "channel": "--ds-table-cell-font-size",
-              "values": [
-                "base=0.8125rem",
-                "overlay-mode=0.875rem"
-              ]
-            },
-            {
               "channel": "--ds-table-resize-bg",
               "values": [
                 "base=color-mix(in srgb, #3A6FB0 22%, #D4E0EA)"
@@ -8798,18 +8684,6 @@
               "channel": "--ds-tall-card-border-hover",
               "values": [
                 "base=color-mix(in srgb, #3A6FB0 25%, #D4E0EA)"
-              ]
-            },
-            {
-              "channel": "--ds-tall-card-gap",
-              "values": [
-                "base=16px"
-              ]
-            },
-            {
-              "channel": "--ds-tall-card-padding",
-              "values": [
-                "base=20px"
               ]
             },
             {
@@ -8831,12 +8705,6 @@
               ]
             },
             {
-              "channel": "--ds-workspace-card-padding",
-              "values": [
-                "base=16px"
-              ]
-            },
-            {
               "channel": "--ds-workspace-card-shadow",
               "values": [
                 "base=0 1px 2px rgba(20, 40, 59, 0.045)"
@@ -8851,9 +8719,9 @@
           ]
         },
         "reDerives": {
-          "count": 150,
-          "reachingRoot": 88,
-          "reachingLiveRoot": 87,
+          "count": 172,
+          "reachingRoot": 110,
+          "reachingLiveRoot": 109,
           "mixedRoleValues": 62,
           "blockedUpstream": 2,
           "channels": [
@@ -8908,9 +8776,29 @@
               "blockedUpstream": false
             },
             {
+              "channel": "--ds-button-lg-font-size",
+              "reads": [
+                "--ds-type-scale"
+              ],
+              "reachesRoot": true,
+              "mixed": false,
+              "reachesLiveRoot": true,
+              "blockedUpstream": false
+            },
+            {
               "channel": "--ds-button-lg-radius",
               "reads": [
                 "--ds-radius-scale"
+              ],
+              "reachesRoot": true,
+              "mixed": false,
+              "reachesLiveRoot": true,
+              "blockedUpstream": false
+            },
+            {
+              "channel": "--ds-button-md-font-size",
+              "reads": [
+                "--ds-type-scale"
               ],
               "reachesRoot": true,
               "mixed": false,
@@ -8948,6 +8836,16 @@
               "blockedUpstream": false
             },
             {
+              "channel": "--ds-button-sm-font-size",
+              "reads": [
+                "--ds-type-scale"
+              ],
+              "reachesRoot": true,
+              "mixed": false,
+              "reachesLiveRoot": true,
+              "blockedUpstream": false
+            },
+            {
               "channel": "--ds-button-sm-radius",
               "reads": [
                 "--ds-radius-scale"
@@ -8958,9 +8856,29 @@
               "blockedUpstream": false
             },
             {
+              "channel": "--ds-button-xl-font-size",
+              "reads": [
+                "--ds-type-scale"
+              ],
+              "reachesRoot": true,
+              "mixed": false,
+              "reachesLiveRoot": true,
+              "blockedUpstream": false
+            },
+            {
               "channel": "--ds-button-xl-radius",
               "reads": [
                 "--ds-radius-scale"
+              ],
+              "reachesRoot": true,
+              "mixed": false,
+              "reachesLiveRoot": true,
+              "blockedUpstream": false
+            },
+            {
+              "channel": "--ds-button-xs-font-size",
+              "reads": [
+                "--ds-type-scale"
               ],
               "reachesRoot": true,
               "mixed": false,
@@ -9050,6 +8968,16 @@
               "blockedUpstream": false
             },
             {
+              "channel": "--ds-card-title-font-size",
+              "reads": [
+                "--ds-type-scale"
+              ],
+              "reachesRoot": true,
+              "mixed": false,
+              "reachesLiveRoot": true,
+              "blockedUpstream": false
+            },
+            {
               "channel": "--ds-collection-card-bg-hover",
               "reads": [
                 "--ds-material-card-background-hover"
@@ -9067,6 +8995,16 @@
               "reachesRoot": false,
               "mixed": true,
               "reachesLiveRoot": false,
+              "blockedUpstream": false
+            },
+            {
+              "channel": "--ds-collection-card-padding",
+              "reads": [
+                "--ds-rhythm-effective-scale"
+              ],
+              "reachesRoot": true,
+              "mixed": false,
+              "reachesLiveRoot": true,
               "blockedUpstream": false
             },
             {
@@ -9131,6 +9069,16 @@
               "blockedUpstream": false
             },
             {
+              "channel": "--ds-command-home-console-padding",
+              "reads": [
+                "--ds-rhythm-effective-scale"
+              ],
+              "reachesRoot": true,
+              "mixed": false,
+              "reachesLiveRoot": true,
+              "blockedUpstream": false
+            },
+            {
               "channel": "--ds-command-home-control-hover-bg",
               "reads": [
                 "--ds-color-primary",
@@ -9138,6 +9086,16 @@
               ],
               "reachesRoot": true,
               "mixed": true,
+              "reachesLiveRoot": true,
+              "blockedUpstream": false
+            },
+            {
+              "channel": "--ds-command-home-gap",
+              "reads": [
+                "--ds-rhythm-effective-scale"
+              ],
+              "reachesRoot": true,
+              "mixed": false,
               "reachesLiveRoot": true,
               "blockedUpstream": false
             },
@@ -9195,6 +9153,16 @@
               "blockedUpstream": false
             },
             {
+              "channel": "--ds-command-home-panel-gap",
+              "reads": [
+                "--ds-rhythm-effective-scale"
+              ],
+              "reachesRoot": true,
+              "mixed": false,
+              "reachesLiveRoot": true,
+              "blockedUpstream": false
+            },
+            {
               "channel": "--ds-command-home-surface-bg",
               "reads": [
                 "--ds-surface-card"
@@ -9212,6 +9180,26 @@
               "reachesRoot": false,
               "mixed": true,
               "reachesLiveRoot": false,
+              "blockedUpstream": false
+            },
+            {
+              "channel": "--ds-compact-card-gap",
+              "reads": [
+                "--ds-rhythm-effective-scale"
+              ],
+              "reachesRoot": true,
+              "mixed": false,
+              "reachesLiveRoot": true,
+              "blockedUpstream": false
+            },
+            {
+              "channel": "--ds-compact-card-padding",
+              "reads": [
+                "--ds-rhythm-effective-scale"
+              ],
+              "reachesRoot": true,
+              "mixed": false,
+              "reachesLiveRoot": true,
               "blockedUpstream": false
             },
             {
@@ -9310,6 +9298,26 @@
               "blockedUpstream": false
             },
             {
+              "channel": "--ds-glass-bg",
+              "reads": [
+                "--ds-effect-intensity"
+              ],
+              "reachesRoot": true,
+              "mixed": false,
+              "reachesLiveRoot": true,
+              "blockedUpstream": false
+            },
+            {
+              "channel": "--ds-glass-border",
+              "reads": [
+                "--ds-effect-intensity"
+              ],
+              "reachesRoot": true,
+              "mixed": false,
+              "reachesLiveRoot": true,
+              "blockedUpstream": false
+            },
+            {
               "channel": "--ds-gradient-surface",
               "reads": [
                 "--ds-surface-canvas",
@@ -9373,6 +9381,26 @@
               "blockedUpstream": false
             },
             {
+              "channel": "--ds-input-helper-font-size",
+              "reads": [
+                "--ds-type-scale"
+              ],
+              "reachesRoot": true,
+              "mixed": false,
+              "reachesLiveRoot": true,
+              "blockedUpstream": false
+            },
+            {
+              "channel": "--ds-input-label-font-size",
+              "reads": [
+                "--ds-type-scale"
+              ],
+              "reachesRoot": true,
+              "mixed": false,
+              "reachesLiveRoot": true,
+              "blockedUpstream": false
+            },
+            {
               "channel": "--ds-input-loading-color",
               "reads": [
                 "--ds-color-primary"
@@ -9403,6 +9431,16 @@
               "blockedUpstream": false
             },
             {
+              "channel": "--ds-listing-grid-card-gap",
+              "reads": [
+                "--ds-rhythm-effective-scale"
+              ],
+              "reachesRoot": true,
+              "mixed": false,
+              "reachesLiveRoot": true,
+              "blockedUpstream": false
+            },
+            {
               "channel": "--ds-listing-grid-empty-border",
               "reads": [
                 "--ds-color-border"
@@ -9410,6 +9448,16 @@
               "reachesRoot": false,
               "mixed": true,
               "reachesLiveRoot": false,
+              "blockedUpstream": false
+            },
+            {
+              "channel": "--ds-listing-grid-gap",
+              "reads": [
+                "--ds-rhythm-effective-scale"
+              ],
+              "reachesRoot": true,
+              "mixed": false,
+              "reachesLiveRoot": true,
               "blockedUpstream": false
             },
             {
@@ -10052,6 +10100,16 @@
               "blockedUpstream": false
             },
             {
+              "channel": "--ds-table-cell-font-size",
+              "reads": [
+                "--ds-type-scale"
+              ],
+              "reachesRoot": true,
+              "mixed": false,
+              "reachesLiveRoot": true,
+              "blockedUpstream": false
+            },
+            {
               "channel": "--ds-table-header-bg-hover",
               "reads": [
                 "--ds-color-primary",
@@ -10101,6 +10159,26 @@
               "reachesRoot": false,
               "mixed": true,
               "reachesLiveRoot": false,
+              "blockedUpstream": false
+            },
+            {
+              "channel": "--ds-tall-card-gap",
+              "reads": [
+                "--ds-rhythm-effective-scale"
+              ],
+              "reachesRoot": true,
+              "mixed": false,
+              "reachesLiveRoot": true,
+              "blockedUpstream": false
+            },
+            {
+              "channel": "--ds-tall-card-padding",
+              "reads": [
+                "--ds-rhythm-effective-scale"
+              ],
+              "reachesRoot": true,
+              "mixed": false,
+              "reachesLiveRoot": true,
               "blockedUpstream": false
             },
             {
@@ -10409,6 +10487,16 @@
               "reachesRoot": false,
               "mixed": true,
               "reachesLiveRoot": false,
+              "blockedUpstream": false
+            },
+            {
+              "channel": "--ds-workspace-card-padding",
+              "reads": [
+                "--ds-rhythm-effective-scale"
+              ],
+              "reachesRoot": true,
+              "mixed": false,
+              "reachesLiveRoot": true,
               "blockedUpstream": false
             },
             {

@@ -924,7 +924,7 @@
   --ds-table-bg: #0C0C0E;
   --ds-table-border: #2A2A2F;
   --ds-table-cell-color: var(--ds-color-text);
-  --ds-table-cell-font-size: var(--ds-text-body-size);
+  --ds-table-cell-font-size: calc(var(--ds-text-body-size) * var(--ds-type-scale, 1));
   --ds-table-cell-padding: 0.875rem 1rem;
   --ds-table-header-bg: #131316;
   --ds-table-header-block-size: calc(var(--ds-input-md-height) - 0.25rem);

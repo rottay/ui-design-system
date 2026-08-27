@@ -41,10 +41,10 @@
     "packages/core/src/tooling/resolution-probe/runtime/ingress/index.mjs",
     "packages/core/src/tooling/resolution-probe/runtime/measure/index.mjs"
   ],
-  "sourceDigest": "19bac61aaafcccc5598feed40856d1b1ef10aba18f3f2c25f2376516937436ca",
+  "sourceDigest": "36067a0d1b3848089936fa5db5174a837ab9d48d46724e6166d775b07b2d5108",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/recipe-profile/rottay-network-professional.json",
   "artifactSha256": "8383eda32a30593df394a39c2e05ce8330a1f8d5ccea479987fe0efab7d1cc08",
-  "createdAt": "2026-08-26T23:34:15.000Z",
+  "createdAt": "2026-08-27T01:02:02.000Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

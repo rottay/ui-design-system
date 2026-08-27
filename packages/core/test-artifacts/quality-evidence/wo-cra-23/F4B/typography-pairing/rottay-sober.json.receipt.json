@@ -66,10 +66,10 @@
     "packages/core/src/ui/primitives/display/Typography/tests/Typography.test.tsx",
     "packages/core/src/ui/primitives/display/Typography/tests/Typography.type-roles.test.tsx"
   ],
-  "sourceDigest": "22848c90ef348f4f1c832d67d54f2fb335c2ebaa49e779a82e6b4c1b2ee1e994",
+  "sourceDigest": "ca19cff838b794cd2946798bafc85dad1a095999b8c519b71c661d105b6cc204",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/typography-pairing/rottay-sober.json",
   "artifactSha256": "843bcbe7ab750363f85232fc95690df6772407b61d2e0b179667663bf95dd4ec",
-  "createdAt": "2026-08-26T23:34:15.000Z",
+  "createdAt": "2026-08-27T01:02:02.000Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

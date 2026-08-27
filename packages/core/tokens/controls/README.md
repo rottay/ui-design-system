@@ -8,7 +8,7 @@
 > Rollback: cada control es un INPUT — quitar la autoría restaura el baseline del vertical
 > (probado por los legs restore-equals-default del harness no-loss).
 
-digest: 38611e8c43f5053b584a9d9974fdb237666a5f2885403d85bf20f854e3db44fd
+digest: 926c0c3c78891b20cc1486b725eae50615d80cc726390c76b05a46e07bfd3e98
 
 ## STANDARD — 13 controles (pocos diales, gran superficie)
 
@@ -17,14 +17,14 @@ digest: 38611e8c43f5053b584a9d9974fdb237666a5f2885403d85bf20f854e3db44fd
 | `palette.seeds` | Brand palette seeds | color-set | vertical baseline palette | 5 ch | `palette.{primaryColor,secondaryColor,accentColor,backgroundColor}` | `appearance.general.palette.{primary,secondary,accent,background}` | 1924 | `button.css` |
 | `typography.pairing` | Type pairing personality | enum | vertical baseline families | 2 ch | `typography.typePairing` | `appearance.general.typography.typePairing` | 218 | `typography.css` |
 | `typography.families` | Explicit font stacks | font-stack | pairing (or vertical baseline) decides | 4 ch | `typography.{fontFamilyBase,fontFamilyHeading,fontFamilyMono,fontFamilyDisplay}` | `appearance.general.typography.{fontFamilyBase,fontFamilyHeading}` | 340 | `default.css` |
-| `typography.scale` | Type scale dial | scale | 1 (vertical envelope may clamp tighter) | 1 ch | `typography.scale` | `appearance.general.typography.scale` | 45 | `index.ts` |
+| `typography.scale` | Type scale dial | scale | 1 (vertical envelope may clamp tighter) | 1 ch | `typography.scale` | `appearance.general.typography.scale` | 60 | `index.ts` |
 | `shape.radius-scale` | Radius scale dial | scale | 1 (vertical envelope may clamp tighter) | 2 ch | `surfaces.radiusScale` | `appearance.general.shape.radiusScale` | 423 | `card.css` |
 | `shape.button-style` | Button silhouette | enum | vertical baseline silhouette | 1 ch | `surfaces.buttonStyle` | `appearance.general.shape.buttonStyle` | 2 | `button.css` |
 | `density.mode` | Density posture | enum | normal (structural density scale is a separate channel) | 2 ch | `surfaces.density` | `appearance.general.density` | 8 | `index.ts` |
-| `spacing.rhythm` | Layout rhythm | enum | normal (factor 1) — byte-identical to the pre-rhythm cascade in every vertical, because the DS floor already resolves --ds-rhythm-effective-scale to 1 | 2 ch | `surfaces.rhythm` | `appearance.general.rhythm` | 94 | `layout-primitives.css` |
+| `spacing.rhythm` | Layout rhythm | enum | normal (factor 1) — byte-identical to the pre-rhythm cascade in every vertical, because the DS floor already resolves --ds-rhythm-effective-scale to 1 | 2 ch | `surfaces.rhythm` | `appearance.general.rhythm` | 112 | `layout-primitives.css` |
 | `motion.dial` | Motion intensity and duration | scale | engine cadence unchanged | 2 ch | `motion.{intensity,durationScale,ambient}` | `appearance.general.motion.{intensity,durationScale,ambient}` | 44 | `alert.css` |
 | `surfaces.elevation-posture` | Elevation posture | enum | soft (DS shadow ramp untouched) | 3 ch | `surfaces.elevation` | `appearance.general.surfaces.elevation` | 174 | `card.css` |
-| `surfaces.effect-intensity` | Decoration intensity | scale | 1 for the DS default; verticals author their own floor | 1 ch | `surfaces.effectIntensity` | `appearance.general.surfaces.effectIntensity` | 62 | `overlay-modal.css` |
+| `surfaces.effect-intensity` | Decoration intensity | scale | 1 for the DS default; verticals author their own floor | 1 ch | `surfaces.effectIntensity` | `appearance.general.surfaces.effectIntensity` | 64 | `overlay-modal.css` |
 | `navigation.sidebar-tone` | Sidebar tone | enum | subtle | 6 ch | `chrome.sidebar.tone` | `appearance.general.navigation.sidebarTone` | 15 | `menu.css` |
 | `experience.profile` | Experience profile | profile-id | baseline identity; a selection composes closed per-axis postures whose expansion always loses to any authored field or channel | 5 ch | `expressive.experienceProfile` | `appearance.general.experienceProfile` | 75 | `index.tsx` |
 

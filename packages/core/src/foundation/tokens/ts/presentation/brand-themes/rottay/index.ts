@@ -7297,7 +7297,7 @@ const CHROME: BrandChrome = {
      * @domicile derived
      * @governor deriva de: --ds-text-body-size (A2-4); 0.875rem plano-invariante medido; la mueve typography.scale
      */
-    cellFontSize: 'var(--ds-text-body-size)',
+    cellFontSize: 'calc(var(--ds-text-body-size) * var(--ds-type-scale, 1))',
     /**
      * @domicile derived
      * @governor deriva de: --ds-color-text (A2-5); medido dark #ECECEC / light #1A1A1A, identicos a lo shippeado; el pin del overlay se retira

@@ -284,7 +284,23 @@ const MOTION_PROPERTY = /^(?:animation(?:-.+)?|transition(?:-.+)?|transform|tran
  * `tests`/`fixtures`/`__snapshots__` are corpora a drill may deliberately fill
  * with a violating read. `collectAuthoredModernStylesheets` refuses to trust
  * that reasoning blindly: it re-reads every excluded stylesheet and fails if
- * one of them carries a rhythm read after all.
+ * one of them carries an ILLICIT rhythm mention.
+ *
+ * ENMIENDA (decision 20 del owner, 2026-08-26). La premisa original era mas
+ * fuerte: un artefacto no podia llevar NINGUNA lectura de ritmo, porque un
+ * build product no autora ritmo. La decision 20 la derogo — una vertical autora
+ * su seed multiplicado por el dial, y el seed de una vertical vive en su tema y
+ * compila al artefacto: no hay otro domicilio posible para el. Asi que la
+ * pregunta dejo de ser SI el artefacto menciona ritmo y paso a ser COMO:
+ *
+ *   licito   `--ds-command-home-gap: calc(16px * var(--ds-rhythm-effective-scale, 1))`
+ *   ilicito  `--ds-rhythm-effective-scale: 1`        (congela el dial en su raiz)
+ *   ilicito  `padding: var(--ds-rhythm-effective-scale)`  (no multiplica nada)
+ *
+ * Esto NO afloja el gate. La clase que existe para pescar —un valor terminal que
+ * no responde al dial— sigue siendo roja por las dos vias de arriba, y el drill
+ * la planta en ambas direcciones. Lo unico que cambio es que la forma correcta
+ * dejo de contar como infraccion.
  */
 const EXCLUDED_PATH = /(?:^|\/)(?:classic|rustic|generated|dist|node_modules|coverage|__snapshots__|tests|fixtures)(?:\/|$)|(?:^|\/)facade\/artifacts(?:\/|$)/u;
 
@@ -310,6 +326,49 @@ function reportPath(file) {
  */
 export function occurrenceCount(value) {
   return [...String(value ?? '').matchAll(RHYTHM_READ)].length;
+}
+
+/**
+ * Una lectura de ritmo dentro de un archivo EXCLUIDO es lícita sólo si carga el
+ * factor: el canal aparece como MULTIPLICANDO dentro de un `calc()`, que es el
+ * patrón del sistema (`patterns.css:500`,
+ * `calc(var(--ds-card-grid-gap) * var(--ds-rhythm-effective-scale, 1))`).
+ *
+ * Devuelve las menciones que NO cumplen esa forma. Dos son las que importan y
+ * las dos siguen siendo rojo:
+ *   - el artefacto DECLARA un canal de ritmo (`--ds-rhythm-effective-scale: 1`):
+ *     eso congela el dial en su propia raíz, que es la falta más grave de todas;
+ *   - el artefacto LEE el canal fuera de un `calc()` (`padding: var(--ds-rhythm-…)`),
+ *     que pinta con un escalar y no multiplica nada.
+ */
+export function illicitRhythmMentions(css, file = '<inline>') {
+  const text = String(css ?? '');
+  const offenders = [];
+  const channelAlternation = RHYTHM_CHANNELS.map((channel) =>
+    channel.replace(/[.*+?^${}()|[\]\\]/gu, '\\$&'),
+  ).join('|');
+  // Tras `{` o `;` tambien: una declaracion no siempre abre la linea.
+  const declaresChannel = new RegExp(`(?:^|[{;])\\s*(?:${channelAlternation})\\s*:`, 'u');
+  for (const line of text.split('\n')) {
+    if (declaresChannel.test(line)) {
+      offenders.push({ line: line.trim(), why: 'declara un canal de ritmo: congela el dial en su raiz' });
+    }
+  }
+  /* Y para todo lo demas, EL MISMO analizador que juzga a los archivos incluidos.
+   * Esto es lo que conserva la mordida entera: un `block-size: calc(1px * var(--ds-rhythm-…))`
+   * escondido en una carpeta excluida sigue siendo FORBIDDEN_SIZE, porque no se
+   * lo juzga con una regla propia mas blanda sino con la de siempre. Lo unico
+   * que la decision 20 cambia es que una declaracion de ESPACIADO con el factor
+   * —la forma licita— dejo de ser infraccion por el solo hecho de estar en un
+   * artefacto. */
+  const analysis = analyzeRhythmStylesheets([{ file, css: text }]);
+  for (const violation of analysis.violations ?? []) {
+    offenders.push({
+      line: `${violation.property ?? '?'}: ${violation.value ?? ''}`.trim(),
+      why: `${violation.classification}: el analizador de siempre lo rechaza`,
+    });
+  }
+  return offenders;
 }
 
 function referencedCustomProperties(value) {
@@ -855,14 +914,18 @@ export function collectAuthoredModernStylesheets(
     throw new Error(`Modern authored CSS corpus contains zero stylesheets: ${root}`);
   }
 
-  const hidden = excluded.filter((file) =>
-    occurrenceCount(readFileSync(file, 'utf8')) > 0,
-  );
+  const hidden = excluded
+    .map((file) => ({ file, offenders: illicitRhythmMentions(readFileSync(file, 'utf8')) }))
+    .filter((entry) => entry.offenders.length > 0);
   if (hidden.length > 0) {
     throw new Error(
-      `excluded paths are hiding ${hidden.length} rhythm read(s); the exclusion set is no longer honest: ${hidden
-        .map((file) => reportPath(file))
-        .join(', ')}`,
+      `excluded paths are hiding ${hidden.reduce((n, e) => n + e.offenders.length, 0)} ILLICIT rhythm ` +
+        'mention(s); the exclusion set is no longer honest. Desde la decision 20 un artefacto SI puede llevar ritmo, pero solo con el factor: ' +
+        'el canal como multiplicando dentro de un calc(), la forma del sistema. Declarar un canal de ' +
+        'ritmo o leerlo sin multiplicar sigue siendo rojo: ' +
+        hidden
+          .map((entry) => `${reportPath(entry.file)} (${entry.offenders.map((o) => o.why).join('; ')})`)
+          .join(', '),
     );
   }
 
@@ -1625,8 +1688,36 @@ export function runGate({
   // would let this gate claim a CSS-only completeness it has not measured.
   // The set is recomputed from the corpus every run; nothing here is an
   // allowlist or a recorded expected count.
+  /* ENMIENDA (decision 20 del owner, 2026-08-26), del mismo cuerpo que la de la
+   * exclusion de artefactos y por la misma razon. Una semilla de brand-theme que
+   * lleva el factor NO es un objetivo indecidible: su objetivo es el canal que
+   * esa semilla compila en el artefacto de su vertical, y ese artefacto lo juzga
+   * la pierna de arriba bajo la regla de forma licita. Contarla aca ademas seria
+   * juzgar dos veces el mismo hecho, y llamarle dos fallas.
+   *
+   * Lo que NO se afloja: la exencion pide la MISMA forma que exige el artefacto
+   * —el canal como multiplicando dentro de un calc()— verificada sobre el propio
+   * TS con el mismo predicado, no sobre la promesa de que compilara bien. Un
+   * `var(--ds-rhythm-effective-scale)` pelado en un tema, o un tema que declare
+   * el canal, sigue siendo indecidible y sigue bloqueando. Fuera de los
+   * brand-themes no cambia nada: el residuo honesto de siempre. */
+  const BRAND_THEME_SOURCE = /(?:^|\/)brand-themes(?:\/|$)/u;
+  const licitSeedLines = new Map();
+  const carriesFactorAtLine = (file, line) => {
+    if (!BRAND_THEME_SOURCE.test(file.split(sep).join('/'))) return false;
+    if (!licitSeedLines.has(file)) {
+      const text = readFileSync(file, 'utf8');
+      const illicit = new Set(illicitRhythmMentions(text).map((entry) => entry.line));
+      licitSeedLines.set(file, { lines: text.split('\n'), illicit });
+    }
+    const { lines, illicit } = licitSeedLines.get(file);
+    const source = (lines[line - 1] ?? '').trim();
+    return source.length > 0 && !illicit.has(source);
+  };
   const typeScriptUndecidable = typeScriptCarriers.filter(
-    (finding) => finding.classification === UNDECIDABLE_TS_CARRIER,
+    (finding) =>
+      finding.classification === UNDECIDABLE_TS_CARRIER
+      && !carriesFactorAtLine(finding.file, finding.line),
   );
   return {
     ...result,

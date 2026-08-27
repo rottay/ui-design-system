@@ -44,10 +44,10 @@
     "packages/core/src/ui/patterns/runtime/adaptive-layout/runtime/index.ts",
     "packages/core/src/ui/surfaces/presentation/pages/data/dashboard/index.tsx"
   ],
-  "sourceDigest": "9552eb5a3962b440229fb900aa2b3dd568eb54c80d5296fe7faa1800783a01a2",
+  "sourceDigest": "8b1a58c118fae441a07f27fb600a9e52c1b5d508d9475ec5b74816fe95518c14",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/responsive-posture/rottay.json",
   "artifactSha256": "ef7231a69b26c0e2b3b07a93ce7ccddcaebcdc22844a23780476181eef9299de",
-  "createdAt": "2026-08-26T23:34:15.000Z",
+  "createdAt": "2026-08-27T01:02:02.000Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

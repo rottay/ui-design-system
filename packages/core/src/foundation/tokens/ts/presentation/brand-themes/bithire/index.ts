@@ -1644,7 +1644,7 @@ const OVERLAY: BrandThemeModeOverlay = {
        * @domicile seed
        * @governor dial: typography.scale
        */
-      cellFontSize: OVERLAY_SEED.typeDetail.tableCellSize,
+      cellFontSize: `calc(${OVERLAY_SEED.typeDetail.tableCellSize} * var(--ds-type-scale, 1))`,
       // Literal on purpose: an alias equal to the body emits NOTHING in a mode
       // block (diff-by-values) -- that is how F2.4 drained this shield. D-1.
       cellColor: "#e4e8ed",
@@ -3998,8 +3998,8 @@ const SURFACES: BrandSurfaces = {
     // es exactamente lo que su propio effectIntensity significa -- aceptado por el
     // owner. background y border siguen congelados por la misma via y quedan
     // inventariados como deuda en scripts/tokens/dial-authority-gate.
-    background: "rgba(255, 255, 255, 0.84)",
-    border: "rgba(196, 210, 222, 0.86)",
+    background: "rgba(255, 255, 255, calc(0.84 * var(--ds-effect-intensity)))",
+    border: "rgba(196, 210, 222, calc(0.86 * var(--ds-effect-intensity)))",
   },
   gradients: {
     /**
@@ -4638,12 +4638,12 @@ const CHROME: BrandChrome = {
      * @domicile seed
      * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
      */
-    commandHomeGap: "16px",
+    commandHomeGap: "calc(16px * var(--ds-rhythm-effective-scale, 1))",
     /**
      * @domicile seed
      * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
      */
-    commandHomePanelGap: "14px",
+    commandHomePanelGap: "calc(14px * var(--ds-rhythm-effective-scale, 1))",
     /**
      * @domicile seed
      * @governor dial: palette.seeds
@@ -4690,7 +4690,9 @@ const CHROME: BrandChrome = {
      * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
      */
     commandHomeConsolePadding:
-      "clamp(20px, 3vw, 34px) clamp(16px, 4vw, 56px) 24px",
+      "clamp(calc(20px * var(--ds-rhythm-effective-scale, 1)), calc(3vw * var(--ds-rhythm-effective-scale, 1)), calc(34px * var(--ds-rhythm-effective-scale, 1))) " +
+      "clamp(calc(16px * var(--ds-rhythm-effective-scale, 1)), calc(4vw * var(--ds-rhythm-effective-scale, 1)), calc(56px * var(--ds-rhythm-effective-scale, 1))) " +
+      "calc(24px * var(--ds-rhythm-effective-scale, 1))",
     /**
      * @domicile seed
      * @governor dial: palette.seeds
@@ -5521,7 +5523,7 @@ const CHROME: BrandChrome = {
          * @domicile seed
          * @governor dial: typography.scale
          */
-        fontSize: "11px",
+        fontSize: "calc(11px * var(--ds-type-scale, 1))",
         /**
          * @domicile seed
          * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
@@ -5558,7 +5560,7 @@ const CHROME: BrandChrome = {
          * @domicile seed
          * @governor dial: typography.scale
          */
-        fontSize: "12px",
+        fontSize: "calc(12px * var(--ds-type-scale, 1))",
         /**
          * @domicile seed
          * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
@@ -5595,7 +5597,7 @@ const CHROME: BrandChrome = {
          * @domicile seed
          * @governor dial: typography.scale
          */
-        fontSize: "13px",
+        fontSize: "calc(13px * var(--ds-type-scale, 1))",
         /**
          * @domicile seed
          * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
@@ -5632,7 +5634,7 @@ const CHROME: BrandChrome = {
          * @domicile seed
          * @governor dial: typography.scale
          */
-        fontSize: "14px",
+        fontSize: "calc(14px * var(--ds-type-scale, 1))",
         /**
          * @domicile seed
          * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
@@ -5669,7 +5671,7 @@ const CHROME: BrandChrome = {
          * @domicile seed
          * @governor dial: typography.scale
          */
-        fontSize: "15px",
+        fontSize: "calc(15px * var(--ds-type-scale, 1))",
         /**
          * @domicile seed
          * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
@@ -5777,7 +5779,7 @@ const CHROME: BrandChrome = {
        * @domicile seed
        * @governor dial: typography.scale
        */
-      labelFontSize: "12px",
+      labelFontSize: "calc(12px * var(--ds-type-scale, 1))",
       /**
        * @domicile seed
        * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
@@ -5797,7 +5799,7 @@ const CHROME: BrandChrome = {
        * @domicile seed
        * @governor dial: typography.scale
        */
-      helperFontSize: "11px",
+      helperFontSize: "calc(11px * var(--ds-type-scale, 1))",
       /**
        * @domicile seed
        * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
@@ -5896,7 +5898,7 @@ const CHROME: BrandChrome = {
         height: "28px",
         paddingX: "8px",
         paddingY: "4px",
-        fontSize: "11px",
+        fontSize: "calc(11px * var(--ds-type-scale, 1))",
         lineHeight: "16px",
         iconSize: "13px",
         radius: "7px",
@@ -5909,7 +5911,7 @@ const CHROME: BrandChrome = {
         height: "32px",
         paddingX: "10px",
         paddingY: "5px",
-        fontSize: "12px",
+        fontSize: "calc(12px * var(--ds-type-scale, 1))",
         lineHeight: "18px",
         iconSize: "14px",
         radius: "8px",
@@ -5968,7 +5970,7 @@ const CHROME: BrandChrome = {
         height: "40px",
         paddingX: "13px",
         paddingY: "8px",
-        fontSize: "14px",
+        fontSize: "calc(14px * var(--ds-type-scale, 1))",
         lineHeight: "22px",
         iconSize: "16px",
         radius: "10px",
@@ -5981,7 +5983,7 @@ const CHROME: BrandChrome = {
         height: "46px",
         paddingX: "15px",
         paddingY: "10px",
-        fontSize: "15px",
+        fontSize: "calc(15px * var(--ds-type-scale, 1))",
         lineHeight: "24px",
         iconSize: "18px",
         radius: "11px",
@@ -7362,7 +7364,7 @@ const CHROME: BrandChrome = {
      * @domicile seed
      * @governor dial: typography.scale
      */
-    cellFontSize: SEED.typeDetail.tableCellSize,
+    cellFontSize: `calc(${SEED.typeDetail.tableCellSize} * var(--ds-type-scale, 1))`,
     /**
      * @domicile derived
      * @governor deriva de: --ds-color-text-primary
@@ -7557,7 +7559,7 @@ const CHROME: BrandChrome = {
      * @domicile seed
      * @governor dial: typography.scale
      */
-    titleFontSize: "13px",
+    titleFontSize: "calc(13px * var(--ds-type-scale, 1))",
     /**
      * @domicile seed
      * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
@@ -8106,7 +8108,7 @@ const CHROME: BrandChrome = {
      * @domicile seed
      * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
      */
-    padding: "16px",
+    padding: "calc(16px * var(--ds-rhythm-effective-scale, 1))",
     /**
      * @domicile seed
      * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
@@ -8207,12 +8209,12 @@ const CHROME: BrandChrome = {
      * @domicile seed
      * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
      */
-    padding: "10px 12px",
+    padding: "calc(10px * var(--ds-rhythm-effective-scale, 1)) calc(12px * var(--ds-rhythm-effective-scale, 1))",
     /**
      * @domicile seed
      * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
      */
-    gap: "8px",
+    gap: "calc(8px * var(--ds-rhythm-effective-scale, 1))",
     /**
      * @domicile seed
      * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
@@ -8269,12 +8271,12 @@ const CHROME: BrandChrome = {
      * @domicile seed
      * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
      */
-    padding: "20px",
+    padding: "calc(20px * var(--ds-rhythm-effective-scale, 1))",
     /**
      * @domicile seed
      * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
      */
-    gap: "16px",
+    gap: "calc(16px * var(--ds-rhythm-effective-scale, 1))",
     /**
      * @domicile seed
      * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
@@ -8351,7 +8353,7 @@ const CHROME: BrandChrome = {
      * @domicile seed
      * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
      */
-    padding: "14px",
+    padding: "calc(14px * var(--ds-rhythm-effective-scale, 1))",
     /**
      * @domicile seed
      * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
@@ -8398,7 +8400,7 @@ const CHROME: BrandChrome = {
      * @domicile seed
      * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
      */
-    gap: "12px",
+    gap: "calc(12px * var(--ds-rhythm-effective-scale, 1))",
     /**
      * @domicile seed
      * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
@@ -8418,7 +8420,7 @@ const CHROME: BrandChrome = {
      * @domicile seed
      * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
      */
-    cardGap: "10px",
+    cardGap: "calc(10px * var(--ds-rhythm-effective-scale, 1))",
     /**
      * @domicile seed
      * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)

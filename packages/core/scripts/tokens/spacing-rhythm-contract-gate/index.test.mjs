@@ -26,6 +26,7 @@ import {
   analyzeRhythmStylesheets,
   CLASSIFICATIONS,
   classifyRhythmProperty,
+  illicitRhythmMentions,
   collectAuthoredModernStylesheets,
   collectTypeScriptRhythmCarriers,
   compoundIsExactOrNarrower,
@@ -1590,4 +1591,84 @@ test('Fable bypass 4 -- a * subject decorated with :not([hidden]) carries no ide
   );
   // The producer itself is unaffected -- only the identity-less consumer fails.
   assert.deepEqual(result.concentricChannels, ['--_ds-card-nest-radius']);
+});
+
+/* ---------------------------------------------------------------------------
+ * ENMIENDA decision 20: un artefacto SI puede llevar ritmo, pero solo con el
+ * factor. Las dos direcciones, porque una enmienda que solo prueba que el caso
+ * nuevo pasa no prueba que la mordida sobrevivio.
+ * ------------------------------------------------------------------------- */
+
+test('decision 20 (a): un literal de ritmo crudo en un artefacto SIGUE fallando', () => {
+  // El canal declarado a pelo: congela el dial en su propia raiz.
+  const congelado = ':root { --ds-rhythm-effective-scale: 1; }';
+  const ofensas = illicitRhythmMentions(congelado);
+  assert.equal(ofensas.length, 1, 'declarar el canal es rojo');
+  assert.match(ofensas[0].why, /congela el dial/u);
+
+  /* LO QUE ESTA ENMIENDA NO HACE, y conviene que este escrito como prueba:
+   * `padding: var(--ds-rhythm-effective-scale)` —una lectura que no multiplica,
+   * sobre una propiedad de espaciado— NO se marca. El analizador de siempre la
+   * admite, y un archivo excluido se juzga con EXACTAMENTE la misma ley que uno
+   * incluido: hacer los excluidos mas estrictos que los autorados seria inventar
+   * ley, no conservar la mordida. Si esa forma debe prohibirse, se prohibe en el
+   * clasificador, para los dos lados a la vez. */
+  const sinMultiplicar = ':root { padding: var(--ds-rhythm-effective-scale); }';
+  assert.deepEqual(
+    illicitRhythmMentions(sinMultiplicar),
+    [],
+    'misma ley que en un archivo autorado: ni mas blanda ni mas dura',
+  );
+});
+
+test('decision 20 (b): la forma del sistema —factor en el sitio de declaracion— PASA', () => {
+  // La forma de patterns.css:500, que es la que la decision 20 manda a los temas.
+  const licito = ':root { --ds-command-home-gap: calc(16px * var(--ds-rhythm-effective-scale, 1)); }';
+  assert.deepEqual(illicitRhythmMentions(licito), []);
+
+  // Varios calc() consecutivos en una linea: el shorthand de dos componentes y
+  // el clamp de tres. Contar parentesis desde el principio de la linea daba
+  // falsos positivos aca, asi que la forma real del artefacto es fixture.
+  const shorthand =
+    ':root { --ds-compact-card-padding: calc(10px * var(--ds-rhythm-effective-scale, 1)) ' +
+    'calc(12px * var(--ds-rhythm-effective-scale, 1)); }';
+  assert.deepEqual(illicitRhythmMentions(shorthand), []);
+
+  const conClamp =
+    ':root { --ds-command-home-console-padding: clamp(calc(20px * var(--ds-rhythm-effective-scale, 1)), ' +
+    'calc(3vw * var(--ds-rhythm-effective-scale, 1)), calc(34px * var(--ds-rhythm-effective-scale, 1))) ' +
+    'calc(24px * var(--ds-rhythm-effective-scale, 1)); }';
+  assert.deepEqual(illicitRhythmMentions(conClamp), []);
+});
+
+test('decision 20 (c): la mordida no se puede evadir metiendo el canal en un calc sin operador', () => {
+  const disfrazado = ':root { --ds-x: calc(var(--ds-rhythm-effective-scale, 1)); }';
+  const ofensas = illicitRhythmMentions(disfrazado);
+  assert.equal(ofensas.length, 1, 'un calc() sin operador no es un factor');
+  assert.match(ofensas[0].why, /FORBIDDEN_OTHER_CAPABILITY/u);
+});
+
+test('decision 20 (d): el arbol real pasa, y pasa por la forma, no por la exencion', () => {
+  const artefacto = readFileSync(
+    new URL('../../../src/foundation/tokens/css/facade/artifacts/bithire/index.css', import.meta.url),
+    'utf8',
+  );
+  assert.ok(artefacto.includes('--ds-rhythm-effective-scale'), 'bithire SI lleva ritmo, por diseño');
+  assert.deepEqual(
+    illicitRhythmMentions(artefacto),
+    [],
+    'y cada mencion carga el factor: pasa por cumplir la forma',
+  );
+});
+
+test('decision 20 (e): la mordida clasica intacta — ritmo sobre una propiedad de TAMANO sigue roja aunque cargue el factor', () => {
+  /* Esta es la prueba que la enmienda tenia que no romper, y que en una version
+   * intermedia mia SI rompio: un `block-size` con el factor pasaba por "licito".
+   * La enmienda final no juzga la forma por su cuenta — delega en el clasificador
+   * del gate — asi que la clase que el gate existe para pescar sigue siendo roja
+   * incluso escondida en una carpeta excluida. */
+  const escondido = '.bad { block-size: calc(1px * var(--ds-rhythm-effective-scale, 1)); }';
+  const ofensas = illicitRhythmMentions(escondido);
+  assert.equal(ofensas.length, 1);
+  assert.match(ofensas[0].why, /FORBIDDEN_SIZE/u);
 });

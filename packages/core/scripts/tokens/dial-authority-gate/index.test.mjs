@@ -86,7 +86,48 @@ test('drill 6: the inventory is decrease-only and the exception list is the owne
   for (const entry of inventory.pending) {
     assert.ok(reproduced.has(key(entry)), `${key(entry)} no longer reproduces: retire it, do not keep it`);
   }
-  assert.deepEqual(inventory.exceptions, [], 'no owner exception has been granted yet');
+  /* La ley del inventario: `exceptions` solo cambia por ruling de owner documentado.
+   * Se pinea la lista EXACTA, no su tamaño, para que agregar una segunda excepcion
+   * sin ruling sea rojo. Hoy hay una, escrita por el owner en la decision 20. */
+  assert.equal(inventory.exceptions.length, 1, 'exactamente una excepcion del owner');
+  const [granted] = inventory.exceptions;
+  assert.deepEqual(
+    { v: granted.vertical, c: granted.channel, d: granted.dial, by: granted.grantedBy, r: granted.ruling },
+    { v: 'bithire', c: '--ds-badge-radius', d: '--ds-radius-scale', by: 'owner', r: 'decision-20' }
+  );
   const listed = new Set([...inventory.pending, ...inventory.exceptions].map(key));
   for (const f of findings) assert.ok(listed.has(key(f)), `${key(f)} is unlisted -- the gate must fail, not the drill`);
+});
+
+test('drill 7 [prueba negativa de la excepcion]: un pill no escala, y por eso queda fuera', () => {
+  /* La excepcion del owner (decision 20) dice que --ds-badge-radius se queda en
+   * var(--ds-radius-full). Esta prueba lo sostiene por el lado que importa: aunque
+   * shape.radius-scale se mueva, el canal sigue resolviendo al centinela pill, y el
+   * gate NO lo reporta como anti-puerta. Si alguien "corrigiera" el badge a
+   * calc(9999px * var(--ds-radius-scale)) creyendo cerrar un pendiente, la primera
+   * mitad de este drill se cae. */
+  const base = {
+    '--ds-radius-full': ['9999px'],
+    '--ds-radius-md': ['calc(var(--ds-radius-md-base) * var(--ds-radius-scale, 1))'],
+    '--ds-radius-md-base': ['8px'],
+    '--ds-badge-radius': ['var(--ds-radius-full)'],
+  };
+  const artifacts = {
+    rottay: { '--ds-badge-radius': ['var(--ds-radius-md)'] },
+    bithire: { '--ds-badge-radius': ['var(--ds-radius-full)'] },
+    evnto: {},
+  };
+  const dials = new Set(['--ds-radius-scale']);
+
+  // El canal del pill no lleva el factor -- por diseño, y con el dial movido sigue sin llevarlo.
+  assert.equal(base['--ds-badge-radius'][0], 'var(--ds-radius-full)');
+  assert.ok(!base['--ds-radius-full'][0].includes('--ds-radius-scale'), 'el pill es un centinela, no una geometria');
+
+  // El gate SI lo ve (por eso hizo falta una excepcion y no un silencio)...
+  const findings = analyse(base, artifacts, dials);
+  const hit = findings.find((f) => f.vertical === 'bithire' && f.channel === '--ds-badge-radius');
+  assert.ok(hit, 'el gate lo detecta: la excepcion es visible, no una regla debilitada');
+
+  // ...y el dial conserva autoridad donde SI hay geometria real.
+  assert.ok(base['--ds-radius-md'][0].includes('--ds-radius-scale'), 'radius-scale gobierna los radios con geometria');
 });
