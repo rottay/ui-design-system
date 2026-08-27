@@ -67,10 +67,10 @@
     "packages/core/styles/index.css",
     "packages/core/styles/rottay.css"
   ],
-  "sourceDigest": "7ab8d6447f9109072c983b2040757f5dc3bfcce350b2240139348bd7f1dc54b5",
+  "sourceDigest": "2f1696275802ffbb418a3333f53d85948d6d766a9429a86e99c1e40aa6984744",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/shape-button-style/rottay-sharp.json",
   "artifactSha256": "035a48e7a48ff8b57768413cb0efa6d89120fe9c53512a35e1a8101755ed15f3",
-  "createdAt": "2026-08-27T07:34:39.000Z",
+  "createdAt": "2026-08-27T08:50:34.523Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

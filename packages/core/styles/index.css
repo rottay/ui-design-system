@@ -33803,8 +33803,11 @@ input.rottay-input.rottay-input--modern[type='number'] {
   box-sizing: border-box;
   display: inline-grid;
   place-items: center;
-  min-inline-size: var(--ds-input-action-size, var(--ds-input-md-icon-size));
-  block-size: var(--ds-input-action-size, var(--ds-input-md-icon-size));
+  /* Rides the density plane WITH the field (coordinated-density law, C-02):
+     compact tightens the button with the field, spacious lets it breathe --
+     density never moves the frame alone. */
+  min-inline-size: calc(var(--ds-input-action-size, var(--ds-input-md-icon-size)) * var(--ds-density-effective-scale));
+  block-size: calc(var(--ds-input-action-size, var(--ds-input-md-icon-size)) * var(--ds-density-effective-scale));
   padding: 0;
   color: var(--ds-input-clear-color, var(--ds-color-text-muted));
   background: var(--ds-input-clear-bg);

@@ -3,7 +3,7 @@
   "generatedBy": "scripts/tokens/customization-surface-census/index.mjs --write",
   "meta": {
     "scopeLaw": "DS-SCOPED PROJECTION (core+showroom). deadWriters is a projection for gates and catalogs, NEVER the instrument behind a deletion: on the same population an app-aware inverted index found 53 census-dead channels with LIVE app readers (F5 reconciliation, 2026-08-02 — the --ds-text-eyebrow failure at scale). Death verdicts require the app-inclusive index plus the raw-mention gate.",
-    "inputsDigest": "9d9dbd85f0290f24e05bb009263e9d1f69d963b8d315087c11f76a39be6f942c",
+    "inputsDigest": "c453ff2da36e9b0e320b513901821b7d69cd57e74391ae465a39388d632a1668",
     "manifestSchemaVersion": 4,
     "corpus": {
       "authoredCssFiles": 466,
@@ -34403,7 +34403,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 319,
+        "css": 321,
         "ts": 7,
         "tests": true,
         "modern": true,

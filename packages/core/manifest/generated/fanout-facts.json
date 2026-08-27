@@ -48,9 +48,9 @@
     "channelsWithoutReaders": 179,
     "channelsPaintsFalse": 913,
     "channelsPaintsInModernFalse": 1962,
-    "readers": 37007,
+    "readers": 37009,
     "readersByPlane": {
-      "modern-skin-css": 14731,
+      "modern-skin-css": 14733,
       "presentation-css": 10656,
       "foundation-css": 1118,
       "runtime-css": 268,
@@ -10359,14 +10359,14 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 327,
+          "line": 330,
           "prop": "background-image",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 333,
+          "line": 336,
           "prop": "background-image",
           "scalars": []
         }
@@ -10385,7 +10385,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 326,
+          "line": 329,
           "prop": "--_ds-textarea-grip-ink",
           "scalars": []
         }
@@ -10404,7 +10404,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 338,
+          "line": 341,
           "prop": "--_ds-textarea-grip-ink",
           "scalars": []
         }
@@ -10423,7 +10423,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 329,
+          "line": 332,
           "prop": "background-size",
           "scalars": []
         }
@@ -81579,21 +81579,21 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 235,
+          "line": 238,
           "prop": "border-color",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 242,
+          "line": 245,
           "prop": "border-color",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 250,
+          "line": 253,
           "prop": "border-color",
           "scalars": []
         },
@@ -83726,7 +83726,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 280,
+          "line": 283,
           "prop": "color",
           "scalars": []
         },
@@ -94018,21 +94018,21 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 280,
+          "line": 283,
           "prop": "color",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 284,
+          "line": 287,
           "prop": "color",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 288,
+          "line": 291,
           "prop": "color",
           "scalars": []
         },
@@ -98280,7 +98280,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 347,
+          "line": 350,
           "prop": "caret-color",
           "scalars": []
         },
@@ -116132,21 +116132,21 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 214,
+          "line": 217,
           "prop": "color",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 268,
+          "line": 271,
           "prop": "color",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 326,
+          "line": 329,
           "prop": "--_ds-textarea-grip-ink",
           "scalars": []
         },
@@ -122505,42 +122505,42 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 233,
+          "line": 236,
           "prop": "color",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 240,
+          "line": 243,
           "prop": "color",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 248,
+          "line": 251,
           "prop": "color",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 268,
+          "line": 271,
           "prop": "color",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 338,
+          "line": 341,
           "prop": "--_ds-textarea-grip-ink",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 344,
+          "line": 347,
           "prop": "-webkit-text-fill-color",
           "scalars": []
         },
@@ -131585,14 +131585,14 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 284,
+          "line": 287,
           "prop": "color",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 288,
+          "line": 291,
           "prop": "color",
           "scalars": []
         },
@@ -146399,6 +146399,26 @@
           "line": 94,
           "prop": "padding-inline",
           "decl": "padding-inline: calc(var(--ds-tag-xl-padding-inline, 1rem) * var(--ds-density-effective-scale))",
+          "scalars": [
+            "--ds-density-effective-scale"
+          ]
+        },
+        {
+          "plane": "modern-skin-css",
+          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
+          "line": 214,
+          "prop": "min-inline-size",
+          "decl": "min-inline-size: calc(var(--ds-input-action-size, var(--ds-input-md-icon-size)) * var(--ds-density-effective-scale))",
+          "scalars": [
+            "--ds-density-effective-scale"
+          ]
+        },
+        {
+          "plane": "modern-skin-css",
+          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
+          "line": 215,
+          "prop": "block-size",
+          "decl": "block-size: calc(var(--ds-input-action-size, var(--ds-input-md-icon-size)) * var(--ds-density-effective-scale))",
           "scalars": [
             "--ds-density-effective-scale"
           ]
@@ -162736,7 +162756,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 244,
+          "line": 247,
           "prop": "box-shadow",
           "scalars": []
         },
@@ -174205,7 +174225,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 269,
+          "line": 272,
           "prop": "font-size",
           "scalars": []
         },
@@ -177984,7 +178004,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 289,
+          "line": 292,
           "prop": "font-weight",
           "scalars": []
         },
@@ -183435,7 +183455,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 251,
+          "line": 254,
           "prop": "transform",
           "scalars": []
         }
@@ -183496,7 +183516,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 244,
+          "line": 247,
           "prop": "box-shadow",
           "scalars": []
         }
@@ -183531,7 +183551,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 217,
+          "line": 220,
           "prop": "border-radius",
           "scalars": []
         }
@@ -183613,16 +183633,22 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 211,
+          "line": 214,
           "prop": "min-inline-size",
-          "scalars": []
+          "decl": "min-inline-size: calc(var(--ds-input-action-size, var(--ds-input-md-icon-size)) * var(--ds-density-effective-scale))",
+          "scalars": [
+            "--ds-density-effective-scale"
+          ]
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 212,
+          "line": 215,
           "prop": "block-size",
-          "scalars": []
+          "decl": "block-size: calc(var(--ds-input-action-size, var(--ds-input-md-icon-size)) * var(--ds-density-effective-scale))",
+          "scalars": [
+            "--ds-density-effective-scale"
+          ]
         }
       ]
     },
@@ -184275,7 +184301,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 348,
+          "line": 351,
           "prop": "box-shadow",
           "scalars": []
         },
@@ -184345,7 +184371,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 347,
+          "line": 350,
           "prop": "caret-color",
           "scalars": []
         }
@@ -184395,7 +184421,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 344,
+          "line": 347,
           "prop": "-webkit-text-fill-color",
           "scalars": []
         },
@@ -185764,7 +185790,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 347,
+          "line": 350,
           "prop": "caret-color",
           "scalars": []
         },
@@ -186349,7 +186375,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 215,
+          "line": 218,
           "prop": "background",
           "scalars": []
         }
@@ -186399,21 +186425,21 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 234,
+          "line": 237,
           "prop": "background",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 241,
+          "line": 244,
           "prop": "background",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 249,
+          "line": 252,
           "prop": "background",
           "scalars": []
         },
@@ -186455,7 +186481,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 216,
+          "line": 219,
           "prop": "border",
           "scalars": []
         }
@@ -186504,21 +186530,21 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 235,
+          "line": 238,
           "prop": "border-color",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 242,
+          "line": 245,
           "prop": "border-color",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 250,
+          "line": 253,
           "prop": "border-color",
           "scalars": []
         }
@@ -186578,7 +186604,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 214,
+          "line": 217,
           "prop": "color",
           "scalars": []
         },
@@ -186686,21 +186712,21 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 233,
+          "line": 236,
           "prop": "color",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 240,
+          "line": 243,
           "prop": "color",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 248,
+          "line": 251,
           "prop": "color",
           "scalars": []
         },
@@ -186744,7 +186770,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 217,
+          "line": 220,
           "prop": "border-radius",
           "scalars": []
         },
@@ -187250,7 +187276,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 268,
+          "line": 271,
           "prop": "color",
           "scalars": []
         },
@@ -187286,7 +187312,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 280,
+          "line": 283,
           "prop": "color",
           "scalars": []
         },
@@ -187322,14 +187348,14 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 284,
+          "line": 287,
           "prop": "color",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 288,
+          "line": 291,
           "prop": "color",
           "scalars": []
         },
@@ -187370,7 +187396,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 289,
+          "line": 292,
           "prop": "font-weight",
           "scalars": []
         },
@@ -188939,7 +188965,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 269,
+          "line": 272,
           "prop": "font-size",
           "scalars": []
         },
@@ -189091,7 +189117,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 270,
+          "line": 273,
           "prop": "line-height",
           "scalars": []
         },
@@ -191085,16 +191111,22 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 211,
+          "line": 214,
           "prop": "min-inline-size",
-          "scalars": []
+          "decl": "min-inline-size: calc(var(--ds-input-action-size, var(--ds-input-md-icon-size)) * var(--ds-density-effective-scale))",
+          "scalars": [
+            "--ds-density-effective-scale"
+          ]
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 212,
+          "line": 215,
           "prop": "block-size",
-          "scalars": []
+          "decl": "block-size: calc(var(--ds-input-action-size, var(--ds-input-md-icon-size)) * var(--ds-density-effective-scale))",
+          "scalars": [
+            "--ds-density-effective-scale"
+          ]
         },
         {
           "plane": "presentation-css",
@@ -194326,21 +194358,21 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 355,
+          "line": 358,
           "prop": "min-block-size",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 359,
+          "line": 362,
           "prop": "min-inline-size",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 362,
+          "line": 365,
           "prop": "min-block-size",
           "scalars": []
         },
@@ -194708,28 +194740,28 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 222,
-          "prop": "transition",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 223,
-          "prop": "transition",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 224,
-          "prop": "transition",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
           "line": 225,
+          "prop": "transition",
+          "scalars": []
+        },
+        {
+          "plane": "modern-skin-css",
+          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
+          "line": 226,
+          "prop": "transition",
+          "scalars": []
+        },
+        {
+          "plane": "modern-skin-css",
+          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
+          "line": 227,
+          "prop": "transition",
+          "scalars": []
+        },
+        {
+          "plane": "modern-skin-css",
+          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
+          "line": 228,
           "prop": "transition",
           "scalars": []
         },
@@ -195048,28 +195080,28 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 222,
-          "prop": "transition",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 223,
-          "prop": "transition",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 224,
-          "prop": "transition",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
           "line": 225,
+          "prop": "transition",
+          "scalars": []
+        },
+        {
+          "plane": "modern-skin-css",
+          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
+          "line": 226,
+          "prop": "transition",
+          "scalars": []
+        },
+        {
+          "plane": "modern-skin-css",
+          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
+          "line": 227,
+          "prop": "transition",
+          "scalars": []
+        },
+        {
+          "plane": "modern-skin-css",
+          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
+          "line": 228,
           "prop": "transition",
           "scalars": []
         },
@@ -201118,7 +201150,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 270,
+          "line": 273,
           "prop": "line-height",
           "scalars": []
         },
@@ -227920,28 +227952,28 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 222,
-          "prop": "transition",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 223,
-          "prop": "transition",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 224,
-          "prop": "transition",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
           "line": 225,
+          "prop": "transition",
+          "scalars": []
+        },
+        {
+          "plane": "modern-skin-css",
+          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
+          "line": 226,
+          "prop": "transition",
+          "scalars": []
+        },
+        {
+          "plane": "modern-skin-css",
+          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
+          "line": 227,
+          "prop": "transition",
+          "scalars": []
+        },
+        {
+          "plane": "modern-skin-css",
+          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
+          "line": 228,
           "prop": "transition",
           "scalars": []
         },
@@ -233939,28 +233971,28 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 222,
-          "prop": "transition",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 223,
-          "prop": "transition",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 224,
-          "prop": "transition",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
           "line": 225,
+          "prop": "transition",
+          "scalars": []
+        },
+        {
+          "plane": "modern-skin-css",
+          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
+          "line": 226,
+          "prop": "transition",
+          "scalars": []
+        },
+        {
+          "plane": "modern-skin-css",
+          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
+          "line": 227,
+          "prop": "transition",
+          "scalars": []
+        },
+        {
+          "plane": "modern-skin-css",
+          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
+          "line": 228,
           "prop": "transition",
           "scalars": []
         },
@@ -256770,7 +256802,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 217,
+          "line": 220,
           "prop": "border-radius",
           "scalars": []
         },
@@ -315999,7 +316031,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 348,
+          "line": 351,
           "prop": "box-shadow",
           "scalars": []
         },
@@ -317854,21 +317886,21 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 234,
+          "line": 237,
           "prop": "background",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 241,
+          "line": 244,
           "prop": "background",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 249,
+          "line": 252,
           "prop": "background",
           "scalars": []
         },
@@ -335064,7 +335096,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 348,
+          "line": 351,
           "prop": "box-shadow",
           "scalars": []
         },
@@ -335212,7 +335244,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 347,
+          "line": 350,
           "prop": "caret-color",
           "scalars": []
         }
@@ -335294,7 +335326,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 344,
+          "line": 347,
           "prop": "-webkit-text-fill-color",
           "scalars": []
         },
@@ -335344,7 +335376,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 268,
+          "line": 271,
           "prop": "color",
           "scalars": []
         },
@@ -335373,7 +335405,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 269,
+          "line": 272,
           "prop": "font-size",
           "scalars": []
         },
@@ -350327,21 +350359,21 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 355,
+          "line": 358,
           "prop": "min-block-size",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 359,
+          "line": 362,
           "prop": "min-inline-size",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 362,
+          "line": 365,
           "prop": "min-block-size",
           "scalars": []
         },

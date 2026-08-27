@@ -5416,7 +5416,7 @@
             {
               "plane": "modern-skin-css",
               "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-              "line": 280,
+              "line": 283,
               "prop": "color",
               "families": [
                 "primitive/inputs/textarea"
@@ -28424,7 +28424,7 @@
             {
               "plane": "modern-skin-css",
               "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-              "line": 347,
+              "line": 350,
               "prop": "caret-color",
               "families": [
                 "primitive/inputs/textarea"
@@ -34416,7 +34416,7 @@
             {
               "plane": "modern-skin-css",
               "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-              "line": 347,
+              "line": 350,
               "prop": "caret-color",
               "families": [
                 "primitive/inputs/textarea"
@@ -34754,7 +34754,7 @@
             {
               "plane": "modern-skin-css",
               "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-              "line": 347,
+              "line": 350,
               "prop": "caret-color",
               "families": [
                 "primitive/inputs/textarea"
@@ -64860,7 +64860,7 @@
         "resolvedBy": {
           "binding": 501,
           "binding-multi": 76,
-          "class+binding": 1258,
+          "class+binding": 1260,
           "class": 155,
           "source-owner": 70,
           "unattributed": 61
@@ -68899,6 +68899,7 @@
             "primitive/inputs/radio",
             "primitive/inputs/select",
             "primitive/inputs/tag-input",
+            "primitive/inputs/textarea",
             "primitive/inputs/transfer",
             "primitive/inputs/tree-select",
             "primitive/layout/collapse",
@@ -70942,6 +70943,26 @@
                 "primitive/display/tag"
               ],
               "resolvedBy": "binding"
+            },
+            {
+              "plane": "modern-skin-css",
+              "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
+              "line": 214,
+              "prop": "min-inline-size",
+              "families": [
+                "primitive/inputs/textarea"
+              ],
+              "resolvedBy": "class+binding"
+            },
+            {
+              "plane": "modern-skin-css",
+              "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
+              "line": 215,
+              "prop": "block-size",
+              "families": [
+                "primitive/inputs/textarea"
+              ],
+              "resolvedBy": "class+binding"
             },
             {
               "plane": "modern-skin-css",
@@ -102494,12 +102515,24 @@
         {
           "family": "primitive/inputs/textarea",
           "manifestFamily": true,
-          "channels": 3,
+          "channels": 4,
           "properties": [
+            "block-size",
             "gap",
+            "min-inline-size",
             "scroll-margin-block"
           ],
           "rows": [
+            {
+              "channel": "--ds-density-effective-scale",
+              "props": [
+                "block-size",
+                "min-inline-size"
+              ],
+              "files": [
+                "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css"
+              ]
+            },
             {
               "channel": "--ds-input-message-gap",
               "props": [
@@ -112877,7 +112910,7 @@
         "resolvedBy": {
           "binding": 501,
           "binding-multi": 76,
-          "class+binding": 1286,
+          "class+binding": 1288,
           "class": 155,
           "source-owner": 70,
           "unattributed": 61
@@ -117274,6 +117307,7 @@
             "primitive/inputs/radio",
             "primitive/inputs/select",
             "primitive/inputs/tag-input",
+            "primitive/inputs/textarea",
             "primitive/inputs/transfer",
             "primitive/inputs/tree-select",
             "primitive/layout/collapse",
@@ -119317,6 +119351,26 @@
                 "primitive/display/tag"
               ],
               "resolvedBy": "binding"
+            },
+            {
+              "plane": "modern-skin-css",
+              "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
+              "line": 214,
+              "prop": "min-inline-size",
+              "families": [
+                "primitive/inputs/textarea"
+              ],
+              "resolvedBy": "class+binding"
+            },
+            {
+              "plane": "modern-skin-css",
+              "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
+              "line": 215,
+              "prop": "block-size",
+              "families": [
+                "primitive/inputs/textarea"
+              ],
+              "resolvedBy": "class+binding"
             },
             {
               "plane": "modern-skin-css",
@@ -150888,12 +150942,24 @@
         {
           "family": "primitive/inputs/textarea",
           "manifestFamily": true,
-          "channels": 3,
+          "channels": 4,
           "properties": [
+            "block-size",
             "gap",
+            "min-inline-size",
             "scroll-margin-block"
           ],
           "rows": [
+            {
+              "channel": "--ds-density-effective-scale",
+              "props": [
+                "block-size",
+                "min-inline-size"
+              ],
+              "files": [
+                "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css"
+              ]
+            },
             {
               "channel": "--ds-input-message-gap",
               "props": [
@@ -161378,7 +161444,7 @@
         "resolvedBy": {
           "binding": 501,
           "binding-multi": 76,
-          "class+binding": 1286,
+          "class+binding": 1288,
           "class": 155,
           "source-owner": 70,
           "unattributed": 61
@@ -165775,6 +165841,7 @@
             "primitive/inputs/radio",
             "primitive/inputs/select",
             "primitive/inputs/tag-input",
+            "primitive/inputs/textarea",
             "primitive/inputs/transfer",
             "primitive/inputs/tree-select",
             "primitive/layout/collapse",
@@ -167818,6 +167885,26 @@
                 "primitive/display/tag"
               ],
               "resolvedBy": "binding"
+            },
+            {
+              "plane": "modern-skin-css",
+              "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
+              "line": 214,
+              "prop": "min-inline-size",
+              "families": [
+                "primitive/inputs/textarea"
+              ],
+              "resolvedBy": "class+binding"
+            },
+            {
+              "plane": "modern-skin-css",
+              "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
+              "line": 215,
+              "prop": "block-size",
+              "families": [
+                "primitive/inputs/textarea"
+              ],
+              "resolvedBy": "class+binding"
             },
             {
               "plane": "modern-skin-css",
@@ -199399,12 +199486,24 @@
         {
           "family": "primitive/inputs/textarea",
           "manifestFamily": true,
-          "channels": 3,
+          "channels": 4,
           "properties": [
+            "block-size",
             "gap",
+            "min-inline-size",
             "scroll-margin-block"
           ],
           "rows": [
+            {
+              "channel": "--ds-density-effective-scale",
+              "props": [
+                "block-size",
+                "min-inline-size"
+              ],
+              "files": [
+                "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css"
+              ]
+            },
             {
               "channel": "--ds-input-message-gap",
               "props": [
@@ -209898,7 +209997,7 @@
         "resolvedBy": {
           "binding": 501,
           "binding-multi": 76,
-          "class+binding": 1286,
+          "class+binding": 1288,
           "class": 155,
           "source-owner": 70,
           "unattributed": 61
@@ -214295,6 +214394,7 @@
             "primitive/inputs/radio",
             "primitive/inputs/select",
             "primitive/inputs/tag-input",
+            "primitive/inputs/textarea",
             "primitive/inputs/transfer",
             "primitive/inputs/tree-select",
             "primitive/layout/collapse",
@@ -216338,6 +216438,26 @@
                 "primitive/display/tag"
               ],
               "resolvedBy": "binding"
+            },
+            {
+              "plane": "modern-skin-css",
+              "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
+              "line": 214,
+              "prop": "min-inline-size",
+              "families": [
+                "primitive/inputs/textarea"
+              ],
+              "resolvedBy": "class+binding"
+            },
+            {
+              "plane": "modern-skin-css",
+              "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
+              "line": 215,
+              "prop": "block-size",
+              "families": [
+                "primitive/inputs/textarea"
+              ],
+              "resolvedBy": "class+binding"
             },
             {
               "plane": "modern-skin-css",
@@ -247919,12 +248039,24 @@
         {
           "family": "primitive/inputs/textarea",
           "manifestFamily": true,
-          "channels": 3,
+          "channels": 4,
           "properties": [
+            "block-size",
             "gap",
+            "min-inline-size",
             "scroll-margin-block"
           ],
           "rows": [
+            {
+              "channel": "--ds-density-effective-scale",
+              "props": [
+                "block-size",
+                "min-inline-size"
+              ],
+              "files": [
+                "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css"
+              ]
+            },
             {
               "channel": "--ds-input-message-gap",
               "props": [
@@ -328649,7 +328781,7 @@
             {
               "plane": "modern-skin-css",
               "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-              "line": 269,
+              "line": 272,
               "prop": "font-size",
               "families": [
                 "primitive/inputs/textarea"
@@ -329810,7 +329942,7 @@
             {
               "plane": "modern-skin-css",
               "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-              "line": 269,
+              "line": 272,
               "prop": "font-size",
               "families": [
                 "primitive/inputs/textarea"
@@ -331136,7 +331268,7 @@
             {
               "plane": "modern-skin-css",
               "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-              "line": 269,
+              "line": 272,
               "prop": "font-size",
               "families": [
                 "primitive/inputs/textarea"

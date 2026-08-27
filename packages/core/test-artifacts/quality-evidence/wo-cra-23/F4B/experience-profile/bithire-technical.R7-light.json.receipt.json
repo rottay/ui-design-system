@@ -71,10 +71,10 @@
     "packages/core/src/ui/primitives/display/Card/engines/rustic/index.tsx",
     "packages/core/src/ui/primitives/display/Card/index.tsx"
   ],
-  "sourceDigest": "bf605257e489b1e9d12061513a3ec1a80e7effabf2b8f1cc3d4bdc7079d592f8",
+  "sourceDigest": "767be4e1bb657a93a804c5facfa5e17d98446f5b61ec6e603f9d7c8defd7818f",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/experience-profile/bithire-technical.R7-light.json",
   "artifactSha256": "cfff482a963efa79379ab596400e1ceea50925a917cfc4fa40c52cdaae720286",
-  "createdAt": "2026-08-27T07:34:39.000Z",
+  "createdAt": "2026-08-27T08:50:34.523Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,
