@@ -1,0 +1,575 @@
+{
+  "_note": "Tabla AUTORADA de adjudicacion owner->tier (frente normalizacion profunda, cohorte 1). Vocabulario cerrado de 6 tiers del catalogo. El productor no puede inventar filas: owner ausente = null (legitimo, decrease-only). Lote 1 del DT (2026-08-27): solo owners con tier estructuralmente claro. Paletas/ramps, THEME.motion/expressive, badge/tag/avatar/alert y gramaticas no-tier (radius/shadow/ratio/type) quedan SIN adjudicar a proposito: sus raices no son tier.* y forzarlas seria tierrar mal. Nunca hay presion de cobertura.",
+  "rows": [
+    {
+      "ownerPath": "CHROME.breadcrumb",
+      "tier": "page",
+      "reason": "marco/estructura de pagina y superficies de contenido en flujo; heads tier.page.* = --ds-sidebar-*"
+    },
+    {
+      "ownerPath": "CHROME.cardComponent",
+      "tier": "raised",
+      "reason": "superficie elevada (tarjeta); head tier.raised.bg = --ds-surface-card"
+    },
+    {
+      "ownerPath": "CHROME.collectionCard",
+      "tier": "raised",
+      "reason": "superficie elevada (tarjeta); head tier.raised.bg = --ds-surface-card"
+    },
+    {
+      "ownerPath": "CHROME.compactCard",
+      "tier": "raised",
+      "reason": "superficie elevada (tarjeta); head tier.raised.bg = --ds-surface-card"
+    },
+    {
+      "ownerPath": "CHROME.controls.autocomplete",
+      "tier": "control",
+      "reason": "controles interactivos (formulario/accion/seleccion); la raiz tier.control.* existe con derivationDebt y ley"
+    },
+    {
+      "ownerPath": "CHROME.controls.buttonAI",
+      "tier": "control",
+      "reason": "controles interactivos (formulario/accion/seleccion); la raiz tier.control.* existe con derivationDebt y ley"
+    },
+    {
+      "ownerPath": "CHROME.controls.buttonDashed",
+      "tier": "control",
+      "reason": "controles interactivos (formulario/accion/seleccion); la raiz tier.control.* existe con derivationDebt y ley"
+    },
+    {
+      "ownerPath": "CHROME.controls.buttonDefault",
+      "tier": "control",
+      "reason": "controles interactivos (formulario/accion/seleccion); la raiz tier.control.* existe con derivationDebt y ley"
+    },
+    {
+      "ownerPath": "CHROME.controls.buttonError",
+      "tier": "control",
+      "reason": "controles interactivos (formulario/accion/seleccion); la raiz tier.control.* existe con derivationDebt y ley"
+    },
+    {
+      "ownerPath": "CHROME.controls.buttonGhost",
+      "tier": "control",
+      "reason": "controles interactivos (formulario/accion/seleccion); la raiz tier.control.* existe con derivationDebt y ley"
+    },
+    {
+      "ownerPath": "CHROME.controls.buttonLink",
+      "tier": "control",
+      "reason": "controles interactivos (formulario/accion/seleccion); la raiz tier.control.* existe con derivationDebt y ley"
+    },
+    {
+      "ownerPath": "CHROME.controls.buttonPrimary",
+      "tier": "control",
+      "reason": "controles interactivos (formulario/accion/seleccion); la raiz tier.control.* existe con derivationDebt y ley"
+    },
+    {
+      "ownerPath": "CHROME.controls.buttonSecondary",
+      "tier": "control",
+      "reason": "controles interactivos (formulario/accion/seleccion); la raiz tier.control.* existe con derivationDebt y ley"
+    },
+    {
+      "ownerPath": "CHROME.controls.buttonText",
+      "tier": "control",
+      "reason": "controles interactivos (formulario/accion/seleccion); la raiz tier.control.* existe con derivationDebt y ley"
+    },
+    {
+      "ownerPath": "CHROME.controls.disabled",
+      "tier": "control",
+      "reason": "controles interactivos (formulario/accion/seleccion); la raiz tier.control.* existe con derivationDebt y ley"
+    },
+    {
+      "ownerPath": "CHROME.controls.form",
+      "tier": "control",
+      "reason": "controles interactivos (formulario/accion/seleccion); la raiz tier.control.* existe con derivationDebt y ley"
+    },
+    {
+      "ownerPath": "CHROME.controls.input",
+      "tier": "control",
+      "reason": "controles interactivos (formulario/accion/seleccion); la raiz tier.control.* existe con derivationDebt y ley"
+    },
+    {
+      "ownerPath": "CHROME.controls.input.addon",
+      "tier": "control",
+      "reason": "controles interactivos (formulario/accion/seleccion); la raiz tier.control.* existe con derivationDebt y ley"
+    },
+    {
+      "ownerPath": "CHROME.controls.input.affix",
+      "tier": "control",
+      "reason": "controles interactivos (formulario/accion/seleccion); la raiz tier.control.* existe con derivationDebt y ley"
+    },
+    {
+      "ownerPath": "CHROME.controls.input.clear",
+      "tier": "control",
+      "reason": "controles interactivos (formulario/accion/seleccion); la raiz tier.control.* existe con derivationDebt y ley"
+    },
+    {
+      "ownerPath": "CHROME.controls.input.filled",
+      "tier": "control",
+      "reason": "controles interactivos (formulario/accion/seleccion); la raiz tier.control.* existe con derivationDebt y ley"
+    },
+    {
+      "ownerPath": "CHROME.controls.input.readOnly",
+      "tier": "control",
+      "reason": "controles interactivos (formulario/accion/seleccion); la raiz tier.control.* existe con derivationDebt y ley"
+    },
+    {
+      "ownerPath": "CHROME.controls.inputNumber",
+      "tier": "control",
+      "reason": "controles interactivos (formulario/accion/seleccion); la raiz tier.control.* existe con derivationDebt y ley"
+    },
+    {
+      "ownerPath": "CHROME.controls.radio",
+      "tier": "control",
+      "reason": "controles interactivos (formulario/accion/seleccion); la raiz tier.control.* existe con derivationDebt y ley"
+    },
+    {
+      "ownerPath": "CHROME.controls.segmented",
+      "tier": "control",
+      "reason": "controles interactivos (formulario/accion/seleccion); la raiz tier.control.* existe con derivationDebt y ley"
+    },
+    {
+      "ownerPath": "CHROME.controls.select",
+      "tier": "control",
+      "reason": "controles interactivos (formulario/accion/seleccion); la raiz tier.control.* existe con derivationDebt y ley"
+    },
+    {
+      "ownerPath": "CHROME.controls.switch",
+      "tier": "control",
+      "reason": "controles interactivos (formulario/accion/seleccion); la raiz tier.control.* existe con derivationDebt y ley"
+    },
+    {
+      "ownerPath": "CHROME.controls.textarea",
+      "tier": "control",
+      "reason": "controles interactivos (formulario/accion/seleccion); la raiz tier.control.* existe con derivationDebt y ley"
+    },
+    {
+      "ownerPath": "CHROME.controls.transfer",
+      "tier": "control",
+      "reason": "controles interactivos (formulario/accion/seleccion); la raiz tier.control.* existe con derivationDebt y ley"
+    },
+    {
+      "ownerPath": "CHROME.controls.upload",
+      "tier": "control",
+      "reason": "controles interactivos (formulario/accion/seleccion); la raiz tier.control.* existe con derivationDebt y ley"
+    },
+    {
+      "ownerPath": "CHROME.drawer",
+      "tier": "overlay",
+      "reason": "capa flotante (modal/drawer/popover/dropdown/tooltip/toast); heads tier.overlay.* = --ds-material-overlay-*"
+    },
+    {
+      "ownerPath": "CHROME.dropdown",
+      "tier": "overlay",
+      "reason": "capa flotante (modal/drawer/popover/dropdown/tooltip/toast); heads tier.overlay.* = --ds-material-overlay-*"
+    },
+    {
+      "ownerPath": "CHROME.filterPill",
+      "tier": "control",
+      "reason": "controles interactivos (formulario/accion/seleccion); la raiz tier.control.* existe con derivationDebt y ley"
+    },
+    {
+      "ownerPath": "CHROME.floatButton",
+      "tier": "control",
+      "reason": "controles interactivos (formulario/accion/seleccion); la raiz tier.control.* existe con derivationDebt y ley"
+    },
+    {
+      "ownerPath": "CHROME.layout",
+      "tier": "page",
+      "reason": "marco/estructura de pagina y superficies de contenido en flujo; heads tier.page.* = --ds-sidebar-*"
+    },
+    {
+      "ownerPath": "CHROME.list",
+      "tier": "page",
+      "reason": "marco/estructura de pagina y superficies de contenido en flujo; heads tier.page.* = --ds-sidebar-*"
+    },
+    {
+      "ownerPath": "CHROME.listingGrid",
+      "tier": "page",
+      "reason": "marco/estructura de pagina y superficies de contenido en flujo; heads tier.page.* = --ds-sidebar-*"
+    },
+    {
+      "ownerPath": "CHROME.message",
+      "tier": "overlay",
+      "reason": "capa flotante (modal/drawer/popover/dropdown/tooltip/toast); heads tier.overlay.* = --ds-material-overlay-*"
+    },
+    {
+      "ownerPath": "CHROME.metricCard",
+      "tier": "raised",
+      "reason": "superficie elevada (tarjeta); head tier.raised.bg = --ds-surface-card"
+    },
+    {
+      "ownerPath": "CHROME.modal",
+      "tier": "overlay",
+      "reason": "capa flotante (modal/drawer/popover/dropdown/tooltip/toast); heads tier.overlay.* = --ds-material-overlay-*"
+    },
+    {
+      "ownerPath": "CHROME.pagination",
+      "tier": "control",
+      "reason": "controles interactivos (formulario/accion/seleccion); la raiz tier.control.* existe con derivationDebt y ley"
+    },
+    {
+      "ownerPath": "CHROME.popover",
+      "tier": "overlay",
+      "reason": "capa flotante (modal/drawer/popover/dropdown/tooltip/toast); heads tier.overlay.* = --ds-material-overlay-*"
+    },
+    {
+      "ownerPath": "CHROME.premiumCard",
+      "tier": "raised",
+      "reason": "superficie elevada (tarjeta); head tier.raised.bg = --ds-surface-card"
+    },
+    {
+      "ownerPath": "CHROME.search",
+      "tier": "control",
+      "reason": "controles interactivos (formulario/accion/seleccion); la raiz tier.control.* existe con derivationDebt y ley"
+    },
+    {
+      "ownerPath": "CHROME.search.commandPalette",
+      "tier": "overlay",
+      "reason": "capa flotante (modal/drawer/popover/dropdown/tooltip/toast); heads tier.overlay.* = --ds-material-overlay-*"
+    },
+    {
+      "ownerPath": "CHROME.shell",
+      "tier": "page",
+      "reason": "marco/estructura de pagina y superficies de contenido en flujo; heads tier.page.* = --ds-sidebar-*"
+    },
+    {
+      "ownerPath": "CHROME.sidebar",
+      "tier": "page",
+      "reason": "marco/estructura de pagina y superficies de contenido en flujo; heads tier.page.* = --ds-sidebar-*"
+    },
+    {
+      "ownerPath": "CHROME.signalCard",
+      "tier": "raised",
+      "reason": "superficie elevada (tarjeta); head tier.raised.bg = --ds-surface-card"
+    },
+    {
+      "ownerPath": "CHROME.steps",
+      "tier": "page",
+      "reason": "marco/estructura de pagina y superficies de contenido en flujo; heads tier.page.* = --ds-sidebar-*"
+    },
+    {
+      "ownerPath": "CHROME.table",
+      "tier": "page",
+      "reason": "marco/estructura de pagina y superficies de contenido en flujo; heads tier.page.* = --ds-sidebar-*"
+    },
+    {
+      "ownerPath": "CHROME.tabs",
+      "tier": "control",
+      "reason": "controles interactivos (formulario/accion/seleccion); la raiz tier.control.* existe con derivationDebt y ley"
+    },
+    {
+      "ownerPath": "CHROME.tallCard",
+      "tier": "raised",
+      "reason": "superficie elevada (tarjeta); head tier.raised.bg = --ds-surface-card"
+    },
+    {
+      "ownerPath": "CHROME.workspaceCard",
+      "tier": "raised",
+      "reason": "superficie elevada (tarjeta); head tier.raised.bg = --ds-surface-card"
+    },
+    {
+      "ownerPath": "SURFACES.surfaceRoles.card",
+      "tier": "raised",
+      "reason": "superficie elevada (tarjeta); head tier.raised.bg = --ds-surface-card"
+    },
+    {
+      "ownerPath": "SURFACES.surfaceRoles.control",
+      "tier": "control",
+      "reason": "controles interactivos (formulario/accion/seleccion); la raiz tier.control.* existe con derivationDebt y ley"
+    },
+    {
+      "ownerPath": "SURFACES.surfaceRoles.inset",
+      "tier": "base",
+      "reason": "nivel canvas (tinta global, fondo global, separador sin calificar); heads tier.base.* adjudicados en la regla de generalidad"
+    },
+    {
+      "ownerPath": "SURFACES.surfaceRoles.panel",
+      "tier": "page",
+      "reason": "marco/estructura de pagina y superficies de contenido en flujo; heads tier.page.* = --ds-sidebar-*"
+    },
+    {
+      "ownerPath": "SURFACES.surfaceRoles.shell",
+      "tier": "page",
+      "reason": "marco/estructura de pagina y superficies de contenido en flujo; heads tier.page.* = --ds-sidebar-*"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.breadcrumb",
+      "tier": "page",
+      "reason": "marco/estructura de pagina y superficies de contenido en flujo; heads tier.page.* = --ds-sidebar-*; la variante de capa OVERLAY de la familia es la MISMA superficie logica (el tier describe la superficie, no la capa de render) — espejo de su homologa CHROME/SURFACES"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.cardComponent",
+      "tier": "raised",
+      "reason": "superficie elevada (tarjeta); head tier.raised.bg = --ds-surface-card; la variante de capa OVERLAY de la familia es la MISMA superficie logica (el tier describe la superficie, no la capa de render) — espejo de su homologa CHROME/SURFACES"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.collectionCard",
+      "tier": "raised",
+      "reason": "superficie elevada (tarjeta); head tier.raised.bg = --ds-surface-card; la variante de capa OVERLAY de la familia es la MISMA superficie logica (el tier describe la superficie, no la capa de render) — espejo de su homologa CHROME/SURFACES"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.compactCard",
+      "tier": "raised",
+      "reason": "superficie elevada (tarjeta); head tier.raised.bg = --ds-surface-card; la variante de capa OVERLAY de la familia es la MISMA superficie logica (el tier describe la superficie, no la capa de render) — espejo de su homologa CHROME/SURFACES"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.controls.autocomplete",
+      "tier": "control",
+      "reason": "controles interactivos (formulario/accion/seleccion); la raiz tier.control.* existe con derivationDebt y ley; la variante de capa OVERLAY de la familia es la MISMA superficie logica (el tier describe la superficie, no la capa de render) — espejo de su homologa CHROME/SURFACES"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.controls.buttonDefault",
+      "tier": "control",
+      "reason": "controles interactivos (formulario/accion/seleccion); la raiz tier.control.* existe con derivationDebt y ley; la variante de capa OVERLAY de la familia es la MISMA superficie logica (el tier describe la superficie, no la capa de render) — espejo de su homologa CHROME/SURFACES"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.controls.buttonError",
+      "tier": "control",
+      "reason": "controles interactivos (formulario/accion/seleccion); la raiz tier.control.* existe con derivationDebt y ley; la variante de capa OVERLAY de la familia es la MISMA superficie logica (el tier describe la superficie, no la capa de render) — espejo de su homologa CHROME/SURFACES"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.controls.buttonGhost",
+      "tier": "control",
+      "reason": "controles interactivos (formulario/accion/seleccion); la raiz tier.control.* existe con derivationDebt y ley; la variante de capa OVERLAY de la familia es la MISMA superficie logica (el tier describe la superficie, no la capa de render) — espejo de su homologa CHROME/SURFACES"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.controls.buttonLink",
+      "tier": "control",
+      "reason": "controles interactivos (formulario/accion/seleccion); la raiz tier.control.* existe con derivationDebt y ley; la variante de capa OVERLAY de la familia es la MISMA superficie logica (el tier describe la superficie, no la capa de render) — espejo de su homologa CHROME/SURFACES"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.controls.buttonPrimary",
+      "tier": "control",
+      "reason": "controles interactivos (formulario/accion/seleccion); la raiz tier.control.* existe con derivationDebt y ley; la variante de capa OVERLAY de la familia es la MISMA superficie logica (el tier describe la superficie, no la capa de render) — espejo de su homologa CHROME/SURFACES"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.controls.buttonSecondary",
+      "tier": "control",
+      "reason": "controles interactivos (formulario/accion/seleccion); la raiz tier.control.* existe con derivationDebt y ley; la variante de capa OVERLAY de la familia es la MISMA superficie logica (el tier describe la superficie, no la capa de render) — espejo de su homologa CHROME/SURFACES"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.controls.buttonText",
+      "tier": "control",
+      "reason": "controles interactivos (formulario/accion/seleccion); la raiz tier.control.* existe con derivationDebt y ley; la variante de capa OVERLAY de la familia es la MISMA superficie logica (el tier describe la superficie, no la capa de render) — espejo de su homologa CHROME/SURFACES"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.controls.disabled",
+      "tier": "control",
+      "reason": "controles interactivos (formulario/accion/seleccion); la raiz tier.control.* existe con derivationDebt y ley; la variante de capa OVERLAY de la familia es la MISMA superficie logica (el tier describe la superficie, no la capa de render) — espejo de su homologa CHROME/SURFACES"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.controls.form",
+      "tier": "control",
+      "reason": "controles interactivos (formulario/accion/seleccion); la raiz tier.control.* existe con derivationDebt y ley; la variante de capa OVERLAY de la familia es la MISMA superficie logica (el tier describe la superficie, no la capa de render) — espejo de su homologa CHROME/SURFACES"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.controls.input",
+      "tier": "control",
+      "reason": "controles interactivos (formulario/accion/seleccion); la raiz tier.control.* existe con derivationDebt y ley; la variante de capa OVERLAY de la familia es la MISMA superficie logica (el tier describe la superficie, no la capa de render) — espejo de su homologa CHROME/SURFACES"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.controls.input.addon",
+      "tier": "control",
+      "reason": "controles interactivos (formulario/accion/seleccion); la raiz tier.control.* existe con derivationDebt y ley; la variante de capa OVERLAY de la familia es la MISMA superficie logica (el tier describe la superficie, no la capa de render) — espejo de su homologa CHROME/SURFACES"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.controls.input.affix",
+      "tier": "control",
+      "reason": "controles interactivos (formulario/accion/seleccion); la raiz tier.control.* existe con derivationDebt y ley; la variante de capa OVERLAY de la familia es la MISMA superficie logica (el tier describe la superficie, no la capa de render) — espejo de su homologa CHROME/SURFACES"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.controls.input.clear",
+      "tier": "control",
+      "reason": "controles interactivos (formulario/accion/seleccion); la raiz tier.control.* existe con derivationDebt y ley; la variante de capa OVERLAY de la familia es la MISMA superficie logica (el tier describe la superficie, no la capa de render) — espejo de su homologa CHROME/SURFACES"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.controls.input.filled",
+      "tier": "control",
+      "reason": "controles interactivos (formulario/accion/seleccion); la raiz tier.control.* existe con derivationDebt y ley; la variante de capa OVERLAY de la familia es la MISMA superficie logica (el tier describe la superficie, no la capa de render) — espejo de su homologa CHROME/SURFACES"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.controls.input.readOnly",
+      "tier": "control",
+      "reason": "controles interactivos (formulario/accion/seleccion); la raiz tier.control.* existe con derivationDebt y ley; la variante de capa OVERLAY de la familia es la MISMA superficie logica (el tier describe la superficie, no la capa de render) — espejo de su homologa CHROME/SURFACES"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.controls.inputNumber",
+      "tier": "control",
+      "reason": "controles interactivos (formulario/accion/seleccion); la raiz tier.control.* existe con derivationDebt y ley; la variante de capa OVERLAY de la familia es la MISMA superficie logica (el tier describe la superficie, no la capa de render) — espejo de su homologa CHROME/SURFACES"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.controls.radio",
+      "tier": "control",
+      "reason": "controles interactivos (formulario/accion/seleccion); la raiz tier.control.* existe con derivationDebt y ley; la variante de capa OVERLAY de la familia es la MISMA superficie logica (el tier describe la superficie, no la capa de render) — espejo de su homologa CHROME/SURFACES"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.controls.segmented",
+      "tier": "control",
+      "reason": "controles interactivos (formulario/accion/seleccion); la raiz tier.control.* existe con derivationDebt y ley; la variante de capa OVERLAY de la familia es la MISMA superficie logica (el tier describe la superficie, no la capa de render) — espejo de su homologa CHROME/SURFACES"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.controls.select",
+      "tier": "control",
+      "reason": "controles interactivos (formulario/accion/seleccion); la raiz tier.control.* existe con derivationDebt y ley; la variante de capa OVERLAY de la familia es la MISMA superficie logica (el tier describe la superficie, no la capa de render) — espejo de su homologa CHROME/SURFACES"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.controls.switch",
+      "tier": "control",
+      "reason": "controles interactivos (formulario/accion/seleccion); la raiz tier.control.* existe con derivationDebt y ley; la variante de capa OVERLAY de la familia es la MISMA superficie logica (el tier describe la superficie, no la capa de render) — espejo de su homologa CHROME/SURFACES"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.controls.textarea",
+      "tier": "control",
+      "reason": "controles interactivos (formulario/accion/seleccion); la raiz tier.control.* existe con derivationDebt y ley; la variante de capa OVERLAY de la familia es la MISMA superficie logica (el tier describe la superficie, no la capa de render) — espejo de su homologa CHROME/SURFACES"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.controls.transfer",
+      "tier": "control",
+      "reason": "controles interactivos (formulario/accion/seleccion); la raiz tier.control.* existe con derivationDebt y ley; la variante de capa OVERLAY de la familia es la MISMA superficie logica (el tier describe la superficie, no la capa de render) — espejo de su homologa CHROME/SURFACES"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.controls.upload",
+      "tier": "control",
+      "reason": "controles interactivos (formulario/accion/seleccion); la raiz tier.control.* existe con derivationDebt y ley; la variante de capa OVERLAY de la familia es la MISMA superficie logica (el tier describe la superficie, no la capa de render) — espejo de su homologa CHROME/SURFACES"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.drawer",
+      "tier": "overlay",
+      "reason": "capa flotante (modal/drawer/popover/dropdown/tooltip/toast); heads tier.overlay.* = --ds-material-overlay-*; la variante de capa OVERLAY de la familia es la MISMA superficie logica (el tier describe la superficie, no la capa de render) — espejo de su homologa CHROME/SURFACES"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.dropdown",
+      "tier": "overlay",
+      "reason": "capa flotante (modal/drawer/popover/dropdown/tooltip/toast); heads tier.overlay.* = --ds-material-overlay-*; la variante de capa OVERLAY de la familia es la MISMA superficie logica (el tier describe la superficie, no la capa de render) — espejo de su homologa CHROME/SURFACES"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.filterPill",
+      "tier": "control",
+      "reason": "controles interactivos (formulario/accion/seleccion); la raiz tier.control.* existe con derivationDebt y ley; la variante de capa OVERLAY de la familia es la MISMA superficie logica (el tier describe la superficie, no la capa de render) — espejo de su homologa CHROME/SURFACES"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.floatButton",
+      "tier": "control",
+      "reason": "controles interactivos (formulario/accion/seleccion); la raiz tier.control.* existe con derivationDebt y ley; la variante de capa OVERLAY de la familia es la MISMA superficie logica (el tier describe la superficie, no la capa de render) — espejo de su homologa CHROME/SURFACES"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.layout",
+      "tier": "page",
+      "reason": "marco/estructura de pagina y superficies de contenido en flujo; heads tier.page.* = --ds-sidebar-*; la variante de capa OVERLAY de la familia es la MISMA superficie logica (el tier describe la superficie, no la capa de render) — espejo de su homologa CHROME/SURFACES"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.list",
+      "tier": "page",
+      "reason": "marco/estructura de pagina y superficies de contenido en flujo; heads tier.page.* = --ds-sidebar-*; la variante de capa OVERLAY de la familia es la MISMA superficie logica (el tier describe la superficie, no la capa de render) — espejo de su homologa CHROME/SURFACES"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.listingGrid",
+      "tier": "page",
+      "reason": "marco/estructura de pagina y superficies de contenido en flujo; heads tier.page.* = --ds-sidebar-*; la variante de capa OVERLAY de la familia es la MISMA superficie logica (el tier describe la superficie, no la capa de render) — espejo de su homologa CHROME/SURFACES"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.message",
+      "tier": "overlay",
+      "reason": "capa flotante (modal/drawer/popover/dropdown/tooltip/toast); heads tier.overlay.* = --ds-material-overlay-*; la variante de capa OVERLAY de la familia es la MISMA superficie logica (el tier describe la superficie, no la capa de render) — espejo de su homologa CHROME/SURFACES"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.metricCard",
+      "tier": "raised",
+      "reason": "superficie elevada (tarjeta); head tier.raised.bg = --ds-surface-card; la variante de capa OVERLAY de la familia es la MISMA superficie logica (el tier describe la superficie, no la capa de render) — espejo de su homologa CHROME/SURFACES"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.modal",
+      "tier": "overlay",
+      "reason": "capa flotante (modal/drawer/popover/dropdown/tooltip/toast); heads tier.overlay.* = --ds-material-overlay-*; la variante de capa OVERLAY de la familia es la MISMA superficie logica (el tier describe la superficie, no la capa de render) — espejo de su homologa CHROME/SURFACES"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.pagination",
+      "tier": "control",
+      "reason": "controles interactivos (formulario/accion/seleccion); la raiz tier.control.* existe con derivationDebt y ley; la variante de capa OVERLAY de la familia es la MISMA superficie logica (el tier describe la superficie, no la capa de render) — espejo de su homologa CHROME/SURFACES"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.popover",
+      "tier": "overlay",
+      "reason": "capa flotante (modal/drawer/popover/dropdown/tooltip/toast); heads tier.overlay.* = --ds-material-overlay-*; la variante de capa OVERLAY de la familia es la MISMA superficie logica (el tier describe la superficie, no la capa de render) — espejo de su homologa CHROME/SURFACES"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.premiumCard",
+      "tier": "raised",
+      "reason": "superficie elevada (tarjeta); head tier.raised.bg = --ds-surface-card; la variante de capa OVERLAY de la familia es la MISMA superficie logica (el tier describe la superficie, no la capa de render) — espejo de su homologa CHROME/SURFACES"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.search",
+      "tier": "control",
+      "reason": "controles interactivos (formulario/accion/seleccion); la raiz tier.control.* existe con derivationDebt y ley; la variante de capa OVERLAY de la familia es la MISMA superficie logica (el tier describe la superficie, no la capa de render) — espejo de su homologa CHROME/SURFACES"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.search.commandPalette",
+      "tier": "overlay",
+      "reason": "capa flotante (modal/drawer/popover/dropdown/tooltip/toast); heads tier.overlay.* = --ds-material-overlay-*; la variante de capa OVERLAY de la familia es la MISMA superficie logica (el tier describe la superficie, no la capa de render) — espejo de su homologa CHROME/SURFACES"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.shell",
+      "tier": "page",
+      "reason": "marco/estructura de pagina y superficies de contenido en flujo; heads tier.page.* = --ds-sidebar-*; la variante de capa OVERLAY de la familia es la MISMA superficie logica (el tier describe la superficie, no la capa de render) — espejo de su homologa CHROME/SURFACES"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.sidebar",
+      "tier": "page",
+      "reason": "marco/estructura de pagina y superficies de contenido en flujo; heads tier.page.* = --ds-sidebar-*; la variante de capa OVERLAY de la familia es la MISMA superficie logica (el tier describe la superficie, no la capa de render) — espejo de su homologa CHROME/SURFACES"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.signalCard",
+      "tier": "raised",
+      "reason": "superficie elevada (tarjeta); head tier.raised.bg = --ds-surface-card; la variante de capa OVERLAY de la familia es la MISMA superficie logica (el tier describe la superficie, no la capa de render) — espejo de su homologa CHROME/SURFACES"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.steps",
+      "tier": "page",
+      "reason": "marco/estructura de pagina y superficies de contenido en flujo; heads tier.page.* = --ds-sidebar-*; la variante de capa OVERLAY de la familia es la MISMA superficie logica (el tier describe la superficie, no la capa de render) — espejo de su homologa CHROME/SURFACES"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.table",
+      "tier": "page",
+      "reason": "marco/estructura de pagina y superficies de contenido en flujo; heads tier.page.* = --ds-sidebar-*; la variante de capa OVERLAY de la familia es la MISMA superficie logica (el tier describe la superficie, no la capa de render) — espejo de su homologa CHROME/SURFACES"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.tabs",
+      "tier": "control",
+      "reason": "controles interactivos (formulario/accion/seleccion); la raiz tier.control.* existe con derivationDebt y ley; la variante de capa OVERLAY de la familia es la MISMA superficie logica (el tier describe la superficie, no la capa de render) — espejo de su homologa CHROME/SURFACES"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.tallCard",
+      "tier": "raised",
+      "reason": "superficie elevada (tarjeta); head tier.raised.bg = --ds-surface-card; la variante de capa OVERLAY de la familia es la MISMA superficie logica (el tier describe la superficie, no la capa de render) — espejo de su homologa CHROME/SURFACES"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.workspaceCard",
+      "tier": "raised",
+      "reason": "superficie elevada (tarjeta); head tier.raised.bg = --ds-surface-card; la variante de capa OVERLAY de la familia es la MISMA superficie logica (el tier describe la superficie, no la capa de render) — espejo de su homologa CHROME/SURFACES"
+    },
+    {
+      "ownerPath": "OVERLAY.surfaces.surfaceRoles.card",
+      "tier": "raised",
+      "reason": "superficie elevada (tarjeta); head tier.raised.bg = --ds-surface-card; la variante de capa OVERLAY de la familia es la MISMA superficie logica (el tier describe la superficie, no la capa de render) — espejo de su homologa CHROME/SURFACES"
+    },
+    {
+      "ownerPath": "OVERLAY.surfaces.surfaceRoles.control",
+      "tier": "control",
+      "reason": "controles interactivos (formulario/accion/seleccion); la raiz tier.control.* existe con derivationDebt y ley; la variante de capa OVERLAY de la familia es la MISMA superficie logica (el tier describe la superficie, no la capa de render) — espejo de su homologa CHROME/SURFACES"
+    },
+    {
+      "ownerPath": "OVERLAY.surfaces.surfaceRoles.inset",
+      "tier": "base",
+      "reason": "nivel canvas (tinta global, fondo global, separador sin calificar); heads tier.base.* adjudicados en la regla de generalidad; la variante de capa OVERLAY de la familia es la MISMA superficie logica (el tier describe la superficie, no la capa de render) — espejo de su homologa CHROME/SURFACES"
+    },
+    {
+      "ownerPath": "OVERLAY.surfaces.surfaceRoles.panel",
+      "tier": "page",
+      "reason": "marco/estructura de pagina y superficies de contenido en flujo; heads tier.page.* = --ds-sidebar-*; la variante de capa OVERLAY de la familia es la MISMA superficie logica (el tier describe la superficie, no la capa de render) — espejo de su homologa CHROME/SURFACES"
+    },
+    {
+      "ownerPath": "OVERLAY.surfaces.surfaceRoles.shell",
+      "tier": "page",
+      "reason": "marco/estructura de pagina y superficies de contenido en flujo; heads tier.page.* = --ds-sidebar-*; la variante de capa OVERLAY de la familia es la MISMA superficie logica (el tier describe la superficie, no la capa de render) — espejo de su homologa CHROME/SURFACES"
+    }
+  ]
+}

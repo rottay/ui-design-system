@@ -13,8 +13,8 @@
       "reason": "Hojas autoradas que ningun docblock cubre. Una hoja sin domicilio es exactamente lo que la ley F4A prohibe ('cero keypaths sin domicilio'). Decrece-solo hasta cero."
     },
     "rowsWithoutRootAttribution": {
-      "value": 3378,
-      "reason": "LA DEUDA CENTRAL DEL FRENTE, medida por primera vez. El catalogo publica CUANTOS canales regenera cada raiz, nunca CUALES: la salida por canal del clasificador de F4A no quedo persistida, asi que estos slots emiten canal pero no se les puede atribuir raiz sin inventarla. Cada una de estas filas cae a R5 por diseno. Baja cuando la membresia por canal exista."
+      "value": 1707,
+      "reason": "Re-anclado UNA vez en la cohorte 1 (2026-08-27): 3378 -> 1707. ES MEJORA DE INSTRUMENTO, NO HALLAZGO NUEVO, y por eso la ley lo admite. La causa es una sola y esta nombrada: la membresia canal->raiz se persistio en manifest/generated/root-membership.json y el inventario la consulta. Aritmetica: de los 1610 canales, 36 ganan raiz por cabeza declarada, 295 por fallback declarado por el autor del skin y 422 por la tabla owner-tiers del DT (lote 1, 114 owners adjudicados de 256 censados); en filas del inventario eso lleva rowsWithRoot de 107 a 1771. Los otros cuatro contadores quedaron QUIETOS y se verifico uno por uno (unassignedRows 297, untaggedRows 25, expressionsCarryingLiteral 71, literalPinsOnDeclaredHead 20): si alguno se hubiera movido seria hallazgo y no se re-ancla. Ancla previa: 3378, producida por la cohorte 0. Decrece-solo desde aqui."
     },
     "expressionsCarryingLiteral": {
       "value": 71,
@@ -26,5 +26,5 @@
       "reason": "Medido cruzando css-edges.json.literalPins (1919) contra roots[].channel. NO es todavia el detector de sombra de la ley 4(a): un literal SOBRE la cabeza declarada es, muchas veces, la casa legitima de la semilla. El detector completo -- un literal en capa INFERIOR que reexpresa una decision que la raiz ya carga -- necesita la membresia por canal que hoy no existe (rowsWithoutRootAttribution). Se ancla como observacion, y el lote del gate decide su forma."
     }
   },
-  "reading": "Sobre 3656 filas: 760 ya colapsadas (R1), 26 colapsables con raiz y ley citada (R2), 0 variantes por vocabulario cerrado (R3), 263 pro/expert (R4) y 2607 en cola de adjudicacion (R5). El R5 no es un cajon de sastre sino la consecuencia medida de la deuda de membresia: 3378 de esas filas no tienen raiz atribuible porque nadie persistio cual raiz regenera cual canal. R3 en cero es un hallazgo, no un hueco del instrumento: ningun tema autora hoy el NOMBRE de un stop donde una raiz gobernada lo aceptaria -- autoran el valor ya resuelto."
+  "reading": "Sobre 3656 filas: 760 ya colapsadas (R1), 906 colapsables con raiz y ley citada (R2), 0 variantes por vocabulario cerrado (R3), 205 pro/expert (R4) y 1785 en cola de adjudicacion (R5). R2 paso de 26 a 906 contra un piso de aceptacion de 412 computado sin adjudicar nada; el crecimiento es la membresia persistida, no una regla mas floja -- las cinco reglas R1..R5 no cambiaron una linea. Las 1707 filas que siguen sin raiz atribuible son la deuda restante y tienen tres motivos medidos: 619 canales cuyo owner no esta adjudicado todavia, 185 cuya combinacion tier.propiedad NO EXISTE como raiz en el catalogo (shadow 78, padding 31, height/width/size/gap/ring/opacity/weight/radius/duration el resto) y 53 cuya hoja no decodifica una propiedad del vocabulario cerrado."
 }

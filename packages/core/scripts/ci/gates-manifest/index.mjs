@@ -527,6 +527,23 @@ export const CI_GATES = Object.freeze([
   // vacio que pasa el --check byte a byte contra su propia salida vacia. Los
   // drills plantan el arbol sintetico donde dos slots comparten valor y raiz
   // distinta -- la coincidencia textual no puede volver a ser evidencia.
+  // COHORTE 1: la membresia canal->raiz persistida. Va ANTES del inventario en
+  // la cadena y tambien aca, porque el inventario la CONSULTA: un orden al
+  // reves dejaria al inventario leyendo una membresia de la corrida anterior.
+  // El drill primero, por la razon de siempre y por una propia: la regla de
+  // admision de la tabla es por CONCORDANCIA de tier, y una regla de
+  // concordancia que dejo de rechazar el desacuerdo atribuye de mas en
+  // silencio -- los tres drills de V3 van juntos y ninguno alcanza solo.
+  {
+    id: 'root-membership-drill',
+    run: ['node', '--test', 'scripts/tokens/root-membership/index.test.mjs'],
+    blocking: true,
+  },
+  {
+    id: 'root-membership',
+    run: ['node', 'scripts/tokens/root-membership/index.mjs', '--check'],
+    blocking: true,
+  },
   {
     id: 'slot-inventory-drill',
     run: ['node', '--test', 'scripts/tokens/slot-inventory/index.test.mjs'],

@@ -108,13 +108,21 @@ const THEME_OBJECT = {
   surfaces: { mystery: 'var(--ds-mystery)' },
 };
 
-async function buildSynthetic({ theme = THEME_OBJECT, catalog = SYNTHETIC_CATALOG } = {}) {
+/**
+ * Los drills sinteticos corren el modo `catalog-heads-only` A PROPOSITO y por
+ * nombre: es un modo de produccion vivo (el que usa `root-membership` para
+ * construirse) y es el unico en el que estas aserciones de cabeza compartida y
+ * de atribucion por cabeza tienen sujeto. El modo con membresia tiene sus
+ * propios drills mas abajo.
+ */
+async function buildSynthetic({ theme = THEME_OBJECT, catalog = SYNTHETIC_CATALOG, membership = 'none' } = {}) {
   return buildInventory({
     arm: syntheticArm({ demo: theme }),
     catalog,
     controls: SYNTHETIC_CONTROLS,
     sources: { demo: THEME_SOURCE },
     overrideTokens: new Set(),
+    membership,
   });
 }
 
@@ -285,4 +293,57 @@ test('todo scope tageado del arbol real cubre al menos una hoja evaluada', async
   assert.equal(doc.stats.unmappedTagScopes, 0, JSON.stringify(doc.unmappedTagScopes.slice(0, 5)));
   assert.equal(doc.stats.compileFailures, 0);
   assert.equal(doc.stats.metadataRows, doc.stats.metadataRosterSize);
+});
+
+
+/* ── 10. el modo CON membresía ───────────────────────────────────────────── */
+
+test('con membresia, la fila toma la raiz y la via que la membresia ya resolvio', async () => {
+  const membership = { rows: [
+    { channel: '--ds-page-bg', rootId: 'tier.page.bg', via: 'governed-owner-table' },
+    { channel: '--ds-untraced', rootId: 'tier.raised.bg', via: 'declared-fallback' },
+  ] };
+  const doc = await buildSynthetic({ membership });
+  assert.equal(doc.provenance.membershipSource, 'manifest/generated/root-membership.json');
+  const bg = doc.rows.find((row) => row.slotId === 'demo:THEME.chrome.sidebar.bg');
+  assert.equal(bg.rootId, 'tier.page.bg');
+  assert.equal(bg.rootAttribution, 'governed-owner-table');
+  const mystery = doc.rows.find((row) => row.slotId === 'demo:THEME.surfaces.mystery');
+  assert.equal(mystery.rootId, 'tier.raised.bg');
+  assert.equal(mystery.rootAttribution, 'declared-fallback');
+});
+
+test('un slot que abarca DOS raices no se atribuye a ninguna', async () => {
+  const membership = { rows: [
+    { channel: '--ds-page-bg', rootId: 'tier.page.bg', via: 'head-exact' },
+    { channel: '--ds-button-radius', rootId: 'shape.button', via: 'head-exact' },
+  ] };
+  const theme = { ...THEME_OBJECT, chrome: { sidebar: { bg: '#ffffff' }, controls: { radius: '#ffffff' } } };
+  // Un solo slot que mueve los dos canales: se planta cambiando el compilador.
+  const arm = {
+    themes: { demo: theme },
+    provenance: { compilerModule: 'synthetic', compilerExport: 'synthetic', themesModule: 'synthetic', freshnessProven: false },
+    compile: ({ brandTheme }) => ({
+      cssVariables: {
+        '--ds-page-bg': String(brandTheme.chrome?.sidebar?.bg ?? ''),
+        '--ds-button-radius': String(brandTheme.chrome?.sidebar?.bg ?? ''),
+      },
+      modeBlocks: [], personality: {}, tokenOverrides: {},
+    }),
+  };
+  const doc = await buildInventory({
+    arm, catalog: SYNTHETIC_CATALOG, controls: SYNTHETIC_CONTROLS,
+    sources: { demo: THEME_SOURCE }, overrideTokens: new Set(), membership,
+  });
+  const row = doc.rows.find((item) => item.slotId === 'demo:THEME.chrome.sidebar.bg');
+  assert.equal(row.rootId, null);
+  assert.equal(row.rootAttribution, 'slot-spans-several-roots');
+  assert.equal(row.rule, 'R5');
+});
+
+test('el modo sin membresia se pide por nombre: leerla por accidente es imposible', async () => {
+  const { readMembership } = await import('./index.mjs');
+  assert.throws(() => readMembership('/no/existe/root-membership.json'), /no existe/);
+  const doc = await buildSynthetic();
+  assert.equal(doc.provenance.membershipSource, 'catalog-heads-only');
 });

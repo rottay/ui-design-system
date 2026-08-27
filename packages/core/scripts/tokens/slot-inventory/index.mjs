@@ -27,7 +27,7 @@
  * valor resuelto de ese stop no clasifica nada.
  *
  * ATRIBUCION DE RAIZ, FAIL-CLOSED. El catalogo publica CUANTOS canales
- * regenera cada raiz (`collapses.total`), nunca CUALES: la salida por canal del
+ * regenera cada raiz (`collapsesLegacy.total`), nunca CUALES: la salida por canal del
  * clasificador constructivo de F4A no quedo persistida en ningun artefacto.
  * Por eso este inventario atribuye raiz SOLO donde el canal ES la cabeza
  * declarada de una raiz (`roots[].channel`), y deja `rootId: null` con motivo
@@ -46,7 +46,7 @@
  * escribe nada.
  */
 import { createHash } from 'node:crypto';
-import { mkdirSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
@@ -234,6 +234,30 @@ export function diffKeys(before, after) {
 }
 
 /**
+ * LA MEMBRESIA PERSISTIDA, o el modo sin ella.
+ *
+ * DOS MODOS EXPLICITOS, NUNCA UN FALLBACK SILENCIOSO. La cadena corre
+ * `root-membership` ANTES que este inventario, y ese productor a su vez llama a
+ * `buildInventory()` para saber que canal emite cada slot. Si este archivo
+ * leyera la membresia incondicionalmente, la primera corrida sobre un arbol
+ * limpio se quedaria esperando un artefacto que todavia no existe -- un ciclo
+ * en tiempo de ejecucion. Por eso el modo se ELIGE y se declara en
+ * `provenance.membershipSource`:
+ *   - `membership: 'none'` -> atribucion por cabeza declarada del catalogo
+ *     unicamente. Es el modo que usa `root-membership` para construirse.
+ *   - por defecto (CLI) -> lee `manifest/generated/root-membership.json` y
+ *     FALLA CERRADO si no esta. Un inventario que degrada a cabezas-solo sin
+ *     decirlo publicaria 107 filas con raiz y pareceria sano.
+ */
+export function membershipIndex(membership) {
+  const byChannel = new Map();
+  for (const row of membership?.rows ?? []) {
+    if (row.rootId) byChannel.set(row.channel, { rootId: row.rootId, via: row.via });
+  }
+  return byChannel;
+}
+
+/**
  * Cabeza declarada -> raiz. Fail-closed: una cabeza reclamada por dos raices no
  * atribuye ninguna (`null` con motivo), porque elegir seria inventar.
  */
@@ -251,6 +275,21 @@ export function headChannelIndex(catalog) {
     else ambiguous.set(channel, roots.sort());
   }
   return { index, ambiguous };
+}
+
+/**
+ * Lee la membresia persistida. FALLA CERRADO si no esta: el modo sin membresia
+ * existe, pero se pide por nombre (`membership: 'none'`), nunca por accidente.
+ */
+export function readMembership(path) {
+  if (!existsSync(path)) {
+    throw new Error(
+      `slot-inventory: ${path} no existe. La cadena corre root-membership ANTES que este `
+      + "inventario. Si de verdad querias el modo sin membresia, pedilo por nombre: "
+      + "buildInventory({ membership: 'none' }).",
+    );
+  }
+  return JSON.parse(readFileSync(path, 'utf8'));
 }
 
 export function readControls(controlsDir = CONTROLS_DIR) {
@@ -387,6 +426,7 @@ export async function buildInventory({
   controls: injectedControls = null,
   sources: injectedSources = null,
   overrideTokens: injectedOverrides = null,
+  membership: injectedMembership = undefined,
 } = {}) {
   const loaded = arm ?? (await loadCompiledArm({ coreRoot }));
   const catalog = injectedCatalog
@@ -396,6 +436,15 @@ export async function buildInventory({
   const controls = injectedControls ?? readControls(join(coreRoot, 'manifest/controls'));
   const overrideTokens = injectedOverrides ?? (await loadOverrideTokens(coreRoot));
   const sources = injectedSources ?? readSources(coreRoot);
+  const membership = injectedMembership === undefined
+    ? readMembership(join(coreRoot, 'manifest/generated/root-membership.json'))
+    : injectedMembership;
+  const membershipSource = membership === 'none' || membership === null
+    ? 'catalog-heads-only'
+    : 'manifest/generated/root-membership.json';
+  const byChannel = membershipSource === 'catalog-heads-only'
+    ? new Map()
+    : membershipIndex(membership);
 
   const rows = [];
   const unmappedTagScopes = [];
@@ -435,22 +484,41 @@ export async function buildInventory({
       }
 
       const channelNames = [...new Set(emitted.map((key) => key.split('|')[1]))];
-      const heads = channelNames.filter((channel) => headIndex.has(channel));
-      const ambiguousHeads = channelNames.filter((channel) => ambiguous.has(channel));
-      const headRootIds = [...new Set(heads.map((channel) => headIndex.get(channel)))].sort();
       let rootId = null;
       let rootAttribution;
-      if (heads.length === 1) {
-        rootId = headIndex.get(heads[0]);
-        rootAttribution = 'head-channel-exact';
-      } else if (heads.length > 1) {
-        rootAttribution = 'multiple-head-channels';
-      } else if (ambiguousHeads.length > 0) {
-        rootAttribution = 'head-channel-claimed-by-several-roots';
-      } else if (channelNames.length === 0) {
-        rootAttribution = 'emits-no-channel';
+      let headRootIds = [];
+      if (membershipSource !== 'catalog-heads-only') {
+        /* La membresia ya resolvio cabezas compartidas, fallbacks declarados y
+         * la tabla adjudicada. Aca solo queda la ambiguedad PROPIA del slot: un
+         * slot que mueve canales de dos raices distintas no pertenece a una. */
+        const attributed = channelNames.map((channel) => byChannel.get(channel)).filter(Boolean);
+        headRootIds = [...new Set(attributed.map((entry) => entry.rootId))].sort();
+        if (headRootIds.length === 1) {
+          rootId = headRootIds[0];
+          rootAttribution = attributed.find((entry) => entry.rootId === rootId).via;
+        } else if (headRootIds.length > 1) {
+          rootAttribution = 'slot-spans-several-roots';
+        } else if (channelNames.length === 0) {
+          rootAttribution = 'emits-no-channel';
+        } else {
+          rootAttribution = 'no-persisted-membership';
+        }
       } else {
-        rootAttribution = 'no-persisted-membership';
+        const heads = channelNames.filter((channel) => headIndex.has(channel));
+        const ambiguousHeads = channelNames.filter((channel) => ambiguous.has(channel));
+        headRootIds = [...new Set(heads.map((channel) => headIndex.get(channel)))].sort();
+        if (heads.length === 1) {
+          rootId = headIndex.get(heads[0]);
+          rootAttribution = 'head-channel-exact';
+        } else if (heads.length > 1) {
+          rootAttribution = 'multiple-head-channels';
+        } else if (ambiguousHeads.length > 0) {
+          rootAttribution = 'head-channel-claimed-by-several-roots';
+        } else if (channelNames.length === 0) {
+          rootAttribution = 'emits-no-channel';
+        } else {
+          rootAttribution = 'no-persisted-membership';
+        }
       }
 
       const root = rootId ? rootById.get(rootId) : null;
@@ -524,6 +592,7 @@ export async function buildInventory({
     },
     provenance: {
       ...loaded.provenance,
+      membershipSource,
       catalog: 'manifest/cascade/root-catalog.json',
       catalogRoots: (catalog.roots ?? []).length,
       tagParser: 'manifest/variant-parity/index.mjs (parseDocblocks + pathIndex + analyzeSource)',
