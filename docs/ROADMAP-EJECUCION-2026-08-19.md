@@ -323,10 +323,18 @@ puede usarse para decidir la semántica de una raíz, reparar paridad de themes 
 ocultar un control que no baja por ambos transportes. Su trabajo es trasladar
 pintura ya gobernada y después elevar craft sobre una cascada estable.
 
-- Clasificación mecánica estable (confirmada): **17 dinámicas** (resolvers de
-  eje en Button/Select/Input/Badge/Avatar — mecanismo legítimo) y **209
-  estáticas migrables**. Regex: `var\(--ds-[a-z0-9-]*\$\{`. El ratchet se ancla
-  solo en las estáticas.
+- Clasificación medida del piloto v3 (2026-08-27; SUPERSEDE a la cifra
+  histórica "17 dinámicas / 209 estáticas migrables"): el regex
+  `var\(--ds-[a-z0-9-]*\$\{` mide **construcción de referencias, no deuda de
+  pintura**. Universo medido: **97 ocurrencias de producción** = 37 residuo de
+  migración ya hecha + 31 dinámicas legítimas por MECANISMO (resolver
+  prop→canal; 17→31 al clasificar por mecanismo y no por archivo) + 11
+  accesores públicos que no pintan + 7 indirección arquitectónica justificada
+  (adjudicadas: NO se migran) + 4 dominio no cerrado + 2 infraestructura de
+  compilador + 2 piloto verificado + 3 sin verificar en profundidad → la
+  **superficie F3 genuina es de UN dígito** (ver asiento del piloto en §13).
+  El progreso F3 se ancla en la superficie genuina medida, no en el pool del
+  regex.
 - Pasada de craft por familia contra raíces (Quiet Premium).
 - ~~Cerrar deuda chart-series~~ → se mueve a F5 (depende de la absorción de
   `appearance/`, no de skins).
@@ -1386,7 +1394,7 @@ paso de esa cadena está autorizado por este checkpoint.
 | H-1 brazo estático con baseline | 100%; `base` del vertical publicado sólo en el brazo estático; preaudit Fable `ACCEPT` V1–V5; drills 47/47; los 20 receipts spacing/effect/radius invariantes |
 | F4B | **20/20 controles ASENTADOS — FASE COMPLETA en su forma honesta (2026-08-26)** — 9 `COMPUTED_VERIFIED` (spacing.rhythm, surfaces.effect-intensity, shape.radius-scale, density.mode, responsive.posture, typography.scale, experience.profile, palette.seeds, surfaces.elevation-posture) + 10 `SOURCE_BOUND` (button-style, typography.pairing, sidebar-tone, motion.dial, typography.families, recipe-profile, profiles.expressive, profiles.icon, token-overrides, chrome.anatomy) + `chrome.families` paraguas BY_REFERENCE (`UNKNOWN` a propósito, `SURFACE_REVIEW_DEFERRED_TO_F5`). **0 `SIGHTED_ACCEPTED`.** Cero evidencia alcanzable pendiente: token-overrides cerró con techo estructural documentado (clase CSS-terminal + puerta sellada ⇒ sin camino a pass:true; candidato F5 `F5_INSTRUMENT_SEALED_DOOR_SINGLE_ARM_VERDICT` con 2 condiciones de admisión Fable). Lo que falta para que los SOURCE_BOUND suban (ratificación propertyGroup, calibración de celdas) es F4C/F5. 134 receipts bajo validador v2 (133 válidos; único stale declarado: compound-editorial, `SUPERSEDED_BY_LIVE_FENCE`). **C5 CERRADO (2026-08-26, commits `fd58f8ba4` gate-debt + `44b14f521` correctivo + docs-engineering `46960f2`):** α1 implementado (`derivedChannels` = radio de impacto de 3 seeds; `calibrationChannels` = superficie atribuible de 2, subconjunto fail-closed), cadena derivada re-emitida entera incluyendo el eslabón no enumerado (`producers.json`), gates:ci **89/89 blocking verdes** + 2 excluidos con owner, postaudit Fable ACCEPT (ver asiento de cierre C5) |
 | F2 asimétrico | **FRENTE CERRADO (2026-08-26)** — las 34 raíces asimétricas con disposición escrita y ejecutada: F2A-0 `fb8ff25b6`/`bf21afec2` (censo) · F2A-1 ley de cinco clases adjudicada (preaudit Fable + consenso Opus que corrigió el instrumento) · Lote A `dfc39efcf` · Lote B `2509bdd3d` (T0 `#A8A898`, decisión 17) · Lotes F/F-2 `96b610162`/`fc1b8faf9` · re-medición `6f3fbe90c` · F′ `791f86be6` (ley 19 + gate dial-authority blocking) · F″ `9e57502af` (28 pendings, decisión 20) · anotaciones `0bd953dbc`. Postaudit Fable por lote, Codex en hitos. Pendientes a fases posteriores (ninguno bloquea el cierre): valor del line-height bithire (ruling de diseño del owner), micro-fix C-02 del clear-button de textarea, pregunta sighted del glass sobre backdrop oscuro (F4C), validador cascade-aware y override plano mode-aware (F5), cableado text-page de evnto (35/1/0), 2 gates excluidos que vuelven cuando sus enumeradores existan |
-| F3/F4C/F5-F8 pendientes | 0% del tramo pendiente |
+| F3 | **PILOTO v3 CERRADO (2026-08-27, `b2b2ad82c`)** — criterio de 3 términos probado punta a punta con cero-delta computado (1 sitio, `cell-renderers`); condición Codex del `13px`×3 resuelta por REMOCIÓN (no reproduce ninguna seed 12/14/16; idioma corpus bare ~50:1; fallback inalcanzable); cifras históricas de §6 corregidas (ver asiento §13); postaudit Fable DEFECTS-2 → ACCEPT condicionado cumplido. F4C/F5-F8 pendientes |
 | F9 | 0/5100 celdas aceptadas |
 | Programa completo | estimación prudente **62% realizado** (ingeniería; corregida a la baja tras la revisión Codex 2026-08-27: la enmienda de paridad profunda agregó scope que el 63–65% previo no descontaba); preparación comercial visible ~43%. Cerrar F4A/F4B **no certifica** F9: 0/5100 celdas aceptadas, gate y calibración de celdas propios, aún pendientes |
 
@@ -4559,6 +4567,71 @@ adjudicación DT sometida a preaudit es α1: restaurar `derivedChannels` a sus 3
 seeds reales y mover la superficie de calibración a un campo propio — la
 decisión 15 conserva su INTENT (superficie de calibración estrecha; dominio
 público 290 intacto) y se enmendará su formulación al cerrar C5.
+
+**F3 — PILOTO v3 CERRADO (2026-08-27; commit `b2b2ad82c`; DT Kimi K3 terminal 2
+— sucesión consumada en `1b260cd0c` + `fc5ae8d37` + nota docs del owner
+`ec824e477`; writer Opus; postaudit Fable: DEFECTS-2 con cláusula de ACCEPT
+condicionado — ambas condiciones cumplidas: el perímetro se re-declara en este
+asiento y la cifra del comentario se corrigió a forma robusta).** El piloto
+prueba el criterio de 3 términos punta a punta con cero-delta medido. **Veredicto
+de los dos frenos (queda escrito):** `presence` descalifica (no existe skin
+propio y NO estampa `data-size`); `Skeleton/compound/Button` descalifica — su
+hatch CONSERVA la interpolación en TS (`:201`/`:218`), así que migrar `height`
+no sacaba ningún sitio del pool, y migrarlo de verdad exigía crear un skin
+modern + literales de hoja nuevos, prohibidos por la ley de literales de la
+enmienda. **Ejecutado: `cell-renderers` (1 sitio, el caso de libro):** el mismo
+objeto estampaba `data-size` Y calculaba `fontSize` inline con el mismo valor;
+el TS deja de pintarlo y el skin lo pinta sobre el atributo existente — cero
+stamps nuevos, cero cambio de contrato. **Condición Codex de commit (el
+`13px`×3) resuelta por REMOCIÓN, no por clasificación ni centralización:**
+medido por el DT y reproducido por writer y auditor, el 13px no reproduce la
+seed de NINGUNO de los tres canales que respaldaba (bases 0.75/0.875/1rem =
+12/14/16px) — era un literal defensivo hand-picked, inalcanzable en toda
+configuración soportada (la cascada foundation es dependencia dura del skin
+layer) y minoritario en el corpus (el idioma bare domina ~50:1; la cifra exacta
+depende del criterio de conteo — tres mediciones independientes dieron
+317/469/454-497 — por eso el comentario shipped cita rango+razón y no cifra
+pineada: ley de citas). Centralizar exigía mintear un socket para un valor sin
+seed; clasificarlo canonizaba el hand-pick; la remoción deja CERO literales — la
+forma más conforme con la ley de literales. **Números del cierre:** ratchet
+cascade-wiring 2171→2171; engine-token-audit 822 pendientes sin mover; receipts
+**134/134 frescos** por recomputación fuera de banda del auditor (población
+completa, no muestreo; `artifactSha256` intacto ×134; el compound-editorial
+recuperó frescura de digest por el re-firma — su retiro de `evidenceIds` sigue
+vigente en `manifest/controls/typography.families.json`); barrido fail-continue
+desde gate 0 sobre el árbol commiteado: **91 PASS / 2 SKIP / 0 FAIL**
+(reproducido por el DT tras el reseal, y `gates:ci` 91 blocking verdes por la
+auditora); suite focal `patterns/runtime` **47/47** (writer, DT y auditor);
+drills tooling 90/90 y 217/217 — **nota Fable asentada: las suites de drills NO
+son concurrencia-seguras entre sí (216/1 flaky bajo concurrencia, verde en
+limpio ×2): no correr en paralelo.** **Efecto colateral medido:** la fila
+fantasma `--ds-font-size-` (la lectura interpolada del TSX) muere en el censo —
+página font 71→70 nombres; `--ds-font-size-sm`/`-md` ganan 1 lectura css cada
+uno. **Trinca cross-repo cerrada:** vistas docs-engineering regeneradas y
+commiteadas en su repo (`9f822e8`, SÓLO el subárbol
+`engineering/design-system/tokens/`; el drift preexistente ajeno intacto),
+reconciliation re-proyectada por digest computado (cifras 4669/266 invariantes,
+precedente F″), GAT-07 resellado por el DT (`dfcb1723…`, 2 corridas
+deterministas). **Lección de orden re-asentada (costó un barrido):** el reseal
+GAT-07 y la re-proyección van DESPUÉS de la última regen del writer — se selló
+antes del micro-fix de comentario y la regen lo rompió; la secuencia correcta
+quedó verificada al cierre. **Precisión de método (Opus, adoptada):** un edit
+de comentario en un skin NO restalea receipts por sí solo (el archivo no está en
+sus `sourceFiles`); lo que los restalea es el rebuild que el edit obliga (los
+bundles `styles/*` embeben el comentario). **Perímetro congelado re-declarado
+(condición 1 de Fable):** HEAD base `ec824e477` (nota docs del owner,
+verificada) + porcelain 153 = 149 del writer + 4 del cierre DT (2 artefactos
+gat-07 + seal + reconciliation); ninguna tercera mano. **Diferidos sin cambio**
+(channel-liveness 49 findings, tenant-reachability 10/13, 2 gates excluidos,
+propagación mode-aware de la decisión 18 — todos con dueño F4C/F5 según la
+adjudicación de la puerta de entrada). **Codex §1.4 queda como packet propio
+inmediato** (registry.json y checkpoint.intent.json narran momentos previos a la
+sucesión; su regularización no se mezcló con este commit). **Próximo paso:** ese
+packet de regularización; después la cohorte `Typography/runtime` (7 sitios — el
+residuo que SOMBREA al skin en cada render) con su prueba de cero-delta propia.
+**Ningún segundo lote F3 se abrió antes de este cierre**, como manda la
+adjudicación de la puerta. Porcentaje sin movimiento: **62%** ingeniería / ~43%
+comercial (el piloto es prueba de método, no drenaje de superficie).
 
 **C5 CERRADO + F2A-1 ADJUDICADO (2026-08-26; DT Kimi K3; commits `fd58f8ba4`
 gate-debt, `44b14f521` correctivo C5, docs-engineering `46960f2`; preaudit α1
