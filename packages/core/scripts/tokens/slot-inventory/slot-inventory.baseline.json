@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "law": "Anclas de la COHORTE 0 del frente de normalizacion profunda. DECRECE-SOLO: un contador que SUBE es regresion o cobertura perdida y falla; uno que BAJA falla tambien, con la instruccion de bajar este archivo en el MISMO commit que movio el numero. Se edita A MANO, con revision del DT. JAMAS se re-ancla un hallazgo nuevo: si un contador sube porque aparecio un caso que antes no se detectaba, el arreglo es la fuente, no este archivo.",
+  "producedBy": "Cohorte 0 (2026-08-27), medido por scripts/tokens/slot-inventory/index.mjs sobre manifest/generated/slot-inventory.json. Ninguna cifra de este archivo se cita de prosa: todas salen de stats.* del inventario, que se recomputa en cada corrida.",
+  "unit": "fila del inventario = un SLOT autorado del objeto evaluado de un tema (3656 hoy). NO es la unidad de anotacion de variant-parity (4131 tags @domicile) ni la de canal del catalogo de cascada.",
+  "counters": {
+    "unassignedRows": {
+      "value": 297,
+      "reason": "Bala 3 del owner: 'cero unassigned requeridos o trayectoria cerrada y medida'. Son slots que el tema SI autora y cuyo docblock los domicilia unassigned. Decrece-solo: una cohorte de colapso puede sacarlos, nunca meterlos."
+    },
+    "untaggedRows": {
+      "value": 25,
+      "reason": "Hojas autoradas que ningun docblock cubre. Una hoja sin domicilio es exactamente lo que la ley F4A prohibe ('cero keypaths sin domicilio'). Decrece-solo hasta cero."
+    },
+    "rowsWithoutRootAttribution": {
+      "value": 3378,
+      "reason": "LA DEUDA CENTRAL DEL FRENTE, medida por primera vez. El catalogo publica CUANTOS canales regenera cada raiz, nunca CUALES: la salida por canal del clasificador de F4A no quedo persistida, asi que estos slots emiten canal pero no se les puede atribuir raiz sin inventarla. Cada una de estas filas cae a R5 por diseno. Baja cuando la membresia por canal exista."
+    },
+    "expressionsCarryingLiteral": {
+      "value": 71,
+      "reason": "calc()/clamp() que leen la cascada y ADEMAS llevan un literal adentro: colapso a medias. El caso testigo es calc(13px * var(--ds-type-scale)). Decrece-solo."
+    },
+    "literalPinsOnDeclaredHead": {
+      "value": 20,
+      "ofWhichOnDerivationDebtRoot": 11,
+      "reason": "Medido cruzando css-edges.json.literalPins (1919) contra roots[].channel. NO es todavia el detector de sombra de la ley 4(a): un literal SOBRE la cabeza declarada es, muchas veces, la casa legitima de la semilla. El detector completo -- un literal en capa INFERIOR que reexpresa una decision que la raiz ya carga -- necesita la membresia por canal que hoy no existe (rowsWithoutRootAttribution). Se ancla como observacion, y el lote del gate decide su forma."
+    }
+  },
+  "reading": "Sobre 3656 filas: 760 ya colapsadas (R1), 26 colapsables con raiz y ley citada (R2), 0 variantes por vocabulario cerrado (R3), 263 pro/expert (R4) y 2607 en cola de adjudicacion (R5). El R5 no es un cajon de sastre sino la consecuencia medida de la deuda de membresia: 3378 de esas filas no tienen raiz atribuible porque nadie persistio cual raiz regenera cual canal. R3 en cero es un hallazgo, no un hueco del instrumento: ningun tema autora hoy el NOMBRE de un stop donde una raiz gobernada lo aceptaria -- autoran el valor ya resuelto."
+}

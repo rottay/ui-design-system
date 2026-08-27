@@ -521,6 +521,22 @@ export const CI_GATES = Object.freeze([
     run: ['node', 'scripts/tokens/dial-authority-gate/index.mjs'],
     blocking: true,
   },
+  // COHORTE 0 del frente de normalizacion profunda: el JOIN slot<->canal<->raiz.
+  // El drill va primero porque este inventario se MIDE por diferencia contra el
+  // compilador real, y una medicion que dejo de detectar emite un inventario
+  // vacio que pasa el --check byte a byte contra su propia salida vacia. Los
+  // drills plantan el arbol sintetico donde dos slots comparten valor y raiz
+  // distinta -- la coincidencia textual no puede volver a ser evidencia.
+  {
+    id: 'slot-inventory-drill',
+    run: ['node', '--test', 'scripts/tokens/slot-inventory/index.test.mjs'],
+    blocking: true,
+  },
+  {
+    id: 'slot-inventory',
+    run: ['node', 'scripts/tokens/slot-inventory/index.mjs', '--check'],
+    blocking: true,
+  },
   // Every production script is wired through a declared channel (manifest,
   // lifecycle chain or ci.yml) or it does not exist. This gate is what makes
   // §1.10's "the wiring gate counts all three channels" true.
