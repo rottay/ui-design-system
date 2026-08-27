@@ -221,6 +221,77 @@ consumidores contra una autoridad de theme que F4 tendría que cambiar después.
 La enmienda no cambia la arquitectura decidida: ordena sus dependencias y hace
 explícitas dos puertas de aceptación que el plan anterior dejaba implícitas.
 
+### Enmienda del owner — paridad profunda y normalización real de vertical themes (2026-08-26)
+
+El cierre estructural anterior mediante placeholders no satisface por sí solo
+el producto esperado. “Mismo roster” no significa solamente que una ausencia
+esté comentada: los tres first-party themes deben resolver la misma superficie
+semántica con igual profundidad contractual, preservando valores e identidad
+visual diferentes.
+
+Esta enmienda no interrumpe F2A. Es un criterio bloqueante de entrada y salida
+para F3/F4C.
+
+##### Contrato obligatorio
+
+1. Rottay, BitHire y Evnto tendrán el mismo contrato tipado de seeds, con el
+   mismo inventario, nombres, orden, documentación y unidades. Los valores
+   serán propios de cada vertical.
+2. La salida normalizada de los tres themes tendrá exactamente el mismo
+   inventario de keypaths y canales requeridos. Se permite que un valor sea:
+   - `AUTHORED_SEED`;
+   - `DERIVED`;
+   - `EXPLICIT_INHERIT`, citando su autoridad compartida;
+   - `PRO_EXPERT`, dentro de la allowlist;
+   - `OPTIONAL_DISABLED`, sólo para capabilities realmente opcionales.
+3. `@domicile unassigned` es un estado transitorio de migración. El objetivo
+   terminal es cero `unassigned` sobre la superficie semántica requerida.
+   Un placeholder no cuenta como una vertical diseñada.
+4. Las diferencias entre verticales deben vivir en seeds, variantes, recipes,
+   anatomía, estados, responsive posture e invariantes justificadas; nunca en
+   una repetición accidental de literales de hoja.
+5. Una capacidad opcional puede no estar autorada, pero su disposition debe
+   ser explícita y tipada. No se exige copiar capacidades inaplicables para
+   fabricar simetría falsa.
+6. La precedencia tenant-last ya adjudicada permanece intacta: ninguna
+   decisión vertical puede volver a sombrear un canal público expuesto.
+
+##### Ley de literales y derivación
+
+- Un literal sólo es admisible en la definición superior de una seed,
+  variante o invariante vertical justificada.
+- Todo valor inferior debe derivarse mediante una raíz, alias, `var()`,
+  `calc()`, `color-mix()` o función canónica del compiler.
+- Un leaf no puede repetir un hex, `rgba`, gradiente, sombra, radio, tamaño,
+  duración o mezcla que ya representa una decisión superior.
+- Los aproximadamente 3.275 canales registrados como candidatos de colapso
+  deben adjudicarse y cerrarse; registrarlos no equivale a normalizarlos.
+- No se crea un segundo `foundation` dentro de `brand-themes`.
+- Los CSS de `facade/artifacts` y `styles/*.css` siguen siendo generados:
+  nunca se corrigen manualmente.
+
+##### Gates obligatorios
+
+F4C no puede cerrar hasta demostrar:
+
+1. mismo schema de seeds para los tres themes;
+2. `effectiveSurface.union == effectiveSurface.intersection` para todos los
+   keypaths requeridos;
+3. cero required keypaths silenciosos;
+4. cero `unassigned` requeridos;
+5. cero literales de hoja no allowlisted;
+6. cero repeticiones literales que sombreen una seed o control;
+7. cada literal superviviente clasificado como seed, invariante justificada
+   o Pro/Expert allowlisted;
+8. los 20 controles públicos mantienen canary, negativos y restore exacto;
+9. static y DB producen la misma forma normalizada;
+10. challenge técnico y visual independiente para Rottay, BitHire y Evnto,
+    incluyendo light/dark, responsive, estados, contraste y tenant overrides.
+
+La igualdad exigida es de contrato, profundidad y superficie resuelta; no de
+valores ni de identidad visual. Cada vertical debe terminar deliberadamente
+distinta y premium.
+
 ## 6. F3 — La pintura vive en las skins (posterior a F4A + F4B)
 
 **Gate de entrada:** F4A cerrado, los 20 controles con F4B cerrado y los
@@ -1308,6 +1379,11 @@ F2 dependiente de theme queda explícitamente detrás de F4B. La cola vinculante
 **F4A cerró 14/14 el 2026-08-22** (ver asiento arriba); PRE_F4B tiene
 inventario mecánico pero F4B permanece bloqueado hasta el gate falsable de
 cascade.
+**Enmienda de paridad profunda (dueño, 2026-08-26, asentada verbatim al inicio
+de §6):** criterio bloqueante de entrada y salida para F3/F4C — mismo contrato
+tipado de seeds, mismo inventario de keypaths en la salida normalizada, ley de
+literales y derivación, y los 10 gates obligatorios de cierre F4C. No
+interrumpe F2A.
 F1 permanece correctamente «gobernado», pero no se reinterpretará como
 certificación: el rollup `UNKNOWN` sólo baja con evidencia causal y F9 lo lleva
 a cero.
