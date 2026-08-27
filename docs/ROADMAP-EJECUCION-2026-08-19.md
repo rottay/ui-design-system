@@ -4568,6 +4568,47 @@ seeds reales y mover la superficie de calibración a un campo propio — la
 decisión 15 conserva su INTENT (superficie de calibración estrecha; dominio
 público 290 intacto) y se enmendará su formulación al cerrar C5.
 
+**F3 — MINI-LOTE C-02b CERRADO + ADJUDICACIÓN presence (2026-08-27; commit
+`b24baabe5`; writer Opus; postaudit Fable: ACCEPT, con veredicto sobre la desviación
+de receipts y verificación de la adjudicación presence).** La clearance de
+`textarea.css:91` deja el literal fijo `1.75rem` y **deriva de la geometría que
+reserva**: `offset + action-size × density-scale + 0.125rem` como FALLBACK del canal
+(tenant-last intacto — un tenant que autore `--ds-textarea-clear-clearance` manda).
+Default **byte-idéntico** (0.375+1.25+0.125=1.75rem), extremos del clamp cerrados
+(0.5→1.125≥1.0; 3→4.25≥4.125); el margen residual no escala a propósito (respiro
+absoluto, clasificado en el sitio). La forma superior a la recomendación del ruling
+C-02 (el co-escalado naíf rompía el piso: 0.875 < 1.0 a scale=0.5). **El offset ganó
+su declaración-seed una sola vez** (antes: `0.375rem` duplicado como fallback en dos
+inset; ahora: una seed en el scope compartido, tres lecturas bare — ley de literales
+cumplida en su forma fuerte). **Corrección a la lista de cadena (adoptada):** una seed
+CSS nueva stalea `hooks-manifest.json` — la cadena de cierre incluye `hooks:generate`
+y el re-ancla del ledger reads-adjudication (la fila graduada sale por ley FASE K,
+2607→2606). **Ratchet 2171→2169 escrito POR ORDEN DEL GATE** (decrease-only sigue al
+árbol hacia abajo; razón completa en `rootsExcludedNote`; drill 10/10) — es registro
+de mejora, no re-ancla de hallazgo. Re-pins de contadores cascade-producers con
+aritmética (+1 la seed nueva: 4873/10312/4586) en 13 sitios; 217/217.
+**Desviación con veredicto Fable:** el writer re-firmó 134/134 incluyendo el
+superseded (contra el ruling 2 de C-02) — el lote PASA sin rehacer estado (inocuo,
+idéntico al aceptado en cohorte 2, declarado); **canon reafirmado: 133+1-declarado; el
+próximo lote usa el tool C5 o el skip explícito; una tercera ocurrencia será defecto,
+no nota.** **Adjudicación DT — `presence` DESCALIFICA para F3 (verificada por Fable
+contra fuente):** `presence/index.tsx:107` interpola dato de instancia
+(`${ring * 2}px` — dominio abierto) y `:112` un ratio sin clasificar (`* -0.3`); sin
+skin ni ancla. Migrar exige gobierno nuevo (skin + stamps + socket + clasificación del
+ratio), no traslado de pintura gobernada. **Con esto la superficie F3 genuina medida
+queda DRENADA por completo:** cell-renderers ✓ (piloto), Typography/runtime ✓
+(cohorte 2), Skeleton/Button descalificado (exigía literales nuevos), presence
+descalificado (gobierno nuevo). Números: barrido 91 PASS/2 SKIP/0 FAIL + gates:ci
+91/91 de la auditora; ratchet 2169; receipts en el estado auditado; docs-engineering
+`3db1c0d` (governance→operational del offset); GAT-07 `9dcb2b92…`. **Estado de F3:**
+la migración de pintura agotó su superficie medida; lo que queda del frente es el eje
+craft (§6, pasada Quiet Premium por familia) — su apertura como cohortes espera la
+respuesta Codex del hito (consulta empaquetada 2026-08-27, relevo por el owner) y no
+bloquea los pendientes del owner (line-height bithire: recomendación DT preservar
+1.5385 como ratio seed). Porcentaje: **62%** ingeniería / ~43% comercial — la
+superficie drenada era de un dígito; el movimiento de porcentaje llega con el eje
+craft o con F4C, no con estas cohortes.
+
 **F3 — MINI-LOTE C-02 CERRADO (2026-08-27; commit `a118d3772`; writer Sonnet;
 postaudit Fable: ACCEPT con dos rulings).** El clear-button de
 `skin/textarea.css:211-212` consumía `--ds-input-action-size`/`--ds-input-md-icon-size`
