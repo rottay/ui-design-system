@@ -4568,6 +4568,41 @@ seeds reales y mover la superficie de calibración a un campo propio — la
 decisión 15 conserva su INTENT (superficie de calibración estrecha; dominio
 público 290 intacto) y se enmendará su formulación al cerrar C5.
 
+**F3 — MINI-LOTE C-02 CERRADO (2026-08-27; commit `a118d3772`; writer Sonnet;
+postaudit Fable: ACCEPT con dos rulings).** El clear-button de
+`skin/textarea.css:211-212` consumía `--ds-input-action-size`/`--ds-input-md-icon-size`
+SIN el factor de densidad que sus gemelos cumplen (ley C-02: el icono se aprieta CON
+el campo); el fix es la forma EXACTA de los gemelos (`calc(… *
+var(--ds-density-effective-scale))`, cotejada carácter a carácter por la auditora),
+en el idioma single-line del archivo. Default byte-idéntico (`calc(x·1)=x`);
+compact/spacious escalan con el campo (la intención, no un freeze). **Ruling Fable 1
+— la geometría de `:91` queda diferida con honestidad como C-02b:** la reserva de
+clearance no co-escala; aritmética reproducida: botón 1.25rem + offset 0.375rem vs
+reserva 1.75rem → margen 2px en default (pre-existente), solape desde scale>1.1,
+overflow 2.375rem en el techo del clamp (3) — antes del fix el botón nunca escalaba y
+el defecto lo enmascaraba. Co-escalar la clearance preserva el default por identidad
+y cierra el extremo, pero cambia padding en densidades no-default = decisión de
+diseño visible → entra por adjudicación, no de contrabando (queda en la cola §6 con
+dueño). **Ruling Fable 2 — estado canónico de receipts: 133 frescos + 1
+declared-stale** (`compound-editorial`, SUPERSEDED_BY_LIVE_FENCE, sin tocar): el tool
+C5 lo salta a propósito y la validez de ese receipt la decide la cerca, no el digest;
+la re-firma de la cohorte 2 (que lo incluyó) fue inocua pero no se repite. **Formato
+canónico de asientos desde acá:** "receipts 133/134 válidos (re-firma quirúrgica
+×133; 1 SUPERSEDED declarado, sin tocar)". **Defecto de proceso confesado:** el
+writer regeneró censo+catalog pero salteó la cabeza de la cadena
+(cascade-extract/consumability/producers) y los eslabones kimi/controls/freshness — su
+memo decía "cadena una vez" y no era cierto; el barrido de cierre lo pescó (7 rojos)
+y el DT recomponer la cadena entera en orden canónico antes del verde final. **La
+batería de cierre volvió a probar su valor: el barrido completo desde gate 0 es lo
+que atrapa una cadena medio-corrida.** Números: barrido 91 PASS/2 SKIP/0 FAIL +
+gates:ci 91/91 de la auditora; focales Textarea 52/52, Input skin 7/7,
+density-scale-parity 10/10; ratchet 2171; engine-token-audit 822 sin mover; censo:
+`--ds-density-effective-scale` 319→321 lecturas css (exactamente el fix);
+docs-engineering `f842cc3` (1 vista); GAT-07 resellado (`7fa7b09f…`). Próximo paso:
+C-02b (adjudicación de la clearance) y la evaluación de `presence` (2 sitios, último
+candidato sin verificar de la clasificación); después, revisión Codex de hito (van 4
+lotes desde la última: piloto, R-3, cohorte 2, C-02 — la cadencia 3–4 lo marca).
+
 **F3 — COHORTE 2 CERRADA (Typography/runtime; 2026-08-27; commit `32fdd4583`;
 writer Opus en 3 vueltas; preaudit Fable del diseño: DEFECTS-2 de enunciado,
 incorporados → ACCEPT; postaudit Fable del diff congelado: **ACCEPT**).** La
