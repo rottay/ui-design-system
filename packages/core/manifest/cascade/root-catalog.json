@@ -564,7 +564,7 @@
       "governedBy": null,
       "governanceScope": "ninguna",
       "exposure": "internal-head",
-      "exposureNote": "Autoridad de fundacion con derivacion escrita. Correcto que no sea dial.",
+      "exposureNote": "Autoridad de fundacion con derivacion escrita. Correcto que no sea dial. F2A-1 (2026-08-26): anotacion de identidad -- consenso Opus, decision de forma del vertical; las declaraciones se quedan, sin escritura de artefacto. Conteo canonico (data-v2.json): 6 lectores de produccion (6 core, 0 showroom).",
       "derivationDebt": true
     },
     {
@@ -602,7 +602,7 @@
       "governedBy": "spacing.rhythm",
       "governanceScope": "total",
       "exposure": "tenant-dial",
-      "exposureNote": "spacing.rhythm declara --ds-rhythm-scale y --ds-rhythm-effective-scale. Perilla completa; los 73 canales son pasos que deberian salir de la escalera.",
+      "exposureNote": "spacing.rhythm declara --ds-rhythm-scale y --ds-rhythm-effective-scale. Perilla completa; los 73 canales son pasos que deberian salir de la escalera. F2A-1 Lote C (2026-08-26): anotacion gobernada, cierre de disposicion -- el dial spacing.rhythm ya explica la asimetria de este canal; sin escritura de artefacto. Conteo canonico (docs/f2a/medicion-f2a0/data-v2.json, censo AST core+showroom): 551 lectores de produccion (548 core + 3 showroom).",
       "derivationDebt": true
     },
     {
@@ -672,7 +672,7 @@
       "governedBy": "typography.scale",
       "governanceScope": "total",
       "exposure": "tenant-dial",
-      "exposureNote": "CABEZA SOLO-ARTEFACTO: cero declaraciones en la base DS; nace al compilar un tenant y el lector trae el 1 por defecto. Legitimo por contrato de fallback.",
+      "exposureNote": "CABEZA SOLO-ARTEFACTO: cero declaraciones en la base DS; nace al compilar un tenant y el lector trae el 1 por defecto. Legitimo por contrato de fallback. F2A-1 Lote D (2026-08-26): anotacion documental de cierre -- la asimetria es de catalogo/declaracion, no de ejecucion. Conteo canonico (instrumento corregido, F2A re-medicion, data-v2.json): 44 lectores de produccion (33 CSS + 11 TS, todos en core; 0 showroom) -- reproduce exacto la cifra citada por Codex. Sin escritura de artefacto.",
       "derivationDebt": true
     },
     {
@@ -710,7 +710,7 @@
       "governedBy": "density.mode",
       "governanceScope": "parcial",
       "exposure": "tenant-dial",
-      "exposureNote": "density.mode declara --ds-density-mode-factor (packages/core/src/foundation/tokens/css/foundation/base/density.css:176) y --ds-density-scale. El factor multiplica el ritmo; la altura md como tal no es perilla y no deberia serlo: es la raiz sobre la que corre la densidad.",
+      "exposureNote": "density.mode declara --ds-density-mode-factor (packages/core/src/foundation/tokens/css/foundation/base/density.css:176) y --ds-density-scale. El factor multiplica el ritmo; la altura md como tal no es perilla y no deberia serlo: es la raiz sobre la que corre la densidad. F2A-1 Lote D (2026-08-26): anotacion documental de cierre -- la asimetria es de catalogo/declaracion, no de ejecucion. Conteo canonico (data-v2.json): 32 lectores de produccion (32 core, 0 showroom). Sin escritura de artefacto.",
       "derivationDebt": false
     },
     {
@@ -931,7 +931,7 @@
       "governedBy": null,
       "governanceScope": "ninguna",
       "exposure": "internal-head",
-      "exposureNote": "Ley de accesibilidad, no identidad de marca. La cabeza existe y esta bien puesta; lo que falta es que los 53 canales la usen en vez de reescribir la plantilla.",
+      "exposureNote": "Ley de accesibilidad, no identidad de marca. La cabeza existe y esta bien puesta; lo que falta es que los 53 canales la usen en vez de reescribir la plantilla. F2A-1 Lote C (2026-08-26): PRUEBA de cascada intencional antes de anotar -- --ds-focus-ring se declara UNA sola vez, en la capa foundation (default.css:887, box-shadow que compone --ds-focus-ring-offset + --ds-focus-ring-color), nunca redeclarado en ningun artefacto de tenant (grep exacto sobre facade/artifacts/*/index.css: 0 ocurrencias de `--ds-focus-ring:`). Todo tema y modo resuelve al mismo canal foundation; sus sub-variables siempre tienen valor real (propio o default), nunca cae a unset/vacio. La asimetria es de catalogo (assignments cuenta modos de --ds-focus-ring-color, la variable dependiente, no de este canal), no de ejecucion. Cierre de disposicion, sin escritura de artefacto. Conteo canonico (data-v2.json): 58 lectores de produccion (58 core, 0 showroom).",
       "derivationDebt": true
     },
     {
@@ -1086,7 +1086,7 @@
       "governedBy": "palette.seeds",
       "governanceScope": "parcial",
       "exposure": "tenant-dial",
-      "exposureNote": "Igual que secondary: documentPath lo cubre (packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts:90-103), declaredOutputs no lo nombra.",
+      "exposureNote": "Igual que secondary: documentPath lo cubre (packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts:90-103), declaredOutputs no lo nombra. F2A-1 Lote E (2026-08-26): cierre por referencia a la decision 18/F5 (derivacion mode-aware, implementacion en F5), sin escritura en este lote. Outlier medido y registrado para F5: conteo canonico (data-v2.json) 6 lectores de produccion (4 CSS + 2 TS, todos core; 0 showroom) contra 239-433 de sus 3 hermanas (success/error/warning) -- la unica semilla de rampa casi sin cablear, visible para F5.",
       "derivationDebt": false
     },
     {
@@ -1124,7 +1124,7 @@
       "governedBy": null,
       "governanceScope": "ninguna",
       "exposure": "gap",
-      "exposureNote": "GAP YA REGISTRADO EN FUENTE: la capability palette.status-seeds existe con status frontier (packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts:507) y su defaultBehavior dice textual \"DB General cannot author status tones today; Advanced tokenOverrides is the only DB route, while BrandTheme authors them directly -- the recorded static/DB asymmetry this frontier closes\". Una frontier es contrato declarado que el schema TODAVIA rechaza (packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts:18-20).",
+      "exposureNote": "GAP YA REGISTRADO EN FUENTE: la capability palette.status-seeds existe con status frontier (packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts:507) y su defaultBehavior dice textual \"DB General cannot author status tones today; Advanced tokenOverrides is the only DB route, while BrandTheme authors them directly -- the recorded static/DB asymmetry this frontier closes\". Una frontier es contrato declarado que el schema TODAVIA rechaza (packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts:18-20). F2A-1 Lote E (2026-08-26): cierre por referencia a la decision 18/F5, sin escritura en este lote. Conteo canonico (data-v2.json): 299 lectores de produccion (282 core + 17 showroom).",
       "derivationDebt": false
     },
     {
@@ -1162,7 +1162,7 @@
       "governedBy": null,
       "governanceScope": "canal-por-canal",
       "exposure": "gap",
-      "exposureNote": "token-overrides declara --ds-color-error entre sus salidas, pero eso es la allowlist pro canal por canal, NO una semilla: mover el tono de error completo sigue exigiendo escribir la rampa a mano. El frontier palette.status-seeds (packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts:507) es la puerta correcta y aun no existe.",
+      "exposureNote": "token-overrides declara --ds-color-error entre sus salidas, pero eso es la allowlist pro canal por canal, NO una semilla: mover el tono de error completo sigue exigiendo escribir la rampa a mano. El frontier palette.status-seeds (packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts:507) es la puerta correcta y aun no existe. F2A-1 Lote E (2026-08-26): cierre por referencia a la decision 18/F5, sin escritura en este lote. Conteo canonico (data-v2.json): 433 lectores de produccion (422 core + 11 showroom).",
       "derivationDebt": false
     },
     {
@@ -1200,7 +1200,7 @@
       "governedBy": null,
       "governanceScope": "ninguna",
       "exposure": "gap",
-      "exposureNote": "Mismo frontier palette.status-seeds (packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts:507).",
+      "exposureNote": "Mismo frontier palette.status-seeds (packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts:507). F2A-1 Lote E (2026-08-26): cierre por referencia a la decision 18/F5, sin escritura en este lote. Conteo canonico (data-v2.json): 239 lectores de produccion (225 core + 14 showroom).",
       "derivationDebt": false
     },
     {
@@ -1313,7 +1313,7 @@
       "governedBy": "shape.radius-scale",
       "governanceScope": "total",
       "exposure": "tenant-dial",
-      "exposureNote": "shape.radius-scale declara --ds-radius-scale y --ds-radius-md. Hay ademas autoridad de anidado: nested-radius, \"inner radius = max(0, outer - inset)\" (packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts:642-648). Evnto ya escribio la doctrina completa de por que NO se copia el bloque (packages/core/src/foundation/tokens/ts/presentation/brand-themes/evnto/index.ts:444-452).",
+      "exposureNote": "shape.radius-scale declara --ds-radius-scale y --ds-radius-md. Hay ademas autoridad de anidado: nested-radius, \"inner radius = max(0, outer - inset)\" (packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts:642-648). Evnto ya escribio la doctrina completa de por que NO se copia el bloque (packages/core/src/foundation/tokens/ts/presentation/brand-themes/evnto/index.ts:444-452). F2A-1 Lote C (2026-08-26): anotacion gobernada, cierre de disposicion -- el dial shape.radius-scale ya explica la asimetria de este canal; sin escritura de artefacto. Conteo canonico (data-v2.json): 425 lectores de produccion (405 core + 20 showroom).",
       "derivationDebt": true
     },
     {
@@ -1420,7 +1420,7 @@
       "governedBy": null,
       "governanceScope": "ninguna",
       "exposure": "internal-head",
-      "exposureNote": "Autoridad de fundacion overlay-panel-scrim-split, con consumidores nombrados (popover.css, tooltip.css, semantic-surface.css, slider.css). No es dial y esta bien que no lo sea.",
+      "exposureNote": "Autoridad de fundacion overlay-panel-scrim-split, con consumidores nombrados (popover.css, tooltip.css, semantic-surface.css, slider.css). No es dial y esta bien que no lo sea. F2A-1 Lote C (2026-08-26): PRUEBA de cascada intencional antes de anotar -- --ds-overlay-scrim se declara UNA sola vez, en la capa foundation (default.css:289): var(--ds-color-bg-overlay, rgba(0,0,0,0.5)) -- fallback literal horneado en la propia expresion, nunca redeclarado en ningun artefacto de tenant (grep exacto: 0 ocurrencias). Resuelve limpio en todo tema y modo, nunca a unset/vacio; mas fuerte que state.delta.focus porque el fallback es literal, no depende de otra variable. Cierre de disposicion, sin escritura de artefacto. Conteo canonico (data-v2.json): 3 lectores de produccion (3 core, 0 showroom).",
       "derivationDebt": true
     },
     {
@@ -1456,7 +1456,7 @@
       "governedBy": null,
       "governanceScope": "ninguna",
       "exposure": "internal-head",
-      "exposureNote": "Derivacion de fundacion.",
+      "exposureNote": "Derivacion de fundacion. F2A-1 Lote D (2026-08-26): anotacion documental de cierre -- la asimetria es de catalogo/declaracion, no de ejecucion. Conteo canonico (data-v2.json): 764 lectores de produccion (602 core + 162 showroom) -- el canal MAS LEIDO de las 34 raices asimetricas medidas en F2A-1; la 'asimetria' que registra esta fila es de cuantas veces cada tema declara, no de cuanto se usa. Sin escritura de artefacto.",
       "derivationDebt": true
     },
     {
@@ -1528,7 +1528,7 @@
       "governedBy": null,
       "governanceScope": "ninguna",
       "exposure": "internal-head",
-      "exposureNote": "La perilla correcta es typography.scale y ya existe; el defecto es que el nivel 2 no lee la rampa. Una linea por canal nivel-2, no 23 literales. CORREGIDA CAUSALMENTE (F2A-1 Lote F-prima, decision 19 del owner, 2026-08-26): bithire congelaba --ds-input-md-font-size en 13px mientras su propio docblock ya declaraba typography.scale como governor — el literal desmentia la anotacion y el dial no movia la fuente de los inputs. Ahora se autora calc(13px * var(--ds-type-scale, 1)): el seed de 13px sigue siendo de bithire (el owner veto por nombre copiar la referencia de rottay, que valdria 14px) y el factor vuelve a la expresion, en la forma que el sistema ya usa (default.css:542). Cero-delta estricto en el estado por defecto: 13px antes, 13px despues. Medido tras el fix: escala 1 -> 13px, 1.08 -> 14.04px, 0.92 -> 11.96px. NOTA DE ALCANCE: lineHeight (20px) e iconSize (15px) de la misma familia NO se tocaron — su dueño (tipografia / densidad / perfil de iconos / invariante vertical) es un paso previo pendiente, y el ruling prohibe inventar la dependencia por proximidad de bloque.",
+      "exposureNote": "La perilla correcta es typography.scale y ya existe; el defecto es que el nivel 2 no lee la rampa. Una linea por canal nivel-2, no 23 literales. CORREGIDA CAUSALMENTE (F2A-1 Lote F-prima, decision 19 del owner, 2026-08-26): bithire congelaba --ds-input-md-font-size en 13px mientras su propio docblock ya declaraba typography.scale como governor — el literal desmentia la anotacion y el dial no movia la fuente de los inputs. Ahora se autora calc(13px * var(--ds-type-scale, 1)): el seed de 13px sigue siendo de bithire (el owner veto por nombre copiar la referencia de rottay, que valdria 14px) y el factor vuelve a la expresion, en la forma que el sistema ya usa (default.css:542). Cero-delta estricto en el estado por defecto: 13px antes, 13px despues. Medido tras el fix: escala 1 -> 13px, 1.08 -> 14.04px, 0.92 -> 11.96px. NOTA DE ALCANCE: lineHeight (20px) e iconSize (15px) de la misma familia NO se tocaron — su dueño (tipografia / densidad / perfil de iconos / invariante vertical) es un paso previo pendiente, y el ruling prohibe inventar la dependencia por proximidad de bloque. F2A-1 (2026-08-26): fila cerrada -- la correccion causal de F-prima (arriba) ya es la disposicion de este canal; sin accion adicional en este lote. Conteo canonico (data-v2.json): 20 lectores de produccion (20 core, 0 showroom).",
       "derivationDebt": true
     },
     {
@@ -1562,7 +1562,7 @@
       "governedBy": null,
       "governanceScope": "ninguna",
       "exposure": "internal-head",
-      "exposureNote": "Razon del sistema. Rottay 10 canales, bithire 13 literales.",
+      "exposureNote": "Razon del sistema. Rottay 10 canales, bithire 13 literales. F2A-1 (2026-08-26), asignacion de dueño adjudicada por el DT: Dueño asignado (decision 19.iii, consenso Opus): typography.scale POR LA UNIDAD — un ratio sin unidad hereda gratis el dial del font-size gobernado; un multiplicador calc() simularia el acoplamiento. Anomalia medida en dos planos: bithire 20px absoluto (hoy 20/13 = 1.5385) y la capa base 1.5rem. Valor exacto: decision de diseño del owner PENDIENTE. Hasta el ruling: ningun cambio al canal. Conteo canonico (data-v2.json): 6 lectores de produccion (6 core, 0 showroom).",
       "derivationDebt": true
     },
     {
@@ -1596,7 +1596,7 @@
       "governedBy": null,
       "governanceScope": "ninguna",
       "exposure": "internal-head",
-      "exposureNote": "Autoridad de fundacion existente. El control profiles.icon es pro y declara CERO canales (manifest/controls/profiles.icon.json declaredOutputs.channels []), asi que el perfil futuro que la autoridad anticipa todavia no baja a canal.",
+      "exposureNote": "Autoridad de fundacion existente. El control profiles.icon es pro y declara CERO canales (manifest/controls/profiles.icon.json declaredOutputs.channels []), asi que el perfil futuro que la autoridad anticipa todavia no baja a canal. F2A-1 (2026-08-26), asignacion de dueño adjudicada por el DT: Dueño registrado: density.mode — gobernado EN CONSUMO. CENSO CORREGIDO (postaudit Fable, condicion ACCEPT, 2026-08-26; el censo original -- \"14/14 multiplican\" -- era falso): de los 14 lectores fuera de artefactos, 8 multiplican en sitio (input.css :133/:136/:156/:159/:219/:222, password-input.css :138/:142), 3 re-alias sin multiplicador (presentation/components/input.css :153/:182/:188), 1 espejo TS (tokens/ts/runtime/components/input/index.ts:35), y 2 consumen SIN el factor: skin/textarea.css:211-212 (clear-button, var crudo sin calc envolvente). Conclusion intacta: no es anti-puerta, el seed 15px de bithire es geometria legitima de control, ninguna accion al canal (tocarlo seria doble escalado, prohibido por decision 20). Hallazgo registrado: el clear-button de textarea parece violar la ley coordinated-density C-02 que sus sitios gemelos (input.css:156/:159) si cumplen — candidato a micro-fix adjudicado por el DT, registrado aca. Conteo canonico (data-v2.json): 14 lectores de produccion (14 core, 0 showroom).",
       "derivationDebt": true
     },
     {
@@ -1786,7 +1786,7 @@
       "governedBy": null,
       "governanceScope": "ninguna",
       "exposure": "internal-head",
-      "exposureNote": "La receta es del sistema; lo que cambia por marca son los dos tonos, que ya son raices de color. 14 canales autorados que deberian ser dos argumentos.",
+      "exposureNote": "La receta es del sistema; lo que cambia por marca son los dos tonos, que ya son raices de color. 14 canales autorados que deberian ser dos argumentos. F2A-1 (2026-08-26): anotacion de identidad -- consenso Opus, decision de forma del vertical; las declaraciones se quedan, sin escritura de artefacto. Conteo canonico (data-v2.json): 3 lectores de produccion (3 core, 0 showroom).",
       "derivationDebt": true
     },
     {
@@ -1852,7 +1852,7 @@
       "governedBy": "shape.button-style",
       "governanceScope": "total",
       "exposure": "tenant-dial",
-      "exposureNote": "shape.button-style declara --ds-radius-button, que ya existe y ya deriva: --ds-radius-button: var(--ds-radius-md) en packages/core/src/foundation/tokens/css/foundation/base/borders.css:27. La perilla esta bien puesta; los 13 literales de bithire son deuda de adopcion, no de contrato.",
+      "exposureNote": "shape.button-style declara --ds-radius-button, que ya existe y ya deriva: --ds-radius-button: var(--ds-radius-md) en packages/core/src/foundation/tokens/css/foundation/base/borders.css:27. La perilla esta bien puesta; los 13 literales de bithire son deuda de adopcion, no de contrato. Cierre F2A-1 (2026-08-26): decision 19.v — INTACTO: conserva correctamente el factor del dial (verificado en F′); el radio 9px de bithire es identidad. La deuda de adopcion queda domiciliada (su analisis pre-F2A arriba sigue vigente para esa parte).",
       "derivationDebt": true
     },
     {
@@ -2386,7 +2386,7 @@
       "governedBy": "surfaces.effect-intensity",
       "governanceScope": "total",
       "exposure": "tenant-dial",
-      "exposureNote": "Perilla y cabeza en su sitio; 1 canal autorado en todo el corpus. Es el ejemplo de como se ve una raiz sana.",
+      "exposureNote": "Perilla y cabeza en su sitio; 1 canal autorado en todo el corpus. Es el ejemplo de como se ve una raiz sana. F2A-1 Lote D (2026-08-26): anotacion documental de cierre -- la asimetria es de catalogo/declaracion, no de ejecucion. Conteo canonico (data-v2.json): 62 lectores de produccion (62 core, 0 showroom). Sin escritura de artefacto.",
       "derivationDebt": false
     }
   ],
