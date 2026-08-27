@@ -4569,6 +4569,31 @@ seeds reales y mover la superficie de calibración a un campo propio — la
 decisión 15 conserva su INTENT (superficie de calibración estrecha; dominio
 público 290 intacto) y se enmendará su formulación al cerrar C5.
 
+**2B — HALLAZGOS DE PRE-EJECUCIÓN Y ADJUDICACIÓN (2026-08-27; plan Opus + adjudicación DT
+`/private/tmp/dt-adjudicacion-2b.md`; sin una línea productiva escrita, árbol en porcelain
+0).** Opus reprodujo la población del brief (204/27/+3.365 B reproduce exacto) y frenó con
+tres hallazgos antes de escribir — el proceso funcionando: (i) **auto-referencia:** 27 filas
+son el PRODUCTOR de la cabeza de su propia raíz (p.ej. `CHROME.sidebar.bg` emite
+`--ds-sidebar-bg` = cabeza de `tier.page.bg`); colapsarlas escribiría `var()` circular.
+**Ley 5b adoptada:** un slot cuya emisión incluye la cabeza de su raíz destino no es
+elegible — STOP (verificada por el DT contra el inventario). Fuera también 1 fila ya
+colapsada (la frena la ley 3). Población plena correcta: **179 filas en 18 raíces, +3.274 B**.
+(ii) **Ningún grupo divergente es hoy enteramente colapsable (0 de 234):** en cada grupo queda
+al menos un miembro value-shift o auto-referencial. (iii) **El colapso completo SUBIRÍA los
+contadores** (234→238 / 1.649→1.657, simulado): colapsar a medias un grupo hoy uniforme crea
+una segunda posición — el detector hace su trabajo. **Adjudicación del DT: camino (B)+(C), (A)
+rechazada con razón escrita** — re-anclar hacia arriba `divergentGroups`/`divergentSlots` en
+la cohorte bandera erosiona el trinquete que el owner pidió (y sería la segunda subida
+seguida tras la cobertura del lote 2); la ley 6 no se toca. **(B) ahora:** los 29 slots de
+grupos que cierran enteros, pipeline completo de punta a punta (cp del pin → colapso →
+`--against` valores+unresolved → contrafactual tenant-dial → cadena una vez) sobre un lote que
+no puede hacer daño; si `shadowingLiteralPins` baja, se re-ancla hacia abajo con razón (legal,
+mismo commit). **(C) después:** el DT retoma `owner-step-rules` (lote 2: estados y
+semánticos-de-estado) para convertir value-shift en pure hasta que los grupos puedan cerrar
+enteros; entonces la 2B plena (179) corre con la ley 6 intacta. Es la doctrina Codex
+"refinar vocabulario antes de colapsar" aplicada al value-shift. Métrica sin mover:
+62%/~43%.
+
 **OWNER-TIERS LOTE 2 (2026-08-27; commit `a86013ba0`; autorado DT; postaudit Fable:
 DEFECTS-1 → condición cumplida en el mismo commit → ACCEPT).** +60 filas (114→174) que
 cierran las familias de tier estructuralmente claro que faltaban: controles restantes
