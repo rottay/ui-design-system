@@ -235,3 +235,33 @@ test('sobre el arbol real: las leyes duras se sostienen y el ancla coincide', as
   );
   assert.equal(result.counters.unassignedSlots, inventoryBaseline.counters.unassignedRows.value);
 });
+
+/* ── la puerta hacia arriba: gobernada, no abierta ───────────────────────── */
+
+test('la unica subida legal es la RE-ATRIBUCION, y se pide por nombre', () => {
+  // El drill vive sobre `evaluate`, que es donde la ley se aplica al leer: una
+  // subida SIEMPRE es un fallo del --check. La bandera --reattribution solo
+  // existe en la puerta de ESCRITURA, y por eso el gate nunca se vuelve
+  // permisivo: re-anclar exige un acto explicito y con razon escrita.
+  const baseline = { counters: Object.fromEntries(
+    ['unassignedSlots', 'governorsNamingMissingAuthority', 'shadowingLiteralPins', 'divergentGroups', 'divergentSlots']
+      .map((name) => [name, { value: 0 }]),
+  ) };
+  const result = { findings: [], governorFindings: [], counters: {
+    unassignedSlots: 0, governorsNamingMissingAuthority: 0,
+    shadowingLiteralPins: 5, divergentGroups: 0, divergentSlots: 0,
+  } };
+  const { drift } = evaluate(result, baseline);
+  assert.ok(drift.some((item) => /shadowingLiteralPins: 0 -> 5 SUBIO/.test(item)),
+    'el --check no tiene puerta de escape: una subida siempre se ve');
+});
+
+test('el ancla registra QUE CLASE de movimiento la produjo', async () => {
+  const { readFileSync } = await import('node:fs');
+  const baseline = JSON.parse(readFileSync(new URL('./normalization-contract-gate.baseline.json', import.meta.url), 'utf8'));
+  assert.ok(baseline.lastMove, 'toda ancla lleva su razon');
+  if (baseline.lastMoveKind === 're-atribucion (subida autorizada por nombre)') {
+    assert.match(baseline.lastMove, /re-atribucion|RE-ATRIBUCION/i,
+      'una subida autorizada tiene que decir en su razon por que no es regresion');
+  }
+});

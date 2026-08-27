@@ -14,7 +14,7 @@ import { readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import test from 'node:test';
 
-import { CATALOG_PATH, CONTROLS_DIR, collectFindings, countByExposure } from './index.mjs';
+import { CATALOG_PATH, CONTROLS_DIR, collectFindings, countByExposure, isRefinedRoot } from './index.mjs';
 
 function expectFinding(findings, fragment, message) {
   assert.ok(
@@ -216,4 +216,44 @@ test('a changed reading fails until it is re-read', () => {
     },
     (findings) => expectFinding(findings, 'the catalog reading changed', 'the reading is part of the snapshot'),
   );
+});
+
+
+/* ── el eje paso: refinar el indice NO mueve el vocabulario ──────────────── */
+
+test('LEY DE REFINAMIENTO: agregar raices-hija de paso no mueve un solo contador', () => {
+  const parents = [
+    { rootId: 'tier.page.border', exposure: 'gap', channel: '--ds-a' },
+    { rootId: 'tier.base.fg', exposure: 'internal-head', channel: '--ds-b' },
+    { rootId: 'tier.control.bg', exposure: 'tenant-dial', channel: '--ds-c' },
+  ];
+  const before = countByExposure(parents);
+  assert.deepEqual(before, { 'tenant-dial': 1, 'internal-head': 1, gap: 1 });
+  // Refinar el indice: cuatro hijas del padre gap y dos del internal-head.
+  const refined = [
+    ...parents,
+    { rootId: 'tier.page.border.primary', exposure: 'gap', channel: '--ds-a1' },
+    { rootId: 'tier.page.border.focus', exposure: 'gap', channel: '--ds-a2' },
+    { rootId: 'tier.page.border.secondary', exposure: 'gap', channel: '--ds-a3' },
+    { rootId: 'tier.page.border.tertiary', exposure: 'gap', channel: '--ds-a4' },
+    { rootId: 'tier.base.fg.muted', exposure: 'internal-head', channel: '--ds-b1' },
+    { rootId: 'tier.base.fg.disabled', exposure: 'internal-head', channel: '--ds-b2' },
+  ];
+  assert.deepEqual(countByExposure(refined), before,
+    'una perilla faltante indexada mas fino sigue siendo UNA perilla faltante');
+});
+
+test('la excepcion es de CONTEO agregado, no una amnistia: un PADRE nuevo si mueve el contador', () => {
+  const base = [{ rootId: 'tier.base.fg', exposure: 'internal-head', channel: '--ds-b' }];
+  const withNewParent = [...base, { rootId: 'tier.accent.bg', exposure: 'gap', channel: '--ds-d' }];
+  assert.equal(countByExposure(base).gap, 0);
+  assert.equal(countByExposure(withNewParent).gap, 1, 'un gap de verdad sigue subiendo el conteo y sigue fallando');
+});
+
+test('isRefinedRoot distingue la raiz de nivel de su hija de paso', () => {
+  assert.equal(isRefinedRoot('tier.base.fg'), false);
+  assert.equal(isRefinedRoot('tier.base.fg.muted'), true);
+  assert.equal(isRefinedRoot('state.delta.hover'), false);
+  assert.equal(isRefinedRoot('ramp.seed.primary'), false);
+  assert.equal(isRefinedRoot(undefined), false);
 });

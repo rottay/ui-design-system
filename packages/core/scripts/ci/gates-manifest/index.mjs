@@ -571,6 +571,35 @@ export const CI_GATES = Object.freeze([
     run: ['node', 'scripts/tokens/normalization-contract-gate/index.mjs', '--check'],
     blocking: true,
   },
+  // COHORTE 2A: los dos instrumentos que el frente necesita ANTES de colapsar.
+  // `purity` responde si una fila puede colapsar sin mover un valor resuelto, y
+  // su tercera clase -- cabeza no emitida -- es una LEY, no una categoria:
+  // protege a las raices nuevas del eje paso, que nacen sin cabeza.
+  // `resolved-map-diff` es la ley cero-delta resuelto hecha CONTINUA: la
+  // byte-identidad de los artifacts deja de poder cumplirse en cuanto el frente
+  // colapsa (un slot colapsado viaja al artefacto como texto var()), asi que lo
+  // que se pinea es el mapa RESUELTO. Cualquier edicion de tema que mueva un
+  // valor que el usuario ve lo enrojece; una que solo colapse forma, no.
+  {
+    id: 'purity-drill',
+    run: ['node', '--test', 'scripts/tokens/purity/index.test.mjs'],
+    blocking: true,
+  },
+  {
+    id: 'purity',
+    run: ['node', 'scripts/tokens/purity/index.mjs', '--check'],
+    blocking: true,
+  },
+  {
+    id: 'resolved-map-drill',
+    run: ['node', '--test', 'scripts/tokens/resolved-map-diff/index.test.mjs'],
+    blocking: true,
+  },
+  {
+    id: 'resolved-map',
+    run: ['node', 'scripts/tokens/resolved-map-diff/index.mjs', '--check'],
+    blocking: true,
+  },
   // Every production script is wired through a declared channel (manifest,
   // lifecycle chain or ci.yml) or it does not exist. This gate is what makes
   // §1.10's "the wiring gate counts all three channels" true.

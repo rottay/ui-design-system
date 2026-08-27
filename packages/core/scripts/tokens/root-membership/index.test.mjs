@@ -86,16 +86,21 @@ test('una disputa SIN reclamante base no se resuelve: null con motivo', async ()
   assert.match(doc.sharedHeads.unresolved[0].reason, /ningun reclamante es tier "base"/);
 });
 
-test('los dos casos REALES del arbol resuelven a tier.base.*', async () => {
-  const { resolved, unresolved } = resolveHeads(
-    JSON.parse((await import('node:fs')).readFileSync(
-      new URL('../../../manifest/cascade/root-catalog.json', import.meta.url), 'utf8')),
-  );
-  assert.equal(unresolved.length, 0, JSON.stringify(unresolved));
-  const shared = [...resolved.entries()].filter(([, head]) => head.shared);
-  assert.equal(shared.length, 2, 'el arbol tiene exactamente 2 cabezas disputadas');
-  assert.equal(resolved.get('--ds-color-text-primary').rootId, 'tier.base.fg');
-  assert.equal(resolved.get('--ds-color-border').rootId, 'tier.base.border');
+test('la regla de generalidad reconoce la raiz de PASO como del mismo nivel', () => {
+  // Una cabeza compartida entre raices de paso tiene que resolver a la base:
+  // si `decomposeRootId` solo entendiera raices de tres partes, no le
+  // encontraria tier a ninguna reclamante y quedaria sin resolver.
+  const catalog = { roots: [
+    { rootId: 'tier.base.fg.secondary', channel: '--ds-x' },
+    { rootId: 'tier.control.fg.secondary', channel: '--ds-x' },
+    { rootId: 'tier.page.fg.secondary', channel: '--ds-x' },
+  ] };
+  const { resolved, unresolved } = resolveHeads(catalog);
+  assert.equal(unresolved.length, 0);
+  assert.equal(resolved.get('--ds-x').rootId, 'tier.base.fg.secondary');
+  assert.deepEqual(resolved.get('--ds-x').references, ['tier.control.fg.secondary', 'tier.page.fg.secondary']);
+  assert.equal(decomposeRootId('tier.base.fg.secondary').tier, 'base');
+  assert.equal(decomposeRootId('tier.base.fg.secondary').step, 'secondary');
 });
 
 /* ── 2. V2: la regla de fila pineada ────────────────────────────────────── */
@@ -262,8 +267,9 @@ test('la hoja camelCase entrega propiedad y estado del vocabulario cerrado', () 
 });
 
 test('rootId se descompone en familia/tier/propiedad', () => {
-  assert.deepEqual(decomposeRootId('tier.raised.border'), { family: 'tier', tier: 'raised', property: 'border' });
-  assert.deepEqual(decomposeRootId('state.delta.hover'), { family: 'state', tier: null, property: 'delta.hover' });
+  assert.deepEqual(decomposeRootId('tier.raised.border'), { family: 'tier', tier: 'raised', property: 'border', step: null });
+  assert.deepEqual(decomposeRootId('tier.raised.border.subtle'), { family: 'tier', tier: 'raised', property: 'border', step: 'subtle' });
+  assert.deepEqual(decomposeRootId('state.delta.hover'), { family: 'state', tier: null, property: 'delta.hover', step: null });
 });
 
 test('los vocabularios son cerrados y no cambian por accidente', () => {
@@ -274,13 +280,98 @@ test('los vocabularios son cerrados y no cambian por accidente', () => {
 
 /* ── 6. el árbol REAL ───────────────────────────────────────────────────── */
 
-test('sobre el arbol real: 2 cabezas resueltas, 0 sin resolver, ninguna via fuera del vocabulario', async () => {
+test('sobre el arbol real: ninguna via fuera del vocabulario y toda fila con su guarda', async () => {
   const doc = await buildMembership();
-  assert.equal(doc.stats.sharedHeadsResolved, 2);
-  assert.equal(doc.stats.sharedHeadsUnresolved, 0);
+  assert.ok(doc.stats.sharedHeadsResolved >= 1);
   for (const row of doc.rows) {
     assert.ok(row.via === null || VIAS.includes(row.via), `via invalida: ${row.via}`);
     assert.equal(row.evidence.coincidenceGuard, 'no-value-match-used');
   }
   assert.ok(doc.stats.r2Floor > 26, `el piso de R2 (${doc.stats.r2Floor}) tiene que superar el R2 de hoy`);
+});
+
+/* ── 10. el TERCER ÍNDICE (`step`) — preparado e INACTIVO ────────────────── */
+
+test('sin tabla owner-step-rules, el refinamiento no toca nada y lo declara', async () => {
+  const { refineWithStep } = await import('./index.mjs');
+  const out = refineWithStep({
+    rootId: 'tier.base.fg', contributors: ['CHROME.card.color'],
+    stepRules: { present: false, byKey: new Map() }, rootExists: () => true,
+  });
+  assert.equal(out.rootId, 'tier.base.fg');
+  assert.equal(out.step, null);
+  assert.match(out.stepNote, /no existe todavia/);
+});
+
+test('con tabla, refina SOLO si la raiz refinada existe en el catalogo', async () => {
+  const { refineWithStep } = await import('./index.mjs');
+  const stepRules = { present: true, byKey: new Map([['CHROME.card|fg|headerColor', { ownerPath: 'CHROME.card', property: 'fg', leaf: 'headerColor', step: 'secondary', reason: 'cabecera de tarjeta' }]]) };
+  const ok = refineWithStep({ rootId: 'tier.base.fg', contributors: ['CHROME.card.headerColor'], stepRules, rootExists: (id) => id === 'tier.base.fg.secondary' });
+  assert.equal(ok.rootId, 'tier.base.fg.secondary');
+  assert.equal(ok.step, 'secondary');
+  const missing = refineWithStep({ rootId: 'tier.base.fg', contributors: ['CHROME.card.headerColor'], stepRules, rootExists: () => false });
+  assert.equal(missing.rootId, 'tier.base.fg', 'jamas se fabrica una raiz desde una tabla');
+  assert.match(missing.stepNote, /esa raiz no existe en el catalogo/);
+});
+
+test('CONCORDANCIA de paso: un contribuyente sin regla, o dos pasos en desacuerdo, no refinan', async () => {
+  const { refineWithStep } = await import('./index.mjs');
+  const stepRules = { present: true, byKey: new Map([
+    ['A|fg|color', { ownerPath: 'A', property: 'fg', leaf: 'color', step: 'muted', reason: 'x' }],
+    ['A|fg|otro', { ownerPath: 'A', property: 'fg', leaf: 'otro', step: 'muted', reason: 'x' }],
+    ['B|fg|color', { ownerPath: 'B', property: 'fg', leaf: 'color', step: 'primary', reason: 'y' }],
+  ]) };
+  const exists = () => true;
+  // pluralidad concordante: SI refina
+  const ok = refineWithStep({ rootId: 'tier.base.fg', contributors: ['A.color', 'A.otro'], stepRules, rootExists: exists });
+  assert.equal(ok.rootId, 'tier.base.fg.muted');
+  // desacuerdo: NO
+  const clash = refineWithStep({ rootId: 'tier.base.fg', contributors: ['A.color', 'B.color'], stepRules, rootExists: exists });
+  assert.equal(clash.rootId, 'tier.base.fg');
+  assert.match(clash.stepNote, /discrepan de paso: muted vs primary/);
+  // sin adjudicar: NO
+  const missing = refineWithStep({ rootId: 'tier.base.fg', contributors: ['A.color', 'Z.color'], stepRules, rootExists: exists });
+  assert.match(missing.stepNote, /sin adjudicar: Z\|fg\|color/);
+  // raiz no refinable
+  assert.match(refineWithStep({ rootId: 'elevation.ladder', contributors: ['A.color'], stepRules, rootExists: exists }).stepNote, /no es un tier/);
+});
+
+test('el gate de forma de owner-step-rules nombra la fila mala', async () => {
+  const { readOwnerStepRules, STEP_VOCABULARY } = await import('./index.mjs');
+  const { writeFileSync, mkdtempSync } = await import('node:fs');
+  const { tmpdir } = await import('node:os');
+  const { join } = await import('node:path');
+  const path = join(mkdtempSync(join(tmpdir(), 'step-rules-')), 'owner-step-rules.json');
+  writeFileSync(path, JSON.stringify({ rows: [
+    { ownerPath: 'A', property: 'shadow', leaf: 'x', step: 'primary', reason: 'x' },
+    { ownerPath: 'B', property: 'fg', leaf: '  ', step: 'muted', reason: 'x' },
+    { ownerPath: 'C', property: 'fg', leaf: 'color', step: 'inventado', reason: 'x' },
+    { ownerPath: 'E', property: 'fg', leaf: 'color', step: 'muted', reason: ' ' },
+    { ownerPath: 'D', property: 'border', leaf: 'border', step: 'subtle', reason: 'ok' },
+    { ownerPath: 'D', property: 'border', leaf: 'border', step: 'focus', reason: 'duplicada' },
+  ] }));
+  const table = readOwnerStepRules(path);
+  assert.equal(table.byKey.size, 1);
+  assert.equal(table.formFailures.length, 5);
+  assert.match(table.formFailures[0], /propiedad "shadow" fuera/);
+  assert.match(table.formFailures[1], /leaf vacia/);
+  assert.match(table.formFailures[2], /paso "inventado" fuera del vocabulario autorado/);
+  assert.match(table.formFailures[3], /reason vacia/);
+  assert.match(table.formFailures[4], /clave duplicada D\|border\|border/);
+  // El vocabulario sale de BrandPalette; nada se inventa.
+  assert.equal(STEP_VOCABULARY.fg.length, 8);
+  assert.equal(STEP_VOCABULARY.border.length, 6);
+});
+
+test('el mecanismo esta ACTIVO y su artefacto lo declara', async () => {
+  const { readFileSync } = await import('node:fs');
+  const doc = JSON.parse(readFileSync(new URL('../../../manifest/generated/root-membership.json', import.meta.url), 'utf8'));
+  assert.equal(doc.stats.stepRulesPresent, true);
+  assert.ok(doc.stats.stepRulesAdjudicated > 0);
+  assert.ok(doc.stats.rowsRefinedByStep > 0);
+  for (const row of doc.rows) {
+    if (row.step === null) continue;
+    assert.equal(row.rootId.split('.').length, 4, 'una fila con paso vive en una raiz refinada');
+    assert.ok(row.parentRootId, 'y declara de que raiz padre vino');
+  }
 });

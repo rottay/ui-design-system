@@ -2388,6 +2388,864 @@
         "bithire": 1,
         "evnto": 0
       }
+    },
+    {
+      "rootId": "tier.page.border.primary",
+      "group": "superficie-por-nivel",
+      "channel": "--ds-color-border-primary",
+      "channelStatus": "existe",
+      "collapsesLegacy": {
+        "total": 0,
+        "rottay": 0,
+        "bithire": 0,
+        "evnto": 0
+      },
+      "assignments": {
+        "total": 0,
+        "rottay": 0,
+        "bithire": 0,
+        "evnto": 0,
+        "modes": {}
+      },
+      "derivation": "Paso \"primary\" del eje borde sobre el nivel page. La cabeza --ds-color-border-primary ya es vocabulario AUTORADO de BrandPalette; esta raiz solo la promueve a cabeza de cascada para que una hoja de ese paso derive en vez de repetir su literal.",
+      "evidence": "--ds-color-border-primary es vocabulario AUTORADO de BrandPalette; emision medida por scripts/tokens/purity: emitida-en-los-3 ({\"rottay\":true,\"bithire\":true,\"evnto\":true})",
+      "governedBy": null,
+      "governanceScope": "ninguna",
+      "exposure": "gap",
+      "exposureNote": "EJE PASO, cohorte 2A (2026-08-27). Hija de tier.page.border: promueve a cabeza de cascada el paso \"primary\" del vocabulario AUTORADO de BrandPalette. Hereda exposure y governedBy del padre porque no es una perilla nueva sino la misma decision indexada por su paso -- por eso root-exposure-gate mide el vocabulario sobre las raices NO refinadas (adjudicacion DT 3.1). collapsesLegacy nace en cero a proposito: ese campo es censo FECHADO de 2026-08-18 y una raiz de 2026-08-27 no puede tener historia ahi; su cifra viva es su poblacion en manifest/generated/root-membership.json.",
+      "derivationDebt": true
+    },
+    {
+      "rootId": "tier.page.border.default",
+      "group": "superficie-por-nivel",
+      "channel": "--ds-color-border",
+      "channelStatus": "existe",
+      "collapsesLegacy": {
+        "total": 0,
+        "rottay": 0,
+        "bithire": 0,
+        "evnto": 0
+      },
+      "assignments": {
+        "total": 0,
+        "rottay": 0,
+        "bithire": 0,
+        "evnto": 0,
+        "modes": {}
+      },
+      "derivation": "Paso \"default\" del eje borde sobre el nivel page. La cabeza --ds-color-border ya es vocabulario AUTORADO de BrandPalette; esta raiz solo la promueve a cabeza de cascada para que una hoja de ese paso derive en vez de repetir su literal.",
+      "evidence": "--ds-color-border es vocabulario AUTORADO de BrandPalette; emision medida por scripts/tokens/purity: emitida-en-los-3 ({\"rottay\":true,\"bithire\":true,\"evnto\":true})",
+      "governedBy": null,
+      "governanceScope": "ninguna",
+      "exposure": "gap",
+      "exposureNote": "EJE PASO, cohorte 2A (2026-08-27). Hija de tier.page.border: promueve a cabeza de cascada el paso \"default\" del vocabulario AUTORADO de BrandPalette. Hereda exposure y governedBy del padre porque no es una perilla nueva sino la misma decision indexada por su paso -- por eso root-exposure-gate mide el vocabulario sobre las raices NO refinadas (adjudicacion DT 3.1). collapsesLegacy nace en cero a proposito: ese campo es censo FECHADO de 2026-08-18 y una raiz de 2026-08-27 no puede tener historia ahi; su cifra viva es su poblacion en manifest/generated/root-membership.json.",
+      "derivationDebt": true
+    },
+    {
+      "rootId": "tier.page.border.focus",
+      "group": "superficie-por-nivel",
+      "channel": "--ds-color-border-focus",
+      "channelStatus": "existe",
+      "collapsesLegacy": {
+        "total": 0,
+        "rottay": 0,
+        "bithire": 0,
+        "evnto": 0
+      },
+      "assignments": {
+        "total": 0,
+        "rottay": 0,
+        "bithire": 0,
+        "evnto": 0,
+        "modes": {}
+      },
+      "derivation": "Paso \"focus\" del eje borde sobre el nivel page. La cabeza --ds-color-border-focus ya es vocabulario AUTORADO de BrandPalette; esta raiz solo la promueve a cabeza de cascada para que una hoja de ese paso derive en vez de repetir su literal.",
+      "evidence": "--ds-color-border-focus es vocabulario AUTORADO de BrandPalette; emision medida por scripts/tokens/purity: emitida-en-los-3 ({\"rottay\":true,\"bithire\":true,\"evnto\":true})",
+      "governedBy": null,
+      "governanceScope": "ninguna",
+      "exposure": "gap",
+      "exposureNote": "EJE PASO, cohorte 2A (2026-08-27). Hija de tier.page.border: promueve a cabeza de cascada el paso \"focus\" del vocabulario AUTORADO de BrandPalette. Hereda exposure y governedBy del padre porque no es una perilla nueva sino la misma decision indexada por su paso -- por eso root-exposure-gate mide el vocabulario sobre las raices NO refinadas (adjudicacion DT 3.1). collapsesLegacy nace en cero a proposito: ese campo es censo FECHADO de 2026-08-18 y una raiz de 2026-08-27 no puede tener historia ahi; su cifra viva es su poblacion en manifest/generated/root-membership.json.",
+      "derivationDebt": true
+    },
+    {
+      "rootId": "tier.base.fg.secondary",
+      "group": "superficie-por-nivel",
+      "channel": "--ds-color-text-secondary",
+      "channelStatus": "existe",
+      "collapsesLegacy": {
+        "total": 0,
+        "rottay": 0,
+        "bithire": 0,
+        "evnto": 0
+      },
+      "assignments": {
+        "total": 0,
+        "rottay": 0,
+        "bithire": 0,
+        "evnto": 0,
+        "modes": {}
+      },
+      "derivation": "Paso \"secondary\" del eje tinta sobre el nivel base. La cabeza --ds-color-text-secondary ya es vocabulario AUTORADO de BrandPalette; esta raiz solo la promueve a cabeza de cascada para que una hoja de ese paso derive en vez de repetir su literal.",
+      "evidence": "--ds-color-text-secondary es vocabulario AUTORADO de BrandPalette; emision medida por scripts/tokens/purity: emitida-en-los-3 ({\"rottay\":true,\"bithire\":true,\"evnto\":true})",
+      "governedBy": null,
+      "governanceScope": "ninguna",
+      "exposure": "internal-head",
+      "exposureNote": "EJE PASO, cohorte 2A (2026-08-27). Hija de tier.base.fg: promueve a cabeza de cascada el paso \"secondary\" del vocabulario AUTORADO de BrandPalette. Hereda exposure y governedBy del padre porque no es una perilla nueva sino la misma decision indexada por su paso -- por eso root-exposure-gate mide el vocabulario sobre las raices NO refinadas (adjudicacion DT 3.1). collapsesLegacy nace en cero a proposito: ese campo es censo FECHADO de 2026-08-18 y una raiz de 2026-08-27 no puede tener historia ahi; su cifra viva es su poblacion en manifest/generated/root-membership.json.",
+      "derivationDebt": true
+    },
+    {
+      "rootId": "tier.base.fg.muted",
+      "group": "superficie-por-nivel",
+      "channel": "--ds-color-text-muted",
+      "channelStatus": "existe",
+      "collapsesLegacy": {
+        "total": 0,
+        "rottay": 0,
+        "bithire": 0,
+        "evnto": 0
+      },
+      "assignments": {
+        "total": 0,
+        "rottay": 0,
+        "bithire": 0,
+        "evnto": 0,
+        "modes": {}
+      },
+      "derivation": "Paso \"muted\" del eje tinta sobre el nivel base. La cabeza --ds-color-text-muted ya es vocabulario AUTORADO de BrandPalette; esta raiz solo la promueve a cabeza de cascada para que una hoja de ese paso derive en vez de repetir su literal.",
+      "evidence": "--ds-color-text-muted es vocabulario AUTORADO de BrandPalette; emision medida por scripts/tokens/purity: emitida-en-los-3 ({\"rottay\":true,\"bithire\":true,\"evnto\":true})",
+      "governedBy": null,
+      "governanceScope": "ninguna",
+      "exposure": "internal-head",
+      "exposureNote": "EJE PASO, cohorte 2A (2026-08-27). Hija de tier.base.fg: promueve a cabeza de cascada el paso \"muted\" del vocabulario AUTORADO de BrandPalette. Hereda exposure y governedBy del padre porque no es una perilla nueva sino la misma decision indexada por su paso -- por eso root-exposure-gate mide el vocabulario sobre las raices NO refinadas (adjudicacion DT 3.1). collapsesLegacy nace en cero a proposito: ese campo es censo FECHADO de 2026-08-18 y una raiz de 2026-08-27 no puede tener historia ahi; su cifra viva es su poblacion en manifest/generated/root-membership.json.",
+      "derivationDebt": true
+    },
+    {
+      "rootId": "tier.base.fg.tertiary",
+      "group": "superficie-por-nivel",
+      "channel": "--ds-color-text-tertiary",
+      "channelStatus": "existe",
+      "collapsesLegacy": {
+        "total": 0,
+        "rottay": 0,
+        "bithire": 0,
+        "evnto": 0
+      },
+      "assignments": {
+        "total": 0,
+        "rottay": 0,
+        "bithire": 0,
+        "evnto": 0,
+        "modes": {}
+      },
+      "derivation": "Paso \"tertiary\" del eje tinta sobre el nivel base. La cabeza --ds-color-text-tertiary ya es vocabulario AUTORADO de BrandPalette; esta raiz solo la promueve a cabeza de cascada para que una hoja de ese paso derive en vez de repetir su literal.",
+      "evidence": "--ds-color-text-tertiary es vocabulario AUTORADO de BrandPalette; emision medida por scripts/tokens/purity: emitida-en-los-3 ({\"rottay\":true,\"bithire\":true,\"evnto\":true})",
+      "governedBy": null,
+      "governanceScope": "ninguna",
+      "exposure": "internal-head",
+      "exposureNote": "EJE PASO, cohorte 2A (2026-08-27). Hija de tier.base.fg: promueve a cabeza de cascada el paso \"tertiary\" del vocabulario AUTORADO de BrandPalette. Hereda exposure y governedBy del padre porque no es una perilla nueva sino la misma decision indexada por su paso -- por eso root-exposure-gate mide el vocabulario sobre las raices NO refinadas (adjudicacion DT 3.1). collapsesLegacy nace en cero a proposito: ese campo es censo FECHADO de 2026-08-18 y una raiz de 2026-08-27 no puede tener historia ahi; su cifra viva es su poblacion en manifest/generated/root-membership.json.",
+      "derivationDebt": true
+    },
+    {
+      "rootId": "tier.base.fg.disabled",
+      "group": "superficie-por-nivel",
+      "channel": "--ds-color-text-disabled",
+      "channelStatus": "existe",
+      "collapsesLegacy": {
+        "total": 0,
+        "rottay": 0,
+        "bithire": 0,
+        "evnto": 0
+      },
+      "assignments": {
+        "total": 0,
+        "rottay": 0,
+        "bithire": 0,
+        "evnto": 0,
+        "modes": {}
+      },
+      "derivation": "Paso \"disabled\" del eje tinta sobre el nivel base. La cabeza --ds-color-text-disabled ya es vocabulario AUTORADO de BrandPalette; esta raiz solo la promueve a cabeza de cascada para que una hoja de ese paso derive en vez de repetir su literal.",
+      "evidence": "--ds-color-text-disabled es vocabulario AUTORADO de BrandPalette; emision medida por scripts/tokens/purity: emitida-en-los-3 ({\"rottay\":true,\"bithire\":true,\"evnto\":true})",
+      "governedBy": null,
+      "governanceScope": "ninguna",
+      "exposure": "internal-head",
+      "exposureNote": "EJE PASO, cohorte 2A (2026-08-27). Hija de tier.base.fg: promueve a cabeza de cascada el paso \"disabled\" del vocabulario AUTORADO de BrandPalette. Hereda exposure y governedBy del padre porque no es una perilla nueva sino la misma decision indexada por su paso -- por eso root-exposure-gate mide el vocabulario sobre las raices NO refinadas (adjudicacion DT 3.1). collapsesLegacy nace en cero a proposito: ese campo es censo FECHADO de 2026-08-18 y una raiz de 2026-08-27 no puede tener historia ahi; su cifra viva es su poblacion en manifest/generated/root-membership.json.",
+      "derivationDebt": true
+    },
+    {
+      "rootId": "tier.page.fg.primary",
+      "group": "superficie-por-nivel",
+      "channel": "--ds-color-text-primary",
+      "channelStatus": "existe",
+      "collapsesLegacy": {
+        "total": 0,
+        "rottay": 0,
+        "bithire": 0,
+        "evnto": 0
+      },
+      "assignments": {
+        "total": 0,
+        "rottay": 0,
+        "bithire": 0,
+        "evnto": 0,
+        "modes": {}
+      },
+      "derivation": "Paso \"primary\" del eje tinta sobre el nivel page. La cabeza --ds-color-text-primary ya es vocabulario AUTORADO de BrandPalette; esta raiz solo la promueve a cabeza de cascada para que una hoja de ese paso derive en vez de repetir su literal.",
+      "evidence": "--ds-color-text-primary es vocabulario AUTORADO de BrandPalette; emision medida por scripts/tokens/purity: emitida-en-los-3 ({\"rottay\":true,\"bithire\":true,\"evnto\":true})",
+      "governedBy": "navigation.sidebar-tone",
+      "governanceScope": "parcial",
+      "exposure": "tenant-dial",
+      "exposureNote": "EJE PASO, cohorte 2A (2026-08-27). Hija de tier.page.fg: promueve a cabeza de cascada el paso \"primary\" del vocabulario AUTORADO de BrandPalette. Hereda exposure y governedBy del padre porque no es una perilla nueva sino la misma decision indexada por su paso -- por eso root-exposure-gate mide el vocabulario sobre las raices NO refinadas (adjudicacion DT 3.1). collapsesLegacy nace en cero a proposito: ese campo es censo FECHADO de 2026-08-18 y una raiz de 2026-08-27 no puede tener historia ahi; su cifra viva es su poblacion en manifest/generated/root-membership.json.",
+      "derivationDebt": true
+    },
+    {
+      "rootId": "tier.page.fg.secondary",
+      "group": "superficie-por-nivel",
+      "channel": "--ds-color-text-secondary",
+      "channelStatus": "existe",
+      "collapsesLegacy": {
+        "total": 0,
+        "rottay": 0,
+        "bithire": 0,
+        "evnto": 0
+      },
+      "assignments": {
+        "total": 0,
+        "rottay": 0,
+        "bithire": 0,
+        "evnto": 0,
+        "modes": {}
+      },
+      "derivation": "Paso \"secondary\" del eje tinta sobre el nivel page. La cabeza --ds-color-text-secondary ya es vocabulario AUTORADO de BrandPalette; esta raiz solo la promueve a cabeza de cascada para que una hoja de ese paso derive en vez de repetir su literal.",
+      "evidence": "--ds-color-text-secondary es vocabulario AUTORADO de BrandPalette; emision medida por scripts/tokens/purity: emitida-en-los-3 ({\"rottay\":true,\"bithire\":true,\"evnto\":true})",
+      "governedBy": "navigation.sidebar-tone",
+      "governanceScope": "parcial",
+      "exposure": "tenant-dial",
+      "exposureNote": "EJE PASO, cohorte 2A (2026-08-27). Hija de tier.page.fg: promueve a cabeza de cascada el paso \"secondary\" del vocabulario AUTORADO de BrandPalette. Hereda exposure y governedBy del padre porque no es una perilla nueva sino la misma decision indexada por su paso -- por eso root-exposure-gate mide el vocabulario sobre las raices NO refinadas (adjudicacion DT 3.1). collapsesLegacy nace en cero a proposito: ese campo es censo FECHADO de 2026-08-18 y una raiz de 2026-08-27 no puede tener historia ahi; su cifra viva es su poblacion en manifest/generated/root-membership.json.",
+      "derivationDebt": true
+    },
+    {
+      "rootId": "tier.page.fg.muted",
+      "group": "superficie-por-nivel",
+      "channel": "--ds-color-text-muted",
+      "channelStatus": "existe",
+      "collapsesLegacy": {
+        "total": 0,
+        "rottay": 0,
+        "bithire": 0,
+        "evnto": 0
+      },
+      "assignments": {
+        "total": 0,
+        "rottay": 0,
+        "bithire": 0,
+        "evnto": 0,
+        "modes": {}
+      },
+      "derivation": "Paso \"muted\" del eje tinta sobre el nivel page. La cabeza --ds-color-text-muted ya es vocabulario AUTORADO de BrandPalette; esta raiz solo la promueve a cabeza de cascada para que una hoja de ese paso derive en vez de repetir su literal.",
+      "evidence": "--ds-color-text-muted es vocabulario AUTORADO de BrandPalette; emision medida por scripts/tokens/purity: emitida-en-los-3 ({\"rottay\":true,\"bithire\":true,\"evnto\":true})",
+      "governedBy": "navigation.sidebar-tone",
+      "governanceScope": "parcial",
+      "exposure": "tenant-dial",
+      "exposureNote": "EJE PASO, cohorte 2A (2026-08-27). Hija de tier.page.fg: promueve a cabeza de cascada el paso \"muted\" del vocabulario AUTORADO de BrandPalette. Hereda exposure y governedBy del padre porque no es una perilla nueva sino la misma decision indexada por su paso -- por eso root-exposure-gate mide el vocabulario sobre las raices NO refinadas (adjudicacion DT 3.1). collapsesLegacy nace en cero a proposito: ese campo es censo FECHADO de 2026-08-18 y una raiz de 2026-08-27 no puede tener historia ahi; su cifra viva es su poblacion en manifest/generated/root-membership.json.",
+      "derivationDebt": true
+    },
+    {
+      "rootId": "tier.page.fg.tertiary",
+      "group": "superficie-por-nivel",
+      "channel": "--ds-color-text-tertiary",
+      "channelStatus": "existe",
+      "collapsesLegacy": {
+        "total": 0,
+        "rottay": 0,
+        "bithire": 0,
+        "evnto": 0
+      },
+      "assignments": {
+        "total": 0,
+        "rottay": 0,
+        "bithire": 0,
+        "evnto": 0,
+        "modes": {}
+      },
+      "derivation": "Paso \"tertiary\" del eje tinta sobre el nivel page. La cabeza --ds-color-text-tertiary ya es vocabulario AUTORADO de BrandPalette; esta raiz solo la promueve a cabeza de cascada para que una hoja de ese paso derive en vez de repetir su literal.",
+      "evidence": "--ds-color-text-tertiary es vocabulario AUTORADO de BrandPalette; emision medida por scripts/tokens/purity: emitida-en-los-3 ({\"rottay\":true,\"bithire\":true,\"evnto\":true})",
+      "governedBy": "navigation.sidebar-tone",
+      "governanceScope": "parcial",
+      "exposure": "tenant-dial",
+      "exposureNote": "EJE PASO, cohorte 2A (2026-08-27). Hija de tier.page.fg: promueve a cabeza de cascada el paso \"tertiary\" del vocabulario AUTORADO de BrandPalette. Hereda exposure y governedBy del padre porque no es una perilla nueva sino la misma decision indexada por su paso -- por eso root-exposure-gate mide el vocabulario sobre las raices NO refinadas (adjudicacion DT 3.1). collapsesLegacy nace en cero a proposito: ese campo es censo FECHADO de 2026-08-18 y una raiz de 2026-08-27 no puede tener historia ahi; su cifra viva es su poblacion en manifest/generated/root-membership.json.",
+      "derivationDebt": true
+    },
+    {
+      "rootId": "tier.page.fg.disabled",
+      "group": "superficie-por-nivel",
+      "channel": "--ds-color-text-disabled",
+      "channelStatus": "existe",
+      "collapsesLegacy": {
+        "total": 0,
+        "rottay": 0,
+        "bithire": 0,
+        "evnto": 0
+      },
+      "assignments": {
+        "total": 0,
+        "rottay": 0,
+        "bithire": 0,
+        "evnto": 0,
+        "modes": {}
+      },
+      "derivation": "Paso \"disabled\" del eje tinta sobre el nivel page. La cabeza --ds-color-text-disabled ya es vocabulario AUTORADO de BrandPalette; esta raiz solo la promueve a cabeza de cascada para que una hoja de ese paso derive en vez de repetir su literal.",
+      "evidence": "--ds-color-text-disabled es vocabulario AUTORADO de BrandPalette; emision medida por scripts/tokens/purity: emitida-en-los-3 ({\"rottay\":true,\"bithire\":true,\"evnto\":true})",
+      "governedBy": "navigation.sidebar-tone",
+      "governanceScope": "parcial",
+      "exposure": "tenant-dial",
+      "exposureNote": "EJE PASO, cohorte 2A (2026-08-27). Hija de tier.page.fg: promueve a cabeza de cascada el paso \"disabled\" del vocabulario AUTORADO de BrandPalette. Hereda exposure y governedBy del padre porque no es una perilla nueva sino la misma decision indexada por su paso -- por eso root-exposure-gate mide el vocabulario sobre las raices NO refinadas (adjudicacion DT 3.1). collapsesLegacy nace en cero a proposito: ese campo es censo FECHADO de 2026-08-18 y una raiz de 2026-08-27 no puede tener historia ahi; su cifra viva es su poblacion en manifest/generated/root-membership.json.",
+      "derivationDebt": true
+    },
+    {
+      "rootId": "tier.raised.border.primary",
+      "group": "superficie-por-nivel",
+      "channel": "--ds-color-border-primary",
+      "channelStatus": "existe",
+      "collapsesLegacy": {
+        "total": 0,
+        "rottay": 0,
+        "bithire": 0,
+        "evnto": 0
+      },
+      "assignments": {
+        "total": 0,
+        "rottay": 0,
+        "bithire": 0,
+        "evnto": 0,
+        "modes": {}
+      },
+      "derivation": "Paso \"primary\" del eje borde sobre el nivel raised. La cabeza --ds-color-border-primary ya es vocabulario AUTORADO de BrandPalette; esta raiz solo la promueve a cabeza de cascada para que una hoja de ese paso derive en vez de repetir su literal.",
+      "evidence": "--ds-color-border-primary es vocabulario AUTORADO de BrandPalette; emision medida por scripts/tokens/purity: emitida-en-los-3 ({\"rottay\":true,\"bithire\":true,\"evnto\":true})",
+      "governedBy": null,
+      "governanceScope": "ninguna",
+      "exposure": "gap",
+      "exposureNote": "EJE PASO, cohorte 2A (2026-08-27). Hija de tier.raised.border: promueve a cabeza de cascada el paso \"primary\" del vocabulario AUTORADO de BrandPalette. Hereda exposure y governedBy del padre porque no es una perilla nueva sino la misma decision indexada por su paso -- por eso root-exposure-gate mide el vocabulario sobre las raices NO refinadas (adjudicacion DT 3.1). collapsesLegacy nace en cero a proposito: ese campo es censo FECHADO de 2026-08-18 y una raiz de 2026-08-27 no puede tener historia ahi; su cifra viva es su poblacion en manifest/generated/root-membership.json.",
+      "derivationDebt": true
+    },
+    {
+      "rootId": "tier.raised.border.subtle",
+      "group": "superficie-por-nivel",
+      "channel": "--ds-color-border-subtle",
+      "channelStatus": "existe",
+      "collapsesLegacy": {
+        "total": 0,
+        "rottay": 0,
+        "bithire": 0,
+        "evnto": 0
+      },
+      "assignments": {
+        "total": 0,
+        "rottay": 0,
+        "bithire": 0,
+        "evnto": 0,
+        "modes": {}
+      },
+      "derivation": "Paso \"subtle\" del eje borde sobre el nivel raised. La cabeza --ds-color-border-subtle ya es vocabulario AUTORADO de BrandPalette; esta raiz solo la promueve a cabeza de cascada para que una hoja de ese paso derive en vez de repetir su literal.",
+      "evidence": "--ds-color-border-subtle es vocabulario AUTORADO de BrandPalette; emision medida por scripts/tokens/purity: emitida-en-los-3 ({\"rottay\":true,\"bithire\":true,\"evnto\":true})",
+      "governedBy": null,
+      "governanceScope": "ninguna",
+      "exposure": "gap",
+      "exposureNote": "EJE PASO, cohorte 2A (2026-08-27). Hija de tier.raised.border: promueve a cabeza de cascada el paso \"subtle\" del vocabulario AUTORADO de BrandPalette. Hereda exposure y governedBy del padre porque no es una perilla nueva sino la misma decision indexada por su paso -- por eso root-exposure-gate mide el vocabulario sobre las raices NO refinadas (adjudicacion DT 3.1). collapsesLegacy nace en cero a proposito: ese campo es censo FECHADO de 2026-08-18 y una raiz de 2026-08-27 no puede tener historia ahi; su cifra viva es su poblacion en manifest/generated/root-membership.json.",
+      "derivationDebt": true
+    },
+    {
+      "rootId": "tier.raised.border.focus",
+      "group": "superficie-por-nivel",
+      "channel": "--ds-color-border-focus",
+      "channelStatus": "existe",
+      "collapsesLegacy": {
+        "total": 0,
+        "rottay": 0,
+        "bithire": 0,
+        "evnto": 0
+      },
+      "assignments": {
+        "total": 0,
+        "rottay": 0,
+        "bithire": 0,
+        "evnto": 0,
+        "modes": {}
+      },
+      "derivation": "Paso \"focus\" del eje borde sobre el nivel raised. La cabeza --ds-color-border-focus ya es vocabulario AUTORADO de BrandPalette; esta raiz solo la promueve a cabeza de cascada para que una hoja de ese paso derive en vez de repetir su literal.",
+      "evidence": "--ds-color-border-focus es vocabulario AUTORADO de BrandPalette; emision medida por scripts/tokens/purity: emitida-en-los-3 ({\"rottay\":true,\"bithire\":true,\"evnto\":true})",
+      "governedBy": null,
+      "governanceScope": "ninguna",
+      "exposure": "gap",
+      "exposureNote": "EJE PASO, cohorte 2A (2026-08-27). Hija de tier.raised.border: promueve a cabeza de cascada el paso \"focus\" del vocabulario AUTORADO de BrandPalette. Hereda exposure y governedBy del padre porque no es una perilla nueva sino la misma decision indexada por su paso -- por eso root-exposure-gate mide el vocabulario sobre las raices NO refinadas (adjudicacion DT 3.1). collapsesLegacy nace en cero a proposito: ese campo es censo FECHADO de 2026-08-18 y una raiz de 2026-08-27 no puede tener historia ahi; su cifra viva es su poblacion en manifest/generated/root-membership.json.",
+      "derivationDebt": true
+    },
+    {
+      "rootId": "tier.base.border.primary",
+      "group": "superficie-por-nivel",
+      "channel": "--ds-color-border-primary",
+      "channelStatus": "existe",
+      "collapsesLegacy": {
+        "total": 0,
+        "rottay": 0,
+        "bithire": 0,
+        "evnto": 0
+      },
+      "assignments": {
+        "total": 0,
+        "rottay": 0,
+        "bithire": 0,
+        "evnto": 0,
+        "modes": {}
+      },
+      "derivation": "Paso \"primary\" del eje borde sobre el nivel base. La cabeza --ds-color-border-primary ya es vocabulario AUTORADO de BrandPalette; esta raiz solo la promueve a cabeza de cascada para que una hoja de ese paso derive en vez de repetir su literal.",
+      "evidence": "--ds-color-border-primary es vocabulario AUTORADO de BrandPalette; emision medida por scripts/tokens/purity: emitida-en-los-3 ({\"rottay\":true,\"bithire\":true,\"evnto\":true})",
+      "governedBy": null,
+      "governanceScope": "ninguna",
+      "exposure": "internal-head",
+      "exposureNote": "EJE PASO, cohorte 2A (2026-08-27). Hija de tier.base.border: promueve a cabeza de cascada el paso \"primary\" del vocabulario AUTORADO de BrandPalette. Hereda exposure y governedBy del padre porque no es una perilla nueva sino la misma decision indexada por su paso -- por eso root-exposure-gate mide el vocabulario sobre las raices NO refinadas (adjudicacion DT 3.1). collapsesLegacy nace en cero a proposito: ese campo es censo FECHADO de 2026-08-18 y una raiz de 2026-08-27 no puede tener historia ahi; su cifra viva es su poblacion en manifest/generated/root-membership.json.",
+      "derivationDebt": true
+    },
+    {
+      "rootId": "tier.base.border.subtle",
+      "group": "superficie-por-nivel",
+      "channel": "--ds-color-border-subtle",
+      "channelStatus": "existe",
+      "collapsesLegacy": {
+        "total": 0,
+        "rottay": 0,
+        "bithire": 0,
+        "evnto": 0
+      },
+      "assignments": {
+        "total": 0,
+        "rottay": 0,
+        "bithire": 0,
+        "evnto": 0,
+        "modes": {}
+      },
+      "derivation": "Paso \"subtle\" del eje borde sobre el nivel base. La cabeza --ds-color-border-subtle ya es vocabulario AUTORADO de BrandPalette; esta raiz solo la promueve a cabeza de cascada para que una hoja de ese paso derive en vez de repetir su literal.",
+      "evidence": "--ds-color-border-subtle es vocabulario AUTORADO de BrandPalette; emision medida por scripts/tokens/purity: emitida-en-los-3 ({\"rottay\":true,\"bithire\":true,\"evnto\":true})",
+      "governedBy": null,
+      "governanceScope": "ninguna",
+      "exposure": "internal-head",
+      "exposureNote": "EJE PASO, cohorte 2A (2026-08-27). Hija de tier.base.border: promueve a cabeza de cascada el paso \"subtle\" del vocabulario AUTORADO de BrandPalette. Hereda exposure y governedBy del padre porque no es una perilla nueva sino la misma decision indexada por su paso -- por eso root-exposure-gate mide el vocabulario sobre las raices NO refinadas (adjudicacion DT 3.1). collapsesLegacy nace en cero a proposito: ese campo es censo FECHADO de 2026-08-18 y una raiz de 2026-08-27 no puede tener historia ahi; su cifra viva es su poblacion en manifest/generated/root-membership.json.",
+      "derivationDebt": true
+    },
+    {
+      "rootId": "tier.base.border.focus",
+      "group": "superficie-por-nivel",
+      "channel": "--ds-color-border-focus",
+      "channelStatus": "existe",
+      "collapsesLegacy": {
+        "total": 0,
+        "rottay": 0,
+        "bithire": 0,
+        "evnto": 0
+      },
+      "assignments": {
+        "total": 0,
+        "rottay": 0,
+        "bithire": 0,
+        "evnto": 0,
+        "modes": {}
+      },
+      "derivation": "Paso \"focus\" del eje borde sobre el nivel base. La cabeza --ds-color-border-focus ya es vocabulario AUTORADO de BrandPalette; esta raiz solo la promueve a cabeza de cascada para que una hoja de ese paso derive en vez de repetir su literal.",
+      "evidence": "--ds-color-border-focus es vocabulario AUTORADO de BrandPalette; emision medida por scripts/tokens/purity: emitida-en-los-3 ({\"rottay\":true,\"bithire\":true,\"evnto\":true})",
+      "governedBy": null,
+      "governanceScope": "ninguna",
+      "exposure": "internal-head",
+      "exposureNote": "EJE PASO, cohorte 2A (2026-08-27). Hija de tier.base.border: promueve a cabeza de cascada el paso \"focus\" del vocabulario AUTORADO de BrandPalette. Hereda exposure y governedBy del padre porque no es una perilla nueva sino la misma decision indexada por su paso -- por eso root-exposure-gate mide el vocabulario sobre las raices NO refinadas (adjudicacion DT 3.1). collapsesLegacy nace en cero a proposito: ese campo es censo FECHADO de 2026-08-18 y una raiz de 2026-08-27 no puede tener historia ahi; su cifra viva es su poblacion en manifest/generated/root-membership.json.",
+      "derivationDebt": true
+    },
+    {
+      "rootId": "tier.control.border.primary",
+      "group": "superficie-por-nivel",
+      "channel": "--ds-color-border-primary",
+      "channelStatus": "existe",
+      "collapsesLegacy": {
+        "total": 0,
+        "rottay": 0,
+        "bithire": 0,
+        "evnto": 0
+      },
+      "assignments": {
+        "total": 0,
+        "rottay": 0,
+        "bithire": 0,
+        "evnto": 0,
+        "modes": {}
+      },
+      "derivation": "Paso \"primary\" del eje borde sobre el nivel control. La cabeza --ds-color-border-primary ya es vocabulario AUTORADO de BrandPalette; esta raiz solo la promueve a cabeza de cascada para que una hoja de ese paso derive en vez de repetir su literal.",
+      "evidence": "--ds-color-border-primary es vocabulario AUTORADO de BrandPalette; emision medida por scripts/tokens/purity: emitida-en-los-3 ({\"rottay\":true,\"bithire\":true,\"evnto\":true})",
+      "governedBy": null,
+      "governanceScope": "ninguna",
+      "exposure": "internal-head",
+      "exposureNote": "EJE PASO, cohorte 2A (2026-08-27). Hija de tier.control.border: promueve a cabeza de cascada el paso \"primary\" del vocabulario AUTORADO de BrandPalette. Hereda exposure y governedBy del padre porque no es una perilla nueva sino la misma decision indexada por su paso -- por eso root-exposure-gate mide el vocabulario sobre las raices NO refinadas (adjudicacion DT 3.1). collapsesLegacy nace en cero a proposito: ese campo es censo FECHADO de 2026-08-18 y una raiz de 2026-08-27 no puede tener historia ahi; su cifra viva es su poblacion en manifest/generated/root-membership.json.",
+      "derivationDebt": true
+    },
+    {
+      "rootId": "tier.control.border.subtle",
+      "group": "superficie-por-nivel",
+      "channel": "--ds-color-border-subtle",
+      "channelStatus": "existe",
+      "collapsesLegacy": {
+        "total": 0,
+        "rottay": 0,
+        "bithire": 0,
+        "evnto": 0
+      },
+      "assignments": {
+        "total": 0,
+        "rottay": 0,
+        "bithire": 0,
+        "evnto": 0,
+        "modes": {}
+      },
+      "derivation": "Paso \"subtle\" del eje borde sobre el nivel control. La cabeza --ds-color-border-subtle ya es vocabulario AUTORADO de BrandPalette; esta raiz solo la promueve a cabeza de cascada para que una hoja de ese paso derive en vez de repetir su literal.",
+      "evidence": "--ds-color-border-subtle es vocabulario AUTORADO de BrandPalette; emision medida por scripts/tokens/purity: emitida-en-los-3 ({\"rottay\":true,\"bithire\":true,\"evnto\":true})",
+      "governedBy": null,
+      "governanceScope": "ninguna",
+      "exposure": "internal-head",
+      "exposureNote": "EJE PASO, cohorte 2A (2026-08-27). Hija de tier.control.border: promueve a cabeza de cascada el paso \"subtle\" del vocabulario AUTORADO de BrandPalette. Hereda exposure y governedBy del padre porque no es una perilla nueva sino la misma decision indexada por su paso -- por eso root-exposure-gate mide el vocabulario sobre las raices NO refinadas (adjudicacion DT 3.1). collapsesLegacy nace en cero a proposito: ese campo es censo FECHADO de 2026-08-18 y una raiz de 2026-08-27 no puede tener historia ahi; su cifra viva es su poblacion en manifest/generated/root-membership.json.",
+      "derivationDebt": true
+    },
+    {
+      "rootId": "tier.control.border.focus",
+      "group": "superficie-por-nivel",
+      "channel": "--ds-color-border-focus",
+      "channelStatus": "existe",
+      "collapsesLegacy": {
+        "total": 0,
+        "rottay": 0,
+        "bithire": 0,
+        "evnto": 0
+      },
+      "assignments": {
+        "total": 0,
+        "rottay": 0,
+        "bithire": 0,
+        "evnto": 0,
+        "modes": {}
+      },
+      "derivation": "Paso \"focus\" del eje borde sobre el nivel control. La cabeza --ds-color-border-focus ya es vocabulario AUTORADO de BrandPalette; esta raiz solo la promueve a cabeza de cascada para que una hoja de ese paso derive en vez de repetir su literal.",
+      "evidence": "--ds-color-border-focus es vocabulario AUTORADO de BrandPalette; emision medida por scripts/tokens/purity: emitida-en-los-3 ({\"rottay\":true,\"bithire\":true,\"evnto\":true})",
+      "governedBy": null,
+      "governanceScope": "ninguna",
+      "exposure": "internal-head",
+      "exposureNote": "EJE PASO, cohorte 2A (2026-08-27). Hija de tier.control.border: promueve a cabeza de cascada el paso \"focus\" del vocabulario AUTORADO de BrandPalette. Hereda exposure y governedBy del padre porque no es una perilla nueva sino la misma decision indexada por su paso -- por eso root-exposure-gate mide el vocabulario sobre las raices NO refinadas (adjudicacion DT 3.1). collapsesLegacy nace en cero a proposito: ese campo es censo FECHADO de 2026-08-18 y una raiz de 2026-08-27 no puede tener historia ahi; su cifra viva es su poblacion en manifest/generated/root-membership.json.",
+      "derivationDebt": true
+    },
+    {
+      "rootId": "tier.control.fg.secondary",
+      "group": "superficie-por-nivel",
+      "channel": "--ds-color-text-secondary",
+      "channelStatus": "existe",
+      "collapsesLegacy": {
+        "total": 0,
+        "rottay": 0,
+        "bithire": 0,
+        "evnto": 0
+      },
+      "assignments": {
+        "total": 0,
+        "rottay": 0,
+        "bithire": 0,
+        "evnto": 0,
+        "modes": {}
+      },
+      "derivation": "Paso \"secondary\" del eje tinta sobre el nivel control. La cabeza --ds-color-text-secondary ya es vocabulario AUTORADO de BrandPalette; esta raiz solo la promueve a cabeza de cascada para que una hoja de ese paso derive en vez de repetir su literal.",
+      "evidence": "--ds-color-text-secondary es vocabulario AUTORADO de BrandPalette; emision medida por scripts/tokens/purity: emitida-en-los-3 ({\"rottay\":true,\"bithire\":true,\"evnto\":true})",
+      "governedBy": null,
+      "governanceScope": "ninguna",
+      "exposure": "internal-head",
+      "exposureNote": "EJE PASO, cohorte 2A (2026-08-27). Hija de tier.control.fg: promueve a cabeza de cascada el paso \"secondary\" del vocabulario AUTORADO de BrandPalette. Hereda exposure y governedBy del padre porque no es una perilla nueva sino la misma decision indexada por su paso -- por eso root-exposure-gate mide el vocabulario sobre las raices NO refinadas (adjudicacion DT 3.1). collapsesLegacy nace en cero a proposito: ese campo es censo FECHADO de 2026-08-18 y una raiz de 2026-08-27 no puede tener historia ahi; su cifra viva es su poblacion en manifest/generated/root-membership.json.",
+      "derivationDebt": true
+    },
+    {
+      "rootId": "tier.control.fg.muted",
+      "group": "superficie-por-nivel",
+      "channel": "--ds-color-text-muted",
+      "channelStatus": "existe",
+      "collapsesLegacy": {
+        "total": 0,
+        "rottay": 0,
+        "bithire": 0,
+        "evnto": 0
+      },
+      "assignments": {
+        "total": 0,
+        "rottay": 0,
+        "bithire": 0,
+        "evnto": 0,
+        "modes": {}
+      },
+      "derivation": "Paso \"muted\" del eje tinta sobre el nivel control. La cabeza --ds-color-text-muted ya es vocabulario AUTORADO de BrandPalette; esta raiz solo la promueve a cabeza de cascada para que una hoja de ese paso derive en vez de repetir su literal.",
+      "evidence": "--ds-color-text-muted es vocabulario AUTORADO de BrandPalette; emision medida por scripts/tokens/purity: emitida-en-los-3 ({\"rottay\":true,\"bithire\":true,\"evnto\":true})",
+      "governedBy": null,
+      "governanceScope": "ninguna",
+      "exposure": "internal-head",
+      "exposureNote": "EJE PASO, cohorte 2A (2026-08-27). Hija de tier.control.fg: promueve a cabeza de cascada el paso \"muted\" del vocabulario AUTORADO de BrandPalette. Hereda exposure y governedBy del padre porque no es una perilla nueva sino la misma decision indexada por su paso -- por eso root-exposure-gate mide el vocabulario sobre las raices NO refinadas (adjudicacion DT 3.1). collapsesLegacy nace en cero a proposito: ese campo es censo FECHADO de 2026-08-18 y una raiz de 2026-08-27 no puede tener historia ahi; su cifra viva es su poblacion en manifest/generated/root-membership.json.",
+      "derivationDebt": true
+    },
+    {
+      "rootId": "tier.control.fg.tertiary",
+      "group": "superficie-por-nivel",
+      "channel": "--ds-color-text-tertiary",
+      "channelStatus": "existe",
+      "collapsesLegacy": {
+        "total": 0,
+        "rottay": 0,
+        "bithire": 0,
+        "evnto": 0
+      },
+      "assignments": {
+        "total": 0,
+        "rottay": 0,
+        "bithire": 0,
+        "evnto": 0,
+        "modes": {}
+      },
+      "derivation": "Paso \"tertiary\" del eje tinta sobre el nivel control. La cabeza --ds-color-text-tertiary ya es vocabulario AUTORADO de BrandPalette; esta raiz solo la promueve a cabeza de cascada para que una hoja de ese paso derive en vez de repetir su literal.",
+      "evidence": "--ds-color-text-tertiary es vocabulario AUTORADO de BrandPalette; emision medida por scripts/tokens/purity: emitida-en-los-3 ({\"rottay\":true,\"bithire\":true,\"evnto\":true})",
+      "governedBy": null,
+      "governanceScope": "ninguna",
+      "exposure": "internal-head",
+      "exposureNote": "EJE PASO, cohorte 2A (2026-08-27). Hija de tier.control.fg: promueve a cabeza de cascada el paso \"tertiary\" del vocabulario AUTORADO de BrandPalette. Hereda exposure y governedBy del padre porque no es una perilla nueva sino la misma decision indexada por su paso -- por eso root-exposure-gate mide el vocabulario sobre las raices NO refinadas (adjudicacion DT 3.1). collapsesLegacy nace en cero a proposito: ese campo es censo FECHADO de 2026-08-18 y una raiz de 2026-08-27 no puede tener historia ahi; su cifra viva es su poblacion en manifest/generated/root-membership.json.",
+      "derivationDebt": true
+    },
+    {
+      "rootId": "tier.control.fg.disabled",
+      "group": "superficie-por-nivel",
+      "channel": "--ds-color-text-disabled",
+      "channelStatus": "existe",
+      "collapsesLegacy": {
+        "total": 0,
+        "rottay": 0,
+        "bithire": 0,
+        "evnto": 0
+      },
+      "assignments": {
+        "total": 0,
+        "rottay": 0,
+        "bithire": 0,
+        "evnto": 0,
+        "modes": {}
+      },
+      "derivation": "Paso \"disabled\" del eje tinta sobre el nivel control. La cabeza --ds-color-text-disabled ya es vocabulario AUTORADO de BrandPalette; esta raiz solo la promueve a cabeza de cascada para que una hoja de ese paso derive en vez de repetir su literal.",
+      "evidence": "--ds-color-text-disabled es vocabulario AUTORADO de BrandPalette; emision medida por scripts/tokens/purity: emitida-en-los-3 ({\"rottay\":true,\"bithire\":true,\"evnto\":true})",
+      "governedBy": null,
+      "governanceScope": "ninguna",
+      "exposure": "internal-head",
+      "exposureNote": "EJE PASO, cohorte 2A (2026-08-27). Hija de tier.control.fg: promueve a cabeza de cascada el paso \"disabled\" del vocabulario AUTORADO de BrandPalette. Hereda exposure y governedBy del padre porque no es una perilla nueva sino la misma decision indexada por su paso -- por eso root-exposure-gate mide el vocabulario sobre las raices NO refinadas (adjudicacion DT 3.1). collapsesLegacy nace en cero a proposito: ese campo es censo FECHADO de 2026-08-18 y una raiz de 2026-08-27 no puede tener historia ahi; su cifra viva es su poblacion en manifest/generated/root-membership.json.",
+      "derivationDebt": true
+    },
+    {
+      "rootId": "tier.overlay.fg.primary",
+      "group": "superficie-por-nivel",
+      "channel": "--ds-color-text-primary",
+      "channelStatus": "existe",
+      "collapsesLegacy": {
+        "total": 0,
+        "rottay": 0,
+        "bithire": 0,
+        "evnto": 0
+      },
+      "assignments": {
+        "total": 0,
+        "rottay": 0,
+        "bithire": 0,
+        "evnto": 0,
+        "modes": {}
+      },
+      "derivation": "Paso \"primary\" del eje tinta sobre el nivel overlay. La cabeza --ds-color-text-primary ya es vocabulario AUTORADO de BrandPalette; esta raiz solo la promueve a cabeza de cascada para que una hoja de ese paso derive en vez de repetir su literal.",
+      "evidence": "--ds-color-text-primary es vocabulario AUTORADO de BrandPalette; emision medida por scripts/tokens/purity: emitida-en-los-3 ({\"rottay\":true,\"bithire\":true,\"evnto\":true})",
+      "governedBy": null,
+      "governanceScope": "ninguna",
+      "exposure": "internal-head",
+      "exposureNote": "EJE PASO, cohorte 2A (2026-08-27). Hija de tier.overlay.fg: promueve a cabeza de cascada el paso \"primary\" del vocabulario AUTORADO de BrandPalette. Hereda exposure y governedBy del padre porque no es una perilla nueva sino la misma decision indexada por su paso -- por eso root-exposure-gate mide el vocabulario sobre las raices NO refinadas (adjudicacion DT 3.1). collapsesLegacy nace en cero a proposito: ese campo es censo FECHADO de 2026-08-18 y una raiz de 2026-08-27 no puede tener historia ahi; su cifra viva es su poblacion en manifest/generated/root-membership.json.",
+      "derivationDebt": true
+    },
+    {
+      "rootId": "tier.overlay.fg.secondary",
+      "group": "superficie-por-nivel",
+      "channel": "--ds-color-text-secondary",
+      "channelStatus": "existe",
+      "collapsesLegacy": {
+        "total": 0,
+        "rottay": 0,
+        "bithire": 0,
+        "evnto": 0
+      },
+      "assignments": {
+        "total": 0,
+        "rottay": 0,
+        "bithire": 0,
+        "evnto": 0,
+        "modes": {}
+      },
+      "derivation": "Paso \"secondary\" del eje tinta sobre el nivel overlay. La cabeza --ds-color-text-secondary ya es vocabulario AUTORADO de BrandPalette; esta raiz solo la promueve a cabeza de cascada para que una hoja de ese paso derive en vez de repetir su literal.",
+      "evidence": "--ds-color-text-secondary es vocabulario AUTORADO de BrandPalette; emision medida por scripts/tokens/purity: emitida-en-los-3 ({\"rottay\":true,\"bithire\":true,\"evnto\":true})",
+      "governedBy": null,
+      "governanceScope": "ninguna",
+      "exposure": "internal-head",
+      "exposureNote": "EJE PASO, cohorte 2A (2026-08-27). Hija de tier.overlay.fg: promueve a cabeza de cascada el paso \"secondary\" del vocabulario AUTORADO de BrandPalette. Hereda exposure y governedBy del padre porque no es una perilla nueva sino la misma decision indexada por su paso -- por eso root-exposure-gate mide el vocabulario sobre las raices NO refinadas (adjudicacion DT 3.1). collapsesLegacy nace en cero a proposito: ese campo es censo FECHADO de 2026-08-18 y una raiz de 2026-08-27 no puede tener historia ahi; su cifra viva es su poblacion en manifest/generated/root-membership.json.",
+      "derivationDebt": true
+    },
+    {
+      "rootId": "tier.overlay.fg.muted",
+      "group": "superficie-por-nivel",
+      "channel": "--ds-color-text-muted",
+      "channelStatus": "existe",
+      "collapsesLegacy": {
+        "total": 0,
+        "rottay": 0,
+        "bithire": 0,
+        "evnto": 0
+      },
+      "assignments": {
+        "total": 0,
+        "rottay": 0,
+        "bithire": 0,
+        "evnto": 0,
+        "modes": {}
+      },
+      "derivation": "Paso \"muted\" del eje tinta sobre el nivel overlay. La cabeza --ds-color-text-muted ya es vocabulario AUTORADO de BrandPalette; esta raiz solo la promueve a cabeza de cascada para que una hoja de ese paso derive en vez de repetir su literal.",
+      "evidence": "--ds-color-text-muted es vocabulario AUTORADO de BrandPalette; emision medida por scripts/tokens/purity: emitida-en-los-3 ({\"rottay\":true,\"bithire\":true,\"evnto\":true})",
+      "governedBy": null,
+      "governanceScope": "ninguna",
+      "exposure": "internal-head",
+      "exposureNote": "EJE PASO, cohorte 2A (2026-08-27). Hija de tier.overlay.fg: promueve a cabeza de cascada el paso \"muted\" del vocabulario AUTORADO de BrandPalette. Hereda exposure y governedBy del padre porque no es una perilla nueva sino la misma decision indexada por su paso -- por eso root-exposure-gate mide el vocabulario sobre las raices NO refinadas (adjudicacion DT 3.1). collapsesLegacy nace en cero a proposito: ese campo es censo FECHADO de 2026-08-18 y una raiz de 2026-08-27 no puede tener historia ahi; su cifra viva es su poblacion en manifest/generated/root-membership.json.",
+      "derivationDebt": true
+    },
+    {
+      "rootId": "tier.overlay.fg.tertiary",
+      "group": "superficie-por-nivel",
+      "channel": "--ds-color-text-tertiary",
+      "channelStatus": "existe",
+      "collapsesLegacy": {
+        "total": 0,
+        "rottay": 0,
+        "bithire": 0,
+        "evnto": 0
+      },
+      "assignments": {
+        "total": 0,
+        "rottay": 0,
+        "bithire": 0,
+        "evnto": 0,
+        "modes": {}
+      },
+      "derivation": "Paso \"tertiary\" del eje tinta sobre el nivel overlay. La cabeza --ds-color-text-tertiary ya es vocabulario AUTORADO de BrandPalette; esta raiz solo la promueve a cabeza de cascada para que una hoja de ese paso derive en vez de repetir su literal.",
+      "evidence": "--ds-color-text-tertiary es vocabulario AUTORADO de BrandPalette; emision medida por scripts/tokens/purity: emitida-en-los-3 ({\"rottay\":true,\"bithire\":true,\"evnto\":true})",
+      "governedBy": null,
+      "governanceScope": "ninguna",
+      "exposure": "internal-head",
+      "exposureNote": "EJE PASO, cohorte 2A (2026-08-27). Hija de tier.overlay.fg: promueve a cabeza de cascada el paso \"tertiary\" del vocabulario AUTORADO de BrandPalette. Hereda exposure y governedBy del padre porque no es una perilla nueva sino la misma decision indexada por su paso -- por eso root-exposure-gate mide el vocabulario sobre las raices NO refinadas (adjudicacion DT 3.1). collapsesLegacy nace en cero a proposito: ese campo es censo FECHADO de 2026-08-18 y una raiz de 2026-08-27 no puede tener historia ahi; su cifra viva es su poblacion en manifest/generated/root-membership.json.",
+      "derivationDebt": true
+    },
+    {
+      "rootId": "tier.overlay.fg.disabled",
+      "group": "superficie-por-nivel",
+      "channel": "--ds-color-text-disabled",
+      "channelStatus": "existe",
+      "collapsesLegacy": {
+        "total": 0,
+        "rottay": 0,
+        "bithire": 0,
+        "evnto": 0
+      },
+      "assignments": {
+        "total": 0,
+        "rottay": 0,
+        "bithire": 0,
+        "evnto": 0,
+        "modes": {}
+      },
+      "derivation": "Paso \"disabled\" del eje tinta sobre el nivel overlay. La cabeza --ds-color-text-disabled ya es vocabulario AUTORADO de BrandPalette; esta raiz solo la promueve a cabeza de cascada para que una hoja de ese paso derive en vez de repetir su literal.",
+      "evidence": "--ds-color-text-disabled es vocabulario AUTORADO de BrandPalette; emision medida por scripts/tokens/purity: emitida-en-los-3 ({\"rottay\":true,\"bithire\":true,\"evnto\":true})",
+      "governedBy": null,
+      "governanceScope": "ninguna",
+      "exposure": "internal-head",
+      "exposureNote": "EJE PASO, cohorte 2A (2026-08-27). Hija de tier.overlay.fg: promueve a cabeza de cascada el paso \"disabled\" del vocabulario AUTORADO de BrandPalette. Hereda exposure y governedBy del padre porque no es una perilla nueva sino la misma decision indexada por su paso -- por eso root-exposure-gate mide el vocabulario sobre las raices NO refinadas (adjudicacion DT 3.1). collapsesLegacy nace en cero a proposito: ese campo es censo FECHADO de 2026-08-18 y una raiz de 2026-08-27 no puede tener historia ahi; su cifra viva es su poblacion en manifest/generated/root-membership.json.",
+      "derivationDebt": true
+    },
+    {
+      "rootId": "tier.overlay.border.primary",
+      "group": "superficie-por-nivel",
+      "channel": "--ds-color-border-primary",
+      "channelStatus": "existe",
+      "collapsesLegacy": {
+        "total": 0,
+        "rottay": 0,
+        "bithire": 0,
+        "evnto": 0
+      },
+      "assignments": {
+        "total": 0,
+        "rottay": 0,
+        "bithire": 0,
+        "evnto": 0,
+        "modes": {}
+      },
+      "derivation": "Paso \"primary\" del eje borde sobre el nivel overlay. La cabeza --ds-color-border-primary ya es vocabulario AUTORADO de BrandPalette; esta raiz solo la promueve a cabeza de cascada para que una hoja de ese paso derive en vez de repetir su literal.",
+      "evidence": "--ds-color-border-primary es vocabulario AUTORADO de BrandPalette; emision medida por scripts/tokens/purity: emitida-en-los-3 ({\"rottay\":true,\"bithire\":true,\"evnto\":true})",
+      "governedBy": null,
+      "governanceScope": "ninguna",
+      "exposure": "internal-head",
+      "exposureNote": "EJE PASO, cohorte 2A (2026-08-27). Hija de tier.overlay.border: promueve a cabeza de cascada el paso \"primary\" del vocabulario AUTORADO de BrandPalette. Hereda exposure y governedBy del padre porque no es una perilla nueva sino la misma decision indexada por su paso -- por eso root-exposure-gate mide el vocabulario sobre las raices NO refinadas (adjudicacion DT 3.1). collapsesLegacy nace en cero a proposito: ese campo es censo FECHADO de 2026-08-18 y una raiz de 2026-08-27 no puede tener historia ahi; su cifra viva es su poblacion en manifest/generated/root-membership.json.",
+      "derivationDebt": true
+    },
+    {
+      "rootId": "tier.overlay.border.subtle",
+      "group": "superficie-por-nivel",
+      "channel": "--ds-color-border-subtle",
+      "channelStatus": "existe",
+      "collapsesLegacy": {
+        "total": 0,
+        "rottay": 0,
+        "bithire": 0,
+        "evnto": 0
+      },
+      "assignments": {
+        "total": 0,
+        "rottay": 0,
+        "bithire": 0,
+        "evnto": 0,
+        "modes": {}
+      },
+      "derivation": "Paso \"subtle\" del eje borde sobre el nivel overlay. La cabeza --ds-color-border-subtle ya es vocabulario AUTORADO de BrandPalette; esta raiz solo la promueve a cabeza de cascada para que una hoja de ese paso derive en vez de repetir su literal.",
+      "evidence": "--ds-color-border-subtle es vocabulario AUTORADO de BrandPalette; emision medida por scripts/tokens/purity: emitida-en-los-3 ({\"rottay\":true,\"bithire\":true,\"evnto\":true})",
+      "governedBy": null,
+      "governanceScope": "ninguna",
+      "exposure": "internal-head",
+      "exposureNote": "EJE PASO, cohorte 2A (2026-08-27). Hija de tier.overlay.border: promueve a cabeza de cascada el paso \"subtle\" del vocabulario AUTORADO de BrandPalette. Hereda exposure y governedBy del padre porque no es una perilla nueva sino la misma decision indexada por su paso -- por eso root-exposure-gate mide el vocabulario sobre las raices NO refinadas (adjudicacion DT 3.1). collapsesLegacy nace en cero a proposito: ese campo es censo FECHADO de 2026-08-18 y una raiz de 2026-08-27 no puede tener historia ahi; su cifra viva es su poblacion en manifest/generated/root-membership.json.",
+      "derivationDebt": true
+    },
+    {
+      "rootId": "tier.overlay.border.focus",
+      "group": "superficie-por-nivel",
+      "channel": "--ds-color-border-focus",
+      "channelStatus": "existe",
+      "collapsesLegacy": {
+        "total": 0,
+        "rottay": 0,
+        "bithire": 0,
+        "evnto": 0
+      },
+      "assignments": {
+        "total": 0,
+        "rottay": 0,
+        "bithire": 0,
+        "evnto": 0,
+        "modes": {}
+      },
+      "derivation": "Paso \"focus\" del eje borde sobre el nivel overlay. La cabeza --ds-color-border-focus ya es vocabulario AUTORADO de BrandPalette; esta raiz solo la promueve a cabeza de cascada para que una hoja de ese paso derive en vez de repetir su literal.",
+      "evidence": "--ds-color-border-focus es vocabulario AUTORADO de BrandPalette; emision medida por scripts/tokens/purity: emitida-en-los-3 ({\"rottay\":true,\"bithire\":true,\"evnto\":true})",
+      "governedBy": null,
+      "governanceScope": "ninguna",
+      "exposure": "internal-head",
+      "exposureNote": "EJE PASO, cohorte 2A (2026-08-27). Hija de tier.overlay.border: promueve a cabeza de cascada el paso \"focus\" del vocabulario AUTORADO de BrandPalette. Hereda exposure y governedBy del padre porque no es una perilla nueva sino la misma decision indexada por su paso -- por eso root-exposure-gate mide el vocabulario sobre las raices NO refinadas (adjudicacion DT 3.1). collapsesLegacy nace en cero a proposito: ese campo es censo FECHADO de 2026-08-18 y una raiz de 2026-08-27 no puede tener historia ahi; su cifra viva es su poblacion en manifest/generated/root-membership.json.",
+      "derivationDebt": true
     }
   ],
   "reconciliation": {
@@ -2403,7 +3261,7 @@
         "tenant-dial": 1308,
         "gap": 490
       },
-      "reading": "De las 64 raices, 28 tienen control o dial declarado (1308 canales), 28 son cabezas internas correctas sin perilla (1512 canales) y 8 son huecos de perilla (490 canales). El grueso de la pintura NO deberia ser perilla nunca: deberia ser cascada. Ese es el hallazgo estructural, no el numero de gaps. F4A-6 sumo tier.page.ink (--ds-color-text-page, 35 canales) como cabeza interna: su dial aterriza en F4B y ahi se reclasifica a tenant-dial. Adjudicacion DT 2026-08-26 (deuda de gate preexistente, ajena a C5): type.family.mono y type.family.display reclasificados gap->tenant-dial bajo typography.families -- medido 2026-08-26, calibrado F4B-14 -- 10->8 gaps, 26->28 tenant-dial (6 canales movidos).",
+      "reading": "De las 64 raices NO REFINADAS, 28 tienen control o dial declarado (1308 canales), 28 son cabezas internas correctas sin perilla (1512) y 8 son huecos de perilla (490). RECOMPUTADO de las filas en la cohorte 2A (2026-08-27). El catalogo tiene ademas 33 raices REFINADAS del eje paso, excluidas de este vocabulario por adjudicacion del DT: una hija hereda el exposure de su padre porque es la MISMA decision indexada mas fino, y contarlas por separado inflaria el backlog de perillas faltantes sin que la deuda crezca. Su cifra viva es su poblacion en manifest/generated/root-membership.json; collapsesLegacy vale cero en ellas porque es censo fechado de 2026-08-18. El grueso de la pintura NO deberia ser perilla nunca: deberia ser cascada. Ese sigue siendo el hallazgo estructural.",
       "derivation": "1308 + 1512 + 490 = 3310 = Σ collapsesLegacy.total de las 64 raices, recomputado de las filas. El campo se llama collapsesLegacy desde la cohorte 1: es un censo FECHADO (2026-08-18) que NO se reconcilia con la membresia viva por canal (manifest/generated/root-membership.json), medida sobre los canales que los temas emiten HOY y con criterios que sobreviven a la ley del owner. Ver corrections."
     },
     "byGroup": {
@@ -2756,7 +3614,8 @@
       "METHOD.ROOTS Y RECONCILIATION.STATEMENT -- MISMO VINTAGE DE F4A-6, NO REESCRITO EN K4: ambas prosas citan '63 raices' (method.roots: 'Las 63 raices cubren el 100% de A+B'; reconciliation.statement: 'Las 63 cabezas internas contra los 20 controles'), pero el catalogo tiene 64 raices desde que tier.page.ink entro en F4A-6. Se registra el drift, no se reescriben las dos frases: corregir la cobertura de A+B exige re-medir los 3275 canales asignados, y eso no es K4.",
       "COHORTE 0 DEL FRENTE DE NORMALIZACION PROFUNDA (2026-08-27) -- LOS TRES DRIFTS DE PROSA CONTRA FILAS, CERRADOS DE UNA VEZ Y CON LA CAUSA DE CADA UNO. (1) CANALES ASIGNADOS 3275 -> 3310: la suma de collapses.total valia 3275 mientras el catalogo tenia 63 raices; F4A-6 (commit 3393f70d4) agrego la raiz 64, tier.page.ink / --ds-color-text-page, con 35 canales, y 3275+35=3310 cierra al entero. La prosa de method.classes y method.roots nunca siguio; corrections.items[7] ya lo habia registrado como drift y declarado no reescribible dentro de K4. Se reescribe ahora porque la cifra derivable de las filas SI se puede recomputar sin re-correr el clasificador: lo que no se recomputa, y por eso queda fechado en vez de corregido, es el reparto A/B/C/D. (2) ASIGNACIONES 261 -> 259, DOS MOVIMIENTOS SIN REGISTRO: corrections.items[6] fijo 'Destino: 268-7=261', y desde entonces las filas pasaron por 262 (commit 2509bdd3d) y quedaron en 259 (commit 96b610162 en adelante) sin que ninguna entrada lo dijera. Medido recorriendo el historico del archivo, commit por commit. La prosa de method.assignments ahora se recomputa de las filas en lugar de citar un literal. (3) '63 RAICES' EN method.roots Y reconciliation.statement: mismo vintage de F4A-6, corregido a 64. LECCION QUE ESTE ARCHIVO ADOPTA: toda cifra derivable de las filas se recomputa al escribirla; toda cifra que NO sea derivable de las filas viaja con su fecha y con la razon por la que no se puede reverificar. Un numero sin productor envejece en silencio, y este catalogo ya lo hizo tres veces.",
       "DENOMINADOR DE PINTURA -- MEDICION COMPLETA, ADJUDICADA POR EL DT (cohorte 0, 2026-08-27). RESOLUCION: la autoridad viva es manifest/generated/slot-inventory.json -> stats.paintDenominator (unica con ambos terminos re-corribles y --check blocking); 3693 y 3690 quedan como vintage fechadas -- texto completo en ratchet.method. Dos autoridades vivas publican cifras distintas y AMBAS reproducen exactamente sobre el arbol de su propia fecha, asi que no hay una equivocada: son dos fotos de trees distintos. (a) method.denominator de este archivo dice '3738 hojas - 45 metadato = 3693'; el termino 3738 reproduce EXACTO en el commit de nacimiento del catalogo (a739b988e: rottay 1819 + bithire 1496 + evnto 423 = 3738), pero el termino 45 no tiene roster enumerado en ningun lado: es un conteo en prosa. (b) PAINT_DENOMINATOR de manifest/variant-parity/index.mjs dice '3726 - 36 = 3690'; el termino 3726 reproduce EXACTO en el commit de nacimiento de ese harness (e6364e90b: 1811 + 1493 + 422 = 3726) y el termino 36 es exactamente METADATA_EXCLUSION.length, una lista enumerada en codigo, que hoy machea 36 filas del inventario una a una. (c) El metodo de walk es UNO SOLO: recorrer el objeto EVALUADO del tema y contar hojas primitivas; la misma implementacion reproduce las dos cifras en sus dos fechas, de modo que NO hay ambiguedad de walk ni dos cosas medidas. (d) Sobre el arbol de hoy el walk da 3656 hojas (rottay 1748, bithire 1486, evnto 422) y el roster enumerado de 36 metadatos deja 3620 canales de pintura -- recomputado en cada corrida por manifest/generated/slot-inventory.json (stats.paintDenominator), que es lo que impide que la proxima cifra vuelva a congelarse. NO SE ELIGE AQUI: el criterio del brief adjudica el DT.",
-      "COHORTE 1 (2026-08-27) -- RENOMBRE roots[].collapses -> roots[].collapsesLegacy, SIN RECONCILIACION. La cohorte 1 persistio la membresia canal->raiz en manifest/generated/root-membership.json, y la pregunta obligada era si los totales nuevos debian cuadrar con collapses.total. NO cuadran y no deben: (a) esa cifra es salida del clasificador constructivo de F4A, que NO EXISTE como script -- barrido de todo .mjs/.ts/.js/.mts del paquete, cero implementaciones; (b) el sustituto obvio, el alcance transitivo del grafo CSS, NO la reproduce -- error medido de 0% a 1536% por raiz, 15 raices con alcance cero, 15251 contra 3310; (c) su clase A incluye 'duplicado', es decir coincidencia de valor, que es el criterio que el owner prohibio, de modo que perseguir la igualdad habria metido el criterio prohibido en los cimientos escondido detras de una coincidencia numerica; y (d) esta medida sobre 3693 canales de un arbol de 2026-08-18, mientras la membresia se mide sobre los 1610 canales que los temas de HOY emiten -- denominadores distintos. Se conserva con su nombre nuevo y su fecha porque borrarla destruiria procedencia, exactamente como el censo A/B/C/D de la cohorte 0. Ningun codigo del paquete leia el campo (verificado por grep antes del renombre), asi que el cambio no rompe consumidor alguno. La cifra viva de membresia es stats.byVia de root-membership.json."
+      "COHORTE 1 (2026-08-27) -- RENOMBRE roots[].collapses -> roots[].collapsesLegacy, SIN RECONCILIACION. La cohorte 1 persistio la membresia canal->raiz en manifest/generated/root-membership.json, y la pregunta obligada era si los totales nuevos debian cuadrar con collapses.total. NO cuadran y no deben: (a) esa cifra es salida del clasificador constructivo de F4A, que NO EXISTE como script -- barrido de todo .mjs/.ts/.js/.mts del paquete, cero implementaciones; (b) el sustituto obvio, el alcance transitivo del grafo CSS, NO la reproduce -- error medido de 0% a 1536% por raiz, 15 raices con alcance cero, 15251 contra 3310; (c) su clase A incluye 'duplicado', es decir coincidencia de valor, que es el criterio que el owner prohibio, de modo que perseguir la igualdad habria metido el criterio prohibido en los cimientos escondido detras de una coincidencia numerica; y (d) esta medida sobre 3693 canales de un arbol de 2026-08-18, mientras la membresia se mide sobre los 1610 canales que los temas de HOY emiten -- denominadores distintos. Se conserva con su nombre nuevo y su fecha porque borrarla destruiria procedencia, exactamente como el censo A/B/C/D de la cohorte 0. Ningun codigo del paquete leia el campo (verificado por grep antes del renombre), asi que el cambio no rompe consumidor alguno. La cifra viva de membresia es stats.byVia de root-membership.json.",
+      "COHORTE 2A (2026-08-27) -- EJE PASO: 33 RAICES tier.<nivel>.<fg|border>.<paso>, y las TRES leyes que su integracion obligo a escribir. CAUSA: el catalogo indexaba raices por tier x propiedad y los temas autoran tier x propiedad x PASO -- BrandPalette declara 8 tintas y 6 bordes contra UNA sola raiz de tinta y una de borde por nivel, y por eso 627 filas caian en value-shift sobre tier.*.{fg,border}. Nada se inventa: los pasos son vocabulario ya autorado, promovido a cabeza de cascada. Propuestas 62, aprobadas 40, creadas 33. (1) LEY DE ALIAS: una raiz-hija cuya CABEZA es la misma que la de su padre no aporta una raiz, aporta un alias, y ademas rompe la regla de generalidad porque deja dos reclamantes del mismo tier. No nace. Removidas 7 por esta ley: tier.base.fg.primary, tier.control.fg.primary, tier.{base,control,overlay,raised}.border.default y tier.page.border.subtle. El enunciado corto 'el paso por defecto ES la raiz padre' vale cuando la cabeza del padre es la del paso por defecto, que es el caso comun pero no todos: tier.page.fg y tier.overlay.fg tienen cabezas propias (--ds-sidebar-item-color, --ds-material-overlay-foreground), asi que sus hijas .primary NO son alias y si nacen; y tier.page.border tiene cabeza --ds-color-border-subtle, asi que la alias ahi es .subtle y no .default. La ley se aplica por COLISION DE CABEZA, que es su razon; enumerarla por nombre de paso habria dejado pasar una y matado dos legitimas. (2) LEY DE REMOCION CORREGIDA: una raiz de paso se conserva si tiene slots ruteados O su cabeza se emite en algun tema. La cabeza es su poblacion minima y su rol de arbitraje en la regla de generalidad: la primera version, que removia por cero slots, borro tier.base.fg.muted, tier.base.fg.disabled y tier.base.border.primary y dejo a --ds-color-text-muted, --ds-color-text-disabled y --ds-color-border-primary sin hermana base con la que desempatar. Con la regla corregida las 33 se conservan (19 con slots ruteados, 14 solo por cabeza emitida) y las cabezas compartidas resuelven 9 de 9. (3) EL VOCABULARIO DE EXPOSURE SE MIDE SOBRE LAS RAICES NO REFINADAS: una hija hereda el exposure del padre porque es la misma decision indexada mas fino, y contar 4 hijas de un gap como 4 gaps nuevos inflaria el backlog de perillas faltantes sin que falte una perilla mas. Implementado en scripts/tokens/root-exposure-gate (isRefinedRoot) con drill. Con la ley, el vocabulario se queda en 28/28/8 y ningun contador se re-ancla. El ruteo del paso lo decide manifest/cascade/owner-step-rules.json (autorada, clave owner x propiedad x hoja, 214 filas) por CONCORDANCIA de todos los contribuyentes; la igualdad de valor sigue prohibida como ruta y la identidad de valor resuelto es verificacion posterior (manifest/generated/resolved-map.json, cero delta)."
     ]
   },
   "provenance": {

@@ -1,0 +1,1503 @@
+{
+  "_note": "Tabla AUTORADA owner x hoja -> paso del eje tier (frente normalizacion, cohorte 2A). Clave ownerPath+property+leaf. Vocabulario de pasos = el AUTORADO de BrandPalette (8 tintas/6 bordes). Hojas con estado (hover/active/focus/selected/checked) FUERA del lote 1: pertenecen al eje state.delta. Bordes semanticos de estado (errorBorder/warningBorder/statusBorder) FUERA: eje semantico, no tier. Owners sin tier adjudicado (owner-tiers.json) no reciben filas (su raiz padre no existe aun). Null es legitimo; nunca presion de cobertura. La igualdad de valor es VERIFICACION post-hoc (resolved-map), NUNCA ruta.",
+  "rows": [
+    {
+      "ownerPath": "CHROME.cardComponent",
+      "property": "fg",
+      "leaf": "bodyColor",
+      "step": "primary",
+      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "CHROME.cardComponent",
+      "property": "fg",
+      "leaf": "color",
+      "step": "primary",
+      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "CHROME.cardComponent",
+      "property": "fg",
+      "leaf": "colorMuted",
+      "step": "muted",
+      "reason": "tinta atenuada (muted) para texto auxiliar/vacio/descripcion; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "CHROME.cardComponent",
+      "property": "fg",
+      "leaf": "footerColor",
+      "step": "secondary",
+      "reason": "tinta suavizada de cabecera/etiqueta/pie — jerarquia secundaria por ley de jerarquia de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "CHROME.cardComponent",
+      "property": "fg",
+      "leaf": "headerColor",
+      "step": "secondary",
+      "reason": "tinta suavizada de cabecera/etiqueta/pie — jerarquia secundaria por ley de jerarquia de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "CHROME.cardComponent",
+      "property": "fg",
+      "leaf": "imagePlaceholderColor",
+      "step": "tertiary",
+      "reason": "tinta de placeholder — mas tenue que muted, paso tertiary; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "CHROME.cardComponent",
+      "property": "fg",
+      "leaf": "subtitleColor",
+      "step": "secondary",
+      "reason": "tinta suavizada de cabecera/etiqueta/pie — jerarquia secundaria por ley de jerarquia de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "CHROME.cardComponent",
+      "property": "fg",
+      "leaf": "titleColor",
+      "step": "primary",
+      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "CHROME.controls.select",
+      "property": "fg",
+      "leaf": "arrowColor",
+      "step": "secondary",
+      "reason": "tinta suavizada de cabecera/etiqueta/pie — jerarquia secundaria por ley de jerarquia de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "CHROME.controls.select",
+      "property": "fg",
+      "leaf": "clearColor",
+      "step": "secondary",
+      "reason": "tinta suavizada de cabecera/etiqueta/pie — jerarquia secundaria por ley de jerarquia de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "CHROME.controls.select",
+      "property": "fg",
+      "leaf": "color",
+      "step": "primary",
+      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "CHROME.controls.select",
+      "property": "fg",
+      "leaf": "colorDisabled",
+      "step": "disabled",
+      "reason": "tinta deshabilitada — paso disabled del vocabulario autorado; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "CHROME.controls.select",
+      "property": "fg",
+      "leaf": "colorPlaceholder",
+      "step": "tertiary",
+      "reason": "tinta de placeholder — mas tenue que muted, paso tertiary; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "CHROME.controls.select",
+      "property": "fg",
+      "leaf": "optionColor",
+      "step": "primary",
+      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "CHROME.controls.select",
+      "property": "fg",
+      "leaf": "optionColorDisabled",
+      "step": "disabled",
+      "reason": "tinta deshabilitada — paso disabled del vocabulario autorado; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.cardComponent",
+      "property": "fg",
+      "leaf": "bodyColor",
+      "step": "primary",
+      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.cardComponent",
+      "property": "fg",
+      "leaf": "color",
+      "step": "primary",
+      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.cardComponent",
+      "property": "fg",
+      "leaf": "colorMuted",
+      "step": "muted",
+      "reason": "tinta atenuada (muted) para texto auxiliar/vacio/descripcion; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.cardComponent",
+      "property": "fg",
+      "leaf": "footerColor",
+      "step": "secondary",
+      "reason": "tinta suavizada de cabecera/etiqueta/pie — jerarquia secundaria por ley de jerarquia de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.cardComponent",
+      "property": "fg",
+      "leaf": "headerColor",
+      "step": "secondary",
+      "reason": "tinta suavizada de cabecera/etiqueta/pie — jerarquia secundaria por ley de jerarquia de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.cardComponent",
+      "property": "fg",
+      "leaf": "imagePlaceholderColor",
+      "step": "tertiary",
+      "reason": "tinta de placeholder — mas tenue que muted, paso tertiary; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.cardComponent",
+      "property": "fg",
+      "leaf": "subtitleColor",
+      "step": "secondary",
+      "reason": "tinta suavizada de cabecera/etiqueta/pie — jerarquia secundaria por ley de jerarquia de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.cardComponent",
+      "property": "fg",
+      "leaf": "titleColor",
+      "step": "primary",
+      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "CHROME.tabs",
+      "property": "fg",
+      "leaf": "color",
+      "step": "primary",
+      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "CHROME.controls.input",
+      "property": "fg",
+      "leaf": "color",
+      "step": "primary",
+      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "CHROME.controls.input",
+      "property": "fg",
+      "leaf": "colorDisabled",
+      "step": "disabled",
+      "reason": "tinta deshabilitada — paso disabled del vocabulario autorado; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "CHROME.controls.input",
+      "property": "fg",
+      "leaf": "colorPlaceholder",
+      "step": "tertiary",
+      "reason": "tinta de placeholder — mas tenue que muted, paso tertiary; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "CHROME.modal",
+      "property": "fg",
+      "leaf": "bodyColor",
+      "step": "primary",
+      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "CHROME.modal",
+      "property": "fg",
+      "leaf": "closeColor",
+      "step": "secondary",
+      "reason": "tinta suavizada de cabecera/etiqueta/pie — jerarquia secundaria por ley de jerarquia de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "CHROME.modal",
+      "property": "fg",
+      "leaf": "color",
+      "step": "primary",
+      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "CHROME.modal",
+      "property": "fg",
+      "leaf": "subtitleColor",
+      "step": "secondary",
+      "reason": "tinta suavizada de cabecera/etiqueta/pie — jerarquia secundaria por ley de jerarquia de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "CHROME.modal",
+      "property": "fg",
+      "leaf": "titleColor",
+      "step": "primary",
+      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.controls.input",
+      "property": "fg",
+      "leaf": "color",
+      "step": "primary",
+      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.controls.input",
+      "property": "fg",
+      "leaf": "colorDisabled",
+      "step": "disabled",
+      "reason": "tinta deshabilitada — paso disabled del vocabulario autorado; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.controls.input",
+      "property": "fg",
+      "leaf": "colorPlaceholder",
+      "step": "tertiary",
+      "reason": "tinta de placeholder — mas tenue que muted, paso tertiary; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.modal",
+      "property": "fg",
+      "leaf": "bodyColor",
+      "step": "primary",
+      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.modal",
+      "property": "fg",
+      "leaf": "closeColor",
+      "step": "secondary",
+      "reason": "tinta suavizada de cabecera/etiqueta/pie — jerarquia secundaria por ley de jerarquia de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.modal",
+      "property": "fg",
+      "leaf": "color",
+      "step": "primary",
+      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.modal",
+      "property": "fg",
+      "leaf": "subtitleColor",
+      "step": "secondary",
+      "reason": "tinta suavizada de cabecera/etiqueta/pie — jerarquia secundaria por ley de jerarquia de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.modal",
+      "property": "fg",
+      "leaf": "titleColor",
+      "step": "primary",
+      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "CHROME.controls.select",
+      "property": "border",
+      "leaf": "border",
+      "step": "default",
+      "reason": "borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "CHROME.controls.select",
+      "property": "border",
+      "leaf": "borderFocus",
+      "step": "focus",
+      "reason": "borde de foco — paso focus del vocabulario autorado; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.controls.select",
+      "property": "fg",
+      "leaf": "arrowColor",
+      "step": "secondary",
+      "reason": "tinta suavizada de cabecera/etiqueta/pie — jerarquia secundaria por ley de jerarquia de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.controls.select",
+      "property": "fg",
+      "leaf": "clearColor",
+      "step": "secondary",
+      "reason": "tinta suavizada de cabecera/etiqueta/pie — jerarquia secundaria por ley de jerarquia de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.controls.select",
+      "property": "fg",
+      "leaf": "color",
+      "step": "primary",
+      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.controls.select",
+      "property": "fg",
+      "leaf": "colorDisabled",
+      "step": "disabled",
+      "reason": "tinta deshabilitada — paso disabled del vocabulario autorado; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.controls.select",
+      "property": "fg",
+      "leaf": "colorPlaceholder",
+      "step": "tertiary",
+      "reason": "tinta de placeholder — mas tenue que muted, paso tertiary; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.controls.select",
+      "property": "fg",
+      "leaf": "optionColor",
+      "step": "primary",
+      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.controls.select",
+      "property": "fg",
+      "leaf": "optionColorDisabled",
+      "step": "disabled",
+      "reason": "tinta deshabilitada — paso disabled del vocabulario autorado; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "CHROME.search",
+      "property": "fg",
+      "leaf": "clearColor",
+      "step": "secondary",
+      "reason": "tinta suavizada de cabecera/etiqueta/pie — jerarquia secundaria por ley de jerarquia de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "CHROME.search",
+      "property": "fg",
+      "leaf": "color",
+      "step": "primary",
+      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.search",
+      "property": "fg",
+      "leaf": "clearColor",
+      "step": "secondary",
+      "reason": "tinta suavizada de cabecera/etiqueta/pie — jerarquia secundaria por ley de jerarquia de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.search",
+      "property": "fg",
+      "leaf": "color",
+      "step": "primary",
+      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "CHROME.controls.input",
+      "property": "border",
+      "leaf": "border",
+      "step": "default",
+      "reason": "borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "CHROME.tabs",
+      "property": "border",
+      "leaf": "border",
+      "step": "default",
+      "reason": "borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "CHROME.tabs",
+      "property": "border",
+      "leaf": "listBorder",
+      "step": "default",
+      "reason": "borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "CHROME.tabs",
+      "property": "border",
+      "leaf": "panelBorder",
+      "step": "default",
+      "reason": "borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.controls.input",
+      "property": "border",
+      "leaf": "border",
+      "step": "default",
+      "reason": "borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.tabs",
+      "property": "fg",
+      "leaf": "color",
+      "step": "primary",
+      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "CHROME.breadcrumb",
+      "property": "fg",
+      "leaf": "color",
+      "step": "primary",
+      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "CHROME.breadcrumb",
+      "property": "fg",
+      "leaf": "itemColor",
+      "step": "primary",
+      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "CHROME.cardComponent",
+      "property": "border",
+      "leaf": "border",
+      "step": "default",
+      "reason": "borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "CHROME.cardComponent",
+      "property": "border",
+      "leaf": "borderColor",
+      "step": "default",
+      "reason": "borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "CHROME.cardComponent",
+      "property": "border",
+      "leaf": "footerBorder",
+      "step": "default",
+      "reason": "borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "CHROME.cardComponent",
+      "property": "border",
+      "leaf": "headerBorder",
+      "step": "default",
+      "reason": "borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "CHROME.collectionCard",
+      "property": "fg",
+      "leaf": "bodyColor",
+      "step": "primary",
+      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "CHROME.collectionCard",
+      "property": "fg",
+      "leaf": "labelColor",
+      "step": "secondary",
+      "reason": "tinta suavizada de cabecera/etiqueta/pie — jerarquia secundaria por ley de jerarquia de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "CHROME.collectionCard",
+      "property": "fg",
+      "leaf": "titleColor",
+      "step": "primary",
+      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "CHROME.collectionCard",
+      "property": "fg",
+      "leaf": "valueColor",
+      "step": "primary",
+      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "CHROME.controls.buttonDefault",
+      "property": "fg",
+      "leaf": "color",
+      "step": "primary",
+      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "CHROME.controls.buttonGhost",
+      "property": "fg",
+      "leaf": "color",
+      "step": "primary",
+      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "CHROME.controls.upload",
+      "property": "border",
+      "leaf": "border",
+      "step": "default",
+      "reason": "borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "CHROME.controls.upload",
+      "property": "border",
+      "leaf": "buttonBorder",
+      "step": "default",
+      "reason": "borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "CHROME.controls.upload",
+      "property": "border",
+      "leaf": "cardBorder",
+      "step": "default",
+      "reason": "borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "CHROME.controls.upload",
+      "property": "border",
+      "leaf": "draggerBorder",
+      "step": "default",
+      "reason": "borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "CHROME.layout",
+      "property": "border",
+      "leaf": "dividerColor",
+      "step": "subtle",
+      "reason": "separador tenue (hairline/divisor) — paso subtle; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "CHROME.layout",
+      "property": "border",
+      "leaf": "headerBorder",
+      "step": "default",
+      "reason": "borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "CHROME.layout",
+      "property": "border",
+      "leaf": "siderBorder",
+      "step": "default",
+      "reason": "borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "CHROME.list",
+      "property": "fg",
+      "leaf": "textColor",
+      "step": "primary",
+      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "CHROME.table",
+      "property": "border",
+      "leaf": "border",
+      "step": "default",
+      "reason": "borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "CHROME.table",
+      "property": "border",
+      "leaf": "headerBorder",
+      "step": "default",
+      "reason": "borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "CHROME.table",
+      "property": "border",
+      "leaf": "rowBorder",
+      "step": "default",
+      "reason": "borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "CHROME.table",
+      "property": "fg",
+      "leaf": "headerColor",
+      "step": "secondary",
+      "reason": "tinta suavizada de cabecera/etiqueta/pie — jerarquia secundaria por ley de jerarquia de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.layout",
+      "property": "border",
+      "leaf": "dividerColor",
+      "step": "subtle",
+      "reason": "separador tenue (hairline/divisor) — paso subtle; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.layout",
+      "property": "border",
+      "leaf": "headerBorder",
+      "step": "default",
+      "reason": "borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.layout",
+      "property": "border",
+      "leaf": "siderBorder",
+      "step": "default",
+      "reason": "borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.list",
+      "property": "fg",
+      "leaf": "textColor",
+      "step": "primary",
+      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "CHROME.controls.buttonLink",
+      "property": "fg",
+      "leaf": "color",
+      "step": "primary",
+      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "CHROME.controls.buttonText",
+      "property": "fg",
+      "leaf": "color",
+      "step": "primary",
+      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "CHROME.controls.segmented",
+      "property": "fg",
+      "leaf": "itemColor",
+      "step": "primary",
+      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "CHROME.premiumCard",
+      "property": "border",
+      "leaf": "border",
+      "step": "default",
+      "reason": "borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "CHROME.shell",
+      "property": "border",
+      "leaf": "border",
+      "step": "default",
+      "reason": "borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "CHROME.sidebar",
+      "property": "fg",
+      "leaf": "groupColor",
+      "step": "primary",
+      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "CHROME.sidebar",
+      "property": "fg",
+      "leaf": "itemColor",
+      "step": "primary",
+      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.breadcrumb",
+      "property": "fg",
+      "leaf": "color",
+      "step": "primary",
+      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.breadcrumb",
+      "property": "fg",
+      "leaf": "itemColor",
+      "step": "primary",
+      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.controls.select",
+      "property": "border",
+      "leaf": "border",
+      "step": "default",
+      "reason": "borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.controls.select",
+      "property": "border",
+      "leaf": "borderFocus",
+      "step": "focus",
+      "reason": "borde de foco — paso focus del vocabulario autorado; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.controls.upload",
+      "property": "border",
+      "leaf": "border",
+      "step": "default",
+      "reason": "borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.controls.upload",
+      "property": "border",
+      "leaf": "buttonBorder",
+      "step": "default",
+      "reason": "borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.controls.upload",
+      "property": "border",
+      "leaf": "cardBorder",
+      "step": "default",
+      "reason": "borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.controls.upload",
+      "property": "border",
+      "leaf": "draggerBorder",
+      "step": "default",
+      "reason": "borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "OVERLAY.surfaces.surfaceRoles.control",
+      "property": "border",
+      "leaf": "border",
+      "step": "default",
+      "reason": "borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "OVERLAY.surfaces.surfaceRoles.control",
+      "property": "border",
+      "leaf": "borderStrong",
+      "step": "primary",
+      "reason": "borde fuerte — paso primary (el mas marcado del eje); adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "SURFACES.surfaceRoles.control",
+      "property": "border",
+      "leaf": "border",
+      "step": "default",
+      "reason": "borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "SURFACES.surfaceRoles.control",
+      "property": "border",
+      "leaf": "borderStrong",
+      "step": "primary",
+      "reason": "borde fuerte — paso primary (el mas marcado del eje); adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "CHROME.controls.buttonDefault",
+      "property": "border",
+      "leaf": "border",
+      "step": "default",
+      "reason": "borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "CHROME.controls.textarea",
+      "property": "border",
+      "leaf": "border",
+      "step": "default",
+      "reason": "borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "CHROME.controls.textarea",
+      "property": "border",
+      "leaf": "borderFocus",
+      "step": "focus",
+      "reason": "borde de foco — paso focus del vocabulario autorado; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "CHROME.filterPill",
+      "property": "border",
+      "leaf": "border",
+      "step": "default",
+      "reason": "borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "CHROME.filterPill",
+      "property": "border",
+      "leaf": "countBorder",
+      "step": "default",
+      "reason": "borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "CHROME.metricCard",
+      "property": "border",
+      "leaf": "border",
+      "step": "default",
+      "reason": "borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "CHROME.metricCard",
+      "property": "border",
+      "leaf": "iconBorder",
+      "step": "default",
+      "reason": "borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "CHROME.metricCard",
+      "property": "border",
+      "leaf": "meterTrackBorder",
+      "step": "default",
+      "reason": "borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "CHROME.signalCard",
+      "property": "border",
+      "leaf": "border",
+      "step": "default",
+      "reason": "borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "CHROME.signalCard",
+      "property": "border",
+      "leaf": "iconBorder",
+      "step": "default",
+      "reason": "borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "CHROME.signalCard",
+      "property": "border",
+      "leaf": "meterTrackBorder",
+      "step": "default",
+      "reason": "borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "CHROME.workspaceCard",
+      "property": "fg",
+      "leaf": "bodyColor",
+      "step": "primary",
+      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "CHROME.workspaceCard",
+      "property": "fg",
+      "leaf": "footerColor",
+      "step": "secondary",
+      "reason": "tinta suavizada de cabecera/etiqueta/pie — jerarquia secundaria por ley de jerarquia de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "CHROME.workspaceCard",
+      "property": "fg",
+      "leaf": "labelColor",
+      "step": "secondary",
+      "reason": "tinta suavizada de cabecera/etiqueta/pie — jerarquia secundaria por ley de jerarquia de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "CHROME.workspaceCard",
+      "property": "fg",
+      "leaf": "titleColor",
+      "step": "primary",
+      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "CHROME.workspaceCard",
+      "property": "fg",
+      "leaf": "valueColor",
+      "step": "primary",
+      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.cardComponent",
+      "property": "border",
+      "leaf": "border",
+      "step": "default",
+      "reason": "borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.cardComponent",
+      "property": "border",
+      "leaf": "footerBorder",
+      "step": "default",
+      "reason": "borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.cardComponent",
+      "property": "border",
+      "leaf": "headerBorder",
+      "step": "default",
+      "reason": "borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.collectionCard",
+      "property": "fg",
+      "leaf": "bodyColor",
+      "step": "primary",
+      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.collectionCard",
+      "property": "fg",
+      "leaf": "labelColor",
+      "step": "secondary",
+      "reason": "tinta suavizada de cabecera/etiqueta/pie — jerarquia secundaria por ley de jerarquia de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.collectionCard",
+      "property": "fg",
+      "leaf": "titleColor",
+      "step": "primary",
+      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.collectionCard",
+      "property": "fg",
+      "leaf": "valueColor",
+      "step": "primary",
+      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.controls.radio",
+      "property": "fg",
+      "leaf": "descriptionColor",
+      "step": "muted",
+      "reason": "tinta atenuada (muted) para texto auxiliar/vacio/descripcion; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.controls.radio",
+      "property": "fg",
+      "leaf": "labelColor",
+      "step": "secondary",
+      "reason": "tinta suavizada de cabecera/etiqueta/pie — jerarquia secundaria por ley de jerarquia de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.tabs",
+      "property": "border",
+      "leaf": "border",
+      "step": "default",
+      "reason": "borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.tabs",
+      "property": "border",
+      "leaf": "listBorder",
+      "step": "default",
+      "reason": "borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.tabs",
+      "property": "border",
+      "leaf": "panelBorder",
+      "step": "default",
+      "reason": "borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.workspaceCard",
+      "property": "fg",
+      "leaf": "bodyColor",
+      "step": "primary",
+      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.workspaceCard",
+      "property": "fg",
+      "leaf": "footerColor",
+      "step": "secondary",
+      "reason": "tinta suavizada de cabecera/etiqueta/pie — jerarquia secundaria por ley de jerarquia de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.workspaceCard",
+      "property": "fg",
+      "leaf": "labelColor",
+      "step": "secondary",
+      "reason": "tinta suavizada de cabecera/etiqueta/pie — jerarquia secundaria por ley de jerarquia de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.workspaceCard",
+      "property": "fg",
+      "leaf": "titleColor",
+      "step": "primary",
+      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.workspaceCard",
+      "property": "fg",
+      "leaf": "valueColor",
+      "step": "primary",
+      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "OVERLAY.surfaces.surfaceRoles.panel",
+      "property": "border",
+      "leaf": "border",
+      "step": "default",
+      "reason": "borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "OVERLAY.surfaces.surfaceRoles.panel",
+      "property": "border",
+      "leaf": "borderStrong",
+      "step": "primary",
+      "reason": "borde fuerte — paso primary (el mas marcado del eje); adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "SURFACES.surfaceRoles.panel",
+      "property": "border",
+      "leaf": "border",
+      "step": "default",
+      "reason": "borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "SURFACES.surfaceRoles.panel",
+      "property": "border",
+      "leaf": "borderStrong",
+      "step": "primary",
+      "reason": "borde fuerte — paso primary (el mas marcado del eje); adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "CHROME.compactCard",
+      "property": "fg",
+      "leaf": "bodyColor",
+      "step": "primary",
+      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "CHROME.compactCard",
+      "property": "fg",
+      "leaf": "labelColor",
+      "step": "secondary",
+      "reason": "tinta suavizada de cabecera/etiqueta/pie — jerarquia secundaria por ley de jerarquia de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "CHROME.compactCard",
+      "property": "fg",
+      "leaf": "titleColor",
+      "step": "primary",
+      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "CHROME.compactCard",
+      "property": "fg",
+      "leaf": "valueColor",
+      "step": "primary",
+      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "CHROME.controls.buttonSecondary",
+      "property": "border",
+      "leaf": "border",
+      "step": "default",
+      "reason": "borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "CHROME.controls.input.clear",
+      "property": "fg",
+      "leaf": "color",
+      "step": "primary",
+      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "CHROME.controls.inputNumber",
+      "property": "border",
+      "leaf": "addonBorder",
+      "step": "default",
+      "reason": "borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "CHROME.controls.inputNumber",
+      "property": "border",
+      "leaf": "border",
+      "step": "default",
+      "reason": "borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "CHROME.controls.inputNumber",
+      "property": "border",
+      "leaf": "borderFocus",
+      "step": "focus",
+      "reason": "borde de foco — paso focus del vocabulario autorado; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "CHROME.controls.inputNumber",
+      "property": "fg",
+      "leaf": "color",
+      "step": "primary",
+      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "CHROME.controls.inputNumber",
+      "property": "fg",
+      "leaf": "controlColor",
+      "step": "primary",
+      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "CHROME.controls.radio",
+      "property": "fg",
+      "leaf": "descriptionColor",
+      "step": "muted",
+      "reason": "tinta atenuada (muted) para texto auxiliar/vacio/descripcion; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "CHROME.controls.radio",
+      "property": "fg",
+      "leaf": "labelColor",
+      "step": "secondary",
+      "reason": "tinta suavizada de cabecera/etiqueta/pie — jerarquia secundaria por ley de jerarquia de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "CHROME.floatButton",
+      "property": "fg",
+      "leaf": "descriptionColor",
+      "step": "muted",
+      "reason": "tinta atenuada (muted) para texto auxiliar/vacio/descripcion; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "CHROME.modal",
+      "property": "border",
+      "leaf": "footerBorder",
+      "step": "default",
+      "reason": "borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "CHROME.modal",
+      "property": "border",
+      "leaf": "headerBorder",
+      "step": "default",
+      "reason": "borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "CHROME.pagination",
+      "property": "fg",
+      "leaf": "itemColor",
+      "step": "primary",
+      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "CHROME.steps",
+      "property": "fg",
+      "leaf": "itemColor",
+      "step": "primary",
+      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "CHROME.tallCard",
+      "property": "fg",
+      "leaf": "bodyColor",
+      "step": "primary",
+      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "CHROME.tallCard",
+      "property": "fg",
+      "leaf": "labelColor",
+      "step": "secondary",
+      "reason": "tinta suavizada de cabecera/etiqueta/pie — jerarquia secundaria por ley de jerarquia de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "CHROME.tallCard",
+      "property": "fg",
+      "leaf": "titleColor",
+      "step": "primary",
+      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "CHROME.tallCard",
+      "property": "fg",
+      "leaf": "valueColor",
+      "step": "primary",
+      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "CHROME.workspaceCard",
+      "property": "border",
+      "leaf": "border",
+      "step": "default",
+      "reason": "borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "CHROME.workspaceCard",
+      "property": "border",
+      "leaf": "footerBorder",
+      "step": "default",
+      "reason": "borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "CHROME.workspaceCard",
+      "property": "border",
+      "leaf": "iconBorder",
+      "step": "default",
+      "reason": "borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.compactCard",
+      "property": "fg",
+      "leaf": "bodyColor",
+      "step": "primary",
+      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.compactCard",
+      "property": "fg",
+      "leaf": "labelColor",
+      "step": "secondary",
+      "reason": "tinta suavizada de cabecera/etiqueta/pie — jerarquia secundaria por ley de jerarquia de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.compactCard",
+      "property": "fg",
+      "leaf": "titleColor",
+      "step": "primary",
+      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.compactCard",
+      "property": "fg",
+      "leaf": "valueColor",
+      "step": "primary",
+      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.controls.buttonDefault",
+      "property": "border",
+      "leaf": "border",
+      "step": "default",
+      "reason": "borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.controls.buttonSecondary",
+      "property": "border",
+      "leaf": "border",
+      "step": "default",
+      "reason": "borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.controls.inputNumber",
+      "property": "border",
+      "leaf": "addonBorder",
+      "step": "default",
+      "reason": "borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.controls.inputNumber",
+      "property": "border",
+      "leaf": "border",
+      "step": "default",
+      "reason": "borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.controls.inputNumber",
+      "property": "border",
+      "leaf": "borderFocus",
+      "step": "focus",
+      "reason": "borde de foco — paso focus del vocabulario autorado; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.controls.inputNumber",
+      "property": "fg",
+      "leaf": "color",
+      "step": "primary",
+      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.controls.inputNumber",
+      "property": "fg",
+      "leaf": "controlColor",
+      "step": "primary",
+      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.controls.textarea",
+      "property": "border",
+      "leaf": "border",
+      "step": "default",
+      "reason": "borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.controls.textarea",
+      "property": "border",
+      "leaf": "borderFocus",
+      "step": "focus",
+      "reason": "borde de foco — paso focus del vocabulario autorado; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.modal",
+      "property": "border",
+      "leaf": "footerBorder",
+      "step": "default",
+      "reason": "borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.modal",
+      "property": "border",
+      "leaf": "headerBorder",
+      "step": "default",
+      "reason": "borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.shell",
+      "property": "border",
+      "leaf": "border",
+      "step": "default",
+      "reason": "borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.sidebar",
+      "property": "fg",
+      "leaf": "groupColor",
+      "step": "primary",
+      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.sidebar",
+      "property": "fg",
+      "leaf": "itemColor",
+      "step": "primary",
+      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.table",
+      "property": "border",
+      "leaf": "border",
+      "step": "default",
+      "reason": "borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.table",
+      "property": "border",
+      "leaf": "rowBorder",
+      "step": "default",
+      "reason": "borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.table",
+      "property": "fg",
+      "leaf": "headerColor",
+      "step": "secondary",
+      "reason": "tinta suavizada de cabecera/etiqueta/pie — jerarquia secundaria por ley de jerarquia de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.tallCard",
+      "property": "fg",
+      "leaf": "bodyColor",
+      "step": "primary",
+      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.tallCard",
+      "property": "fg",
+      "leaf": "labelColor",
+      "step": "secondary",
+      "reason": "tinta suavizada de cabecera/etiqueta/pie — jerarquia secundaria por ley de jerarquia de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.tallCard",
+      "property": "fg",
+      "leaf": "titleColor",
+      "step": "primary",
+      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.tallCard",
+      "property": "fg",
+      "leaf": "valueColor",
+      "step": "primary",
+      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "OVERLAY.surfaces.surfaceRoles.card",
+      "property": "border",
+      "leaf": "border",
+      "step": "default",
+      "reason": "borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "OVERLAY.surfaces.surfaceRoles.card",
+      "property": "border",
+      "leaf": "borderStrong",
+      "step": "primary",
+      "reason": "borde fuerte — paso primary (el mas marcado del eje); adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "OVERLAY.surfaces.surfaceRoles.panel",
+      "property": "fg",
+      "leaf": "foreground",
+      "step": "primary",
+      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "OVERLAY.surfaces.surfaceRoles.panel",
+      "property": "fg",
+      "leaf": "foregroundDisabled",
+      "step": "disabled",
+      "reason": "tinta deshabilitada — paso disabled del vocabulario autorado; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "OVERLAY.surfaces.surfaceRoles.panel",
+      "property": "fg",
+      "leaf": "foregroundMuted",
+      "step": "muted",
+      "reason": "tinta atenuada (muted) para texto auxiliar/vacio/descripcion; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "SURFACES.surfaceRoles.card",
+      "property": "border",
+      "leaf": "border",
+      "step": "default",
+      "reason": "borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "SURFACES.surfaceRoles.card",
+      "property": "border",
+      "leaf": "borderStrong",
+      "step": "primary",
+      "reason": "borde fuerte — paso primary (el mas marcado del eje); adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "SURFACES.surfaceRoles.panel",
+      "property": "fg",
+      "leaf": "foreground",
+      "step": "primary",
+      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "SURFACES.surfaceRoles.panel",
+      "property": "fg",
+      "leaf": "foregroundDisabled",
+      "step": "disabled",
+      "reason": "tinta deshabilitada — paso disabled del vocabulario autorado; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "SURFACES.surfaceRoles.panel",
+      "property": "fg",
+      "leaf": "foregroundMuted",
+      "step": "muted",
+      "reason": "tinta atenuada (muted) para texto auxiliar/vacio/descripcion; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "CHROME.collectionCard",
+      "property": "border",
+      "leaf": "border",
+      "step": "default",
+      "reason": "borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "CHROME.controls.buttonGhost",
+      "property": "border",
+      "leaf": "border",
+      "step": "default",
+      "reason": "borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "CHROME.controls.buttonPrimary",
+      "property": "fg",
+      "leaf": "color",
+      "step": "primary",
+      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "CHROME.controls.buttonSecondary",
+      "property": "fg",
+      "leaf": "color",
+      "step": "primary",
+      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "CHROME.controls.disabled",
+      "property": "border",
+      "leaf": "border",
+      "step": "default",
+      "reason": "borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "CHROME.controls.form",
+      "property": "fg",
+      "leaf": "labelColor",
+      "step": "secondary",
+      "reason": "tinta suavizada de cabecera/etiqueta/pie — jerarquia secundaria por ley de jerarquia de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "CHROME.controls.input.readOnly",
+      "property": "border",
+      "leaf": "border",
+      "step": "default",
+      "reason": "borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "CHROME.controls.radio",
+      "property": "border",
+      "leaf": "border",
+      "step": "default",
+      "reason": "borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "CHROME.controls.textarea",
+      "property": "fg",
+      "leaf": "color",
+      "step": "primary",
+      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "CHROME.controls.textarea",
+      "property": "fg",
+      "leaf": "colorPlaceholder",
+      "step": "tertiary",
+      "reason": "tinta de placeholder — mas tenue que muted, paso tertiary; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    },
+    {
+      "ownerPath": "CHROME.dropdown",
+      "property": "fg",
+      "leaf": "itemColor",
+      "step": "primary",
+      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso"
+    }
+  ]
+}

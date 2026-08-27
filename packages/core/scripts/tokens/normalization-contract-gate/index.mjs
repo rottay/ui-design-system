@@ -337,10 +337,21 @@ async function main(argv) {
     const reason = reasonIndex >= 0 ? flags[reasonIndex + 1] : null;
     if (!reason) { console.error('--write-baseline exige --reason "por que se mueve el ancla"'); process.exit(2); }
     const previous = readBaseline();
+    /* LA UNICA PUERTA HACIA ARRIBA, Y ES GOBERNADA. Un contador puede subir sin
+     * ser regresion en un caso y solo uno: cuando el frente RE-ATRIBUYE y el
+     * contador se re-teclea sobre claves mas finas. Al refinar `tier.base.fg` en
+     * sus pasos, un grupo puede partirse en dos y `divergentGroups` sube sin que
+     * haya aparecido una duplicacion nueva; y `shadowingLiteralPins` sube porque
+     * mas canales GANARON raiz con ley de derivacion, es decir por COBERTURA
+     * ganada. Esa puerta se pide por nombre (`--reattribution`), exige la razon
+     * escrita como cualquier otra ancla, y queda registrada en el archivo: un
+     * hand-edit habria hecho lo mismo en silencio. Sin la bandera, subir sigue
+     * siendo imposible. */
+    const reattribution = flags.includes('--reattribution');
     for (const [name, value] of Object.entries(result.counters)) {
       const anchored = previous?.counters?.[name]?.value;
-      if (anchored !== undefined && value > anchored) {
-        console.error(`normalization-contract-gate: me niego a re-anclar HACIA ARRIBA ${name} (${anchored} -> ${value}). Un hallazgo nuevo se arregla en la fuente.`);
+      if (anchored !== undefined && value > anchored && !reattribution) {
+        console.error(`normalization-contract-gate: me niego a re-anclar HACIA ARRIBA ${name} (${anchored} -> ${value}). Un hallazgo nuevo se arregla en la fuente. Si de verdad es re-atribucion, pedila por nombre: --reattribution --reason "..."`);
         process.exit(1);
       }
     }
@@ -359,6 +370,7 @@ async function main(argv) {
         divergentGroupsTop: result.divergent.slice(0, 15).map((group) => `${group.key}: ${group.slots} slots, ${group.positions} posiciones`),
       },
       lastMove: reason,
+      lastMoveKind: reattribution ? 're-atribucion (subida autorizada por nombre)' : 'decrece-solo',
     };
     writeFileSync(BASELINE_PATH, `${JSON.stringify(doc, null, 2)}\n`);
     console.log(`normalization-contract-gate: ancla escrita\n${render(result)}`);

@@ -83,9 +83,41 @@ export function declaredChannelOwners(controlsDir = CONTROLS_DIR) {
   return owners;
 }
 
+/**
+ * Una raiz REFINADA es una hija del eje paso: `tier.<nivel>.<fg|border>.<paso>`.
+ * Cuatro segmentos donde la raiz de nivel tiene tres.
+ */
+export const isRefinedRoot = (rootId) => {
+  const parts = String(rootId ?? '').split('.');
+  return parts.length === 4 && parts[0] === 'tier';
+};
+
+/**
+ * EL VOCABULARIO SE MIDE SOBRE LAS RAICES NO REFINADAS. Adjudicacion del DT,
+ * 2026-08-27 (cohorte 2A, §3.1).
+ *
+ * POR QUE. `gap` es decrece-solo porque cuenta PERILLAS FALTANTES: cada gap es
+ * una puerta que un tenant deberia poder abrir y no puede. El eje paso no crea
+ * puertas: parte una que ya faltaba en las posiciones que el tema autora, y una
+ * hija hereda el `exposure` de su padre precisamente porque es la MISMA
+ * decision indexada mas fino. Contarlas por separado inflaria el backlog sin
+ * que la deuda crezca -- la misma patologia que `collapsesLegacy`, un numero
+ * que deja de significar lo que dice.
+ *
+ * Medido cuando la ley se escribio: refinar `tier.page.border` y
+ * `tier.raised.border` (dos gaps) en sus pasos habria llevado el conteo de 8 a
+ * 12 sin que apareciera una sola perilla nueva.
+ *
+ * LO QUE NO AFLOJA. Un padre que gana `gap` sigue subiendo el conteo y sigue
+ * fallando; una hija con un `exposure` DISTINTO del de su padre es una
+ * incoherencia y se sigue viendo, porque las tres leyes de abajo se evaluan
+ * sobre TODAS las raices -- lo unico que se mide sobre los padres es el
+ * VOCABULARIO agregado del snapshot.
+ */
 export function countByExposure(roots) {
   const counts = Object.fromEntries(EXPOSURES.map((key) => [key, 0]));
   for (const root of roots) {
+    if (isRefinedRoot(root?.rootId)) continue;
     if (Object.prototype.hasOwnProperty.call(counts, root?.exposure)) counts[root.exposure] += 1;
   }
   return counts;

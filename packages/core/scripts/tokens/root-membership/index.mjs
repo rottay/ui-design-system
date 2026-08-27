@@ -111,10 +111,15 @@ export const GENERALITY_EVIDENCE =
 /** `tier.raised.border` -> {family:'tier', tier:'raised', property:'border'} */
 export function decomposeRootId(rootId) {
   const parts = String(rootId).split('.');
-  if (parts[0] === 'tier' && parts.length === 3) {
-    return { family: 'tier', tier: parts[1], property: parts[2] };
+  /* Tres partes es la raiz de nivel (`tier.base.fg`); CUATRO es la misma raiz
+   * refinada por su paso (`tier.base.fg.secondary`). Las dos son del mismo
+   * nivel y la regla de generalidad tiene que verlo: si solo se reconociera la
+   * de tres, una cabeza compartida entre raices de paso quedaria sin resolver
+   * por no encontrarle tier a ninguna reclamante. */
+  if (parts[0] === 'tier' && (parts.length === 3 || parts.length === 4)) {
+    return { family: 'tier', tier: parts[1], property: parts[2], step: parts[3] ?? null };
   }
-  return { family: parts[0], tier: null, property: parts.slice(1).join('.') };
+  return { family: parts[0], tier: null, property: parts.slice(1).join('.'), step: null };
 }
 
 /**
@@ -248,6 +253,121 @@ export function readOwnerTiers(path = OWNER_TIERS_PATH) {
   return { present: true, byOwner, formFailures };
 }
 
+export const OWNER_STEP_RULES_PATH = join(CORE_ROOT, 'manifest/cascade/owner-step-rules.json');
+
+/**
+ * EL TERCER INDICE: `step`. PREPARADO E INACTIVO hasta que el DT adjudique.
+ *
+ * La cohorte 2 midio la asimetria que lo obliga: el catalogo indexa raices por
+ * `tier x propiedad`, y los temas autoran `tier x propiedad x PASO` -- 8 tintas
+ * y 6 bordes declarados en `BrandPalette` contra UNA sola raiz de tinta por
+ * nivel. Por eso 627 filas caen en `value-shift` sobre `tier.*.{fg,border}`:
+ * su decision es de otro paso y la unica raiz disponible carga el primario.
+ *
+ * ESTE MECANISMO NO INVENTA NADA Y HOY NO HACE NADA. Sin
+ * `manifest/cascade/owner-step-rules.json` -- la segunda tabla autorada, misma
+ * disciplina que `owner-tiers` -- `step` sale `null` y `rootId` no se toca. Y
+ * cuando la tabla exista, el refinamiento SOLO ocurre si la raiz refinada
+ * EXISTE en el catalogo: una regla que apunte a una raiz inexistente deja la
+ * fila en su raiz padre y lo declara. Nunca se fabrica una raiz desde una
+ * tabla.
+ *
+ * Y LA IGUALDAD DE VALOR SIGUE PROHIBIDA COMO RUTA. El paso lo decide la tabla
+ * (owner x propiedad -> paso), jamas el parecido entre un literal y el valor de
+ * un canal. La identidad de valor resuelto es VERIFICACION posterior (la ley
+ * cero-delta de `resolved-map-diff`), nunca evidencia de ruteo.
+ */
+export const STEP_VOCABULARY = Object.freeze({
+  fg: Object.freeze(['primary', 'secondary', 'page', 'muted', 'tertiary', 'disabled', 'inverse', 'on-primary']),
+  border: Object.freeze(['primary', 'secondary', 'default', 'tertiary', 'subtle', 'focus']),
+});
+
+export function readOwnerStepRules(path = OWNER_STEP_RULES_PATH) {
+  if (!existsSync(path)) return { present: false, byKey: new Map(), formFailures: [] };
+  const table = JSON.parse(readFileSync(path, 'utf8'));
+  const rows = Array.isArray(table) ? table : (table.rows ?? []);
+  const byKey = new Map();
+  const formFailures = [];
+  for (const [index, row] of rows.entries()) {
+    const where = `owner-step-rules.json[${index}]`;
+    if (!row?.ownerPath) { formFailures.push(`${where}: sin ownerPath`); continue; }
+    const vocabulary = STEP_VOCABULARY[row.property];
+    if (!vocabulary) {
+      formFailures.push(`${where} (${row.ownerPath}): propiedad "${row.property}" fuera de {${Object.keys(STEP_VOCABULARY).join(' | ')}}`);
+      continue;
+    }
+    if (typeof row.leaf !== 'string' || row.leaf.trim() === '') {
+      formFailures.push(`${where} (${row.ownerPath}|${row.property}): leaf vacia`);
+      continue;
+    }
+    if (!vocabulary.includes(row.step)) {
+      formFailures.push(`${where} (${row.ownerPath}|${row.property}|${row.leaf}): paso "${row.step}" fuera del vocabulario autorado (${vocabulary.join(' | ')})`);
+      continue;
+    }
+    if (typeof row.reason !== 'string' || row.reason.trim() === '') {
+      formFailures.push(`${where} (${row.ownerPath}|${row.property}|${row.leaf}): reason vacia`);
+      continue;
+    }
+    const key = stepRuleKey(row.ownerPath, row.property, row.leaf);
+    if (byKey.has(key)) { formFailures.push(`${where}: clave duplicada ${key}`); continue; }
+    byKey.set(key, row);
+  }
+  return { present: true, byKey, formFailures };
+}
+
+/** La clave de la tabla del DT: owner x propiedad x HOJA. */
+export const stepRuleKey = (ownerPath, property, leaf) => `${ownerPath}|${property}|${leaf}`;
+
+export const leafOfSlotPath = (slotPath) => String(slotPath).split('.').pop();
+
+/**
+ * Refina `tier.<nivel>.<prop>` a `tier.<nivel>.<prop>.<paso>`.
+ *
+ * LA CLAVE ES `owner x propiedad x HOJA` (decision del DT, 2026-08-27): el
+ * censo de la fase A mostro que en las celdas grandes el numero de hojas casi
+ * iguala al de posiciones, porque **los nombres de hoja YA son el paso** --
+ * `bodyColor`, `headerColor`, `mutedColor`, `placeholderColor`. Adjudicar por
+ * hoja es adjudicar la decision real; por (owner, propiedad) habria obligado a
+ * un solo paso por familia entera.
+ *
+ * CONCORDANCIA, la misma disciplina que el tier. Un canal lo escriben varios
+ * slots; el paso se aplica solo si TODOS sus contribuyentes tienen regla y
+ * TODAS coinciden. Un contribuyente sin adjudicar, o dos pasos en desacuerdo,
+ * dejan el canal en su raiz PADRE con la discrepancia nombrada. Lo que se
+ * rechaza es el desacuerdo, no la pluralidad.
+ *
+ * Y LA RAIZ REFINADA TIENE QUE EXISTIR. Una regla que apunte a una raiz que el
+ * catalogo no declara deja la fila en su padre y lo declara: jamas se fabrica
+ * una raiz desde una tabla.
+ */
+export function refineWithStep({ rootId, contributors, stepRules, rootExists }) {
+  if (!stepRules?.present) return { rootId, step: null, stepNote: 'la tabla owner-step-rules no existe todavia' };
+  const parts = String(rootId ?? '').split('.');
+  if (parts.length !== 3 || parts[0] !== 'tier' || !STEP_VOCABULARY[parts[2]]) {
+    return { rootId, step: null, stepNote: 'la raiz no es un tier.<nivel>.<fg|border> refinable' };
+  }
+  const property = parts[2];
+  const steps = new Set();
+  const missing = [];
+  for (const slotPath of contributors) {
+    const key = stepRuleKey(ownerOfSlotPath(slotPath), property, leafOfSlotPath(slotPath));
+    const rule = stepRules.byKey.get(key);
+    if (!rule) { missing.push(key); continue; }
+    steps.add(rule.step);
+  }
+  if (missing.length > 0) {
+    return { rootId, step: null, stepNote: `sin adjudicar: ${[...new Set(missing)].slice(0, 3).join(', ')}` };
+  }
+  if (steps.size === 0) return { rootId, step: null, stepNote: 'ningun contribuyente aporta regla' };
+  if (steps.size > 1) {
+    return { rootId, step: null, stepNote: `los contribuyentes discrepan de paso: ${[...steps].sort().join(' vs ')}` };
+  }
+  const [step] = [...steps];
+  const refined = `${rootId}.${step}`;
+  if (!rootExists(refined)) return { rootId, step: null, stepNote: `la tabla pide ${refined} y esa raiz no existe en el catalogo` };
+  return { rootId: refined, step, stepNote: null };
+}
+
 export const sha256 = (text) => createHash('sha256').update(text).digest('hex');
 
 export async function buildMembership({
@@ -256,6 +376,7 @@ export async function buildMembership({
   catalog: injectedCatalog = null,
   edges: injectedEdges = null,
   ownerTiers: injectedOwnerTiers = null,
+  stepRules: injectedStepRules = null,
 } = {}) {
   const catalog = injectedCatalog
     ?? JSON.parse(readFileSync(join(coreRoot, 'manifest/cascade/root-catalog.json'), 'utf8'));
@@ -266,6 +387,7 @@ export async function buildMembership({
    * entre dos artefactos generados. Llamar a su funcion pura no lo crea. */
   const inventory = injectedInventory ?? (await buildInventory({ coreRoot, membership: 'none' }));
   const table = injectedOwnerTiers ?? readOwnerTiers(join(coreRoot, 'manifest/cascade/owner-tiers.json'));
+  const stepRules = injectedStepRules ?? readOwnerStepRules(join(coreRoot, 'manifest/cascade/owner-step-rules.json'));
 
   const { resolved, unresolved } = resolveHeads(catalog);
   const guarded = fallbackIndex(edgesDoc.edges ?? [], resolved);
@@ -395,6 +517,31 @@ export async function buildMembership({
     });
   }
 
+  /* EL TERCER INDICE, aplicado uniformemente y al final. Da igual por que via
+   * la fila gano su raiz: si esa raiz es refinable y la tabla adjudica el paso
+   * de TODOS sus contribuyentes, la fila baja un escalon. La VIA no cambia: el
+   * paso refina la raiz, no re-atribuye la evidencia. */
+  const rootExists = (id) => rootById.has(id);
+  for (const row of rows) {
+    if (!row.rootId) { row.step = null; row.stepNote = 'sin raiz que refinar'; continue; }
+    const refined = refineWithStep({
+      rootId: row.rootId,
+      contributors: row.contributingSlots.map((slotId) => slotId.slice(slotId.indexOf(':') + 1)),
+      stepRules,
+      rootExists,
+    });
+    if (refined.rootId !== row.rootId) {
+      row.parentRootId = row.rootId;
+      row.rootId = refined.rootId;
+      const refinedRoot = rootById.get(refined.rootId);
+      row.rootExposure = refinedRoot?.exposure ?? row.rootExposure;
+      row.rootHasDerivationLaw = Boolean(refinedRoot?.derivationDebt && refinedRoot?.derivation);
+      row.evidence = { ...row.evidence, stepFrom: 'owner-step-rules.json (owner x propiedad x hoja, por concordancia)' };
+    }
+    row.step = refined.step;
+    row.stepNote = refined.stepNote;
+  }
+
   const tally = (pick) => rows.reduce((acc, row) => {
     const key = String(pick(row));
     acc[key] = (acc[key] ?? 0) + 1;
@@ -455,6 +602,8 @@ export async function buildMembership({
       inventory: 'scripts/tokens/slot-inventory/index.mjs (funcion pura, no el artefacto: leerlo crearia un ciclo)',
       ownerTiers: table.present ? 'manifest/cascade/owner-tiers.json' : 'AUSENTE — V3 no atribuye nada, y es legitimo',
       ownerTiersFormFailures: table.formFailures,
+      ownerStepRules: stepRules.present ? 'manifest/cascade/owner-step-rules.json' : 'AUSENTE',
+      ownerStepRulesFormFailures: stepRules.formFailures,
     },
     stats: {
       rows: rows.length,
@@ -467,6 +616,10 @@ export async function buildMembership({
       sharedHeadsUnresolved: unresolved.length,
       ownersCensused: Object.keys(byOwnerSorted).length,
       ownersAdjudicated: table.byOwner.size,
+      stepRulesPresent: stepRules.present,
+      stepRulesAdjudicated: stepRules.byKey.size,
+      rowsRefinedByStep: rows.filter((row) => row.step !== null).length,
+      byStep: tally((row) => row.step ?? 'sin-paso'),
       r2Floor,
       r2FloorRoots: [...r2FloorRoots].sort(),
     },
@@ -496,6 +649,11 @@ async function main(argv) {
     process.exit(2);
   }
   const doc = withDigest(await buildMembership());
+  if (doc.provenance.ownerStepRulesFormFailures.length > 0) {
+    console.error('root-membership: FAIL — owner-step-rules.json tiene errores de forma:');
+    for (const failure of doc.provenance.ownerStepRulesFormFailures) console.error(`  - ${failure}`);
+    process.exit(1);
+  }
   if (doc.provenance.ownerTiersFormFailures.length > 0) {
     console.error('root-membership: FAIL — owner-tiers.json tiene errores de forma:');
     for (const failure of doc.provenance.ownerTiersFormFailures) console.error(`  - ${failure}`);
