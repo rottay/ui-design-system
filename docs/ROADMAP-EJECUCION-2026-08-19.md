@@ -4568,6 +4568,69 @@ seeds reales y mover la superficie de calibración a un campo propio — la
 decisión 15 conserva su INTENT (superficie de calibración estrecha; dominio
 público 290 intacto) y se enmendará su formulación al cerrar C5.
 
+**PIVOTE DE ESTRATEGIA — DIRECTIVA DEL OWNER (2026-08-27 ~09:45, relay Codex,
+VINCULANTE): PAUSA del craft puntual y apertura del frente de NORMALIZACIÓN PROFUNDA
+DE THEMES como puerta ejecutable previa a F4C.** El owner detectó lo correcto: los
+lotes F3 cerrados son válidos pero NO son la normalización sistémica pedida — el
+método variable-por-variable con ripple de ~148 derivados por microfix no escala.
+Números del consultor (medidos sobre los themes fuente): **3.592 literales en los tres
+brand themes** (rottay 1.725 / bithire 1.594 / evnto 273; 23.623 líneas), **3.275
+canales candidatos de colapso registrados y NO colapsados**, 378.370 líneas de CSS
+generado, F9 0/5100. **Corrección de registro F4A:** catalogó los 3.275 pero no
+realizó el colapso (§7 F4A ya lo decía — "todavía no hace craft premium ni colapsa en
+masa"; queda asentado que el colapso profundo ocurre AHORA, antes del craft masivo).
+**Modelo mental del owner, confirmado por Codex — ley de diseño del frente:**
+BrandTheme (pocas decisiones autoradas) → compiler → variables raíz → variables
+semánticas que derivan → skins que SÓLO consumen. Hardcodes legítimos sólo arriba
+(seeds de identidad vertical, invariantes deliberadas, Pro/Expert justificado,
+estructurales universales = los 4 domicilios F4A). **Salvedad vinculante: deduplicar
+por SIGNIFICADO, no por coincidencia textual** — dos valores iguales hoy que puedan
+divergir mañana NO comparten raíz (button.primary vs danger.background). **Leyes del
+frente (directiva, adoptadas enteras):** (1) Opus define schema común de seeds +
+estrategia de colapso; (2) Fable preaudita la arquitectura UNA vez; (3) Sonnet
+clasifica mecánicamente los 3.275 en seed/derived/invariante/Pro-Expert/retire con
+evidencia reproducible; (4) un único Opus integrador implementa cohortes GRANDES por
+dominio (color/surfaces → typography → spacing/density → radius/geometry → motion →
+elevation/material → estados/responsive) — cada cohorte elimina CIENTOS de
+repeticiones; (5) reporte por cohorte: literales antes/después, canales colapsados,
+mismo schema en los 3 themes, tenant-last, static/DB parity, valores visuales
+preservados salvo adjudicación explícita, CSS regenerado UNA vez, postaudit Fable,
+commit parcial + asiento; (6) gate bloqueante NUEVO contra literales inferiores y
+shadowing de seeds (las 5 balas de la enmienda del owner: contrato tipado equivalente,
+misma superficie semántica, cero unassigned requeridos o trayectoria medida, detector
+bloqueante, tenant-last intacto); (7) prohibido variable-por-variable y regeneración
+por microfix; (8) **craft masivo BLOQUEADO hasta que la puerta tenga implementación
+real.** **Packet line-height bithire: FRENADO en vuelo y descartado sin commit** (era
+el patrón prohibido: 1 variable, 148 derivados); write-set restaurado, árbol a
+`f7a909bf6` (porcelain 0, diff-check verde). Su conocimiento queda cosechado para la
+cohorte typography: el canal se AUTORA en
+`src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts`
+(`CHROME.controls.fieldGeometry.md.lineHeight`, vía `setControlSizeVars`) y el facade
+CSS es build product; identidad computada verificada (20px→1.5385, delta 0.0005px, el
+ratio sigue al dial type-scale, tenant-last por puerta DB); el valor sigue
+owner-gated (recomendación DT: preservar 1.5385). **Corrección de registro receipts
+(verificación DT contra el árbol — la refutación del writer SE ACEPTA):** el "tool
+`c5-receipt-reemission.mjs`" citado en asientos C-02/C-02b **no existe** y el estado
+"133 frescos + 1 declared-stale SUPERSEDED_BY_LIVE_FENCE" **no reproduce**: son 134
+receipts sin marca alguna (la marca SUPERSEDED_BY_LIVE_FENCE vive en manifests de
+familias — `manifest/controls/typography.families.json` — no en receipts). Lo que
+sostiene el árbol: re-firma quirúrgica (sourceDigest+createdAt; artifactSha256
+intacto) sobre 134/134. Corregido el mecanismo en el ledger (el resultado de esos
+lotes estaba bien); el diseño del frente debe citar el mecanismo REAL de re-emisión
+con grep citado. **Craft #1 (switch) PAUSADO** con su contrato listo
+(`/private/tmp/mr-craft-c1-contract.md`) y preaudit Fable **DEFECTS-3** con remedios
+baratos escritos (cifras de §2 a corregir — 2 transitions y 12 density-refs son las
+cifras del inventario; objetivo 1 a ampliar a conformidad motion §2+§4 completa o
+excepción acotada declarada; el `0.01ms` vive en reduced-motion — NO tentar
+`--ds-motion-instant` de 120ms): se remedian al reabrir, después de la puerta.
+**Pendiente de verificación en curso:** `modern-rescue-tooling-drills` salió rojo en
+el barrido parcial del árbol sucio (87 PASS/4 FAIL; 3 = trío cross-repo conocido que
+requiere escribir en docs-engineering; el 4to sin diagnosticar) — re-corriendo en HEAD
+limpio; resultado en el próximo asiento. **Métrica sin mover: 62%/~43%** — este frente
+es donde el porcentaje se mueve de verdad. Próximo paso: diseño del schema (Opus,
+brief `/private/tmp/mr-brief-opus-norm-schema.md`) → preaudit Fable → clasificación
+Sonnet → cohorte #1 (color/surfaces).
+
 **HITO F3 — VEREDICTO CODEX RECIBIDO E INTEGRADO (2026-08-27; relay del owner en
 terminal; la consulta empaquetada era `/private/tmp/codex-f3-hito-consulta.md`).**
 **ACCEPT del cierre técnico de la migración F3** — los 4 lotes (piloto `b2b2ad82c`,
