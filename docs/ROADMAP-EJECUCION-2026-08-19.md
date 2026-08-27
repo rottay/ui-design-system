@@ -318,6 +318,12 @@ delta y restore se abre F3.
   `theme-channel-parity --check`, regeneración de
   `generated/mirror-parity.json` + `fanout-facts.json`, canaries F4B intactos y
   revisión sighted de las tres verticales.
+- **Revisión sighted de F4C absorbe (decisión del owner, 2026-08-26):** la
+  evaluación sighted A/B light/dark de la delta visible de glass de BitHire
+  producida por el Lote F″ de F2A (decisión 20.ii). La evidencia se produce en
+  F″ igualmente (artefactos/escenas por Fable) y el control de contraste
+  gobernado sigue siendo gate del lote; lo que se mueve es el MOMENTO de la
+  lectura sighted, que vive acá y no frena F2A.
 - **Salida F4C:** paridad estructural blocking, valores verticales premium,
   cero shadowing regresado y los artefactos generados como salida — nunca como
   fuente editada.
@@ -543,9 +549,11 @@ histórico y no reaparece**.
     comportamiento responsive y se prueba contra doble escalado);
     (ii) `glass-bg` y `glass-border` **conservan sus semillas cromáticas
     BitHire** multiplicadas en intensidad por el dial — aceptada la delta
-    visible en baseline 0.58, sujeta a A/B sighted light/dark (evidencia Fable,
-    aceptación DT) y control de contraste — y **prohibido** caer a los valores
-    glass genéricos o introducir doble escalado; (iii) `badge-radius` queda
+    visible en baseline 0.58, con control de contraste gobernado en el lote;
+    **la evaluación sighted A/B light/dark se domicilia en la revisión
+    sighted de F4C** (decisión del owner, mismo día — F4C absorbe esa lectura;
+    F″ produce la evidencia pero no se frena por ella) — y **prohibido** caer
+    en los valores glass genéricos o introducir doble escalado; (iii) `badge-radius` queda
     como **excepción owner-visible** (primera entrada del registro
     `exceptions` del dial-authority-gate): un pill permanece `radius-full`,
     INVARIANT_WITH_REASON, con prueba negativa de que sigue siendo pill cuando
