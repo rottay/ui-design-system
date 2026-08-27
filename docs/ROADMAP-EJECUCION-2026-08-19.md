@@ -1392,9 +1392,10 @@ paso de esa cadena está autorizado por este checkpoint.
 | C4 brecha PRE_F4B | 100% REGULARIZADA (doble postaudit Codex DEFECTS 5/5 + Fable REGULARIZA; T-11 anclado, T-12 narrativa, frescura producers.json; D1 aceptado con asiento) |
 | PRE_F4B | CERRADO por regularización C4 (ver asiento C4); inventario mecánico `INVENTORY_READY` histórico |
 | H-1 brazo estático con baseline | 100%; `base` del vertical publicado sólo en el brazo estático; preaudit Fable `ACCEPT` V1–V5; drills 47/47; los 20 receipts spacing/effect/radius invariantes |
-| F4B | **20/20 controles ASENTADOS — FASE COMPLETA en su forma honesta (2026-08-26)** — 9 `COMPUTED_VERIFIED` (spacing.rhythm, surfaces.effect-intensity, shape.radius-scale, density.mode, responsive.posture, typography.scale, experience.profile, palette.seeds, surfaces.elevation-posture) + 10 `SOURCE_BOUND` (button-style, typography.pairing, sidebar-tone, motion.dial, typography.families, recipe-profile, profiles.expressive, profiles.icon, token-overrides, chrome.anatomy) + `chrome.families` paraguas BY_REFERENCE (`UNKNOWN` a propósito, `SURFACE_REVIEW_DEFERRED_TO_F5`). **0 `SIGHTED_ACCEPTED`.** Cero evidencia alcanzable pendiente: token-overrides cerró con techo estructural documentado (clase CSS-terminal + puerta sellada ⇒ sin camino a pass:true; candidato F5 `F5_INSTRUMENT_SEALED_DOOR_SINGLE_ARM_VERDICT` con 2 condiciones de admisión Fable). Lo que falta para que los SOURCE_BOUND suban (ratificación propertyGroup, calibración de celdas) es F4C/F5. 134 receipts bajo validador v2 (133 válidos; único stale declarado: compound-editorial, `SUPERSEDED_BY_LIVE_FENCE`). **C5 CERRADO (2026-08-26, commits `fd58f8ba4` gate-debt + `44b14f521` correctivo + docs-engineering `46960f2`):** α1 implementado (`derivedChannels` = radio de impacto de 3 seeds; `calibrationChannels` = superficie atribuible de 2, subconjunto fail-closed), cadena derivada re-emitida entera incluyendo el eslabón no enumerado (`producers.json`), gates:ci **89/89 blocking verdes** + 2 excluidos con owner, postaudit Fable ACCEPT (ver asiento de cierre C5) |
+| F4B | **20/20 controles ASENTADOS — FASE COMPLETA en su forma honesta (2026-08-26)** — 9 `COMPUTED_VERIFIED` (spacing.rhythm, surfaces.effect-intensity, shape.radius-scale, density.mode, responsive.posture, typography.scale, experience.profile, palette.seeds, surfaces.elevation-posture) + 10 `SOURCE_BOUND` (button-style, typography.pairing, sidebar-tone, motion.dial, typography.families, recipe-profile, profiles.expressive, profiles.icon, token-overrides, chrome.anatomy) + `chrome.families` paraguas BY_REFERENCE (`UNKNOWN` a propósito, `SURFACE_REVIEW_DEFERRED_TO_F5`). **0 `SIGHTED_ACCEPTED`.** Cero evidencia alcanzable pendiente: token-overrides cerró con techo estructural documentado (clase CSS-terminal + puerta sellada ⇒ sin camino a pass:true; candidato F5 `F5_INSTRUMENT_SEALED_DOOR_SINGLE_ARM_VERDICT` con 2 condiciones de admisión Fable). Lo que falta para que los SOURCE_BOUND suban (ratificación propertyGroup, calibración de celdas) es F4C/F5. 134 receipts bajo validador v2 (**134/134 válidos**; la supuesta marca "stale declarado: compound-editorial" era un `scenarioId` leído como estado — corrección verificada contra el árbol y asentada 2026-08-27). **C5 CERRADO (2026-08-26, commits `fd58f8ba4` gate-debt + `44b14f521` correctivo + docs-engineering `46960f2`):** α1 implementado (`derivedChannels` = radio de impacto de 3 seeds; `calibrationChannels` = superficie atribuible de 2, subconjunto fail-closed), cadena derivada re-emitida entera incluyendo el eslabón no enumerado (`producers.json`), gates:ci **89/89 blocking verdes** + 2 excluidos con owner, postaudit Fable ACCEPT (ver asiento de cierre C5) |
 | F2 asimétrico | **FRENTE CERRADO (2026-08-26)** — las 34 raíces asimétricas con disposición escrita y ejecutada: F2A-0 `fb8ff25b6`/`bf21afec2` (censo) · F2A-1 ley de cinco clases adjudicada (preaudit Fable + consenso Opus que corrigió el instrumento) · Lote A `dfc39efcf` · Lote B `2509bdd3d` (T0 `#A8A898`, decisión 17) · Lotes F/F-2 `96b610162`/`fc1b8faf9` · re-medición `6f3fbe90c` · F′ `791f86be6` (ley 19 + gate dial-authority blocking) · F″ `9e57502af` (28 pendings, decisión 20) · anotaciones `0bd953dbc`. Postaudit Fable por lote, Codex en hitos. Pendientes a fases posteriores (ninguno bloquea el cierre): valor del line-height bithire (ruling de diseño del owner), micro-fix C-02 del clear-button de textarea, pregunta sighted del glass sobre backdrop oscuro (F4C), validador cascade-aware y override plano mode-aware (F5), cableado text-page de evnto (35/1/0), 2 gates excluidos que vuelven cuando sus enumeradores existan |
-| F3 | **PILOTO v3 CERRADO (2026-08-27, `b2b2ad82c`)** — criterio de 3 términos probado punta a punta con cero-delta computado (1 sitio, `cell-renderers`); condición Codex del `13px`×3 resuelta por REMOCIÓN (no reproduce ninguna seed 12/14/16; idioma corpus bare ~50:1; fallback inalcanzable); cifras históricas de §6 corregidas (ver asiento §13); postaudit Fable DEFECTS-2 → ACCEPT condicionado cumplido. F4C/F5-F8 pendientes |
+| F3 | **PILOTO v3 CERRADO (2026-08-27, `b2b2ad82c`)** — criterio de 3 términos probado punta a punta con cero-delta computado (1 sitio, `cell-renderers`); condición Codex del `13px`×3 resuelta por REMOCIÓN (no reproduce ninguna seed 12/14/16; idioma corpus bare ~50:1; fallback inalcanzable); cifras históricas de §6 corregidas (ver asiento §13); postaudit Fable DEFECTS-2 → ACCEPT condicionado cumplido. **Hito Codex 2026-08-27: ACCEPT del cierre técnico de la migración (4 lotes, +156/−33 en 8 archivos); eje craft PAUSADO por directiva del owner hasta que exista la puerta de normalización profunda.** F4C/F5-F8 pendientes |
+| Normalización profunda (puerta ejecutable pre-F4C; directiva owner 2026-08-27) | **COHORTE 0 CERRADA (2026-08-27, `3ccd2f402` + higiene arc-11 `57e13c26a`)** — extractor JOIN slot↔canal↔raíz + inventario enumerado con `--check` blocking (3.656 filas); denominador de pintura adjudicado (autoridad viva `stats.paintDenominator` = 3.620); baselines anclados (unassigned 297, sin-raíz 3.378, untagged 25, expresiones-con-literal 71); **2.041 literales seed citables con productor**. Cero literales colapsados aún — la cohorte 1 empieza persistiendo la membresía por canal (R2=26 por construcción hasta tenerla). Postaudit Fable: ACCEPT condicionado cumplido |
 | F9 | 0/5100 celdas aceptadas |
 | Programa completo | estimación prudente **62% realizado** (ingeniería; corregida a la baja tras la revisión Codex 2026-08-27: la enmienda de paridad profunda agregó scope que el 63–65% previo no descontaba); preparación comercial visible ~43%. Cerrar F4A/F4B **no certifica** F9: 0/5100 celdas aceptadas, gate y calibración de celdas propios, aún pendientes |
 
@@ -4567,6 +4568,62 @@ adjudicación DT sometida a preaudit es α1: restaurar `derivedChannels` a sus 3
 seeds reales y mover la superficie de calibración a un campo propio — la
 decisión 15 conserva su INTENT (superficie de calibración estrecha; dominio
 público 290 intacto) y se enmendará su formulación al cerrar C5.
+
+**COHORTE 0 CERRADA (2026-08-27; commits `3ccd2f402` cohorte + `57e13c26a` higiene
+arc-11; writer Opus; postaudit Fable: DEFECTS-2 condicionado → condiciones cumplidas →
+ACCEPT).** Cero colapso, cero riesgo visual — la cohorte que hace medible todo lo que sigue.
+**Lo construido:** extractor JOIN slot↔canal↔raíz
+(`scripts/tokens/slot-inventory/`, 620+288 líneas, 15 drills) que mide el canal de cada hoja por
+DIFERENCIA contra el `compileBrandTheme` real de `dist/` (interroga al compilador, no lo
+interpreta; un solo lowering; `assertDistFresh`; 17,5 s para los 3 temas; 0 fallos en 3.656
+perturbaciones) → `manifest/generated/slot-inventory.json` (3.656 filas, digest, `--check`
+fail-closed, 2 entradas blocking en gates-manifest: 95 gates, 93 blocking; la salida vive en
+`generated/` y no en `normalization/` porque `scripts-tree` fail-closed lo exigió — baseline de 4
+intacto, ley "jamás baselinar un hallazgo nuevo" cumplida moviendo el artefacto a su casa
+lícita). **Cifras citables con productor (D1 saldado — todas re-corridas por la auditora del
+JSON, no del memo):** 2.041 filas seed-literal (hex 1.457 / dim 259 / color-fn 257 / num 68);
+dedup textual 546 distintos / 238 repetidos / **1.495 absorciones** (`#ffffff` ×117 — el peligro
+que prohíbe la salvedad del owner es 50% mayor que la estimación de diseño 945); reparto **R1
+760 / R2 26 / R3 0 / R4 263 / R5 2.607**; **3.378 filas sin raíz atribuible**; 904 leen cascada;
+71 expresiones con literal dentro (colapso a medias); 1.610 canales / 4.100 emisiones;
+paintDenominator **3.620**. **Adjudicación del denominador (DT, D4a, RATIFICADA por Fable):**
+ambas cifras viejas reproducen EXACTO sobre el árbol de su fecha (3.738 hojas en `a739b988e`;
+3.726 en `e6364e90b`; la diferencia = 29 commits que tocaron temas; 4 variantes de walk, mismo
+total) — la asimetría decisiva: el 45 del catálogo era prosa sin roster, el 36 de variant-parity
+es lista enumerada que machea 1:1 con las filas → **la autoridad viva es
+`slot-inventory stats.paintDenominator`** (única recomputada por corrida con `--check` blocking);
+3.693/3.690 quedan vintage fechadas (escrito en `ratchet.method` + puntero en
+`method.denominator` + resolución en `corrections.items[8]`). **Prosa-vs-filas del catálogo
+corregida** (3.310/64/259 con desglose por tema que suma exacto; censo A/B/C/D fechado y marcado
+no-recomputable — su salida por canal nunca se persistió; 2 entradas nuevas en `corrections`
+documentan los 3 drifts históricos). **Anclas decrease-only escritas** (baseline del extractor):
+unassigned 297 / untagged 25 / sin-raíz 3.378 / expresiones-con-literal 71 / pins-sobre-cabeza 20
+(observación — el detector de sombra real necesita la membresía por canal). **Hallazgo
+estratégico (sostenido por la evidencia, no por el memo):** la cohorte 1 NO empieza colapsando —
+empieza **persistiendo la membresía por canal** (el catálogo publica CUÁNTOS canales regenera
+cada raíz, nunca CUÁLES); sin ella R2 queda en 26 por construcción y "eliminar cientos por
+cohorte" sería imposible sin adivinar raíces por coincidencia de valor (lo prohibido). **R3=0 es
+hallazgo:** los temas autoran valores RESUELTOS, nunca nombres de stop — misma fenomenología que
+la clase anti-puerta de la decisión 19. **Condiciones del postaudit cumplidas:** (1)
+`cascade-producers --write` post-adjudicación (mi edición DT llegó después del ripple del writer;
+y confesión: leí el exit de `tail` por la tubería en una verificación intermedia — la misma
+trampa que la autocrítica asentada por Fable; desde acá, exit codes directos siempre); (2) este
+asiento no afirma "3 drills" — existen 2 (anti-coincidencia property-based, más fuerte que lo
+pedido; y D3 anti-valor-de-stop) y el **drill de duplicación-real queda PREREQUISITO de la
+cohorte 1**. **Ruling arc-11 ejecutado:** commit de higiene separado con las revisiones de los
+hermanos registradas (bithire `8abd05578`, evnto `6ff6ae9ec`, platform `44abb819` — con sus
+worktrees sucios contados); deuda ambiental nombrada con dueño (el frente: pin de revisiones como
+input del generador o des-trackeo adjudicado). **Corrección al memo del writer:** los "158
+archivos de docs-engineering por tokens:catalog:write" eran drift AJENO preexistente de ese repo
+(business/marketing/platform); la cohorte no tocó ninguna vista de tokens → **sello docs-eng
+NO-OP** (GAT-07 verde en el barrido sin reseal; los 3 READMEs design-system sucios allá son
+ajenos, los revisa su dueño). **Batería:** barrido **93 PASS/0 FAIL/2 SKIP** (incluye
+tooling-drills 346s verde y el trío cross-repo); los 4 artifacts byte-idénticos (ley §5.1 +
+`styles/index.css`); `git diff --check` verde; re-pins NINGUNO (los contadores no se movieron —
+la cohorte no toca pintura — verificado contra baselines). **Próximo paso:** cohorte 1 =
+persistir la membresía por canal + drill duplicación-real (prerequisito), y lote del gate
+`normalization-contract-gate`. Métrica sin mover (62%/~43%): esto es instrumentación; el
+porcentaje se mueve con las cohortes de colapso por dominio.
 
 **FRENTE NORMALIZACIÓN PROFUNDA — ARQUITECTURA ACEPTADA + COHORTE 0 DESPACHADA
 (2026-08-27).** Diseño Opus (`/private/tmp/opus-norm-schema.md`, 720 líneas) medido contra el
