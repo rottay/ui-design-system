@@ -4568,6 +4568,24 @@ seeds reales y mover la superficie de calibración a un campo propio — la
 decisión 15 conserva su INTENT (superficie de calibración estrecha; dominio
 público 290 intacto) y se enmendará su formulación al cerrar C5.
 
+**R-3 (Codex §1.4) — las autoridades de status narran el presente
+(2026-08-27; DT Kimi K3, packet de la línea authority; commit `eb39afd86`).**
+El punto 1.4 de la revisión Codex del cierre F2A — el único no listado entre
+los integrados por el DT saliente — queda verificado y regularizado:
+`checkpoint.intent.json` y la sección generada del README decían "F4B 5/20"
+(la era pre-cierre); ahora renderizan la era F3 por la vía canónica
+(`program-state --write`; `allowedLiteral` nuevo: el ordinal "decisión 18"
+colisiona con `derived.inventory.byLayer.chart`, razón escrita; --check verde).
+En `roadmap/registry.json` el campo `notes` de WO-CRA-23 seguía describiendo a
+Codex como DT (era 2026-08-21): el script canónico no tiene vía para reescribir
+`notes` en un WO in-progress, así que la verdad corriente quedó asentada por
+`progress --note` (entrada 19, timestamped) y la falta de un subcomando `note`
+en `scripts/roadmap/status/index.mjs` queda nombrada como deuda con ese dueño —
+la próxima sucesión no debe heredar la trampa. `roadmap:check` OK (100 WOs).
+`claimedBy: claude-modern-rescue` se conserva (handle genérico del pool, no
+afirmación de actor). Batería del packet: program-state --check + roadmap:check
+verdes; ningún gate de producto afectado (docs/status solamente).
+
 **F3 — PILOTO v3 CERRADO (2026-08-27; commit `b2b2ad82c`; DT Kimi K3 terminal 2
 — sucesión consumada en `1b260cd0c` + `fc5ae8d37` + nota docs del owner
 `ec824e477`; writer Opus; postaudit Fable: DEFECTS-2 con cláusula de ACCEPT
