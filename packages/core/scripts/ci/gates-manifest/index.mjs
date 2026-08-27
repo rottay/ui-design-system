@@ -554,6 +554,23 @@ export const CI_GATES = Object.freeze([
     run: ['node', 'scripts/tokens/slot-inventory/index.mjs', '--check'],
     blocking: true,
   },
+  // LA PUERTA DEL FRENTE DE NORMALIZACION PROFUNDA. Va DESPUES del inventario y
+  // de la membresia porque las consume a las dos: sin membresia no hay con que
+  // agrupar dos seeds por raiz, y la deteccion de sombra vuelve a ser la
+  // aproximacion de 20 pines que era antes. El drill primero, y aca la razon es
+  // mas fuerte que de costumbre: tres de las cinco leyes se gobiernan por
+  // trinquete, y un detector que dejo de detectar reporta cero hallazgos, baja
+  // sus contadores y parece una mejora.
+  {
+    id: 'normalization-contract-drill',
+    run: ['node', '--test', 'scripts/tokens/normalization-contract-gate/index.test.mjs'],
+    blocking: true,
+  },
+  {
+    id: 'normalization-contract',
+    run: ['node', 'scripts/tokens/normalization-contract-gate/index.mjs', '--check'],
+    blocking: true,
+  },
   // Every production script is wired through a declared channel (manifest,
   // lifecycle chain or ci.yml) or it does not exist. This gate is what makes
   // §1.10's "the wiring gate counts all three channels" true.
