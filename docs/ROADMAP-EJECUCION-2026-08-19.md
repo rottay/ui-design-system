@@ -4568,6 +4568,41 @@ seeds reales y mover la superficie de calibración a un campo propio — la
 decisión 15 conserva su INTENT (superficie de calibración estrecha; dominio
 público 290 intacto) y se enmendará su formulación al cerrar C5.
 
+**HITO F3 — VEREDICTO CODEX RECIBIDO E INTEGRADO (2026-08-27; relay del owner en
+terminal; la consulta empaquetada era `/private/tmp/codex-f3-hito-consulta.md`).**
+**ACCEPT del cierre técnico de la migración F3** — los 4 lotes (piloto `b2b2ad82c`,
+R-3, cohorte 2 `32fdd4583`, C-02/C-02b `a118d3772`+`b24baabe5`) verificados por el
+consultor contra el árbol: cambio productivo neto **+156/−33 en 8 archivos
+source/tests**; el resto del diffstat por commit fue ripple derivado. **Queda
+PROHIBIDO reauditar o reabrir esos lotes.** Respuestas a las 3 preguntas del paquete:
+(Q1) el flag `includeRoleMatrix` se acepta como solución LOCAL — **no es patrón
+general**: si reaparece la necesidad de factorizar un productor certificado, la vía es
+corregir el validador (packet de tooling), no otro flag; (Q2) la forma de cierre
+vale — F3 migración técnica 100% de su superficie real medida; el eje craft NO se abre
+como pasada masiva sino como **cohorte productiva acotada** (contrato abajo), y
+**antes de escalar craft a muchas familias se implementa la puerta mínima ejecutable
+de paridad profunda de los tres themes** (la ley escrita no basta; la puerta tiene que
+existir y correr); (Q3) C-02b bien orientado — el `0.125rem` residual queda como
+margen absoluto clasificado en el punto de definición (ya ejecutado así) y presence
+correctamente descalificado. **Crítica de eficiencia adoptada como ley operativa:**
+cada microcambio mueve ~150 derivados → los cambios compatibles se JUNTAN en cohortes
+y la cadena derivada se regenera **una sola vez por cohorte**, nunca por microedición.
+**Un solo DT:** la terminal Kimi saliente quedó cerrada en esta sesión (verificado por
+proceso: único `kimi` vivo = ttys004); su autoridad no vuelve. **Contrato obligatorio
+ANTES de todo write craft (ley del siguiente frente):** familia/vertical concreta;
+estados y dispositivos cubiertos; objetivo visual medible; ley de literales;
+tenant-last; prueba de responsive/reflow; aceptación Fable (pre/post); una única
+regeneración final. Routing confirmado: Sonnet = inventario/mecánica, Opus =
+diseño/implementación de riesgo, Fable = pre/postaudit, Codex = consulta por cadencia.
+**Progreso adoptado (sin mover):** F3 migración técnica 100% de su superficie real;
+craft 0%; F4C ~3–5% (contrato escrito); F5–F8 0%; F9 0/5100; total **62%** ingeniería
+/ ~43% comercial. **Cola inmediata:** (a) packet line-height bithire por la vía
+preservante — `--ds-input-md-line-height` 1.5385 como ratio seed sin unidad (identidad
+exacta, cero delta; el redondeo a 1.5 sigue siendo decisión del owner, ejecutable
+después como cambio de un solo valor); (b) diseño de la cohorte craft #1 bajo el
+contrato de arriba; (c) puerta ejecutable de paridad profunda como prerequisito de
+escala. **Sin bloqueo del owner ni de Codex: la ejecución continúa ya.**
+
 **F3 — MINI-LOTE C-02b CERRADO + ADJUDICACIÓN presence (2026-08-27; commit
 `b24baabe5`; writer Opus; postaudit Fable: ACCEPT, con veredicto sobre la desviación
 de receipts y verificación de la adjudicación presence).** La clearance de
