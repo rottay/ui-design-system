@@ -117,11 +117,20 @@ archivo aunque el canal se haya disparado sin waiter):
 
 ## 5. En vuelo al momento de la sucesión
 
-1. **Piloto F3 v3 (Opus, escribiendo):** migración skin-first de
-   `Skeleton/compound/Button` (`height`, patrón hatch del propio archivo) +
-   paso 0: verificación de 3 candidatos (presence ×2, cell-renderers ×1).
-   Brief completo: `/private/tmp/mr-brief-opus-f3-piloto3.md`. Al llegar su
-   señal: postaudit Fable acotado → commit → asiento.
+1. **Piloto F3 v3 (Opus) — SEÑALADO al cierre de esta sucesión** (el memo
+   llegó: `/private/tmp/opus-f3-piloto3.md`). Resultado: el paso 0
+   descalificó presence (sin skin ni data-size) y Skeleton/Button (su hatch
+   CONSERVA la interpolación en TS — migrar height no sacaba ningún sitio del
+   pool, y migrarla de verdad exigía skin nuevo + literales nuevos prohibidos
+   por la enmienda) y **ejecutó `cell-renderers`** (1 sitio: el mismo objeto
+   estampaba `data-size` Y calculaba `fontSize` inline con el mismo valor —
+   redundancia de libro; ahora pinta el skin vía `data-size`, comportamiento
+   observado conservado). **Condición de commit (Codex, asentada):** la
+   repetición `13px`×3 en el skin se centraliza o clasifica como UNA
+   seed/invariante ANTES del commit — lo verifica Fable en el postaudit.
+   Pendiente del DT entrante: postaudit Fable acotado → commit → asiento F3
+   con las correcciones de cifras (209→medido hoy; 17→31 por mecanismo; la
+   superficie F3 genuina de un dígito) y el veredicto de los dos frenos.
 2. **Revisión Codex del cierre F2A** (en curso): 3 preguntas (pendientes que
    podrían ser cierre falso; dependencias antes de la migración masiva F3;
    tensión entre la enmienda de paridad y las decisiones 18/19/20). Memo
