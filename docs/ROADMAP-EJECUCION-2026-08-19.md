@@ -4582,6 +4582,25 @@ fontSize 13px causal, con re-medición de los 2 controles en bithire).
 Pendiente del DT: asignación de dueño para lineHeight/iconSize (decisión 19,
 punto iii).
 
+**F2A-1 Lote F-2 commiteado (2026-08-26, `fc1b8faf9`; re-auditoría Fable
+pedida por el owner tras la 2.ª revisión Codex: ACCEPT condicionado,
+condición cumplida).** El cero-delta del Lote F era verdadero sobre una
+escena y la escena no era todas: la ruta de override DB plano no estaba en la
+superficie de prueba. Restaurada la partición por-modo de
+`--ds-surface-overlay` en bithire (portadora real; el validador APCA no
+resuelve cascada — medido); `raised-foreground` sigue removido (único
+duplicado real). Ley general asentada: **una prueba de cero-delta acota su
+propia escena; el veredicto de deuda muerta nombra las rutas no cubiertas.**
+Correcciones Codex aplicadas: pin duro + separación (no la forma débil) y
+Reversión #1 registrada como reversión (observación Fable pendiente: nombrar
+la "reversión de remoción commiteada" como vía propia en la ley del baseline
+variant-parity en su próxima edición). Re-pins con aritmética:
+provenance-acceptance 1231−3+2−1=1229; producers 10310→10311. Gates nuevos
+blocking: dial-authority + su drill (91→93 en el manifiesto). **Punto ciego
+de batería cerrado:** el barrido de lotes corría sin los 330 s del suite
+tooling-drills; la batería de cierre vuelve a ser completa desde el gate 0 +
+la suite focal del subsistema tocado.
+
 **F2A-1 Lotes A y B commiteados (2026-08-26; `dfc39efcf` A, `2509bdd3d` B).**
 A: las 10 inertes congeladas con evidencia de cero-ocurrencia reproducida por
 Fable; `type.leading` fuera del set (vivo en la capa base) con su cita
