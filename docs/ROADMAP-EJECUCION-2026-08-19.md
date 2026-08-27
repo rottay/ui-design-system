@@ -1395,7 +1395,7 @@ paso de esa cadena está autorizado por este checkpoint.
 | F4B | **20/20 controles ASENTADOS — FASE COMPLETA en su forma honesta (2026-08-26)** — 9 `COMPUTED_VERIFIED` (spacing.rhythm, surfaces.effect-intensity, shape.radius-scale, density.mode, responsive.posture, typography.scale, experience.profile, palette.seeds, surfaces.elevation-posture) + 10 `SOURCE_BOUND` (button-style, typography.pairing, sidebar-tone, motion.dial, typography.families, recipe-profile, profiles.expressive, profiles.icon, token-overrides, chrome.anatomy) + `chrome.families` paraguas BY_REFERENCE (`UNKNOWN` a propósito, `SURFACE_REVIEW_DEFERRED_TO_F5`). **0 `SIGHTED_ACCEPTED`.** Cero evidencia alcanzable pendiente: token-overrides cerró con techo estructural documentado (clase CSS-terminal + puerta sellada ⇒ sin camino a pass:true; candidato F5 `F5_INSTRUMENT_SEALED_DOOR_SINGLE_ARM_VERDICT` con 2 condiciones de admisión Fable). Lo que falta para que los SOURCE_BOUND suban (ratificación propertyGroup, calibración de celdas) es F4C/F5. 134 receipts bajo validador v2 (**134/134 válidos**; la supuesta marca "stale declarado: compound-editorial" era un `scenarioId` leído como estado — corrección verificada contra el árbol y asentada 2026-08-27). **C5 CERRADO (2026-08-26, commits `fd58f8ba4` gate-debt + `44b14f521` correctivo + docs-engineering `46960f2`):** α1 implementado (`derivedChannels` = radio de impacto de 3 seeds; `calibrationChannels` = superficie atribuible de 2, subconjunto fail-closed), cadena derivada re-emitida entera incluyendo el eslabón no enumerado (`producers.json`), gates:ci **89/89 blocking verdes** + 2 excluidos con owner, postaudit Fable ACCEPT (ver asiento de cierre C5) |
 | F2 asimétrico | **FRENTE CERRADO (2026-08-26)** — las 34 raíces asimétricas con disposición escrita y ejecutada: F2A-0 `fb8ff25b6`/`bf21afec2` (censo) · F2A-1 ley de cinco clases adjudicada (preaudit Fable + consenso Opus que corrigió el instrumento) · Lote A `dfc39efcf` · Lote B `2509bdd3d` (T0 `#A8A898`, decisión 17) · Lotes F/F-2 `96b610162`/`fc1b8faf9` · re-medición `6f3fbe90c` · F′ `791f86be6` (ley 19 + gate dial-authority blocking) · F″ `9e57502af` (28 pendings, decisión 20) · anotaciones `0bd953dbc`. Postaudit Fable por lote, Codex en hitos. Pendientes a fases posteriores (ninguno bloquea el cierre): valor del line-height bithire (ruling de diseño del owner), micro-fix C-02 del clear-button de textarea, pregunta sighted del glass sobre backdrop oscuro (F4C), validador cascade-aware y override plano mode-aware (F5), cableado text-page de evnto (35/1/0), 2 gates excluidos que vuelven cuando sus enumeradores existan |
 | F3 | **PILOTO v3 CERRADO (2026-08-27, `b2b2ad82c`)** — criterio de 3 términos probado punta a punta con cero-delta computado (1 sitio, `cell-renderers`); condición Codex del `13px`×3 resuelta por REMOCIÓN (no reproduce ninguna seed 12/14/16; idioma corpus bare ~50:1; fallback inalcanzable); cifras históricas de §6 corregidas (ver asiento §13); postaudit Fable DEFECTS-2 → ACCEPT condicionado cumplido. **Hito Codex 2026-08-27: ACCEPT del cierre técnico de la migración (4 lotes, +156/−33 en 8 archivos); eje craft PAUSADO por directiva del owner hasta que exista la puerta de normalización profunda.** F4C/F5-F8 pendientes |
-| Normalización profunda (puerta ejecutable pre-F4C; directiva owner 2026-08-27) | **COHORTE 0 CERRADA (2026-08-27, `3ccd2f402` + higiene arc-11 `57e13c26a`)** — extractor JOIN slot↔canal↔raíz + inventario enumerado con `--check` blocking (3.656 filas); denominador de pintura adjudicado (autoridad viva `stats.paintDenominator` = 3.620); baselines anclados (unassigned 297, sin-raíz 3.378, untagged 25, expresiones-con-literal 71); **2.041 literales seed citables con productor**. Cero literales colapsados aún — la cohorte 1 empieza persistiendo la membresía por canal (R2=26 por construcción hasta tenerla). Postaudit Fable: ACCEPT condicionado cumplido |
+| Normalización profunda (puerta ejecutable pre-F4C; directiva owner 2026-08-27) | **COHORTE 1 CERRADA (2026-08-27, `b00e5700a`; cohorte 0 en `3ccd2f402`)** — membresía canal→raíz persistida (753/1.610 canales con raíz por 3 vías sin coincidencia textual) + tabla owner-tiers autorada por el DT (114) + inventario v2 con **R2 26→906** (piso 412) + `collapsesLegacy` fechado. Cero literales colapsados aún — el primer colapso (color/surfaces) espera el gate `normalization-contract-gate` (drill de duplicación-real) y el diseño de cohorte 2 |
 | F9 | 0/5100 celdas aceptadas |
 | Programa completo | estimación prudente **62% realizado** (ingeniería; corregida a la baja tras la revisión Codex 2026-08-27: la enmienda de paridad profunda agregó scope que el 63–65% previo no descontaba); preparación comercial visible ~43%. Cerrar F4A/F4B **no certifica** F9: 0/5100 celdas aceptadas, gate y calibración de celdas propios, aún pendientes |
 
@@ -4568,6 +4568,45 @@ adjudicación DT sometida a preaudit es α1: restaurar `derivedChannels` a sus 3
 seeds reales y mover la superficie de calibración a un campo propio — la
 decisión 15 conserva su INTENT (superficie de calibración estrecha; dominio
 público 290 intacto) y se enmendará su formulación al cerrar C5.
+
+**COHORTE 1 CERRADA (2026-08-27; commit `b00e5700a`; writer Opus en dos fases + tabla autorada
+del DT; postaudit Fable: ACCEPT con 3 rulings favorables).** La membresía canal→raíz queda
+**persistida y gobernada**: `scripts/tokens/root-membership/` (productor + 19 drills) →
+`manifest/generated/root-membership.json` (1.610 canales, `--check` blocking, ciclo roto por
+modo explícito `membership:'none'` con default fail-closed — ruling (b) ratificado). **Tres
+vías, ninguna mira valores:** head-exact 36 + declared-fallback 295 + governed-owner-table 422 =
+**753 canales con raíz**; cabezas disputadas 2/0 resueltas por la regla de generalidad
+(`--ds-color-text-primary`→`tier.base.fg`, `--ds-color-border`→`tier.base.border`, las demás
+raíces como `referencesHead`). **La tabla `manifest/cascade/owner-tiers.json` es AUTORADA por el
+DT** (lote 1: 114 owners con razón estructural por fila — control 62 / page 20 / raised 18 /
+overlay 12 / base 2; muestra de 6 auditada por Fable contra los heads del catálogo; las 2 filas
+`inset`→base son la adjudicación más débil y su corrección pertenece al packet de fusión
+8-roles-vs-6-tiers, no bloquea). Paletas/ramps, motion, expressive y badge/tag/avatar/alert
+quedaron SIN adjudicar a propósito (gramática no-tier; "null legítimo, nunca presión de
+cobertura"). **Admisión V3 por CONCORDANCIA** (desviación aceptada por el DT en fase A, ruling
+(a) ratificado: 0 de los 857 residuales es por desacuerdo de tier). **Inventario v2: R2 26 →
+906** (piso computado 412, superado 2,2×), filas con raíz 107 → 1.771, R5 2.607 → 1.785, R3
+sigue en 0 (hallazgo: los temas autoran valores resueltos, no nombres de stop). **Re-ancla
+única con razón:** solo `rowsWithoutRootAttribution` 3.378→1.707 (causa: membresía persistida);
+los otros 4 contadores QUIETOS, verificados campo a campo. **Rename `collapses`→`collapsesLegacy`
+con las prosas en el mismo edit** (0 restos en prosa viva; 3 menciones históricas en
+`corrections`, correctas). **Hallazgo estructural (185 canales, 27 combinaciones
+`tier.propiedad` inexistentes — shadow 78, padding, height, gap, ring):** la cascada de nivel
+está definida solo para color/borde; **dirección adjudicada por el DT: domicilio en el EJE de la
+propiedad** (shadow→`elevation.ladder` con `surfaces.elevation-posture` como ley de escalón;
+padding/gap→`spacing.step`/`control.ratio.*`; height→`control.height`; ring→`state.delta.focus`),
+**NO 27 raíces nuevas** — la matriz tier queda cromática; la mecánica entra al diseño de la
+cohorte 2 con preaudit. **Política temporal aceptada (ruling (c) con condición):** la omisión de
+`surface-census:generate` se declara por cohorte y EXPIRA cuando cierre la deuda arc-11 (pin de
+revisiones o des-trackeo); si sobrevive al cierre, es divergencia silenciosa y defecto.
+**Batería:** barrido **95 PASS / 0 FAIL** (97 gates / 95 blocking, drill primero); cadena 13/13
+una vez; artifacts byte-idénticos; receipts 134/134 fresh (este write-set no los toca — Fable
+verificó 0/134 con root-catalog en sourceFiles); diff --check verde. **Lo que la cohorte 1 NO
+hizo, por ley: colapsar un solo literal.** **Próximo paso:** lote `normalization-contract-gate`
+(5 leyes + el drill de duplicación-real, prerequisito del primer colapso — ahora posible: ya hay
+con qué agrupar dos seeds por raíz-modo) y diseño de la cohorte 2 (color/surfaces, primer
+colapso, sobre R2=906). Métrica sin mover (62%/~43%) — instrumentación; el porcentaje se mueve
+con las cohortes de colapso.
 
 **COHORTE 0 CERRADA (2026-08-27; commits `3ccd2f402` cohorte + `57e13c26a` higiene
 arc-11; writer Opus; postaudit Fable: DEFECTS-2 condicionado → condiciones cumplidas →
