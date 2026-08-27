@@ -3,13 +3,13 @@
   "app": "app-bithire",
   "source": "generated-from-productive-typescript",
   "counts": {
-    "route": 224,
+    "route": 225,
     "field": 433,
-    "column": 441,
-    "tab": 150,
-    "action": 472
+    "column": 447,
+    "tab": 144,
+    "action": 474
   },
-  "total": 1720,
+  "total": 1723,
   "entries": [
     {
       "kind": "action",
@@ -286,9 +286,16 @@
     },
     {
       "kind": "action",
+      "id": "add-to-pool",
+      "source": "features/candidates/surface/screens/record/listing/index.tsx",
+      "line": 1725,
+      "column": 19
+    },
+    {
+      "kind": "action",
       "id": "add-to-work-tray",
       "source": "features/_shared/operations/actions/workflows/contextual-actions/index.ts",
-      "line": 1093,
+      "line": 1838,
       "column": 26
     },
     {
@@ -433,13 +440,6 @@
     },
     {
       "kind": "action",
-      "id": "application.advance",
-      "source": "features/candidates/surface/screens/workflows/compare/index.tsx",
-      "line": 128,
-      "column": 29
-    },
-    {
-      "kind": "action",
       "id": "application.client_decision",
       "source": "features/applications/surface/screens/record/detail/index.tsx",
       "line": 226,
@@ -489,13 +489,6 @@
     },
     {
       "kind": "action",
-      "id": "application.reject",
-      "source": "features/candidates/surface/screens/workflows/compare/index.tsx",
-      "line": 134,
-      "column": 29
-    },
-    {
-      "kind": "action",
       "id": "application.schedule",
       "source": "features/applications/surface/screens/record/detail/index.tsx",
       "line": 214,
@@ -526,7 +519,7 @@
       "kind": "action",
       "id": "applications",
       "source": "features/candidates/surface/screens/record/edit/view/sections/sidebar-panels/index.tsx",
-      "line": 267,
+      "line": 235,
       "column": 5
     },
     {
@@ -596,7 +589,7 @@
       "kind": "action",
       "id": "ask-about-this-record",
       "source": "features/_shared/operations/actions/workflows/contextual-actions/index.ts",
-      "line": 1007,
+      "line": 1752,
       "column": 26
     },
     {
@@ -701,7 +694,7 @@
       "kind": "action",
       "id": "candidate",
       "source": "app/(dashboard)/layout.tsx",
-      "line": 90,
+      "line": 92,
       "column": 3
     },
     {
@@ -727,107 +720,121 @@
     },
     {
       "kind": "action",
-      "id": "candidate-360",
+      "id": "candidate-dossier",
       "source": "features/candidates/surface/screens/record/edit/view/sections/sidebar-panels/index.tsx",
-      "line": 259,
+      "line": 227,
       "column": 5
     },
     {
       "kind": "action",
       "id": "candidate.archive",
       "source": "features/candidates/surface/screens/record/detail/index.tsx",
-      "line": 167,
+      "line": 183,
       "column": 29
     },
     {
       "kind": "action",
       "id": "candidate.create",
       "source": "features/candidates/surface/screens/record/listing/index.tsx",
-      "line": 398,
+      "line": 440,
       "column": 45
     },
     {
       "kind": "action",
       "id": "candidate.edit",
       "source": "features/candidates/surface/screens/record/detail/index.tsx",
-      "line": 160,
+      "line": 176,
       "column": 29
     },
     {
       "kind": "action",
       "id": "candidate.edit",
       "source": "features/candidates/surface/screens/record/listing/index.tsx",
-      "line": 404,
+      "line": 446,
       "column": 45
     },
     {
       "kind": "action",
       "id": "candidate.matching",
       "source": "features/candidates/surface/screens/record/detail/index.tsx",
-      "line": 209,
+      "line": 225,
+      "column": 29
+    },
+    {
+      "kind": "action",
+      "id": "candidate.matching",
+      "source": "features/candidates/surface/screens/record/listing/index.tsx",
+      "line": 453,
       "column": 29
     },
     {
       "kind": "action",
       "id": "candidate.message",
       "source": "features/candidates/surface/screens/record/detail/index.tsx",
-      "line": 223,
+      "line": 239,
+      "column": 29
+    },
+    {
+      "kind": "action",
+      "id": "candidate.message",
+      "source": "features/candidates/surface/screens/record/listing/index.tsx",
+      "line": 469,
       "column": 29
     },
     {
       "kind": "action",
       "id": "candidate.open_applications",
       "source": "features/candidates/surface/screens/record/detail/index.tsx",
-      "line": 187,
+      "line": 203,
       "column": 55
     },
     {
       "kind": "action",
       "id": "candidate.open_interviews",
       "source": "features/candidates/surface/screens/record/detail/index.tsx",
-      "line": 192,
+      "line": 208,
       "column": 53
     },
     {
       "kind": "action",
       "id": "candidate.pipeline",
       "source": "features/candidates/surface/screens/record/detail/index.tsx",
-      "line": 202,
+      "line": 218,
       "column": 50
     },
     {
       "kind": "action",
       "id": "candidate.save_pool",
       "source": "features/candidates/surface/screens/record/detail/index.tsx",
-      "line": 230,
+      "line": 246,
       "column": 29
     },
     {
       "kind": "action",
       "id": "candidate.schedule",
       "source": "features/candidates/surface/screens/record/detail/index.tsx",
-      "line": 216,
+      "line": 232,
       "column": 29
     },
     {
       "kind": "action",
       "id": "candidate.schedule",
       "source": "features/candidates/surface/screens/record/listing/index.tsx",
-      "line": 410,
+      "line": 461,
+      "column": 29
+    },
+    {
+      "kind": "action",
+      "id": "candidate.source_ai",
+      "source": "features/candidates/surface/screens/record/detail/index.tsx",
+      "line": 255,
       "column": 56
     },
     {
       "kind": "action",
       "id": "candidate.source_ai",
       "source": "features/candidates/surface/screens/record/detail/index.tsx",
-      "line": 239,
-      "column": 56
-    },
-    {
-      "kind": "action",
-      "id": "candidate.source_ai",
-      "source": "features/candidates/surface/screens/record/detail/index.tsx",
-      "line": 246,
+      "line": 262,
       "column": 29
     },
     {
@@ -932,14 +939,14 @@
       "kind": "action",
       "id": "compare",
       "source": "features/_shared/operations/actions/workflows/contextual-actions/index.ts",
-      "line": 1071,
+      "line": 1816,
       "column": 26
     },
     {
       "kind": "action",
       "id": "compare",
       "source": "features/candidates/surface/screens/record/listing/index.tsx",
-      "line": 1267,
+      "line": 1701,
       "column": 13
     },
     {
@@ -981,7 +988,7 @@
       "kind": "action",
       "id": "copy-link",
       "source": "features/_shared/operations/actions/workflows/contextual-actions/index.ts",
-      "line": 1061,
+      "line": 1806,
       "column": 26
     },
     {
@@ -1259,6 +1266,13 @@
     },
     {
       "kind": "action",
+      "id": "dnc",
+      "source": "features/candidates/surface/screens/record/listing/index.tsx",
+      "line": 1732,
+      "column": 19
+    },
+    {
+      "kind": "action",
       "id": "draft",
       "source": "features/sourcing/surface/screens/workflows/outreach/listing/index.tsx",
       "line": 116,
@@ -1282,7 +1296,7 @@
       "kind": "action",
       "id": "drill-into-metric",
       "source": "features/_shared/operations/actions/workflows/contextual-actions/index.ts",
-      "line": 1082,
+      "line": 1827,
       "column": 26
     },
     {
@@ -1331,7 +1345,7 @@
       "kind": "action",
       "id": "email",
       "source": "features/candidates/model/domain/record/listing/workbench-listing/mapping/index.ts",
-      "line": 115,
+      "line": 128,
       "column": 5
     },
     {
@@ -1394,7 +1408,7 @@
       "kind": "action",
       "id": "export",
       "source": "features/candidates/surface/screens/record/listing/index.tsx",
-      "line": 1275,
+      "line": 1709,
       "column": 13
     },
     {
@@ -1436,7 +1450,7 @@
       "kind": "action",
       "id": "interview",
       "source": "app/(dashboard)/layout.tsx",
-      "line": 104,
+      "line": 106,
       "column": 3
     },
     {
@@ -1541,7 +1555,7 @@
       "kind": "action",
       "id": "job",
       "source": "app/(dashboard)/layout.tsx",
-      "line": 97,
+      "line": 99,
       "column": 3
     },
     {
@@ -1709,7 +1723,7 @@
       "kind": "action",
       "id": "match",
       "source": "features/candidates/model/domain/record/listing/workbench-listing/mapping/index.ts",
-      "line": 113,
+      "line": 116,
       "column": 5
     },
     {
@@ -1723,7 +1737,7 @@
       "kind": "action",
       "id": "matching",
       "source": "features/candidates/surface/screens/record/edit/view/sections/sidebar-panels/index.tsx",
-      "line": 283,
+      "line": 251,
       "column": 5
     },
     {
@@ -1758,70 +1772,70 @@
       "kind": "action",
       "id": "new-application",
       "source": "vertical/surface/navigation/sidebar-config/contextual-routes/index.ts",
-      "line": 2318,
+      "line": 2288,
       "column": 26
     },
     {
       "kind": "action",
       "id": "new-candidate",
       "source": "vertical/surface/navigation/sidebar-config/contextual-routes/index.ts",
-      "line": 2311,
+      "line": 2281,
       "column": 24
     },
     {
       "kind": "action",
       "id": "new-client",
       "source": "vertical/surface/navigation/sidebar-config/contextual-routes/index.ts",
-      "line": 2304,
+      "line": 2274,
       "column": 21
     },
     {
       "kind": "action",
       "id": "new-interview",
       "source": "vertical/surface/navigation/sidebar-config/contextual-routes/index.ts",
-      "line": 2325,
+      "line": 2295,
       "column": 24
     },
     {
       "kind": "action",
       "id": "new-offer",
       "source": "vertical/surface/navigation/sidebar-config/contextual-routes/index.ts",
-      "line": 2332,
+      "line": 2302,
       "column": 20
     },
     {
       "kind": "action",
       "id": "new-position",
       "source": "vertical/surface/navigation/sidebar-config/contextual-routes/index.ts",
-      "line": 2346,
+      "line": 2316,
       "column": 23
     },
     {
       "kind": "action",
       "id": "new-recruiter",
       "source": "vertical/surface/navigation/sidebar-config/contextual-routes/index.ts",
-      "line": 2290,
+      "line": 2260,
       "column": 24
     },
     {
       "kind": "action",
       "id": "new-rubric",
       "source": "vertical/surface/navigation/sidebar-config/contextual-routes/index.ts",
-      "line": 2339,
+      "line": 2309,
       "column": 29
     },
     {
       "kind": "action",
       "id": "new-search",
       "source": "vertical/surface/navigation/sidebar-config/contextual-routes/index.ts",
-      "line": 2297,
+      "line": 2267,
       "column": 18
     },
     {
       "kind": "action",
       "id": "new-squad",
       "source": "vertical/surface/navigation/sidebar-config/contextual-routes/index.ts",
-      "line": 2283,
+      "line": 2253,
       "column": 18
     },
     {
@@ -2017,7 +2031,7 @@
       "kind": "action",
       "id": "open-as-page",
       "source": "features/_shared/operations/actions/workflows/contextual-actions/index.ts",
-      "line": 1050,
+      "line": 1795,
       "column": 26
     },
     {
@@ -2031,7 +2045,7 @@
       "kind": "action",
       "id": "open-in-workbench",
       "source": "features/_shared/operations/actions/workflows/contextual-actions/index.ts",
-      "line": 1039,
+      "line": 1784,
       "column": 26
     },
     {
@@ -2094,7 +2108,7 @@
       "kind": "action",
       "id": "pipeline",
       "source": "features/candidates/surface/screens/record/edit/view/sections/sidebar-panels/index.tsx",
-      "line": 275,
+      "line": 243,
       "column": 5
     },
     {
@@ -2276,7 +2290,7 @@
       "kind": "action",
       "id": "preview-safe-action",
       "source": "features/_shared/operations/actions/workflows/contextual-actions/index.ts",
-      "line": 1136,
+      "line": 1881,
       "column": 26
     },
     {
@@ -2633,7 +2647,7 @@
       "kind": "action",
       "id": "schedule",
       "source": "features/candidates/model/domain/record/listing/workbench-listing/mapping/index.ts",
-      "line": 114,
+      "line": 122,
       "column": 5
     },
     {
@@ -2759,14 +2773,14 @@
       "kind": "action",
       "id": "show-related",
       "source": "features/_shared/operations/actions/workflows/contextual-actions/index.ts",
-      "line": 1102,
+      "line": 1847,
       "column": 26
     },
     {
       "kind": "action",
       "id": "show-timeline",
       "source": "features/_shared/operations/actions/workflows/contextual-actions/index.ts",
-      "line": 1119,
+      "line": 1864,
       "column": 26
     },
     {
@@ -2983,7 +2997,7 @@
       "kind": "action",
       "id": "summarize-this-tab",
       "source": "features/_shared/operations/actions/workflows/contextual-actions/index.ts",
-      "line": 1026,
+      "line": 1771,
       "column": 26
     },
     {
@@ -3186,7 +3200,7 @@
       "kind": "action",
       "id": "view",
       "source": "features/candidates/model/domain/record/listing/workbench-listing/mapping/index.ts",
-      "line": 107,
+      "line": 110,
       "column": 5
     },
     {
@@ -3556,6 +3570,13 @@
     {
       "kind": "column",
       "id": "candidate",
+      "source": "features/candidates/surface/screens/workflows/comparison/view/sections/matrix/index.tsx",
+      "line": 53,
+      "column": 5
+    },
+    {
+      "kind": "column",
+      "id": "candidate",
       "source": "features/recruiters/surface/screens/record/detail/view/sections/interviews-collection/index.tsx",
       "line": 50,
       "column": 3
@@ -3835,6 +3856,13 @@
     },
     {
       "kind": "column",
+      "id": "coverage",
+      "source": "features/candidates/surface/screens/workflows/comparison/view/sections/matrix/index.tsx",
+      "line": 116,
+      "column": 5
+    },
+    {
+      "kind": "column",
       "id": "createdAt",
       "source": "app/(dashboard)/jobs/loading.tsx",
       "line": 19,
@@ -3851,7 +3879,7 @@
       "kind": "column",
       "id": "createdAt",
       "source": "features/candidates/model/domain/record/listing/workbench-listing/mapping/index.ts",
-      "line": 64,
+      "line": 68,
       "column": 5
     },
     {
@@ -4115,6 +4143,13 @@
     },
     {
       "kind": "column",
+      "id": "engagementScore",
+      "source": "features/candidates/model/domain/record/listing/workbench-listing/mapping/index.ts",
+      "line": 57,
+      "column": 5
+    },
+    {
+      "kind": "column",
       "id": "enteredAt",
       "source": "features/applications/surface/screens/record/detail/view/sections/stage-history-collection/index.tsx",
       "line": 78,
@@ -4147,6 +4182,13 @@
       "source": "features/settings/surface/screens/workflows/ai/studio/webhook-manager/index.tsx",
       "line": 436,
       "column": 3
+    },
+    {
+      "kind": "column",
+      "id": "evidence",
+      "source": "features/candidates/surface/screens/workflows/comparison/view/sections/matrix/index.tsx",
+      "line": 177,
+      "column": 5
     },
     {
       "kind": "column",
@@ -5320,6 +5362,13 @@
     {
       "kind": "column",
       "id": "score",
+      "source": "features/candidates/surface/screens/workflows/comparison/view/sections/matrix/index.tsx",
+      "line": 141,
+      "column": 5
+    },
+    {
+      "kind": "column",
+      "id": "score",
       "source": "features/clients/surface/screens/record/detail/view/sections/pipeline/index.tsx",
       "line": 94,
       "column": 3
@@ -5351,6 +5400,13 @@
       "source": "features/applications/surface/screens/record/detail/view/sections/interviews-collection/index.tsx",
       "line": 129,
       "column": 3
+    },
+    {
+      "kind": "column",
+      "id": "scoredDimensions",
+      "source": "features/candidates/surface/screens/workflows/comparison/view/sections/matrix/index.tsx",
+      "line": 129,
+      "column": 5
     },
     {
       "kind": "column",
@@ -5392,13 +5448,6 @@
       "id": "sentAt",
       "source": "features/offers/model/domain/record/listing/workbench-listing/mapping/index.ts",
       "line": 68,
-      "column": 5
-    },
-    {
-      "kind": "column",
-      "id": "signal",
-      "source": "features/candidates/model/domain/record/listing/workbench-listing/mapping/index.ts",
-      "line": 57,
       "column": 5
     },
     {
@@ -5505,6 +5554,13 @@
       "source": "features/applications/surface/screens/record/listing/view/sections/client-view/index.tsx",
       "line": 26,
       "column": 3
+    },
+    {
+      "kind": "column",
+      "id": "stage",
+      "source": "features/candidates/surface/screens/workflows/comparison/view/sections/matrix/index.tsx",
+      "line": 81,
+      "column": 5
     },
     {
       "kind": "column",
@@ -6049,7 +6105,7 @@
       "kind": "column",
       "id": "totalApplications",
       "source": "features/candidates/model/domain/record/listing/workbench-listing/mapping/index.ts",
-      "line": 58,
+      "line": 62,
       "column": 5
     },
     {
@@ -6616,238 +6672,238 @@
       "kind": "field",
       "id": "candidate.availableFrom",
       "source": "features/candidates/model/domain/record/listing/mapping/index.ts",
-      "line": 212,
+      "line": 356,
       "column": 5
     },
     {
       "kind": "field",
       "id": "candidate.avatarUrl",
       "source": "features/candidates/model/domain/record/listing/mapping/index.ts",
-      "line": 229,
+      "line": 413,
       "column": 5
     },
     {
       "kind": "field",
       "id": "candidate.communication",
       "source": "features/candidates/surface/screens/record/detail/index.tsx",
-      "line": 197,
+      "line": 213,
       "column": 56
     },
     {
       "kind": "field",
       "id": "candidate.compensation",
       "source": "features/candidates/surface/screens/record/detail/index.tsx",
-      "line": 177,
+      "line": 193,
       "column": 55
     },
     {
       "kind": "field",
       "id": "candidate.compensation",
       "source": "features/candidates/surface/screens/record/edit/index.tsx",
-      "line": 282,
+      "line": 283,
       "column": 48
     },
     {
       "kind": "field",
       "id": "candidate.createdAt",
       "source": "features/candidates/model/domain/record/listing/mapping/index.ts",
-      "line": 228,
+      "line": 412,
       "column": 5
     },
     {
       "kind": "field",
       "id": "candidate.currentCompany",
       "source": "features/candidates/model/domain/record/listing/mapping/index.ts",
-      "line": 208,
+      "line": 336,
       "column": 5
     },
     {
       "kind": "field",
       "id": "candidate.currentTitle",
       "source": "features/candidates/model/domain/record/listing/mapping/index.ts",
-      "line": 209,
+      "line": 341,
       "column": 5
     },
     {
       "kind": "field",
       "id": "candidate.email",
       "source": "features/candidates/model/domain/record/listing/mapping/index.ts",
-      "line": 203,
+      "line": 331,
       "column": 5
     },
     {
       "kind": "field",
       "id": "candidate.engagementScore",
       "source": "features/candidates/model/domain/record/listing/mapping/index.ts",
-      "line": 225,
+      "line": 397,
       "column": 5
     },
     {
       "kind": "field",
       "id": "candidate.expectedSalaryMax",
       "source": "features/candidates/model/domain/record/listing/mapping/index.ts",
-      "line": 215,
+      "line": 371,
       "column": 5
     },
     {
       "kind": "field",
       "id": "candidate.expectedSalaryMin",
       "source": "features/candidates/model/domain/record/listing/mapping/index.ts",
-      "line": 214,
+      "line": 366,
       "column": 5
     },
     {
       "kind": "field",
       "id": "candidate.ghostRiskLevel",
       "source": "features/candidates/model/domain/record/listing/mapping/index.ts",
-      "line": 226,
+      "line": 402,
       "column": 5
     },
     {
       "kind": "field",
       "id": "candidate.githubUrl",
       "source": "features/candidates/model/domain/record/listing/mapping/index.ts",
-      "line": 218,
+      "line": 378,
       "column": 5
     },
     {
       "kind": "field",
       "id": "candidate.integrity",
       "source": "features/candidates/surface/screens/record/detail/index.tsx",
-      "line": 182,
+      "line": 198,
       "column": 52
     },
     {
       "kind": "field",
       "id": "candidate.internal_notes",
       "source": "features/candidates/surface/screens/record/detail/index.tsx",
-      "line": 172,
+      "line": 188,
       "column": 56
     },
     {
       "kind": "field",
       "id": "candidate.lastActivityAt",
       "source": "features/candidates/model/domain/record/listing/mapping/index.ts",
-      "line": 227,
+      "line": 407,
       "column": 5
     },
     {
       "kind": "field",
       "id": "candidate.linkedinUrl",
       "source": "features/candidates/model/domain/record/listing/mapping/index.ts",
-      "line": 217,
+      "line": 377,
       "column": 5
     },
     {
       "kind": "field",
       "id": "candidate.location",
       "source": "features/candidates/model/domain/record/listing/mapping/index.ts",
-      "line": 207,
+      "line": 335,
       "column": 5
     },
     {
       "kind": "field",
       "id": "candidate.name",
       "source": "features/candidates/model/domain/record/listing/mapping/index.ts",
-      "line": 202,
+      "line": 330,
       "column": 5
     },
     {
       "kind": "field",
       "id": "candidate.phone",
       "source": "features/candidates/model/domain/record/listing/mapping/index.ts",
-      "line": 204,
+      "line": 332,
       "column": 5
     },
     {
       "kind": "field",
       "id": "candidate.portfolioUrl",
       "source": "features/candidates/model/domain/record/listing/mapping/index.ts",
-      "line": 219,
+      "line": 379,
       "column": 5
     },
     {
       "kind": "field",
       "id": "candidate.preferredWorkModes",
       "source": "features/candidates/model/domain/record/listing/mapping/index.ts",
-      "line": 213,
+      "line": 361,
       "column": 5
     },
     {
       "kind": "field",
       "id": "candidate.resumeUrl",
       "source": "features/candidates/model/domain/record/listing/mapping/index.ts",
-      "line": 216,
+      "line": 376,
       "column": 5
     },
     {
       "kind": "field",
       "id": "candidate.seniorityLevel",
       "source": "features/candidates/model/domain/record/listing/mapping/index.ts",
-      "line": 210,
+      "line": 346,
       "column": 5
     },
     {
       "kind": "field",
       "id": "candidate.sensitive_profile",
       "source": "features/candidates/surface/screens/record/edit/index.tsx",
-      "line": 291,
+      "line": 292,
       "column": 48
     },
     {
       "kind": "field",
       "id": "candidate.skills",
       "source": "features/candidates/model/domain/record/listing/mapping/index.ts",
-      "line": 220,
+      "line": 384,
       "column": 5
     },
     {
       "kind": "field",
       "id": "candidate.source",
       "source": "features/candidates/model/domain/record/listing/mapping/index.ts",
-      "line": 206,
+      "line": 334,
       "column": 5
     },
     {
       "kind": "field",
       "id": "candidate.status",
       "source": "features/candidates/model/domain/record/listing/mapping/index.ts",
-      "line": 205,
+      "line": 333,
       "column": 5
     },
     {
       "kind": "field",
       "id": "candidate.tags",
       "source": "features/candidates/model/domain/record/listing/mapping/index.ts",
-      "line": 221,
+      "line": 385,
       "column": 5
     },
     {
       "kind": "field",
       "id": "candidate.totalApplications",
       "source": "features/candidates/model/domain/record/listing/mapping/index.ts",
-      "line": 222,
+      "line": 386,
       "column": 5
     },
     {
       "kind": "field",
       "id": "candidate.totalInterviews",
       "source": "features/candidates/model/domain/record/listing/mapping/index.ts",
-      "line": 223,
+      "line": 391,
       "column": 5
     },
     {
       "kind": "field",
       "id": "candidate.totalOffers",
       "source": "features/candidates/model/domain/record/listing/mapping/index.ts",
-      "line": 224,
+      "line": 396,
       "column": 5
     },
     {
       "kind": "field",
       "id": "candidate.workAuthorization",
       "source": "features/candidates/model/domain/record/listing/mapping/index.ts",
-      "line": 211,
+      "line": 351,
       "column": 5
     },
     {
@@ -6973,7 +7029,7 @@
       "kind": "field",
       "id": "currentCompany",
       "source": "features/candidates/model/domain/record/detail/details-fields/index.ts",
-      "line": 155,
+      "line": 156,
       "column": 3
     },
     {
@@ -6987,7 +7043,7 @@
       "kind": "field",
       "id": "currentTitle",
       "source": "features/candidates/model/domain/record/detail/details-fields/index.ts",
-      "line": 146,
+      "line": 147,
       "column": 3
     },
     {
@@ -7190,7 +7246,7 @@
       "kind": "field",
       "id": "email",
       "source": "features/candidates/model/domain/record/detail/details-fields/index.ts",
-      "line": 116,
+      "line": 117,
       "column": 3
     },
     {
@@ -7253,14 +7309,14 @@
       "kind": "field",
       "id": "expectedSalaryMax",
       "source": "features/candidates/model/domain/record/detail/details-fields/index.ts",
-      "line": 209,
+      "line": 210,
       "column": 3
     },
     {
       "kind": "field",
       "id": "expectedSalaryMin",
       "source": "features/candidates/model/domain/record/detail/details-fields/index.ts",
-      "line": 197,
+      "line": 198,
       "column": 3
     },
     {
@@ -7323,7 +7379,7 @@
       "kind": "field",
       "id": "firstName",
       "source": "features/candidates/model/domain/record/detail/details-fields/index.ts",
-      "line": 98,
+      "line": 99,
       "column": 3
     },
     {
@@ -7365,7 +7421,7 @@
       "kind": "field",
       "id": "headline",
       "source": "features/candidates/model/domain/record/detail/details-fields/index.ts",
-      "line": 136,
+      "line": 137,
       "column": 3
     },
     {
@@ -7778,7 +7834,7 @@
       "kind": "field",
       "id": "lastName",
       "source": "features/candidates/model/domain/record/detail/details-fields/index.ts",
-      "line": 107,
+      "line": 108,
       "column": 3
     },
     {
@@ -8079,7 +8135,7 @@
       "kind": "field",
       "id": "notes",
       "source": "features/candidates/model/domain/record/detail/details-fields/index.ts",
-      "line": 249,
+      "line": 250,
       "column": 3
     },
     {
@@ -8310,7 +8366,7 @@
       "kind": "field",
       "id": "phone",
       "source": "features/candidates/model/domain/record/detail/details-fields/index.ts",
-      "line": 126,
+      "line": 127,
       "column": 3
     },
     {
@@ -8842,7 +8898,7 @@
       "kind": "field",
       "id": "seniorityLevel",
       "source": "features/candidates/model/domain/record/detail/details-fields/index.ts",
-      "line": 175,
+      "line": 176,
       "column": 3
     },
     {
@@ -8919,7 +8975,7 @@
       "kind": "field",
       "id": "skills",
       "source": "features/candidates/model/domain/record/detail/details-fields/index.ts",
-      "line": 222,
+      "line": 223,
       "column": 3
     },
     {
@@ -8989,7 +9045,7 @@
       "kind": "field",
       "id": "status",
       "source": "features/candidates/model/domain/record/detail/details-fields/index.ts",
-      "line": 185,
+      "line": 186,
       "column": 3
     },
     {
@@ -9052,7 +9108,7 @@
       "kind": "field",
       "id": "summary",
       "source": "features/candidates/model/domain/record/detail/details-fields/index.ts",
-      "line": 241,
+      "line": 242,
       "column": 3
     },
     {
@@ -9087,7 +9143,7 @@
       "kind": "field",
       "id": "tags",
       "source": "features/candidates/model/domain/record/detail/details-fields/index.ts",
-      "line": 232,
+      "line": 233,
       "column": 3
     },
     {
@@ -9430,7 +9486,7 @@
       "kind": "field",
       "id": "yearsOfExperience",
       "source": "features/candidates/model/domain/record/detail/details-fields/index.ts",
-      "line": 163,
+      "line": 164,
       "column": 3
     },
     {
@@ -9773,6 +9829,13 @@
       "kind": "route",
       "id": "/callback",
       "source": "app/(auth)/callback/page.tsx",
+      "line": 1,
+      "column": 1
+    },
+    {
+      "kind": "route",
+      "id": "/canary/candidates",
+      "source": "app/(dashboard)/canary/candidates/page.tsx",
       "line": 1,
       "column": 1
     },
@@ -11004,20 +11067,6 @@
     {
       "kind": "tab",
       "id": "activity",
-      "source": "features/candidates/model/domain/record/detail/tabs/index.ts",
-      "line": 97,
-      "column": 5
-    },
-    {
-      "kind": "tab",
-      "id": "activity",
-      "source": "features/candidates/model/domain/record/detail/tabs/normalization/index.ts",
-      "line": 44,
-      "column": 3
-    },
-    {
-      "kind": "tab",
-      "id": "activity",
       "source": "features/clients/model/domain/record/detail/tabs/index.ts",
       "line": 91,
       "column": 3
@@ -11076,20 +11125,6 @@
       "id": "api-keys",
       "source": "features/settings/surface/screens/workflows/general/index.tsx",
       "line": 84,
-      "column": 3
-    },
-    {
-      "kind": "tab",
-      "id": "applications",
-      "source": "features/candidates/model/domain/record/detail/tabs/index.ts",
-      "line": 76,
-      "column": 5
-    },
-    {
-      "kind": "tab",
-      "id": "applications",
-      "source": "features/candidates/model/domain/record/detail/tabs/normalization/index.ts",
-      "line": 41,
       "column": 3
     },
     {
@@ -11208,14 +11243,14 @@
       "kind": "tab",
       "id": "compliance",
       "source": "features/candidates/model/domain/record/detail/tabs/index.ts",
-      "line": 114,
+      "line": 78,
       "column": 5
     },
     {
       "kind": "tab",
       "id": "compliance",
       "source": "features/candidates/model/domain/record/detail/tabs/normalization/index.ts",
-      "line": 46,
+      "line": 45,
       "column": 3
     },
     {
@@ -11264,14 +11299,14 @@
       "kind": "tab",
       "id": "details",
       "source": "features/candidates/model/domain/record/detail/tabs/index.ts",
-      "line": 75,
+      "line": 77,
       "column": 5
     },
     {
       "kind": "tab",
       "id": "details",
       "source": "features/candidates/model/domain/record/detail/tabs/normalization/index.ts",
-      "line": 40,
+      "line": 44,
       "column": 3
     },
     {
@@ -11381,14 +11416,14 @@
     },
     {
       "kind": "tab",
-      "id": "evaluation",
+      "id": "evidence",
       "source": "features/candidates/model/domain/record/detail/tabs/index.ts",
-      "line": 90,
+      "line": 76,
       "column": 5
     },
     {
       "kind": "tab",
-      "id": "evaluation",
+      "id": "evidence",
       "source": "features/candidates/model/domain/record/detail/tabs/normalization/index.ts",
       "line": 43,
       "column": 3
@@ -11501,20 +11536,6 @@
     {
       "kind": "tab",
       "id": "interviews",
-      "source": "features/candidates/model/domain/record/detail/tabs/index.ts",
-      "line": 83,
-      "column": 5
-    },
-    {
-      "kind": "tab",
-      "id": "interviews",
-      "source": "features/candidates/model/domain/record/detail/tabs/normalization/index.ts",
-      "line": 42,
-      "column": 3
-    },
-    {
-      "kind": "tab",
-      "id": "interviews",
       "source": "features/jobs/model/domain/record/detail/tabs/index.ts",
       "line": 71,
       "column": 3
@@ -11532,6 +11553,20 @@
       "source": "features/positions/model/domain/record/detail/tabs/index.ts",
       "line": 95,
       "column": 5
+    },
+    {
+      "kind": "tab",
+      "id": "journey",
+      "source": "features/candidates/model/domain/record/detail/tabs/index.ts",
+      "line": 73,
+      "column": 5
+    },
+    {
+      "kind": "tab",
+      "id": "journey",
+      "source": "features/candidates/model/domain/record/detail/tabs/normalization/index.ts",
+      "line": 42,
+      "column": 3
     },
     {
       "kind": "tab",
@@ -11600,14 +11635,14 @@
       "kind": "tab",
       "id": "overview",
       "source": "features/candidates/model/domain/record/detail/tabs/index.ts",
-      "line": 74,
+      "line": 70,
       "column": 5
     },
     {
       "kind": "tab",
       "id": "overview",
       "source": "features/candidates/model/domain/record/detail/tabs/normalization/index.ts",
-      "line": 39,
+      "line": 41,
       "column": 3
     },
     {
@@ -11840,20 +11875,6 @@
       "source": "features/interviews/surface/screens/record/detail/index.tsx",
       "line": 198,
       "column": 29
-    },
-    {
-      "kind": "tab",
-      "id": "screening",
-      "source": "features/candidates/model/domain/record/detail/tabs/index.ts",
-      "line": 107,
-      "column": 5
-    },
-    {
-      "kind": "tab",
-      "id": "screening",
-      "source": "features/candidates/model/domain/record/detail/tabs/normalization/index.ts",
-      "line": 45,
-      "column": 3
     },
     {
       "kind": "tab",
