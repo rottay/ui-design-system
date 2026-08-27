@@ -3082,7 +3082,17 @@ test('S-8 the live tree closes exactly the 8 resolveTypeRoleStyle rows', () => {
   assert.equal(seq.length, 8);
   // the exact identities from the census: 4 call-sites x (call + spread)
   const ordinals = seq.map((r) => r.ordinal).sort((a, b) => a - b);
-  assert.deepEqual(ordinals, [11202, 11205, 16867, 16870, 21496, 21499, 26731, 26734]);
+  /* Re-ancla con razón escrita (ley del Lote F: un tranche que mueve el pin
+   * intencionalmente lo re-ancla, nunca en silencio). F3 cohorte 2
+   * (2026-08-27, DT Kimi K3): el lote Typography agregó el flag
+   * `includeRoleMatrix` + un comentario de 3 líneas en cada uno de los 4
+   * call-sites de `engines/modern/index.tsx` (+177 bytes por sitio,
+   * acumulativo: 177/354/531 — el par 11202/11205 queda antes del primer
+   * insert y no se mueve). Las IDENTIDADES de las 8 filas son invariantes
+   * (mismo archivo, mismo template, 8 filas, cero buckets abiertos — el resto
+   * de este assert es el control contrafáctico y pasó intacto). Sólo se
+   * mueven los ordinales de byte, que es exactamente lo que el diff hace. */
+  assert.deepEqual(ordinals, [11202, 11205, 17044, 17047, 21850, 21853, 27262, 27265]);
   for (const row of seq) {
     assert.ok(row.file.endsWith('Typography/engines/modern/index.tsx'));
     assert.match(row.template, /resolveTypeRoleStyle/);

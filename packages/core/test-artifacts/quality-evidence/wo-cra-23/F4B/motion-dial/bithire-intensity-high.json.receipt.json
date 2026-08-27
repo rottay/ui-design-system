@@ -53,10 +53,10 @@
     "packages/core/src/ui/primitives/feedback/Alert/engines/rustic/index.tsx",
     "packages/core/src/ui/primitives/feedback/Alert/index.tsx"
   ],
-  "sourceDigest": "3ae73929cae342c122660e70e0bd4fc0ee404980dc9f484da6f8897d879dd385",
+  "sourceDigest": "951e11e3515f30cd5c594b60b30c67fc2b0a1a838017a7a6b0a86b91531a3462",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/motion-dial/bithire-intensity-high.json",
   "artifactSha256": "e066e64ddc314141e818acd7ffe45557f05eaf2bb6ad8e6d6979728d4b8d9f7a",
-  "createdAt": "2026-08-27T05:51:33.000Z",
+  "createdAt": "2026-08-27T07:34:39.000Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

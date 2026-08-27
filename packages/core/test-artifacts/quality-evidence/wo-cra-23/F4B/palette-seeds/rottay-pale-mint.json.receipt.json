@@ -66,10 +66,10 @@
     "packages/core/styles/index.css",
     "packages/core/styles/rottay.css"
   ],
-  "sourceDigest": "ae9e955abdfb479cda2f0d0aaa54b93a9ec9032b6f2ba42e692d32d7f12e1992",
+  "sourceDigest": "1f7de836d37b7d99969b8476e64f9261544e1f8af587c198d400943c2ef56d9e",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/palette-seeds/rottay-pale-mint.json",
   "artifactSha256": "1c286af4f1b06f7ecf066cdd7add4b3bb1f502f066ce91873286c2c24ae65a8e",
-  "createdAt": "2026-08-27T05:51:33.000Z",
+  "createdAt": "2026-08-27T07:34:39.000Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

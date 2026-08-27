@@ -1,7 +1,7 @@
 {
  "schemaVersion": 1,
- "generatedBy": "tokens-catalog gate re-derivation, 2026-08-27 (piloto F3 v3 cell-renderers: la lectura interpolada --ds-font-size-${size} del TSX y su fila fantasma mueren; 3 lecturas bare nuevas en el skin; re-proyeccion 2 tras la regen del micro-fix de comentario) — digest re-projected from the current census report; figures unchanged (writers 4669, deadWriters 266); adjudications unchanged",
- "basedOnReportDigest": "9fc9a0033c02a8e9b8f20d98898296c26cc0068f4867ebf6cdf8843e67116b79",
+ "generatedBy": "tokens-catalog gate re-derivation, 2026-08-27 (F3 cohorte 2 Typography: la matriz de rol sale del inline modern via includeRoleMatrix; las 7 interpolaciones quedan en runtime para classic/rustic; movimiento del censo: inputsDigest + flag tests) — digest re-projected from the current census report; figures unchanged (writers 4669, deadWriters 266); adjudications unchanged",
+ "basedOnReportDigest": "bc293b192a17fd6aeb5caba8437c1096d328cee706a4cd11a98d6760e24c5854",
  "normative": {
   "writers": 4669,
   "deadWriters": 266,

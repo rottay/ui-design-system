@@ -348,7 +348,10 @@ export const ModernHeading = forwardRef<HTMLHeadingElement, HeadingProps>(
       motion,
       lang,
     };
-    const craftStyle = resolveTypographyCraftStyle({
+    const nonRoleStyle = resolveTypographyCraftStyle({
+      // La matriz de rol la pinta el skin sobre el `data-text-style` que este
+      // engine estampa; pedirla aca la escribiria dos veces.
+      includeRoleMatrix: false,
       ...craftProps,
       kind: 'heading',
       size: effectiveSize,
@@ -384,7 +387,7 @@ export const ModernHeading = forwardRef<HTMLHeadingElement, HeadingProps>(
           data-size={effectiveSize}
           data-line-clamp={normalizedClamp}
           {...typographyDataAttributes(craftProps)}
-          style={{ ...typographyStyle, ...craftStyle, ...style }}
+          style={{ ...typographyStyle, ...nonRoleStyle, ...style }}
         >
           {children}
         </Component>
@@ -526,7 +529,10 @@ export const ModernText = forwardRef<HTMLElement, TextProps>(
       motion,
       lang,
     };
-    const craftStyle = resolveTypographyCraftStyle({
+    const nonRoleStyle = resolveTypographyCraftStyle({
+      // La matriz de rol la pinta el skin sobre el `data-text-style` que este
+      // engine estampa; pedirla aca la escribiria dos veces.
+      includeRoleMatrix: false,
       ...craftProps,
       kind: 'text',
       size,
@@ -561,7 +567,7 @@ export const ModernText = forwardRef<HTMLElement, TextProps>(
           data-size={size}
           data-line-clamp={normalizedClamp}
           {...typographyDataAttributes(craftProps)}
-          style={{ ...textSizeStyle, ...craftStyle, ...style }}
+          style={{ ...textSizeStyle, ...nonRoleStyle, ...style }}
         >
           {children}
         </Component>
@@ -679,7 +685,10 @@ export const ModernParagraph = forwardRef<HTMLParagraphElement, ParagraphProps>(
       motion,
       lang,
     };
-    const craftStyle = resolveTypographyCraftStyle({
+    const nonRoleStyle = resolveTypographyCraftStyle({
+      // La matriz de rol la pinta el skin sobre el `data-text-style` que este
+      // engine estampa; pedirla aca la escribiria dos veces.
+      includeRoleMatrix: false,
       ...craftProps,
       kind: 'text',
       size,
@@ -712,7 +721,7 @@ export const ModernParagraph = forwardRef<HTMLParagraphElement, ParagraphProps>(
           data-size={size}
           data-line-clamp={normalizedClamp}
           {...typographyDataAttributes(craftProps)}
-          style={{ ...paragraphSizeStyle, ...craftStyle, ...style }}
+          style={{ ...paragraphSizeStyle, ...nonRoleStyle, ...style }}
         >
           {children}
         </p>
@@ -838,7 +847,10 @@ export const ModernLink = forwardRef<HTMLAnchorElement, LinkProps>(
       motion,
       lang,
     };
-    const craftStyle = resolveTypographyCraftStyle({
+    const nonRoleStyle = resolveTypographyCraftStyle({
+      // La matriz de rol la pinta el skin sobre el `data-text-style` que este
+      // engine estampa; pedirla aca la escribiria dos veces.
+      includeRoleMatrix: false,
       ...craftProps,
       kind: 'text',
       size,
@@ -869,7 +881,7 @@ export const ModernLink = forwardRef<HTMLAnchorElement, LinkProps>(
           data-size={size}
           data-disabled={disabled || undefined}
           {...typographyDataAttributes(craftProps)}
-          style={{ ...linkSizeStyle, ...craftStyle, ...style }}
+          style={{ ...linkSizeStyle, ...nonRoleStyle, ...style }}
           aria-disabled={disabled || undefined}
         >
           {children}

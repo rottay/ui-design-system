@@ -68,10 +68,10 @@
     "packages/core/src/ui/primitives/display/Card/engines/rustic/index.tsx",
     "packages/core/src/ui/primitives/display/Card/index.tsx"
   ],
-  "sourceDigest": "ba599ac82647b95abb8e4adf4fece4e5e9b934ce96fada5570af3c9e508d3b05",
+  "sourceDigest": "f08c1f82ee78e4fd44a8f0ea1a0c7483543ea179ed64227e92ee99f0d90f7457",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/surfaces-elevation-posture/evnto-elevated.json",
   "artifactSha256": "567d1bdad5da370a4b4a0a96e5b577fdf5881d63c57233f7c6c0d1d7119b63c1",
-  "createdAt": "2026-08-27T05:51:33.000Z",
+  "createdAt": "2026-08-27T07:34:39.000Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

@@ -4,7 +4,7 @@
   "scope": "Phase-0 exact proof and minimal public-claim floor; not DS-IMP-060 completion",
   "reproducibility": {
     "classification": "deterministic same-input runs",
-    "authorityDigest": "218b17a50b9b4157a3639999a9e812b03334e9875f22bc6fdb92b13d4a5b512b",
+    "authorityDigest": "1421780a5bda7cead00f1b0f05c49d6840620ddac95b47ac1668f83c0afd4959",
     "sourceHeadIsAuthority": false,
     "toolchain": {
       "node": {
@@ -24724,8 +24724,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 28484,
-        "sha256": "f95204ce207050ec12098ad6185056944047e33057dec990b180e68ed0b2c643"
+        "bytes": 29192,
+        "sha256": "24d0ac71308523b0e4f9af00e5b5fec5c6893b41069746f1bf08cf8045998aef"
       },
       {
         "path": "ui-design-system/packages/core/src/ui/primitives/display/Typography/engines/rustic/index.tsx",
@@ -24754,8 +24754,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 13586,
-        "sha256": "6522087f478938258eef083fbd497f3f0d141d979d617a9f618d04d3af6f68b6"
+        "bytes": 15035,
+        "sha256": "ff4e174abbdcc8418aa8e04b08fbdfeeeae6396bd62d8e4d7b5f633173148d47"
       },
       {
         "path": "ui-design-system/packages/core/src/ui/primitives/display/Typography/tests/Typography.integration.test.tsx",
@@ -24778,8 +24778,8 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 8164,
-        "sha256": "fdbd0bd2a1ade023e6fa5d8c6cae27e6f4ba5718e32df5786359888014062ea9"
+        "bytes": 8676,
+        "sha256": "fe25f42aa76bdba7fcae74888684e68d9eaefdb13670aa2574c303410fdac157"
       },
       {
         "path": "ui-design-system/packages/core/src/ui/primitives/display/Typography/tests/Typography.responsive.test.tsx",
@@ -24810,8 +24810,8 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 10259,
-        "sha256": "c5de8926e777c2c25c8880d614c18657443e89d5151dabba45f3f77bb46c7294"
+        "bytes": 10886,
+        "sha256": "a9a47803923fc1b0295b770f7a2e2f2b4eb14fc1228ebd94a6e2cecd6ea78349"
       },
       {
         "path": "ui-design-system/packages/core/src/ui/primitives/display/Typography/Typography.stories.tsx",
@@ -40519,7 +40519,7 @@
         "sha256": "d2a99efed33922a4a699ea033538b677022ddaccf0cdbb25ece0a7295bdc4812"
       }
     ],
-    "digest": "218b17a50b9b4157a3639999a9e812b03334e9875f22bc6fdb92b13d4a5b512b"
+    "digest": "1421780a5bda7cead00f1b0f05c49d6840620ddac95b47ac1668f83c0afd4959"
   },
   "paintAudit": {
     "output": "engine-token-audit --check OK (3326 counters; 3226 completed zeros locked exactly; 91 decrease-only ceilings; 2 positive exact invariants; 7 positive minimum floors)",
@@ -113900,8 +113900,8 @@
   "deterministicRuns": {
     "count": 2,
     "hashes": [
-      "dfcb17234510134f0a8e65feb0d76f42e8f85a323237d48627f7e54a04d04ff7",
-      "dfcb17234510134f0a8e65feb0d76f42e8f85a323237d48627f7e54a04d04ff7"
+      "dac4fb3d4582b8df3f9951e643e069d036c3cc9d5aa0ec23839aec251867ab72",
+      "dac4fb3d4582b8df3f9951e643e069d036c3cc9d5aa0ec23839aec251867ab72"
     ],
     "agree": true
   }

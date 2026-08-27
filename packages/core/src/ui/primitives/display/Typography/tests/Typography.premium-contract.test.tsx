@@ -27,7 +27,12 @@ describe('Typography premium contract — pass 1 semantics and resilience', () =
     const heading = screen.getByRole('heading', { level: 3 });
     expect(heading.tagName).toBe('H3');
     expect(heading).toHaveAttribute('data-text-style', 'display');
-    expect(heading.getAttribute('style')).toContain('--ds-type-display-font-family');
+    /* F3 cohorte 2: la matriz de rol dejo de escribirse inline -- la pinta el skin
+     * sobre este mismo `data-text-style`. Lo que se afirma es el CONTRATO (el rol
+     * llega al DOM como ancla resoluble) y ya no el mecanismo (que ademas viajara
+     * duplicado en el atributo `style`). La afirmacion no se debilita: se comprueba
+     * que el ancla existe con su valor exacto Y que el inline ya NO la repite. */
+    expect(heading.getAttribute('style') ?? '').not.toContain('--ds-type-display-font-family');
   });
 
   it('preserves h6 semantics in the classic engine despite Ant Design supporting only five title levels', () => {
@@ -97,7 +102,8 @@ describe('Typography premium contract — pass 1 semantics and resilience', () =
       'data-text-style',
       'body',
     );
-    expect(screen.getByText('Semantic body').getAttribute('style')).toContain(
+    // F3 cohorte 2: idem -- el rol viaja por el ancla, no por el inline.
+    expect(screen.getByText('Semantic body').getAttribute('style') ?? '').not.toContain(
       '--ds-type-body-font-size',
     );
   });

@@ -65,10 +65,10 @@
     "packages/core/src/ui/primitives/display/Typography/tests/Typography.test.tsx",
     "packages/core/src/ui/primitives/display/Typography/tests/Typography.type-roles.test.tsx"
   ],
-  "sourceDigest": "853314e0b9e4026119935f660c5e9207007005f5b62a84abb57a8430f3475f3b",
+  "sourceDigest": "aec6278cdc24e57da2128ac3d3d42b7026d0ae0affde6a4b9c476785c06f266d",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/typography-families/rottay-heading-unquoted.json",
   "artifactSha256": "4274ecb2c3329c0304577c83b92024100e216cf5b4ddba630177dfbe22d5d6ff",
-  "createdAt": "2026-08-27T05:51:33.000Z",
+  "createdAt": "2026-08-27T07:34:39.000Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

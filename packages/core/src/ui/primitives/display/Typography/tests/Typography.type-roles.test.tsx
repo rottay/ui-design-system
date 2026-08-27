@@ -226,9 +226,16 @@ describe('Typography semantic roles — what the engine renders', () => {
       </ModernText>
     );
 
-    expect(screen.getByText('Explicit role').style.fontSize).toBe(
-      'var(--ds-type-caption-font-size)'
-    );
+    /* F3 cohorte 2. Antes esto se leia en el inline; ahora la matriz de rol la pinta
+     * el skin. La PRECEDENCIA que el test existe para proteger --un textStyle
+     * explicito gana sobre el rol derivado del tier-- se preserva y se afirma por su
+     * mecanismo real: con textStyle explicito el engine NO escribe el tamaño del tier
+     * inline (`textSizeStyle` se construye solo cuando no hay textStyle), asi que
+     * nada compite con la regla del skin. Si alguien reintrodujera el tamaño del tier
+     * inline, ganaria sobre el skin y este assert se cae. */
+    const explicit = screen.getByText('Explicit role');
+    expect(explicit).toHaveAttribute('data-text-style', 'caption');
+    expect(explicit.style.fontSize).toBe('');
   });
 
   it('lets an explicit figure style keep precedence over the role decision', () => {

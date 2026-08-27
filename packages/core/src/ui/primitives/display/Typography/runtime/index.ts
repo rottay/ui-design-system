@@ -246,6 +246,28 @@ export function isJoiningScriptLang(lang: string | undefined): boolean {
 
 export interface ResolveTypographyStyleOptions extends TypographyCraftProps {
   align?: TypographyAlign;
+  /**
+   * Si la MATRIZ DE ROL entra en el objeto devuelto. Default `true`.
+   *
+   * Lo pasa en `false` UNICAMENTE el engine modern, porque su matriz la pinta el
+   * skin sobre el `data-text-style` que el propio engine estampa
+   * (runtime/engines/modern/skin/typography.css). Classic y rustic no lo pasan
+   * nunca: no tienen skin y ese inline ES su pintura, no residuo.
+   *
+   * No es un control de producto ni un segundo modelo de tipografia: es un campo
+   * interno del resolver cross-engine, y por eso vive en el options-bag y no en la
+   * API publica de Typography.
+   *
+   * POR QUE UN FLAG Y NO UNA FACTORIZACION (adjudicacion DT, 2026-08-27): partir
+   * esta funcion en dos productores obliga a que uno delegue en el otro, y un
+   * productor certificado `zeroPaint` NO PUEDE DELEGAR -- el contador de pintura
+   * inline valida el contrato re-contando el cuerpo AISLADO de la funcion
+   * (scripts/lib/paint/inline-paint-counter/index.mjs:804-808), texto que no lleva
+   * imports, asi que toda llamada dentro suyo queda opaca y suma +1 fail-closed.
+   * Medido: la version factorizada dejaba modern y rustic en 1 contra un baseline
+   * de 0. El flag mantiene el objeto entero a la vista del lexer.
+   */
+  includeRoleMatrix?: boolean;
   kind: TypographyKind;
   size?: TextSize;
   truncate?: boolean;
@@ -264,6 +286,7 @@ export function resolveFluidTypographySize(kind: TypographyKind, size: TextSize)
  */
 export function resolveTypographyCraftStyle({
   textStyle,
+  includeRoleMatrix = true,
   family,
   fluid,
   leading,
@@ -283,7 +306,9 @@ export function resolveTypographyCraftStyle({
   const normalizedClamp = normalizeLineClamp(lineClamp);
   const suppressTracking = isJoiningScriptLang(lang);
   const style: CSSProperties = {
-    ...(roleKey
+    // Matriz de rol: primera, y sigue primera -- `family` pisa su `fontFamily` y
+    // `fluid` su `fontSize` justamente porque vienen despues.
+    ...(includeRoleMatrix && roleKey
       ? {
           fontFamily: `var(--ds-type-${roleKey}-font-family)`,
           fontSize: `var(--ds-type-${roleKey}-font-size)`,

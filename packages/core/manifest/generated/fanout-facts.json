@@ -354851,49 +354851,49 @@
         {
           "plane": "ts-other",
           "file": "src/ui/primitives/display/Typography/runtime/index.ts",
-          "line": 288,
+          "line": 313,
           "prop": "fontFamily",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/ui/primitives/display/Typography/runtime/index.ts",
-          "line": 289,
+          "line": 314,
           "prop": "fontSize",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/ui/primitives/display/Typography/runtime/index.ts",
-          "line": 290,
+          "line": 315,
           "prop": "fontWeight",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/ui/primitives/display/Typography/runtime/index.ts",
-          "line": 291,
+          "line": 316,
           "prop": "lineHeight",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/ui/primitives/display/Typography/runtime/index.ts",
-          "line": 294,
+          "line": 319,
           "prop": "letterSpacing",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/ui/primitives/display/Typography/runtime/index.ts",
-          "line": 295,
+          "line": 320,
           "prop": "textTransform",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/ui/primitives/display/Typography/runtime/index.ts",
-          "line": 296,
+          "line": 321,
           "prop": "fontVariantNumeric",
           "scalars": []
         }
@@ -356628,7 +356628,7 @@
         {
           "plane": "ts-other",
           "file": "src/ui/primitives/display/Typography/runtime/index.ts",
-          "line": 319,
+          "line": 344,
           "prop": "fontSynthesis",
           "scalars": []
         }
@@ -356672,7 +356672,7 @@
         {
           "plane": "ts-other",
           "file": "src/ui/primitives/display/Typography/runtime/index.ts",
-          "line": 320,
+          "line": 345,
           "prop": "fontVariationSettings",
           "scalars": []
         }
@@ -357577,7 +357577,7 @@
         {
           "plane": "ts-other",
           "file": "src/ui/primitives/display/Typography/runtime/index.ts",
-          "line": 318,
+          "line": 343,
           "prop": "fontOpticalSizing",
           "scalars": []
         }

@@ -41,10 +41,10 @@
     "packages/core/src/tooling/resolution-probe/runtime/ingress/index.mjs",
     "packages/core/src/tooling/resolution-probe/runtime/measure/index.mjs"
   ],
-  "sourceDigest": "bfcccd2bd8eb66f9d382beab42bcc8695ee1d3e83653eef0fbfda03a267691de",
+  "sourceDigest": "147aa2229755177514018f96fdec488e5a83a741cd3c7331a493341bc52c803f",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/recipe-profile/rottay-editorial-round.json",
   "artifactSha256": "c0f74757fb5428a698f7165bfeab595718324067717bf95559f0464be5d81160",
-  "createdAt": "2026-08-27T05:51:33.000Z",
+  "createdAt": "2026-08-27T07:34:39.000Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,
