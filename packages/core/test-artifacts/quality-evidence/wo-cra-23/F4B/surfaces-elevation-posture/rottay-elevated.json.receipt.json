@@ -68,10 +68,10 @@
     "packages/core/src/ui/primitives/display/Card/engines/rustic/index.tsx",
     "packages/core/src/ui/primitives/display/Card/index.tsx"
   ],
-  "sourceDigest": "1422f1377804283b0f35d748a5550772ac69aa0810fea0c4e6b2881e5faf59c0",
+  "sourceDigest": "534e9518a858ac2a056b32572aed371a7f3f51918a71102d18cea8d9987a7a63",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/surfaces-elevation-posture/rottay-elevated.json",
   "artifactSha256": "9129849c36d30a8a6ca506b61d16ddfc0fbd9f7b5d7573012fba22495d4ae873",
-  "createdAt": "2026-08-27T01:02:02.000Z",
+  "createdAt": "2026-08-27T05:51:33.000Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

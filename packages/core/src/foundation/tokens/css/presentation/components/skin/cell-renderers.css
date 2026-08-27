@@ -70,6 +70,41 @@
   color: var(--ds-cell-renderers-mono-color);
 }
 
+/* F3 (piloto): el tamaño de fuente del mono vivia inline en el renderer aunque el
+   MISMO objeto ya estampaba `data-size` -- la decision estaba escrita dos veces, y
+   una de las dos en un plano que el skin no puede alcanzar. Se reubica aca sobre el
+   atributo que ya existia; el componente no cambio de contrato ni gano stamps.
+
+   SIN FALLBACK, y la razon corrige lo que este comentario decia antes. La version
+   previa defendia un `, 13px` como "el mismo fallback relocalizado, no una decision
+   de hoja". Medido, eso era falso: las seeds de los tres canales que respalda son
+   0.75rem/0.875rem/1rem (12/14/16px), asi que 13px no reproduce NINGUNA -- era un
+   literal defensivo independiente, hand-picked, contradiciendo a las tres seeds que
+   decia representar.
+   Se retira, y el skin lee el canal bare como hace el resto del corpus: esos canales
+   se leen bare en el orden de ~450-500 ocurrencias contra menos de 10 con ese
+   fallback. Lo que sostiene el argumento es la RAZON (~50:1), no una cifra: el conteo
+   exacto depende del criterio (por ocurrencia o unico, incluyendo o no los `-base`,
+   con o sin los artefactos compilados) y tres mediciones independientes dieron tres
+   numeros distintos. Una cifra pineada sin su metodo no es recomputable, asi que no
+   se pinea.
+   El fallback era ademas inalcanzable: cada uno de los tres canales tiene UNA sola
+   declaracion y las tres viven en la capa foundation (themes/default.css:615-616,
+   base/typography.css:65), que es dependencia dura de este layer -- si faltara, la
+   regla `mono-color` de arriba, tambien bare, ya estaria rota. Cero-delta computado: el canal siempre
+   resuelve, asi que lo unico que cae es texto muerto. */
+.ds-pattern-cell-renderers[data-part='mono'][data-size='xs'] {
+  font-size: var(--ds-font-size-xs);
+}
+
+.ds-pattern-cell-renderers[data-part='mono'][data-size='sm'] {
+  font-size: var(--ds-font-size-sm);
+}
+
+.ds-pattern-cell-renderers[data-part='mono'][data-size='md'] {
+  font-size: var(--ds-font-size-md);
+}
+
 /* The `--` placeholder is the absence of data, not a value: it reads in the
    disabled ink, same convention as the date renderer's empty stamp. */
 .ds-pattern-cell-renderers[data-part='mono'][data-empty='true'] {

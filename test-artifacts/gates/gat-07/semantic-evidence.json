@@ -4,7 +4,7 @@
   "scope": "Phase-0 exact proof and minimal public-claim floor; not DS-IMP-060 completion",
   "reproducibility": {
     "classification": "deterministic same-input runs",
-    "authorityDigest": "15cd1bf6ff55bef676adc57d844ac1df367f80bf47ac8b5e7ce91b7f4c2a6f22",
+    "authorityDigest": "218b17a50b9b4157a3639999a9e812b03334e9875f22bc6fdb92b13d4a5b512b",
     "sourceHeadIsAuthority": false,
     "toolchain": {
       "node": {
@@ -102,7 +102,7 @@
   "documentationAuthority": {
     "path": "ui-design-system/packages/core/scripts/evidence/gat-07-exact-proof/gat-07-exact-proof.documentation-seal.json",
     "requirementsRevision": "969205380fd24eb45947bf3748db5a6cacd798f8",
-    "documentationRevision": "1cc041ef2dfe6e9123cca3aa352dd2f6b84fb7f8",
+    "documentationRevision": "9f822e87d8d69c40c2bdc9d0d5165ee1c82589f8",
     "inspectedDocsMatchRevision": true,
     "sealed": true,
     "sealingErrors": []
@@ -284,7 +284,7 @@
           "documentation-seal"
         ],
         "bytes": 166,
-        "sha256": "6d70a88d09ca598119a186547cbd49045613a9a6613a125944f20b3d3e9edb14"
+        "sha256": "6831c398967ce70bf858640c481d8fc635c6d16ed5d81045864474c6f90d8f4e"
       },
       {
         "path": "ui-design-system/packages/core/scripts/evidence/gat-07-exact-proof/gat-07-exact-proof.public-claim-floor.json",
@@ -3523,8 +3523,8 @@
           "data-part-corpus",
           "stale-claim-corpus"
         ],
-        "bytes": 7309,
-        "sha256": "10a336c0cc5c801453a5536dc5c8d34ffee2a44b467b01c79aa218c82fc132ec"
+        "bytes": 9325,
+        "sha256": "9cbaa1b0293ec4b6275a126acc7f4a1f74dda399ccbdb80a84c3cbbdb41b01bf"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/chart-area.css",
@@ -19642,8 +19642,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 16525,
-        "sha256": "42d33ccbab0915bc21f00e43009ea8c1e19e63146f12670bad5fbb2e6edbb417"
+        "bytes": 16671,
+        "sha256": "0162492e59bb452c76ff1c2df67ba46616591e51cfd20976c85eb667b5a93db8"
       },
       {
         "path": "ui-design-system/packages/core/src/ui/patterns/runtime/cell-renderers/tests/CellRenderers.truncation-reveal.test.tsx",
@@ -36995,24 +36995,24 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 5382157,
-        "sha256": "c8a77c5689002b91e16a2a90a63190b7442dd1efb77a2b232dc694b33e37f025"
+        "bytes": 5384173,
+        "sha256": "2d0b5d1b0001334bd04855c519c2d5bdd5572edd389392e51b0f13f3dd8eca51"
       },
       {
         "path": "ui-design-system/packages/core/styles/evnto.css",
         "roles": [
           "audit-input"
         ],
-        "bytes": 5314801,
-        "sha256": "61c7811f311a7e1d23acf0fa20de9ac60a53bfb561b7ae5650e68ddcbf13c76d"
+        "bytes": 5316817,
+        "sha256": "6cc235daa9fe73fd50cd3cfebb7fc2cbfc7465f7a7a09d247a5ae57b15be9733"
       },
       {
         "path": "ui-design-system/packages/core/styles/index.css",
         "roles": [
           "audit-input"
         ],
-        "bytes": 5504968,
-        "sha256": "4e19e3e3966a92df3bbd9b243e8caa7c2e1c61877b6fa5d249737358f7efa3a4"
+        "bytes": 5506984,
+        "sha256": "cb8f97f38237abda208d5a60af7724b96869f782deb42212f1ba8c46ce7dedb2"
       },
       {
         "path": "ui-design-system/packages/core/styles/modern.css",
@@ -37027,8 +37027,8 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 5374497,
-        "sha256": "effaa32d210601e23c18b82538f3cc29dc1584fd1ef4f53e05919926660d5f63"
+        "bytes": 5376513,
+        "sha256": "a09e603318330d2de7a7c926172b54d63c1a0c6379487a63c69b800ca4272452"
       },
       {
         "path": "ui-design-system/packages/showroom/e2e/visual/communication-batch.spec.ts",
@@ -40519,7 +40519,7 @@
         "sha256": "d2a99efed33922a4a699ea033538b677022ddaccf0cdbb25ece0a7295bdc4812"
       }
     ],
-    "digest": "15cd1bf6ff55bef676adc57d844ac1df367f80bf47ac8b5e7ce91b7f4c2a6f22"
+    "digest": "218b17a50b9b4157a3639999a9e812b03334e9875f22bc6fdb92b13d4a5b512b"
   },
   "paintAudit": {
     "output": "engine-token-audit --check OK (3326 counters; 3226 completed zeros locked exactly; 91 decrease-only ceilings; 2 positive exact invariants; 7 positive minimum floors)",
@@ -55330,7 +55330,7 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/cell-renderers.css",
-          "line": 79
+          "line": 114
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/dashboard-header.css",
@@ -85214,7 +85214,7 @@
       "tag": [
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/cell-renderers.css",
-          "line": 105
+          "line": 140
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select.css",
@@ -89172,19 +89172,19 @@
       "value": [
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/cell-renderers.css",
-          "line": 83
+          "line": 118
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/cell-renderers.css",
-          "line": 83
+          "line": 118
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/cell-renderers.css",
-          "line": 89
+          "line": 124
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/cell-renderers.css",
-          "line": 93
+          "line": 128
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/chart-foundation.css",
@@ -113900,8 +113900,8 @@
   "deterministicRuns": {
     "count": 2,
     "hashes": [
-      "29b3ea0d68405368a26cd309e1d195cab2859d31731cb631b5e7a53d70eca8ca",
-      "29b3ea0d68405368a26cd309e1d195cab2859d31731cb631b5e7a53d70eca8ca"
+      "dfcb17234510134f0a8e65feb0d76f42e8f85a323237d48627f7e54a04d04ff7",
+      "dfcb17234510134f0a8e65feb0d76f42e8f85a323237d48627f7e54a04d04ff7"
     ],
     "agree": true
   }

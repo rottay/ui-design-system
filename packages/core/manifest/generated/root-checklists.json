@@ -3006,7 +3006,7 @@
             {
               "plane": "presentation-css",
               "file": "src/foundation/tokens/css/presentation/components/skin/cell-renderers.css",
-              "line": 127,
+              "line": 162,
               "prop": "background",
               "families": [
                 "pattern/data/pattern-data-table"
@@ -3016,7 +3016,7 @@
             {
               "plane": "presentation-css",
               "file": "src/foundation/tokens/css/presentation/components/skin/cell-renderers.css",
-              "line": 139,
+              "line": 174,
               "prop": "color",
               "families": [
                 "pattern/data/pattern-data-table"
@@ -293999,7 +293999,7 @@
             {
               "plane": "presentation-css",
               "file": "src/foundation/tokens/css/presentation/components/skin/cell-renderers.css",
-              "line": 106,
+              "line": 141,
               "prop": "border-radius",
               "families": [
                 "pattern/data/pattern-data-table"
@@ -319125,7 +319125,7 @@
         "foreignCustomPropertyCuts": 0,
         "discardedLookupKeys": 19,
         "resolvedBy": {
-          "binding": 136,
+          "binding": 139,
           "binding-multi": 30,
           "class+binding": 518,
           "class": 54,
@@ -322367,6 +322367,7 @@
           "paintsInModern": true,
           "families": [
             "pattern/data/list-toolbar",
+            "pattern/data/pattern-data-table",
             "pattern/data/pattern-stats-grid",
             "pattern/data/record-facts",
             "pattern/data/widget-board",
@@ -322377,6 +322378,16 @@
             "primitive/navigation/stepper"
           ],
           "sites": [
+            {
+              "plane": "presentation-css",
+              "file": "src/foundation/tokens/css/presentation/components/skin/cell-renderers.css",
+              "line": 105,
+              "prop": "font-size",
+              "families": [
+                "pattern/data/pattern-data-table"
+              ],
+              "resolvedBy": "binding"
+            },
             {
               "plane": "presentation-css",
               "file": "src/foundation/tokens/css/presentation/components/skin/record-facts.css",
@@ -322690,6 +322701,16 @@
               "prop": "font-size",
               "families": [
                 "primitive/layout/ascii-frame"
+              ],
+              "resolvedBy": "binding"
+            },
+            {
+              "plane": "presentation-css",
+              "file": "src/foundation/tokens/css/presentation/components/skin/cell-renderers.css",
+              "line": 101,
+              "prop": "font-size",
+              "families": [
+                "pattern/data/pattern-data-table"
               ],
               "resolvedBy": "binding"
             },
@@ -325216,7 +325237,7 @@
             {
               "plane": "tsx-inline-stamp",
               "file": "src/ui/patterns/runtime/cell-renderers/index.tsx",
-              "line": 325,
+              "line": 327,
               "prop": "fontSize",
               "families": [
                 "unattributed/src/ui/patterns/runtime/cell-renderers/index.tsx"
@@ -325226,7 +325247,7 @@
             {
               "plane": "tsx-inline-stamp",
               "file": "src/ui/patterns/runtime/cell-renderers/index.tsx",
-              "line": 360,
+              "line": 362,
               "prop": "fontSize",
               "families": [
                 "unattributed/src/ui/patterns/runtime/cell-renderers/index.tsx"
@@ -325236,7 +325257,7 @@
             {
               "plane": "tsx-inline-stamp",
               "file": "src/ui/patterns/runtime/cell-renderers/index.tsx",
-              "line": 394,
+              "line": 396,
               "prop": "fontSize",
               "families": [
                 "unattributed/src/ui/patterns/runtime/cell-renderers/index.tsx"
@@ -325246,7 +325267,7 @@
             {
               "plane": "tsx-inline-stamp",
               "file": "src/ui/patterns/runtime/cell-renderers/index.tsx",
-              "line": 533,
+              "line": 535,
               "prop": "fontSize",
               "families": [
                 "unattributed/src/ui/patterns/runtime/cell-renderers/index.tsx"
@@ -325256,7 +325277,7 @@
             {
               "plane": "tsx-inline-stamp",
               "file": "src/ui/patterns/runtime/cell-renderers/index.tsx",
-              "line": 559,
+              "line": 561,
               "prop": "fontSize",
               "families": [
                 "unattributed/src/ui/patterns/runtime/cell-renderers/index.tsx"
@@ -326162,6 +326183,16 @@
                 "pattern/data/bulk-select-toggle"
               ],
               "resolvedBy": "class+binding"
+            },
+            {
+              "plane": "presentation-css",
+              "file": "src/foundation/tokens/css/presentation/components/skin/cell-renderers.css",
+              "line": 97,
+              "prop": "font-size",
+              "families": [
+                "pattern/data/pattern-data-table"
+              ],
+              "resolvedBy": "binding"
             },
             {
               "plane": "presentation-css",
@@ -329318,7 +329349,7 @@
             {
               "plane": "tsx-inline-stamp",
               "file": "src/ui/patterns/runtime/cell-renderers/index.tsx",
-              "line": 429,
+              "line": 431,
               "prop": "fontSize",
               "families": [
                 "unattributed/src/ui/patterns/runtime/cell-renderers/index.tsx"
@@ -329328,7 +329359,7 @@
             {
               "plane": "tsx-inline-stamp",
               "file": "src/ui/patterns/runtime/cell-renderers/index.tsx",
-              "line": 442,
+              "line": 444,
               "prop": "fontSize",
               "families": [
                 "unattributed/src/ui/patterns/runtime/cell-renderers/index.tsx"
@@ -329338,7 +329369,7 @@
             {
               "plane": "tsx-inline-stamp",
               "file": "src/ui/patterns/runtime/cell-renderers/index.tsx",
-              "line": 507,
+              "line": 509,
               "prop": "fontSize",
               "families": [
                 "unattributed/src/ui/patterns/runtime/cell-renderers/index.tsx"
@@ -333763,7 +333794,7 @@
         {
           "family": "pattern/data/pattern-data-table",
           "manifestFamily": true,
-          "channels": 5,
+          "channels": 6,
           "properties": [
             "font-size",
             "fontSize"
@@ -333788,12 +333819,22 @@
               ]
             },
             {
+              "channel": "--ds-font-size-md",
+              "props": [
+                "font-size"
+              ],
+              "files": [
+                "src/foundation/tokens/css/presentation/components/skin/cell-renderers.css"
+              ]
+            },
+            {
               "channel": "--ds-font-size-sm",
               "props": [
                 "font-size",
                 "fontSize"
               ],
               "files": [
+                "src/foundation/tokens/css/presentation/components/skin/cell-renderers.css",
                 "src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
                 "src/foundation/tokens/css/runtime/engines/modern/skin/data-table.css",
                 "src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css",
@@ -333808,6 +333849,7 @@
                 "fontSize"
               ],
               "files": [
+                "src/foundation/tokens/css/presentation/components/skin/cell-renderers.css",
                 "src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
                 "src/foundation/tokens/css/runtime/engines/modern/skin/data-table.css",
                 "src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css",

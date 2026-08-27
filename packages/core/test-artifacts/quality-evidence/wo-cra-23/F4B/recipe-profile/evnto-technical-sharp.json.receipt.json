@@ -41,10 +41,10 @@
     "packages/core/src/tooling/resolution-probe/runtime/ingress/index.mjs",
     "packages/core/src/tooling/resolution-probe/runtime/measure/index.mjs"
   ],
-  "sourceDigest": "bf4cb222eb44b89016176d2de9d19d8cbde55b6455bd452b9cc098bc8d622cbe",
+  "sourceDigest": "4f8dc04373fbf9a5fd06566c09847b88b47ec8958ad47b0f150a3644d1f7a5cf",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/recipe-profile/evnto-technical-sharp.json",
   "artifactSha256": "7c21bd16dcb83309e122961291344ca6196337c22db93caf42c81c3e3395dfb9",
-  "createdAt": "2026-08-27T01:02:02.000Z",
+  "createdAt": "2026-08-27T05:51:33.000Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

@@ -280,7 +280,9 @@ function mono(
     title: isTruncated ? display : undefined,
     style: {
       fontFamily: 'var(--ds-font-family-mono, monospace)',
-      fontSize: `var(--ds-font-size-${options?.size ?? 'sm'}, 13px)`,
+      // F3: el font-size lo pinta el skin sobre `data-size` (cell-renderers.css).
+      // Lo estampamos igual dos lineas mas arriba, asi que resolverlo tambien aca
+      // era la misma decision escrita dos veces.
       '--ds-cell-renderers-mono-color': options?.color ?? 'var(--ds-color-text-muted)',
       whiteSpace: 'nowrap',
     } as React.CSSProperties,

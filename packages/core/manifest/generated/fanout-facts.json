@@ -42,22 +42,22 @@
   ],
   "summary": {
     "filesScanned": 2488,
-    "channels": 7504,
-    "channelsDs": 7120,
+    "channels": 7503,
+    "channelsDs": 7119,
     "channelsBridge": 384,
     "channelsWithoutReaders": 179,
     "channelsPaintsFalse": 913,
-    "channelsPaintsInModernFalse": 1963,
-    "readers": 37005,
+    "channelsPaintsInModernFalse": 1962,
+    "readers": 37007,
     "readersByPlane": {
       "modern-skin-css": 14731,
-      "presentation-css": 10653,
+      "presentation-css": 10656,
       "foundation-css": 1118,
       "runtime-css": 268,
       "facade-entrypoints-css": 2,
       "classic-css": 857,
       "rustic-css": 3193,
-      "tsx-inline-stamp": 1865,
+      "tsx-inline-stamp": 1864,
       "graphics-tsx": 53,
       "infrastructure-tsx": 6,
       "ts-token-mirror": 1447,
@@ -72,7 +72,7 @@
       "facade-entrypoints-css": 1,
       "classic-css": 723,
       "rustic-css": 1186,
-      "tsx-inline-stamp": 667,
+      "tsx-inline-stamp": 666,
       "graphics-tsx": 30,
       "infrastructure-tsx": 4,
       "ts-token-mirror": 1410,
@@ -51511,14 +51511,14 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/cell-renderers.css",
-          "line": 116,
+          "line": 151,
           "prop": "border-radius",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/cell-renderers.css",
-          "line": 121,
+          "line": 156,
           "prop": "border-radius",
           "scalars": []
         }
@@ -63802,7 +63802,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/cell-renderers.css",
-          "line": 107,
+          "line": 142,
           "prop": "background",
           "scalars": []
         },
@@ -75105,7 +75105,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/cell-renderers.css",
-          "line": 117,
+          "line": 152,
           "prop": "background",
           "scalars": []
         },
@@ -84258,14 +84258,14 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/cell-renderers.css",
-          "line": 127,
+          "line": 162,
           "prop": "background",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/cell-renderers.css",
-          "line": 139,
+          "line": 174,
           "prop": "color",
           "scalars": []
         },
@@ -111289,21 +111289,21 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/cell-renderers.css",
-          "line": 135,
+          "line": 170,
           "prop": "background",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/cell-renderers.css",
-          "line": 160,
+          "line": 195,
           "prop": "color",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/cell-renderers.css",
-          "line": 183,
+          "line": 218,
           "prop": "color",
           "scalars": []
         },
@@ -114755,14 +114755,14 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/cell-renderers.css",
-          "line": 76,
+          "line": 111,
           "prop": "color",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/cell-renderers.css",
-          "line": 98,
+          "line": 133,
           "prop": "color",
           "scalars": []
         },
@@ -116580,35 +116580,35 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/cell-renderers.css",
-          "line": 80,
+          "line": 115,
           "prop": "color",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/cell-renderers.css",
-          "line": 94,
+          "line": 129,
           "prop": "color",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/cell-renderers.css",
-          "line": 102,
+          "line": 137,
           "prop": "color",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/cell-renderers.css",
-          "line": 112,
+          "line": 147,
           "prop": "color",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/cell-renderers.css",
-          "line": 187,
+          "line": 222,
           "prop": "color",
           "scalars": []
         },
@@ -118456,7 +118456,7 @@
         {
           "plane": "tsx-inline-stamp",
           "file": "src/ui/patterns/runtime/cell-renderers/index.tsx",
-          "line": 284,
+          "line": 286,
           "prop": "inline-expr",
           "scalars": []
         },
@@ -123415,14 +123415,14 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/cell-renderers.css",
-          "line": 85,
+          "line": 120,
           "prop": "color",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/cell-renderers.css",
-          "line": 191,
+          "line": 226,
           "prop": "color",
           "scalars": []
         },
@@ -128224,7 +128224,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/cell-renderers.css",
-          "line": 108,
+          "line": 143,
           "prop": "color",
           "scalars": []
         },
@@ -131956,14 +131956,14 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/cell-renderers.css",
-          "line": 131,
+          "line": 166,
           "prop": "background",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/cell-renderers.css",
-          "line": 156,
+          "line": 191,
           "prop": "color",
           "scalars": []
         },
@@ -167527,7 +167527,7 @@
         {
           "plane": "tsx-inline-stamp",
           "file": "src/ui/patterns/runtime/cell-renderers/index.tsx",
-          "line": 395,
+          "line": 397,
           "prop": "inline-expr",
           "scalars": []
         },
@@ -168051,25 +168051,6 @@
           "file": "src/foundation/tokens/ts/presentation/typography/pairings/index.ts",
           "line": 57,
           "prop": "base",
-          "scalars": []
-        }
-      ]
-    },
-    {
-      "channel": "--ds-font-size-",
-      "kind": "ds",
-      "declaredIn": [],
-      "planes": [
-        "tsx-inline-stamp"
-      ],
-      "paints": true,
-      "paintsInModern": false,
-      "readers": [
-        {
-          "plane": "tsx-inline-stamp",
-          "file": "src/ui/patterns/runtime/cell-renderers/index.tsx",
-          "line": 283,
-          "prop": "fontSize",
           "scalars": []
         }
       ]
@@ -170543,6 +170524,13 @@
         },
         {
           "plane": "presentation-css",
+          "file": "src/foundation/tokens/css/presentation/components/skin/cell-renderers.css",
+          "line": 105,
+          "prop": "font-size",
+          "scalars": []
+        },
+        {
+          "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/record-facts.css",
           "line": 124,
           "prop": "font-size",
@@ -171778,6 +171766,13 @@
         },
         {
           "plane": "presentation-css",
+          "file": "src/foundation/tokens/css/presentation/components/skin/cell-renderers.css",
+          "line": 101,
+          "prop": "font-size",
+          "scalars": []
+        },
+        {
+          "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/chart-area.css",
           "line": 59,
           "prop": "font-size",
@@ -172650,35 +172645,35 @@
         {
           "plane": "tsx-inline-stamp",
           "file": "src/ui/patterns/runtime/cell-renderers/index.tsx",
-          "line": 325,
+          "line": 327,
           "prop": "fontSize",
           "scalars": []
         },
         {
           "plane": "tsx-inline-stamp",
           "file": "src/ui/patterns/runtime/cell-renderers/index.tsx",
-          "line": 360,
+          "line": 362,
           "prop": "fontSize",
           "scalars": []
         },
         {
           "plane": "tsx-inline-stamp",
           "file": "src/ui/patterns/runtime/cell-renderers/index.tsx",
-          "line": 394,
+          "line": 396,
           "prop": "fontSize",
           "scalars": []
         },
         {
           "plane": "tsx-inline-stamp",
           "file": "src/ui/patterns/runtime/cell-renderers/index.tsx",
-          "line": 533,
+          "line": 535,
           "prop": "fontSize",
           "scalars": []
         },
         {
           "plane": "tsx-inline-stamp",
           "file": "src/ui/patterns/runtime/cell-renderers/index.tsx",
-          "line": 559,
+          "line": 561,
           "prop": "fontSize",
           "scalars": []
         },
@@ -174504,6 +174499,13 @@
         },
         {
           "plane": "presentation-css",
+          "file": "src/foundation/tokens/css/presentation/components/skin/cell-renderers.css",
+          "line": 97,
+          "prop": "font-size",
+          "scalars": []
+        },
+        {
+          "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/chart-c.css",
           "line": 233,
           "prop": "font-size",
@@ -175577,21 +175579,21 @@
         {
           "plane": "tsx-inline-stamp",
           "file": "src/ui/patterns/runtime/cell-renderers/index.tsx",
-          "line": 429,
+          "line": 431,
           "prop": "fontSize",
           "scalars": []
         },
         {
           "plane": "tsx-inline-stamp",
           "file": "src/ui/patterns/runtime/cell-renderers/index.tsx",
-          "line": 442,
+          "line": 444,
           "prop": "fontSize",
           "scalars": []
         },
         {
           "plane": "tsx-inline-stamp",
           "file": "src/ui/patterns/runtime/cell-renderers/index.tsx",
-          "line": 507,
+          "line": 509,
           "prop": "fontSize",
           "scalars": []
         },
@@ -224804,7 +224806,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/cell-renderers.css",
-          "line": 123,
+          "line": 158,
           "prop": "transition",
           "scalars": []
         },
@@ -239079,7 +239081,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/cell-renderers.css",
-          "line": 122,
+          "line": 157,
           "prop": "transition",
           "scalars": []
         },
@@ -263388,7 +263390,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/cell-renderers.css",
-          "line": 106,
+          "line": 141,
           "prop": "border-radius",
           "scalars": []
         },

@@ -1,7 +1,7 @@
 {
  "schemaVersion": 1,
- "generatedBy": "tokens-catalog gate re-derivation, 2026-08-26 (cross-repo post-F″/enmienda-rhythm) — digest re-projected from the current census report; figures unchanged (writers 4669=4669, deadWriters 266=266); adjudications unchanged",
- "basedOnReportDigest": "3908794f9c6669daa56128eee97daec7f5d9f67ecae522781133e68265941946",
+ "generatedBy": "tokens-catalog gate re-derivation, 2026-08-27 (piloto F3 v3 cell-renderers: la lectura interpolada --ds-font-size-${size} del TSX y su fila fantasma mueren; 3 lecturas bare nuevas en el skin; re-proyeccion 2 tras la regen del micro-fix de comentario) — digest re-projected from the current census report; figures unchanged (writers 4669, deadWriters 266); adjudications unchanged",
+ "basedOnReportDigest": "9fc9a0033c02a8e9b8f20d98898296c26cc0068f4867ebf6cdf8843e67116b79",
  "normative": {
   "writers": 4669,
   "deadWriters": 266,

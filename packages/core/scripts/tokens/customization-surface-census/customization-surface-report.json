@@ -3,7 +3,7 @@
   "generatedBy": "scripts/tokens/customization-surface-census/index.mjs --write",
   "meta": {
     "scopeLaw": "DS-SCOPED PROJECTION (core+showroom). deadWriters is a projection for gates and catalogs, NEVER the instrument behind a deletion: on the same population an app-aware inverted index found 53 census-dead channels with LIVE app readers (F5 reconciliation, 2026-08-02 — the --ds-text-eyebrow failure at scale). Death verdicts require the app-inclusive index plus the raw-mention gate.",
-    "inputsDigest": "20e49315ab7ea219fa98eb9e853a4f6e4a5b0075fa725762a19955787f2c8bf4",
+    "inputsDigest": "66e60b6a56cc331fe9721f4752dee18109c175c8e4e182ec0749c0a3abcdec38",
     "manifestSchemaVersion": 4,
     "corpus": {
       "authoredCssFiles": 466,
@@ -13,7 +13,7 @@
     }
   },
   "counts": {
-    "universe": 7302,
+    "universe": 7301,
     "writers": 4669,
     "foundationTokens": 3357,
     "componentTokens": 566,
@@ -23,7 +23,7 @@
     "deadWriters": 266,
     "frontierReserved": 20,
     "modernConsumedUnique": 3674,
-    "tsReadNames": 2692,
+    "tsReadNames": 2691,
     "tsWriteNames": 1210,
     "tsMetadataNames": 654,
     "unclassified": 0,
@@ -41886,21 +41886,6 @@
       "tsWriteSites": 0,
       "tsMetadataMentions": 0
     },
-    "--ds-font-size-": {
-      "category": "consumed-external-origin",
-      "tier": "internal",
-      "status": "active",
-      "writer": false,
-      "reads": {
-        "css": 0,
-        "ts": 1,
-        "tests": true,
-        "modern": false,
-        "artifact": false
-      },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 0
-    },
     "--ds-font-size-2xl": {
       "category": "canonical-authority",
       "tier": "internal",
@@ -42447,7 +42432,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 11,
+        "css": 12,
         "ts": 3,
         "tests": true,
         "modern": true,
@@ -42477,7 +42462,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 219,
+        "css": 220,
         "ts": 120,
         "tests": true,
         "modern": true,
@@ -42537,7 +42522,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 277,
+        "css": 278,
         "ts": 73,
         "tests": true,
         "modern": true,
