@@ -65,10 +65,10 @@
     "packages/core/styles/index.css",
     "packages/core/styles/rottay.css"
   ],
-  "sourceDigest": "814d7be1ba3bb0303b1097c4f56734c363f1715eacfea16dc41aca3f538f5cc6",
+  "sourceDigest": "20c15ad9253cbcbac4ae995369f72a457b168ccf113dd774d45bae51b1227b1f",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/palette-seeds/bithire-crimson.json",
   "artifactSha256": "519de99c14f7663e92e5ae0853cf1fdad3acf20b90cb04a694362f99d5f7d082",
-  "createdAt": "2026-08-27T10:15:24.000Z",
+  "createdAt": "2026-08-27T14:19:45.883Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

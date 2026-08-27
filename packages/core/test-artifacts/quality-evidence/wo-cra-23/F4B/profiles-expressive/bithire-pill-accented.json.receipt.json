@@ -69,10 +69,10 @@
     "packages/core/src/ui/primitives/display/Card/engines/rustic/index.tsx",
     "packages/core/src/ui/primitives/display/Card/index.tsx"
   ],
-  "sourceDigest": "ff57b0ac3182accab9df5e4c47ccdeda73fa4708b2d000596c7b6604053d546f",
+  "sourceDigest": "8ead91b69332e0518bc089a4222db3fc5907cb14471a4a8ea7ba09d788751f1d",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/profiles-expressive/bithire-pill-accented.json",
   "artifactSha256": "98691e791c1694f9ae465a0102f1a80306b5bafcaac9a1c333a0cb27e746ee46",
-  "createdAt": "2026-08-27T10:15:24.000Z",
+  "createdAt": "2026-08-27T14:19:45.883Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,
