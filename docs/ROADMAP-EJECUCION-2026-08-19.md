@@ -1362,7 +1362,7 @@ paso de esa cadena está autorizado por este checkpoint.
 | PRE_F4B | CERRADO por regularización C4 (ver asiento C4); inventario mecánico `INVENTORY_READY` histórico |
 | H-1 brazo estático con baseline | 100%; `base` del vertical publicado sólo en el brazo estático; preaudit Fable `ACCEPT` V1–V5; drills 47/47; los 20 receipts spacing/effect/radius invariantes |
 | F4B | **20/20 controles ASENTADOS — FASE COMPLETA en su forma honesta (2026-08-26)** — 9 `COMPUTED_VERIFIED` (spacing.rhythm, surfaces.effect-intensity, shape.radius-scale, density.mode, responsive.posture, typography.scale, experience.profile, palette.seeds, surfaces.elevation-posture) + 10 `SOURCE_BOUND` (button-style, typography.pairing, sidebar-tone, motion.dial, typography.families, recipe-profile, profiles.expressive, profiles.icon, token-overrides, chrome.anatomy) + `chrome.families` paraguas BY_REFERENCE (`UNKNOWN` a propósito, `SURFACE_REVIEW_DEFERRED_TO_F5`). **0 `SIGHTED_ACCEPTED`.** Cero evidencia alcanzable pendiente: token-overrides cerró con techo estructural documentado (clase CSS-terminal + puerta sellada ⇒ sin camino a pass:true; candidato F5 `F5_INSTRUMENT_SEALED_DOOR_SINGLE_ARM_VERDICT` con 2 condiciones de admisión Fable). Lo que falta para que los SOURCE_BOUND suban (ratificación propertyGroup, calibración de celdas) es F4C/F5. 134 receipts bajo validador v2 (133 válidos; único stale declarado: compound-editorial, `SUPERSEDED_BY_LIVE_FENCE`). **C5 CERRADO (2026-08-26, commits `fd58f8ba4` gate-debt + `44b14f521` correctivo + docs-engineering `46960f2`):** α1 implementado (`derivedChannels` = radio de impacto de 3 seeds; `calibrationChannels` = superficie atribuible de 2, subconjunto fail-closed), cadena derivada re-emitida entera incluyendo el eslabón no enumerado (`producers.json`), gates:ci **89/89 blocking verdes** + 2 excluidos con owner, postaudit Fable ACCEPT (ver asiento de cierre C5) |
-| F2 asimétrico | F2A-0 cerrado; **F2A-1 ADJUDICADO (2026-08-26)**: ley de cinco clases con ACCEPT-para-adjudicación de Fable + tabla medida corregida por el consenso Opus (el censo de consumidores barre la superficie real, no sólo los 3 artefactos). Disposición de las 34: 10 inertes (Lote A) · 1 T0 `#A8A898` (Lote B) · 4 cascada gobernada (Lote C) · 4 anotación (Lote D) · 4 ramp.seed cerradas por dec.18/F5 (Lote E) · 2 deuda muerta + 1 condicional (Lote F) · 2 anti-puerta resueltas por dec.19 (Lote F′) · 5 identidad vertical (anotación) · 1 fuera del set (type.leading, vivo en la capa base). Lotes encolados post-C5 |
+| F2 asimétrico | **F2A-1 EN EJECUCIÓN (2026-08-26)**: ley de cinco clases adjudicada + tabla medida con instrumento canónico. Commiteados: Lote A `dfc39efcf` (10 inertes) · Lote B `2509bdd3d` (T0 `#A8A898` + exclusión muerta por causa raíz) · Lote F `96b610162` + F-2 `fc1b8faf9` (deuda muerta + la ruta de override) · re-medición `6f3fbe90c` · Lote F′ `791f86be6` (ley 19 ejecutable + gate dial-authority) · Lote F″ `9e57502af` (28 pendings cerrados, decisión 20). Restan: C/D/E (anotaciones) + asignación de dueño lineHeight/iconSize (dec.19.iii) |
 | F3/F4C/F5-F8 pendientes | 0% del tramo pendiente |
 | F9 | 0/5100 celdas aceptadas |
 | Programa completo | estimación prudente **55–60% realizado** (ingeniería; sube de 39–43% con F4B 20/20 asentado); preparación comercial visible ~41%. Cerrar F4A/F4B **no certifica** F9: 0/5100 celdas aceptadas, gate y calibración de celdas propios, aún pendientes |
@@ -4600,6 +4600,27 @@ blocking: dial-authority + su drill (91→93 en el manifiesto). **Punto ciego
 de batería cerrado:** el barrido de lotes corría sin los 330 s del suite
 tooling-drills; la batería de cierre vuelve a ser completa desde el gate 0 +
 la suite focal del subsistema tocado.
+
+**F2A-1 Lote F″ commiteado (2026-08-26, `9e57502af`; postaudit Fable: ACCEPT
+limpio — el primero sin defectos del frente, con su propia corrida de
+gates:ci reproduciendo 91/91).** Decisión 20 ejecutada entera: los 28
+pendings del dial-authority cerrados (27 correcciones causales con cero-delta
+a factor 1 por canal/modo + la excepción owner-visible de badge-radius con
+prueba negativa); `pending` 28→0, `exceptions` 1. Semillas bithire
+conservadas (cromas glass × dial; table-cell rottay por referencia); la forma
+es la del sistema (factor en el sitio de declaración). Enmienda del
+`spacing-rhythm-contract` adjudicada por el DT: lectura de ritmo en artefacto
+lícita SÓLO con el factor (la premisa vieja "los artefactos no autoran ritmo"
+murió con la decisión 20); la mordida intacta, con el episodio de la v1 del
+writer escrito como drill (e). **Hallazgo estructural con dueño (condición de
+asiento Fable):** los rosters receipteados de F4B nunca cubrieron los canales
+donde los diales estaban bloqueados — por eso ninguna anti-puerta apareció en
+una evidencia; límite del diseño de rosters F4B, dueño F4C/F5. Evidencia A/B
+del glass producida para F4C (`/private/tmp/f3-glass-ab-evidence.md`): el
+control de contraste gobernado pasa; la composición worst-case sobre backdrop
+oscuro cae a Lc 40.4 (modelo aritmético declarado) — la pregunta sighted de
+F4C es la frecuencia real de vidrio-sobre-oscuro; salida candidata: alpha
+mínimo en el seed bithire (no revertir la decisión 20).
 
 **F2A-1 Lotes A y B commiteados (2026-08-26; `dfc39efcf` A, `2509bdd3d` B).**
 A: las 10 inertes congeladas con evidencia de cero-ocurrencia reproducida por
