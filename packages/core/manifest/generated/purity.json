@@ -15,22 +15,22 @@
     "valueLaw": "la comparacion de valores NO decide pertenencia -- la raiz viene de la membresia, construida sin mirar valores. Decide si el colapso hacia esa raiz seria inocuo: verificacion post-hoc, jamas ruteo."
   },
   "stats": {
-    "rows": 1818,
+    "rows": 2006,
     "byClass": {
-      "value-shift": 1173,
-      "pure": 332,
-      "head-not-emitted": 313
+      "value-shift": 1286,
+      "pure": 336,
+      "head-not-emitted": 384
     },
     "byVertical": {
-      "bithire": 816,
+      "bithire": 842,
       "evnto": 162,
-      "rottay": 840
+      "rottay": 1002
     },
     "pureByRoot": {
-      "tier.base.fg": 48,
+      "tier.base.fg": 49,
       "tier.base.fg.secondary": 15,
       "tier.raised.bg": 10,
-      "tier.raised.border": 7,
+      "tier.raised.border": 8,
       "ramp.seed.primary": 16,
       "tier.base.border.primary": 4,
       "control.ratio.fontSize": 2,
@@ -39,12 +39,12 @@
       "control.ratio.lineHeight": 2,
       "tier.base.fg.muted": 25,
       "tier.control.bg": 11,
-      "tier.control.border": 22,
+      "tier.control.border": 23,
       "tier.base.border": 16,
       "tier.page.bg": 17,
       "tier.page.border.default": 4,
       "tier.overlay.fg.primary": 1,
-      "tier.control.fg": 13,
+      "tier.control.fg": 14,
       "tier.base.bg": 8,
       "tier.base.border.focus": 6,
       "tier.base.border.subtle": 5,
@@ -79,22 +79,22 @@
       "--ds-font-weight-medium": 13,
       "--ds-density-effective-scale": 14,
       "--ds-focus-ring": 6,
-      "--ds-surface-card": 28,
-      "--ds-surface-control": 148,
+      "--ds-surface-card": 36,
+      "--ds-surface-control": 184,
       "--ds-glass-blur": 2,
       "--ds-gradient-primary": 2,
-      "--ds-material-overlay-background": 22,
-      "--ds-material-overlay-foreground": 7
+      "--ds-material-overlay-background": 38,
+      "--ds-material-overlay-foreground": 18
     },
-    "collapsibleReplacementBytes": 5007,
+    "collapsibleReplacementBytes": 5079,
     "collapsibleBytesByVertical": {
-      "bithire": 2254,
+      "bithire": 2275,
       "evnto": 669,
-      "rottay": 2084
+      "rottay": 2135
     },
     "pureByRule": {
-      "R2": 223,
-      "R5": 53,
+      "R2": 226,
+      "R5": 54,
       "R1": 13,
       "R4": 43
     }
@@ -904,6 +904,17 @@
       "replacementDeltaBytes": 7
     },
     {
+      "slotId": "bithire:CHROME.controls.buttonInfo.color",
+      "vertical": "bithire",
+      "rootId": "tier.control.fg",
+      "rule": "R1",
+      "scope": "base",
+      "headChannel": "--ds-color-text-primary",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": -28
+    },
+    {
       "slotId": "bithire:CHROME.controls.buttonLink.color",
       "vertical": "bithire",
       "rootId": "tier.control.fg",
@@ -1047,6 +1058,17 @@
       "replacementDeltaBytes": 21
     },
     {
+      "slotId": "bithire:CHROME.controls.buttonSuccess.color",
+      "vertical": "bithire",
+      "rootId": "tier.control.fg",
+      "rule": "R1",
+      "scope": "base",
+      "headChannel": "--ds-color-text-primary",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": -31
+    },
+    {
       "slotId": "bithire:CHROME.controls.buttonText.bg",
       "vertical": "bithire",
       "rootId": "tier.control.bg",
@@ -1111,6 +1133,17 @@
       "headEmitted": true,
       "class": "value-shift",
       "replacementDeltaBytes": 7
+    },
+    {
+      "slotId": "bithire:CHROME.controls.buttonWarning.color",
+      "vertical": "bithire",
+      "rootId": "tier.control.fg",
+      "rule": "R1",
+      "scope": "base",
+      "headChannel": "--ds-color-text-primary",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": -22
     },
     {
       "slotId": "bithire:CHROME.controls.disabled.bg",
@@ -1364,6 +1397,17 @@
       "headEmitted": true,
       "class": "value-shift",
       "replacementDeltaBytes": 21
+    },
+    {
+      "slotId": "bithire:CHROME.controls.input.autofill.bg",
+      "vertical": "bithire",
+      "rootId": "tier.control.bg",
+      "rule": "R2",
+      "scope": "base",
+      "headChannel": "--ds-surface-control",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": 18
     },
     {
       "slotId": "bithire:CHROME.controls.input.autofill.color",
@@ -1765,6 +1809,17 @@
       "slotId": "bithire:CHROME.controls.input.label.color",
       "vertical": "bithire",
       "rootId": "tier.base.fg",
+      "rule": "R2",
+      "scope": "base",
+      "headChannel": "--ds-color-text-primary",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": 21
+    },
+    {
+      "slotId": "bithire:CHROME.controls.input.label.disabledColor",
+      "vertical": "bithire",
+      "rootId": "tier.control.fg",
       "rule": "R2",
       "scope": "base",
       "headChannel": "--ds-color-text-primary",
@@ -2213,6 +2268,28 @@
       "replacementDeltaBytes": -64
     },
     {
+      "slotId": "bithire:CHROME.detail.controlBg",
+      "vertical": "bithire",
+      "rootId": "tier.page.bg",
+      "rule": "R2",
+      "scope": "base",
+      "headChannel": "--ds-sidebar-bg",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": -84
+    },
+    {
+      "slotId": "bithire:CHROME.detail.controlBorder",
+      "vertical": "bithire",
+      "rootId": "tier.page.border",
+      "rule": "R5",
+      "scope": "base",
+      "headChannel": "--ds-color-border-subtle",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": -57
+    },
+    {
       "slotId": "bithire:CHROME.detail.controlBorderHover",
       "vertical": "bithire",
       "rootId": "ramp.seed.primary",
@@ -2235,6 +2312,17 @@
       "replacementDeltaBytes": -159
     },
     {
+      "slotId": "bithire:CHROME.detail.heroBorder",
+      "vertical": "bithire",
+      "rootId": "tier.page.border",
+      "rule": "R5",
+      "scope": "base",
+      "headChannel": "--ds-color-border-subtle",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": -37
+    },
+    {
       "slotId": "bithire:CHROME.detail.heroShadow",
       "vertical": "bithire",
       "rootId": "elevation.ladder",
@@ -2255,6 +2343,28 @@
       "headEmitted": true,
       "class": "value-shift",
       "replacementDeltaBytes": -37
+    },
+    {
+      "slotId": "bithire:CHROME.detail.sectionBg",
+      "vertical": "bithire",
+      "rootId": "tier.page.bg",
+      "rule": "R2",
+      "scope": "base",
+      "headChannel": "--ds-sidebar-bg",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": -110
+    },
+    {
+      "slotId": "bithire:CHROME.detail.sectionBorder",
+      "vertical": "bithire",
+      "rootId": "tier.page.border",
+      "rule": "R5",
+      "scope": "base",
+      "headChannel": "--ds-color-border-subtle",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": -44
     },
     {
       "slotId": "bithire:CHROME.filterPill.activeBg",
@@ -4215,6 +4325,28 @@
       "replacementDeltaBytes": 29
     },
     {
+      "slotId": "bithire:CHROME.toolbar.bg",
+      "vertical": "bithire",
+      "rootId": "tier.page.bg",
+      "rule": "R2",
+      "scope": "base",
+      "headChannel": "--ds-sidebar-bg",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": -19
+    },
+    {
+      "slotId": "bithire:CHROME.toolbar.border",
+      "vertical": "bithire",
+      "rootId": "tier.page.border",
+      "rule": "R5",
+      "scope": "base",
+      "headChannel": "--ds-color-border-subtle",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": 22
+    },
+    {
       "slotId": "bithire:CHROME.toolbar.borderBottom",
       "vertical": "bithire",
       "rootId": "tier.base.border.subtle",
@@ -4226,6 +4358,17 @@
       "replacementDeltaBytes": -15
     },
     {
+      "slotId": "bithire:CHROME.toolbar.color",
+      "vertical": "bithire",
+      "rootId": "tier.page.fg",
+      "rule": "R2",
+      "scope": "base",
+      "headChannel": "--ds-sidebar-item-color",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": 21
+    },
+    {
       "slotId": "bithire:CHROME.toolbar.controlBg",
       "vertical": "bithire",
       "rootId": "tier.raised.bg",
@@ -4235,6 +4378,28 @@
       "headEmitted": true,
       "class": "pure",
       "replacementDeltaBytes": 15
+    },
+    {
+      "slotId": "bithire:CHROME.toolbar.controlBorder",
+      "vertical": "bithire",
+      "rootId": "tier.page.border",
+      "rule": "R5",
+      "scope": "base",
+      "headChannel": "--ds-color-border-subtle",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": 22
+    },
+    {
+      "slotId": "bithire:CHROME.toolbar.controlColor",
+      "vertical": "bithire",
+      "rootId": "tier.page.fg",
+      "rule": "R2",
+      "scope": "base",
+      "headChannel": "--ds-sidebar-item-color",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": 21
     },
     {
       "slotId": "bithire:CHROME.toolbar.shadow",
@@ -5029,6 +5194,17 @@
       "replacementDeltaBytes": -2
     },
     {
+      "slotId": "bithire:OVERLAY.chrome.controls.input.autofill.bg",
+      "vertical": "bithire",
+      "rootId": "tier.control.bg",
+      "rule": "R1",
+      "scope": "dark",
+      "headChannel": "--ds-surface-control",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": 2
+    },
+    {
       "slotId": "bithire:OVERLAY.chrome.controls.input.autofill.color",
       "vertical": "bithire",
       "rootId": "tier.base.fg",
@@ -5335,6 +5511,17 @@
       "headEmitted": true,
       "class": "value-shift",
       "replacementDeltaBytes": 0
+    },
+    {
+      "slotId": "bithire:OVERLAY.chrome.controls.input.label.disabledColor",
+      "vertical": "bithire",
+      "rootId": "tier.control.fg",
+      "rule": "R1",
+      "scope": "dark",
+      "headChannel": "--ds-color-text-primary",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": -1
     },
     {
       "slotId": "bithire:OVERLAY.chrome.controls.input.label.requiredColor",
@@ -6932,6 +7119,28 @@
       "replacementDeltaBytes": 8
     },
     {
+      "slotId": "bithire:OVERLAY.chrome.toolbar.bg",
+      "vertical": "bithire",
+      "rootId": "tier.page.bg",
+      "rule": "R1",
+      "scope": "dark",
+      "headChannel": "--ds-sidebar-bg",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": -50
+    },
+    {
+      "slotId": "bithire:OVERLAY.chrome.toolbar.border",
+      "vertical": "bithire",
+      "rootId": "tier.page.border",
+      "rule": "R1",
+      "scope": "dark",
+      "headChannel": "--ds-color-border-subtle",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": 7
+    },
+    {
       "slotId": "bithire:OVERLAY.chrome.toolbar.borderBottom",
       "vertical": "bithire",
       "rootId": "tier.base.border.subtle",
@@ -6943,6 +7152,17 @@
       "replacementDeltaBytes": -30
     },
     {
+      "slotId": "bithire:OVERLAY.chrome.toolbar.color",
+      "vertical": "bithire",
+      "rootId": "tier.page.fg",
+      "rule": "R1",
+      "scope": "dark",
+      "headChannel": "--ds-sidebar-item-color",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": 0
+    },
+    {
       "slotId": "bithire:OVERLAY.chrome.toolbar.controlBg",
       "vertical": "bithire",
       "rootId": "tier.raised.bg",
@@ -6952,6 +7172,28 @@
       "headEmitted": true,
       "class": "value-shift",
       "replacementDeltaBytes": -3
+    },
+    {
+      "slotId": "bithire:OVERLAY.chrome.toolbar.controlBorder",
+      "vertical": "bithire",
+      "rootId": "tier.page.border",
+      "rule": "R1",
+      "scope": "dark",
+      "headChannel": "--ds-color-border-subtle",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": 2
+    },
+    {
+      "slotId": "bithire:OVERLAY.chrome.toolbar.controlColor",
+      "vertical": "bithire",
+      "rootId": "tier.page.fg",
+      "rule": "R1",
+      "scope": "dark",
+      "headChannel": "--ds-sidebar-item-color",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": 0
     },
     {
       "slotId": "bithire:OVERLAY.chrome.workspaceCard.bg",
@@ -7504,6 +7746,17 @@
       "replacementDeltaBytes": 0
     },
     {
+      "slotId": "bithire:OVERLAY.surfaces.surfaceRoles.canvas.foreground",
+      "vertical": "bithire",
+      "rootId": "tier.base.fg",
+      "rule": "R1",
+      "scope": "dark",
+      "headChannel": "--ds-color-text-primary",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": 0
+    },
+    {
       "slotId": "bithire:OVERLAY.surfaces.surfaceRoles.card.background",
       "vertical": "bithire",
       "rootId": "tier.raised.bg",
@@ -7856,6 +8109,17 @@
       "replacementDeltaBytes": -2
     },
     {
+      "slotId": "bithire:OVERLAY.surfaces.surfaceRoles.overlay.background",
+      "vertical": "bithire",
+      "rootId": "tier.overlay.bg",
+      "rule": "R1",
+      "scope": "dark",
+      "headChannel": "--ds-material-overlay-background",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": 10
+    },
+    {
       "slotId": "bithire:OVERLAY.surfaces.surfaceRoles.overlay.foreground",
       "vertical": "bithire",
       "rootId": "tier.overlay.fg",
@@ -8043,6 +8307,17 @@
       "replacementDeltaBytes": -66
     },
     {
+      "slotId": "bithire:OVERLAY.surfaces.surfaceRoles.raised.border",
+      "vertical": "bithire",
+      "rootId": "tier.raised.border",
+      "rule": "R1",
+      "scope": "dark",
+      "headChannel": "--ds-color-border",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": 0
+    },
+    {
       "slotId": "bithire:OVERLAY.surfaces.surfaceRoles.shell.background",
       "vertical": "bithire",
       "rootId": "tier.page.bg",
@@ -8206,6 +8481,17 @@
       "headEmitted": true,
       "class": "value-shift",
       "replacementDeltaBytes": 19
+    },
+    {
+      "slotId": "bithire:SURFACES.surfaceRoles.canvas.foreground",
+      "vertical": "bithire",
+      "rootId": "tier.base.fg",
+      "rule": "R2",
+      "scope": "base",
+      "headChannel": "--ds-color-text-primary",
+      "headEmitted": true,
+      "class": "pure",
+      "replacementDeltaBytes": 21
     },
     {
       "slotId": "bithire:SURFACES.surfaceRoles.card.background",
@@ -8538,17 +8824,6 @@
       "replacementDeltaBytes": 21
     },
     {
-      "slotId": "bithire:SURFACES.surfaceRoles.overlay.background",
-      "vertical": "bithire",
-      "rootId": "chart.palette",
-      "rule": "R4",
-      "scope": "base",
-      "headChannel": "--ds-chart-series-1",
-      "headEmitted": true,
-      "class": "value-shift",
-      "replacementDeltaBytes": 17
-    },
-    {
       "slotId": "bithire:SURFACES.surfaceRoles.overlay.foreground",
       "vertical": "bithire",
       "rootId": "tier.overlay.fg",
@@ -8734,6 +9009,17 @@
       "headEmitted": true,
       "class": "value-shift",
       "replacementDeltaBytes": -27
+    },
+    {
+      "slotId": "bithire:SURFACES.surfaceRoles.raised.border",
+      "vertical": "bithire",
+      "rootId": "tier.raised.border",
+      "rule": "R4",
+      "scope": "base",
+      "headChannel": "--ds-color-border",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": 15
     },
     {
       "slotId": "bithire:SURFACES.surfaceRoles.shell.background",
@@ -10892,6 +11178,17 @@
       "replacementDeltaBytes": 0
     },
     {
+      "slotId": "rottay:CHROME.backTop.color",
+      "vertical": "rottay",
+      "rootId": "tier.control.fg",
+      "rule": "R2",
+      "scope": "base",
+      "headChannel": "--ds-color-text-primary",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": 21
+    },
+    {
       "slotId": "rottay:CHROME.badge.radius",
       "vertical": "rottay",
       "rootId": "radius.base",
@@ -10931,6 +11228,28 @@
       "rule": "R2",
       "scope": "base",
       "headChannel": "--ds-color-text-tertiary",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": 22
+    },
+    {
+      "slotId": "rottay:CHROME.calendar.bg",
+      "vertical": "rottay",
+      "rootId": "tier.page.bg",
+      "rule": "R2",
+      "scope": "base",
+      "headChannel": "--ds-sidebar-bg",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": 13
+    },
+    {
+      "slotId": "rottay:CHROME.calendar.border",
+      "vertical": "rottay",
+      "rootId": "tier.page.border",
+      "rule": "R5",
+      "scope": "base",
+      "headChannel": "--ds-color-border-subtle",
       "headEmitted": true,
       "class": "value-shift",
       "replacementDeltaBytes": 22
@@ -11107,6 +11426,72 @@
       "rule": "R2",
       "scope": "base",
       "headChannel": "--ds-color-text-primary",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": 21
+    },
+    {
+      "slotId": "rottay:CHROME.collapse.bg",
+      "vertical": "rottay",
+      "rootId": "tier.page.bg",
+      "rule": "R2",
+      "scope": "base",
+      "headChannel": "--ds-sidebar-bg",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": 13
+    },
+    {
+      "slotId": "rottay:CHROME.collapse.border",
+      "vertical": "rottay",
+      "rootId": "tier.page.border",
+      "rule": "R5",
+      "scope": "base",
+      "headChannel": "--ds-color-border-subtle",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": 22
+    },
+    {
+      "slotId": "rottay:CHROME.collapse.contentBg",
+      "vertical": "rottay",
+      "rootId": "tier.page.bg",
+      "rule": "R2",
+      "scope": "base",
+      "headChannel": "--ds-sidebar-bg",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": 13
+    },
+    {
+      "slotId": "rottay:CHROME.collapse.headerBg",
+      "vertical": "rottay",
+      "rootId": "tier.page.bg",
+      "rule": "R2",
+      "scope": "base",
+      "headChannel": "--ds-sidebar-bg",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": 13
+    },
+    {
+      "slotId": "rottay:CHROME.collapse.headerBgHover",
+      "vertical": "rottay",
+      "rootId": "tier.page.bg",
+      "rule": "R2",
+      "scope": "base",
+      "headChannel": "--ds-sidebar-bg",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": 13
+    },
+    {
+      "slotId": "rottay:CHROME.collapse.headerColor",
+      "vertical": "rottay",
+      "rootId": "tier.page.fg",
+      "rule": "R2",
+      "scope": "base",
+      "headChannel": "--ds-sidebar-item-color",
       "headEmitted": true,
       "class": "value-shift",
       "replacementDeltaBytes": 21
@@ -11442,6 +11827,61 @@
       "replacementDeltaBytes": 21
     },
     {
+      "slotId": "rottay:CHROME.controls.buttonInfo.bg",
+      "vertical": "rottay",
+      "rootId": "tier.control.bg",
+      "rule": "R2",
+      "scope": "base",
+      "headChannel": "--ds-surface-control",
+      "headEmitted": false,
+      "class": "head-not-emitted",
+      "replacementDeltaBytes": 18
+    },
+    {
+      "slotId": "rottay:CHROME.controls.buttonInfo.bgActive",
+      "vertical": "rottay",
+      "rootId": "tier.control.bg",
+      "rule": "R2",
+      "scope": "base",
+      "headChannel": "--ds-surface-control",
+      "headEmitted": false,
+      "class": "head-not-emitted",
+      "replacementDeltaBytes": 18
+    },
+    {
+      "slotId": "rottay:CHROME.controls.buttonInfo.bgHover",
+      "vertical": "rottay",
+      "rootId": "tier.control.bg",
+      "rule": "R2",
+      "scope": "base",
+      "headChannel": "--ds-surface-control",
+      "headEmitted": false,
+      "class": "head-not-emitted",
+      "replacementDeltaBytes": 18
+    },
+    {
+      "slotId": "rottay:CHROME.controls.buttonInfo.border",
+      "vertical": "rottay",
+      "rootId": "tier.control.border",
+      "rule": "R2",
+      "scope": "base",
+      "headChannel": "--ds-color-border",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": 11
+    },
+    {
+      "slotId": "rottay:CHROME.controls.buttonInfo.color",
+      "vertical": "rottay",
+      "rootId": "tier.control.fg",
+      "rule": "R2",
+      "scope": "base",
+      "headChannel": "--ds-color-text-primary",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": 21
+    },
+    {
       "slotId": "rottay:CHROME.controls.buttonLink.color",
       "vertical": "rottay",
       "rootId": "tier.control.fg",
@@ -11596,6 +12036,61 @@
       "replacementDeltaBytes": 21
     },
     {
+      "slotId": "rottay:CHROME.controls.buttonSuccess.bg",
+      "vertical": "rottay",
+      "rootId": "tier.control.bg",
+      "rule": "R2",
+      "scope": "base",
+      "headChannel": "--ds-surface-control",
+      "headEmitted": false,
+      "class": "head-not-emitted",
+      "replacementDeltaBytes": 18
+    },
+    {
+      "slotId": "rottay:CHROME.controls.buttonSuccess.bgActive",
+      "vertical": "rottay",
+      "rootId": "tier.control.bg",
+      "rule": "R2",
+      "scope": "base",
+      "headChannel": "--ds-surface-control",
+      "headEmitted": false,
+      "class": "head-not-emitted",
+      "replacementDeltaBytes": 18
+    },
+    {
+      "slotId": "rottay:CHROME.controls.buttonSuccess.bgHover",
+      "vertical": "rottay",
+      "rootId": "tier.control.bg",
+      "rule": "R2",
+      "scope": "base",
+      "headChannel": "--ds-surface-control",
+      "headEmitted": false,
+      "class": "head-not-emitted",
+      "replacementDeltaBytes": 18
+    },
+    {
+      "slotId": "rottay:CHROME.controls.buttonSuccess.border",
+      "vertical": "rottay",
+      "rootId": "tier.control.border",
+      "rule": "R2",
+      "scope": "base",
+      "headChannel": "--ds-color-border",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": 11
+    },
+    {
+      "slotId": "rottay:CHROME.controls.buttonSuccess.color",
+      "vertical": "rottay",
+      "rootId": "tier.control.fg",
+      "rule": "R2",
+      "scope": "base",
+      "headChannel": "--ds-color-text-primary",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": 21
+    },
+    {
       "slotId": "rottay:CHROME.controls.buttonText.bg",
       "vertical": "rottay",
       "rootId": "tier.control.bg",
@@ -11662,9 +12157,97 @@
       "replacementDeltaBytes": 21
     },
     {
+      "slotId": "rottay:CHROME.controls.buttonWarning.bg",
+      "vertical": "rottay",
+      "rootId": "tier.control.bg",
+      "rule": "R2",
+      "scope": "base",
+      "headChannel": "--ds-surface-control",
+      "headEmitted": false,
+      "class": "head-not-emitted",
+      "replacementDeltaBytes": 18
+    },
+    {
+      "slotId": "rottay:CHROME.controls.buttonWarning.bgActive",
+      "vertical": "rottay",
+      "rootId": "tier.control.bg",
+      "rule": "R2",
+      "scope": "base",
+      "headChannel": "--ds-surface-control",
+      "headEmitted": false,
+      "class": "head-not-emitted",
+      "replacementDeltaBytes": 18
+    },
+    {
+      "slotId": "rottay:CHROME.controls.buttonWarning.bgHover",
+      "vertical": "rottay",
+      "rootId": "tier.control.bg",
+      "rule": "R2",
+      "scope": "base",
+      "headChannel": "--ds-surface-control",
+      "headEmitted": false,
+      "class": "head-not-emitted",
+      "replacementDeltaBytes": 18
+    },
+    {
+      "slotId": "rottay:CHROME.controls.buttonWarning.border",
+      "vertical": "rottay",
+      "rootId": "tier.control.border",
+      "rule": "R2",
+      "scope": "base",
+      "headChannel": "--ds-color-border",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": 11
+    },
+    {
+      "slotId": "rottay:CHROME.controls.buttonWarning.color",
+      "vertical": "rottay",
+      "rootId": "tier.control.fg",
+      "rule": "R2",
+      "scope": "base",
+      "headChannel": "--ds-color-text-primary",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": 21
+    },
+    {
+      "slotId": "rottay:CHROME.controls.checkbox.bg",
+      "vertical": "rottay",
+      "rootId": "tier.control.bg",
+      "rule": "R2",
+      "scope": "base",
+      "headChannel": "--ds-surface-control",
+      "headEmitted": false,
+      "class": "head-not-emitted",
+      "replacementDeltaBytes": 18
+    },
+    {
+      "slotId": "rottay:CHROME.controls.checkbox.bgDisabled",
+      "vertical": "rottay",
+      "rootId": "tier.control.bg",
+      "rule": "R2",
+      "scope": "base",
+      "headChannel": "--ds-surface-control",
+      "headEmitted": false,
+      "class": "head-not-emitted",
+      "replacementDeltaBytes": 18
+    },
+    {
       "slotId": "rottay:CHROME.controls.checkbox.border",
       "vertical": "rottay",
       "rootId": "tier.base.border",
+      "rule": "R2",
+      "scope": "base",
+      "headChannel": "--ds-color-border",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": -3
+    },
+    {
+      "slotId": "rottay:CHROME.controls.checkbox.borderHover",
+      "vertical": "rottay",
+      "rootId": "tier.control.border",
       "rule": "R2",
       "scope": "base",
       "headChannel": "--ds-color-border",
@@ -11684,6 +12267,50 @@
       "replacementDeltaBytes": 0
     },
     {
+      "slotId": "rottay:CHROME.controls.checkbox.checkedBorder",
+      "vertical": "rottay",
+      "rootId": "tier.control.border",
+      "rule": "R1",
+      "scope": "base",
+      "headChannel": "--ds-color-border",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": -1
+    },
+    {
+      "slotId": "rottay:CHROME.controls.checkbox.checkedColor",
+      "vertical": "rottay",
+      "rootId": "tier.control.fg",
+      "rule": "R2",
+      "scope": "base",
+      "headChannel": "--ds-color-text-primary",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": 21
+    },
+    {
+      "slotId": "rottay:CHROME.controls.checkbox.errorBorder",
+      "vertical": "rottay",
+      "rootId": "tier.control.border",
+      "rule": "R2",
+      "scope": "base",
+      "headChannel": "--ds-color-border",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": 15
+    },
+    {
+      "slotId": "rottay:CHROME.controls.checkbox.focusRingColor",
+      "vertical": "rottay",
+      "rootId": "tier.control.fg",
+      "rule": "R2",
+      "scope": "base",
+      "headChannel": "--ds-color-text-primary",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": 3
+    },
+    {
       "slotId": "rottay:CHROME.controls.checkbox.labelColor",
       "vertical": "rottay",
       "rootId": "tier.base.fg",
@@ -11695,9 +12322,64 @@
       "replacementDeltaBytes": 21
     },
     {
+      "slotId": "rottay:CHROME.controls.checkbox.labelColorDisabled",
+      "vertical": "rottay",
+      "rootId": "tier.control.fg",
+      "rule": "R2",
+      "scope": "base",
+      "headChannel": "--ds-color-text-primary",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": 21
+    },
+    {
+      "slotId": "rottay:CHROME.controls.datePicker.bg",
+      "vertical": "rottay",
+      "rootId": "tier.control.bg",
+      "rule": "R2",
+      "scope": "base",
+      "headChannel": "--ds-surface-control",
+      "headEmitted": false,
+      "class": "head-not-emitted",
+      "replacementDeltaBytes": 18
+    },
+    {
+      "slotId": "rottay:CHROME.controls.datePicker.bgDisabled",
+      "vertical": "rottay",
+      "rootId": "tier.control.bg",
+      "rule": "R2",
+      "scope": "base",
+      "headChannel": "--ds-surface-control",
+      "headEmitted": false,
+      "class": "head-not-emitted",
+      "replacementDeltaBytes": 18
+    },
+    {
       "slotId": "rottay:CHROME.controls.datePicker.border",
       "vertical": "rottay",
       "rootId": "tier.base.border",
+      "rule": "R2",
+      "scope": "base",
+      "headChannel": "--ds-color-border",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": 15
+    },
+    {
+      "slotId": "rottay:CHROME.controls.datePicker.borderFocus",
+      "vertical": "rottay",
+      "rootId": "tier.control.border",
+      "rule": "R2",
+      "scope": "base",
+      "headChannel": "--ds-color-border",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": -3
+    },
+    {
+      "slotId": "rottay:CHROME.controls.datePicker.borderHover",
+      "vertical": "rottay",
+      "rootId": "tier.control.border",
       "rule": "R2",
       "scope": "base",
       "headChannel": "--ds-color-border",
@@ -12465,6 +13147,17 @@
       "replacementDeltaBytes": 21
     },
     {
+      "slotId": "rottay:CHROME.controls.rate.color",
+      "vertical": "rottay",
+      "rootId": "tier.control.fg",
+      "rule": "R2",
+      "scope": "base",
+      "headChannel": "--ds-color-text-primary",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": 21
+    },
+    {
       "slotId": "rottay:CHROME.controls.segmented.bg",
       "vertical": "rottay",
       "rootId": "tier.control.bg",
@@ -12872,6 +13565,83 @@
       "replacementDeltaBytes": 16
     },
     {
+      "slotId": "rottay:CHROME.controls.slider.handleBg",
+      "vertical": "rottay",
+      "rootId": "tier.control.bg",
+      "rule": "R2",
+      "scope": "base",
+      "headChannel": "--ds-surface-control",
+      "headEmitted": false,
+      "class": "head-not-emitted",
+      "replacementDeltaBytes": 18
+    },
+    {
+      "slotId": "rottay:CHROME.controls.slider.handleBgDisabled",
+      "vertical": "rottay",
+      "rootId": "tier.control.bg",
+      "rule": "R2",
+      "scope": "base",
+      "headChannel": "--ds-surface-control",
+      "headEmitted": false,
+      "class": "head-not-emitted",
+      "replacementDeltaBytes": 18
+    },
+    {
+      "slotId": "rottay:CHROME.controls.slider.handleBorder",
+      "vertical": "rottay",
+      "rootId": "tier.control.border",
+      "rule": "R2",
+      "scope": "base",
+      "headChannel": "--ds-color-border",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": 15
+    },
+    {
+      "slotId": "rottay:CHROME.controls.slider.markColor",
+      "vertical": "rottay",
+      "rootId": "tier.control.fg",
+      "rule": "R2",
+      "scope": "base",
+      "headChannel": "--ds-color-text-primary",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": 21
+    },
+    {
+      "slotId": "rottay:CHROME.controls.slider.railColor",
+      "vertical": "rottay",
+      "rootId": "tier.control.fg",
+      "rule": "R2",
+      "scope": "base",
+      "headChannel": "--ds-color-text-primary",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": 3
+    },
+    {
+      "slotId": "rottay:CHROME.controls.slider.trackColor",
+      "vertical": "rottay",
+      "rootId": "tier.control.fg",
+      "rule": "R1",
+      "scope": "base",
+      "headChannel": "--ds-color-text-primary",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": 5
+    },
+    {
+      "slotId": "rottay:CHROME.controls.slider.trackColorDisabled",
+      "vertical": "rottay",
+      "rootId": "tier.control.fg",
+      "rule": "R2",
+      "scope": "base",
+      "headChannel": "--ds-color-text-primary",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": 21
+    },
+    {
       "slotId": "rottay:CHROME.controls.switch.bg",
       "vertical": "rottay",
       "rootId": "tier.control.bg",
@@ -13081,6 +13851,39 @@
       "replacementDeltaBytes": 15
     },
     {
+      "slotId": "rottay:CHROME.controls.timePicker.bg",
+      "vertical": "rottay",
+      "rootId": "tier.control.bg",
+      "rule": "R2",
+      "scope": "base",
+      "headChannel": "--ds-surface-control",
+      "headEmitted": false,
+      "class": "head-not-emitted",
+      "replacementDeltaBytes": 18
+    },
+    {
+      "slotId": "rottay:CHROME.controls.timePicker.bgDisabled",
+      "vertical": "rottay",
+      "rootId": "tier.control.bg",
+      "rule": "R2",
+      "scope": "base",
+      "headChannel": "--ds-surface-control",
+      "headEmitted": false,
+      "class": "head-not-emitted",
+      "replacementDeltaBytes": 18
+    },
+    {
+      "slotId": "rottay:CHROME.controls.timePicker.border",
+      "vertical": "rottay",
+      "rootId": "tier.control.border",
+      "rule": "R2",
+      "scope": "base",
+      "headChannel": "--ds-color-border",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": 15
+    },
+    {
       "slotId": "rottay:CHROME.controls.timePicker.borderFocus",
       "vertical": "rottay",
       "rootId": "ramp.seed.primary",
@@ -13090,6 +13893,61 @@
       "headEmitted": true,
       "class": "value-shift",
       "replacementDeltaBytes": -2
+    },
+    {
+      "slotId": "rottay:CHROME.controls.timePicker.clearColor",
+      "vertical": "rottay",
+      "rootId": "tier.control.fg",
+      "rule": "R2",
+      "scope": "base",
+      "headChannel": "--ds-color-text-primary",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": 21
+    },
+    {
+      "slotId": "rottay:CHROME.controls.timePicker.color",
+      "vertical": "rottay",
+      "rootId": "tier.control.fg",
+      "rule": "R2",
+      "scope": "base",
+      "headChannel": "--ds-color-text-primary",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": 21
+    },
+    {
+      "slotId": "rottay:CHROME.controls.timePicker.iconColor",
+      "vertical": "rottay",
+      "rootId": "tier.control.fg",
+      "rule": "R2",
+      "scope": "base",
+      "headChannel": "--ds-color-text-primary",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": 21
+    },
+    {
+      "slotId": "rottay:CHROME.controls.timePicker.separatorColor",
+      "vertical": "rottay",
+      "rootId": "tier.control.fg",
+      "rule": "R2",
+      "scope": "base",
+      "headChannel": "--ds-color-text-primary",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": 21
+    },
+    {
+      "slotId": "rottay:CHROME.controls.timePicker.warningBorder",
+      "vertical": "rottay",
+      "rootId": "tier.control.border",
+      "rule": "R2",
+      "scope": "base",
+      "headChannel": "--ds-color-border",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": 15
     },
     {
       "slotId": "rottay:CHROME.controls.toggle.descriptionColor",
@@ -13125,6 +13983,28 @@
       "replacementDeltaBytes": -8
     },
     {
+      "slotId": "rottay:CHROME.controls.toggle.errorBg",
+      "vertical": "rottay",
+      "rootId": "tier.control.bg",
+      "rule": "R2",
+      "scope": "base",
+      "headChannel": "--ds-surface-control",
+      "headEmitted": false,
+      "class": "head-not-emitted",
+      "replacementDeltaBytes": 18
+    },
+    {
+      "slotId": "rottay:CHROME.controls.toggle.innerLabelColor",
+      "vertical": "rottay",
+      "rootId": "tier.control.fg",
+      "rule": "R2",
+      "scope": "base",
+      "headChannel": "--ds-color-text-primary",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": 21
+    },
+    {
       "slotId": "rottay:CHROME.controls.toggle.labelColor",
       "vertical": "rottay",
       "rootId": "tier.base.fg",
@@ -13134,6 +14014,50 @@
       "headEmitted": true,
       "class": "value-shift",
       "replacementDeltaBytes": 21
+    },
+    {
+      "slotId": "rottay:CHROME.controls.toggle.successBg",
+      "vertical": "rottay",
+      "rootId": "tier.control.bg",
+      "rule": "R2",
+      "scope": "base",
+      "headChannel": "--ds-surface-control",
+      "headEmitted": false,
+      "class": "head-not-emitted",
+      "replacementDeltaBytes": 18
+    },
+    {
+      "slotId": "rottay:CHROME.controls.toggle.trackBg",
+      "vertical": "rottay",
+      "rootId": "tier.control.bg",
+      "rule": "R2",
+      "scope": "base",
+      "headChannel": "--ds-surface-control",
+      "headEmitted": false,
+      "class": "head-not-emitted",
+      "replacementDeltaBytes": 0
+    },
+    {
+      "slotId": "rottay:CHROME.controls.toggle.trackBgChecked",
+      "vertical": "rottay",
+      "rootId": "tier.control.bg",
+      "rule": "R1",
+      "scope": "base",
+      "headChannel": "--ds-surface-control",
+      "headEmitted": false,
+      "class": "head-not-emitted",
+      "replacementDeltaBytes": 2
+    },
+    {
+      "slotId": "rottay:CHROME.controls.toggle.warningBg",
+      "vertical": "rottay",
+      "rootId": "tier.control.bg",
+      "rule": "R2",
+      "scope": "base",
+      "headChannel": "--ds-surface-control",
+      "headEmitted": false,
+      "class": "head-not-emitted",
+      "replacementDeltaBytes": 18
     },
     {
       "slotId": "rottay:CHROME.controls.transfer.bg",
@@ -13862,6 +14786,28 @@
       "replacementDeltaBytes": 0
     },
     {
+      "slotId": "rottay:CHROME.liveFeed.badgeColor",
+      "vertical": "rottay",
+      "rootId": "tier.page.fg",
+      "rule": "R2",
+      "scope": "base",
+      "headChannel": "--ds-sidebar-item-color",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": 21
+    },
+    {
+      "slotId": "rottay:CHROME.liveFeed.bg",
+      "vertical": "rottay",
+      "rootId": "tier.page.bg",
+      "rule": "R2",
+      "scope": "base",
+      "headChannel": "--ds-sidebar-bg",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": 13
+    },
+    {
       "slotId": "rottay:CHROME.liveFeed.border",
       "vertical": "rottay",
       "rootId": "tier.base.border",
@@ -13895,6 +14841,28 @@
       "replacementDeltaBytes": 16
     },
     {
+      "slotId": "rottay:CHROME.liveFeed.newBg",
+      "vertical": "rottay",
+      "rootId": "tier.page.bg",
+      "rule": "R2",
+      "scope": "base",
+      "headChannel": "--ds-sidebar-bg",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": -4
+    },
+    {
+      "slotId": "rottay:CHROME.liveFeed.newBorder",
+      "vertical": "rottay",
+      "rootId": "tier.page.border",
+      "rule": "R5",
+      "scope": "base",
+      "headChannel": "--ds-color-border-subtle",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": 5
+    },
+    {
       "slotId": "rottay:CHROME.liveFeed.newColor",
       "vertical": "rottay",
       "rootId": "ramp.seed.info",
@@ -13915,6 +14883,50 @@
       "headEmitted": true,
       "class": "value-shift",
       "replacementDeltaBytes": 5
+    },
+    {
+      "slotId": "rottay:CHROME.liveFeed.skeletonBg",
+      "vertical": "rottay",
+      "rootId": "tier.page.bg",
+      "rule": "R2",
+      "scope": "base",
+      "headChannel": "--ds-sidebar-bg",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": 13
+    },
+    {
+      "slotId": "rottay:CHROME.menu.bg",
+      "vertical": "rottay",
+      "rootId": "tier.overlay.bg",
+      "rule": "R2",
+      "scope": "base",
+      "headChannel": "--ds-material-overlay-background",
+      "headEmitted": false,
+      "class": "head-not-emitted",
+      "replacementDeltaBytes": 30
+    },
+    {
+      "slotId": "rottay:CHROME.menu.darkBg",
+      "vertical": "rottay",
+      "rootId": "tier.overlay.bg",
+      "rule": "R2",
+      "scope": "base",
+      "headChannel": "--ds-material-overlay-background",
+      "headEmitted": false,
+      "class": "head-not-emitted",
+      "replacementDeltaBytes": 30
+    },
+    {
+      "slotId": "rottay:CHROME.menu.darkItemColor",
+      "vertical": "rottay",
+      "rootId": "tier.overlay.fg",
+      "rule": "R2",
+      "scope": "base",
+      "headChannel": "--ds-material-overlay-foreground",
+      "headEmitted": false,
+      "class": "head-not-emitted",
+      "replacementDeltaBytes": 30
     },
     {
       "slotId": "rottay:CHROME.menu.dividerColor",
@@ -13950,6 +14962,17 @@
       "replacementDeltaBytes": 19
     },
     {
+      "slotId": "rottay:CHROME.menu.itemBgActive",
+      "vertical": "rottay",
+      "rootId": "tier.overlay.bg",
+      "rule": "R2",
+      "scope": "base",
+      "headChannel": "--ds-material-overlay-background",
+      "headEmitted": false,
+      "class": "head-not-emitted",
+      "replacementDeltaBytes": 30
+    },
+    {
       "slotId": "rottay:CHROME.menu.itemBgHover",
       "vertical": "rottay",
       "rootId": "ramp.seed.primary",
@@ -13959,6 +14982,17 @@
       "headEmitted": true,
       "class": "value-shift",
       "replacementDeltaBytes": -2
+    },
+    {
+      "slotId": "rottay:CHROME.menu.itemColor",
+      "vertical": "rottay",
+      "rootId": "tier.overlay.fg",
+      "rule": "R1",
+      "scope": "base",
+      "headChannel": "--ds-material-overlay-foreground",
+      "headEmitted": false,
+      "class": "head-not-emitted",
+      "replacementDeltaBytes": 12
     },
     {
       "slotId": "rottay:CHROME.menu.itemColorActive",
@@ -13994,6 +15028,28 @@
       "replacementDeltaBytes": 14
     },
     {
+      "slotId": "rottay:CHROME.menu.itemHoverBg",
+      "vertical": "rottay",
+      "rootId": "tier.overlay.bg",
+      "rule": "R2",
+      "scope": "base",
+      "headChannel": "--ds-material-overlay-background",
+      "headEmitted": false,
+      "class": "head-not-emitted",
+      "replacementDeltaBytes": 12
+    },
+    {
+      "slotId": "rottay:CHROME.menu.itemSelectedBg",
+      "vertical": "rottay",
+      "rootId": "tier.overlay.bg",
+      "rule": "R2",
+      "scope": "base",
+      "headChannel": "--ds-material-overlay-background",
+      "headEmitted": false,
+      "class": "head-not-emitted",
+      "replacementDeltaBytes": 30
+    },
+    {
       "slotId": "rottay:CHROME.menu.itemSelectedColor",
       "vertical": "rottay",
       "rootId": "ramp.seed.primary",
@@ -14003,6 +15059,17 @@
       "headEmitted": true,
       "class": "value-shift",
       "replacementDeltaBytes": 16
+    },
+    {
+      "slotId": "rottay:CHROME.menu.submenuBg",
+      "vertical": "rottay",
+      "rootId": "tier.overlay.bg",
+      "rule": "R2",
+      "scope": "base",
+      "headChannel": "--ds-material-overlay-background",
+      "headEmitted": false,
+      "class": "head-not-emitted",
+      "replacementDeltaBytes": 30
     },
     {
       "slotId": "rottay:CHROME.message.bg",
@@ -14179,6 +15246,17 @@
       "headEmitted": true,
       "class": "value-shift",
       "replacementDeltaBytes": 21
+    },
+    {
+      "slotId": "rottay:CHROME.notification.bg",
+      "vertical": "rottay",
+      "rootId": "tier.overlay.bg",
+      "rule": "R2",
+      "scope": "base",
+      "headChannel": "--ds-material-overlay-background",
+      "headEmitted": false,
+      "class": "head-not-emitted",
+      "replacementDeltaBytes": 30
     },
     {
       "slotId": "rottay:CHROME.notification.titleColor",
@@ -14443,6 +15521,17 @@
       "headEmitted": true,
       "class": "value-shift",
       "replacementDeltaBytes": -83
+    },
+    {
+      "slotId": "rottay:CHROME.result.iconColor",
+      "vertical": "rottay",
+      "rootId": "tier.page.fg",
+      "rule": "R2",
+      "scope": "base",
+      "headChannel": "--ds-sidebar-item-color",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": 21
     },
     {
       "slotId": "rottay:CHROME.result.subtitleColor",
@@ -14775,6 +15864,28 @@
       "replacementDeltaBytes": 0
     },
     {
+      "slotId": "rottay:CHROME.statistic.prefixColor",
+      "vertical": "rottay",
+      "rootId": "tier.page.fg",
+      "rule": "R1",
+      "scope": "base",
+      "headChannel": "--ds-sidebar-item-color",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": 3
+    },
+    {
+      "slotId": "rottay:CHROME.statistic.suffixColor",
+      "vertical": "rottay",
+      "rootId": "tier.page.fg",
+      "rule": "R1",
+      "scope": "base",
+      "headChannel": "--ds-sidebar-item-color",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": 3
+    },
+    {
       "slotId": "rottay:CHROME.statistic.titleColor",
       "vertical": "rottay",
       "rootId": "tier.base.fg.secondary",
@@ -14797,10 +15908,54 @@
       "replacementDeltaBytes": 21
     },
     {
+      "slotId": "rottay:CHROME.statsGrid.cardBg",
+      "vertical": "rottay",
+      "rootId": "tier.raised.bg",
+      "rule": "R2",
+      "scope": "base",
+      "headChannel": "--ds-surface-card",
+      "headEmitted": false,
+      "class": "head-not-emitted",
+      "replacementDeltaBytes": 15
+    },
+    {
       "slotId": "rottay:CHROME.statsGrid.cardBorder",
       "vertical": "rottay",
       "rootId": "tier.base.border",
       "rule": "R2",
+      "scope": "base",
+      "headChannel": "--ds-color-border",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": 15
+    },
+    {
+      "slotId": "rottay:CHROME.statsGrid.cardFilledBg",
+      "vertical": "rottay",
+      "rootId": "tier.raised.bg",
+      "rule": "R2",
+      "scope": "base",
+      "headChannel": "--ds-surface-card",
+      "headEmitted": false,
+      "class": "head-not-emitted",
+      "replacementDeltaBytes": 15
+    },
+    {
+      "slotId": "rottay:CHROME.statsGrid.cardGlassBg",
+      "vertical": "rottay",
+      "rootId": "tier.raised.bg",
+      "rule": "R2",
+      "scope": "base",
+      "headChannel": "--ds-surface-card",
+      "headEmitted": false,
+      "class": "head-not-emitted",
+      "replacementDeltaBytes": -3
+    },
+    {
+      "slotId": "rottay:CHROME.statsGrid.cardGlassBorder",
+      "vertical": "rottay",
+      "rootId": "tier.raised.border",
+      "rule": "R5",
       "scope": "base",
       "headChannel": "--ds-color-border",
       "headEmitted": true,
@@ -14828,6 +15983,17 @@
       "headEmitted": true,
       "class": "value-shift",
       "replacementDeltaBytes": 5
+    },
+    {
+      "slotId": "rottay:CHROME.statsGrid.skeletonBg",
+      "vertical": "rottay",
+      "rootId": "tier.raised.bg",
+      "rule": "R2",
+      "scope": "base",
+      "headChannel": "--ds-surface-card",
+      "headEmitted": false,
+      "class": "head-not-emitted",
+      "replacementDeltaBytes": 15
     },
     {
       "slotId": "rottay:CHROME.statsGrid.trendNegative",
@@ -15446,6 +16612,50 @@
       "replacementDeltaBytes": -45
     },
     {
+      "slotId": "rottay:CHROME.timeline.contentColor",
+      "vertical": "rottay",
+      "rootId": "tier.page.fg",
+      "rule": "R1",
+      "scope": "base",
+      "headChannel": "--ds-sidebar-item-color",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": 3
+    },
+    {
+      "slotId": "rottay:CHROME.timeline.dotBg",
+      "vertical": "rottay",
+      "rootId": "tier.page.bg",
+      "rule": "R1",
+      "scope": "base",
+      "headChannel": "--ds-sidebar-bg",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": -3
+    },
+    {
+      "slotId": "rottay:CHROME.timeline.dotBorder",
+      "vertical": "rottay",
+      "rootId": "tier.page.border",
+      "rule": "R5",
+      "scope": "base",
+      "headChannel": "--ds-color-border-subtle",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": 22
+    },
+    {
+      "slotId": "rottay:CHROME.timeline.lineColor",
+      "vertical": "rottay",
+      "rootId": "tier.page.fg",
+      "rule": "R2",
+      "scope": "base",
+      "headChannel": "--ds-sidebar-item-color",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": 21
+    },
+    {
       "slotId": "rottay:CHROME.tooltip.bg",
       "vertical": "rottay",
       "rootId": "tier.base.fg",
@@ -15455,6 +16665,39 @@
       "headEmitted": true,
       "class": "value-shift",
       "replacementDeltaBytes": 21
+    },
+    {
+      "slotId": "rottay:CHROME.tooltip.color",
+      "vertical": "rottay",
+      "rootId": "tier.overlay.fg",
+      "rule": "R2",
+      "scope": "base",
+      "headChannel": "--ds-material-overlay-foreground",
+      "headEmitted": false,
+      "class": "head-not-emitted",
+      "replacementDeltaBytes": 30
+    },
+    {
+      "slotId": "rottay:CHROME.tooltip.defaultBg",
+      "vertical": "rottay",
+      "rootId": "tier.overlay.bg",
+      "rule": "R2",
+      "scope": "base",
+      "headChannel": "--ds-material-overlay-background",
+      "headEmitted": false,
+      "class": "head-not-emitted",
+      "replacementDeltaBytes": 30
+    },
+    {
+      "slotId": "rottay:CHROME.tooltip.defaultColor",
+      "vertical": "rottay",
+      "rootId": "tier.overlay.fg",
+      "rule": "R2",
+      "scope": "base",
+      "headChannel": "--ds-material-overlay-foreground",
+      "headEmitted": false,
+      "class": "head-not-emitted",
+      "replacementDeltaBytes": 30
     },
     {
       "slotId": "rottay:CHROME.tooltip.primaryBg",
@@ -15468,6 +16711,17 @@
       "replacementDeltaBytes": 0
     },
     {
+      "slotId": "rottay:CHROME.tooltip.primaryColor",
+      "vertical": "rottay",
+      "rootId": "tier.overlay.fg",
+      "rule": "R2",
+      "scope": "base",
+      "headChannel": "--ds-material-overlay-foreground",
+      "headEmitted": false,
+      "class": "head-not-emitted",
+      "replacementDeltaBytes": 30
+    },
+    {
       "slotId": "rottay:CHROME.tooltip.secondaryBg",
       "vertical": "rottay",
       "rootId": "ramp.seed.secondary",
@@ -15477,6 +16731,17 @@
       "headEmitted": true,
       "class": "value-shift",
       "replacementDeltaBytes": 18
+    },
+    {
+      "slotId": "rottay:CHROME.tooltip.secondaryColor",
+      "vertical": "rottay",
+      "rootId": "tier.overlay.fg",
+      "rule": "R2",
+      "scope": "base",
+      "headChannel": "--ds-material-overlay-foreground",
+      "headEmitted": false,
+      "class": "head-not-emitted",
+      "replacementDeltaBytes": 30
     },
     {
       "slotId": "rottay:CHROME.tooltip.successBg",
@@ -15501,6 +16766,17 @@
       "replacementDeltaBytes": 16
     },
     {
+      "slotId": "rottay:CHROME.tree.nodeBgHover",
+      "vertical": "rottay",
+      "rootId": "tier.page.bg",
+      "rule": "R2",
+      "scope": "base",
+      "headChannel": "--ds-sidebar-bg",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": -5
+    },
+    {
       "slotId": "rottay:CHROME.tree.nodeBgSelected",
       "vertical": "rottay",
       "rootId": "ramp.seed.primary",
@@ -15512,6 +16788,17 @@
       "replacementDeltaBytes": 16
     },
     {
+      "slotId": "rottay:CHROME.tree.nodeColor",
+      "vertical": "rottay",
+      "rootId": "tier.page.fg",
+      "rule": "R1",
+      "scope": "base",
+      "headChannel": "--ds-sidebar-item-color",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": 3
+    },
+    {
       "slotId": "rottay:CHROME.tree.nodeColorSelected",
       "vertical": "rottay",
       "rootId": "ramp.seed.primary",
@@ -15521,6 +16808,17 @@
       "headEmitted": true,
       "class": "value-shift",
       "replacementDeltaBytes": 16
+    },
+    {
+      "slotId": "rottay:OVERLAY.chrome.backTop.color",
+      "vertical": "rottay",
+      "rootId": "tier.control.fg",
+      "rule": "R2",
+      "scope": "light",
+      "headChannel": "--ds-color-text-primary",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": 21
     },
     {
       "slotId": "rottay:OVERLAY.chrome.breadcrumb.color",
@@ -15551,6 +16849,28 @@
       "rule": "R2",
       "scope": "light",
       "headChannel": "--ds-color-text-tertiary",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": 22
+    },
+    {
+      "slotId": "rottay:OVERLAY.chrome.calendar.bg",
+      "vertical": "rottay",
+      "rootId": "tier.page.bg",
+      "rule": "R2",
+      "scope": "light",
+      "headChannel": "--ds-sidebar-bg",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": 13
+    },
+    {
+      "slotId": "rottay:OVERLAY.chrome.calendar.border",
+      "vertical": "rottay",
+      "rootId": "tier.page.border",
+      "rule": "R5",
+      "scope": "light",
+      "headChannel": "--ds-color-border-subtle",
       "headEmitted": true,
       "class": "value-shift",
       "replacementDeltaBytes": 22
@@ -15707,6 +17027,72 @@
       "headChannel": "--ds-color-text-primary",
       "headEmitted": true,
       "class": "pure",
+      "replacementDeltaBytes": 21
+    },
+    {
+      "slotId": "rottay:OVERLAY.chrome.collapse.bg",
+      "vertical": "rottay",
+      "rootId": "tier.page.bg",
+      "rule": "R2",
+      "scope": "light",
+      "headChannel": "--ds-sidebar-bg",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": 13
+    },
+    {
+      "slotId": "rottay:OVERLAY.chrome.collapse.border",
+      "vertical": "rottay",
+      "rootId": "tier.page.border",
+      "rule": "R5",
+      "scope": "light",
+      "headChannel": "--ds-color-border-subtle",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": 22
+    },
+    {
+      "slotId": "rottay:OVERLAY.chrome.collapse.contentBg",
+      "vertical": "rottay",
+      "rootId": "tier.page.bg",
+      "rule": "R2",
+      "scope": "light",
+      "headChannel": "--ds-sidebar-bg",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": 13
+    },
+    {
+      "slotId": "rottay:OVERLAY.chrome.collapse.headerBg",
+      "vertical": "rottay",
+      "rootId": "tier.page.bg",
+      "rule": "R2",
+      "scope": "light",
+      "headChannel": "--ds-sidebar-bg",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": 13
+    },
+    {
+      "slotId": "rottay:OVERLAY.chrome.collapse.headerBgHover",
+      "vertical": "rottay",
+      "rootId": "tier.page.bg",
+      "rule": "R2",
+      "scope": "light",
+      "headChannel": "--ds-sidebar-bg",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": 13
+    },
+    {
+      "slotId": "rottay:OVERLAY.chrome.collapse.headerColor",
+      "vertical": "rottay",
+      "rootId": "tier.page.fg",
+      "rule": "R2",
+      "scope": "light",
+      "headChannel": "--ds-sidebar-item-color",
+      "headEmitted": true,
+      "class": "value-shift",
       "replacementDeltaBytes": 21
     },
     {
@@ -15996,6 +17382,39 @@
       "replacementDeltaBytes": 21
     },
     {
+      "slotId": "rottay:OVERLAY.chrome.controls.buttonInfo.bg",
+      "vertical": "rottay",
+      "rootId": "tier.control.bg",
+      "rule": "R2",
+      "scope": "light",
+      "headChannel": "--ds-surface-control",
+      "headEmitted": false,
+      "class": "head-not-emitted",
+      "replacementDeltaBytes": 18
+    },
+    {
+      "slotId": "rottay:OVERLAY.chrome.controls.buttonInfo.bgActive",
+      "vertical": "rottay",
+      "rootId": "tier.control.bg",
+      "rule": "R2",
+      "scope": "light",
+      "headChannel": "--ds-surface-control",
+      "headEmitted": false,
+      "class": "head-not-emitted",
+      "replacementDeltaBytes": 18
+    },
+    {
+      "slotId": "rottay:OVERLAY.chrome.controls.buttonInfo.bgHover",
+      "vertical": "rottay",
+      "rootId": "tier.control.bg",
+      "rule": "R2",
+      "scope": "light",
+      "headChannel": "--ds-surface-control",
+      "headEmitted": false,
+      "class": "head-not-emitted",
+      "replacementDeltaBytes": 18
+    },
+    {
       "slotId": "rottay:OVERLAY.chrome.controls.buttonLink.color",
       "vertical": "rottay",
       "rootId": "tier.control.fg",
@@ -16172,6 +17591,28 @@
       "replacementDeltaBytes": 21
     },
     {
+      "slotId": "rottay:OVERLAY.chrome.controls.checkbox.bg",
+      "vertical": "rottay",
+      "rootId": "tier.control.bg",
+      "rule": "R2",
+      "scope": "light",
+      "headChannel": "--ds-surface-control",
+      "headEmitted": false,
+      "class": "head-not-emitted",
+      "replacementDeltaBytes": 18
+    },
+    {
+      "slotId": "rottay:OVERLAY.chrome.controls.checkbox.bgDisabled",
+      "vertical": "rottay",
+      "rootId": "tier.control.bg",
+      "rule": "R2",
+      "scope": "light",
+      "headChannel": "--ds-surface-control",
+      "headEmitted": false,
+      "class": "head-not-emitted",
+      "replacementDeltaBytes": 18
+    },
+    {
       "slotId": "rottay:OVERLAY.chrome.controls.checkbox.border",
       "vertical": "rottay",
       "rootId": "tier.base.border",
@@ -16181,6 +17622,61 @@
       "headEmitted": true,
       "class": "value-shift",
       "replacementDeltaBytes": 15
+    },
+    {
+      "slotId": "rottay:OVERLAY.chrome.controls.checkbox.borderHover",
+      "vertical": "rottay",
+      "rootId": "tier.control.border",
+      "rule": "R2",
+      "scope": "light",
+      "headChannel": "--ds-color-border",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": 15
+    },
+    {
+      "slotId": "rottay:OVERLAY.chrome.controls.checkbox.checkedColor",
+      "vertical": "rottay",
+      "rootId": "tier.control.fg",
+      "rule": "R2",
+      "scope": "light",
+      "headChannel": "--ds-color-text-primary",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": 21
+    },
+    {
+      "slotId": "rottay:OVERLAY.chrome.controls.checkbox.errorBorder",
+      "vertical": "rottay",
+      "rootId": "tier.control.border",
+      "rule": "R2",
+      "scope": "light",
+      "headChannel": "--ds-color-border",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": 15
+    },
+    {
+      "slotId": "rottay:OVERLAY.chrome.controls.checkbox.errorColor",
+      "vertical": "rottay",
+      "rootId": "tier.control.fg",
+      "rule": "R2",
+      "scope": "light",
+      "headChannel": "--ds-color-text-primary",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": 21
+    },
+    {
+      "slotId": "rottay:OVERLAY.chrome.controls.checkbox.focusRingColor",
+      "vertical": "rottay",
+      "rootId": "tier.control.fg",
+      "rule": "R2",
+      "scope": "light",
+      "headChannel": "--ds-color-text-primary",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": 6
     },
     {
       "slotId": "rottay:OVERLAY.chrome.controls.checkbox.labelColor",
@@ -16194,6 +17690,39 @@
       "replacementDeltaBytes": 21
     },
     {
+      "slotId": "rottay:OVERLAY.chrome.controls.checkbox.labelColorDisabled",
+      "vertical": "rottay",
+      "rootId": "tier.control.fg",
+      "rule": "R2",
+      "scope": "light",
+      "headChannel": "--ds-color-text-primary",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": 21
+    },
+    {
+      "slotId": "rottay:OVERLAY.chrome.controls.datePicker.bg",
+      "vertical": "rottay",
+      "rootId": "tier.control.bg",
+      "rule": "R2",
+      "scope": "light",
+      "headChannel": "--ds-surface-control",
+      "headEmitted": false,
+      "class": "head-not-emitted",
+      "replacementDeltaBytes": 18
+    },
+    {
+      "slotId": "rottay:OVERLAY.chrome.controls.datePicker.bgDisabled",
+      "vertical": "rottay",
+      "rootId": "tier.control.bg",
+      "rule": "R2",
+      "scope": "light",
+      "headChannel": "--ds-surface-control",
+      "headEmitted": false,
+      "class": "head-not-emitted",
+      "replacementDeltaBytes": 18
+    },
+    {
       "slotId": "rottay:OVERLAY.chrome.controls.datePicker.border",
       "vertical": "rottay",
       "rootId": "tier.base.border",
@@ -16202,6 +17731,28 @@
       "headChannel": "--ds-color-border",
       "headEmitted": true,
       "class": "pure",
+      "replacementDeltaBytes": 15
+    },
+    {
+      "slotId": "rottay:OVERLAY.chrome.controls.datePicker.borderFocus",
+      "vertical": "rottay",
+      "rootId": "tier.control.border",
+      "rule": "R2",
+      "scope": "light",
+      "headChannel": "--ds-color-border",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": 0
+    },
+    {
+      "slotId": "rottay:OVERLAY.chrome.controls.datePicker.borderHover",
+      "vertical": "rottay",
+      "rootId": "tier.control.border",
+      "rule": "R2",
+      "scope": "light",
+      "headChannel": "--ds-color-border",
+      "headEmitted": true,
+      "class": "value-shift",
       "replacementDeltaBytes": 15
     },
     {
@@ -16832,6 +18383,17 @@
       "replacementDeltaBytes": 21
     },
     {
+      "slotId": "rottay:OVERLAY.chrome.controls.rate.color",
+      "vertical": "rottay",
+      "rootId": "tier.control.fg",
+      "rule": "R2",
+      "scope": "light",
+      "headChannel": "--ds-color-text-primary",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": 21
+    },
+    {
       "slotId": "rottay:OVERLAY.chrome.controls.segmented.bg",
       "vertical": "rottay",
       "rootId": "tier.control.bg",
@@ -17107,6 +18669,61 @@
       "replacementDeltaBytes": 18
     },
     {
+      "slotId": "rottay:OVERLAY.chrome.controls.slider.handleBgDisabled",
+      "vertical": "rottay",
+      "rootId": "tier.control.bg",
+      "rule": "R2",
+      "scope": "light",
+      "headChannel": "--ds-surface-control",
+      "headEmitted": false,
+      "class": "head-not-emitted",
+      "replacementDeltaBytes": 18
+    },
+    {
+      "slotId": "rottay:OVERLAY.chrome.controls.slider.handleBorder",
+      "vertical": "rottay",
+      "rootId": "tier.control.border",
+      "rule": "R2",
+      "scope": "light",
+      "headChannel": "--ds-color-border",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": 15
+    },
+    {
+      "slotId": "rottay:OVERLAY.chrome.controls.slider.markColor",
+      "vertical": "rottay",
+      "rootId": "tier.control.fg",
+      "rule": "R2",
+      "scope": "light",
+      "headChannel": "--ds-color-text-primary",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": 21
+    },
+    {
+      "slotId": "rottay:OVERLAY.chrome.controls.slider.railColor",
+      "vertical": "rottay",
+      "rootId": "tier.control.fg",
+      "rule": "R2",
+      "scope": "light",
+      "headChannel": "--ds-color-text-primary",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": 21
+    },
+    {
+      "slotId": "rottay:OVERLAY.chrome.controls.slider.trackColorDisabled",
+      "vertical": "rottay",
+      "rootId": "tier.control.fg",
+      "rule": "R2",
+      "scope": "light",
+      "headChannel": "--ds-color-text-primary",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": 21
+    },
+    {
       "slotId": "rottay:OVERLAY.chrome.controls.switch.bg",
       "vertical": "rottay",
       "rootId": "tier.control.bg",
@@ -17294,6 +18911,39 @@
       "replacementDeltaBytes": -12
     },
     {
+      "slotId": "rottay:OVERLAY.chrome.controls.timePicker.bg",
+      "vertical": "rottay",
+      "rootId": "tier.control.bg",
+      "rule": "R2",
+      "scope": "light",
+      "headChannel": "--ds-surface-control",
+      "headEmitted": false,
+      "class": "head-not-emitted",
+      "replacementDeltaBytes": 18
+    },
+    {
+      "slotId": "rottay:OVERLAY.chrome.controls.timePicker.bgDisabled",
+      "vertical": "rottay",
+      "rootId": "tier.control.bg",
+      "rule": "R2",
+      "scope": "light",
+      "headChannel": "--ds-surface-control",
+      "headEmitted": false,
+      "class": "head-not-emitted",
+      "replacementDeltaBytes": 18
+    },
+    {
+      "slotId": "rottay:OVERLAY.chrome.controls.timePicker.border",
+      "vertical": "rottay",
+      "rootId": "tier.control.border",
+      "rule": "R2",
+      "scope": "light",
+      "headChannel": "--ds-color-border",
+      "headEmitted": true,
+      "class": "pure",
+      "replacementDeltaBytes": 15
+    },
+    {
       "slotId": "rottay:OVERLAY.chrome.controls.timePicker.borderFocus",
       "vertical": "rottay",
       "rootId": "ramp.seed.primary",
@@ -17303,6 +18953,61 @@
       "headEmitted": true,
       "class": "value-shift",
       "replacementDeltaBytes": 1
+    },
+    {
+      "slotId": "rottay:OVERLAY.chrome.controls.timePicker.clearColor",
+      "vertical": "rottay",
+      "rootId": "tier.control.fg",
+      "rule": "R2",
+      "scope": "light",
+      "headChannel": "--ds-color-text-primary",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": 21
+    },
+    {
+      "slotId": "rottay:OVERLAY.chrome.controls.timePicker.color",
+      "vertical": "rottay",
+      "rootId": "tier.control.fg",
+      "rule": "R2",
+      "scope": "light",
+      "headChannel": "--ds-color-text-primary",
+      "headEmitted": true,
+      "class": "pure",
+      "replacementDeltaBytes": 21
+    },
+    {
+      "slotId": "rottay:OVERLAY.chrome.controls.timePicker.errorBorder",
+      "vertical": "rottay",
+      "rootId": "tier.control.border",
+      "rule": "R2",
+      "scope": "light",
+      "headChannel": "--ds-color-border",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": 15
+    },
+    {
+      "slotId": "rottay:OVERLAY.chrome.controls.timePicker.iconColor",
+      "vertical": "rottay",
+      "rootId": "tier.control.fg",
+      "rule": "R2",
+      "scope": "light",
+      "headChannel": "--ds-color-text-primary",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": 21
+    },
+    {
+      "slotId": "rottay:OVERLAY.chrome.controls.timePicker.separatorColor",
+      "vertical": "rottay",
+      "rootId": "tier.control.fg",
+      "rule": "R2",
+      "scope": "light",
+      "headChannel": "--ds-color-text-primary",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": 21
     },
     {
       "slotId": "rottay:OVERLAY.chrome.controls.toggle.descriptionColor",
@@ -17338,6 +19043,39 @@
       "replacementDeltaBytes": -8
     },
     {
+      "slotId": "rottay:OVERLAY.chrome.controls.toggle.errorBg",
+      "vertical": "rottay",
+      "rootId": "tier.control.bg",
+      "rule": "R2",
+      "scope": "light",
+      "headChannel": "--ds-surface-control",
+      "headEmitted": false,
+      "class": "head-not-emitted",
+      "replacementDeltaBytes": 18
+    },
+    {
+      "slotId": "rottay:OVERLAY.chrome.controls.toggle.errorColor",
+      "vertical": "rottay",
+      "rootId": "tier.control.fg",
+      "rule": "R2",
+      "scope": "light",
+      "headChannel": "--ds-color-text-primary",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": 21
+    },
+    {
+      "slotId": "rottay:OVERLAY.chrome.controls.toggle.innerLabelColor",
+      "vertical": "rottay",
+      "rootId": "tier.control.fg",
+      "rule": "R2",
+      "scope": "light",
+      "headChannel": "--ds-color-text-primary",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": 21
+    },
+    {
       "slotId": "rottay:OVERLAY.chrome.controls.toggle.labelColor",
       "vertical": "rottay",
       "rootId": "tier.base.fg",
@@ -17347,6 +19085,39 @@
       "headEmitted": true,
       "class": "pure",
       "replacementDeltaBytes": 21
+    },
+    {
+      "slotId": "rottay:OVERLAY.chrome.controls.toggle.successBg",
+      "vertical": "rottay",
+      "rootId": "tier.control.bg",
+      "rule": "R2",
+      "scope": "light",
+      "headChannel": "--ds-surface-control",
+      "headEmitted": false,
+      "class": "head-not-emitted",
+      "replacementDeltaBytes": 18
+    },
+    {
+      "slotId": "rottay:OVERLAY.chrome.controls.toggle.trackBg",
+      "vertical": "rottay",
+      "rootId": "tier.control.bg",
+      "rule": "R2",
+      "scope": "light",
+      "headChannel": "--ds-surface-control",
+      "headEmitted": false,
+      "class": "head-not-emitted",
+      "replacementDeltaBytes": 18
+    },
+    {
+      "slotId": "rottay:OVERLAY.chrome.controls.toggle.warningBg",
+      "vertical": "rottay",
+      "rootId": "tier.control.bg",
+      "rule": "R2",
+      "scope": "light",
+      "headChannel": "--ds-surface-control",
+      "headEmitted": false,
+      "class": "head-not-emitted",
+      "replacementDeltaBytes": 18
     },
     {
       "slotId": "rottay:OVERLAY.chrome.controls.transfer.bg",
@@ -17954,6 +19725,28 @@
       "replacementDeltaBytes": 21
     },
     {
+      "slotId": "rottay:OVERLAY.chrome.liveFeed.badgeColor",
+      "vertical": "rottay",
+      "rootId": "tier.page.fg",
+      "rule": "R2",
+      "scope": "light",
+      "headChannel": "--ds-sidebar-item-color",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": 21
+    },
+    {
+      "slotId": "rottay:OVERLAY.chrome.liveFeed.bg",
+      "vertical": "rottay",
+      "rootId": "tier.page.bg",
+      "rule": "R2",
+      "scope": "light",
+      "headChannel": "--ds-sidebar-bg",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": 13
+    },
+    {
       "slotId": "rottay:OVERLAY.chrome.liveFeed.border",
       "vertical": "rottay",
       "rootId": "tier.base.border",
@@ -17987,6 +19780,28 @@
       "replacementDeltaBytes": 16
     },
     {
+      "slotId": "rottay:OVERLAY.chrome.liveFeed.newBg",
+      "vertical": "rottay",
+      "rootId": "tier.page.bg",
+      "rule": "R2",
+      "scope": "light",
+      "headChannel": "--ds-sidebar-bg",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": -3
+    },
+    {
+      "slotId": "rottay:OVERLAY.chrome.liveFeed.newBorder",
+      "vertical": "rottay",
+      "rootId": "tier.page.border",
+      "rule": "R5",
+      "scope": "light",
+      "headChannel": "--ds-color-border-subtle",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": 6
+    },
+    {
       "slotId": "rottay:OVERLAY.chrome.liveFeed.newColor",
       "vertical": "rottay",
       "rootId": "ramp.seed.info",
@@ -17996,6 +19811,50 @@
       "headEmitted": true,
       "class": "pure",
       "replacementDeltaBytes": 13
+    },
+    {
+      "slotId": "rottay:OVERLAY.chrome.liveFeed.skeletonBg",
+      "vertical": "rottay",
+      "rootId": "tier.page.bg",
+      "rule": "R2",
+      "scope": "light",
+      "headChannel": "--ds-sidebar-bg",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": 13
+    },
+    {
+      "slotId": "rottay:OVERLAY.chrome.menu.bg",
+      "vertical": "rottay",
+      "rootId": "tier.overlay.bg",
+      "rule": "R2",
+      "scope": "light",
+      "headChannel": "--ds-material-overlay-background",
+      "headEmitted": false,
+      "class": "head-not-emitted",
+      "replacementDeltaBytes": 30
+    },
+    {
+      "slotId": "rottay:OVERLAY.chrome.menu.darkBg",
+      "vertical": "rottay",
+      "rootId": "tier.overlay.bg",
+      "rule": "R2",
+      "scope": "light",
+      "headChannel": "--ds-material-overlay-background",
+      "headEmitted": false,
+      "class": "head-not-emitted",
+      "replacementDeltaBytes": 30
+    },
+    {
+      "slotId": "rottay:OVERLAY.chrome.menu.darkItemColor",
+      "vertical": "rottay",
+      "rootId": "tier.overlay.fg",
+      "rule": "R2",
+      "scope": "light",
+      "headChannel": "--ds-material-overlay-foreground",
+      "headEmitted": false,
+      "class": "head-not-emitted",
+      "replacementDeltaBytes": 30
     },
     {
       "slotId": "rottay:OVERLAY.chrome.menu.dividerColor",
@@ -18018,6 +19877,17 @@
       "headEmitted": true,
       "class": "pure",
       "replacementDeltaBytes": 19
+    },
+    {
+      "slotId": "rottay:OVERLAY.chrome.menu.itemBgActive",
+      "vertical": "rottay",
+      "rootId": "tier.overlay.bg",
+      "rule": "R2",
+      "scope": "light",
+      "headChannel": "--ds-material-overlay-background",
+      "headEmitted": false,
+      "class": "head-not-emitted",
+      "replacementDeltaBytes": 18
     },
     {
       "slotId": "rottay:OVERLAY.chrome.menu.itemBgHover",
@@ -18064,6 +19934,28 @@
       "replacementDeltaBytes": 14
     },
     {
+      "slotId": "rottay:OVERLAY.chrome.menu.itemHoverBg",
+      "vertical": "rottay",
+      "rootId": "tier.overlay.bg",
+      "rule": "R2",
+      "scope": "light",
+      "headChannel": "--ds-material-overlay-background",
+      "headEmitted": false,
+      "class": "head-not-emitted",
+      "replacementDeltaBytes": 18
+    },
+    {
+      "slotId": "rottay:OVERLAY.chrome.menu.itemSelectedBg",
+      "vertical": "rottay",
+      "rootId": "tier.overlay.bg",
+      "rule": "R2",
+      "scope": "light",
+      "headChannel": "--ds-material-overlay-background",
+      "headEmitted": false,
+      "class": "head-not-emitted",
+      "replacementDeltaBytes": 18
+    },
+    {
       "slotId": "rottay:OVERLAY.chrome.menu.itemSelectedColor",
       "vertical": "rottay",
       "rootId": "ramp.seed.primary",
@@ -18073,6 +19965,17 @@
       "headEmitted": true,
       "class": "value-shift",
       "replacementDeltaBytes": 16
+    },
+    {
+      "slotId": "rottay:OVERLAY.chrome.menu.submenuBg",
+      "vertical": "rottay",
+      "rootId": "tier.overlay.bg",
+      "rule": "R2",
+      "scope": "light",
+      "headChannel": "--ds-material-overlay-background",
+      "headEmitted": false,
+      "class": "head-not-emitted",
+      "replacementDeltaBytes": 30
     },
     {
       "slotId": "rottay:OVERLAY.chrome.message.bg",
@@ -18240,6 +20143,17 @@
       "replacementDeltaBytes": 21
     },
     {
+      "slotId": "rottay:OVERLAY.chrome.notification.bg",
+      "vertical": "rottay",
+      "rootId": "tier.overlay.bg",
+      "rule": "R2",
+      "scope": "light",
+      "headChannel": "--ds-material-overlay-background",
+      "headEmitted": false,
+      "class": "head-not-emitted",
+      "replacementDeltaBytes": 30
+    },
+    {
       "slotId": "rottay:OVERLAY.chrome.notification.titleColor",
       "vertical": "rottay",
       "rootId": "tier.base.fg",
@@ -18337,6 +20251,17 @@
       "headEmitted": false,
       "class": "head-not-emitted",
       "replacementDeltaBytes": 30
+    },
+    {
+      "slotId": "rottay:OVERLAY.chrome.result.iconColor",
+      "vertical": "rottay",
+      "rootId": "tier.page.fg",
+      "rule": "R2",
+      "scope": "light",
+      "headChannel": "--ds-sidebar-item-color",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": 21
     },
     {
       "slotId": "rottay:OVERLAY.chrome.result.subtitleColor",
@@ -18647,10 +20572,54 @@
       "replacementDeltaBytes": 21
     },
     {
+      "slotId": "rottay:OVERLAY.chrome.statsGrid.cardBg",
+      "vertical": "rottay",
+      "rootId": "tier.raised.bg",
+      "rule": "R2",
+      "scope": "light",
+      "headChannel": "--ds-surface-card",
+      "headEmitted": false,
+      "class": "head-not-emitted",
+      "replacementDeltaBytes": 15
+    },
+    {
       "slotId": "rottay:OVERLAY.chrome.statsGrid.cardBorder",
       "vertical": "rottay",
       "rootId": "tier.base.border",
       "rule": "R2",
+      "scope": "light",
+      "headChannel": "--ds-color-border",
+      "headEmitted": true,
+      "class": "pure",
+      "replacementDeltaBytes": 15
+    },
+    {
+      "slotId": "rottay:OVERLAY.chrome.statsGrid.cardFilledBg",
+      "vertical": "rottay",
+      "rootId": "tier.raised.bg",
+      "rule": "R2",
+      "scope": "light",
+      "headChannel": "--ds-surface-card",
+      "headEmitted": false,
+      "class": "head-not-emitted",
+      "replacementDeltaBytes": 15
+    },
+    {
+      "slotId": "rottay:OVERLAY.chrome.statsGrid.cardGlassBg",
+      "vertical": "rottay",
+      "rootId": "tier.raised.bg",
+      "rule": "R2",
+      "scope": "light",
+      "headChannel": "--ds-surface-card",
+      "headEmitted": false,
+      "class": "head-not-emitted",
+      "replacementDeltaBytes": -3
+    },
+    {
+      "slotId": "rottay:OVERLAY.chrome.statsGrid.cardGlassBorder",
+      "vertical": "rottay",
+      "rootId": "tier.raised.border",
+      "rule": "R5",
       "scope": "light",
       "headChannel": "--ds-color-border",
       "headEmitted": true,
@@ -18667,6 +20636,17 @@
       "headEmitted": true,
       "class": "pure",
       "replacementDeltaBytes": 19
+    },
+    {
+      "slotId": "rottay:OVERLAY.chrome.statsGrid.skeletonBg",
+      "vertical": "rottay",
+      "rootId": "tier.raised.bg",
+      "rule": "R2",
+      "scope": "light",
+      "headChannel": "--ds-surface-card",
+      "headEmitted": false,
+      "class": "head-not-emitted",
+      "replacementDeltaBytes": 15
     },
     {
       "slotId": "rottay:OVERLAY.chrome.statsGrid.trendNegative",
@@ -18944,6 +20924,28 @@
       "replacementDeltaBytes": 21
     },
     {
+      "slotId": "rottay:OVERLAY.chrome.timeline.dotBorder",
+      "vertical": "rottay",
+      "rootId": "tier.page.border",
+      "rule": "R5",
+      "scope": "light",
+      "headChannel": "--ds-color-border-subtle",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": 22
+    },
+    {
+      "slotId": "rottay:OVERLAY.chrome.timeline.lineColor",
+      "vertical": "rottay",
+      "rootId": "tier.page.fg",
+      "rule": "R2",
+      "scope": "light",
+      "headChannel": "--ds-sidebar-item-color",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": 21
+    },
+    {
       "slotId": "rottay:OVERLAY.chrome.tooltip.bg",
       "vertical": "rottay",
       "rootId": "tier.base.fg",
@@ -18953,6 +20955,39 @@
       "headEmitted": true,
       "class": "pure",
       "replacementDeltaBytes": 21
+    },
+    {
+      "slotId": "rottay:OVERLAY.chrome.tooltip.color",
+      "vertical": "rottay",
+      "rootId": "tier.overlay.fg",
+      "rule": "R2",
+      "scope": "light",
+      "headChannel": "--ds-material-overlay-foreground",
+      "headEmitted": false,
+      "class": "head-not-emitted",
+      "replacementDeltaBytes": 30
+    },
+    {
+      "slotId": "rottay:OVERLAY.chrome.tooltip.defaultBg",
+      "vertical": "rottay",
+      "rootId": "tier.overlay.bg",
+      "rule": "R2",
+      "scope": "light",
+      "headChannel": "--ds-material-overlay-background",
+      "headEmitted": false,
+      "class": "head-not-emitted",
+      "replacementDeltaBytes": 30
+    },
+    {
+      "slotId": "rottay:OVERLAY.chrome.tooltip.defaultColor",
+      "vertical": "rottay",
+      "rootId": "tier.overlay.fg",
+      "rule": "R2",
+      "scope": "light",
+      "headChannel": "--ds-material-overlay-foreground",
+      "headEmitted": false,
+      "class": "head-not-emitted",
+      "replacementDeltaBytes": 30
     },
     {
       "slotId": "rottay:OVERLAY.chrome.tooltip.errorBg",
@@ -18966,6 +21001,17 @@
       "replacementDeltaBytes": 14
     },
     {
+      "slotId": "rottay:OVERLAY.chrome.tooltip.primaryColor",
+      "vertical": "rottay",
+      "rootId": "tier.overlay.fg",
+      "rule": "R2",
+      "scope": "light",
+      "headChannel": "--ds-material-overlay-foreground",
+      "headEmitted": false,
+      "class": "head-not-emitted",
+      "replacementDeltaBytes": 30
+    },
+    {
       "slotId": "rottay:OVERLAY.chrome.tooltip.secondaryBg",
       "vertical": "rottay",
       "rootId": "ramp.seed.secondary",
@@ -18975,6 +21021,28 @@
       "headEmitted": true,
       "class": "value-shift",
       "replacementDeltaBytes": 18
+    },
+    {
+      "slotId": "rottay:OVERLAY.chrome.tooltip.secondaryColor",
+      "vertical": "rottay",
+      "rootId": "tier.overlay.fg",
+      "rule": "R2",
+      "scope": "light",
+      "headChannel": "--ds-material-overlay-foreground",
+      "headEmitted": false,
+      "class": "head-not-emitted",
+      "replacementDeltaBytes": 30
+    },
+    {
+      "slotId": "rottay:OVERLAY.chrome.tree.nodeBgHover",
+      "vertical": "rottay",
+      "rootId": "tier.page.bg",
+      "rule": "R2",
+      "scope": "light",
+      "headChannel": "--ds-sidebar-bg",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": 13
     },
     {
       "slotId": "rottay:OVERLAY.chrome.tree.nodeBgSelected",
@@ -20099,5 +22167,5 @@
       "replacementDeltaBytes": 28
     }
   ],
-  "digest": "89a2baa9ab7f66f18b91d289bd3d8f3de761525f69ec1a259e5a6db680dfc421"
+  "digest": "439e64d52f6d77ff2f617ceb46d47e7a5e5fe8ae57a7350486772d752172a19e"
 }
