@@ -64,7 +64,7 @@ const CORE = resolve(HERE, '../../..');
 const CSS = join(CORE, 'src/foundation/tokens/css');
 const ARTIFACTS = join(CSS, 'facade/artifacts');
 const CONTROLS = join(CORE, 'manifest/controls');
-const INVENTORY = join(HERE, 'dial-authority.inventory.json');
+const INVENTORY = join(HERE, 'dial-authority-gate.inventory.json');
 
 const VERTICALS = Object.freeze(['rottay', 'bithire', 'evnto']);
 const DECLARATION = /^\s*(--ds-[a-z0-9-]+)\s*:\s*([^;]+);/i;

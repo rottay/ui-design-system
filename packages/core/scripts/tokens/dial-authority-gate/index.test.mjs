@@ -79,7 +79,7 @@ test('drill 6: the inventory is decrease-only and the exception list is the owne
   const { dirname, join } = await import('node:path');
   const { fileURLToPath } = await import('node:url');
   const here = dirname(fileURLToPath(import.meta.url));
-  const inventory = JSON.parse(readFileSync(join(here, 'dial-authority.inventory.json'), 'utf8'));
+  const inventory = JSON.parse(readFileSync(join(here, 'dial-authority-gate.inventory.json'), 'utf8'));
   const { findings } = measure();
   const key = (f) => `${f.vertical}|${f.channel}|${f.dial}`;
   const reproduced = new Set(findings.map(key));
