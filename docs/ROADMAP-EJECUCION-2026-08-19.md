@@ -4568,6 +4568,62 @@ seeds reales y mover la superficie de calibración a un campo propio — la
 decisión 15 conserva su INTENT (superficie de calibración estrecha; dominio
 público 290 intacto) y se enmendará su formulación al cerrar C5.
 
+**FRENTE NORMALIZACIÓN PROFUNDA — ARQUITECTURA ACEPTADA + COHORTE 0 DESPACHADA
+(2026-08-27).** Diseño Opus (`/private/tmp/opus-norm-schema.md`, 720 líneas) medido contra el
+árbol: **preaudit Fable DEFECTS-4 → remedios integrados como Addendum §10 vinculante →
+confirmación ACCEPT** (cobertura de la directiva 8/8; reproducción de cifras críticas total:
+censo `@domicile` 15/15 celdas exactas, 290 = 67+160+63 exacto, drift de denominadores
+confirmado, el fantasma "133+1" reproducido entero — `compound-editorial` es un `scenarioId`
+sano leído como estado; el schema de receipt ni siquiera tiene campo de marca). **Hallazgos que
+re-encuadran el frente (asentados):** (i) el trabajo real no es "3.592 literales" — la
+clasificación por slot YA está aplicada en la fuente (4.131 anotaciones `@domicile`: seed 1.903 /
+derived 759 / unassigned 1.440 / pro-expert 29 / baseline 0) y el conjunto de trabajo son los
+**literales en slots `seed`** (estimación ~1.458 hasta que la cohorte 0 la re-emita con extractor
+pineado — Addendum D1); (ii) lo que falta no es taxonomía sino un **JOIN** slot↔canal↔raíz —
+los dos medio-instrumentos existen (`cascade-extract` con 1.919 literalPins; `parseDocblocks` de
+variant-parity) y nadie los une; (iii) el contrato tipado equivalente YA existe a nivel familia
+(`FirstPartyBrandTheme` + `BrandCapabilityCatalog` = Record) y muere en la hoja — el schema lo
+extiende con el producto cartesiano rol×faceta que el allowlist de 290 ya usa; (iv) el gate
+bloqueante es el endurecimiento que `GOVERNOR_CLASS` declaró ("en F4A-2 se REPORTA, no bloquea")
+y nunca se ejecutó, más el detector de sombra; (v) **la salvedad del owner es mecánica**: el eje
+del colapso es `rootId`, la igualdad de valor queda PROHIBIDA como evidencia, con drill
+anti-coincidencia + drill de duplicación-real + tercer drill anti-valor-de-stop (D3); el premio
+ingenuo y el daño prohibido son el mismo número (945 absorciones textuales, `#ffffff` ×75);
+(vi) la prueba de preservación visual es el **diff byte-idéntico de los 4 artifacts**
+(`styles/{rottay,bithire,evnto,index}.css`, 378.370 líneas + index) — cobertura total, carga de
+la prueba invertida: toda línea de diff es un evento de adjudicación; (vii) ley de emisión: los
+manifests están en los `sourceFiles` de los 134 receipts → **write-set congelado antes de emitir;
+receipts últimos, siempre**; (viii) presupuesto de PROSA (§7.3): 5 subpaths del trinquete de
+entrypoints en headroom cero — UN docblock de cohorte en archivo de bajo fan-out o en JSON,
+nunca comentarios por sitio en temas. **Corrección propia de Fable asentada** (sumada a la mía):
+el "tool C5" y el "133+1" de sus rulings C-02/C-02b eran el mismo fantasma — lección adoptada por
+el programa: *toda afirmación de mecanismo exige grep de existencia del mecanismo, no sólo
+verificación de sus efectos.* **Cohorte 0 despachada a Opus** (brief
+`/private/tmp/mr-brief-opus-norm-c0.md`): reconciliación de denominadores 3.693/3.690 por
+RE-MEDICIÓN del walk (criterio D4a: reproduce-gana; si ninguna, ambas se corrigen; adjudica DT),
+corrección prosa-vs-filas del root-catalog (3.310/64/259 con entrada en `corrections`), extractor
+JOIN + inventario enumerado `manifest/normalization/slot-inventory.json` con `--check` fail-closed
+cableado blocking, anclas de baselines (unassigned decrease-only + ley 4a), cero colapso, cero
+cambio visual (artifacts byte-idénticos). Postaudit Fable del diff congelado antes del commit.
+
+**REPARACIÓN AMBIENTAL DE RECEIPTS + diagnóstico tooling-drills (2026-08-27; commit
+`c680e4b79`).** El rojo de `modern-rescue-tooling-drills` investigado a fondo: en serie y por
+separado, HEAD limpio tenía 3 fallas REALES + 1 de CARRERA (A11 sólo bajo paralelismo —
+confirmado otra vez: los drills no son concurrencia-seguros). Causa raíz de las 3: los
+`sourceDigest` de los receipts cubren **`dist/` que NO está trackeado en git** (0 archivos) —
+cualquier build local los stalea en disco; **HEAD nunca estuvo roto** (el rojo era el build
+on-disk de la mañana, del packet cancelado). Reparación: rebuild de dist desde HEAD limpio +
+re-firma quirúrgica de **134/134** (los 134 estaban stale, no 15) con el validador REAL
+(`computeSourceDigest` importado de `scripts/quality-evidence/v2/receipts.mjs`, parche de texto
+sourceDigest+createdAt, re-validación post-parche, `artifactSha256` intacto) → **program-check
+48/48 + generator 42/42 en serie**. Mecanismo real citado por grep (ley nueva): productor =
+probe `writeEvidence`; validador único = `receipts.mjs` ("A second validator would be a second
+authority"). **Deuda asignada al frente:** (a) los digests de receipts no deberían cubrir
+artefactos no trackeados (inmunidad por diseño — la evalúa la estrategia de cadena del frente);
+(b) la carrera A11 (aislamiento de fixtures de drills) sigue como deuda conocida con evidencia
+nueva; (c) el script de re-firma vive en /tmp — canonizarlo como tool del repo lo decide el
+frente (hoy lo corre el DT).
+
 **PIVOTE DE ESTRATEGIA — DIRECTIVA DEL OWNER (2026-08-27 ~09:45, relay Codex,
 VINCULANTE): PAUSA del craft puntual y apertura del frente de NORMALIZACIÓN PROFUNDA
 DE THEMES como puerta ejecutable previa a F4C.** El owner detectó lo correcto: los
