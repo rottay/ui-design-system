@@ -1,1529 +1,1845 @@
 {
   "generated": true,
   "generator": "scripts/tokens/resolved-map-diff/index.mjs",
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "law": {
     "statement": "CERO-DELTA RESUELTO: una cohorte de colapso preserva este mapa. El diff de bytes del artefacto deja de ser criterio y pasa a ser el registro de lo colapsado.",
     "why": "un slot colapsado viaja al artefacto como texto var(), no como su valor resuelto: la byte-identidad es imposible por construccion en cuanto el frente colapsa.",
-    "unresolvedLaw": "un canal que no resuelve se marca con su motivo (missing | cycle | depth) y jamas se lo hace pasar por literal.",
-    "fallbackLaw": "var(--x, F) usa F solo si --x no resuelve, que es la semantica de CSS y lo que hace visible un colapso hacia una cabeza no emitida.",
+    "unresolvedLaw": "un canal que no resuelve se marca con su motivo (missing | cycle | depth | guaranteed-invalid), CON el canal externo que falla y su causa inmediata, y jamas se lo hace pasar por literal.",
+    "fallbackLaw": "var(--x, F) usa F cuando --x no esta declarada, es ciclica, o es invalida en computed-value time por su propia cadena de var() (IACVT → guaranteed-invalid, semantica CSS de custom properties); `--x: initial` ES guaranteed-invalid. La guarda depth del instrumento NUNCA engancha un fallback: es una guarda, no una invalidez real.",
+    "againstLaw": "--against compara valores Y el conjunto unresolved (canal externo + motivo + causa): un colapso que rompe o repara una resolucion sin mover su valor igual FALLA aqui.",
     "maxDepth": 32
   },
   "stats": {
     "verticals": 3,
     "scopes": 6,
     "channels": 5803,
-    "unresolved": 251,
+    "unresolved": 260,
     "unresolvedByReason": {
-      "missing": 251
+      "missing": 251,
+      "guaranteed-invalid": 9
     }
   },
   "unresolved": [
     {
       "vertical": "rottay",
       "scope": "base",
-      "channel": "--ds-type-body-font-size",
-      "reason": "missing"
+      "channel": "--ds-type-body",
+      "reason": "missing",
+      "cause": "--ds-type-body-font-size"
     },
     {
       "vertical": "rottay",
       "scope": "base",
-      "channel": "--ds-font-weight-medium",
-      "reason": "missing"
+      "channel": "--ds-badge-font-weight",
+      "reason": "missing",
+      "cause": "--ds-font-weight-medium"
     },
     {
       "vertical": "rottay",
       "scope": "base",
-      "channel": "--ds-line-height-none",
-      "reason": "missing"
+      "channel": "--ds-badge-line-height",
+      "reason": "missing",
+      "cause": "--ds-line-height-none"
     },
     {
       "vertical": "rottay",
       "scope": "base",
-      "channel": "--ds-spacing-1",
-      "reason": "missing"
+      "channel": "--ds-badge-gap",
+      "reason": "missing",
+      "cause": "--ds-spacing-1"
     },
     {
       "vertical": "rottay",
       "scope": "base",
-      "channel": "--ds-radius-sm",
-      "reason": "missing"
+      "channel": "--ds-badge-radius",
+      "reason": "missing",
+      "cause": "--ds-radius-sm"
     },
     {
       "vertical": "rottay",
       "scope": "base",
-      "channel": "--ds-surface-card-bg",
-      "reason": "missing"
+      "channel": "--ds-control-surface",
+      "reason": "missing",
+      "cause": "--ds-surface-card-bg"
     },
     {
       "vertical": "rottay",
       "scope": "base",
-      "channel": "--ds-surface-card-bg",
-      "reason": "missing"
+      "channel": "--ds-control-surface-raised",
+      "reason": "missing",
+      "cause": "--ds-control-surface"
     },
     {
       "vertical": "rottay",
       "scope": "base",
-      "channel": "--ds-surface-card-bg",
-      "reason": "missing"
+      "channel": "--ds-control-brand-tint",
+      "reason": "missing",
+      "cause": "--ds-control-surface"
     },
     {
       "vertical": "rottay",
       "scope": "base",
-      "channel": "--ds-surface-card-bg",
-      "reason": "missing"
+      "channel": "--ds-control-brand-tint-hover",
+      "reason": "missing",
+      "cause": "--ds-control-surface"
     },
     {
       "vertical": "rottay",
       "scope": "base",
-      "channel": "--ds-surface-card-border",
-      "reason": "missing"
+      "channel": "--ds-icon-tile-border",
+      "reason": "missing",
+      "cause": "--ds-surface-icon-border"
     },
     {
       "vertical": "rottay",
       "scope": "base",
-      "channel": "--ds-font-weight-medium",
-      "reason": "missing"
+      "channel": "--ds-button-font-weight",
+      "reason": "missing",
+      "cause": "--ds-font-weight-medium"
     },
     {
       "vertical": "rottay",
       "scope": "base",
-      "channel": "--ds-font-size-xs",
-      "reason": "missing"
+      "channel": "--ds-button-xs-font-size",
+      "reason": "missing",
+      "cause": "--ds-font-size-xs"
     },
     {
       "vertical": "rottay",
       "scope": "base",
-      "channel": "--ds-icon-xs-size",
-      "reason": "missing"
+      "channel": "--ds-button-xs-icon-size",
+      "reason": "missing",
+      "cause": "--ds-icon-xs-size"
     },
     {
       "vertical": "rottay",
       "scope": "base",
-      "channel": "--ds-icon-sm-size",
-      "reason": "missing"
+      "channel": "--ds-button-sm-icon-size",
+      "reason": "missing",
+      "cause": "--ds-icon-sm-size"
     },
     {
       "vertical": "rottay",
       "scope": "base",
-      "channel": "--ds-font-size-sm",
-      "reason": "missing"
+      "channel": "--ds-button-md-font-size",
+      "reason": "missing",
+      "cause": "--ds-font-size-sm"
     },
     {
       "vertical": "rottay",
       "scope": "base",
-      "channel": "--ds-icon-sm-size",
-      "reason": "missing"
+      "channel": "--ds-button-md-icon-size",
+      "reason": "missing",
+      "cause": "--ds-icon-sm-size"
     },
     {
       "vertical": "rottay",
       "scope": "base",
-      "channel": "--ds-font-size-base",
-      "reason": "missing"
+      "channel": "--ds-button-lg-font-size",
+      "reason": "missing",
+      "cause": "--ds-font-size-base"
     },
     {
       "vertical": "rottay",
       "scope": "base",
-      "channel": "--ds-icon-sm-size",
-      "reason": "missing"
+      "channel": "--ds-button-lg-icon-size",
+      "reason": "missing",
+      "cause": "--ds-icon-sm-size"
     },
     {
       "vertical": "rottay",
       "scope": "base",
-      "channel": "--ds-font-size-lg",
-      "reason": "missing"
+      "channel": "--ds-button-xl-font-size",
+      "reason": "missing",
+      "cause": "--ds-font-size-lg"
     },
     {
       "vertical": "rottay",
       "scope": "base",
-      "channel": "--ds-icon-md-size",
-      "reason": "missing"
+      "channel": "--ds-button-xl-icon-size",
+      "reason": "missing",
+      "cause": "--ds-icon-md-size"
     },
     {
       "vertical": "rottay",
       "scope": "base",
-      "channel": "--ds-spacing-2",
-      "reason": "missing"
+      "channel": "--ds-input-gap",
+      "reason": "missing",
+      "cause": "--ds-spacing-2"
     },
     {
       "vertical": "rottay",
       "scope": "base",
-      "channel": "--ds-font-weight-normal",
-      "reason": "missing"
+      "channel": "--ds-input-font-weight",
+      "reason": "missing",
+      "cause": "--ds-font-weight-normal"
     },
     {
       "vertical": "rottay",
       "scope": "base",
-      "channel": "--ds-font-size-xs",
-      "reason": "missing"
+      "channel": "--ds-input-label-font-size",
+      "reason": "missing",
+      "cause": "--ds-font-size-xs"
     },
     {
       "vertical": "rottay",
       "scope": "base",
-      "channel": "--ds-font-weight-medium",
-      "reason": "missing"
+      "channel": "--ds-input-label-font-weight",
+      "reason": "missing",
+      "cause": "--ds-font-weight-medium"
     },
     {
       "vertical": "rottay",
       "scope": "base",
-      "channel": "--ds-font-size-xs",
-      "reason": "missing"
+      "channel": "--ds-input-helper-font-size",
+      "reason": "missing",
+      "cause": "--ds-font-size-xs"
     },
     {
       "vertical": "rottay",
       "scope": "base",
-      "channel": "--ds-motion-fast",
-      "reason": "missing"
+      "channel": "--ds-input-transition-duration",
+      "reason": "missing",
+      "cause": "--ds-motion-fast"
     },
     {
       "vertical": "rottay",
       "scope": "base",
-      "channel": "--ds-font-size-xs",
-      "reason": "missing"
+      "channel": "--ds-input-xs-font-size",
+      "reason": "missing",
+      "cause": "--ds-font-size-xs"
     },
     {
       "vertical": "rottay",
       "scope": "base",
-      "channel": "--ds-icon-xs-size",
-      "reason": "missing"
+      "channel": "--ds-input-xs-icon-size",
+      "reason": "missing",
+      "cause": "--ds-icon-xs-size"
     },
     {
       "vertical": "rottay",
       "scope": "base",
-      "channel": "--ds-icon-sm-size",
-      "reason": "missing"
+      "channel": "--ds-input-sm-icon-size",
+      "reason": "missing",
+      "cause": "--ds-icon-sm-size"
     },
     {
       "vertical": "rottay",
       "scope": "base",
-      "channel": "--ds-font-size-sm",
-      "reason": "missing"
+      "channel": "--ds-input-md-font-size",
+      "reason": "missing",
+      "cause": "--ds-font-size-sm"
     },
     {
       "vertical": "rottay",
       "scope": "base",
-      "channel": "--ds-icon-sm-size",
-      "reason": "missing"
+      "channel": "--ds-input-md-icon-size",
+      "reason": "missing",
+      "cause": "--ds-icon-sm-size"
     },
     {
       "vertical": "rottay",
       "scope": "base",
-      "channel": "--ds-font-size-base",
-      "reason": "missing"
+      "channel": "--ds-input-lg-font-size",
+      "reason": "missing",
+      "cause": "--ds-font-size-base"
     },
     {
       "vertical": "rottay",
       "scope": "base",
-      "channel": "--ds-icon-sm-size",
-      "reason": "missing"
+      "channel": "--ds-input-lg-icon-size",
+      "reason": "missing",
+      "cause": "--ds-icon-sm-size"
     },
     {
       "vertical": "rottay",
       "scope": "base",
-      "channel": "--ds-font-size-lg",
-      "reason": "missing"
+      "channel": "--ds-input-xl-font-size",
+      "reason": "missing",
+      "cause": "--ds-font-size-lg"
     },
     {
       "vertical": "rottay",
       "scope": "base",
-      "channel": "--ds-icon-md-size",
-      "reason": "missing"
+      "channel": "--ds-input-xl-icon-size",
+      "reason": "missing",
+      "cause": "--ds-icon-md-size"
     },
     {
       "vertical": "rottay",
       "scope": "base",
-      "channel": "--ds-shadow-button-rest",
-      "reason": "missing"
+      "channel": "--ds-button-primary-shadow-active",
+      "reason": "missing",
+      "cause": "--ds-shadow-button-rest"
     },
     {
       "vertical": "rottay",
       "scope": "base",
-      "channel": "--ds-shadow-button-rest",
-      "reason": "missing"
+      "channel": "--ds-button-secondary-shadow",
+      "reason": "missing",
+      "cause": "--ds-shadow-button-rest"
     },
     {
       "vertical": "rottay",
       "scope": "base",
-      "channel": "--ds-shadow-button-hover",
-      "reason": "missing"
+      "channel": "--ds-button-secondary-shadow-hover",
+      "reason": "missing",
+      "cause": "--ds-shadow-button-hover"
     },
     {
       "vertical": "rottay",
       "scope": "base",
-      "channel": "--ds-shadow-button-rest",
-      "reason": "missing"
+      "channel": "--ds-button-secondary-shadow-active",
+      "reason": "missing",
+      "cause": "--ds-shadow-button-rest"
     },
     {
       "vertical": "rottay",
       "scope": "base",
-      "channel": "--ds-shadow-button-rest",
-      "reason": "missing"
+      "channel": "--ds-button-default-shadow",
+      "reason": "missing",
+      "cause": "--ds-shadow-button-rest"
     },
     {
       "vertical": "rottay",
       "scope": "base",
-      "channel": "--ds-shadow-button-hover",
-      "reason": "missing"
+      "channel": "--ds-button-default-shadow-hover",
+      "reason": "missing",
+      "cause": "--ds-shadow-button-hover"
     },
     {
       "vertical": "rottay",
       "scope": "base",
-      "channel": "--ds-shadow-button-rest",
-      "reason": "missing"
+      "channel": "--ds-button-default-shadow-active",
+      "reason": "missing",
+      "cause": "--ds-shadow-button-rest"
     },
     {
       "vertical": "rottay",
       "scope": "base",
-      "channel": "--ds-shadow-success-sm",
-      "reason": "missing"
+      "channel": "--ds-button-success-shadow",
+      "reason": "missing",
+      "cause": "--ds-shadow-success-sm"
     },
     {
       "vertical": "rottay",
       "scope": "base",
-      "channel": "--ds-shadow-success-sm",
-      "reason": "missing"
+      "channel": "--ds-button-success-shadow-hover",
+      "reason": "missing",
+      "cause": "--ds-button-success-shadow"
     },
     {
       "vertical": "rottay",
       "scope": "base",
-      "channel": "--ds-shadow-success-sm",
-      "reason": "missing"
+      "channel": "--ds-button-success-shadow-active",
+      "reason": "missing",
+      "cause": "--ds-button-success-shadow"
     },
     {
       "vertical": "rottay",
       "scope": "base",
-      "channel": "--ds-shadow-warning-sm",
-      "reason": "missing"
+      "channel": "--ds-button-warning-shadow",
+      "reason": "missing",
+      "cause": "--ds-shadow-warning-sm"
     },
     {
       "vertical": "rottay",
       "scope": "base",
-      "channel": "--ds-shadow-warning-sm",
-      "reason": "missing"
+      "channel": "--ds-button-warning-shadow-hover",
+      "reason": "missing",
+      "cause": "--ds-button-warning-shadow"
     },
     {
       "vertical": "rottay",
       "scope": "base",
-      "channel": "--ds-shadow-warning-sm",
-      "reason": "missing"
+      "channel": "--ds-button-warning-shadow-active",
+      "reason": "missing",
+      "cause": "--ds-button-warning-shadow"
     },
     {
       "vertical": "rottay",
       "scope": "base",
-      "channel": "--ds-shadow-error-sm",
-      "reason": "missing"
+      "channel": "--ds-button-error-shadow",
+      "reason": "missing",
+      "cause": "--ds-shadow-error-sm"
     },
     {
       "vertical": "rottay",
       "scope": "base",
-      "channel": "--ds-shadow-error-sm",
-      "reason": "missing"
+      "channel": "--ds-button-error-shadow-hover",
+      "reason": "missing",
+      "cause": "--ds-shadow-error-sm"
     },
     {
       "vertical": "rottay",
       "scope": "base",
-      "channel": "--ds-shadow-error-sm",
-      "reason": "missing"
+      "channel": "--ds-button-error-shadow-active",
+      "reason": "missing",
+      "cause": "--ds-shadow-error-sm"
     },
     {
       "vertical": "rottay",
       "scope": "base",
-      "channel": "--ds-shadow-button-rest",
-      "reason": "missing"
+      "channel": "--ds-button-info-shadow",
+      "reason": "missing",
+      "cause": "--ds-shadow-button-rest"
     },
     {
       "vertical": "rottay",
       "scope": "base",
-      "channel": "--ds-shadow-button-rest",
-      "reason": "missing"
+      "channel": "--ds-button-info-shadow-hover",
+      "reason": "missing",
+      "cause": "--ds-button-info-shadow"
     },
     {
       "vertical": "rottay",
       "scope": "base",
-      "channel": "--ds-shadow-button-rest",
-      "reason": "missing"
+      "channel": "--ds-button-info-shadow-active",
+      "reason": "missing",
+      "cause": "--ds-button-info-shadow"
     },
     {
       "vertical": "rottay",
       "scope": "base",
-      "channel": "--ds-shadow-button-rest",
-      "reason": "missing"
+      "channel": "--ds-button-ai-shadow",
+      "reason": "missing",
+      "cause": "--ds-shadow-button-rest"
     },
     {
       "vertical": "rottay",
       "scope": "base",
-      "channel": "--ds-shadow-button-hover",
-      "reason": "missing"
+      "channel": "--ds-button-ai-shadow-hover",
+      "reason": "missing",
+      "cause": "--ds-shadow-button-hover"
     },
     {
       "vertical": "rottay",
       "scope": "base",
-      "channel": "--ds-shadow-button-rest",
-      "reason": "missing"
+      "channel": "--ds-button-ai-shadow-active",
+      "reason": "missing",
+      "cause": "--ds-shadow-button-rest"
     },
     {
       "vertical": "rottay",
       "scope": "base",
-      "channel": "--ds-focus-ring",
-      "reason": "missing"
+      "channel": "--ds-button-focus-ring",
+      "reason": "missing",
+      "cause": "--ds-focus-ring"
     },
     {
       "vertical": "rottay",
       "scope": "base",
-      "channel": "--ds-font-weight-medium",
-      "reason": "missing"
+      "channel": "--ds-input-error-message-font-weight",
+      "reason": "missing",
+      "cause": "--ds-font-weight-medium"
     },
     {
       "vertical": "rottay",
       "scope": "base",
-      "channel": "--ds-spacing-3",
-      "reason": "missing"
+      "channel": "--ds-card-padding-sm",
+      "reason": "missing",
+      "cause": "--ds-spacing-3"
     },
     {
       "vertical": "rottay",
       "scope": "base",
-      "channel": "--ds-spacing-3",
-      "reason": "missing"
+      "channel": "--ds-card-sm-padding",
+      "reason": "missing",
+      "cause": "--ds-spacing-3"
     },
     {
       "vertical": "rottay",
       "scope": "base",
-      "channel": "--ds-spacing-4",
-      "reason": "missing"
+      "channel": "--ds-card-padding-md",
+      "reason": "missing",
+      "cause": "--ds-spacing-4"
     },
     {
       "vertical": "rottay",
       "scope": "base",
-      "channel": "--ds-spacing-4",
-      "reason": "missing"
+      "channel": "--ds-card-md-padding",
+      "reason": "missing",
+      "cause": "--ds-spacing-4"
     },
     {
       "vertical": "rottay",
       "scope": "base",
-      "channel": "--ds-spacing-5",
-      "reason": "missing"
+      "channel": "--ds-card-padding-lg",
+      "reason": "missing",
+      "cause": "--ds-spacing-5"
     },
     {
       "vertical": "rottay",
       "scope": "base",
-      "channel": "--ds-spacing-5",
-      "reason": "missing"
+      "channel": "--ds-card-lg-padding",
+      "reason": "missing",
+      "cause": "--ds-spacing-5"
     },
     {
       "vertical": "rottay",
       "scope": "base",
-      "channel": "--ds-spacing-6",
-      "reason": "missing"
+      "channel": "--ds-card-padding-xl",
+      "reason": "missing",
+      "cause": "--ds-spacing-6"
     },
     {
       "vertical": "rottay",
       "scope": "base",
-      "channel": "--ds-spacing-6",
-      "reason": "missing"
+      "channel": "--ds-card-xl-padding",
+      "reason": "missing",
+      "cause": "--ds-spacing-6"
     },
     {
       "vertical": "rottay",
       "scope": "base",
-      "channel": "--ds-spacing-4",
-      "reason": "missing"
+      "channel": "--ds-card-header-padding",
+      "reason": "missing",
+      "cause": "--ds-spacing-4"
     },
     {
       "vertical": "rottay",
       "scope": "base",
-      "channel": "--ds-font-size-sm",
-      "reason": "missing"
+      "channel": "--ds-card-title-font-size",
+      "reason": "missing",
+      "cause": "--ds-font-size-sm"
     },
     {
       "vertical": "rottay",
       "scope": "base",
-      "channel": "--ds-font-weight-medium",
-      "reason": "missing"
+      "channel": "--ds-card-title-font-weight",
+      "reason": "missing",
+      "cause": "--ds-font-weight-medium"
     },
     {
       "vertical": "rottay",
       "scope": "base",
-      "channel": "--ds-spacing-4",
-      "reason": "missing"
+      "channel": "--ds-card-body-padding",
+      "reason": "missing",
+      "cause": "--ds-spacing-4"
     },
     {
       "vertical": "rottay",
       "scope": "base",
-      "channel": "--ds-spacing-3",
-      "reason": "missing"
+      "channel": "--ds-card-footer-padding",
+      "reason": "missing",
+      "cause": "--ds-spacing-3"
     },
     {
       "vertical": "rottay",
       "scope": "base",
-      "channel": "--ds-rich-card-header-bg",
-      "reason": "missing"
+      "channel": "--ds-premium-card-header-bg",
+      "reason": "missing",
+      "cause": "--ds-rich-card-header-bg"
     },
     {
       "vertical": "rottay",
       "scope": "base",
-      "channel": "--ds-rich-card-section-bg",
-      "reason": "missing"
+      "channel": "--ds-premium-card-section-bg",
+      "reason": "missing",
+      "cause": "--ds-rich-card-section-bg"
     },
     {
       "vertical": "rottay",
       "scope": "base",
-      "channel": "--ds-rich-card-section-alt-bg",
-      "reason": "missing"
+      "channel": "--ds-premium-card-section-alt-bg",
+      "reason": "missing",
+      "cause": "--ds-rich-card-section-alt-bg"
     },
     {
       "vertical": "rottay",
       "scope": "base",
-      "channel": "--ds-radius-md",
-      "reason": "missing"
+      "channel": "--ds-surface-radius-md",
+      "reason": "missing",
+      "cause": "--ds-radius-md"
     },
     {
       "vertical": "rottay",
       "scope": "base",
-      "channel": "--ds-surface-card-bg",
-      "reason": "missing"
+      "channel": "--ds-surface-icon-bg",
+      "reason": "missing",
+      "cause": "--ds-surface-card-bg"
     },
     {
       "vertical": "rottay",
       "scope": "base",
-      "channel": "--ds-surface-card-border",
-      "reason": "missing"
+      "channel": "--ds-surface-icon-border",
+      "reason": "missing",
+      "cause": "--ds-surface-card-border"
     },
     {
       "vertical": "rottay",
       "scope": "base",
-      "channel": "--ds-surface-card-bg",
-      "reason": "missing"
+      "channel": "--ds-surface-chip-bg",
+      "reason": "missing",
+      "cause": "--ds-surface-card-bg"
     },
     {
       "vertical": "rottay",
       "scope": "light",
-      "channel": "--ds-color-white",
-      "reason": "missing"
+      "channel": "--ds-color-neutral-0",
+      "reason": "missing",
+      "cause": "--ds-color-white"
     },
     {
       "vertical": "rottay",
       "scope": "light",
-      "channel": "--ds-shadow-tint",
-      "reason": "missing"
+      "channel": "--ds-elevation-1",
+      "reason": "missing",
+      "cause": "--ds-shadow-tint"
     },
     {
       "vertical": "rottay",
       "scope": "light",
-      "channel": "--ds-shadow-tint",
-      "reason": "missing"
+      "channel": "--ds-elevation-2",
+      "reason": "missing",
+      "cause": "--ds-shadow-tint"
     },
     {
       "vertical": "rottay",
       "scope": "light",
-      "channel": "--ds-shadow-tint",
-      "reason": "missing"
+      "channel": "--ds-elevation-3",
+      "reason": "missing",
+      "cause": "--ds-shadow-tint"
     },
     {
       "vertical": "rottay",
       "scope": "light",
-      "channel": "--ds-shadow-tint",
-      "reason": "missing"
+      "channel": "--ds-elevation-4",
+      "reason": "missing",
+      "cause": "--ds-shadow-tint"
     },
     {
       "vertical": "rottay",
       "scope": "light",
-      "channel": "--ds-shadow-tint",
-      "reason": "missing"
+      "channel": "--ds-elevation-5",
+      "reason": "missing",
+      "cause": "--ds-shadow-tint"
     },
     {
       "vertical": "rottay",
       "scope": "light",
-      "channel": "--ds-type-body-font-size",
-      "reason": "missing"
+      "channel": "--ds-type-body",
+      "reason": "missing",
+      "cause": "--ds-type-body-font-size"
     },
     {
       "vertical": "rottay",
       "scope": "light",
-      "channel": "--ds-font-weight-medium",
-      "reason": "missing"
+      "channel": "--ds-sidebar-shell-padding-inline",
+      "reason": "guaranteed-invalid",
+      "cause": null
     },
     {
       "vertical": "rottay",
       "scope": "light",
-      "channel": "--ds-line-height-none",
-      "reason": "missing"
+      "channel": "--ds-sidebar-shell-padding-collapsed",
+      "reason": "guaranteed-invalid",
+      "cause": null
     },
     {
       "vertical": "rottay",
       "scope": "light",
-      "channel": "--ds-spacing-1",
-      "reason": "missing"
+      "channel": "--ds-sidebar-item-height",
+      "reason": "guaranteed-invalid",
+      "cause": null
     },
     {
       "vertical": "rottay",
       "scope": "light",
-      "channel": "--ds-radius-sm",
-      "reason": "missing"
+      "channel": "--ds-sidebar-item-child-height",
+      "reason": "guaranteed-invalid",
+      "cause": null
     },
     {
       "vertical": "rottay",
       "scope": "light",
-      "channel": "--ds-surface-card-bg",
-      "reason": "missing"
+      "channel": "--ds-sidebar-item-font-size-child",
+      "reason": "guaranteed-invalid",
+      "cause": null
     },
     {
       "vertical": "rottay",
       "scope": "light",
-      "channel": "--ds-surface-card-bg",
-      "reason": "missing"
+      "channel": "--ds-sidebar-item-padding-inline",
+      "reason": "guaranteed-invalid",
+      "cause": null
     },
     {
       "vertical": "rottay",
       "scope": "light",
-      "channel": "--ds-surface-card-bg",
-      "reason": "missing"
+      "channel": "--ds-sidebar-icon-column-size",
+      "reason": "guaranteed-invalid",
+      "cause": null
     },
     {
       "vertical": "rottay",
       "scope": "light",
-      "channel": "--ds-surface-card-bg",
-      "reason": "missing"
+      "channel": "--ds-sidebar-item-gap",
+      "reason": "guaranteed-invalid",
+      "cause": null
     },
     {
       "vertical": "rottay",
       "scope": "light",
-      "channel": "--ds-surface-card-border",
-      "reason": "missing"
+      "channel": "--ds-sidebar-child-padding-inline",
+      "reason": "guaranteed-invalid",
+      "cause": null
     },
     {
       "vertical": "rottay",
       "scope": "light",
-      "channel": "--ds-font-weight-medium",
-      "reason": "missing"
+      "channel": "--ds-badge-font-weight",
+      "reason": "missing",
+      "cause": "--ds-font-weight-medium"
     },
     {
       "vertical": "rottay",
       "scope": "light",
-      "channel": "--ds-font-size-xs",
-      "reason": "missing"
+      "channel": "--ds-badge-line-height",
+      "reason": "missing",
+      "cause": "--ds-line-height-none"
     },
     {
       "vertical": "rottay",
       "scope": "light",
-      "channel": "--ds-icon-xs-size",
-      "reason": "missing"
+      "channel": "--ds-badge-gap",
+      "reason": "missing",
+      "cause": "--ds-spacing-1"
     },
     {
       "vertical": "rottay",
       "scope": "light",
-      "channel": "--ds-icon-sm-size",
-      "reason": "missing"
+      "channel": "--ds-badge-radius",
+      "reason": "missing",
+      "cause": "--ds-radius-sm"
     },
     {
       "vertical": "rottay",
       "scope": "light",
-      "channel": "--ds-font-size-sm",
-      "reason": "missing"
+      "channel": "--ds-control-surface",
+      "reason": "missing",
+      "cause": "--ds-surface-card-bg"
     },
     {
       "vertical": "rottay",
       "scope": "light",
-      "channel": "--ds-icon-sm-size",
-      "reason": "missing"
+      "channel": "--ds-control-surface-raised",
+      "reason": "missing",
+      "cause": "--ds-control-surface"
     },
     {
       "vertical": "rottay",
       "scope": "light",
-      "channel": "--ds-font-size-base",
-      "reason": "missing"
+      "channel": "--ds-control-brand-tint",
+      "reason": "missing",
+      "cause": "--ds-control-surface"
     },
     {
       "vertical": "rottay",
       "scope": "light",
-      "channel": "--ds-icon-sm-size",
-      "reason": "missing"
+      "channel": "--ds-control-brand-tint-hover",
+      "reason": "missing",
+      "cause": "--ds-control-surface"
     },
     {
       "vertical": "rottay",
       "scope": "light",
-      "channel": "--ds-font-size-lg",
-      "reason": "missing"
+      "channel": "--ds-icon-tile-border",
+      "reason": "missing",
+      "cause": "--ds-surface-icon-border"
     },
     {
       "vertical": "rottay",
       "scope": "light",
-      "channel": "--ds-icon-md-size",
-      "reason": "missing"
+      "channel": "--ds-button-font-weight",
+      "reason": "missing",
+      "cause": "--ds-font-weight-medium"
     },
     {
       "vertical": "rottay",
       "scope": "light",
-      "channel": "--ds-spacing-2",
-      "reason": "missing"
+      "channel": "--ds-button-xs-font-size",
+      "reason": "missing",
+      "cause": "--ds-font-size-xs"
     },
     {
       "vertical": "rottay",
       "scope": "light",
-      "channel": "--ds-font-weight-normal",
-      "reason": "missing"
+      "channel": "--ds-button-xs-icon-size",
+      "reason": "missing",
+      "cause": "--ds-icon-xs-size"
     },
     {
       "vertical": "rottay",
       "scope": "light",
-      "channel": "--ds-font-size-xs",
-      "reason": "missing"
+      "channel": "--ds-button-sm-icon-size",
+      "reason": "missing",
+      "cause": "--ds-icon-sm-size"
     },
     {
       "vertical": "rottay",
       "scope": "light",
-      "channel": "--ds-font-weight-medium",
-      "reason": "missing"
+      "channel": "--ds-button-md-font-size",
+      "reason": "missing",
+      "cause": "--ds-font-size-sm"
     },
     {
       "vertical": "rottay",
       "scope": "light",
-      "channel": "--ds-font-size-xs",
-      "reason": "missing"
+      "channel": "--ds-button-md-icon-size",
+      "reason": "missing",
+      "cause": "--ds-icon-sm-size"
     },
     {
       "vertical": "rottay",
       "scope": "light",
-      "channel": "--ds-motion-fast",
-      "reason": "missing"
+      "channel": "--ds-button-lg-font-size",
+      "reason": "missing",
+      "cause": "--ds-font-size-base"
     },
     {
       "vertical": "rottay",
       "scope": "light",
-      "channel": "--ds-font-size-xs",
-      "reason": "missing"
+      "channel": "--ds-button-lg-icon-size",
+      "reason": "missing",
+      "cause": "--ds-icon-sm-size"
     },
     {
       "vertical": "rottay",
       "scope": "light",
-      "channel": "--ds-icon-xs-size",
-      "reason": "missing"
+      "channel": "--ds-button-xl-font-size",
+      "reason": "missing",
+      "cause": "--ds-font-size-lg"
     },
     {
       "vertical": "rottay",
       "scope": "light",
-      "channel": "--ds-icon-sm-size",
-      "reason": "missing"
+      "channel": "--ds-button-xl-icon-size",
+      "reason": "missing",
+      "cause": "--ds-icon-md-size"
     },
     {
       "vertical": "rottay",
       "scope": "light",
-      "channel": "--ds-font-size-sm",
-      "reason": "missing"
+      "channel": "--ds-input-gap",
+      "reason": "missing",
+      "cause": "--ds-spacing-2"
     },
     {
       "vertical": "rottay",
       "scope": "light",
-      "channel": "--ds-icon-sm-size",
-      "reason": "missing"
+      "channel": "--ds-input-font-weight",
+      "reason": "missing",
+      "cause": "--ds-font-weight-normal"
     },
     {
       "vertical": "rottay",
       "scope": "light",
-      "channel": "--ds-font-size-base",
-      "reason": "missing"
+      "channel": "--ds-input-label-font-size",
+      "reason": "missing",
+      "cause": "--ds-font-size-xs"
     },
     {
       "vertical": "rottay",
       "scope": "light",
-      "channel": "--ds-icon-sm-size",
-      "reason": "missing"
+      "channel": "--ds-input-label-font-weight",
+      "reason": "missing",
+      "cause": "--ds-font-weight-medium"
     },
     {
       "vertical": "rottay",
       "scope": "light",
-      "channel": "--ds-font-size-lg",
-      "reason": "missing"
+      "channel": "--ds-input-helper-font-size",
+      "reason": "missing",
+      "cause": "--ds-font-size-xs"
     },
     {
       "vertical": "rottay",
       "scope": "light",
-      "channel": "--ds-icon-md-size",
-      "reason": "missing"
+      "channel": "--ds-input-transition-duration",
+      "reason": "missing",
+      "cause": "--ds-motion-fast"
     },
     {
       "vertical": "rottay",
       "scope": "light",
-      "channel": "--ds-shadow-button-rest",
-      "reason": "missing"
+      "channel": "--ds-input-xs-font-size",
+      "reason": "missing",
+      "cause": "--ds-font-size-xs"
     },
     {
       "vertical": "rottay",
       "scope": "light",
-      "channel": "--ds-shadow-button-rest",
-      "reason": "missing"
+      "channel": "--ds-input-xs-icon-size",
+      "reason": "missing",
+      "cause": "--ds-icon-xs-size"
     },
     {
       "vertical": "rottay",
       "scope": "light",
-      "channel": "--ds-shadow-button-hover",
-      "reason": "missing"
+      "channel": "--ds-input-sm-icon-size",
+      "reason": "missing",
+      "cause": "--ds-icon-sm-size"
     },
     {
       "vertical": "rottay",
       "scope": "light",
-      "channel": "--ds-shadow-button-rest",
-      "reason": "missing"
+      "channel": "--ds-input-md-font-size",
+      "reason": "missing",
+      "cause": "--ds-font-size-sm"
     },
     {
       "vertical": "rottay",
       "scope": "light",
-      "channel": "--ds-shadow-button-rest",
-      "reason": "missing"
+      "channel": "--ds-input-md-icon-size",
+      "reason": "missing",
+      "cause": "--ds-icon-sm-size"
     },
     {
       "vertical": "rottay",
       "scope": "light",
-      "channel": "--ds-shadow-button-hover",
-      "reason": "missing"
+      "channel": "--ds-input-lg-font-size",
+      "reason": "missing",
+      "cause": "--ds-font-size-base"
     },
     {
       "vertical": "rottay",
       "scope": "light",
-      "channel": "--ds-shadow-button-rest",
-      "reason": "missing"
+      "channel": "--ds-input-lg-icon-size",
+      "reason": "missing",
+      "cause": "--ds-icon-sm-size"
     },
     {
       "vertical": "rottay",
       "scope": "light",
-      "channel": "--ds-shadow-success-sm",
-      "reason": "missing"
+      "channel": "--ds-input-xl-font-size",
+      "reason": "missing",
+      "cause": "--ds-font-size-lg"
     },
     {
       "vertical": "rottay",
       "scope": "light",
-      "channel": "--ds-shadow-success-sm",
-      "reason": "missing"
+      "channel": "--ds-input-xl-icon-size",
+      "reason": "missing",
+      "cause": "--ds-icon-md-size"
     },
     {
       "vertical": "rottay",
       "scope": "light",
-      "channel": "--ds-shadow-success-sm",
-      "reason": "missing"
+      "channel": "--ds-button-primary-shadow-active",
+      "reason": "missing",
+      "cause": "--ds-shadow-button-rest"
     },
     {
       "vertical": "rottay",
       "scope": "light",
-      "channel": "--ds-shadow-warning-sm",
-      "reason": "missing"
+      "channel": "--ds-button-secondary-shadow",
+      "reason": "missing",
+      "cause": "--ds-shadow-button-rest"
     },
     {
       "vertical": "rottay",
       "scope": "light",
-      "channel": "--ds-shadow-warning-sm",
-      "reason": "missing"
+      "channel": "--ds-button-secondary-shadow-hover",
+      "reason": "missing",
+      "cause": "--ds-shadow-button-hover"
     },
     {
       "vertical": "rottay",
       "scope": "light",
-      "channel": "--ds-shadow-warning-sm",
-      "reason": "missing"
+      "channel": "--ds-button-secondary-shadow-active",
+      "reason": "missing",
+      "cause": "--ds-shadow-button-rest"
     },
     {
       "vertical": "rottay",
       "scope": "light",
-      "channel": "--ds-shadow-error-sm",
-      "reason": "missing"
+      "channel": "--ds-button-default-shadow",
+      "reason": "missing",
+      "cause": "--ds-shadow-button-rest"
     },
     {
       "vertical": "rottay",
       "scope": "light",
-      "channel": "--ds-shadow-error-sm",
-      "reason": "missing"
+      "channel": "--ds-button-default-shadow-hover",
+      "reason": "missing",
+      "cause": "--ds-shadow-button-hover"
     },
     {
       "vertical": "rottay",
       "scope": "light",
-      "channel": "--ds-shadow-error-sm",
-      "reason": "missing"
+      "channel": "--ds-button-default-shadow-active",
+      "reason": "missing",
+      "cause": "--ds-shadow-button-rest"
     },
     {
       "vertical": "rottay",
       "scope": "light",
-      "channel": "--ds-shadow-button-rest",
-      "reason": "missing"
+      "channel": "--ds-button-success-shadow",
+      "reason": "missing",
+      "cause": "--ds-shadow-success-sm"
     },
     {
       "vertical": "rottay",
       "scope": "light",
-      "channel": "--ds-shadow-button-rest",
-      "reason": "missing"
+      "channel": "--ds-button-success-shadow-hover",
+      "reason": "missing",
+      "cause": "--ds-button-success-shadow"
     },
     {
       "vertical": "rottay",
       "scope": "light",
-      "channel": "--ds-shadow-button-rest",
-      "reason": "missing"
+      "channel": "--ds-button-success-shadow-active",
+      "reason": "missing",
+      "cause": "--ds-button-success-shadow"
     },
     {
       "vertical": "rottay",
       "scope": "light",
-      "channel": "--ds-shadow-button-rest",
-      "reason": "missing"
+      "channel": "--ds-button-warning-shadow",
+      "reason": "missing",
+      "cause": "--ds-shadow-warning-sm"
     },
     {
       "vertical": "rottay",
       "scope": "light",
-      "channel": "--ds-shadow-button-hover",
-      "reason": "missing"
+      "channel": "--ds-button-warning-shadow-hover",
+      "reason": "missing",
+      "cause": "--ds-button-warning-shadow"
     },
     {
       "vertical": "rottay",
       "scope": "light",
-      "channel": "--ds-shadow-button-rest",
-      "reason": "missing"
+      "channel": "--ds-button-warning-shadow-active",
+      "reason": "missing",
+      "cause": "--ds-button-warning-shadow"
     },
     {
       "vertical": "rottay",
       "scope": "light",
-      "channel": "--ds-focus-ring",
-      "reason": "missing"
+      "channel": "--ds-button-error-shadow",
+      "reason": "missing",
+      "cause": "--ds-shadow-error-sm"
     },
     {
       "vertical": "rottay",
       "scope": "light",
-      "channel": "--ds-font-weight-medium",
-      "reason": "missing"
+      "channel": "--ds-button-error-shadow-hover",
+      "reason": "missing",
+      "cause": "--ds-shadow-error-sm"
     },
     {
       "vertical": "rottay",
       "scope": "light",
-      "channel": "--ds-spacing-3",
-      "reason": "missing"
+      "channel": "--ds-button-error-shadow-active",
+      "reason": "missing",
+      "cause": "--ds-shadow-error-sm"
     },
     {
       "vertical": "rottay",
       "scope": "light",
-      "channel": "--ds-spacing-3",
-      "reason": "missing"
+      "channel": "--ds-button-info-shadow",
+      "reason": "missing",
+      "cause": "--ds-shadow-button-rest"
     },
     {
       "vertical": "rottay",
       "scope": "light",
-      "channel": "--ds-spacing-4",
-      "reason": "missing"
+      "channel": "--ds-button-info-shadow-hover",
+      "reason": "missing",
+      "cause": "--ds-button-info-shadow"
     },
     {
       "vertical": "rottay",
       "scope": "light",
-      "channel": "--ds-spacing-4",
-      "reason": "missing"
+      "channel": "--ds-button-info-shadow-active",
+      "reason": "missing",
+      "cause": "--ds-button-info-shadow"
     },
     {
       "vertical": "rottay",
       "scope": "light",
-      "channel": "--ds-spacing-5",
-      "reason": "missing"
+      "channel": "--ds-button-ai-shadow",
+      "reason": "missing",
+      "cause": "--ds-shadow-button-rest"
     },
     {
       "vertical": "rottay",
       "scope": "light",
-      "channel": "--ds-spacing-5",
-      "reason": "missing"
+      "channel": "--ds-button-ai-shadow-hover",
+      "reason": "missing",
+      "cause": "--ds-shadow-button-hover"
     },
     {
       "vertical": "rottay",
       "scope": "light",
-      "channel": "--ds-spacing-6",
-      "reason": "missing"
+      "channel": "--ds-button-ai-shadow-active",
+      "reason": "missing",
+      "cause": "--ds-shadow-button-rest"
     },
     {
       "vertical": "rottay",
       "scope": "light",
-      "channel": "--ds-spacing-6",
-      "reason": "missing"
+      "channel": "--ds-button-focus-ring",
+      "reason": "missing",
+      "cause": "--ds-focus-ring"
     },
     {
       "vertical": "rottay",
       "scope": "light",
-      "channel": "--ds-spacing-4",
-      "reason": "missing"
+      "channel": "--ds-input-error-message-font-weight",
+      "reason": "missing",
+      "cause": "--ds-font-weight-medium"
     },
     {
       "vertical": "rottay",
       "scope": "light",
-      "channel": "--ds-font-size-sm",
-      "reason": "missing"
+      "channel": "--ds-card-padding-sm",
+      "reason": "missing",
+      "cause": "--ds-spacing-3"
     },
     {
       "vertical": "rottay",
       "scope": "light",
-      "channel": "--ds-font-weight-medium",
-      "reason": "missing"
+      "channel": "--ds-card-sm-padding",
+      "reason": "missing",
+      "cause": "--ds-spacing-3"
     },
     {
       "vertical": "rottay",
       "scope": "light",
-      "channel": "--ds-spacing-4",
-      "reason": "missing"
+      "channel": "--ds-card-padding-md",
+      "reason": "missing",
+      "cause": "--ds-spacing-4"
     },
     {
       "vertical": "rottay",
       "scope": "light",
-      "channel": "--ds-spacing-3",
-      "reason": "missing"
+      "channel": "--ds-card-md-padding",
+      "reason": "missing",
+      "cause": "--ds-spacing-4"
     },
     {
       "vertical": "rottay",
       "scope": "light",
-      "channel": "--ds-rich-card-header-bg",
-      "reason": "missing"
+      "channel": "--ds-card-padding-lg",
+      "reason": "missing",
+      "cause": "--ds-spacing-5"
     },
     {
       "vertical": "rottay",
       "scope": "light",
-      "channel": "--ds-rich-card-section-bg",
-      "reason": "missing"
+      "channel": "--ds-card-lg-padding",
+      "reason": "missing",
+      "cause": "--ds-spacing-5"
     },
     {
       "vertical": "rottay",
       "scope": "light",
-      "channel": "--ds-rich-card-section-alt-bg",
-      "reason": "missing"
+      "channel": "--ds-card-padding-xl",
+      "reason": "missing",
+      "cause": "--ds-spacing-6"
     },
     {
       "vertical": "rottay",
       "scope": "light",
-      "channel": "--ds-radius-md",
-      "reason": "missing"
+      "channel": "--ds-card-xl-padding",
+      "reason": "missing",
+      "cause": "--ds-spacing-6"
     },
     {
       "vertical": "rottay",
       "scope": "light",
-      "channel": "--ds-surface-card-bg",
-      "reason": "missing"
+      "channel": "--ds-card-header-padding",
+      "reason": "missing",
+      "cause": "--ds-spacing-4"
     },
     {
       "vertical": "rottay",
       "scope": "light",
-      "channel": "--ds-surface-card-border",
-      "reason": "missing"
+      "channel": "--ds-card-title-font-size",
+      "reason": "missing",
+      "cause": "--ds-font-size-sm"
     },
     {
       "vertical": "rottay",
       "scope": "light",
-      "channel": "--ds-surface-card-bg",
-      "reason": "missing"
+      "channel": "--ds-card-title-font-weight",
+      "reason": "missing",
+      "cause": "--ds-font-weight-medium"
     },
     {
       "vertical": "rottay",
       "scope": "light",
-      "channel": "--ds-overlay-scrim",
-      "reason": "missing"
+      "channel": "--ds-card-body-padding",
+      "reason": "missing",
+      "cause": "--ds-spacing-4"
+    },
+    {
+      "vertical": "rottay",
+      "scope": "light",
+      "channel": "--ds-card-footer-padding",
+      "reason": "missing",
+      "cause": "--ds-spacing-3"
+    },
+    {
+      "vertical": "rottay",
+      "scope": "light",
+      "channel": "--ds-premium-card-header-bg",
+      "reason": "missing",
+      "cause": "--ds-rich-card-header-bg"
+    },
+    {
+      "vertical": "rottay",
+      "scope": "light",
+      "channel": "--ds-premium-card-section-bg",
+      "reason": "missing",
+      "cause": "--ds-rich-card-section-bg"
+    },
+    {
+      "vertical": "rottay",
+      "scope": "light",
+      "channel": "--ds-premium-card-section-alt-bg",
+      "reason": "missing",
+      "cause": "--ds-rich-card-section-alt-bg"
+    },
+    {
+      "vertical": "rottay",
+      "scope": "light",
+      "channel": "--ds-surface-radius-md",
+      "reason": "missing",
+      "cause": "--ds-radius-md"
+    },
+    {
+      "vertical": "rottay",
+      "scope": "light",
+      "channel": "--ds-surface-icon-bg",
+      "reason": "missing",
+      "cause": "--ds-surface-card-bg"
+    },
+    {
+      "vertical": "rottay",
+      "scope": "light",
+      "channel": "--ds-surface-icon-border",
+      "reason": "missing",
+      "cause": "--ds-surface-card-border"
+    },
+    {
+      "vertical": "rottay",
+      "scope": "light",
+      "channel": "--ds-surface-chip-bg",
+      "reason": "missing",
+      "cause": "--ds-surface-card-bg"
+    },
+    {
+      "vertical": "rottay",
+      "scope": "light",
+      "channel": "--ds-overlay-bg",
+      "reason": "missing",
+      "cause": "--ds-overlay-scrim"
     },
     {
       "vertical": "bithire",
       "scope": "base",
-      "channel": "--ds-type-body-font-size",
-      "reason": "missing"
+      "channel": "--ds-type-body",
+      "reason": "missing",
+      "cause": "--ds-type-body-font-size"
     },
     {
       "vertical": "bithire",
       "scope": "base",
-      "channel": "--ds-radius-md",
-      "reason": "missing"
+      "channel": "--ds-card-radius",
+      "reason": "missing",
+      "cause": "--ds-radius-md"
     },
     {
       "vertical": "bithire",
       "scope": "base",
-      "channel": "--ds-radius-md",
-      "reason": "missing"
+      "channel": "--ds-card-border-radius",
+      "reason": "missing",
+      "cause": "--ds-radius-md"
     },
     {
       "vertical": "bithire",
       "scope": "base",
-      "channel": "--ds-radius-md",
-      "reason": "missing"
+      "channel": "--ds-surface-radius-md",
+      "reason": "missing",
+      "cause": "--ds-radius-md"
     },
     {
       "vertical": "bithire",
       "scope": "dark",
-      "channel": "--ds-type-body-font-size",
-      "reason": "missing"
+      "channel": "--ds-type-body",
+      "reason": "missing",
+      "cause": "--ds-type-body-font-size"
     },
     {
       "vertical": "bithire",
       "scope": "dark",
-      "channel": "--ds-radius-lg",
-      "reason": "missing"
+      "channel": "--ds-table-radius",
+      "reason": "missing",
+      "cause": "--ds-radius-lg"
     },
     {
       "vertical": "bithire",
       "scope": "dark",
-      "channel": "--ds-radius-md",
-      "reason": "missing"
+      "channel": "--ds-card-radius",
+      "reason": "missing",
+      "cause": "--ds-radius-md"
     },
     {
       "vertical": "bithire",
       "scope": "dark",
-      "channel": "--ds-radius-md",
-      "reason": "missing"
+      "channel": "--ds-card-border-radius",
+      "reason": "missing",
+      "cause": "--ds-radius-md"
     },
     {
       "vertical": "bithire",
       "scope": "dark",
-      "channel": "--ds-rich-card-header-bg",
-      "reason": "missing"
+      "channel": "--ds-premium-card-header-bg",
+      "reason": "missing",
+      "cause": "--ds-rich-card-header-bg"
     },
     {
       "vertical": "bithire",
       "scope": "dark",
-      "channel": "--ds-rich-card-section-bg",
-      "reason": "missing"
+      "channel": "--ds-premium-card-section-bg",
+      "reason": "missing",
+      "cause": "--ds-rich-card-section-bg"
     },
     {
       "vertical": "bithire",
       "scope": "dark",
-      "channel": "--ds-rich-card-section-alt-bg",
-      "reason": "missing"
+      "channel": "--ds-premium-card-section-alt-bg",
+      "reason": "missing",
+      "cause": "--ds-rich-card-section-alt-bg"
     },
     {
       "vertical": "bithire",
       "scope": "dark",
-      "channel": "--ds-radius-md",
-      "reason": "missing"
+      "channel": "--ds-surface-radius-md",
+      "reason": "missing",
+      "cause": "--ds-radius-md"
     },
     {
       "vertical": "evnto",
       "scope": "base",
-      "channel": "--ds-type-body-font-size",
-      "reason": "missing"
+      "channel": "--ds-type-body",
+      "reason": "missing",
+      "cause": "--ds-type-body-font-size"
     },
     {
       "vertical": "evnto",
       "scope": "base",
-      "channel": "--ds-surface-card-bg",
-      "reason": "missing"
+      "channel": "--ds-control-surface",
+      "reason": "missing",
+      "cause": "--ds-surface-card-bg"
     },
     {
       "vertical": "evnto",
       "scope": "base",
-      "channel": "--ds-surface-card-bg",
-      "reason": "missing"
+      "channel": "--ds-control-surface-raised",
+      "reason": "missing",
+      "cause": "--ds-control-surface"
     },
     {
       "vertical": "evnto",
       "scope": "base",
-      "channel": "--ds-surface-card-bg",
-      "reason": "missing"
+      "channel": "--ds-control-brand-tint",
+      "reason": "missing",
+      "cause": "--ds-control-surface"
     },
     {
       "vertical": "evnto",
       "scope": "base",
-      "channel": "--ds-surface-card-bg",
-      "reason": "missing"
+      "channel": "--ds-control-brand-tint-hover",
+      "reason": "missing",
+      "cause": "--ds-control-surface"
     },
     {
       "vertical": "evnto",
       "scope": "base",
-      "channel": "--ds-surface-card-border",
-      "reason": "missing"
+      "channel": "--ds-icon-tile-border",
+      "reason": "missing",
+      "cause": "--ds-surface-icon-border"
     },
     {
       "vertical": "evnto",
       "scope": "base",
-      "channel": "--ds-shadow-button-hover",
-      "reason": "missing"
+      "channel": "--ds-button-primary-shadow-hover",
+      "reason": "missing",
+      "cause": "--ds-shadow-button-hover"
     },
     {
       "vertical": "evnto",
       "scope": "base",
-      "channel": "--ds-shadow-button-rest",
-      "reason": "missing"
+      "channel": "--ds-button-primary-shadow-active",
+      "reason": "missing",
+      "cause": "--ds-shadow-button-rest"
     },
     {
       "vertical": "evnto",
       "scope": "base",
-      "channel": "--ds-shadow-button-rest",
-      "reason": "missing"
+      "channel": "--ds-button-secondary-shadow",
+      "reason": "missing",
+      "cause": "--ds-shadow-button-rest"
     },
     {
       "vertical": "evnto",
       "scope": "base",
-      "channel": "--ds-shadow-button-hover",
-      "reason": "missing"
+      "channel": "--ds-button-secondary-shadow-hover",
+      "reason": "missing",
+      "cause": "--ds-shadow-button-hover"
     },
     {
       "vertical": "evnto",
       "scope": "base",
-      "channel": "--ds-shadow-button-rest",
-      "reason": "missing"
+      "channel": "--ds-button-secondary-shadow-active",
+      "reason": "missing",
+      "cause": "--ds-shadow-button-rest"
     },
     {
       "vertical": "evnto",
       "scope": "base",
-      "channel": "--ds-shadow-button-rest",
-      "reason": "missing"
+      "channel": "--ds-button-default-shadow",
+      "reason": "missing",
+      "cause": "--ds-shadow-button-rest"
     },
     {
       "vertical": "evnto",
       "scope": "base",
-      "channel": "--ds-shadow-button-hover",
-      "reason": "missing"
+      "channel": "--ds-button-default-shadow-hover",
+      "reason": "missing",
+      "cause": "--ds-shadow-button-hover"
     },
     {
       "vertical": "evnto",
       "scope": "base",
-      "channel": "--ds-shadow-button-rest",
-      "reason": "missing"
+      "channel": "--ds-button-default-shadow-active",
+      "reason": "missing",
+      "cause": "--ds-shadow-button-rest"
     },
     {
       "vertical": "evnto",
       "scope": "base",
-      "channel": "--ds-shadow-success-sm",
-      "reason": "missing"
+      "channel": "--ds-button-success-shadow",
+      "reason": "missing",
+      "cause": "--ds-shadow-success-sm"
     },
     {
       "vertical": "evnto",
       "scope": "base",
-      "channel": "--ds-shadow-success-sm",
-      "reason": "missing"
+      "channel": "--ds-button-success-shadow-hover",
+      "reason": "missing",
+      "cause": "--ds-button-success-shadow"
     },
     {
       "vertical": "evnto",
       "scope": "base",
-      "channel": "--ds-shadow-success-sm",
-      "reason": "missing"
+      "channel": "--ds-button-success-shadow-active",
+      "reason": "missing",
+      "cause": "--ds-button-success-shadow"
     },
     {
       "vertical": "evnto",
       "scope": "base",
-      "channel": "--ds-shadow-warning-sm",
-      "reason": "missing"
+      "channel": "--ds-button-warning-shadow",
+      "reason": "missing",
+      "cause": "--ds-shadow-warning-sm"
     },
     {
       "vertical": "evnto",
       "scope": "base",
-      "channel": "--ds-shadow-warning-sm",
-      "reason": "missing"
+      "channel": "--ds-button-warning-shadow-hover",
+      "reason": "missing",
+      "cause": "--ds-button-warning-shadow"
     },
     {
       "vertical": "evnto",
       "scope": "base",
-      "channel": "--ds-shadow-warning-sm",
-      "reason": "missing"
+      "channel": "--ds-button-warning-shadow-active",
+      "reason": "missing",
+      "cause": "--ds-button-warning-shadow"
     },
     {
       "vertical": "evnto",
       "scope": "base",
-      "channel": "--ds-shadow-error-sm",
-      "reason": "missing"
+      "channel": "--ds-button-error-shadow",
+      "reason": "missing",
+      "cause": "--ds-shadow-error-sm"
     },
     {
       "vertical": "evnto",
       "scope": "base",
-      "channel": "--ds-shadow-error-sm",
-      "reason": "missing"
+      "channel": "--ds-button-error-shadow-hover",
+      "reason": "missing",
+      "cause": "--ds-shadow-error-sm"
     },
     {
       "vertical": "evnto",
       "scope": "base",
-      "channel": "--ds-shadow-error-sm",
-      "reason": "missing"
+      "channel": "--ds-button-error-shadow-active",
+      "reason": "missing",
+      "cause": "--ds-shadow-error-sm"
     },
     {
       "vertical": "evnto",
       "scope": "base",
-      "channel": "--ds-shadow-button-rest",
-      "reason": "missing"
+      "channel": "--ds-button-info-shadow",
+      "reason": "missing",
+      "cause": "--ds-shadow-button-rest"
     },
     {
       "vertical": "evnto",
       "scope": "base",
-      "channel": "--ds-shadow-button-rest",
-      "reason": "missing"
+      "channel": "--ds-button-info-shadow-hover",
+      "reason": "missing",
+      "cause": "--ds-button-info-shadow"
     },
     {
       "vertical": "evnto",
       "scope": "base",
-      "channel": "--ds-shadow-button-rest",
-      "reason": "missing"
+      "channel": "--ds-button-info-shadow-active",
+      "reason": "missing",
+      "cause": "--ds-button-info-shadow"
     },
     {
       "vertical": "evnto",
       "scope": "base",
-      "channel": "--ds-shadow-button-rest",
-      "reason": "missing"
+      "channel": "--ds-button-ai-shadow",
+      "reason": "missing",
+      "cause": "--ds-shadow-button-rest"
     },
     {
       "vertical": "evnto",
       "scope": "base",
-      "channel": "--ds-shadow-button-hover",
-      "reason": "missing"
+      "channel": "--ds-button-ai-shadow-hover",
+      "reason": "missing",
+      "cause": "--ds-shadow-button-hover"
     },
     {
       "vertical": "evnto",
       "scope": "base",
-      "channel": "--ds-shadow-button-rest",
-      "reason": "missing"
+      "channel": "--ds-button-ai-shadow-active",
+      "reason": "missing",
+      "cause": "--ds-shadow-button-rest"
     },
     {
       "vertical": "evnto",
       "scope": "base",
-      "channel": "--ds-color-white",
-      "reason": "missing"
+      "channel": "--ds-select-dropdown-bg",
+      "reason": "missing",
+      "cause": "--ds-color-white"
     },
     {
       "vertical": "evnto",
       "scope": "base",
-      "channel": "--ds-rich-card-header-bg",
-      "reason": "missing"
+      "channel": "--ds-premium-card-header-bg",
+      "reason": "missing",
+      "cause": "--ds-rich-card-header-bg"
     },
     {
       "vertical": "evnto",
       "scope": "base",
-      "channel": "--ds-rich-card-section-bg",
-      "reason": "missing"
+      "channel": "--ds-premium-card-section-bg",
+      "reason": "missing",
+      "cause": "--ds-rich-card-section-bg"
     },
     {
       "vertical": "evnto",
       "scope": "base",
-      "channel": "--ds-rich-card-section-alt-bg",
-      "reason": "missing"
+      "channel": "--ds-premium-card-section-alt-bg",
+      "reason": "missing",
+      "cause": "--ds-rich-card-section-alt-bg"
     },
     {
       "vertical": "evnto",
       "scope": "base",
-      "channel": "--ds-radius-md",
-      "reason": "missing"
+      "channel": "--ds-surface-radius-md",
+      "reason": "missing",
+      "cause": "--ds-radius-md"
     },
     {
       "vertical": "evnto",
       "scope": "base",
-      "channel": "--ds-surface-card-bg",
-      "reason": "missing"
+      "channel": "--ds-surface-icon-bg",
+      "reason": "missing",
+      "cause": "--ds-surface-card-bg"
     },
     {
       "vertical": "evnto",
       "scope": "base",
-      "channel": "--ds-surface-card-border",
-      "reason": "missing"
+      "channel": "--ds-surface-icon-border",
+      "reason": "missing",
+      "cause": "--ds-surface-card-border"
     },
     {
       "vertical": "evnto",
       "scope": "base",
-      "channel": "--ds-surface-card-bg",
-      "reason": "missing"
+      "channel": "--ds-surface-chip-bg",
+      "reason": "missing",
+      "cause": "--ds-surface-card-bg"
     },
     {
       "vertical": "evnto",
       "scope": "dark",
-      "channel": "--ds-type-body-font-size",
-      "reason": "missing"
+      "channel": "--ds-type-body",
+      "reason": "missing",
+      "cause": "--ds-type-body-font-size"
     },
     {
       "vertical": "evnto",
       "scope": "dark",
-      "channel": "--ds-surface-card-bg",
-      "reason": "missing"
+      "channel": "--ds-control-surface",
+      "reason": "missing",
+      "cause": "--ds-surface-card-bg"
     },
     {
       "vertical": "evnto",
       "scope": "dark",
-      "channel": "--ds-surface-card-bg",
-      "reason": "missing"
+      "channel": "--ds-control-surface-raised",
+      "reason": "missing",
+      "cause": "--ds-control-surface"
     },
     {
       "vertical": "evnto",
       "scope": "dark",
-      "channel": "--ds-surface-card-bg",
-      "reason": "missing"
+      "channel": "--ds-control-brand-tint",
+      "reason": "missing",
+      "cause": "--ds-control-surface"
     },
     {
       "vertical": "evnto",
       "scope": "dark",
-      "channel": "--ds-surface-card-bg",
-      "reason": "missing"
+      "channel": "--ds-control-brand-tint-hover",
+      "reason": "missing",
+      "cause": "--ds-control-surface"
     },
     {
       "vertical": "evnto",
       "scope": "dark",
-      "channel": "--ds-surface-card-border",
-      "reason": "missing"
+      "channel": "--ds-icon-tile-border",
+      "reason": "missing",
+      "cause": "--ds-surface-icon-border"
     },
     {
       "vertical": "evnto",
       "scope": "dark",
-      "channel": "--ds-shadow-button-hover",
-      "reason": "missing"
+      "channel": "--ds-button-primary-shadow-hover",
+      "reason": "missing",
+      "cause": "--ds-shadow-button-hover"
     },
     {
       "vertical": "evnto",
       "scope": "dark",
-      "channel": "--ds-shadow-button-rest",
-      "reason": "missing"
+      "channel": "--ds-button-primary-shadow-active",
+      "reason": "missing",
+      "cause": "--ds-shadow-button-rest"
     },
     {
       "vertical": "evnto",
       "scope": "dark",
-      "channel": "--ds-shadow-button-rest",
-      "reason": "missing"
+      "channel": "--ds-button-secondary-shadow",
+      "reason": "missing",
+      "cause": "--ds-shadow-button-rest"
     },
     {
       "vertical": "evnto",
       "scope": "dark",
-      "channel": "--ds-shadow-button-hover",
-      "reason": "missing"
+      "channel": "--ds-button-secondary-shadow-hover",
+      "reason": "missing",
+      "cause": "--ds-shadow-button-hover"
     },
     {
       "vertical": "evnto",
       "scope": "dark",
-      "channel": "--ds-shadow-button-rest",
-      "reason": "missing"
+      "channel": "--ds-button-secondary-shadow-active",
+      "reason": "missing",
+      "cause": "--ds-shadow-button-rest"
     },
     {
       "vertical": "evnto",
       "scope": "dark",
-      "channel": "--ds-shadow-button-rest",
-      "reason": "missing"
+      "channel": "--ds-button-default-shadow",
+      "reason": "missing",
+      "cause": "--ds-shadow-button-rest"
     },
     {
       "vertical": "evnto",
       "scope": "dark",
-      "channel": "--ds-shadow-button-hover",
-      "reason": "missing"
+      "channel": "--ds-button-default-shadow-hover",
+      "reason": "missing",
+      "cause": "--ds-shadow-button-hover"
     },
     {
       "vertical": "evnto",
       "scope": "dark",
-      "channel": "--ds-shadow-button-rest",
-      "reason": "missing"
+      "channel": "--ds-button-default-shadow-active",
+      "reason": "missing",
+      "cause": "--ds-shadow-button-rest"
     },
     {
       "vertical": "evnto",
       "scope": "dark",
-      "channel": "--ds-shadow-success-sm",
-      "reason": "missing"
+      "channel": "--ds-button-success-shadow",
+      "reason": "missing",
+      "cause": "--ds-shadow-success-sm"
     },
     {
       "vertical": "evnto",
       "scope": "dark",
-      "channel": "--ds-shadow-success-sm",
-      "reason": "missing"
+      "channel": "--ds-button-success-shadow-hover",
+      "reason": "missing",
+      "cause": "--ds-button-success-shadow"
     },
     {
       "vertical": "evnto",
       "scope": "dark",
-      "channel": "--ds-shadow-success-sm",
-      "reason": "missing"
+      "channel": "--ds-button-success-shadow-active",
+      "reason": "missing",
+      "cause": "--ds-button-success-shadow"
     },
     {
       "vertical": "evnto",
       "scope": "dark",
-      "channel": "--ds-shadow-warning-sm",
-      "reason": "missing"
+      "channel": "--ds-button-warning-shadow",
+      "reason": "missing",
+      "cause": "--ds-shadow-warning-sm"
     },
     {
       "vertical": "evnto",
       "scope": "dark",
-      "channel": "--ds-shadow-warning-sm",
-      "reason": "missing"
+      "channel": "--ds-button-warning-shadow-hover",
+      "reason": "missing",
+      "cause": "--ds-button-warning-shadow"
     },
     {
       "vertical": "evnto",
       "scope": "dark",
-      "channel": "--ds-shadow-warning-sm",
-      "reason": "missing"
+      "channel": "--ds-button-warning-shadow-active",
+      "reason": "missing",
+      "cause": "--ds-button-warning-shadow"
     },
     {
       "vertical": "evnto",
       "scope": "dark",
-      "channel": "--ds-shadow-error-sm",
-      "reason": "missing"
+      "channel": "--ds-button-error-shadow",
+      "reason": "missing",
+      "cause": "--ds-shadow-error-sm"
     },
     {
       "vertical": "evnto",
       "scope": "dark",
-      "channel": "--ds-shadow-error-sm",
-      "reason": "missing"
+      "channel": "--ds-button-error-shadow-hover",
+      "reason": "missing",
+      "cause": "--ds-shadow-error-sm"
     },
     {
       "vertical": "evnto",
       "scope": "dark",
-      "channel": "--ds-shadow-error-sm",
-      "reason": "missing"
+      "channel": "--ds-button-error-shadow-active",
+      "reason": "missing",
+      "cause": "--ds-shadow-error-sm"
     },
     {
       "vertical": "evnto",
       "scope": "dark",
-      "channel": "--ds-shadow-button-rest",
-      "reason": "missing"
+      "channel": "--ds-button-info-shadow",
+      "reason": "missing",
+      "cause": "--ds-shadow-button-rest"
     },
     {
       "vertical": "evnto",
       "scope": "dark",
-      "channel": "--ds-shadow-button-rest",
-      "reason": "missing"
+      "channel": "--ds-button-info-shadow-hover",
+      "reason": "missing",
+      "cause": "--ds-button-info-shadow"
     },
     {
       "vertical": "evnto",
       "scope": "dark",
-      "channel": "--ds-shadow-button-rest",
-      "reason": "missing"
+      "channel": "--ds-button-info-shadow-active",
+      "reason": "missing",
+      "cause": "--ds-button-info-shadow"
     },
     {
       "vertical": "evnto",
       "scope": "dark",
-      "channel": "--ds-shadow-button-rest",
-      "reason": "missing"
+      "channel": "--ds-button-ai-shadow",
+      "reason": "missing",
+      "cause": "--ds-shadow-button-rest"
     },
     {
       "vertical": "evnto",
       "scope": "dark",
-      "channel": "--ds-shadow-button-hover",
-      "reason": "missing"
+      "channel": "--ds-button-ai-shadow-hover",
+      "reason": "missing",
+      "cause": "--ds-shadow-button-hover"
     },
     {
       "vertical": "evnto",
       "scope": "dark",
-      "channel": "--ds-shadow-button-rest",
-      "reason": "missing"
+      "channel": "--ds-button-ai-shadow-active",
+      "reason": "missing",
+      "cause": "--ds-shadow-button-rest"
     },
     {
       "vertical": "evnto",
       "scope": "dark",
-      "channel": "--ds-color-white",
-      "reason": "missing"
+      "channel": "--ds-select-dropdown-bg",
+      "reason": "missing",
+      "cause": "--ds-color-white"
     },
     {
       "vertical": "evnto",
       "scope": "dark",
-      "channel": "--ds-rich-card-header-bg",
-      "reason": "missing"
+      "channel": "--ds-premium-card-header-bg",
+      "reason": "missing",
+      "cause": "--ds-rich-card-header-bg"
     },
     {
       "vertical": "evnto",
       "scope": "dark",
-      "channel": "--ds-rich-card-section-bg",
-      "reason": "missing"
+      "channel": "--ds-premium-card-section-bg",
+      "reason": "missing",
+      "cause": "--ds-rich-card-section-bg"
     },
     {
       "vertical": "evnto",
       "scope": "dark",
-      "channel": "--ds-rich-card-section-alt-bg",
-      "reason": "missing"
+      "channel": "--ds-premium-card-section-alt-bg",
+      "reason": "missing",
+      "cause": "--ds-rich-card-section-alt-bg"
     },
     {
       "vertical": "evnto",
       "scope": "dark",
-      "channel": "--ds-radius-md",
-      "reason": "missing"
+      "channel": "--ds-surface-radius-md",
+      "reason": "missing",
+      "cause": "--ds-radius-md"
     },
     {
       "vertical": "evnto",
       "scope": "dark",
-      "channel": "--ds-surface-card-bg",
-      "reason": "missing"
+      "channel": "--ds-surface-icon-bg",
+      "reason": "missing",
+      "cause": "--ds-surface-card-bg"
     },
     {
       "vertical": "evnto",
       "scope": "dark",
-      "channel": "--ds-surface-card-border",
-      "reason": "missing"
+      "channel": "--ds-surface-icon-border",
+      "reason": "missing",
+      "cause": "--ds-surface-card-border"
     },
     {
       "vertical": "evnto",
       "scope": "dark",
-      "channel": "--ds-surface-card-bg",
-      "reason": "missing"
+      "channel": "--ds-surface-chip-bg",
+      "reason": "missing",
+      "cause": "--ds-surface-card-bg"
     }
   ],
   "themes": {
@@ -1665,8 +1981,8 @@
         "--ds-button-info-border": "transparent",
         "--ds-button-info-color": "#ffffff",
         "--ds-button-info-shadow": "var(--ds-shadow-button-rest)",
-        "--ds-button-info-shadow-active": "var(--ds-shadow-button-rest)",
-        "--ds-button-info-shadow-hover": "var(--ds-shadow-button-rest)",
+        "--ds-button-info-shadow-active": "var(--ds-button-info-shadow)",
+        "--ds-button-info-shadow-hover": "var(--ds-button-info-shadow)",
         "--ds-button-letter-spacing": "0",
         "--ds-button-lg-font-size": "var(--ds-font-size-base)",
         "--ds-button-lg-gap": "calc(calc(2.25rem + 0.375rem) * 0.18)",
@@ -1717,8 +2033,8 @@
         "--ds-button-success-border": "transparent",
         "--ds-button-success-color": "#ffffff",
         "--ds-button-success-shadow": "var(--ds-shadow-success-sm)",
-        "--ds-button-success-shadow-active": "var(--ds-shadow-success-sm)",
-        "--ds-button-success-shadow-hover": "var(--ds-shadow-success-sm)",
+        "--ds-button-success-shadow-active": "var(--ds-button-success-shadow)",
+        "--ds-button-success-shadow-hover": "var(--ds-button-success-shadow)",
         "--ds-button-text-bg": "transparent",
         "--ds-button-text-bg-active": "rgba(255, 255, 255, 0.08)",
         "--ds-button-text-bg-hover": "rgba(255, 255, 255, 0.05)",
@@ -1735,8 +2051,8 @@
         "--ds-button-warning-border": "transparent",
         "--ds-button-warning-color": "#FFFFFF",
         "--ds-button-warning-shadow": "var(--ds-shadow-warning-sm)",
-        "--ds-button-warning-shadow-active": "var(--ds-shadow-warning-sm)",
-        "--ds-button-warning-shadow-hover": "var(--ds-shadow-warning-sm)",
+        "--ds-button-warning-shadow-active": "var(--ds-button-warning-shadow)",
+        "--ds-button-warning-shadow-hover": "var(--ds-button-warning-shadow)",
         "--ds-button-xl-font-size": "var(--ds-font-size-lg)",
         "--ds-button-xl-gap": "calc(calc(2.25rem + 0.875rem) * 0.18)",
         "--ds-button-xl-height": "calc(2.25rem + 0.875rem)",
@@ -1982,13 +2298,13 @@
         "--ds-command-palette-item-hover-bg": "rgba(255, 255, 255, 0.04)",
         "--ds-command-palette-shortcut-border": "#2A2A2F",
         "--ds-control-brand-border": "color-mix(in srgb, #FFFFFF 30%, #28282C)",
-        "--ds-control-brand-tint": "color-mix(in srgb, #FFFFFF 10%, var(--ds-surface-card-bg))",
-        "--ds-control-brand-tint-hover": "color-mix(in srgb, #FFFFFF 15%, var(--ds-surface-card-bg))",
+        "--ds-control-brand-tint": "color-mix(in srgb, #FFFFFF 10%, var(--ds-control-surface))",
+        "--ds-control-brand-tint-hover": "color-mix(in srgb, #FFFFFF 15%, var(--ds-control-surface))",
         "--ds-control-ink": "#F0F0F0",
         "--ds-control-ink-muted": "#B0B0B5",
         "--ds-control-on-brand": "#0C0C0E",
         "--ds-control-surface": "var(--ds-surface-card-bg)",
-        "--ds-control-surface-raised": "color-mix(in srgb, var(--ds-surface-card-bg) 86%, var(--ds-surface-panel-bg))",
+        "--ds-control-surface-raised": "color-mix(in srgb, var(--ds-control-surface) 86%, var(--ds-surface-panel-bg))",
         "--ds-datepicker-bg": "#131316",
         "--ds-datepicker-bg-disabled": "#101012",
         "--ds-datepicker-border": "#2A2A2F",
@@ -2049,7 +2365,7 @@
         "--ds-form-label-color": "#A0A0A5",
         "--ds-form-label-font-weight": "600",
         "--ds-gradient-dark": "linear-gradient(135deg, #0C0C0E 0%, #131316 50%, #1A1A1E 100%)",
-        "--ds-icon-tile-border": "color-mix(in srgb, #FFFFFF 22%, var(--ds-surface-card-border))",
+        "--ds-icon-tile-border": "var(--ds-surface-icon-border)",
         "--ds-image-overlay-bg": "rgba(0, 0, 0, 0.70)",
         "--ds-input-addon-bg": "#1A1A1E",
         "--ds-input-addon-border": "#2A2A2F",
@@ -2860,8 +3176,8 @@
         "--ds-button-info-border": "transparent",
         "--ds-button-info-color": "#ffffff",
         "--ds-button-info-shadow": "var(--ds-shadow-button-rest)",
-        "--ds-button-info-shadow-active": "var(--ds-shadow-button-rest)",
-        "--ds-button-info-shadow-hover": "var(--ds-shadow-button-rest)",
+        "--ds-button-info-shadow-active": "var(--ds-button-info-shadow)",
+        "--ds-button-info-shadow-hover": "var(--ds-button-info-shadow)",
         "--ds-button-letter-spacing": "0",
         "--ds-button-lg-font-size": "var(--ds-font-size-base)",
         "--ds-button-lg-gap": "calc(calc(2.25rem + 0.375rem) * 0.18)",
@@ -2912,8 +3228,8 @@
         "--ds-button-success-border": "transparent",
         "--ds-button-success-color": "#ffffff",
         "--ds-button-success-shadow": "var(--ds-shadow-success-sm)",
-        "--ds-button-success-shadow-active": "var(--ds-shadow-success-sm)",
-        "--ds-button-success-shadow-hover": "var(--ds-shadow-success-sm)",
+        "--ds-button-success-shadow-active": "var(--ds-button-success-shadow)",
+        "--ds-button-success-shadow-hover": "var(--ds-button-success-shadow)",
         "--ds-button-text-bg": "transparent",
         "--ds-button-text-bg-active": "rgba(0, 0, 0, 0.08)",
         "--ds-button-text-bg-hover": "rgba(0, 0, 0, 0.04)",
@@ -2930,8 +3246,8 @@
         "--ds-button-warning-border": "transparent",
         "--ds-button-warning-color": "#FFFFFF",
         "--ds-button-warning-shadow": "var(--ds-shadow-warning-sm)",
-        "--ds-button-warning-shadow-active": "var(--ds-shadow-warning-sm)",
-        "--ds-button-warning-shadow-hover": "var(--ds-shadow-warning-sm)",
+        "--ds-button-warning-shadow-active": "var(--ds-button-warning-shadow)",
+        "--ds-button-warning-shadow-hover": "var(--ds-button-warning-shadow)",
         "--ds-button-xl-font-size": "var(--ds-font-size-lg)",
         "--ds-button-xl-gap": "calc(calc(2.25rem + 0.875rem) * 0.18)",
         "--ds-button-xl-height": "calc(2.25rem + 0.875rem)",
@@ -3184,13 +3500,13 @@
         "--ds-command-palette-item-hover-bg": "#FAFAF9",
         "--ds-command-palette-shortcut-border": "#E5E5E3",
         "--ds-control-brand-border": "color-mix(in srgb, #0A0A0A 30%, #E5E5E3)",
-        "--ds-control-brand-tint": "color-mix(in srgb, #0A0A0A 10%, var(--ds-surface-card-bg))",
-        "--ds-control-brand-tint-hover": "color-mix(in srgb, #0A0A0A 15%, var(--ds-surface-card-bg))",
+        "--ds-control-brand-tint": "color-mix(in srgb, #0A0A0A 10%, var(--ds-control-surface))",
+        "--ds-control-brand-tint-hover": "color-mix(in srgb, #0A0A0A 15%, var(--ds-control-surface))",
         "--ds-control-ink": "#1A1A1A",
         "--ds-control-ink-muted": "#6B6B6B",
         "--ds-control-on-brand": "#FFFFFF",
         "--ds-control-surface": "var(--ds-surface-card-bg)",
-        "--ds-control-surface-raised": "color-mix(in srgb, var(--ds-surface-card-bg) 86%, var(--ds-surface-panel-bg))",
+        "--ds-control-surface-raised": "color-mix(in srgb, var(--ds-control-surface) 86%, var(--ds-surface-panel-bg))",
         "--ds-datepicker-bg": "#FFFFFF",
         "--ds-datepicker-bg-disabled": "#F4F4F3",
         "--ds-datepicker-border": "#E5E5E3",
@@ -3256,7 +3572,7 @@
         "--ds-form-success-color": "#16A34A",
         "--ds-form-warning-color": "#D97706",
         "--ds-gradient-dark": "linear-gradient(135deg, #FAFAF9 0%, #F4F4F3 50%, #EDEDEC 100%)",
-        "--ds-icon-tile-border": "color-mix(in srgb, #0A0A0A 22%, var(--ds-surface-card-border))",
+        "--ds-icon-tile-border": "var(--ds-surface-icon-border)",
         "--ds-image-overlay-bg": "rgba(0, 0, 0, 0.60)",
         "--ds-input-addon-bg": "#F4F4F3",
         "--ds-input-addon-border": "#E5E5E3",
@@ -6436,8 +6752,8 @@
         "--ds-button-ghost-shadow-active": "none",
         "--ds-button-ghost-shadow-hover": "none",
         "--ds-button-info-shadow": "var(--ds-shadow-button-rest)",
-        "--ds-button-info-shadow-active": "var(--ds-shadow-button-rest)",
-        "--ds-button-info-shadow-hover": "var(--ds-shadow-button-rest)",
+        "--ds-button-info-shadow-active": "var(--ds-button-info-shadow)",
+        "--ds-button-info-shadow-hover": "var(--ds-button-info-shadow)",
         "--ds-button-link-shadow": "none",
         "--ds-button-link-shadow-active": "none",
         "--ds-button-link-shadow-hover": "none",
@@ -6458,14 +6774,14 @@
         "--ds-button-secondary-shadow-active": "var(--ds-shadow-button-rest)",
         "--ds-button-secondary-shadow-hover": "var(--ds-shadow-button-hover)",
         "--ds-button-success-shadow": "var(--ds-shadow-success-sm)",
-        "--ds-button-success-shadow-active": "var(--ds-shadow-success-sm)",
-        "--ds-button-success-shadow-hover": "var(--ds-shadow-success-sm)",
+        "--ds-button-success-shadow-active": "var(--ds-button-success-shadow)",
+        "--ds-button-success-shadow-hover": "var(--ds-button-success-shadow)",
         "--ds-button-text-shadow": "none",
         "--ds-button-text-shadow-active": "none",
         "--ds-button-text-shadow-hover": "none",
         "--ds-button-warning-shadow": "var(--ds-shadow-warning-sm)",
-        "--ds-button-warning-shadow-active": "var(--ds-shadow-warning-sm)",
-        "--ds-button-warning-shadow-hover": "var(--ds-shadow-warning-sm)",
+        "--ds-button-warning-shadow-active": "var(--ds-button-warning-shadow)",
+        "--ds-button-warning-shadow-hover": "var(--ds-button-warning-shadow)",
         "--ds-card-bg": "#ffffff",
         "--ds-card-border": "rgba(0, 0, 0, 0.08)",
         "--ds-card-border-color": "rgba(0, 0, 0, 0.08)",
@@ -6612,13 +6928,13 @@
         "--ds-color-warning-bg": "#fefce8",
         "--ds-color-warning-border": "color-mix(in srgb, #A16207 20%, transparent)",
         "--ds-control-brand-border": "color-mix(in srgb, #171717 30%, rgba(0, 0, 0, 0.08))",
-        "--ds-control-brand-tint": "color-mix(in srgb, #171717 10%, var(--ds-surface-card-bg))",
-        "--ds-control-brand-tint-hover": "color-mix(in srgb, #171717 15%, var(--ds-surface-card-bg))",
+        "--ds-control-brand-tint": "color-mix(in srgb, #171717 10%, var(--ds-control-surface))",
+        "--ds-control-brand-tint-hover": "color-mix(in srgb, #171717 15%, var(--ds-control-surface))",
         "--ds-control-ink": "#111111",
         "--ds-control-ink-muted": "#3d3d3d",
         "--ds-control-on-brand": "#ffffff",
         "--ds-control-surface": "var(--ds-surface-card-bg)",
-        "--ds-control-surface-raised": "color-mix(in srgb, var(--ds-surface-card-bg) 86%, var(--ds-surface-panel-bg))",
+        "--ds-control-surface-raised": "color-mix(in srgb, var(--ds-control-surface) 86%, var(--ds-surface-panel-bg))",
         "--ds-datepicker-panel-shadow": "0 4px 12px rgba(0, 0, 0, 0.06)",
         "--ds-density-scale": "1.125",
         "--ds-ease-exit": "cubic-bezier(0.4, 0, 1, 1)",
@@ -6629,7 +6945,7 @@
         "--ds-font-family-display": "'Outfit', ui-sans-serif, system-ui, -apple-system, sans-serif, \"Noto Sans Arabic\", sans-serif",
         "--ds-font-family-heading": "'Outfit', ui-sans-serif, system-ui, -apple-system, sans-serif, \"Noto Sans Arabic\", sans-serif",
         "--ds-font-family-mono": "'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace",
-        "--ds-icon-tile-border": "color-mix(in srgb, #171717 22%, var(--ds-surface-card-border))",
+        "--ds-icon-tile-border": "var(--ds-surface-icon-border)",
         "--ds-input-bg": "#ffffff",
         "--ds-input-bg-disabled": "#FAFAFA",
         "--ds-input-border": "rgba(0, 0, 0, 0.12)",
@@ -6906,8 +7222,8 @@
         "--ds-button-ghost-shadow-active": "none",
         "--ds-button-ghost-shadow-hover": "none",
         "--ds-button-info-shadow": "var(--ds-shadow-button-rest)",
-        "--ds-button-info-shadow-active": "var(--ds-shadow-button-rest)",
-        "--ds-button-info-shadow-hover": "var(--ds-shadow-button-rest)",
+        "--ds-button-info-shadow-active": "var(--ds-button-info-shadow)",
+        "--ds-button-info-shadow-hover": "var(--ds-button-info-shadow)",
         "--ds-button-link-shadow": "none",
         "--ds-button-link-shadow-active": "none",
         "--ds-button-link-shadow-hover": "none",
@@ -6928,14 +7244,14 @@
         "--ds-button-secondary-shadow-active": "var(--ds-shadow-button-rest)",
         "--ds-button-secondary-shadow-hover": "var(--ds-shadow-button-hover)",
         "--ds-button-success-shadow": "var(--ds-shadow-success-sm)",
-        "--ds-button-success-shadow-active": "var(--ds-shadow-success-sm)",
-        "--ds-button-success-shadow-hover": "var(--ds-shadow-success-sm)",
+        "--ds-button-success-shadow-active": "var(--ds-button-success-shadow)",
+        "--ds-button-success-shadow-hover": "var(--ds-button-success-shadow)",
         "--ds-button-text-shadow": "none",
         "--ds-button-text-shadow-active": "none",
         "--ds-button-text-shadow-hover": "none",
         "--ds-button-warning-shadow": "var(--ds-shadow-warning-sm)",
-        "--ds-button-warning-shadow-active": "var(--ds-shadow-warning-sm)",
-        "--ds-button-warning-shadow-hover": "var(--ds-shadow-warning-sm)",
+        "--ds-button-warning-shadow-active": "var(--ds-button-warning-shadow)",
+        "--ds-button-warning-shadow-hover": "var(--ds-button-warning-shadow)",
         "--ds-card-bg": "#1C1A16",
         "--ds-card-border": "#2E2C24",
         "--ds-card-border-color": "#2E2C24",
@@ -7082,13 +7398,13 @@
         "--ds-color-warning-bg": "#FFFBF7",
         "--ds-color-warning-border": "color-mix(in srgb, #A16207 20%, transparent)",
         "--ds-control-brand-border": "color-mix(in srgb, #E8E8E0 30%, #2E2C24)",
-        "--ds-control-brand-tint": "color-mix(in srgb, #E8E8E0 10%, var(--ds-surface-card-bg))",
-        "--ds-control-brand-tint-hover": "color-mix(in srgb, #E8E8E0 15%, var(--ds-surface-card-bg))",
+        "--ds-control-brand-tint": "color-mix(in srgb, #E8E8E0 10%, var(--ds-control-surface))",
+        "--ds-control-brand-tint-hover": "color-mix(in srgb, #E8E8E0 15%, var(--ds-control-surface))",
         "--ds-control-ink": "#E8E8E0",
         "--ds-control-ink-muted": "#A8A898",
         "--ds-control-on-brand": "#131210",
         "--ds-control-surface": "var(--ds-surface-card-bg)",
-        "--ds-control-surface-raised": "color-mix(in srgb, var(--ds-surface-card-bg) 86%, var(--ds-surface-panel-bg))",
+        "--ds-control-surface-raised": "color-mix(in srgb, var(--ds-control-surface) 86%, var(--ds-surface-panel-bg))",
         "--ds-datepicker-panel-shadow": "0 4px 12px rgba(0, 0, 0, 0.06)",
         "--ds-density-scale": "1.125",
         "--ds-ease-exit": "cubic-bezier(0.4, 0, 1, 1)",
@@ -7099,7 +7415,7 @@
         "--ds-font-family-display": "'Outfit', ui-sans-serif, system-ui, -apple-system, sans-serif, \"Noto Sans Arabic\", sans-serif",
         "--ds-font-family-heading": "'Outfit', ui-sans-serif, system-ui, -apple-system, sans-serif, \"Noto Sans Arabic\", sans-serif",
         "--ds-font-family-mono": "'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace",
-        "--ds-icon-tile-border": "color-mix(in srgb, #E8E8E0 22%, var(--ds-surface-card-border))",
+        "--ds-icon-tile-border": "var(--ds-surface-icon-border)",
         "--ds-input-bg": "#131210",
         "--ds-input-bg-disabled": "#1C1A16",
         "--ds-input-border": "#2E2C24",
@@ -7349,5 +7665,5 @@
       }
     }
   },
-  "digest": "20d7164b7d96bdd2dd54a04fa9ac81c85b58d280a13e1a70c0cd9a57d43d5056"
+  "digest": "a49c3798f25f2fc44efd7b80dbb6b9d3d543f3ef5c0ca89e0a020c4d60b904f2"
 }
