@@ -4569,6 +4569,39 @@ seeds reales y mover la superficie de calibración a un campo propio — la
 decisión 15 conserva su INTENT (superficie de calibración estrecha; dominio
 público 290 intacto) y se enmendará su formulación al cerrar C5.
 
+**OWNER-TIERS LOTE 2 (2026-08-27; commit `a86013ba0`; autorado DT; postaudit Fable:
+DEFECTS-1 → condición cumplida en el mismo commit → ACCEPT).** +60 filas (114→174) que
+cierran las familias de tier estructuralmente claro que faltaban: controles restantes
+(checkbox/slider/toggle/pickers/rate/buttons semánticos/sub-owners de input/raíz
+`CHROME.controls`/backTop), capas flotantes (tooltip/notification/menu), contenido en flujo
+(toolbar/detail/liveFeed/timeline/tree/calendar/collapse/result/empty/statistic), statsGrid
+(raised; sus slots son `card*`), los roles de superficie homónimos (canvas→base,
+raised→raised, overlay→overlay) y 3 variantes de modo (el tier describe la superficie, no el
+modo). **+109 canales ganan raíz por `governed-owner-table`** (control 55, page 32, overlay
+15, raised 6, base 1) con **cero re-atribuciones** de los 772 ya ruteados (verificador propio
++ réplica canal-por-canal de la auditora): membresía 772→881 de 1.610. **Ley dura intacta:**
+resolved-map `--check` EXIT=0 (5.803 canales, cero delta — cohorte de vocabulario). **El
+gate subió y es COBERTURA, probado 2×2 con `analyse()` pura** (inventario × membresía de HEAD
+inyectados): shadowingLiteralPins 170→226 = efecto membresía puro; divergentGroups 230→234 y
+divergentSlots 1.472→1.649 = efecto inventario puro (los slots recién ruteados ganan
+coordenada de raíz y entran al censo); unassignedSlots 297 y governorsNaming 10 quietos; 0
+findings L1/L2/L5 en las cuatro esquinas. Re-ancla por la **puerta gobernada
+`--reattribution --reason`** con la aritmética completa en la razón — el caso que la
+docstring de la puerta anticipa textualmente. purity: pure 332→**336**; las filas recién
+ruteadas entran como lo que son (value-shift 1.286 / head-not-emitted 384: visibilidad, no
+regresión — las cabezas page/raised no emitidas ya están protegidas por la ley STOP).
+**Exclusiones escritas en el `_note` (nunca por presión de cobertura):** paletas/ramps/aliases
+(eje propio), semánticos-de-estado (badge/tag/avatar/alert/controls.semantic), gramáticas
+no-tier, `CHROME.surface` y espejo (owner paraguas — **deuda lote 3: descomposición**),
+progress/spinner/skeleton/anchor (adjudicación débil — lectura fina pendiente), geometrías
+(eje paso), `input.helper/count` (sin canales bloqueados hoy). Condición Fable cumplida: el
+`_note` ya no nombra `input.readOnly` como pendiente (está desde el lote 1). Hallazgo lateral
+de la auditora, queda como nota del lote 3: `statistic.titleColor` autorado idéntico a
+prefix/suffix pero atribuido a otra raíz por precedencia de vía (legítimo, visible).
+**Batería:** drills root-membership 24/24, slot-inventory+purity 28/28,
+normalization-contract 20/20, resolved-map 24/24; 8 productores `--check` verdes; diff-check
+limpio. Métrica sin mover: 62%/~43%.
+
 **RE-ANCLA E-2 APLICADA (2026-08-27; commit `df121b4c4`; escritor DT bajo autorización owner
 — forma E-2; postaudit Fable: ACCEPT).** +32.000 B en `maxSourceBytes` de **exactamente los 18
 subpaths cuyo grafo de imports lleva los 3 brand-themes** (probado en ambas direcciones por la
