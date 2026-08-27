@@ -292,6 +292,29 @@ La igualdad exigida es de contrato, profundidad y superficie resuelta; no de
 valores ni de identidad visual. Cada vertical debe terminar deliberadamente
 distinta y premium.
 
+**Adjudicación DT — puerta de entrada de F3 bajo la enmienda (2026-08-27,
+tras la revisión Codex que pescó que F3 se abrió sin esta escritura):** la
+enmienda es puerta de ENTRADA y salida para F3/F4C. Para la entrada de F3
+rigen como LEY DE TRABAJO la ley de literales/derivación y la precedencia
+tenant-last: ningún lote de F3 puede transportar hardcodes, repetir un
+literal de hoja que una decisión superior ya representa, ni crear un segundo
+`foundation` — y el piloto en vuelo la cumple. Los 10 gates obligatorios son
+de CIERRE de F4C (texto expreso de la enmienda: "F4C no puede cerrar hasta
+demostrar"); exigir su existencia antes de F3 invertiría la cola vinculante.
+Queda escrito que los diferidos de F2 (channel-liveness 49 hallazgos,
+tenant-reachability 10/13, los 2 gates excluidos, la propagación mode-aware
+de la decisión 18) NO están resueltos — están diferidos con dueño (F4C/F5) y
+no condicionan la entrada de F3 porque son de la capa de contrato/validador,
+no de la migración de pintura; si esta lectura es errada, el owner la corrige
+y F3 se pausa. **Ningún segundo lote F3 se abre hasta que el piloto cierre
+(postaudit Fable + commit + asiento)**, y el piloto no commitea hasta que la
+repetición `13px`×3 quede centralizada o clasificada como UNA seed/invariante
+(ley de literales; hallazgo Codex). Ley operativa F3 (Codex, adoptada): las
+migraciones se acumulan en cohortes coherentes y la cadena derivada se
+regenera UNA vez por cierre de lote. **Métrica corregida tras la revisión:**
+60–62% (Codex) vs 63–65% (mi asiento anterior, que no descontaba el scope
+nuevo de la enmienda) — se asienta **62%** ingeniería / ~43% comercial.
+
 ## 6. F3 — La pintura vive en las skins (posterior a F4A + F4B)
 
 **Gate de entrada:** F4A cerrado, los 20 controles con F4B cerrado y los
@@ -1365,7 +1388,7 @@ paso de esa cadena está autorizado por este checkpoint.
 | F2 asimétrico | **FRENTE CERRADO (2026-08-26)** — las 34 raíces asimétricas con disposición escrita y ejecutada: F2A-0 `fb8ff25b6`/`bf21afec2` (censo) · F2A-1 ley de cinco clases adjudicada (preaudit Fable + consenso Opus que corrigió el instrumento) · Lote A `dfc39efcf` · Lote B `2509bdd3d` (T0 `#A8A898`, decisión 17) · Lotes F/F-2 `96b610162`/`fc1b8faf9` · re-medición `6f3fbe90c` · F′ `791f86be6` (ley 19 + gate dial-authority blocking) · F″ `9e57502af` (28 pendings, decisión 20) · anotaciones `0bd953dbc`. Postaudit Fable por lote, Codex en hitos. Pendientes a fases posteriores (ninguno bloquea el cierre): valor del line-height bithire (ruling de diseño del owner), micro-fix C-02 del clear-button de textarea, pregunta sighted del glass sobre backdrop oscuro (F4C), validador cascade-aware y override plano mode-aware (F5), cableado text-page de evnto (35/1/0), 2 gates excluidos que vuelven cuando sus enumeradores existan |
 | F3/F4C/F5-F8 pendientes | 0% del tramo pendiente |
 | F9 | 0/5100 celdas aceptadas |
-| Programa completo | estimación prudente **63–65% realizado** (ingeniería; sube con F2 asimétrico CERRADO + C5 cerrado con gates completos — consistente con la revisión Codex de hito); preparación comercial visible ~43%. Cerrar F4A/F4B **no certifica** F9: 0/5100 celdas aceptadas, gate y calibración de celdas propios, aún pendientes |
+| Programa completo | estimación prudente **62% realizado** (ingeniería; corregida a la baja tras la revisión Codex 2026-08-27: la enmienda de paridad profunda agregó scope que el 63–65% previo no descontaba); preparación comercial visible ~43%. Cerrar F4A/F4B **no certifica** F9: 0/5100 celdas aceptadas, gate y calibración de celdas propios, aún pendientes |
 
 **Regla de reporte:** el porcentaje sólo cambia por implementación o aceptación
 real; producir memos read-only no infla progreso.
