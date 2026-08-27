@@ -1,6 +1,6 @@
 {
  "$schema": "roadmap work-order state registry (single source of WO status; specs live in roadmap lane markdown files)",
- "updated": "2026-08-05",
+ "updated": "2026-08-27",
  "rules": {
   "done_requires": "status in-progress + all dependsOn done + non-empty --evidence + mustLandWith partner in-progress/done; support milestones never complete source IDs",
   "claim_requires": "all dependsOn done + DS-improvements phase claimState open",
@@ -3579,6 +3579,11 @@
      "at": "2026-08-11 10:45",
      "by": "codex-modern-rescue",
      "note": "AUTHORITY RECONCILIATION IN PROGRESS: source audit and independent Claude/Fable/Kimi/Codex review rejected the 103-CSS-basename rescope and retained 252 canonical families as closure. Operational matrix is 13 Standard + 7 Pro controls = 5,040 family/control cells. The new segmented manifest intentionally initializes all cells UNKNOWN and all 252 family reviews unaccepted, so it credits zero family progress. Current packet establishes one START HERE, removes competing human roadmaps after migrating unique laws, and calibrates spacing.rhythm before any broad family propagation. Frozen full suite at fb1e200ca exited 1 with 17 failed files/25 failed tests; failures require classification and do not authorize a quality-fix loop. R0-R6 only; R7 disabled; no push."
+    },
+    {
+     "at": "2026-08-27 02:43",
+     "by": "kimi-k3-dt",
+     "note": "Sucesion DT 2026-08-27 (docs/prompt-dt-succession-2026-08-27.md): el asiento DT sigue siendo Kimi K3 — transferido de terminal 1 a terminal 2 por cuota de cuenta; exactamente una autoridad DT antes, durante y despues. El campo notes superior describe la era 2026-08-21 (Codex DT) y queda STALE en su modelo operativo: el vigente es Kimi K3 DT/coordinador y unico committer local; pool Claude (Sonnet/Opus) implementa via tmux y nunca commitea; Fable 5 auditor independiente en cada cierre; Codex consultor read-only de baja frecuencia. Autoridad completa del modelo: AGENTS.md + agent-orchestration.json + roadmap §12/§13. F3 abierto: piloto v3 cerrado 2026-08-27 (roadmap §13); proxima cohorte Typography/runtime."
     }
    ],
    "claimedBy": "claude-modern-rescue",

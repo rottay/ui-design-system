@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "currentWave": "F4B — calibración causal de los 20 controles públicos: 5/20 COMPUTED_VERIFIED (spacing.rhythm, surfaces.effect-intensity, shape.radius-scale, density.mode; experience.profile degradado a IMPLEMENTED — su re-medición pintada refutó la equivalencia de brazos bajo el instrumento corregido H-1; ninguno SIGHTED_ACCEPTED), 30 receipts válidos y frescos bajo validador v2, 15 controles UNKNOWN. Cola inmediata: H1/H3 (spacing.rhythm legislativo + terminalReach), fix estructural de lowerStop, F4B-6 responsive.posture (sonda DATA diferencial con guardia nueva y preaudit Fable).",
-  "blockedOn": "OPEN_VERTICAL_CASCADE_DEFECT — re-adjudicada por M-1 (2026-08-24): la doble declaración dark del artifact es salida CORRECTA de compileModeBlocks (los compiladores coinciden en dark); lo que estaba mal era el brazo DB del instrumento descartando modeDeltas (fase (a) de H-3, packet propio). Queda como instrumento-DB + pregunta de producto para el owner (¿debería el seed del tenant mover el modo no-default bajo la opción B?). OPEN_ARM_ASYMMETRY — CERRADA con la ley nueva (opción B implementada en B-1; experience.profile re-verificado). El stash pre-programa sigue owner-gated. Gobernanza al día: tablero 9/9 instrumento, 48/48 constitucional, 217/217 cascade, CONSTITUTION_READY.",
+  "currentWave": "F3 — la pintura vive en las skins: piloto v3 CERRADO (2026-08-27; commit y asiento en §13 del roadmap). cell-renderers migrado al skin vía data-size con cero-delta computado; la condición Codex del 13px×3 resuelta por remoción (no reproduce ninguna seed del canal; el idioma del corpus es bare; el fallback era inalcanzable). F4B quedó completa en su forma honesta (los 20 controles asentados: nueve COMPUTED_VERIFIED, diez SOURCE_BOUND, chrome.families paraguas BY_REFERENCE) y F2 asimétrico cerrado como disposición, con diferidos de contrato/validador con dueño. La clasificación medida del pool supersede a las cifras históricas: 97 ocurrencias de producción, 31 dinámicas legítimas por mecanismo, superficie F3 genuina de un dígito. Cola inmediata: cohorte Typography/runtime (siete sitios — el residuo que sombrea al skin en cada render) con prueba de cero-delta propia, y el micro-fix C-02 del clear-button de textarea con mini-lote propio.",
+  "blockedOn": "Nada bloquea la cohorte siguiente. Diferidos con dueño (capa de contrato/validador, no de migración de pintura): channel-liveness (49 findings) y lane-control-drills (10/13) vuelven a blocking cuando existan sus enumeradores; la propagación mode-aware de la decisión 18 y el validador APCA cascade-aware son F5; la pregunta sighted del glass de bithire sobre backdrop oscuro es de F4C (evidencia A/B ya producida). Decisiones del owner pendientes, sin apuro: el valor del --ds-input-md-line-height de bithire (forma adjudicada: ratio sin unidad, dueño typography.scale; recomendación DT: preservar 1.5385 como ratio seed, identidad exacta) y la pregunta satélite de la capa base. El stash pre-programa sigue owner-gated.",
   "allowedLiterals": [
     {
       "value": 4,
@@ -10,6 +10,10 @@
     {
       "value": 6,
       "reason": "Scenario/receipt counts of the F4B packets (6 scenarios per control run, 6 new R5 receipts), a ledger count — not derived.singleOwner.entries, with which it collides numerically."
+    },
+    {
+      "value": 18,
+      "reason": "The owner decision ordinal (roadmap §12 decision 18, mode-aware propagation) cited in blockedOn — not derived.inventory.byLayer.chart, with which it collides numerically."
     }
   ],
   "laneTableCaption": "Active packets:",
@@ -18,17 +22,17 @@
       "id": "authority",
       "work": "Keep one human entry point, machine contracts and honest derived status; retire competing prompts, roadmaps and checkpoints after their unique facts are migrated.",
       "model": "kimi-k3-dt",
-      "modelReason": "This packet changes programme authority and deletion boundaries, so it requires source audit, dependency analysis and final local commit ownership — held by the Kimi K3 DT under the explicit owner order of 2026-08-23 (docs/prompt-dt-fresh-session-2026-08-23.md). History: Codex held the seat until the identity reconciliation (owner order 2026-08-20, roadmap §12 decision 13), Kimi K3 held it until 2026-08-21 (quota exhaustion; the documented backup DT Codex was activated), and Kimi K3 holds it again from 2026-08-23, with Codex remaining as a low-frequency read-only technical consultant. Fable 5 remains the sole independent read-only auditor, so DT != auditor holds with Kimi K3 in the seat."
+      "modelReason": "This packet changes programme authority and deletion boundaries, so it requires source audit, dependency analysis and final local commit ownership — held by the Kimi K3 DT under the explicit owner order of 2026-08-23 (docs/prompt-dt-fresh-session-2026-08-23.md). History: Codex held the seat until the identity reconciliation (owner order 2026-08-20, roadmap §12 decision 13), Kimi K3 held it until 2026-08-21 (quota exhaustion; the documented backup DT Codex was activated), and Kimi K3 holds it again from 2026-08-23, with Codex remaining as a low-frequency read-only technical consultant. Fable 5 remains the sole independent read-only auditor, so DT != auditor holds with Kimi K3 in the seat. The 2026-08-27 succession (docs/prompt-dt-succession-2026-08-27.md) did not change hands between models: the same Kimi K3 seat moved from terminal 1 to terminal 2 on quota exhaustion, with exactly one DT authority before, during and after."
     },
     {
       "id": "control-calibration",
-      "work": "Close the remaining 16 public controls (4/20 COMPUTED_VERIFIED) from both tenant inputs through normalized channels, canonical family parts, computed deltas, negative controls and exact restore, one control per packet; the immediate queue is C2 (program-check green), C3 (GAT-07 reseal) and C4 (PRE_F4B→F4B scribe-gap postaudit), then density.mode or responsive.posture by measured preflight.",
+      "work": "F4B is complete in its honest form (all twenty public controls settled: nine COMPUTED_VERIFIED, ten SOURCE_BOUND, chrome.families BY_REFERENCE umbrella — see roadmap §13). What remains for the SOURCE_BOUND controls to rise (propertyGroup ratification, cell calibration) is F4C/F5 work, not this phase.",
       "model": "strong-implementation",
       "modelReason": "The packet spans schemas, both compiler paths, CSS ownership and browser evidence; it is bounded but not a mechanical substitution."
     },
     {
       "id": "family-closure",
-      "work": "After the control matrix stabilizes, enrich each family once against every applicable control, state and stress case recorded in the manifest.",
+      "work": "F3 is underway in coherent cohorts (Codex law, adopted: one derived-chain regeneration per lot close, not per micro-edit; no second lot opens before the pilot closed — it closed 2026-08-27). Next cohort: Typography/runtime (the residue that shadows the skin every render) with its own zero-delta proof. The measured classification of the F3 universe lives in roadmap §6/§13.",
       "model": "disjoint-family-writers",
       "modelReason": "A family packet becomes mechanical only after applicability, stops, parts, invariants and evidence commands are closed by the calibration work."
     },
@@ -52,7 +56,8 @@
   "notes": [
     "The operational traversal is two-axis: calibrate each public control on representative families, then close each canonical family once against the stabilized full applicability matrix.",
     "The full suite is a reconciliation signal. Packet gates are causal and focal; every red test is classified before source or expectation changes.",
-    "Historical receipts remain immutable evidence. Historical Markdown is not an active authority."
+    "Historical receipts remain immutable evidence. Historical Markdown is not an active authority.",
+    "Las suites de drills de tooling no son concurrencia-seguras entre sí (flaky medida bajo concurrencia en el postaudit del piloto F3, verde en limpio por duplicado): la batería corre en serie."
   ],
   "derivedFacts": [
     "inventory.families",
