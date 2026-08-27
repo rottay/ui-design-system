@@ -44,10 +44,10 @@
     "packages/core/src/ui/patterns/runtime/adaptive-layout/runtime/index.ts",
     "packages/core/src/ui/surfaces/presentation/pages/data/dashboard/index.tsx"
   ],
-  "sourceDigest": "468e4ee74e1662e8310f2dc5badb5da8034aa2f4aeab841e0288cec4e7d42109",
+  "sourceDigest": "9552eb5a3962b440229fb900aa2b3dd568eb54c80d5296fe7faa1800783a01a2",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/responsive-posture/evnto.json",
   "artifactSha256": "f6266df1f7dc61a1accf49ef0866215eac666e8c98322923ebc38901fe4b78c1",
-  "createdAt": "2026-08-26T23:08:02.000Z",
+  "createdAt": "2026-08-26T23:34:15.000Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

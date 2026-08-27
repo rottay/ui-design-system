@@ -48,7 +48,7 @@
     "channelsWithoutReaders": 179,
     "channelsPaintsFalse": 913,
     "channelsPaintsInModernFalse": 1963,
-    "readers": 36974,
+    "readers": 36975,
     "readersByPlane": {
       "modern-skin-css": 14731,
       "presentation-css": 10653,
@@ -62,7 +62,7 @@
       "infrastructure-tsx": 6,
       "ts-token-mirror": 1447,
       "ts-token-utils": 47,
-      "ts-other": 2734
+      "ts-other": 2735
     },
     "channelsByPlane": {
       "modern-skin-css": 3840,
@@ -33275,7 +33275,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 6465,
+          "line": 6471,
           "prop": "colorActive",
           "scalars": []
         },
@@ -34365,7 +34365,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 6246,
+          "line": 6252,
           "prop": "border",
           "scalars": []
         },
@@ -34515,7 +34515,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 6231,
+          "line": 6237,
           "prop": "bgActive",
           "scalars": []
         },
@@ -41540,21 +41540,21 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1417,
+          "line": 1420,
           "prop": "bg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1423,
+          "line": 1426,
           "prop": "sheen",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1444,
+          "line": 1447,
           "prop": "footerBg",
           "scalars": []
         },
@@ -67832,6 +67832,13 @@
         },
         {
           "plane": "ts-other",
+          "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
+          "line": 969,
+          "prop": "background",
+          "scalars": []
+        },
+        {
+          "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/evnto/index.ts",
           "line": 2049,
           "prop": "backgroundHover",
@@ -68219,21 +68226,21 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1334,
+          "line": 1337,
           "prop": "bg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1340,
+          "line": 1343,
           "prop": "bgHover",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1346,
+          "line": 1349,
           "prop": "bgFocus",
           "scalars": []
         },
@@ -70296,7 +70303,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 8602,
+          "line": 8608,
           "prop": "controlBg",
           "scalars": []
         },
@@ -71836,7 +71843,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1444,
+          "line": 1447,
           "prop": "footerBg",
           "scalars": []
         },
@@ -76267,315 +76274,315 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1235,
+          "line": 1238,
           "prop": "border",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1269,
+          "line": 1272,
           "prop": "border",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1818,
+          "line": 1821,
           "prop": "border",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1855,
+          "line": 1858,
           "prop": "border",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1870,
+          "line": 1873,
           "prop": "statusBorder",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1902,
+          "line": 1905,
           "prop": "commandHomeControlBorder",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1922,
+          "line": 1925,
           "prop": "commandHomeMeterBg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1937,
+          "line": 1940,
           "prop": "commandHomePanelBorder",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1942,
+          "line": 1945,
           "prop": "commandHomePanelBorderSoft",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1972,
+          "line": 1975,
           "prop": "border",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1994,
+          "line": 1997,
           "prop": "border",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 2026,
+          "line": 2029,
           "prop": "border",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 2036,
+          "line": 2039,
           "prop": "countBorder",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 2058,
+          "line": 2061,
           "prop": "border",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 2140,
+          "line": 2143,
           "prop": "headerBorder",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 2150,
+          "line": 2153,
           "prop": "siderBorder",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 2162,
+          "line": 2165,
           "prop": "cardBorder",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 2172,
+          "line": 2175,
           "prop": "emptyBorder",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 2199,
+          "line": 2202,
           "prop": "meterTrack",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 2204,
+          "line": 2207,
           "prop": "meterTrackBorder",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 2298,
+          "line": 2301,
           "prop": "border",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 2308,
+          "line": 2311,
           "prop": "meterTrack",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 2313,
+          "line": 2316,
           "prop": "meterTrackBorder",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 2360,
+          "line": 2363,
           "prop": "badgeBorderActive",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 2422,
+          "line": 2425,
           "prop": "border",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 2449,
+          "line": 2452,
           "prop": "border",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 2454,
+          "line": 2457,
           "prop": "borderBottom",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 2501,
+          "line": 2504,
           "prop": "border",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 3438,
+          "line": 3441,
           "prop": "borderPrimaryColor",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 4869,
+          "line": 4875,
           "prop": "frameBorder",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 4885,
+          "line": 4891,
           "prop": "hoverBorder",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 4895,
+          "line": 4901,
           "prop": "activeBorder",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 5474,
+          "line": 5480,
           "prop": "brandBorder",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 5480,
+          "line": 5486,
           "prop": "iconTileBorder",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 6332,
+          "line": 6338,
           "prop": "border",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 7241,
+          "line": 7247,
           "prop": "border",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 7292,
+          "line": 7298,
           "prop": "headerBorder",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 7297,
+          "line": 7303,
           "prop": "headerShadow",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 7400,
+          "line": 7406,
           "prop": "actionBorder",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 7673,
+          "line": 7679,
           "prop": "border",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 7679,
+          "line": 7685,
           "prop": "borderHover",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 7685,
+          "line": 7691,
           "prop": "selectedBorder",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 7722,
+          "line": 7728,
           "prop": "iconBorder",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 8472,
+          "line": 8478,
           "prop": "previewPanelBorder",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 8585,
+          "line": 8591,
           "prop": "sectionBorder",
           "scalars": []
         },
@@ -80242,119 +80249,119 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1131,
+          "line": 1134,
           "prop": "borderDisabled",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1302,
+          "line": 1305,
           "prop": "border",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1307,
+          "line": 1310,
           "prop": "borderColor",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1532,
+          "line": 1535,
           "prop": "footerBorder",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1537,
+          "line": 1540,
           "prop": "footerBorderColor",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1552,
+          "line": 1555,
           "prop": "headerBorder",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1557,
+          "line": 1560,
           "prop": "headerBorderColor",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 2113,
+          "line": 2116,
           "prop": "resultBorder",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 2256,
+          "line": 2259,
           "prop": "footerBorder",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 2266,
+          "line": 2269,
           "prop": "headerBorder",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 2370,
+          "line": 2373,
           "prop": "border",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 2380,
+          "line": 2383,
           "prop": "listBorder",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 2400,
+          "line": 2403,
           "prop": "panelBorder",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 2479,
+          "line": 2482,
           "prop": "divider",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 2511,
+          "line": 2514,
           "prop": "footerBorder",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 8608,
+          "line": 8614,
           "prop": "controlBorder",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 8614,
+          "line": 8620,
           "prop": "controlBorderHover",
           "scalars": []
         },
@@ -85245,63 +85252,63 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1191,
+          "line": 1194,
           "prop": "colorError",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1202,
+          "line": 1205,
           "prop": "errorBg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1208,
+          "line": 1211,
           "prop": "errorColor",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1252,
+          "line": 1255,
           "prop": "requiredColor",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 5037,
+          "line": 5043,
           "prop": "errorBg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 5042,
+          "line": 5048,
           "prop": "errorColor",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 6411,
+          "line": 6417,
           "prop": "bg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 6416,
+          "line": 6422,
           "prop": "bgHover",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 6426,
+          "line": 6432,
           "prop": "border",
           "scalars": []
         },
@@ -87222,7 +87229,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 6416,
+          "line": 6422,
           "prop": "bgHover",
           "scalars": []
         }
@@ -88056,14 +88063,14 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 5048,
+          "line": 5054,
           "prop": "infoBg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 5054,
+          "line": 5060,
           "prop": "infoColor",
           "scalars": []
         },
@@ -90384,7 +90391,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1392,
+          "line": 1395,
           "prop": "optionBgHover",
           "scalars": []
         },
@@ -91215,7 +91222,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1382,
+          "line": 1385,
           "prop": "dropdownBorderColor",
           "scalars": []
         },
@@ -91669,14 +91676,14 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1138,
+          "line": 1141,
           "prop": "borderColor",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1361,
+          "line": 1364,
           "prop": "borderColor",
           "scalars": []
         },
@@ -92123,21 +92130,21 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1143,
+          "line": 1146,
           "prop": "borderColorHover",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1356,
+          "line": 1359,
           "prop": "colorPlaceholder",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1366,
+          "line": 1369,
           "prop": "borderColorHover",
           "scalars": []
         },
@@ -92916,28 +92923,28 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1086,
+          "line": 1089,
           "prop": "border",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1164,
+          "line": 1167,
           "prop": "borderHover",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 2088,
+          "line": 2091,
           "prop": "inputBorder",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 2469,
+          "line": 2472,
           "prop": "controlBorder",
           "scalars": []
         },
@@ -94298,14 +94305,14 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1351,
+          "line": 1354,
           "prop": "color",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1402,
+          "line": 1405,
           "prop": "optionColor",
           "scalars": []
         },
@@ -104027,476 +104034,476 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1115,
+          "line": 1118,
           "prop": "caret",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1153,
+          "line": 1156,
           "prop": "caretColor",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1258,
+          "line": 1261,
           "prop": "loadingColor",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1465,
+          "line": 1468,
           "prop": "iconBg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1471,
+          "line": 1474,
           "prop": "iconBorder",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1477,
+          "line": 1480,
           "prop": "chipBg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1547,
+          "line": 1550,
           "prop": "headerBg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1657,
+          "line": 1660,
           "prop": "headerBgHover",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1756,
+          "line": 1759,
           "prop": "iconBg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1771,
+          "line": 1774,
           "prop": "removeBg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1776,
+          "line": 1779,
           "prop": "removeHoverBg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1786,
+          "line": 1789,
           "prop": "selectedSurface",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1796,
+          "line": 1799,
           "prop": "surfaceHover",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1801,
+          "line": 1804,
           "prop": "surfacePressed",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1813,
+          "line": 1816,
           "prop": "bg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1870,
+          "line": 1873,
           "prop": "statusBorder",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1902,
+          "line": 1905,
           "prop": "commandHomeControlBorder",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1907,
+          "line": 1910,
           "prop": "commandHomeControlHoverBg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1917,
+          "line": 1920,
           "prop": "commandHomeIconBg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1937,
+          "line": 1940,
           "prop": "commandHomePanelBorder",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1942,
+          "line": 1945,
           "prop": "commandHomePanelBorderSoft",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 2016,
+          "line": 2019,
           "prop": "activeColor",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 2189,
+          "line": 2192,
           "prop": "iconBg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 2283,
+          "line": 2286,
           "prop": "badgeColor",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 2303,
+          "line": 2306,
           "prop": "iconBg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 2318,
+          "line": 2321,
           "prop": "sectionAltBg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 2360,
+          "line": 2363,
           "prop": "badgeBorderActive",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 2444,
+          "line": 2447,
           "prop": "bg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 2521,
+          "line": 2524,
           "prop": "iconBg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 2526,
+          "line": 2529,
           "prop": "iconColor",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 4544,
+          "line": 4550,
           "prop": "overlay",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 4646,
+          "line": 4652,
           "prop": "commandHomeGridLine",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 4869,
+          "line": 4875,
           "prop": "frameBorder",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 4880,
+          "line": 4886,
           "prop": "hoverBg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 4885,
+          "line": 4891,
           "prop": "hoverBorder",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 4895,
+          "line": 4901,
           "prop": "activeBorder",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 4999,
+          "line": 5005,
           "prop": "primaryColor",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 5048,
+          "line": 5054,
           "prop": "infoBg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 5054,
+          "line": 5060,
           "prop": "infoColor",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 5284,
+          "line": 5290,
           "prop": "colorHover",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 5462,
+          "line": 5468,
           "prop": "brandTint",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 5468,
+          "line": 5474,
           "prop": "brandTintHover",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 5474,
+          "line": 5480,
           "prop": "brandBorder",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 5480,
+          "line": 5486,
           "prop": "iconTileBorder",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 6274,
+          "line": 6280,
           "prop": "bgActive",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 6454,
+          "line": 6460,
           "prop": "color",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 6471,
+          "line": 6477,
           "prop": "focusRingColor",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 7333,
+          "line": 7339,
           "prop": "rowHoverShadow",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 7339,
+          "line": 7345,
           "prop": "rowFocusShadow",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 7375,
+          "line": 7381,
           "prop": "filterFocusShadow",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 7459,
+          "line": 7465,
           "prop": "bgHover",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 7661,
+          "line": 7667,
           "prop": "sectionAltBg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 7673,
+          "line": 7679,
           "prop": "border",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 7679,
+          "line": 7685,
           "prop": "borderHover",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 7685,
+          "line": 7691,
           "prop": "selectedBorder",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 7691,
+          "line": 7697,
           "prop": "selectedRing",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 7716,
+          "line": 7722,
           "prop": "iconBg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 7722,
+          "line": 7728,
           "prop": "iconBorder",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 7728,
+          "line": 7734,
           "prop": "chipBg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 7734,
+          "line": 7740,
           "prop": "cardSideAccentSoft",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 7753,
+          "line": 7759,
           "prop": "cardGridLine",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 8466,
+          "line": 8472,
           "prop": "previewPanelBg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 8472,
+          "line": 8478,
           "prop": "previewPanelBorder",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 8561,
+          "line": 8567,
           "prop": "heroBg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 8573,
+          "line": 8579,
           "prop": "heroShadow",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 8585,
+          "line": 8591,
           "prop": "sectionBorder",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 8596,
+          "line": 8602,
           "prop": "heroSpine",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 8614,
+          "line": 8620,
           "prop": "controlBorderHover",
           "scalars": []
         },
@@ -106751,7 +106758,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1328,
+          "line": 1331,
           "prop": "focusRingColor",
           "scalars": []
         },
@@ -107030,7 +107037,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1397,
+          "line": 1400,
           "prop": "optionBgSelected",
           "scalars": []
         },
@@ -107963,14 +107970,14 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1148,
+          "line": 1151,
           "prop": "borderColorFocus",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1371,
+          "line": 1374,
           "prop": "borderColorFocus",
           "scalars": []
         },
@@ -108706,7 +108713,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1407,
+          "line": 1410,
           "prop": "optionColorSelected",
           "scalars": []
         },
@@ -108942,14 +108949,14 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 6231,
+          "line": 6237,
           "prop": "bgActive",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 6465,
+          "line": 6471,
           "prop": "colorActive",
           "scalars": []
         }
@@ -109169,42 +109176,42 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1766,
+          "line": 1769,
           "prop": "inkHover",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1781,
+          "line": 1784,
           "prop": "selectedInk",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1875,
+          "line": 1878,
           "prop": "statusColor",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 2209,
+          "line": 2212,
           "prop": "trendColor",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 2365,
+          "line": 2368,
           "prop": "badgeColorActive",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 6459,
+          "line": 6465,
           "prop": "colorHover",
           "scalars": []
         },
@@ -109641,21 +109648,21 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1465,
+          "line": 1468,
           "prop": "iconBg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 5048,
+          "line": 5054,
           "prop": "infoBg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 5054,
+          "line": 5060,
           "prop": "infoColor",
           "scalars": []
         },
@@ -111989,21 +111996,21 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1285,
+          "line": 1288,
           "prop": "successBg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 5015,
+          "line": 5021,
           "prop": "successBg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 5020,
+          "line": 5026,
           "prop": "successColor",
           "scalars": []
         },
@@ -115126,7 +115133,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 5445,
+          "line": 5451,
           "prop": "onBrand",
           "scalars": []
         },
@@ -118204,21 +118211,21 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1180,
+          "line": 1183,
           "prop": "colorDisabled",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1312,
+          "line": 1315,
           "prop": "text",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 2043,
+          "line": 2046,
           "prop": "clearColor",
           "scalars": []
         },
@@ -118637,7 +118644,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 6421,
+          "line": 6427,
           "prop": "color",
           "scalars": []
         }
@@ -118656,7 +118663,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 6447,
+          "line": 6453,
           "prop": "color",
           "scalars": []
         }
@@ -119705,7 +119712,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 5445,
+          "line": 5451,
           "prop": "onBrand",
           "scalars": []
         },
@@ -119836,7 +119843,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 6433,
+          "line": 6439,
           "prop": "color",
           "scalars": []
         }
@@ -119855,7 +119862,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 7262,
+          "line": 7268,
           "prop": "headerColor",
           "scalars": []
         },
@@ -125529,301 +125536,301 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 971,
+          "line": 974,
           "prop": "foreground",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1120,
+          "line": 1123,
           "prop": "color",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1174,
+          "line": 1177,
           "prop": "colorHover",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1242,
+          "line": 1245,
           "prop": "color",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1280,
+          "line": 1283,
           "prop": "selectionColor",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1517,
+          "line": 1520,
           "prop": "bodyColor",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1522,
+          "line": 1525,
           "prop": "color",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1582,
+          "line": 1585,
           "prop": "titleColor",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1761,
+          "line": 1764,
           "prop": "ink",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1808,
+          "line": 1811,
           "prop": "colorActive",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1880,
+          "line": 1883,
           "prop": "titleColor",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1885,
+          "line": 1888,
           "prop": "valueColor",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 2004,
+          "line": 2007,
           "prop": "titleColor",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 2009,
+          "line": 2012,
           "prop": "valueColor",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 2073,
+          "line": 2076,
           "prop": "color",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 2093,
+          "line": 2096,
           "prop": "inputColor",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 2123,
+          "line": 2126,
           "prop": "resultTitleColor",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 2214,
+          "line": 2217,
           "prop": "valueColor",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 2226,
+          "line": 2229,
           "prop": "bodyColor",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 2241,
+          "line": 2244,
           "prop": "closeColorHover",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 2246,
+          "line": 2249,
           "prop": "color",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 2276,
+          "line": 2279,
           "prop": "titleColor",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 2328,
+          "line": 2331,
           "prop": "titleColor",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 2340,
+          "line": 2343,
           "prop": "colorActive",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 2345,
+          "line": 2348,
           "prop": "colorHover",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 2405,
+          "line": 2408,
           "prop": "panelHighlight",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 2432,
+          "line": 2435,
           "prop": "titleColor",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 2437,
+          "line": 2440,
           "prop": "valueColor",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 2459,
+          "line": 2462,
           "prop": "color",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 2474,
+          "line": 2477,
           "prop": "controlColor",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 2536,
+          "line": 2539,
           "prop": "titleColor",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 2541,
+          "line": 2544,
           "prop": "valueColor",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 5434,
+          "line": 5440,
           "prop": "ink",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 6659,
+          "line": 6665,
           "prop": "color",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 7364,
+          "line": 7370,
           "prop": "cellColor",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 7704,
+          "line": 7710,
           "prop": "shadow",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 7710,
+          "line": 7716,
           "prop": "shadowHover",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 8478,
+          "line": 8484,
           "prop": "previewPanelShadow",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 8567,
+          "line": 8573,
           "prop": "heroBorder",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 8573,
+          "line": 8579,
           "prop": "heroShadow",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 8591,
+          "line": 8597,
           "prop": "sectionShadow",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 8608,
+          "line": 8614,
           "prop": "controlBorder",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 8620,
+          "line": 8626,
           "prop": "continuousBoundary",
           "scalars": []
         },
@@ -129743,126 +129750,126 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1091,
+          "line": 1094,
           "prop": "color",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1103,
+          "line": 1106,
           "prop": "color",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1274,
+          "line": 1277,
           "prop": "color",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1542,
+          "line": 1545,
           "prop": "footerColor",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1562,
+          "line": 1565,
           "prop": "headerColor",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1823,
+          "line": 1826,
           "prop": "color",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1828,
+          "line": 1831,
           "prop": "itemColor",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1850,
+          "line": 1853,
           "prop": "bodyColor",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1989,
+          "line": 1992,
           "prop": "bodyColor",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 2031,
+          "line": 2034,
           "prop": "color",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 2068,
+          "line": 2071,
           "prop": "clearColorHover",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 2293,
+          "line": 2296,
           "prop": "bodyColor",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 2417,
+          "line": 2420,
           "prop": "bodyColor",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 2496,
+          "line": 2499,
           "prop": "bodyColor",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 2516,
+          "line": 2519,
           "prop": "footerColor",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 5274,
+          "line": 5280,
           "prop": "linkColor",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 5439,
+          "line": 5445,
           "prop": "inkMuted",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 8716,
+          "line": 8722,
           "prop": "color",
           "scalars": []
         },
@@ -130828,133 +130835,133 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1169,
+          "line": 1172,
           "prop": "color",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1186,
+          "line": 1189,
           "prop": "color",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1213,
+          "line": 1216,
           "prop": "color",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1247,
+          "line": 1250,
           "prop": "disabledColor",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1527,
+          "line": 1530,
           "prop": "colorMuted",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1572,
+          "line": 1575,
           "prop": "imagePlaceholderColor",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1577,
+          "line": 1580,
           "prop": "subtitleColor",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1833,
+          "line": 1836,
           "prop": "separatorColor",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1860,
+          "line": 1863,
           "prop": "labelColor",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1999,
+          "line": 2002,
           "prop": "labelColor",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 2048,
+          "line": 2051,
           "prop": "iconColor",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 2063,
+          "line": 2066,
           "prop": "categoryColor",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 2098,
+          "line": 2101,
           "prop": "placeholderColor",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 2118,
+          "line": 2121,
           "prop": "resultMetaColor",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 2194,
+          "line": 2197,
           "prop": "labelColor",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 2236,
+          "line": 2239,
           "prop": "closeColor",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 2271,
+          "line": 2274,
           "prop": "subtitleColor",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 2427,
+          "line": 2430,
           "prop": "labelColor",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 2531,
+          "line": 2534,
           "prop": "labelColor",
           "scalars": []
         },
@@ -132383,28 +132390,28 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1196,
+          "line": 1199,
           "prop": "colorWarning",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1290,
+          "line": 1293,
           "prop": "warningBg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 5026,
+          "line": 5032,
           "prop": "warningBg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 5031,
+          "line": 5037,
           "prop": "warningColor",
           "scalars": []
         },
@@ -133603,14 +133610,14 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 5031,
+          "line": 5037,
           "prop": "warningColor",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 6440,
+          "line": 6446,
           "prop": "color",
           "scalars": []
         }
@@ -134360,21 +134367,21 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1334,
+          "line": 1337,
           "prop": "bg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1340,
+          "line": 1343,
           "prop": "bgHover",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1346,
+          "line": 1349,
           "prop": "bgFocus",
           "scalars": []
         },
@@ -140255,7 +140262,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 6289,
+          "line": 6295,
           "prop": "border",
           "scalars": []
         }
@@ -140276,28 +140283,28 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 4994,
+          "line": 5000,
           "prop": "primaryBg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 6263,
+          "line": 6269,
           "prop": "bg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 6344,
+          "line": 6350,
           "prop": "bgHover",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 6381,
+          "line": 6387,
           "prop": "bgHover",
           "scalars": []
         }
@@ -140318,21 +140325,21 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 6268,
+          "line": 6274,
           "prop": "bgHover",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 6349,
+          "line": 6355,
           "prop": "bgActive",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 6386,
+          "line": 6392,
           "prop": "bgActive",
           "scalars": []
         }
@@ -140425,70 +140432,70 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 4906,
+          "line": 4912,
           "prop": "activeShadow",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 6317,
+          "line": 6323,
           "prop": "color",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 6322,
+          "line": 6328,
           "prop": "colorHover",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 6327,
+          "line": 6333,
           "prop": "colorActive",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 6364,
+          "line": 6370,
           "prop": "colorHover",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 6369,
+          "line": 6375,
           "prop": "colorActive",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 6391,
+          "line": 6397,
           "prop": "color",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 6396,
+          "line": 6402,
           "prop": "colorHover",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 6401,
+          "line": 6407,
           "prop": "colorActive",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 6440,
+          "line": 6446,
           "prop": "color",
           "scalars": []
         }
@@ -140509,21 +140516,21 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 4989,
+          "line": 4995,
           "prop": "defaultColor",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 5009,
+          "line": 5015,
           "prop": "secondaryColor",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 6359,
+          "line": 6365,
           "prop": "color",
           "scalars": []
         }
@@ -140544,28 +140551,28 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 6241,
+          "line": 6247,
           "prop": "color",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 6421,
+          "line": 6427,
           "prop": "color",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 6433,
+          "line": 6439,
           "prop": "color",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 6447,
+          "line": 6453,
           "prop": "color",
           "scalars": []
         }
@@ -140675,98 +140682,98 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 4880,
+          "line": 4886,
           "prop": "hoverBg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 4916,
+          "line": 4922,
           "prop": "countBg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 4921,
+          "line": 4927,
           "prop": "countActiveBg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 5015,
+          "line": 5021,
           "prop": "successBg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 5026,
+          "line": 5032,
           "prop": "warningBg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 5037,
+          "line": 5043,
           "prop": "errorBg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 5048,
+          "line": 5054,
           "prop": "infoBg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 5462,
+          "line": 5468,
           "prop": "brandTint",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 5468,
+          "line": 5474,
           "prop": "brandTintHover",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 6274,
+          "line": 6280,
           "prop": "bgActive",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 6296,
+          "line": 6302,
           "prop": "bg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 6307,
+          "line": 6313,
           "prop": "bgActive",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 8561,
+          "line": 8567,
           "prop": "heroBg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 8602,
+          "line": 8608,
           "prop": "controlBg",
           "scalars": []
         },
@@ -140829,21 +140836,21 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 4984,
+          "line": 4990,
           "prop": "defaultBg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 5004,
+          "line": 5010,
           "prop": "secondaryBg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 6301,
+          "line": 6307,
           "prop": "bgHover",
           "scalars": []
         }
@@ -160531,7 +160538,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 4906,
+          "line": 4912,
           "prop": "activeShadow",
           "scalars": []
         },
@@ -165897,7 +165904,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 4949,
+          "line": 4955,
           "prop": "fontFamily",
           "scalars": []
         },
@@ -167441,7 +167448,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 5194,
+          "line": 5200,
           "prop": "countFontFamily",
           "scalars": []
         },
@@ -167836,14 +167843,14 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 3493,
+          "line": 3496,
           "prop": "fontFamilyHeading",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 3505,
+          "line": 3508,
           "prop": "fontFamilyDisplay",
           "scalars": []
         },
@@ -167878,7 +167885,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 3487,
+          "line": 3490,
           "prop": "fontFamilyBase",
           "scalars": []
         },
@@ -167934,7 +167941,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 3499,
+          "line": 3502,
           "prop": "fontFamilyMono",
           "scalars": []
         },
@@ -206403,7 +206410,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1417,
+          "line": 1420,
           "prop": "bg",
           "scalars": []
         },
@@ -206461,21 +206468,21 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1957,
+          "line": 1960,
           "prop": "activeBg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1962,
+          "line": 1965,
           "prop": "activeGradient",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 2355,
+          "line": 2358,
           "prop": "badgeBgActive",
           "scalars": []
         }
@@ -206555,21 +206562,21 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1845,
+          "line": 1848,
           "prop": "bgHover",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1984,
+          "line": 1987,
           "prop": "bgHover",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 2491,
+          "line": 2494,
           "prop": "bgHover",
           "scalars": []
         }
@@ -207433,14 +207440,14 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1126,
+          "line": 1129,
           "prop": "bgDisabled",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1297,
+          "line": 1300,
           "prop": "bg",
           "scalars": []
         }
@@ -207477,21 +207484,21 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1159,
+          "line": 1162,
           "prop": "bgHover",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1230,
+          "line": 1233,
           "prop": "bgHover",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 6050,
+          "line": 6056,
           "prop": "itemBgHover",
           "scalars": []
         }
@@ -207520,7 +207527,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 6056,
+          "line": 6062,
           "prop": "itemBgSelected",
           "scalars": []
         }
@@ -207599,7 +207606,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 6017,
+          "line": 6023,
           "prop": "border",
           "scalars": []
         }
@@ -207628,7 +207635,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 6602,
+          "line": 6608,
           "prop": "borderFocus",
           "scalars": []
         }
@@ -207826,7 +207833,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 6597,
+          "line": 6603,
           "prop": "borderHover",
           "scalars": []
         }
@@ -207920,14 +207927,14 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 6102,
+          "line": 6108,
           "prop": "focusRing",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 6634,
+          "line": 6640,
           "prop": "shadowFocus",
           "scalars": []
         }
@@ -207963,14 +207970,14 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 6066,
+          "line": 6072,
           "prop": "itemColorHover",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 6071,
+          "line": 6077,
           "prop": "itemColorSelected",
           "scalars": []
         }
@@ -208020,7 +208027,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 6061,
+          "line": 6067,
           "prop": "itemColor",
           "scalars": []
         }
@@ -208230,14 +208237,14 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 6037,
+          "line": 6043,
           "prop": "shadow",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 6256,
+          "line": 6262,
           "prop": "shadow",
           "scalars": []
         }
@@ -208492,7 +208499,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 6086,
+          "line": 6092,
           "prop": "itemShadowSelected",
           "scalars": []
         }
@@ -208650,7 +208657,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 6592,
+          "line": 6598,
           "prop": "border",
           "scalars": []
         }
@@ -208885,7 +208892,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 6624,
+          "line": 6630,
           "prop": "shadowRest",
           "scalars": []
         }
@@ -208935,7 +208942,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 6629,
+          "line": 6635,
           "prop": "shadowHover",
           "scalars": []
         }
@@ -230454,7 +230461,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 5224,
+          "line": 5230,
           "prop": "motionEasing",
           "scalars": []
         },
@@ -237139,14 +237146,14 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 8917,
+          "line": 8923,
           "prop": "motionDuration",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 8922,
+          "line": 8928,
           "prop": "activeRevealDuration",
           "scalars": []
         }
@@ -239982,7 +239989,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 8927,
+          "line": 8933,
           "prop": "panelMotionDuration",
           "scalars": []
         }
@@ -249355,14 +249362,14 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 7474,
+          "line": 7480,
           "prop": "border",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 7479,
+          "line": 7485,
           "prop": "borderColor",
           "scalars": []
         },
@@ -249496,7 +249503,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 7484,
+          "line": 7490,
           "prop": "borderHover",
           "scalars": []
         }
@@ -249637,7 +249644,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 7589,
+          "line": 7595,
           "prop": "footerBg",
           "scalars": []
         }
@@ -257165,7 +257172,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 5059,
+          "line": 5065,
           "prop": "radius",
           "scalars": []
         },
@@ -259154,7 +259161,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1599,
+          "line": 1602,
           "prop": "radius",
           "scalars": []
         },
@@ -261922,21 +261929,21 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 6022,
+          "line": 6028,
           "prop": "radius",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 7506,
+          "line": 7512,
           "prop": "radius",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 7698,
+          "line": 7704,
           "prop": "radiusMd",
           "scalars": []
         },
@@ -263953,28 +263960,28 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 6080,
+          "line": 6086,
           "prop": "itemRadius",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 6138,
+          "line": 6144,
           "prop": "radius",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 6175,
+          "line": 6181,
           "prop": "radius",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 6212,
+          "line": 6218,
           "prop": "radius",
           "scalars": []
         },
@@ -268140,7 +268147,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1428,
+          "line": 1431,
           "prop": "headerBg",
           "scalars": []
         },
@@ -268201,7 +268208,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1438,
+          "line": 1441,
           "prop": "sectionAltBg",
           "scalars": []
         },
@@ -268251,7 +268258,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1433,
+          "line": 1436,
           "prop": "sectionBg",
           "scalars": []
         },
@@ -278303,7 +278310,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1387,
+          "line": 1390,
           "prop": "dropdownShadow",
           "scalars": []
         },
@@ -278504,21 +278511,21 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1459,
+          "line": 1462,
           "prop": "shadowHover",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1487,
+          "line": 1490,
           "prop": "popoverShadow",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 7501,
+          "line": 7507,
           "prop": "shadowHover",
           "scalars": []
         },
@@ -278747,7 +278754,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 6530,
+          "line": 6536,
           "prop": "dropdownShadow",
           "scalars": []
         }
@@ -279136,14 +279143,14 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1454,
+          "line": 1457,
           "prop": "shadow",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 7495,
+          "line": 7501,
           "prop": "shadow",
           "scalars": []
         },
@@ -283539,7 +283546,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 7753,
+          "line": 7759,
           "prop": "cardGridLine",
           "scalars": []
         },
@@ -310352,35 +310359,35 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 979,
+          "line": 982,
           "prop": "surface",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1967,
+          "line": 1970,
           "prop": "bg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 2251,
+          "line": 2254,
           "prop": "footerBg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 2412,
+          "line": 2415,
           "prop": "bg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 2506,
+          "line": 2509,
           "prop": "footerBg",
           "scalars": []
         },
@@ -312632,420 +312639,420 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 979,
+          "line": 982,
           "prop": "surface",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1202,
+          "line": 1205,
           "prop": "errorBg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1285,
+          "line": 1288,
           "prop": "successBg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1290,
+          "line": 1293,
           "prop": "warningBg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1377,
+          "line": 1380,
           "prop": "dropdownBg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1547,
+          "line": 1550,
           "prop": "headerBg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1657,
+          "line": 1660,
           "prop": "headerBgHover",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1756,
+          "line": 1759,
           "prop": "iconBg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1771,
+          "line": 1774,
           "prop": "removeBg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1776,
+          "line": 1779,
           "prop": "removeHoverBg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1786,
+          "line": 1789,
           "prop": "selectedSurface",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1796,
+          "line": 1799,
           "prop": "surfaceHover",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1801,
+          "line": 1804,
           "prop": "surfacePressed",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1813,
+          "line": 1816,
           "prop": "bg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1840,
+          "line": 1843,
           "prop": "bg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1907,
+          "line": 1910,
           "prop": "commandHomeControlHoverBg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1912,
+          "line": 1915,
           "prop": "commandHomeHeroBg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1917,
+          "line": 1920,
           "prop": "commandHomeIconBg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1922,
+          "line": 1925,
           "prop": "commandHomeMeterBg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1927,
+          "line": 1930,
           "prop": "commandHomePanelBg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1932,
+          "line": 1935,
           "prop": "commandHomePanelBgStrong",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1947,
+          "line": 1950,
           "prop": "commandHomeSurfaceBg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1952,
+          "line": 1955,
           "prop": "commandRailBg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1979,
+          "line": 1982,
           "prop": "bg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 2135,
+          "line": 2138,
           "prop": "headerBg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 2145,
+          "line": 2148,
           "prop": "siderBg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 2157,
+          "line": 2160,
           "prop": "cardBg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 2184,
+          "line": 2187,
           "prop": "bg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 2189,
+          "line": 2192,
           "prop": "iconBg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 2221,
+          "line": 2224,
           "prop": "bg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 2261,
+          "line": 2264,
           "prop": "headerBg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 2288,
+          "line": 2291,
           "prop": "bg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 2303,
+          "line": 2306,
           "prop": "iconBg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 2323,
+          "line": 2326,
           "prop": "sectionBg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 2350,
+          "line": 2353,
           "prop": "activeBg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 2375,
+          "line": 2378,
           "prop": "listBg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 2395,
+          "line": 2398,
           "prop": "panelBg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 2412,
+          "line": 2415,
           "prop": "bg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 2444,
+          "line": 2447,
           "prop": "bg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 2486,
+          "line": 2489,
           "prop": "bg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 2521,
+          "line": 2524,
           "prop": "iconBg",
-          "scalars": []
-        },
-        {
-          "plane": "ts-other",
-          "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 5450,
-          "prop": "surface",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
           "line": 5456,
+          "prop": "surface",
+          "scalars": []
+        },
+        {
+          "plane": "ts-other",
+          "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
+          "line": 5462,
           "prop": "surfaceRaised",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 7236,
+          "line": 7242,
           "prop": "bg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 7302,
+          "line": 7308,
           "prop": "rowBg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 7395,
+          "line": 7401,
           "prop": "actionBg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 7454,
+          "line": 7460,
           "prop": "bg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 7459,
+          "line": 7465,
           "prop": "bgHover",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 7639,
+          "line": 7645,
           "prop": "bg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 7650,
+          "line": 7656,
           "prop": "headerBg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 7655,
+          "line": 7661,
           "prop": "sectionBg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 7667,
+          "line": 7673,
           "prop": "footerBg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 7716,
+          "line": 7722,
           "prop": "iconBg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 7728,
+          "line": 7734,
           "prop": "chipBg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 7759,
+          "line": 7765,
           "prop": "cardGridBg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 8466,
+          "line": 8472,
           "prop": "previewPanelBg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 8478,
+          "line": 8484,
           "prop": "previewPanelShadow",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 8573,
+          "line": 8579,
           "prop": "heroShadow",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 8579,
+          "line": 8585,
           "prop": "sectionBg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 8626,
+          "line": 8632,
           "prop": "continuousSurface",
           "scalars": []
         },
@@ -314296,28 +314303,28 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1465,
+          "line": 1468,
           "prop": "iconBg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1477,
+          "line": 1480,
           "prop": "chipBg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 8602,
+          "line": 8608,
           "prop": "controlBg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 8626,
+          "line": 8632,
           "prop": "continuousSurface",
           "scalars": []
         },
@@ -314857,7 +314864,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1471,
+          "line": 1474,
           "prop": "iconBorder",
           "scalars": []
         },
@@ -315140,7 +315147,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 7759,
+          "line": 7765,
           "prop": "cardGridBg",
           "scalars": []
         },
@@ -315928,105 +315935,105 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1225,
+          "line": 1228,
           "prop": "bgFocus",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1334,
+          "line": 1337,
           "prop": "bg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1340,
+          "line": 1343,
           "prop": "bgHover",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1346,
+          "line": 1349,
           "prop": "bgFocus",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1652,
+          "line": 1655,
           "prop": "actionBg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1751,
+          "line": 1754,
           "prop": "countBg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1791,
+          "line": 1794,
           "prop": "surface",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1897,
+          "line": 1900,
           "prop": "commandHomeControlBg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 2021,
+          "line": 2024,
           "prop": "bg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 2053,
+          "line": 2056,
           "prop": "bg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 2083,
+          "line": 2086,
           "prop": "inputBg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 2103,
+          "line": 2106,
           "prop": "resultBg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 2385,
+          "line": 2388,
           "prop": "overflowControlBg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 2464,
+          "line": 2467,
           "prop": "controlBg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 6012,
+          "line": 6018,
           "prop": "bg",
           "scalars": []
         },
@@ -317944,21 +317951,21 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 6577,
+          "line": 6583,
           "prop": "bg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 6582,
+          "line": 6588,
           "prop": "bgHover",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 6587,
+          "line": 6593,
           "prop": "bgFocus",
           "scalars": []
         },
@@ -318973,259 +318980,259 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 979,
+          "line": 982,
           "prop": "surface",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1081,
+          "line": 1084,
           "prop": "bg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1098,
+          "line": 1101,
           "prop": "bg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1110,
+          "line": 1113,
           "prop": "bg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1220,
+          "line": 1223,
           "prop": "bg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1264,
+          "line": 1267,
           "prop": "bg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1547,
+          "line": 1550,
           "prop": "headerBg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1567,
+          "line": 1570,
           "prop": "imagePlaceholderBg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1865,
+          "line": 1868,
           "prop": "statusBg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1892,
+          "line": 1895,
           "prop": "commandHomeConsoleBg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1967,
+          "line": 1970,
           "prop": "bg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 2078,
+          "line": 2081,
           "prop": "emptyBg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 2108,
+          "line": 2111,
           "prop": "resultBgHover",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 2130,
+          "line": 2133,
           "prop": "bg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 2167,
+          "line": 2170,
           "prop": "emptyBg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 2177,
+          "line": 2180,
           "prop": "skeletonBg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 2199,
+          "line": 2202,
           "prop": "meterTrack",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 2231,
+          "line": 2234,
           "prop": "closeBgHover",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 2261,
+          "line": 2264,
           "prop": "headerBg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 2308,
+          "line": 2311,
           "prop": "meterTrack",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 2318,
+          "line": 2321,
           "prop": "sectionAltBg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 2335,
+          "line": 2338,
           "prop": "bgHover",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 2375,
+          "line": 2378,
           "prop": "listBg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 2390,
+          "line": 2393,
           "prop": "overflowControlBgHover",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 2412,
+          "line": 2415,
           "prop": "bg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 4916,
+          "line": 4922,
           "prop": "countBg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 5456,
+          "line": 5462,
           "prop": "surfaceRaised",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 6307,
+          "line": 6313,
           "prop": "bgActive",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 7307,
+          "line": 7313,
           "prop": "rowBgHover",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 7322,
+          "line": 7328,
           "prop": "rowBgExpanded",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 7369,
+          "line": 7375,
           "prop": "filterRowBg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 7650,
+          "line": 7656,
           "prop": "headerBg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 7661,
+          "line": 7667,
           "prop": "sectionAltBg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 7667,
+          "line": 7673,
           "prop": "footerBg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 8466,
+          "line": 8472,
           "prop": "previewPanelBg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 8561,
+          "line": 8567,
           "prop": "heroBg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 8579,
+          "line": 8585,
           "prop": "sectionBg",
           "scalars": []
         },
@@ -320032,7 +320039,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 7495,
+          "line": 7501,
           "prop": "shadow",
           "scalars": []
         }
@@ -320051,7 +320058,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 7501,
+          "line": 7507,
           "prop": "shadowHover",
           "scalars": []
         }
@@ -320102,7 +320109,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 1967,
+          "line": 1970,
           "prop": "bg",
           "scalars": []
         }
@@ -333848,7 +333855,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 7277,
+          "line": 7283,
           "prop": "headerLetterSpacing",
           "decl": "calc(var(--ds-text-eyebrow-letter-spacing, 0.08em) * $",
           "scalars": []
@@ -337987,28 +337994,28 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 7390,
+          "line": 7396,
           "prop": "reorderBg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 7886,
+          "line": 7892,
           "prop": "selectedRing",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 8327,
+          "line": 8333,
           "prop": "selectedRing",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 8435,
+          "line": 8441,
           "prop": "selectedRing",
           "scalars": []
         }
@@ -338035,14 +338042,14 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 4911,
+          "line": 4917,
           "prop": "focusRing",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 7512,
+          "line": 7518,
           "prop": "focusRing",
           "scalars": []
         }
@@ -338097,21 +338104,21 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 4394,
+          "line": 4400,
           "prop": "itemBgActive",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 4890,
+          "line": 4896,
           "prop": "activeBg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 8016,
+          "line": 8022,
           "prop": "badgeBg",
           "scalars": []
         }
@@ -358156,7 +358163,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-          "line": 5940,
+          "line": 5946,
           "prop": "fontSize",
           "decl": "calc(13px * var(--ds-type-scale, 1))",
           "scalars": [

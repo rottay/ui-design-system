@@ -12,9 +12,9 @@
       },
       {
         "file": "src/foundation/tokens/css/facade/artifacts/bithire/index.css",
-        "bytes": 96598,
-        "lines": 1724,
-        "sha256": "c293c28235baa4019f386a8df84c7674524355368c8dc418e87d1adb95b1db8e"
+        "bytes": 96747,
+        "lines": 1727,
+        "sha256": "c3c1201aba91ebc15108f68d43f95c9b99b9ae73db89a73665d1a4be8b8b4f96"
       },
       {
         "file": "src/foundation/tokens/css/facade/artifacts/evnto/index.css",
@@ -32,9 +32,9 @@
       },
       {
         "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-        "bytes": 338181,
-        "lines": 9304,
-        "sha256": "109a9127b7c73842f814f6dc738035e1f296bb43642e9a1fa2e009f9f186444e"
+        "bytes": 339534,
+        "lines": 9310,
+        "sha256": "ea45460b873d60a35bb0d58074d6fc000de86036367d037ae6138fcd60cc4471"
       },
       {
         "file": "src/foundation/tokens/ts/presentation/brand-themes/evnto/index.ts",
@@ -51,8 +51,8 @@
       "distinctChannels": 1212
     },
     "bithire": {
-      "occurrences": 1700,
-      "distinctChannels": 1230
+      "occurrences": 1703,
+      "distinctChannels": 1232
     },
     "evnto": {
       "occurrences": 563,
@@ -62,17 +62,17 @@
   "surface": {
     "declares": {
       "rottay": 1212,
-      "bithire": 1230,
+      "bithire": 1232,
       "evnto": 470
     },
-    "union": 1758,
+    "union": 1760,
     "intersection": 432,
-    "intersectionPct": 24.6,
+    "intersectionPct": 24.5,
     "intersectionPctOfSmallest": 91.9,
     "pairwise": {
       "rottay+bithire": {
         "shared": 684,
-        "union": 1758,
+        "union": 1760,
         "pctOfUnion": 38.9,
         "pctOfSmaller": 56.4
       },
@@ -84,8 +84,8 @@
       },
       "bithire+evnto": {
         "shared": 434,
-        "union": 1266,
-        "pctOfUnion": 34.3,
+        "union": 1268,
+        "pctOfUnion": 34.2,
         "pctOfSmaller": 92.3
       }
     },
@@ -893,6 +893,7 @@
         "--ds-material-inset-background",
         "--ds-material-inset-border",
         "--ds-material-inset-foreground",
+        "--ds-material-overlay-background",
         "--ds-material-overlay-foreground",
         "--ds-material-panel-background",
         "--ds-material-panel-background-active",
@@ -1031,6 +1032,7 @@
         "--ds-surface-control",
         "--ds-surface-control-bg",
         "--ds-surface-inset",
+        "--ds-surface-overlay",
         "--ds-surface-panel",
         "--ds-surface-panel-bg",
         "--ds-surface-raised",
@@ -11278,8 +11280,8 @@
         "sameRoleTwiceChannels": []
       },
       "bithire": {
-        "channelsDeclaredMoreThanOnce": 470,
-        "allInDistinctRoles": 470,
+        "channelsDeclaredMoreThanOnce": 471,
+        "allInDistinctRoles": 471,
         "sameRoleTwice": 0,
         "sameRoleTwiceChannels": []
       },
@@ -11296,17 +11298,17 @@
     "note": "Unidad distinta de la del artefacto. NUNCA fusionar con `surface`.",
     "authors": {
       "rottay": 1757,
-      "bithire": 1494,
+      "bithire": 1496,
       "evnto": 397
     },
-    "union": 2550,
+    "union": 2552,
     "intersection": 345,
     "intersectionPct": 13.5,
     "intersectionPctOfSmallest": 86.9,
     "pairwise": {
       "rottay+bithire": {
         "shared": 704,
-        "union": 2547,
+        "union": 2549,
         "pctOfUnion": 27.6,
         "pctOfSmaller": 47.1
       },
@@ -11318,14 +11320,14 @@
       },
       "bithire+evnto": {
         "shared": 349,
-        "union": 1542,
+        "union": 1544,
         "pctOfUnion": 22.6,
         "pctOfSmaller": 87.9
       }
     },
     "exclusive": {
       "rottay": 1008,
-      "bithire": 786,
+      "bithire": 788,
       "evnto": 3
     },
     "exclusiveSamples": {

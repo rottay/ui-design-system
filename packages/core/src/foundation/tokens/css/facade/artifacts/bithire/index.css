@@ -712,6 +712,7 @@
   --ds-material-inset-background: var(--ds-surface-inset);
   --ds-material-inset-border: #D7E2EA;
   --ds-material-inset-foreground: #31506B;
+  --ds-material-overlay-background: var(--ds-surface-overlay);
   --ds-material-overlay-foreground: #14283B;
   --ds-material-panel-background: var(--ds-surface-panel);
   --ds-material-panel-background-active: linear-gradient(180deg, #F6FAFC 0%, #EBF3F8 100%);
@@ -959,6 +960,7 @@
   --ds-surface-icon-bg: color-mix(in srgb, var(--ds-color-primary) 8%, var(--ds-surface-card));
   --ds-surface-icon-border: color-mix(in srgb, var(--ds-color-primary) 24%, var(--ds-color-border));
   --ds-surface-inset: #EDF3F7;
+  --ds-surface-overlay: #ffffff;
   --ds-surface-panel: #f4f8fd;
   --ds-surface-panel-bg: var(--ds-surface-panel);
   --ds-surface-radius-md: var(--ds-radius-md);
@@ -1656,6 +1658,7 @@
   --ds-surface-icon-bg: linear-gradient(145deg, color-mix(in srgb, var(--ds-color-primary) 12%, var(--ds-surface-card-bg)), color-mix(in srgb, var(--ds-color-secondary) 10%, var(--ds-surface-card-bg)));
   --ds-surface-icon-border: color-mix(in srgb, var(--ds-color-primary) 22%, var(--ds-surface-card-border));
   --ds-surface-inset: var(--ds-color-neutral-50);
+  --ds-surface-overlay: var(--ds-color-bg-elevated);
   --ds-surface-panel: var(--ds-color-bg-primary);
   --ds-surface-raised: linear-gradient(180deg, var(--ds-color-bg-elevated) 0%, var(--ds-color-bg-surface) 100%);
   --ds-surface-shadow: var(--ds-shadow-sm);

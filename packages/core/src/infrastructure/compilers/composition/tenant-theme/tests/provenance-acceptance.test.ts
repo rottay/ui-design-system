@@ -455,9 +455,28 @@ describe("case C — no contested tenant authorship changes nothing", () => {
   });
 
   it("keeps the shipped first-party variable counts", () => {
+    /* bithire 1231 -> 1229, con la aritmetica completa escrita porque tres lotes
+     * la movieron y una cuenta sin procedencia es imposible de auditar despues:
+     *   1231  estado previo
+     *    -3   F2A-1 Lote F (96b610162): --ds-surface-overlay,
+     *         --ds-material-overlay-background y --ds-material-raised-foreground,
+     *         removidos como duplicados de la capa base
+     *    +2   F2A-1 Lote F-2 (este cierre): se RESTAURAN los dos primeros. No eran
+     *         deuda muerta: salen de un solo campo (surfaceRoles.overlay.background)
+     *         que emite el canal y su alias en el mismo `if`, y el alias existe,
+     *         segun el comentario del propio compilador, para que un override DB
+     *         no quede enmascarado. Su remocion rompia la particion por modo en la
+     *         ruta de override plano (SC-7, APCA Lc 10.3).
+     *    -1   F2A-1 Lote F-prima (decision 19): --ds-glass-blur, congelaba el
+     *         resultado del dial surfaces.effect-intensity. Sitio unico de emision
+     *         (brand-theme/index.ts:1009), verificado en fuente y en el artefacto.
+     *   ----
+     *   1229  medido hoy
+     * --ds-material-raised-foreground sigue removido: es el unico de los tres del
+     * Lote F que si era duplicado sin ruta de override que proteger. */
     const counts: Record<Vertical, number> = {
       rottay: 1192,
-      bithire: 1231,
+      bithire: 1229,
       evnto: 468,
     };
     for (const vertical of VERTICALS) {

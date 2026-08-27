@@ -506,6 +506,21 @@ export const CI_GATES = Object.freeze([
     run: ['node', 'scripts/tokens/root-exposure-gate/index.mjs'],
     blocking: true,
   },
+  // Decision 19 (owner, 2026-08-26) hecha ejecutable: un dial publico conserva
+  // autoridad sobre sus canales en cada vertical. El drill va primero por la
+  // misma razon que arriba, y con un motivo propio: conserva como fixtures los
+  // dos casos que el owner adjudico, de modo que ablandar la regla en vez de
+  // corregir la fuente se ve como rojo y no como verde.
+  {
+    id: 'dial-authority-drill',
+    run: ['node', '--test', 'scripts/tokens/dial-authority-gate/index.test.mjs'],
+    blocking: true,
+  },
+  {
+    id: 'dial-authority',
+    run: ['node', 'scripts/tokens/dial-authority-gate/index.mjs'],
+    blocking: true,
+  },
   // Every production script is wired through a declared channel (manifest,
   // lifecycle chain or ci.yml) or it does not exist. This gate is what makes
   // §1.10's "the wiring gate counts all three channels" true.

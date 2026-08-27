@@ -8,7 +8,7 @@
 > Rollback: cada control es un INPUT — quitar la autoría restaura el baseline del vertical
 > (probado por los legs restore-equals-default del harness no-loss).
 
-digest: b05af7dc1eec0fd262d7139615e809937ed16844f681ccf146b543f431511319
+digest: 38611e8c43f5053b584a9d9974fdb237666a5f2885403d85bf20f854e3db44fd
 
 ## STANDARD — 13 controles (pocos diales, gran superficie)
 

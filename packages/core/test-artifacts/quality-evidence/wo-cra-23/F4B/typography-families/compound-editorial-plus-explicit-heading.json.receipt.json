@@ -44,10 +44,10 @@
     "packages/core/src/tooling/resolution-probe/runtime/ingress/index.mjs",
     "packages/core/src/tooling/resolution-probe/runtime/measure/index.mjs"
   ],
-  "sourceDigest": "8517e5de0b3407d50528c079add8e486aec27f19abb37df0c78fcc99307f4f15",
+  "sourceDigest": "3fffe9f8c801ba51427fd4dfe16be678ff2cc8aa563dd8046fbc83731de88b30",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/typography-families/compound-editorial-plus-explicit-heading.json",
   "artifactSha256": "a7c05b8467095a2694fb73cc45024c0e9e1b39273d34214ba4678dc60bfcd270",
-  "createdAt": "2026-08-26T23:08:02.000Z",
+  "createdAt": "2026-08-26T23:34:15.000Z",
   "negativeDrill": {
     "violation": "the explicit-wins fix silently overrides the whole typography family instead of only the field the document actually authored",
     "failsClosed": true,

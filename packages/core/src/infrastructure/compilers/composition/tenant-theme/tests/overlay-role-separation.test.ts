@@ -59,10 +59,44 @@ describe('SC-7 overlay panel/scrim separation', () => {
     );
   });
 
+  /* F2A-1 Lote F-2. El pin exacto se CONSERVA: `#ffffff` es el valor resuelto que
+   * bithire debe emitir para el panel, y aflojarlo a "definido, opaco y distinto
+   * del velo" aceptaria un `#00ff00` sin chistar (correccion del DT a una primera
+   * version mia que hizo justo eso). Lo que se agrega es la afirmacion que SC-7
+   * siempre quiso hacer y que el pin solo no hace: que panel y velo resuelvan a
+   * autoridades DISTINTAS. Las dos cosas, no una en lugar de la otra.
+   *
+   * Por que importa que esten juntas: el pin solo se cayo cuando el Lote F removio
+   * la declaracion del tema aunque la separacion siguiera intacta, y la separacion
+   * sola habria pasado con el panel pintando cualquier cosa. Juntas, la prueba
+   * distingue los dos modos de romperse. */
   it('static BrandTheme emits the tenant panel and veil independently', () => {
     const compiled = compileBrandTheme({ brandTheme: bithireBrandTheme, tenantSlug: 'bithire' });
-    expect(compiled.cssVariables['--ds-surface-overlay']).toBe('#ffffff');
-    expect(compiled.cssVariables['--ds-color-bg-overlay']).toBe('rgba(20, 40, 59, 0.42)');
+    const panel = compiled.cssVariables['--ds-surface-overlay'];
+    const veil = compiled.cssVariables['--ds-color-bg-overlay'];
+    // El pin duro, intacto.
+    expect(panel).toBe('#ffffff');
+    expect(veil).toBe('rgba(20, 40, 59, 0.42)');
+    // Y encima, la separacion de roles que da nombre a SC-7.
+    expect(panel).not.toBe(veil);
+    // El velo es scrim: translucido por construccion. El panel es superficie que
+    // un tooltip o un popover pintan ENCIMA, asi que es opaco. Confundirlos
+    // volveria falsa alguna de estas dos.
+    expect(veil).toMatch(/rgba?\(/i);
+    expect(panel).not.toMatch(/rgba?\(/i);
+  });
+
+  it('drill: the role-separation half dies if panel and veil collapse to one origin', () => {
+    /* El contrafactual que el DT pidio, sobre la mitad que el pin no cubre:
+     * plantar el colapso y ver morir el predicado de separacion. */
+    const collapsed = {
+      '--ds-surface-overlay': 'rgba(20, 40, 59, 0.42)',
+      '--ds-color-bg-overlay': 'rgba(20, 40, 59, 0.42)',
+    };
+    const panel = collapsed['--ds-surface-overlay'];
+    const veil = collapsed['--ds-color-bg-overlay'];
+    expect(() => expect(panel).not.toBe(veil)).toThrow();
+    expect(() => expect(panel).not.toMatch(/rgba?\(/i)).toThrow();
   });
 
   it('DB Advanced can tune either role without rewriting the other', () => {

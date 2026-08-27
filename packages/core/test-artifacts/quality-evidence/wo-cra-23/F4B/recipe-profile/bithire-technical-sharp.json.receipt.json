@@ -41,10 +41,10 @@
     "packages/core/src/tooling/resolution-probe/runtime/ingress/index.mjs",
     "packages/core/src/tooling/resolution-probe/runtime/measure/index.mjs"
   ],
-  "sourceDigest": "f11b97c8a1856d328d8c0ec147ea0d5bebc1002d063fd9734b5e3a1f29298366",
+  "sourceDigest": "d3cd65382575fb1a86ce2c7428454504a512bf18d0d2db688bc27c6950881969",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/recipe-profile/bithire-technical-sharp.json",
   "artifactSha256": "f5afcbee2d3ff42b246ae537c7fa6896516b343cef3bc469429f45d97c1b989d",
-  "createdAt": "2026-08-26T23:08:02.000Z",
+  "createdAt": "2026-08-26T23:34:15.000Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

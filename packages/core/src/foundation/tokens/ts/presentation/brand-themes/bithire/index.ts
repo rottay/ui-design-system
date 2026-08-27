@@ -962,8 +962,11 @@ const OVERLAY: BrandThemeModeOverlay = {
         shadow: "0 16px 36px -24px color-mix(in srgb, var(--ds-color-neutral-50) 80%, transparent), 0 4px 12px color-mix(in srgb, var(--ds-color-neutral-50) 58%, transparent)",
       },
       overlay: {
-        // F2A-1 Lote F: background removido -- alias-derivado a var(--ds-surface-overlay)
-        // en todo modo, duplicado exacto de default.css; la capa base gana.
+        /**
+         * @domicile derived
+         * @governor deriva de: --ds-color-bg-elevated — F2A-1 Lote F-2: RESTAURADO. El Lote F lo removio como duplicado exacto de la capa base y el cero-delta era cierto EN LA ESCENA POR DEFECTO, pero no cubria la ruta de override DB. Este campo emite DOS canales desde un solo `if` (brand-theme/index.ts:386-392): --ds-surface-overlay y su alias --ds-material-overlay-background, y el comentario del propio compilador dice para que existe el alias: "so a later DB TenantTheme override cannot be masked by a static vertical literal". Al removerlo, un override DB PLANO de --ds-surface-overlay pasaba a ser el ground de los DOS modos y chocaba con la tinta dark del tema (APCA Lc 10.3, SC-7). La declaracion por-modo es la portadora de esa particion: no era deuda muerta.
+         */
+        background: "var(--ds-color-bg-elevated)",
         /**
          * @domicile derived
          * @governor deriva de: --ds-color-text-primary
@@ -3970,8 +3973,11 @@ const SURFACES: BrandSurfaces = {
      * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
      */
     overlay: {
-      // F2A-1 Lote F: background removido -- alias-derivado a var(--ds-surface-overlay)
-      // en todo modo, duplicado exacto de default.css; la capa base gana.
+      /**
+       * @domicile seed
+       * @governor F2A-1 Lote F-2: RESTAURADO. El Lote F lo removio como duplicado exacto de la capa base y el cero-delta era cierto EN LA ESCENA POR DEFECTO, pero no cubria la ruta de override DB. Este campo emite DOS canales desde un solo `if` (brand-theme/index.ts:386-392): --ds-surface-overlay y su alias --ds-material-overlay-background, y el comentario del propio compilador dice para que existe el alias: "so a later DB TenantTheme override cannot be masked by a static vertical literal". Al removerlo, un override DB PLANO de --ds-surface-overlay pasaba a ser el ground de los DOS modos y chocaba con la tinta dark del tema (APCA Lc 10.3, SC-7). La declaracion por-modo es la portadora de esa particion: no era deuda muerta.
+       */
+      background: "#ffffff",
       foreground: "#14283B",
     },
   },
