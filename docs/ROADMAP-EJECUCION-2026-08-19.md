@@ -4569,6 +4569,43 @@ seeds reales y mover la superficie de calibración a un campo propio — la
 decisión 15 conserva su INTENT (superficie de calibración estrecha; dominio
 público 290 intacto) y se enmendará su formulación al cerrar C5.
 
+**CORRECCIÓN PRE-2B DEL INSTRUMENTO CERO-DELTA + RECEPCIÓN CODEX DE HITO (2026-08-27; commit
+`0c74b9412`; escritor DT; postaudit Fable: DEFECTS-1 → remedio verificado con 6 sondas
+adversariales propias → ACCEPT).** La consulta Codex del hito (rango `6f00cbada..6d8a7cd7e`)
+volvió vía owner con tres respuestas, asentadas acá como ley del frente. **(1) Cero-delta
+resuelto APROBADO como ley de aceptación de colapsos**, con dos correcciones previas a 2B,
+cerradas en este lote: (a) `--against` endurecido — ahora compara también **el conjunto
+unresolved** (multi-set vertical/scope/canal-externo/motivo/causa) y falla nombrando entradas
+y salidas; antes declaraba cero-delta mirando solo valores movidos (el defecto señalado en
+`resolved-map-diff/index.mjs:233`); (b) **semántica de fallback llevada a spec CSS Custom
+Properties L1**: es guaranteed-invalid la no declarada, la declarada `--x: initial` (9
+declaraciones reales del sidebar rottay, ahora marcadas con motivo propio), la IACVT
+transitiva (la declarada con cadena rota se comporta como no declarada: el fallback del
+consumidor ENGANCHA) y la cíclica — con el matiz que encontró el postaudit: **el MIEMBRO de
+un ciclo jamás engancha su propio fallback** (las aristas del grafo las crea el primer
+argumento de cada `var()`; §3.1), solo el consumidor externo; la guarda `depth` nunca
+engancha (escrito y drilleado). (c) **Atribución del conjunto unresolved**: canal EXTERNO +
+causa inmediata (antes se pisaban: 251 entradas con 99 tuplas distintas; ahora 260 tuplas
+distintas = 251 missing + 9 guaranteed-invalid). Artefacto re-pineado schemaVersion 1→2 con
+cada movimiento nombrado: **40 canales movidos, 40/40 con `var()` en el antes Y en el
+después — cero literales pintados movidos** (lo que cambió es dónde la resolución frena
+honesta en cadenas ya no-resueltas). **(2) Refinar-vocabulario-antes-de-colapsar
+APROBADO**: `state.delta` y `ramp.seed` solo con contrato autorado + owner explícito + cabeza
+emitida/gobernada; nunca raíces por coincidencia de valor; la fusión 8-roles/6-tiers sigue
+diferida (deuda con dueño: el frente, packet propio). **(3) Re-ancla E-2 AUTORIZADA** bajo 4
+condiciones (bytes vivos, trazada a la proyección, expira en F6, decrease-only inmediato; no
+habilita futuras re-anclas hacia arriba) — se ejecuta en el lote siguiente. **Batería:**
+suite del instrumento **24/24** (drills nuevos: fallback transitivo engancha/no-engancha,
+`initial`, ciclo miembro vs externo ×3, depth no engancha jamás, diffUnresolved, gemela
+`depth===undefined` en árbol real, guarda `inherit|unset|revert` en el mapa vivo);
+`--check` EXIT=0 **sin re-pin tras el fix de ciclo** (la condición exacta de Fable: cero
+ciclos reales ⇒ el fix no mueve el mapa); contract-gate verde con contadores idénticos
+(297/10/170/230/1472); **barrido 101 PASS/0 FAIL** sobre el estado final. **Write-set: 3
+archivos** (instrumento + tests + pin). **Próximo:** re-ancla E-2 (autorizada) → owner-tiers
+lote 2 → **2B con el contrato endurecido**: candidatos resueltos antes/después según el
+instrumento corregido, diff fuente exclusivamente literal→`var()`, y contrafactual tenant por
+raíz expuesta vía probe real. Métrica sin mover: 62%/~43%.
+
 **COHORTE 2A CERRADA — el eje PASO integrado SIN colapsar un literal (2026-08-27; commit
 `45d39fc64`; writer Opus en fases + DOS tablas autoradas del DT; postaudit Fable: DEFECTS-1
 condicionado → condición cumplida → ACCEPT).** Historia completa, porque es el proceso
