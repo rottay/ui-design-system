@@ -15,7 +15,7 @@
     "failClosed": "every expression the scanner cannot resolve is ONE ROW in unknownProvenance. Under STRICT a missing producer ADMITS a fallback branch and can LOWER debt, so under-counting producers can buy a false green: it is not a safe approximation and is never treated as one."
   },
   "inputsDigest": {
-    "cssEdges": "125054122a54da34056a404858444d6c7aff334e4d27825efd1644455289f540",
+    "cssEdges": "975bcb1ea2a9c8e813f6faf3a2cbaa6bef4993006d3b342de72126973861d34c",
     "cascadeRoots": "d1920ce06bb7e4b520828672d263351240d77c87f63ae6a7aab5dab7ac08c22e",
     "rootCatalog": "a3fcd4cd91586119e4570900ede6e5abc404abc4a6e3d35610e181a4c8746b5a",
     "srcTsx": "68940c68e98fcce49ff593764e7ecc713ea10f53b1434f61e2be820deae0f056",
@@ -23,13 +23,13 @@
     "artifacts": "9c382017023f21eea4ad5d9bc153a7392a4deae02eeb166e660c0c7c5b84099f"
   },
   "stats": {
-    "producerSites": 4872,
-    "channelEmissions": 10311,
-    "distinctChannels": 4585,
+    "producerSites": 4873,
+    "channelEmissions": 10312,
+    "distinctChannels": 4586,
     "byPlane": {
       "css": {
-        "producerSites": 4519,
-        "channelEmissions": 4519
+        "producerSites": 4520,
+        "channelEmissions": 4520
       },
       "ts-compilers": {
         "producerSites": 49,
@@ -46,7 +46,7 @@
     },
     "emissionsByEngineScope": {
       "modern+rustic+classic": 9720,
-      "modern": 521,
+      "modern": 522,
       "rustic": 68,
       "classic": 2
     },
@@ -2101,9 +2101,9 @@
     {"rootId":"typography.scale","to":"--ds-font-size-*","reason":"wildcard-shape"}
   ],
   "digests": {
-    "producerSites": "431c2c2a9a5c69f64ea73ba60cebb772afeb98ae875c9b7c79f11871e9f9228b",
-    "channelEmissions": "4b2b413e2d19108231df7141b44307f7583a9388a5607533e138a24476a48ec6",
-    "byChannel": "eb78eb6f81e26c1b5aa3c8275f6e133f66b5d76597d8b821e522d0faff77692e",
+    "producerSites": "f6777cfbf311594b987601c156d0171215ac8b0f262037ad00b9b8888438dfc3",
+    "channelEmissions": "e70d7ae9b4d9c0ea56a8793b433d94f66393ee8156d3799455ac75cbd72f5aa1",
+    "byChannel": "6e47e24f239c4c5e6942870516b26cce0a151d671d5b1eff17f88a5c03fbf3fa",
     "unknownProvenance": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
     "closedNonObject": "f8323daf3a289fe396585e009896f3cba46cc9713413ace7ea4d59837c5b7d57",
     "closedZeroGoverned": "7f843d250d72ae7e797ea034ad26a0e6dede7ededd59774b8b70ba85f603b4ba",
@@ -2140,6 +2140,7 @@
     {"producerSiteId":"0061f93a3a025348b8c590aa2ac778a418e10b578f0da49e13e90940f8b35588","plane":"css","file":"packages/core/src/foundation/tokens/css/presentation/components/patterns.css","line":144,"symbol":"--ds-surface-highlight-faint","ordinal":0,"ownerId":"css-declaration","ownerEvidence":"packages/core/src/foundation/tokens/css/presentation/components/patterns.css:144 declares --ds-surface-highlight-faint"},
     {"producerSiteId":"0069119e8af71ceb238884377f8fdfee62c0cb2e7779738e94c22311d3f44adc","plane":"css","file":"packages/core/src/foundation/tokens/css/foundation/themes/default.css","line":1247,"symbol":"--ds-alert-error-color","ordinal":0,"ownerId":"css-declaration","ownerEvidence":"packages/core/src/foundation/tokens/css/foundation/themes/default.css:1247 declares --ds-alert-error-color"},
     {"producerSiteId":"00737998a2f742616bbe5693c0358f7599bf6f64c87ac27b92036b535d1a0b8f","plane":"css","file":"packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/badge.css","line":391,"symbol":"--ds-badge-tone-outline","ordinal":0,"ownerId":"css-declaration","ownerEvidence":"packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/badge.css:391 declares --ds-badge-tone-outline"},
+    {"producerSiteId":"007b84658568facfcb33139bef3c2dc85bc50af01080127da01061e5a7178166","plane":"css","file":"packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css","line":52,"symbol":"--ds-textarea-clear-offset","ordinal":0,"ownerId":"css-declaration","ownerEvidence":"packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css:52 declares --ds-textarea-clear-offset"},
     {"producerSiteId":"008536c22847a1d15e0af92591882837cca514bf47b4bb13c88fc82e3960de7d","plane":"css","file":"packages/core/src/foundation/tokens/css/foundation/themes/default.css","line":948,"symbol":"--ds-z-index-max","ordinal":0,"ownerId":"css-declaration","ownerEvidence":"packages/core/src/foundation/tokens/css/foundation/themes/default.css:948 declares --ds-z-index-max"},
     {"producerSiteId":"00adcde453b26fd39143cdc2f10cd0d19fc7710b269b3614bcb19afc712eddcc","plane":"css","file":"packages/core/src/foundation/tokens/css/presentation/components/select.css","line":91,"symbol":"--ds-select-filled-bg-hover","ordinal":0,"ownerId":"css-declaration","ownerEvidence":"packages/core/src/foundation/tokens/css/presentation/components/select.css:91 declares --ds-select-filled-bg-hover"},
     {"producerSiteId":"00b31a06d37517c99c949532de550a42442207200c3ab0cd14b83b841b2b9920","plane":"css","file":"packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification.css","line":178,"symbol":"--ds-notification-accent","ordinal":0,"ownerId":"css-declaration","ownerEvidence":"packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification.css:178 declares --ds-notification-accent"},
@@ -7014,6 +7015,7 @@
     {"channelEmissionId":"e89ef1f8460e74ab1a515cceaf80861fabd97ff2e8e068002f06811cc8c07c23","producerSiteId":"0061f93a3a025348b8c590aa2ac778a418e10b578f0da49e13e90940f8b35588","channel":"--ds-surface-highlight-faint","engineScope":["modern","rustic","classic"],"applicabilityEvidence":"css-edges.json scopeTable[0] (path modern+rustic+classic INTERSECT selector modern+rustic+classic)","causalRootIds":[]},
     {"channelEmissionId":"15ab715da2a72d1dc9ec683ab9c109330386bcba92cacde8c7a62a0a2f60fc16","producerSiteId":"0069119e8af71ceb238884377f8fdfee62c0cb2e7779738e94c22311d3f44adc","channel":"--ds-alert-error-color","engineScope":["modern","rustic","classic"],"applicabilityEvidence":"css-edges.json scopeTable[0] (path modern+rustic+classic INTERSECT selector modern+rustic+classic)","causalRootIds":[]},
     {"channelEmissionId":"786eb07235fe36381f4bfcfd99097ad3eaf2ffeecf36bc9ec2c05d6faebac45d","producerSiteId":"00737998a2f742616bbe5693c0358f7599bf6f64c87ac27b92036b535d1a0b8f","channel":"--ds-badge-tone-outline","engineScope":["modern"],"applicabilityEvidence":"css-edges.json scopeTable[8] (path modern INTERSECT selector modern)","causalRootIds":[]},
+    {"channelEmissionId":"60bf174619c2724f8b3459416d0ac06d2ec974c1fa4ca5af2da2cb12292b2d4a","producerSiteId":"007b84658568facfcb33139bef3c2dc85bc50af01080127da01061e5a7178166","channel":"--ds-textarea-clear-offset","engineScope":["modern"],"applicabilityEvidence":"css-edges.json scopeTable[7] (path modern INTERSECT selector modern+rustic+classic)","causalRootIds":[]},
     {"channelEmissionId":"fbcd0cdb01c94f80b6f182ab530a43e2ca53e6c32c6e484b5ff4f554c962dd0c","producerSiteId":"008536c22847a1d15e0af92591882837cca514bf47b4bb13c88fc82e3960de7d","channel":"--ds-z-index-max","engineScope":["modern","rustic","classic"],"applicabilityEvidence":"css-edges.json scopeTable[0] (path modern+rustic+classic INTERSECT selector modern+rustic+classic)","causalRootIds":[]},
     {"channelEmissionId":"d6da9cae40805d53b0e7d8b6581eee74fb3b1ce7a2d6e127c9f9de3696c4a57c","producerSiteId":"00adcde453b26fd39143cdc2f10cd0d19fc7710b269b3614bcb19afc712eddcc","channel":"--ds-select-filled-bg-hover","engineScope":["modern","rustic","classic"],"applicabilityEvidence":"css-edges.json scopeTable[0] (path modern+rustic+classic INTERSECT selector modern+rustic+classic)","causalRootIds":[]},
     {"channelEmissionId":"34f971a9930fb452d3df6b301e2ce0e981c61231584ceee422b7fa144583f13a","producerSiteId":"00b31a06d37517c99c949532de550a42442207200c3ab0cd14b83b841b2b9920","channel":"--ds-notification-accent","engineScope":["modern"],"applicabilityEvidence":"css-edges.json scopeTable[8] (path modern INTERSECT selector modern)","causalRootIds":[]},
@@ -34482,6 +34484,9 @@
       "811e19761b1f2f51cbfd4861ffc05cdb6c0ef6cff62a1c0b5824e97998c3cc2b",
       "81bf42e20469ad8698dbb9c21368f470a0d6dc7ef1e86200ff3ecf364a711795",
       "3bac290e5c5c48bae764760bf4d55c5e8a1264db5de067c1aea98d1a8e09a462"
+    ],
+    "--ds-textarea-clear-offset": [
+      "60bf174619c2724f8b3459416d0ac06d2ec974c1fa4ca5af2da2cb12292b2d4a"
     ],
     "--ds-textarea-color": [
       "b5ec0b2e2edee81149e7e722e92a6adeead10767f73d17ab5c6aed5c795dd776",

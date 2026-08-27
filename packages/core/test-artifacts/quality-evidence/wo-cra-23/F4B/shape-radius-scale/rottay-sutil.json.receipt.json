@@ -70,10 +70,10 @@
     "packages/core/src/ui/primitives/display/Card/engines/rustic/index.tsx",
     "packages/core/src/ui/primitives/display/Card/index.tsx"
   ],
-  "sourceDigest": "c46100b34aa5415c4b35af58339f6b3288df09ba414038fcf67ab8a2c0c34cd1",
+  "sourceDigest": "984031f51411101e0b4b50a1c83eb53c35014bacd6bc64ee9eb2fb4f79186e7b",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/shape-radius-scale/rottay-sutil.json",
   "artifactSha256": "c6e14e491c0319a852fb70f4ca52da285d8721ad5821a0811a299f4f8ccac955",
-  "createdAt": "2026-08-27T08:50:34.523Z",
+  "createdAt": "2026-08-27T10:15:24.000Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

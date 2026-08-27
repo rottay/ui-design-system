@@ -1,9 +1,9 @@
 {
  "schemaVersion": 1,
- "generatedBy": "tokens-catalog gate re-derivation, 2026-08-27 (mini-lote C-02: textarea clear-button entra a la ley de densidad, --ds-density-effective-scale gana 2 lecturas css) — digest re-projected from the current census report; figures unchanged (writers 4669, deadWriters 266); adjudications unchanged",
- "basedOnReportDigest": "01149e2d6c2b2daaf5d36e8c6879721cad13a726cdf1c87e6c686e773393d73f",
+ "generatedBy": "tokens-catalog gate re-derivation, 2026-08-27 (F3 C-02b: --ds-textarea-clear-offset gana su declaracion-seed — writers 4669->4670 con la razon; la clearance deriva de la geometria del boton) — digest re-projected from the current census report; deadWriters unchanged (266=266); adjudications unchanged",
+ "basedOnReportDigest": "f892923b9b894aba2277b5f50e8b518f49378b18584083b7dd3e87888c835db8",
  "normative": {
-  "writers": 4669,
+  "writers": 4670,
   "deadWriters": 266,
   "definition": "customization-surface-census.mjs header — writer = manifest sets ∪ authored-CSS decls ∪ AST TS write-sites ∪ artifact emissions; productive read = PostCSS var() ∪ AST-classified TS read; metadata never counts"
  },

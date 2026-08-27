@@ -33612,6 +33612,15 @@ input.rottay-input.rottay-input--modern[type='number'] {
  */
 
 .ds-textarea-field[data-part='field'] {
+  /* SEED del offset de la accion de limpiar, declarada UNA vez en el scope que
+     ambos lectores comparten (el boton es hijo directo, y la raiz del textarea
+     tambien). Antes el 0.375rem vivia sólo como fallback, repetido en las dos
+     inset del boton; al derivar la clearance de esta misma geometria habria
+     quedado un tercer literal igual. La ley de literales admite el literal en la
+     definicion de la seed, y esto es esa definicion: los tres sitios ahora la
+     leen bare. Un tenant que autore el canal mueve el boton Y su reserva a la vez,
+     que es la unica forma en que la reserva no puede quedar desfasada. */
+  --ds-textarea-clear-offset: 0.375rem;
   container-type: inline-size;
   position: relative;
   display: grid;
@@ -33657,9 +33666,43 @@ input.rottay-input.rottay-input--modern[type='number'] {
 }
 
 /* Leave breathing room for the clear action so long values never slide
-   underneath it; the padding is logical, so RTL mirrors for free. */
+   underneath it; the padding is logical, so RTL mirrors for free.
+
+   LA RESERVA SE DERIVA DE LA GEOMETRIA QUE RESERVA (C-02b). El default era el
+   literal 1.75rem, que describia el boton a densidad 1 y dejaba de describirlo en
+   cuanto la densidad se movia: desde scale>1.1 el valor largo se metia debajo del
+   boton, y en el techo del clamp el boton desbordaba 2.375rem. La reserva ahora se
+   compone de las MISMAS tres piezas que posicionan y dimensionan el boton
+   (:205-215), leidas de los mismos canales, asi que no puede desfasarse de el.
+
+   POR QUE NO CO-ESCALAR EL LITERAL. `1.75rem * scale` parece equivalente y rompe el
+   PISO: a scale=0.5 daria 0.875rem contra un boton que ocupa 1.0rem (offset 0.375 +
+   alto 0.625) -- se meteria debajo justo en compacto. El error es escalar el total
+   cuando sólo una de sus partes escala.
+
+   EL MARGEN RESIDUAL NO ESCALA, a proposito: 0.125rem es respiro absoluto entre el
+   texto y el boton, no una proporcion de la tipografia ni de la densidad. Escalarlo
+   lo volveria invisible en compacto y excesivo en espacioso.
+
+   Aritmetica en los tres puntos que importan (action-size 1.25rem por defecto):
+     scale 1    ->  0.375 + 1.25  + 0.125 = 1.75rem   (IDENTICO al default anterior)
+     scale 0.5  ->  0.375 + 0.625 + 0.125 = 1.125rem  >= 1.0rem   que ocupa el boton
+     scale 3    ->  0.375 + 3.75  + 0.125 = 4.25rem   >= 4.125rem que ocupa el boton
+   El 0.125rem es el unico literal, y vive donde la ley lo admite: en la definicion
+   del default de este canal, que es lo que este fallback es.
+
+   TENANT-LAST: `--ds-textarea-clear-clearance` sigue mandando si esta autorado --
+   la formula es su FALLBACK, no un override. */
 .ds-textarea-field[data-part='field'][data-has-clear='true'] > .ds-textarea.ds-textarea--modern[data-part='root'] {
-  padding-block-start: calc(var(--ds-textarea-clear-clearance, 1.75rem));
+  padding-block-start: var(
+    --ds-textarea-clear-clearance,
+    calc(
+      var(--ds-textarea-clear-offset) +
+        var(--ds-input-action-size, var(--ds-input-md-icon-size)) *
+        var(--ds-density-effective-scale) +
+        0.125rem
+    )
+  );
 }
 
 /* Size geometry on the canonical textarea scale (density scales the spacing
@@ -33774,8 +33817,8 @@ input.rottay-input.rottay-input--modern[type='number'] {
    attribute (4th-tanda law; no test pinned the doubled form). */
 .ds-textarea-field[data-part='field'] > [data-part='clear-button'][type='button'] {
   position: absolute;
-  inset-block-start: var(--ds-textarea-clear-offset, 0.375rem);
-  inset-inline-end: var(--ds-textarea-clear-offset, 0.375rem);
+  inset-block-start: var(--ds-textarea-clear-offset);
+  inset-inline-end: var(--ds-textarea-clear-offset);
   box-sizing: border-box;
   display: inline-grid;
   place-items: center;

@@ -53,10 +53,10 @@
     "packages/core/src/ui/primitives/feedback/Alert/engines/rustic/index.tsx",
     "packages/core/src/ui/primitives/feedback/Alert/index.tsx"
   ],
-  "sourceDigest": "25c35ea56387c9bd18f622896191a96005d3fd119431e4cc75b716cead3f9a83",
+  "sourceDigest": "82a321b8e761b4ac8b31a7125a974c776b7c87da84ffcded441074f74eb2896c",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/motion-dial/bithire-duration-scale-low.json",
   "artifactSha256": "b85f04e94e3bfd98c9c1aec2a6a150d4a6bf605704461a6ce6426f8ec550a1d0",
-  "createdAt": "2026-08-27T08:50:34.523Z",
+  "createdAt": "2026-08-27T10:15:24.000Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

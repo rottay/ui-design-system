@@ -11,7 +11,7 @@
   "substrate": {
     "path": "manifest/cascade/extracted/css-edges.json",
     "schemaVersion": 2,
-    "digest": "125054122a54da34056a404858444d6c7aff334e4d27825efd1644455289f540"
+    "digest": "975bcb1ea2a9c8e813f6faf3a2cbaa6bef4993006d3b342de72126973861d34c"
   },
   "planeVocabulary": [
     "css",

@@ -4,7 +4,7 @@
   "scope": "Phase-0 exact proof and minimal public-claim floor; not DS-IMP-060 completion",
   "reproducibility": {
     "classification": "deterministic same-input runs",
-    "authorityDigest": "671c0a002fa706e52289f23ef60de68806d117d282a82d2db295db240ebdc183",
+    "authorityDigest": "f672d6af23849fd36115c90a274b428278a9cfa52dbb97f85fd4691569527d15",
     "sourceHeadIsAuthority": false,
     "toolchain": {
       "node": {
@@ -102,7 +102,7 @@
   "documentationAuthority": {
     "path": "ui-design-system/packages/core/scripts/evidence/gat-07-exact-proof/gat-07-exact-proof.documentation-seal.json",
     "requirementsRevision": "969205380fd24eb45947bf3748db5a6cacd798f8",
-    "documentationRevision": "f842cc3f69b6ec581f527a70294edffb54067a8f",
+    "documentationRevision": "3db1c0da6825cf179f63f538cd5a4842ac882b15",
     "inspectedDocsMatchRevision": true,
     "sealed": true,
     "sealingErrors": []
@@ -284,7 +284,7 @@
           "documentation-seal"
         ],
         "bytes": 166,
-        "sha256": "ecdeaeca4c70fed1c50b8690efcd3a1d76764e99080a3f6eb6e83ceb16a9390c"
+        "sha256": "d736a2fca428615d3dbaada887f61c8ba802e1cf029bb583cb1f94fd4bb5106e"
       },
       {
         "path": "ui-design-system/packages/core/scripts/evidence/gat-07-exact-proof/gat-07-exact-proof.public-claim-floor.json",
@@ -6033,8 +6033,8 @@
           "data-part-corpus",
           "stale-claim-corpus"
         ],
-        "bytes": 22703,
-        "sha256": "01e58b5e22b5d4ce1514f02a0ce822232cefb1d05e837f42b1eac1183f2d5a3e"
+        "bytes": 25166,
+        "sha256": "f2108a2040422e7ea796186fa435e63b5aab3ca84728c96ad36318d817177a99"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/time-picker.css",
@@ -7389,8 +7389,8 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 1457285,
-        "sha256": "8e2141464574b3f4eb03e13a63b85739fed5b2c11a960745f2bcb6e14aca7ed0"
+        "bytes": 1457120,
+        "sha256": "f68596ca7f5dfbea787a4cbab81efbff6aefceba34454a6d991787ce6e8c4a26"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/tokens/residual-adjudication.json",
@@ -36995,24 +36995,24 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 5384456,
-        "sha256": "7e68db57d5db4dbaf9bd4c3b2ef6be6dc42d088777b88ebecacdf5ec52a2d1d9"
+        "bytes": 5386919,
+        "sha256": "1d3a66c0fbf0f886b9dfb71a6236ec865c61180fbd3e00a4cc901d8c843ebdb5"
       },
       {
         "path": "ui-design-system/packages/core/styles/evnto.css",
         "roles": [
           "audit-input"
         ],
-        "bytes": 5317100,
-        "sha256": "20e0b4e63325ecaec1eef082955eecf463db28bde941bc5d1ca3fff3de27d85e"
+        "bytes": 5319563,
+        "sha256": "8f09a8d1a9d41d55cffd60e81e450a00669e6be387537a179b127e823491ddca"
       },
       {
         "path": "ui-design-system/packages/core/styles/index.css",
         "roles": [
           "audit-input"
         ],
-        "bytes": 5507267,
-        "sha256": "1847be3802c4bcf2cceac23ab26abaad0c7d678eb6de9b95bc203782593c882b"
+        "bytes": 5509730,
+        "sha256": "c71d068ed904ac46ebf56af3b12579550d4009bfb7081bcf9b59472192d963b4"
       },
       {
         "path": "ui-design-system/packages/core/styles/modern.css",
@@ -37027,8 +37027,8 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 5376796,
-        "sha256": "47b912632db5d0f500dbf0db30b56ad00836bdf7b4212438c6f086e4669db07d"
+        "bytes": 5379259,
+        "sha256": "b9f34e154797ab4d4dcb211a0145cc2b5a798518480f9d0bd78e7be1142a723a"
       },
       {
         "path": "ui-design-system/packages/showroom/e2e/visual/communication-batch.spec.ts",
@@ -40519,7 +40519,7 @@
         "sha256": "d2a99efed33922a4a699ea033538b677022ddaccf0cdbb25ece0a7295bdc4812"
       }
     ],
-    "digest": "671c0a002fa706e52289f23ef60de68806d117d282a82d2db295db240ebdc183"
+    "digest": "f672d6af23849fd36115c90a274b428278a9cfa52dbb97f85fd4691569527d15"
   },
   "paintAudit": {
     "output": "engine-token-audit --check OK (3326 counters; 3226 completed zeros locked exactly; 91 decrease-only ceilings; 2 positive exact invariants; 7 positive minimum floors)",
@@ -46517,35 +46517,35 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 204
+          "line": 247
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 235
+          "line": 278
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 242
+          "line": 285
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 250
+          "line": 293
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 361
-        },
-        {
-          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 370
-        },
-        {
-          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 377
+          "line": 404
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
           "line": 413
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
+          "line": 420
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
+          "line": 456
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/time-picker.css",
@@ -47983,31 +47983,31 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 268
+          "line": 311
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 282
+          "line": 325
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 286
+          "line": 329
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 290
+          "line": 333
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 299
+          "line": 342
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 299
+          "line": 342
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 409
+          "line": 452
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/input-residual.css",
@@ -51362,67 +51362,67 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 90
+          "line": 125
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 204
+          "line": 247
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 235
+          "line": 278
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 242
+          "line": 285
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 250
+          "line": 293
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 268
+          "line": 311
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 282
+          "line": 325
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 286
+          "line": 329
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 290
+          "line": 333
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 299
+          "line": 342
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 299
+          "line": 342
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 361
-        },
-        {
-          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 370
-        },
-        {
-          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 377
-        },
-        {
-          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 409
+          "line": 404
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
           "line": 413
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
+          "line": 420
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
+          "line": 452
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
+          "line": 456
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/toggle.css",
@@ -75692,39 +75692,15 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 55
+          "line": 64
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 90
+          "line": 125
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 96
-        },
-        {
-          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 102
-        },
-        {
-          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 108
-        },
-        {
-          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 114
-        },
-        {
-          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 119
-        },
-        {
-          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 126
-        },
-        {
-          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 129
+          "line": 139
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
@@ -75732,23 +75708,19 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 148
-        },
-        {
-          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
           "line": 151
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 155
+          "line": 157
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 159
+          "line": 162
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 167
+          "line": 169
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
@@ -75756,55 +75728,67 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 175
+          "line": 188
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 180
+          "line": 191
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 187
+          "line": 194
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 190
+          "line": 198
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 193
+          "line": 202
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 196
+          "line": 210
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 313
+          "line": 215
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 328
+          "line": 218
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 335
+          "line": 223
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 340
+          "line": 230
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 346
+          "line": 233
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 355
+          "line": 236
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 370
+          "line": 239
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
+          "line": 356
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
+          "line": 371
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
+          "line": 378
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
@@ -75812,15 +75796,31 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 392
+          "line": 389
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 396
+          "line": 398
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 401
+          "line": 413
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
+          "line": 426
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
+          "line": 435
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
+          "line": 439
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
+          "line": 444
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/time-picker.css",
@@ -113900,8 +113900,8 @@
   "deterministicRuns": {
     "count": 2,
     "hashes": [
-      "7fa7b09f69812eeea10c461aa5ca2b1d3f2d767fa4d7522c66e10735e270d50e",
-      "7fa7b09f69812eeea10c461aa5ca2b1d3f2d767fa4d7522c66e10735e270d50e"
+      "9dcb2b92a00db3532e67bb70c891d253b787f6b185760266e480871f03d0162b",
+      "9dcb2b92a00db3532e67bb70c891d253b787f6b185760266e480871f03d0162b"
     ],
     "agree": true
   }

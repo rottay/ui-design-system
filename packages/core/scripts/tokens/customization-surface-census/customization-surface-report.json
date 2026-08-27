@@ -3,7 +3,7 @@
   "generatedBy": "scripts/tokens/customization-surface-census/index.mjs --write",
   "meta": {
     "scopeLaw": "DS-SCOPED PROJECTION (core+showroom). deadWriters is a projection for gates and catalogs, NEVER the instrument behind a deletion: on the same population an app-aware inverted index found 53 census-dead channels with LIVE app readers (F5 reconciliation, 2026-08-02 — the --ds-text-eyebrow failure at scale). Death verdicts require the app-inclusive index plus the raw-mention gate.",
-    "inputsDigest": "c453ff2da36e9b0e320b513901821b7d69cd57e74391ae465a39388d632a1668",
+    "inputsDigest": "57986db148f5a9594901ac7dfa73dfa8258da4c7e593b8b71995890ece53a3f2",
     "manifestSchemaVersion": 4,
     "corpus": {
       "authoredCssFiles": 466,
@@ -14,12 +14,12 @@
   },
   "counts": {
     "universe": 7301,
-    "writers": 4669,
+    "writers": 4670,
     "foundationTokens": 3357,
-    "componentTokens": 566,
+    "componentTokens": 567,
     "tenantChannels": 2191,
     "publicHooks": 91,
-    "unadjudicatedReads": 2607,
+    "unadjudicatedReads": 2606,
     "deadWriters": 266,
     "frontierReserved": 20,
     "modernConsumedUnique": 3674,
@@ -34403,7 +34403,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 321,
+        "css": 322,
         "ts": 7,
         "tests": true,
         "modern": true,
@@ -45402,7 +45402,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 6,
+        "css": 7,
         "ts": 0,
         "tests": false,
         "modern": true,
@@ -47127,7 +47127,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 13,
+        "css": 14,
         "ts": 1,
         "tests": false,
         "modern": true,
@@ -95571,12 +95571,12 @@
       "tsMetadataMentions": 0
     },
     "--ds-textarea-clear-offset": {
-      "category": "unadjudicated-read",
-      "tier": "application-unadjudicated",
-      "status": "unwritten-hook",
-      "writer": false,
+      "category": "component-channel",
+      "tier": "internal",
+      "status": "active",
+      "writer": true,
       "reads": {
-        "css": 2,
+        "css": 3,
         "ts": 0,
         "tests": false,
         "modern": true,

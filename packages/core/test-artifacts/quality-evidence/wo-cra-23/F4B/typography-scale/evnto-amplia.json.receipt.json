@@ -69,10 +69,10 @@
     "packages/core/src/ui/primitives/display/Card/engines/rustic/index.tsx",
     "packages/core/src/ui/primitives/display/Card/index.tsx"
   ],
-  "sourceDigest": "58a17d411bfade6c65cd6dbd764361a2a80ddaf8a93bb8d74e909d205c5f5aec",
+  "sourceDigest": "7e3bcea95e8f112a7baaac6fc71d5fae2a50075f8d44befd5b198eea1d4bd81c",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/typography-scale/evnto-amplia.json",
   "artifactSha256": "21fd7bdc2f1959522385e984b7cdecf4d879a68f0c74ba3055c6bb72c3097db4",
-  "createdAt": "2026-08-27T08:50:34.523Z",
+  "createdAt": "2026-08-27T10:15:24.000Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

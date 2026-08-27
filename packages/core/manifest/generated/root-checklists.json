@@ -5406,7 +5406,7 @@
             {
               "plane": "modern-skin-css",
               "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-              "line": 152,
+              "line": 195,
               "prop": "border-color",
               "families": [
                 "primitive/inputs/textarea"
@@ -5416,7 +5416,7 @@
             {
               "plane": "modern-skin-css",
               "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-              "line": 283,
+              "line": 326,
               "prop": "color",
               "families": [
                 "primitive/inputs/textarea"
@@ -28394,7 +28394,7 @@
             {
               "plane": "modern-skin-css",
               "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-              "line": 62,
+              "line": 71,
               "prop": "caret-color",
               "families": [
                 "primitive/inputs/textarea"
@@ -28404,7 +28404,7 @@
             {
               "plane": "modern-skin-css",
               "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-              "line": 79,
+              "line": 88,
               "prop": "scrollbar-color",
               "families": [
                 "primitive/inputs/textarea"
@@ -28414,7 +28414,7 @@
             {
               "plane": "modern-skin-css",
               "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-              "line": 176,
+              "line": 219,
               "prop": "border-color",
               "families": [
                 "primitive/inputs/textarea"
@@ -28424,7 +28424,7 @@
             {
               "plane": "modern-skin-css",
               "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-              "line": 350,
+              "line": 393,
               "prop": "caret-color",
               "families": [
                 "primitive/inputs/textarea"
@@ -34416,7 +34416,7 @@
             {
               "plane": "modern-skin-css",
               "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-              "line": 350,
+              "line": 393,
               "prop": "caret-color",
               "families": [
                 "primitive/inputs/textarea"
@@ -34734,7 +34734,7 @@
             {
               "plane": "modern-skin-css",
               "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-              "line": 62,
+              "line": 71,
               "prop": "caret-color",
               "families": [
                 "primitive/inputs/textarea"
@@ -34744,7 +34744,7 @@
             {
               "plane": "modern-skin-css",
               "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-              "line": 176,
+              "line": 219,
               "prop": "border-color",
               "families": [
                 "primitive/inputs/textarea"
@@ -34754,7 +34754,7 @@
             {
               "plane": "modern-skin-css",
               "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-              "line": 350,
+              "line": 393,
               "prop": "caret-color",
               "families": [
                 "primitive/inputs/textarea"
@@ -35053,7 +35053,7 @@
             {
               "plane": "modern-skin-css",
               "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-              "line": 121,
+              "line": 164,
               "prop": "background",
               "families": [
                 "primitive/inputs/textarea"
@@ -64860,7 +64860,7 @@
         "resolvedBy": {
           "binding": 501,
           "binding-multi": 76,
-          "class+binding": 1260,
+          "class+binding": 1261,
           "class": 155,
           "source-owner": 70,
           "unattributed": 61
@@ -70947,7 +70947,17 @@
             {
               "plane": "modern-skin-css",
               "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-              "line": 214,
+              "line": 131,
+              "prop": "padding-block-start",
+              "families": [
+                "primitive/inputs/textarea"
+              ],
+              "resolvedBy": "class+binding"
+            },
+            {
+              "plane": "modern-skin-css",
+              "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
+              "line": 257,
               "prop": "min-inline-size",
               "families": [
                 "primitive/inputs/textarea"
@@ -70957,7 +70967,7 @@
             {
               "plane": "modern-skin-css",
               "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-              "line": 215,
+              "line": 258,
               "prop": "block-size",
               "families": [
                 "primitive/inputs/textarea"
@@ -72213,7 +72223,7 @@
             {
               "plane": "modern-skin-css",
               "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-              "line": 49,
+              "line": 58,
               "prop": "gap",
               "families": [
                 "primitive/inputs/textarea"
@@ -76382,7 +76392,7 @@
             {
               "plane": "modern-skin-css",
               "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-              "line": 49,
+              "line": 58,
               "prop": "gap",
               "families": [
                 "primitive/inputs/textarea"
@@ -90822,7 +90832,7 @@
             {
               "plane": "modern-skin-css",
               "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-              "line": 52,
+              "line": 61,
               "prop": "scroll-margin-block",
               "families": [
                 "primitive/inputs/textarea"
@@ -102520,6 +102530,7 @@
             "block-size",
             "gap",
             "min-inline-size",
+            "padding-block-start",
             "scroll-margin-block"
           ],
           "rows": [
@@ -102527,7 +102538,8 @@
               "channel": "--ds-density-effective-scale",
               "props": [
                 "block-size",
-                "min-inline-size"
+                "min-inline-size",
+                "padding-block-start"
               ],
               "files": [
                 "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css"
@@ -112910,7 +112922,7 @@
         "resolvedBy": {
           "binding": 501,
           "binding-multi": 76,
-          "class+binding": 1288,
+          "class+binding": 1289,
           "class": 155,
           "source-owner": 70,
           "unattributed": 61
@@ -119355,7 +119367,17 @@
             {
               "plane": "modern-skin-css",
               "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-              "line": 214,
+              "line": 131,
+              "prop": "padding-block-start",
+              "families": [
+                "primitive/inputs/textarea"
+              ],
+              "resolvedBy": "class+binding"
+            },
+            {
+              "plane": "modern-skin-css",
+              "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
+              "line": 257,
               "prop": "min-inline-size",
               "families": [
                 "primitive/inputs/textarea"
@@ -119365,7 +119387,7 @@
             {
               "plane": "modern-skin-css",
               "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-              "line": 215,
+              "line": 258,
               "prop": "block-size",
               "families": [
                 "primitive/inputs/textarea"
@@ -120631,7 +120653,7 @@
             {
               "plane": "modern-skin-css",
               "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-              "line": 49,
+              "line": 58,
               "prop": "gap",
               "families": [
                 "primitive/inputs/textarea"
@@ -124800,7 +124822,7 @@
             {
               "plane": "modern-skin-css",
               "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-              "line": 49,
+              "line": 58,
               "prop": "gap",
               "families": [
                 "primitive/inputs/textarea"
@@ -139240,7 +139262,7 @@
             {
               "plane": "modern-skin-css",
               "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-              "line": 52,
+              "line": 61,
               "prop": "scroll-margin-block",
               "families": [
                 "primitive/inputs/textarea"
@@ -150947,6 +150969,7 @@
             "block-size",
             "gap",
             "min-inline-size",
+            "padding-block-start",
             "scroll-margin-block"
           ],
           "rows": [
@@ -150954,7 +150977,8 @@
               "channel": "--ds-density-effective-scale",
               "props": [
                 "block-size",
-                "min-inline-size"
+                "min-inline-size",
+                "padding-block-start"
               ],
               "files": [
                 "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css"
@@ -161444,7 +161468,7 @@
         "resolvedBy": {
           "binding": 501,
           "binding-multi": 76,
-          "class+binding": 1288,
+          "class+binding": 1289,
           "class": 155,
           "source-owner": 70,
           "unattributed": 61
@@ -167889,7 +167913,17 @@
             {
               "plane": "modern-skin-css",
               "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-              "line": 214,
+              "line": 131,
+              "prop": "padding-block-start",
+              "families": [
+                "primitive/inputs/textarea"
+              ],
+              "resolvedBy": "class+binding"
+            },
+            {
+              "plane": "modern-skin-css",
+              "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
+              "line": 257,
               "prop": "min-inline-size",
               "families": [
                 "primitive/inputs/textarea"
@@ -167899,7 +167933,7 @@
             {
               "plane": "modern-skin-css",
               "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-              "line": 215,
+              "line": 258,
               "prop": "block-size",
               "families": [
                 "primitive/inputs/textarea"
@@ -169175,7 +169209,7 @@
             {
               "plane": "modern-skin-css",
               "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-              "line": 49,
+              "line": 58,
               "prop": "gap",
               "families": [
                 "primitive/inputs/textarea"
@@ -173344,7 +173378,7 @@
             {
               "plane": "modern-skin-css",
               "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-              "line": 49,
+              "line": 58,
               "prop": "gap",
               "families": [
                 "primitive/inputs/textarea"
@@ -187784,7 +187818,7 @@
             {
               "plane": "modern-skin-css",
               "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-              "line": 52,
+              "line": 61,
               "prop": "scroll-margin-block",
               "families": [
                 "primitive/inputs/textarea"
@@ -199491,6 +199525,7 @@
             "block-size",
             "gap",
             "min-inline-size",
+            "padding-block-start",
             "scroll-margin-block"
           ],
           "rows": [
@@ -199498,7 +199533,8 @@
               "channel": "--ds-density-effective-scale",
               "props": [
                 "block-size",
-                "min-inline-size"
+                "min-inline-size",
+                "padding-block-start"
               ],
               "files": [
                 "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css"
@@ -209997,7 +210033,7 @@
         "resolvedBy": {
           "binding": 501,
           "binding-multi": 76,
-          "class+binding": 1288,
+          "class+binding": 1289,
           "class": 155,
           "source-owner": 70,
           "unattributed": 61
@@ -216442,7 +216478,17 @@
             {
               "plane": "modern-skin-css",
               "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-              "line": 214,
+              "line": 131,
+              "prop": "padding-block-start",
+              "families": [
+                "primitive/inputs/textarea"
+              ],
+              "resolvedBy": "class+binding"
+            },
+            {
+              "plane": "modern-skin-css",
+              "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
+              "line": 257,
               "prop": "min-inline-size",
               "families": [
                 "primitive/inputs/textarea"
@@ -216452,7 +216498,7 @@
             {
               "plane": "modern-skin-css",
               "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-              "line": 215,
+              "line": 258,
               "prop": "block-size",
               "families": [
                 "primitive/inputs/textarea"
@@ -217728,7 +217774,7 @@
             {
               "plane": "modern-skin-css",
               "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-              "line": 49,
+              "line": 58,
               "prop": "gap",
               "families": [
                 "primitive/inputs/textarea"
@@ -221897,7 +221943,7 @@
             {
               "plane": "modern-skin-css",
               "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-              "line": 49,
+              "line": 58,
               "prop": "gap",
               "families": [
                 "primitive/inputs/textarea"
@@ -236337,7 +236383,7 @@
             {
               "plane": "modern-skin-css",
               "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-              "line": 52,
+              "line": 61,
               "prop": "scroll-margin-block",
               "families": [
                 "primitive/inputs/textarea"
@@ -248044,6 +248090,7 @@
             "block-size",
             "gap",
             "min-inline-size",
+            "padding-block-start",
             "scroll-margin-block"
           ],
           "rows": [
@@ -248051,7 +248098,8 @@
               "channel": "--ds-density-effective-scale",
               "props": [
                 "block-size",
-                "min-inline-size"
+                "min-inline-size",
+                "padding-block-start"
               ],
               "files": [
                 "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css"
@@ -270641,7 +270689,7 @@
             {
               "plane": "modern-skin-css",
               "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-              "line": 72,
+              "line": 81,
               "prop": "font-family",
               "families": [
                 "primitive/inputs/textarea"
@@ -287104,7 +287152,7 @@
             {
               "plane": "modern-skin-css",
               "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-              "line": 67,
+              "line": 76,
               "prop": "border-radius",
               "families": [
                 "primitive/inputs/textarea"
@@ -292536,7 +292584,7 @@
             {
               "plane": "modern-skin-css",
               "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-              "line": 67,
+              "line": 76,
               "prop": "border-radius",
               "families": [
                 "primitive/inputs/textarea"
@@ -297415,7 +297463,7 @@
             {
               "plane": "modern-skin-css",
               "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-              "line": 67,
+              "line": 76,
               "prop": "border-radius",
               "families": [
                 "primitive/inputs/textarea"
@@ -328781,7 +328829,7 @@
             {
               "plane": "modern-skin-css",
               "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-              "line": 272,
+              "line": 315,
               "prop": "font-size",
               "families": [
                 "primitive/inputs/textarea"
@@ -329942,7 +329990,7 @@
             {
               "plane": "modern-skin-css",
               "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-              "line": 272,
+              "line": 315,
               "prop": "font-size",
               "families": [
                 "primitive/inputs/textarea"
@@ -331268,7 +331316,7 @@
             {
               "plane": "modern-skin-css",
               "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-              "line": 272,
+              "line": 315,
               "prop": "font-size",
               "families": [
                 "primitive/inputs/textarea"
@@ -331301,7 +331349,7 @@
             {
               "plane": "modern-skin-css",
               "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-              "line": 110,
+              "line": 153,
               "prop": "font-size",
               "families": [
                 "primitive/inputs/textarea"
@@ -331334,7 +331382,7 @@
             {
               "plane": "modern-skin-css",
               "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-              "line": 104,
+              "line": 147,
               "prop": "font-size",
               "families": [
                 "primitive/inputs/textarea"
@@ -331367,7 +331415,7 @@
             {
               "plane": "modern-skin-css",
               "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-              "line": 98,
+              "line": 141,
               "prop": "font-size",
               "families": [
                 "primitive/inputs/textarea"

@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "generatedBy": "FASE K + Codex C1 reconciliation 2026-08-03 — rows that gained productive writers removed from the orphan-read ledger",
-  "basedOnManifestDigest": "62bc2a84e58a328f143ecc299561994e3b3043159f0bf17d45ed993b245dfd07",
+  "generatedBy": "re-ancla C-02b (F3, 2026-08-27, DT Kimi K3): --ds-textarea-clear-offset gana su declaracion-seed y sale del orphan-read ledger (ley FASE K: una fila que gana writer productivo se remueve); digest re-proyectado sobre el hooks-manifest republicado (la seed nueva staleo el manifiesto — hooks:generate). Rows 2607 -> 2606. Precedente de formato: fd58f8ba4",
+  "basedOnManifestDigest": "ce8ed4dbf05f0a44fa45393c87c2291a92575026fdcad0ee7c553e1c6b31f402",
   "laws": [
     "a read without an owner classification cannot ship: every name in hooks-manifest.unadjudicatedReads has exactly one row here",
     "MODERN_PRIVATE includes engine-agnostic private channels (fallback-governed, single owning reader) — the non-modern-reader:foundation-tokens flag preserves the distinction without widening the closed vocabulary",
@@ -33106,16 +33106,6 @@
         "foundation/tokens/css/runtime/engines/modern/skin/textarea.css"
       ],
       "evidence": "undeclared internal channel; 1 read(s) in modern, 1 with a governing fallback"
-    },
-    {
-      "name": "--ds-textarea-clear-offset",
-      "family": "textarea",
-      "class": "MODERN_PRIVATE",
-      "owner": "foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-      "readSites": [
-        "foundation/tokens/css/runtime/engines/modern/skin/textarea.css"
-      ],
-      "evidence": "undeclared internal channel; 2 read(s) in modern, 2 with a governing fallback"
     },
     {
       "name": "--ds-textarea-lg-line-height",

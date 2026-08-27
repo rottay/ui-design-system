@@ -6553,8 +6553,8 @@
       "excludes": "src/foundation/tokens/css/facade/artifacts/",
       "excludeReason": "Los artefactos de tenant son la SALIDA que se esta juzgando; incluirlos haria que el piso se explicara a si mismo.",
       "files": 466,
-      "channels": 3577,
-      "sha256": "ae16c965f98cc0e44a273fd5c61c23d7b343dc8eb93852b2f03660b4a81559e2",
+      "channels": 3578,
+      "sha256": "4e1ecf5eef1d7da7d7ee3055ba8ae4da7364546bebc26181f08d3bb2c440d511",
       "derivedForms": "var( | calc( | color-mix(",
       "note": "Tamano y hash del piso medido. Si el piso cambia, esta cifra se mueve y la clasificacion de raices se vuelve a discutir con evidencia."
     },
