@@ -1395,7 +1395,7 @@ paso de esa cadena está autorizado por este checkpoint.
 | F4B | **20/20 controles ASENTADOS — FASE COMPLETA en su forma honesta (2026-08-26)** — 9 `COMPUTED_VERIFIED` (spacing.rhythm, surfaces.effect-intensity, shape.radius-scale, density.mode, responsive.posture, typography.scale, experience.profile, palette.seeds, surfaces.elevation-posture) + 10 `SOURCE_BOUND` (button-style, typography.pairing, sidebar-tone, motion.dial, typography.families, recipe-profile, profiles.expressive, profiles.icon, token-overrides, chrome.anatomy) + `chrome.families` paraguas BY_REFERENCE (`UNKNOWN` a propósito, `SURFACE_REVIEW_DEFERRED_TO_F5`). **0 `SIGHTED_ACCEPTED`.** Cero evidencia alcanzable pendiente: token-overrides cerró con techo estructural documentado (clase CSS-terminal + puerta sellada ⇒ sin camino a pass:true; candidato F5 `F5_INSTRUMENT_SEALED_DOOR_SINGLE_ARM_VERDICT` con 2 condiciones de admisión Fable). Lo que falta para que los SOURCE_BOUND suban (ratificación propertyGroup, calibración de celdas) es F4C/F5. 134 receipts bajo validador v2 (**134/134 válidos**; la supuesta marca "stale declarado: compound-editorial" era un `scenarioId` leído como estado — corrección verificada contra el árbol y asentada 2026-08-27). **C5 CERRADO (2026-08-26, commits `fd58f8ba4` gate-debt + `44b14f521` correctivo + docs-engineering `46960f2`):** α1 implementado (`derivedChannels` = radio de impacto de 3 seeds; `calibrationChannels` = superficie atribuible de 2, subconjunto fail-closed), cadena derivada re-emitida entera incluyendo el eslabón no enumerado (`producers.json`), gates:ci **89/89 blocking verdes** + 2 excluidos con owner, postaudit Fable ACCEPT (ver asiento de cierre C5) |
 | F2 asimétrico | **FRENTE CERRADO (2026-08-26)** — las 34 raíces asimétricas con disposición escrita y ejecutada: F2A-0 `fb8ff25b6`/`bf21afec2` (censo) · F2A-1 ley de cinco clases adjudicada (preaudit Fable + consenso Opus que corrigió el instrumento) · Lote A `dfc39efcf` · Lote B `2509bdd3d` (T0 `#A8A898`, decisión 17) · Lotes F/F-2 `96b610162`/`fc1b8faf9` · re-medición `6f3fbe90c` · F′ `791f86be6` (ley 19 + gate dial-authority blocking) · F″ `9e57502af` (28 pendings, decisión 20) · anotaciones `0bd953dbc`. Postaudit Fable por lote, Codex en hitos. Pendientes a fases posteriores (ninguno bloquea el cierre): valor del line-height bithire (ruling de diseño del owner), micro-fix C-02 del clear-button de textarea, pregunta sighted del glass sobre backdrop oscuro (F4C), validador cascade-aware y override plano mode-aware (F5), cableado text-page de evnto (35/1/0), 2 gates excluidos que vuelven cuando sus enumeradores existan |
 | F3 | **PILOTO v3 CERRADO (2026-08-27, `b2b2ad82c`)** — criterio de 3 términos probado punta a punta con cero-delta computado (1 sitio, `cell-renderers`); condición Codex del `13px`×3 resuelta por REMOCIÓN (no reproduce ninguna seed 12/14/16; idioma corpus bare ~50:1; fallback inalcanzable); cifras históricas de §6 corregidas (ver asiento §13); postaudit Fable DEFECTS-2 → ACCEPT condicionado cumplido. **Hito Codex 2026-08-27: ACCEPT del cierre técnico de la migración (4 lotes, +156/−33 en 8 archivos); eje craft PAUSADO por directiva del owner hasta que exista la puerta de normalización profunda.** F4C/F5-F8 pendientes |
-| Normalización profunda (puerta ejecutable pre-F4C; directiva owner 2026-08-27) | **COHORTE 1 CERRADA (2026-08-27, `b00e5700a`; cohorte 0 en `3ccd2f402`)** — membresía canal→raíz persistida (753/1.610 canales con raíz por 3 vías sin coincidencia textual) + tabla owner-tiers autorada por el DT (114) + inventario v2 con **R2 26→906** (piso 412) + `collapsesLegacy` fechado. Cero literales colapsados aún — el primer colapso (color/surfaces) espera el gate `normalization-contract-gate` (drill de duplicación-real) y el diseño de cohorte 2 |
+| Normalización profunda (puerta ejecutable pre-F4C; directiva owner 2026-08-27) | **COHORTE 1 CERRADA (2026-08-27, `b00e5700a`; cohorte 0 en `3ccd2f402`)** — membresía canal→raíz persistida (753/1.610 canales con raíz por 3 vías sin coincidencia textual) + tabla owner-tiers autorada por el DT (114) + inventario v2 con **R2 26→906** (piso 412) + `collapsesLegacy` fechado. Cero literales colapsados aún — el primer colapso (color/surfaces) espera el gate `normalization-contract-gate` (drill de duplicación-real) y el diseño de cohorte 2. **PUERTA EN PIE (2026-08-27, `1c5037903`):** gate blocking con las 5 leyes de la enmienda + 18 drills + baseline con deuda enumerada (sombras 152, grupos divergentes 214/1.495, unassigned 297 — decrease-only) |
 | F9 | 0/5100 celdas aceptadas |
 | Programa completo | estimación prudente **62% realizado** (ingeniería; corregida a la baja tras la revisión Codex 2026-08-27: la enmienda de paridad profunda agregó scope que el 63–65% previo no descontaba); preparación comercial visible ~43%. Cerrar F4A/F4B **no certifica** F9: 0/5100 celdas aceptadas, gate y calibración de celdas propios, aún pendientes |
 
@@ -4568,6 +4568,39 @@ adjudicación DT sometida a preaudit es α1: restaurar `derivedChannels` a sus 3
 seeds reales y mover la superficie de calibración a un campo propio — la
 decisión 15 conserva su INTENT (superficie de calibración estrecha; dominio
 público 290 intacto) y se enmendará su formulación al cerrar C5.
+
+**PUERTA DEL FRENTE EN PIE — `normalization-contract-gate` BLOCKING (2026-08-27; commit
+`1c5037903`; writer Opus; postaudit Fable: ACCEPT con 4 rulings favorables).** Las 5 leyes de la
+enmienda del owner quedan ejecutables y cableadas (99 gates / 97 blocking; orden
+root-membership(92) < slot-inventory(94) < normalization-contract(96)): **L1** el contrato tipado
+de familia no puede relajarse en silencio (las 10 claves readonly sin `?`, `Record` no `Partial`
+— reconciliación declarada: el SeedSlotValue por-hoja no existe, es de las cohortes de colapso);
+**L2** prohibido nombrar autoridad INEXISTENTE (inversión ratificada: la forma literal de
+`GOVERNOR_CLASS` reprobaría 115 governors legítimos que declaran "no hay dial"; el daño perseguido
+es la mentira, no el silencio; 10 preexistentes enumerados por nombre; falso positivo del comodín
+`--ds-stats-grid-*` evitado y drilleado — 24 hallazgos falsos); **L3** `unassigned` decrease-only
+297 con drill de que ambos baselines llevan el MISMO número; **L4(a)** 152 pines-sombra
+enumerados (la cohorte 0 solo pudo 20 sin membresía; 70% vía la tabla del lote 1); **L4(b)**
+duplicación de decisión como **trinquete decrease-only 214 grupos/1.495 slots** con coordenada
+refinada (tema, raíz, propiedad, estado, modo — la enunciada (tema,raíz,modo) medía 127/1.688 =
+46% del corpus porque conflata decisiones que DEBEN diferir; un gate que exige cero en deuda
+preexistente es un gate permanentemente rojo, que es lo mismo que no tener gate — ruling (d1)
+ratificado con reproducción de ambas mediciones); **L5** allowlist COMPUESTO (67+8×20+9×7=290)
++ puerta DB 20/20 (`ingress.dbTenantThemePath` — el `documentPath` del brief no existe en
+manifiestos; sustitución verificada, ruling (d3)). **18 drills**, con el trío obligatorio en forma
+property-based: anti-coincidencia PASA / duplicación-real FALLA / D3 biyección de valores
+invariante (+ su par: colapsar valores SÍ cambia el veredicto) — **la única comparación de valores
+del frente es cardinalidad (`Set(...).size`), jamás contenido**. Baseline con `namedDebt`
+enumerado y `--write-baseline` que niega re-ancla hacia arriba sin `--reason`. **Incidente de la
+auditora, declarado y reparado antes del commit:** ensayó `--write-baseline` creyendo sandbox y el
+CLI escribió el baseline real (sin afordancia de ruta); daño exacto = el campo `lastMove`;
+reparación determinista re-corriendo con la razón original preservada en las reasons
+por-contador; lección adoptada por el programa: **jamás ejecutar un modo de escritura de un CLI
+sin leer antes su contrato de rutas** (me la anoto también a mí). Batería: barrido 97 PASS/0
+FAIL, artifacts byte-idénticos, cero derivados (el gate LEE, no escribe), perímetro 4 archivos.
+**Con esto, la condición de la directiva "puerta con implementación real antes de craft masivo"
+queda satisfecha a nivel gate** — el craft masivo sigue pausado porque el frente de colapso es lo
+que la puerta protege, y ese frente es el que corre.
 
 **COHORTE 1 CERRADA (2026-08-27; commit `b00e5700a`; writer Opus en dos fases + tabla autorada
 del DT; postaudit Fable: ACCEPT con 3 rulings favorables).** La membresía canal→raíz queda
