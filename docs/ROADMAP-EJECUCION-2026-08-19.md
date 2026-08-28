@@ -4569,6 +4569,36 @@ seeds reales y mover la superficie de calibración a un campo propio — la
 decisión 15 conserva su INTENT (superficie de calibración estrecha; dominio
 público 290 intacto) y se enmendará su formulación al cerrar C5.
 
+**LOTE PURITY STRING-EXACTO CERRADO — LA DEUDA CASO-HEX DEL INSTRUMENTO QUEDA CERRADA (Y ESTABA
+DRILLEADA EN VERDE) (2026-08-28; commit `b468f205f`; writer Opus; postaudit Fable: ACCEPT (el drill prueba una propiedad MAS FUERTE que la pedida; la no-sombra verificada; dos menores no bloqueantes quedan en cola: codigo muerto en el drill (c) + docblock del consumidor loadArm/scopesOf)).**
+`purity.normalise` pierde el `toLowerCase` (el `trim` se queda — whitespace de bordes, que ningún
+navegador distingue) y la comparación cabeza↔autorado pasa a ser **string-exacta**, alineada con
+el `--against` del cero-delta resuelto. **Población adjudicada: 43 filas, no las 36 del brief**
+— el writer frenó por la cláusula 2c con el censo medido: mi contador del extractor v4 era un
+subconjunto por construcción (solo llega al test de caso entre las elegibles E1–E5); 43 = 34 (v4)
++ 8 (`gap-o-inexistente`) + 1 (`linkColor`, eje-paleta), inclusión estricta y aritmética sin
+residuo. Todas hex-case, todas bithire (el único tema que mezcla las dos convenciones en volumen:
+277 cabezas hex mayúscula vs 65 minúscula; rottay 462/5, evnto 75/28). **El efecto es
+RECLASIFICACIÓN, no regresión:** `pure` 200→**157**, `value-shift` 1.419→**1.462** — trasvase
+puro, con `rows` 2.003 y `head-not-emitted` 384 quietos; las 43 ya eran incolapsables (el
+`--against` las frenaba igual), solo que el censo no lo mostraba. **Hallazgo del lote: la deuda
+estaba drilleada en verde** — el test viejo afirmaba que el caso no se distingue ("un STOP por
+mayúsculas sería ruido"); el writer lo **invirtió en su sitio** con la razón del vuelco (el diff
+muestra inversión, no desaparición). Drills 13/13; el drill del árbol real afirma la PROPIEDAD
+(ninguna `pure` difiere de su cabeza solo por el caso), no la lista congelada — la lección del pin
+que ya costó una vez. **Ley dura intacta:** `resolved-map --check` EXIT=0 sin re-pin, dos veces,
+mismo digest. Nadie consume purity downstream (verificado por ambos). **Las dos capas, los dos
+veredictos correctos:** `bithire:PALETTE.borderFocusColor` sigue `pure` (su cabeza emite
+minúscula, byte-idéntica — NO está en las 43); su caso-hex de P1 era de la capa de emisión
+(sonda de ausencia), y ambas decisiones eran correctas. Mi "34+2" del brief queda corregido:
+34+1+1-de-otra-capa. **Deuda que queda viva con dueño (F4C):** el lado VISUAL del caso-hex —
+unificar el caso en la fuente o en la derivación desbloquearía 43 colapsos reales; queda medido
+y nominado en vez de escondido dentro de un `pure` falso. **Lección adoptada:** censar con TODOS
+los motivos que aplican a una fila, no el primero (mejora futura del extractor, no urgente: la
+elegibilidad sigue fail-closed igual). Barrido del writer: 101 blocking passed; receipts intactos.
+Métrica sin mover: **62% / ~43%** — se reevalúa al cierre de la cohorte paleta.
+
+
 **LOTE LEDGER-GATE CERRADO — EL BASELINE DE SLOT-INVENTORY AHORA LO VERIFICA SU PROPIO PRODUCTOR
 (2026-08-28; commit `d3322f695`; writer Opus; postaudit Fable: ACCEPT — verifico la no-sombra EN POSITIVO (los 4 canales siguen enumerados en el censo L4a del norm-gate; clase residual vacia, 0/33 raices refinadas sin ley)).** Cierra el hallazgo de
 P1 en el mismo día: `BASELINE_PATH` existía desde la cohorte 0 y **nadie lo leía** — 4 de las 5
