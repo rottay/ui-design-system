@@ -1395,7 +1395,7 @@ paso de esa cadena está autorizado por este checkpoint.
 | F4B | **20/20 controles ASENTADOS — FASE COMPLETA en su forma honesta (2026-08-26)** — 9 `COMPUTED_VERIFIED` (spacing.rhythm, surfaces.effect-intensity, shape.radius-scale, density.mode, responsive.posture, typography.scale, experience.profile, palette.seeds, surfaces.elevation-posture) + 10 `SOURCE_BOUND` (button-style, typography.pairing, sidebar-tone, motion.dial, typography.families, recipe-profile, profiles.expressive, profiles.icon, token-overrides, chrome.anatomy) + `chrome.families` paraguas BY_REFERENCE (`UNKNOWN` a propósito, `SURFACE_REVIEW_DEFERRED_TO_F5`). **0 `SIGHTED_ACCEPTED`.** Cero evidencia alcanzable pendiente: token-overrides cerró con techo estructural documentado (clase CSS-terminal + puerta sellada ⇒ sin camino a pass:true; candidato F5 `F5_INSTRUMENT_SEALED_DOOR_SINGLE_ARM_VERDICT` con 2 condiciones de admisión Fable). Lo que falta para que los SOURCE_BOUND suban (ratificación propertyGroup, calibración de celdas) es F4C/F5. 134 receipts bajo validador v2 (**134/134 válidos**; la supuesta marca "stale declarado: compound-editorial" era un `scenarioId` leído como estado — corrección verificada contra el árbol y asentada 2026-08-27). **C5 CERRADO (2026-08-26, commits `fd58f8ba4` gate-debt + `44b14f521` correctivo + docs-engineering `46960f2`):** α1 implementado (`derivedChannels` = radio de impacto de 3 seeds; `calibrationChannels` = superficie atribuible de 2, subconjunto fail-closed), cadena derivada re-emitida entera incluyendo el eslabón no enumerado (`producers.json`), gates:ci **89/89 blocking verdes** + 2 excluidos con owner, postaudit Fable ACCEPT (ver asiento de cierre C5) |
 | F2 asimétrico | **FRENTE CERRADO (2026-08-26)** — las 34 raíces asimétricas con disposición escrita y ejecutada: F2A-0 `fb8ff25b6`/`bf21afec2` (censo) · F2A-1 ley de cinco clases adjudicada (preaudit Fable + consenso Opus que corrigió el instrumento) · Lote A `dfc39efcf` · Lote B `2509bdd3d` (T0 `#A8A898`, decisión 17) · Lotes F/F-2 `96b610162`/`fc1b8faf9` · re-medición `6f3fbe90c` · F′ `791f86be6` (ley 19 + gate dial-authority blocking) · F″ `9e57502af` (28 pendings, decisión 20) · anotaciones `0bd953dbc`. Postaudit Fable por lote, Codex en hitos. Pendientes a fases posteriores (ninguno bloquea el cierre): valor del line-height bithire (ruling de diseño del owner), micro-fix C-02 del clear-button de textarea, pregunta sighted del glass sobre backdrop oscuro (F4C), validador cascade-aware y override plano mode-aware (F5), cableado text-page de evnto (35/1/0), 2 gates excluidos que vuelven cuando sus enumeradores existan |
 | F3 | **PILOTO v3 CERRADO (2026-08-27, `b2b2ad82c`)** — criterio de 3 términos probado punta a punta con cero-delta computado (1 sitio, `cell-renderers`); condición Codex del `13px`×3 resuelta por REMOCIÓN (no reproduce ninguna seed 12/14/16; idioma corpus bare ~50:1; fallback inalcanzable); cifras históricas de §6 corregidas (ver asiento §13); postaudit Fable DEFECTS-2 → ACCEPT condicionado cumplido. **Hito Codex 2026-08-27: ACCEPT del cierre técnico de la migración (4 lotes, +156/−33 en 8 archivos); eje craft PAUSADO por directiva del owner hasta que exista la puerta de normalización profunda.** F4C/F5-F8 pendientes |
-| Normalización profunda (puerta ejecutable pre-F4C; directiva owner 2026-08-27) | **COHORTE 1 CERRADA (2026-08-27, `b00e5700a`; cohorte 0 en `3ccd2f402`)** — membresía canal→raíz persistida (753/1.610 canales con raíz por 3 vías sin coincidencia textual) + tabla owner-tiers autorada por el DT (114) + inventario v2 con **R2 26→906** (piso 412) + `collapsesLegacy` fechado. Cero literales colapsados aún — el primer colapso (color/surfaces) espera el gate `normalization-contract-gate` (drill de duplicación-real) y el diseño de cohorte 2. **PUERTA EN PIE (2026-08-27, `1c5037903`):** gate blocking con las 5 leyes de la enmienda + 18 drills + baseline con deuda enumerada (sombras 152, grupos divergentes 214/1.495, unassigned 297 — decrease-only). **COHORTE 2A CERRADA (`45d39fc64`):** eje `paso` integrado (33 raíces nuevas, tabla owner-step-rules del DT) — R2 **1.005**, purity.pure **332**, r2Floor **593**, cero delta resuelto. **CORRECCIÓN PRE-2B CERRADA (`0c74b9412`):** instrumento cero-delta endurecido (conjunto unresolved al diff, fallback a spec CSS con ciclo-miembro correcto, atribución externo+causa; Fable ACCEPT). **E-2 APLICADA (`df121b4c4`):** +32KB a los 18 subpaths con los 3 themes, autorización owner con las 4 condiciones en `_budgetGovernance`. **2B SUB-LOTE 1 (`d8592aad5`)** — primer colapso real (21 slots). **OWNER-STEP-RULES LOTE 2 (`3cbd42d95`):** ley de espejo + convenciones BrandPalette, pure 315→333. **2B PLENA CERRADA (`628e228a3`):** 128 slots en 19 raíces, cero-delta 3×, contrafactual 8/8, **el primer grupo divergente cierra por colapso real** (239→238/1639→1635, baja legal); pure 333→205 consumida. Próximo: cohorte PALETA (diseño Opus listo: P0 gobierno de las 5 raíces gap, P1 retire×29 cero-delta, P2 derivación consciente del modo) |
+| Normalización profunda (puerta ejecutable pre-F4C; directiva owner 2026-08-27) | **COHORTE 1 CERRADA (2026-08-27, `b00e5700a`; cohorte 0 en `3ccd2f402`)** — membresía canal→raíz persistida (753/1.610 canales con raíz por 3 vías sin coincidencia textual) + tabla owner-tiers autorada por el DT (114) + inventario v2 con **R2 26→906** (piso 412) + `collapsesLegacy` fechado. Cero literales colapsados aún — el primer colapso (color/surfaces) espera el gate `normalization-contract-gate` (drill de duplicación-real) y el diseño de cohorte 2. **PUERTA EN PIE (2026-08-27, `1c5037903`):** gate blocking con las 5 leyes de la enmienda + 18 drills + baseline con deuda enumerada (sombras 152, grupos divergentes 214/1.495, unassigned 297 — decrease-only). **COHORTE 2A CERRADA (`45d39fc64`):** eje `paso` integrado (33 raíces nuevas, tabla owner-step-rules del DT) — R2 **1.005**, purity.pure **332**, r2Floor **593**, cero delta resuelto. **CORRECCIÓN PRE-2B CERRADA (`0c74b9412`):** instrumento cero-delta endurecido (conjunto unresolved al diff, fallback a spec CSS con ciclo-miembro correcto, atribución externo+causa; Fable ACCEPT). **E-2 APLICADA (`df121b4c4`):** +32KB a los 18 subpaths con los 3 themes, autorización owner con las 4 condiciones en `_budgetGovernance`. **2B SUB-LOTE 1 (`d8592aad5`)** — primer colapso real (21 slots). **OWNER-STEP-RULES LOTE 2 (`3cbd42d95`):** ley de espejo + convenciones BrandPalette, pure 315→333. **2B PLENA CERRADA (`628e228a3`):** 128 slots en 19 raíces, cero-delta 3×, contrafactual 8/8, **el primer grupo divergente cierra por colapso real** (239→238/1639→1635, baja legal); pure 333→205 consumida. **2B COLA CERRADA (`9f9dbc597`) — COHORTE 2B COMPLETA:** 3 slots finales (edit en línea con 3 aserciones), contadores quietos, pure **202**; la clase `pure` fuera de paleta queda **agotada salvo 5 bloqueadas-con-dueño** (4 esperan la cohorte paleta por E7 uniformidad — ley nueva codificada en el extractor v4 — y 1 es deuda del eje `seeds.json`). Próximo: cohorte PALETA (diseño Opus listo: P0 gobierno de las 5 raíces gap — **espera decisión owner por el dial público nuevo `palette.status-seeds`** — P1 retire×29 cero-delta, P2 derivación consciente del modo con consulta Codex preparada) |
 | F9 | 0/5100 celdas aceptadas |
 | Programa completo | estimación prudente **62% realizado** (ingeniería; corregida a la baja tras la revisión Codex 2026-08-27: la enmienda de paridad profunda agregó scope que el 63–65% previo no descontaba); preparación comercial visible ~43%. Cerrar F4A/F4B **no certifica** F9: 0/5100 celdas aceptadas, gate y calibración de celdas propios, aún pendientes |
 
@@ -4568,6 +4568,53 @@ adjudicación DT sometida a preaudit es α1: restaurar `derivedChannels` a sus 3
 seeds reales y mover la superficie de calibración a un campo propio — la
 decisión 15 conserva su INTENT (superficie de calibración estrecha; dominio
 público 290 intacto) y se enmendará su formulación al cerrar C5.
+
+**2B COLA CERRADA — LA CLASE `pure` FUERA DE PALETA QUEDA AGOTADA SALVO 5 BLOQUEADAS-CON-DUEÑO
+(2026-08-28; commit `9f9dbc597`; writer Opus; postaudit Fable: **ACCEPT** con reproducción propia
+— SequenceMatcher propio sobre el diff, `--against` y gate re-corridos, clave L4b del v4
+replicada en JS independiente con los mismos 238/1635 y los mismos 4 grupos uniformes).** Último lote de la
+cohorte 2B: **3 slots colapsados** literal→`var()` en bithire (`filled.bgFocus`→
+`--ds-surface-control`, tenant-dial con contrafactual e=1; `clear.colorHover` y
+`autofill.color`→`--ds-color-text-primary`), **+52 B** de fuente. Novedad de método: **edit en
+línea** — las 3 líneas llevan otros literales que quedaron byte-intactos, con tres aserciones
+mecánicas por slot (clave única en la línea con guard de borde, literal == `authoredValue`
+caso-exacto, prefijo+sufijo byte-idénticos) y custodia probada por SequenceMatcher sobre el diff
+(exactamente 1 fragmento alterado por línea). Cero-delta resuelto `--against` (valores +
+unresolved) EXIT=0 verificado por el DT; contadores quietos (297/10/228/238/1635, cero
+re-anclas); purity.pure **205→202**; pins congelados intactos. **Las 5 que no colapsaron quedan
+bloqueadas con dueño escrito:** 4 por **E7 (uniformidad cross-cohorte)** — su grupo es uniforme
+hoy y su hermano `PALETTE.*` espera la cohorte paleta; colapsar la mitad chrome lo partiría
+(medido: +4/+8, la misma contrafactual 242/1643 ya replicada dos veces) — y 1 por **ley 3 sobre
+la línea fuente** (`evnto:OVERLAY.chrome.table.headerColor` lee `seeds.json`; el inventario
+registra el valor evaluado y la veía literal). **Leyes nuevas adoptadas (efectivas ya):** (i)
+**E7** — un slot no es elegible si su grupo L4b es uniforme y algún miembro está excluido del
+lote; ninguna exclusión puede volver a vivir en la memoria del writer: está codificada en el
+**extractor v4** (instrumento DT, `/private/tmp/mr-2b-extract-v4.py`), que además verifica la ley
+3 sobre la línea fuente (clave+literal en ventana desde el tag). Corrido al cierre: **0 elegibles
+libres, E7=4, ley3-fuente=1** — la cola queda agotada con ese matiz. (ii) **El censo de
+superficie corre ANTES de sus tres consumidores** en la cadena canónica (kimi-preservation →
+controls-catalog → tokens:catalog:write); el orden documentado no lo decía y enrojecía el barrido
+por causa ajena al lote — asentado. **Desviaciones del writer declaradas y aceptadas:** orden de
+cadena corregido en caliente (primer barrido 9 rojos, todos staleo downstream; segundo 97/4 con
+los 4 de contrato DT) y re-proyección de `customization-reconciliation.json` (solo el puntero
+digest, cifras normativas intactas verificadas por aserción — writers 4.670, deadWriters 266).
+**Nota de honestidad del ledger (matiz Fable):** el censo independiente del writer reportó 7
+libres donde v4 reporta 0 — su E5 sin herencia intra-vertical deja pasar **SEIS** filas de la
+clase A, no las 3 que él citó: los 3 conocidos (`tabs.borderActive`, `input.borderFocus`,
+`sidebar.itemColorActive`) MÁS 3 nunca vistos (`collectionCard.selectedBorder`,
+`table.resizeBgHover`, `sidebar.groupColor`) que un colapso con ese criterio habría pintado
+distinto en dark sin que nadie lo viera hasta el `--against` (verificado por Fable fila por fila
+contra el mapa resuelto: las 6 exclusiones son verdad medida). v4 los caza a los 6 ANTES de
+tocar una línea — es la prueba empírica de que la E5 endurecida no era formalismo. La cifra
+autoritativa es la del instrumento.
+**Próximo:** cohorte PALETA — P0 (gobierno de las 5 raíces `ramp.seed.*` gap: dial público nuevo
+`palette.status-seeds` + `neutral` en `palette.seeds`; **espera decisión del owner**) y P1
+(retire×29, cero-delta por construcción, primer lote que mueve los pins de canal — declarado).
+Consulta Codex pre-P2 preparada (toca el compilador: derivación de rampa consciente del modo).
+Deudas vivas: eje `seeds.json` (tercera aparición de la clase), purity string-exacto, drill
+decrease-only de los 77 techos, 60 alias-inertes (lote 3). Métrica sin mover: **62% / ~43%** — se
+reevalúa al cierre de la cohorte paleta.
+
 
 **2B PLENA CERRADA — 128 SLOTS COLAPSADOS EN 19 RAÍCES, Y EL PRIMER CONTADOR DEL FRENTE BAJA
 POR COLAPSO REAL (2026-08-27; commit `628e228a3`; writer Opus; postaudit Fable: ACCEPT con
