@@ -124972,7 +124972,7 @@ html[lang]:lang(ar) {
   --ds-input-color-disabled: rgba(0, 0, 0, 0.25);
   --ds-input-disabled-opacity: 0.4;
   --ds-input-shadow-focus: 0 0 0 1px rgba(23, 23, 23, 0.2);
-  --ds-layout-bg: #FFFFFF;
+  --ds-layout-bg: var(--ds-color-bg-primary);
   --ds-layout-header-backdrop: blur(10px);
   --ds-layout-header-bg: rgba(255, 255, 255, 0.95);
   --ds-layout-header-border: rgba(0, 0, 0, 0.06);
@@ -125227,7 +125227,7 @@ html[lang]:lang(ar) {
   --ds-button-primary-color: #131210;
   --ds-button-primary-hover-bg: #F0F0E8;
   --ds-button-secondary-bg-hover: #1C1A16;
-  --ds-button-secondary-border: #2E2C24;
+  --ds-button-secondary-border: var(--ds-color-border);
   --ds-button-secondary-color: #A8A898;
   --ds-button-secondary-hover-bg: #1C1A16;
   --ds-card-bg: #1C1A16;
@@ -125292,15 +125292,13 @@ html[lang]:lang(ar) {
   --ds-focus-ring-color: var(--ds-color-primary-400);
   --ds-input-bg: #131210;
   --ds-input-bg-disabled: #1C1A16;
-  --ds-input-border: #2E2C24;
+  --ds-input-border: var(--ds-color-border);
   --ds-input-border-color-disabled: #222018;
   --ds-input-border-disabled: #222018;
   --ds-input-color-disabled: var(--ds-color-text-disabled);
   --ds-input-color-placeholder: #686858;
-  --ds-layout-bg: var(--ds-color-bg-primary);
   --ds-layout-header-bg: rgba(19, 18, 16, 0.92);
   --ds-layout-header-border: #2E2C24;
-  --ds-layout-sider-bg: #0E0D0B;
   --ds-layout-sider-border: #222018;
   --ds-sidebar-bg: #0E0D0B;
   --ds-sidebar-text: #A8A898;

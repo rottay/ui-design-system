@@ -3,7 +3,7 @@
   "generatedBy": "scripts/tokens/customization-surface-census/index.mjs --write",
   "meta": {
     "scopeLaw": "DS-SCOPED PROJECTION (core+showroom). deadWriters is a projection for gates and catalogs, NEVER the instrument behind a deletion: on the same population an app-aware inverted index found 53 census-dead channels with LIVE app readers (F5 reconciliation, 2026-08-02 — the --ds-text-eyebrow failure at scale). Death verdicts require the app-inclusive index plus the raw-mention gate.",
-    "inputsDigest": "57986db148f5a9594901ac7dfa73dfa8258da4c7e593b8b71995890ece53a3f2",
+    "inputsDigest": "89b74579fba7a35187c3dd32865fd2606074405b0b5456f719fd56541b5bb5c6",
     "manifestSchemaVersion": 4,
     "corpus": {
       "authoredCssFiles": 466,
@@ -23,7 +23,7 @@
     "deadWriters": 266,
     "frontierReserved": 20,
     "modernConsumedUnique": 3674,
-    "tsReadNames": 2691,
+    "tsReadNames": 2692,
     "tsWriteNames": 1210,
     "tsMetadataNames": 654,
     "unclassified": 0,
@@ -26304,7 +26304,7 @@
       "writer": true,
       "reads": {
         "css": 244,
-        "ts": 32,
+        "ts": 36,
         "tests": true,
         "modern": true,
         "artifact": true
@@ -26409,7 +26409,7 @@
       "writer": true,
       "reads": {
         "css": 483,
-        "ts": 119,
+        "ts": 152,
         "tests": true,
         "modern": true,
         "artifact": true
@@ -27579,7 +27579,7 @@
       "writer": true,
       "reads": {
         "css": 1341,
-        "ts": 246,
+        "ts": 252,
         "tests": true,
         "modern": true,
         "artifact": true
@@ -28389,7 +28389,7 @@
       "writer": true,
       "reads": {
         "css": 49,
-        "ts": 2,
+        "ts": 8,
         "tests": true,
         "modern": true,
         "artifact": true
@@ -28419,7 +28419,7 @@
       "writer": true,
       "reads": {
         "css": 424,
-        "ts": 62,
+        "ts": 85,
         "tests": true,
         "modern": true,
         "artifact": true
@@ -28509,7 +28509,7 @@
       "writer": true,
       "reads": {
         "css": 761,
-        "ts": 143,
+        "ts": 203,
         "tests": true,
         "modern": true,
         "artifact": true
@@ -28524,7 +28524,7 @@
       "writer": true,
       "reads": {
         "css": 466,
-        "ts": 89,
+        "ts": 95,
         "tests": true,
         "modern": true,
         "artifact": true
@@ -78403,7 +78403,7 @@
       "writer": true,
       "reads": {
         "css": 3,
-        "ts": 3,
+        "ts": 6,
         "tests": true,
         "modern": false,
         "artifact": true
@@ -78673,7 +78673,7 @@
       "writer": true,
       "reads": {
         "css": 1,
-        "ts": 0,
+        "ts": 1,
         "tests": true,
         "modern": true,
         "artifact": true
@@ -85723,7 +85723,7 @@
       "writer": true,
       "reads": {
         "css": 332,
-        "ts": 71,
+        "ts": 76,
         "tests": true,
         "modern": true,
         "artifact": true
@@ -85978,7 +85978,7 @@
       "writer": true,
       "reads": {
         "css": 76,
-        "ts": 22,
+        "ts": 24,
         "tests": true,
         "modern": true,
         "artifact": true

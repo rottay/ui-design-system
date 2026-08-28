@@ -6,56 +6,56 @@
     "artifacts": [
       {
         "file": "src/foundation/tokens/css/facade/artifacts/rottay/index.css",
-        "bytes": 91130,
-        "lines": 1896,
-        "sha256": "d09f0985c452064b75b0af8771386abd2e0ed5886544c976a5b3debfa480b948"
+        "bytes": 92630,
+        "lines": 1894,
+        "sha256": "650ba37f4e88534a6232397cf3cf188f0cdfc8ae363ab6312e4f5a71b258536d"
       },
       {
         "file": "src/foundation/tokens/css/facade/artifacts/bithire/index.css",
-        "bytes": 98023,
-        "lines": 1726,
-        "sha256": "f2c510912b4a5c0abedb0f847236d4d6cbd8bb5cf25e700475f455f9ac7144c8"
+        "bytes": 97153,
+        "lines": 1697,
+        "sha256": "52bf7c514fab2b69a54118bafcd4b1e6df63422346a4372c9604825fff66376e"
       },
       {
         "file": "src/foundation/tokens/css/facade/artifacts/evnto/index.css",
-        "bytes": 30396,
-        "lines": 585,
-        "sha256": "e2e5e6f738e54524ba200fca4db4e0d5446fd36ae43dd65fc1e9c5217072b8cd"
+        "bytes": 30366,
+        "lines": 583,
+        "sha256": "c3d9c6402bc866fa71b85af8bfd267202eba1e11201e50beb76aff0bde67eec3"
       }
     ],
     "sources": [
       {
         "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-        "bytes": 342366,
+        "bytes": 343958,
         "lines": 9295,
-        "sha256": "eb53576087d8227234d5edf77be6fc3edbccab1ff17c81a3d424cc8e6457542e"
+        "sha256": "1b70d362a4186523e6b619deeed63cf9b603482bfc5f185b93d40611c2e0db71"
       },
       {
         "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-        "bytes": 340897,
+        "bytes": 341652,
         "lines": 9312,
-        "sha256": "fae4157b9500b4beff999181c0a6eb6f6ed66c85e9ec19319d6baecd04097ac8"
+        "sha256": "b44f3f93f4f26afe361b067411f51c261c596f51ef04e0d4efc2045baf2e3daf"
       },
       {
         "file": "src/foundation/tokens/ts/presentation/brand-themes/evnto/index.ts",
-        "bytes": 218499,
+        "bytes": 218561,
         "lines": 5006,
-        "sha256": "8994e0a99f96450384d742a00b97694f412ac3cb91f830035fbcfad50565d097"
+        "sha256": "925f174a1f3ff0f6decea894a64ba9236b13c972837789cd1efa1dd1a811ee88"
       }
     ],
     "mtimeExcluded": "Se registra sha256 y no mtime: el mtime cambia con un clon o un touch y rompe --check sin que el contenido se mueva."
   },
   "occurrenceTrap": {
     "rottay": {
-      "occurrences": 1874,
+      "occurrences": 1872,
       "distinctChannels": 1212
     },
     "bithire": {
-      "occurrences": 1702,
+      "occurrences": 1673,
       "distinctChannels": 1232
     },
     "evnto": {
-      "occurrences": 563,
+      "occurrences": 561,
       "distinctChannels": 470
     }
   },
@@ -1869,8 +1869,8 @@
     "commonChannels": 432,
     "identicalValue": 157,
     "divergentValue": 275,
-    "identicalRoleShape": 289,
-    "divergentRoleShape": 143,
+    "identicalRoleShape": 287,
+    "divergentRoleShape": 145,
     "divergentRoleShapeChannels": [
       {
         "channel": "--ds-button-default-bg",
@@ -2556,6 +2556,22 @@
         "channel": "--ds-input-shadow-focus",
         "roles": {
           "rottay": "base,overlay-mode",
+          "bithire": "base,overlay-mode",
+          "evnto": "base"
+        }
+      },
+      {
+        "channel": "--ds-layout-bg",
+        "roles": {
+          "rottay": "base",
+          "bithire": "base,overlay-mode",
+          "evnto": "base"
+        }
+      },
+      {
+        "channel": "--ds-layout-sider-bg",
+        "roles": {
+          "rottay": "base",
           "bithire": "base,overlay-mode",
           "evnto": "base"
         }
@@ -6561,7 +6577,7 @@
     "perTenant": {
       "rottay": {
         "declaredInCascade": 154,
-        "severedTotal": 49,
+        "severedTotal": 48,
         "rootPinned": {
           "count": 9,
           "byReason": {
@@ -6695,7 +6711,7 @@
           ]
         },
         "severs": {
-          "count": 47,
+          "count": 46,
           "channels": [
             {
               "channel": "--ds-autocomplete-dropdown-shadow",
@@ -6748,13 +6764,6 @@
               "channel": "--ds-button-ghost-border-hover",
               "values": [
                 "base=transparent"
-              ]
-            },
-            {
-              "channel": "--ds-button-ghost-color-hover",
-              "values": [
-                "base=#ECECEC",
-                "overlay-mode=#1A1A1A"
               ]
             },
             {
@@ -7025,10 +7034,10 @@
           ]
         },
         "reDerives": {
-          "count": 96,
+          "count": 97,
           "reachingRoot": 47,
           "reachingLiveRoot": 47,
-          "mixedRoleValues": 13,
+          "mixedRoleValues": 14,
           "blockedUpstream": 0,
           "channels": [
             {
@@ -7058,6 +7067,16 @@
               ],
               "reachesRoot": false,
               "mixed": false,
+              "reachesLiveRoot": false,
+              "blockedUpstream": false
+            },
+            {
+              "channel": "--ds-button-ghost-color-hover",
+              "reads": [
+                "--ds-color-text-primary"
+              ],
+              "reachesRoot": false,
+              "mixed": true,
               "reachesLiveRoot": false,
               "blockedUpstream": false
             },
@@ -8060,11 +8079,11 @@
       },
       "bithire": {
         "declaredInCascade": 262,
-        "severedTotal": 79,
+        "severedTotal": 78,
         "rootPinned": {
-          "count": 11,
+          "count": 12,
           "byReason": {
-            "tenant-parametric": 3,
+            "tenant-parametric": 4,
             "floor-literal": 5,
             "floor-absent": 3
           },
@@ -8080,6 +8099,14 @@
                 "line": 145,
                 "value": "1.05"
               }
+            },
+            {
+              "channel": "--ds-button-primary-bg",
+              "reason": "tenant-parametric",
+              "values": [
+                "base=var(--ds-color-primary)",
+                "overlay-mode=#1a7fe0"
+              ]
             },
             {
               "channel": "--ds-color-primary",
@@ -8178,26 +8205,10 @@
           ]
         },
         "rootFrozen": {
-          "count": 4,
+          "count": 3,
           "readerEdges": 18,
           "distinctReaders": 18,
           "channels": [
-            {
-              "channel": "--ds-button-primary-bg",
-              "values": [
-                "base=#3A6FB0",
-                "overlay-mode=#1a7fe0"
-              ],
-              "readers": [
-                "--ds-button-primary-border"
-              ],
-              "readerCount": 1,
-              "floor": {
-                "file": "src/foundation/tokens/css/presentation/components/button.css",
-                "line": 93,
-                "value": "var(--ds-color-primary-500)"
-              }
-            },
             {
               "channel": "--ds-color-error",
               "values": [
@@ -8249,8 +8260,10 @@
                 "base=#ffffff",
                 "overlay-mode=#0a0f18"
               ],
-              "readers": [],
-              "readerCount": 0,
+              "readers": [
+                "--ds-sidebar-footer-bg"
+              ],
+              "readerCount": 1,
               "floor": {
                 "file": "src/foundation/tokens/css/foundation/themes/default.css",
                 "line": 1005,
@@ -8724,9 +8737,9 @@
         "reDerives": {
           "count": 172,
           "reachingRoot": 110,
-          "reachingLiveRoot": 109,
-          "mixedRoleValues": 62,
-          "blockedUpstream": 2,
+          "reachingLiveRoot": 110,
+          "mixedRoleValues": 61,
+          "blockedUpstream": 1,
           "channels": [
             {
               "channel": "--ds-badge-font-family",
@@ -8825,8 +8838,8 @@
               ],
               "reachesRoot": true,
               "mixed": false,
-              "reachesLiveRoot": false,
-              "blockedUpstream": true
+              "reachesLiveRoot": true,
+              "blockedUpstream": false
             },
             {
               "channel": "--ds-button-primary-shadow",
@@ -9379,7 +9392,7 @@
                 "--ds-color-primary"
               ],
               "reachesRoot": true,
-              "mixed": true,
+              "mixed": false,
               "reachesLiveRoot": true,
               "blockedUpstream": false
             },
@@ -11365,20 +11378,20 @@
     "notDuplication": "Variante de modo (claro/oscuro), no duplicacion. Ver `valueParity`, que compara por rol de scope.",
     "perTenant": {
       "rottay": {
-        "channelsDeclaredMoreThanOnce": 662,
-        "allInDistinctRoles": 662,
+        "channelsDeclaredMoreThanOnce": 660,
+        "allInDistinctRoles": 660,
         "sameRoleTwice": 0,
         "sameRoleTwiceChannels": []
       },
       "bithire": {
-        "channelsDeclaredMoreThanOnce": 470,
-        "allInDistinctRoles": 470,
+        "channelsDeclaredMoreThanOnce": 441,
+        "allInDistinctRoles": 441,
         "sameRoleTwice": 0,
         "sameRoleTwiceChannels": []
       },
       "evnto": {
-        "channelsDeclaredMoreThanOnce": 93,
-        "allInDistinctRoles": 93,
+        "channelsDeclaredMoreThanOnce": 91,
+        "allInDistinctRoles": 91,
         "sameRoleTwice": 0,
         "sameRoleTwiceChannels": []
       }

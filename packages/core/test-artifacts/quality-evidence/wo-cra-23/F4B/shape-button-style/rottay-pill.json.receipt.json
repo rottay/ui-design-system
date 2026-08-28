@@ -67,10 +67,10 @@
     "packages/core/styles/index.css",
     "packages/core/styles/rottay.css"
   ],
-  "sourceDigest": "2c16cf11299939b151a6ed816c036dcc8ceb32635b6a184064a05290c9f631fb",
+  "sourceDigest": "1fb8e6258a1ae7500456fb3a03d3adfa116ea3d25570e5ea6243b05efaf400f3",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/shape-button-style/rottay-pill.json",
   "artifactSha256": "b175c992601f2b6d0ba7c28786895550cf686a7f961f1e7a7db9dd37ae58f0d5",
-  "createdAt": "2026-08-27T23:50:38.721Z",
+  "createdAt": "2026-08-28T01:36:58.802Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

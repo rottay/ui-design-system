@@ -15,11 +15,11 @@
       "reason": "Ancla inicial del lote normalization-contract-gate (2026-08-27), medida sobre HEAD 73bda7ac1. Es deuda PREEXISTENTE que este gate hace visible por primera vez, no un hallazgo de esta sesion: los governors que nombran autoridad inexistente vienen de F4B (los 6 'dial: tenant-dial' de textPageColor esperan su control en F4B) y de 4 canales derivados que nunca nacieron; los literales que sombrean solo se pudieron medir cuando la cohorte 1 persistio la membresia (la cohorte 0 solo pudo aproximar 20 pines sobre cabezas declaradas); y los grupos divergentes son la premisa del frente -- un corpus que todavia no colapso ES una masa de decisiones repetidas. Desde aqui los cinco contadores solo pueden bajar."
     },
     "divergentGroups": {
-      "value": 239,
+      "value": 238,
       "reason": "Ancla inicial del lote normalization-contract-gate (2026-08-27), medida sobre HEAD 73bda7ac1. Es deuda PREEXISTENTE que este gate hace visible por primera vez, no un hallazgo de esta sesion: los governors que nombran autoridad inexistente vienen de F4B (los 6 'dial: tenant-dial' de textPageColor esperan su control en F4B) y de 4 canales derivados que nunca nacieron; los literales que sombrean solo se pudieron medir cuando la cohorte 1 persistio la membresia (la cohorte 0 solo pudo aproximar 20 pines sobre cabezas declaradas); y los grupos divergentes son la premisa del frente -- un corpus que todavia no colapso ES una masa de decisiones repetidas. Desde aqui los cinco contadores solo pueden bajar."
     },
     "divergentSlots": {
-      "value": 1639,
+      "value": 1635,
       "reason": "Ancla inicial del lote normalization-contract-gate (2026-08-27), medida sobre HEAD 73bda7ac1. Es deuda PREEXISTENTE que este gate hace visible por primera vez, no un hallazgo de esta sesion: los governors que nombran autoridad inexistente vienen de F4B (los 6 'dial: tenant-dial' de textPageColor esperan su control en F4B) y de 4 canales derivados que nunca nacieron; los literales que sombrean solo se pudieron medir cuando la cohorte 1 persistio la membresia (la cohorte 0 solo pudo aproximar 20 pines sobre cabezas declaradas); y los grupos divergentes son la premisa del frente -- un corpus que todavia no colapso ES una masa de decisiones repetidas. Desde aqui los cinco contadores solo pueden bajar."
     }
   },
@@ -274,16 +274,16 @@
       "bithire|tier.page.bg|bg|sin-estado|base: 30 slots, 21 posiciones",
       "rottay|tier.base.fg|fg|sin-estado|base: 30 slots, 10 posiciones",
       "bithire|tier.control.bg|bg|sin-estado|base: 28 slots, 15 posiciones",
-      "bithire|tier.raised.bg|bg|sin-estado|base: 28 slots, 17 posiciones",
+      "bithire|tier.raised.bg|bg|sin-estado|base: 28 slots, 16 posiciones",
       "bithire|tier.base.fg|fg|sin-estado|base: 27 slots, 11 posiciones",
       "rottay|tier.control.fg|fg|sin-estado|overlay: 27 slots, 9 posiciones",
       "bithire|tier.raised.bg|bg|sin-estado|overlay: 26 slots, 16 posiciones",
       "rottay|tier.control.border|border|sin-estado|overlay: 26 slots, 5 posiciones",
-      "bithire|tier.page.bg|bg|sin-estado|overlay: 24 slots, 14 posiciones",
+      "bithire|tier.page.bg|bg|sin-estado|overlay: 24 slots, 15 posiciones",
       "bithire|tier.raised.fg|fg|sin-estado|base: 24 slots, 5 posiciones",
       "bithire|tier.raised.fg|fg|sin-estado|overlay: 24 slots, 5 posiciones"
     ]
   },
-  "lastMove": "re-atribucion por owner-step-rules LOTE 2 (+46 filas DT: convenciones de hoja por semantica AUTORADA del BrandPalette + LEY DE ESPEJO — gemelos CHROME/OVERLAY del mismo canal llevan el mismo paso y TODOS los contribuyentes reciben fila o el canal no refina). Re-ancla UNICA del lote. No es regresion — atribucion 2x2 final con analyse() pura contra el estado anterior al lote: shadowingLiteralPins 226->228 efecto MEMBRESIA puro (canales refinados a raices de paso con ley de derivacion entran al censo por cobertura, no por sombra nueva); divergentGroups 234->239 efecto INVENTARIO puro (los grupos se PARTEN por la coordenada refinada — la docstring de la puerta anticipa este caso); divergentSlots 1649->1639 BAJA legal (-10 neto: las filas que el eje paso volvio puras salen del censo). purity pure 315->333 (+18). Ley dura intacta: resolved-map --check EXIT=0 (5.803 canales). Cero lineas de CSS/TS autorado tocadas. Conflictos NO forzados: tabs.color e inputNumber.controlColor quedan como lote 1, hoy INERTES por la ley de alias (piden primary, cuyo destino no existe); la enmienda ensayada se descarto porque sus contribuyentes discrepan de valor entre modos — null es la verdad hoy y el valor no es ruta. 3 filas con paso primary sobre tier.control.fg son inertes por la misma ley de alias.",
-  "lastMoveKind": "re-atribucion (subida autorizada por nombre)"
+  "lastMove": "COHORTE 2B PLENA (2026-08-27): BAJA por colapso. divergentGroups 239->238 y divergentSlots 1639->1635. Un grupo divergente CERRO al colapsar sus miembros a la misma referencia -- la primera vez que un lote del frente baja este contador. Aritmetica y advertencia: la corrida sin las 4 exclusiones de §uniformidad daba 239->242 y 1639->1643, es decir SUBIA, porque colapsar la mitad chrome de un grupo cuya otra mitad es un slot de PALETA (excluida por adjudicacion, tiene su propia cohorte) parte un grupo que era uniforme. Se excluyeron esos 4 slots -- no se re-anclo hacia arriba, que la ley 6 re-scopeada prohibe. Con la exclusion el movimiento es neto hacia abajo y por colapso real. Los otros tres contadores quietos: unassignedSlots 297, governorsNamingMissingAuthority 10, shadowingLiteralPins 228 (mide pines del CSS autorado; este lote toca TS: poblaciones disjuntas). Ley dura sostenida: resolved-map --against EXIT=0, cero delta resuelto, verificado tras el colapso y tras la cadena.",
+  "lastMoveKind": "decrece-solo"
 }

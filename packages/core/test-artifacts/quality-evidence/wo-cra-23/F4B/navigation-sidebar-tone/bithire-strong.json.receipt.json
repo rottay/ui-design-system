@@ -48,10 +48,10 @@
     "packages/core/src/tooling/resolution-probe/runtime/measure/index.mjs",
     "packages/core/src/ui/structures/shell/navigation/sidebar-surface/index.tsx"
   ],
-  "sourceDigest": "87eefe7a4a3472697449d1b277790fa4337da412da132aa0bd3b39fedf2c7cd2",
+  "sourceDigest": "141b9fd6510e176e0ae01efab17f0c55ffbfab4a5bc5fcfb978a951c202c1e10",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/navigation-sidebar-tone/bithire-strong.json",
   "artifactSha256": "f0ddfb47f76f87dabc8b5313d42d1261e9f4e6c1af3eb0f2c3d33eac2f3e9779",
-  "createdAt": "2026-08-27T23:50:38.721Z",
+  "createdAt": "2026-08-28T01:36:58.802Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

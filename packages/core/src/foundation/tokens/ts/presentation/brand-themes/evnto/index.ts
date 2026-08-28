@@ -616,7 +616,7 @@ const OVERLAY: BrandThemeModeOverlay = {
       buttonSecondary: {
         bgHover: "#1C1A16",
         color: "#A8A898",
-        border: "#2E2C24",
+        border: "var(--ds-color-border)",
       },
       /**
        * @domicile seed
@@ -655,7 +655,7 @@ const OVERLAY: BrandThemeModeOverlay = {
        */
       input: {
         bg: "#131210",
-        border: "#2E2C24",
+        border: "var(--ds-color-border)",
         bgDisabled: "#1C1A16",
         colorDisabled: "var(--ds-color-text-disabled)",
         borderDisabled: "#222018",
@@ -684,7 +684,7 @@ const OVERLAY: BrandThemeModeOverlay = {
       headerBorder: "#2E2C24",
       // Literal on purpose: an alias equal to the body emits NOTHING in a mode
       // block (diff-by-values) -- that is how F2.4 drained this shield. D-1.
-      siderBg: "#0E0D0B",
+      siderBg: "var(--ds-sidebar-bg)",
       siderBorder: "#222018",
     },
     /**
@@ -2749,7 +2749,7 @@ const CHROME: BrandChrome = {
      * @domicile seed
      * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
      */
-    bg: '#FFFFFF',
+    bg: "var(--ds-color-bg-primary)",
     /**
      * @domicile seed
      * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)

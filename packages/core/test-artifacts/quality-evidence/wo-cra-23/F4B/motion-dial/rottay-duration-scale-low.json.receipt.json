@@ -53,10 +53,10 @@
     "packages/core/src/ui/primitives/feedback/Alert/engines/rustic/index.tsx",
     "packages/core/src/ui/primitives/feedback/Alert/index.tsx"
   ],
-  "sourceDigest": "b38718e11fee87cdac34ab3077097d3f9220de4acf8c5fd7e783cdc9109b410c",
+  "sourceDigest": "a202a9ada5383c1d8319fb10eeca37c98d66f53fe3d1e0ab50a63d820dd74fb1",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/motion-dial/rottay-duration-scale-low.json",
   "artifactSha256": "a0ad6a845321ffddbda3344ed43e1fc40b64f264e541cc4e176a4bc5b03d27f7",
-  "createdAt": "2026-08-27T23:50:38.721Z",
+  "createdAt": "2026-08-28T01:36:58.802Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

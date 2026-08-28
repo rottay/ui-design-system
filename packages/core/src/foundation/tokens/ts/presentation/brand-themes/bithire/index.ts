@@ -1041,7 +1041,7 @@ const OVERLAY: BrandThemeModeOverlay = {
        */
       buttonSecondary: {
         bg: "transparent",
-        border: "#253545",
+        border: "var(--ds-color-border)",
         color: "#9aacbf",
         bgHover: "#1b2535",
       },
@@ -1055,7 +1055,7 @@ const OVERLAY: BrandThemeModeOverlay = {
          * @domicile seed
          * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
          */
-        border: "#253545",
+        border: "var(--ds-color-border)",
         /**
          * @domicile seed
          * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
@@ -1075,7 +1075,7 @@ const OVERLAY: BrandThemeModeOverlay = {
          * @domicile seed
          * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
          */
-        colorPlaceholder: "#5a7085",
+        colorPlaceholder: "var(--ds-color-text-muted)",
         addon: {
           /**
            * @domicile derived
@@ -1669,7 +1669,7 @@ const OVERLAY: BrandThemeModeOverlay = {
        * @domicile seed
        * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
        */
-      groupColor: "#5a7085",
+      groupColor: "var(--ds-color-text-muted)",
       /**
        * @domicile seed
        * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
@@ -1729,7 +1729,7 @@ const OVERLAY: BrandThemeModeOverlay = {
        * @domicile seed
        * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
        */
-      footerBg: "#0a0f18",
+      footerBg: "var(--ds-sidebar-bg)",
       /**
        * @domicile seed
        * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
@@ -1739,12 +1739,12 @@ const OVERLAY: BrandThemeModeOverlay = {
        * @domicile seed
        * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
        */
-      text: "#9aacbf",
+      text: "var(--ds-color-text-secondary)",
       /**
        * @domicile seed
        * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
        */
-      textMuted: "#5a7085",
+      textMuted: "var(--ds-color-text-muted)",
     },
     badge: {
       /**
@@ -3614,7 +3614,7 @@ const SURFACES: BrandSurfaces = {
        * @domicile seed
        * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
        */
-      foreground: "#14283B",
+      foreground: "var(--ds-color-text-primary)",
       /**
        * @domicile seed
        * @governor dial: palette.seeds
@@ -3628,7 +3628,7 @@ const SURFACES: BrandSurfaces = {
      */
     shell: {
       background: "#EEF4F8",
-      foreground: "#14283B",
+      foreground: "var(--ds-color-text-primary)",
       border: "#D4E0EA",
     },
     panel: {
@@ -3665,7 +3665,7 @@ const SURFACES: BrandSurfaces = {
        * @domicile seed
        * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
        */
-      foreground: "#14283B",
+      foreground: "var(--ds-color-text-primary)",
       /**
        * @domicile seed
        * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
@@ -3769,7 +3769,7 @@ const SURFACES: BrandSurfaces = {
        * @domicile seed
        * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
        */
-      foreground: "#14283B",
+      foreground: "var(--ds-color-text-primary)",
       /**
        * @domicile seed
        * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
@@ -3883,7 +3883,7 @@ const SURFACES: BrandSurfaces = {
        * @domicile seed
        * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
        */
-      foreground: "#14283B",
+      foreground: "var(--ds-color-text-primary)",
       /**
        * @domicile seed
        * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
@@ -4392,7 +4392,7 @@ const CHROME: BrandChrome = {
      * @domicile seed
      * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
      */
-    itemColorActive: "#3A6FB0",
+    itemColorActive: "var(--ds-color-primary)",
     /**
      * @domicile derived
      * @governor deriva de: --ds-tint-8
@@ -4807,7 +4807,7 @@ const CHROME: BrandChrome = {
      * @domicile seed
      * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
      */
-    color: "#14283B",
+    color: "var(--ds-color-text-primary)",
     /**
      * @domicile seed
      * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
@@ -4842,7 +4842,7 @@ const CHROME: BrandChrome = {
      * @domicile seed
      * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
      */
-    controlColor: "#14283B",
+    controlColor: "var(--ds-color-text-primary)",
     /**
      * @domicile seed
      * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
@@ -4905,7 +4905,7 @@ const CHROME: BrandChrome = {
      * @domicile seed
      * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
      */
-    activeColor: "#3A6FB0",
+    activeColor: "var(--ds-color-primary)",
     /**
      * @domicile seed
      * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
@@ -5084,7 +5084,7 @@ const CHROME: BrandChrome = {
      * @domicile seed
      * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
      */
-    ink: "#14283B",
+    ink: "var(--ds-color-text-primary)",
     /**
      * @domicile seed
      * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
@@ -5335,7 +5335,7 @@ const CHROME: BrandChrome = {
      * @domicile seed
      * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
      */
-    color: "#14283B",
+    color: "var(--ds-color-text-primary)",
     /**
      * @domicile seed
      * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
@@ -5362,7 +5362,7 @@ const CHROME: BrandChrome = {
      * @domicile seed
      * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
      */
-    inputColor: "#14283B",
+    inputColor: "var(--ds-color-text-primary)",
     /**
      * @domicile seed
      * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
@@ -5407,7 +5407,7 @@ const CHROME: BrandChrome = {
      * @domicile seed
      * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
      */
-    resultTitleColor: "#14283B",
+    resultTitleColor: "var(--ds-color-text-primary)",
     /**
      * @domicile seed
      * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
@@ -6225,7 +6225,7 @@ const CHROME: BrandChrome = {
        * @domicile seed
        * @governor dial: chrome.families
        */
-      bg: "#3A6FB0",
+      bg: "var(--ds-color-primary)",
       /**
        * @domicile seed
        * @governor dial: palette.seeds
@@ -6649,7 +6649,7 @@ const CHROME: BrandChrome = {
        * @domicile seed
        * @governor dial: palette.seeds
        */
-      caretColor: "#3A6FB0",
+      caretColor: "var(--ds-color-primary)",
       /**
        * @domicile seed
        * @governor dial: palette.seeds
@@ -6659,7 +6659,7 @@ const CHROME: BrandChrome = {
        * @domicile seed
        * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
        */
-      selectionColor: "#14283B",
+      selectionColor: "var(--ds-color-text-primary)",
       /**
        * @domicile derived
        * @governor deriva de: --ds-color-text-primary
@@ -7469,7 +7469,7 @@ const CHROME: BrandChrome = {
      * @domicile seed
      * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
      */
-    color: "#14283B",
+    color: "var(--ds-color-text-primary)",
     /**
      * @domicile seed
      * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
@@ -7554,7 +7554,7 @@ const CHROME: BrandChrome = {
      * @domicile seed
      * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
      */
-    titleColor: "#14283B",
+    titleColor: "var(--ds-color-text-primary)",
     /**
      * @domicile seed
      * @governor dial: typography.scale
@@ -7870,7 +7870,7 @@ const CHROME: BrandChrome = {
      * @domicile seed
      * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
      */
-    bg: "#FFFFFF",
+    bg: "var(--ds-surface-card)",
     /**
      * @domicile seed
      * @governor dial: palette.seeds
@@ -7927,7 +7927,7 @@ const CHROME: BrandChrome = {
      * @domicile seed
      * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
      */
-    valueColor: "#14283B",
+    valueColor: "var(--ds-color-text-primary)",
     /**
      * @domicile seed
      * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
@@ -8011,7 +8011,7 @@ const CHROME: BrandChrome = {
      * @domicile seed
      * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
      */
-    titleColor: "#14283B",
+    titleColor: "var(--ds-color-text-primary)",
     /**
      * @domicile seed
      * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
@@ -8072,7 +8072,7 @@ const CHROME: BrandChrome = {
      * @domicile seed
      * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
      */
-    bg: "#FFFFFF",
+    bg: "var(--ds-surface-card)",
     /**
      * @domicile seed
      * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
@@ -8128,7 +8128,7 @@ const CHROME: BrandChrome = {
      * @domicile seed
      * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
      */
-    iconColor: "#3A6FB0",
+    iconColor: "var(--ds-color-primary)",
     /**
      * @domicile seed
      * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
@@ -8179,7 +8179,7 @@ const CHROME: BrandChrome = {
      * @domicile seed
      * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
      */
-    bg: "#FFFFFF",
+    bg: "var(--ds-surface-card)",
     /**
      * @domicile seed
      * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
@@ -8307,7 +8307,7 @@ const CHROME: BrandChrome = {
      * @domicile seed
      * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
      */
-    bg: "#FFFFFF",
+    bg: "var(--ds-surface-card)",
     /**
      * @domicile seed
      * @governor dial: palette.seeds
@@ -8643,7 +8643,7 @@ const CHROME: BrandChrome = {
      * @domicile seed
      * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
      */
-    color: "#14283B",
+    color: "var(--ds-color-text-primary)",
     /**
      * @domicile seed
      * @governor dial: palette.seeds
@@ -8674,7 +8674,7 @@ const CHROME: BrandChrome = {
      * @domicile seed
      * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
      */
-    titleColor: "#14283B",
+    titleColor: "var(--ds-color-text-primary)",
     /**
      * @domicile seed
      * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
@@ -8704,7 +8704,7 @@ const CHROME: BrandChrome = {
      * @domicile seed
      * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
      */
-    closeColorHover: "#14283B",
+    closeColorHover: "var(--ds-color-text-primary)",
     /**
      * @domicile seed
      * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
@@ -8726,12 +8726,12 @@ const CHROME: BrandChrome = {
      * @domicile seed
      * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
      */
-    colorHover: "#14283B",
+    colorHover: "var(--ds-color-text-primary)",
     /**
      * @domicile seed
      * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
      */
-    colorActive: "#14283B",
+    colorActive: "var(--ds-color-text-primary)",
     /**
      * @domicile seed
      * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
@@ -8813,7 +8813,7 @@ const CHROME: BrandChrome = {
      * @domicile seed
      * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
      */
-    activeBg: "#FFFFFF",
+    activeBg: "var(--ds-surface-control)",
     /**
      * @domicile seed
      * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
@@ -8870,7 +8870,7 @@ const CHROME: BrandChrome = {
      * @domicile seed
      * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
      */
-    panelBg: "#FFFFFF",
+    panelBg: "var(--ds-surface-card)",
     /**
      * @domicile seed
      * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
@@ -8902,7 +8902,7 @@ const CHROME: BrandChrome = {
      * @domicile seed
      * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
      */
-    overflowControlBg: "#FFFFFF",
+    overflowControlBg: "var(--ds-surface-control)",
     /**
      * @domicile seed
      * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
