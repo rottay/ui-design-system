@@ -763,7 +763,7 @@
   --ds-metric-card-trend-color: #315F86;
   --ds-metric-card-value-color: #14283B;
   --ds-modal-bg: #FFFFFF;
-  --ds-modal-body-color: #14283B;
+  --ds-modal-body-color: var(--ds-color-text-primary);
   --ds-modal-close-bg-hover: #F4F8FD;
   --ds-modal-close-color: #728398;
   --ds-modal-close-color-hover: #14283B;
@@ -1572,7 +1572,6 @@
   --ds-metric-card-trend-color: var(--ds-color-primary-hover);
   --ds-metric-card-value-color: var(--ds-color-text-primary);
   --ds-modal-bg: var(--ds-surface-card);
-  --ds-modal-body-color: var(--ds-color-text-primary);
   --ds-modal-close-bg-hover: var(--ds-surface-panel);
   --ds-modal-close-color: var(--ds-color-text-tertiary);
   --ds-modal-close-color-hover: var(--ds-color-text-primary);

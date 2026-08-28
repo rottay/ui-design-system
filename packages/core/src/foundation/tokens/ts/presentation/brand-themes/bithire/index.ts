@@ -8684,7 +8684,7 @@ const CHROME: BrandChrome = {
      * @domicile seed
      * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
      */
-    bodyColor: "#14283B",
+    bodyColor: "var(--ds-color-text-primary)",
     /**
      * @domicile seed
      * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)

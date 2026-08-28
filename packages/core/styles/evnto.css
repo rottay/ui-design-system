@@ -125295,9 +125295,9 @@ html[lang]:lang(ar) {
   --ds-input-border: #2E2C24;
   --ds-input-border-color-disabled: #222018;
   --ds-input-border-disabled: #222018;
-  --ds-input-color-disabled: #484838;
+  --ds-input-color-disabled: var(--ds-color-text-disabled);
   --ds-input-color-placeholder: #686858;
-  --ds-layout-bg: #131210;
+  --ds-layout-bg: var(--ds-color-bg-primary);
   --ds-layout-header-bg: rgba(19, 18, 16, 0.92);
   --ds-layout-header-border: #2E2C24;
   --ds-layout-sider-bg: #0E0D0B;

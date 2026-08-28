@@ -70,10 +70,10 @@
     "packages/core/src/ui/primitives/display/Card/engines/rustic/index.tsx",
     "packages/core/src/ui/primitives/display/Card/index.tsx"
   ],
-  "sourceDigest": "73267b0a96fc2c641d4511d032e5c700dd41d724a8ad2a4c98a45baa14bb356b",
+  "sourceDigest": "2ea54474ca1e7c2bfe774db62b1e4fcf87b7187360eef557a0cf0be7c80d5879",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/surfaces-effect-intensity/rottay-sobrio.json",
   "artifactSha256": "618a8bb72cf86db7726795b4f85a2b0e29c4b9ee33feb2c701fc2be8299fd280",
-  "createdAt": "2026-08-27T14:19:45.883Z",
+  "createdAt": "2026-08-27T23:50:38.721Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

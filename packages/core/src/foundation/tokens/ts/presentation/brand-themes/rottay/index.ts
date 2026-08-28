@@ -653,7 +653,7 @@ const OVERLAY: BrandThemeModeOverlay = {
          * @domicile seed
          * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
          */
-        borderDisabled: "#E5E5E3",
+        borderDisabled: "var(--ds-color-border)",
         /**
          * @domicile seed
          * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
@@ -880,7 +880,7 @@ const OVERLAY: BrandThemeModeOverlay = {
          * @domicile seed
          * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
          */
-        itemColorSelected: "#1A1A1A",
+        itemColorSelected: "var(--ds-color-text-primary)",
         /**
          * @domicile seed
          * @governor dial: palette.seeds
@@ -984,7 +984,7 @@ const OVERLAY: BrandThemeModeOverlay = {
          * @domicile seed
          * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
          */
-        optionColorDisabled: "#C4C4C2",
+        optionColorDisabled: "var(--ds-color-text-disabled)",
         /**
          * @domicile seed
          * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
@@ -1560,7 +1560,7 @@ const OVERLAY: BrandThemeModeOverlay = {
        * @domicile seed
        * @governor dial: palette.seeds
        */
-      imageLoadingActive: '#0A0A0A',
+      imageLoadingActive: "var(--ds-color-primary)",
       /**
        * @domicile seed
        * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
@@ -1602,7 +1602,7 @@ const OVERLAY: BrandThemeModeOverlay = {
        * @domicile seed
        * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
        */
-      headerBorder: "#E5E5E3",
+      headerBorder: "var(--ds-color-border)",
       /**
        * @domicile seed
        * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
@@ -1617,7 +1617,7 @@ const OVERLAY: BrandThemeModeOverlay = {
        * @domicile seed
        * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
        */
-      footerBorder: "#E5E5E3",
+      footerBorder: "var(--ds-color-border)",
       /**
        * @domicile seed
        * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
@@ -1632,7 +1632,7 @@ const OVERLAY: BrandThemeModeOverlay = {
        * @domicile seed
        * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
        */
-      closeColorHover: "#1A1A1A",
+      closeColorHover: "var(--ds-color-text-primary)",
       /**
        * @domicile seed
        * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
@@ -1649,7 +1649,7 @@ const OVERLAY: BrandThemeModeOverlay = {
       headerBg: OVERLAY_SEED.surface.wash,
       // Literal on purpose: an alias equal to the body emits NOTHING in a mode
       // block (diff-by-values) -- that is how F4A-6 drained this shield. D-1b.
-      headerColor: "#6B6B6B",
+      headerColor: "var(--ds-color-text-secondary)",
       rowBg: OVERLAY_SEED.surface.card,
       rowBgHover: OVERLAY_SEED.surface.wash,
       rowBgStriped: OVERLAY_SEED.surface.wash,
@@ -1673,7 +1673,7 @@ const OVERLAY: BrandThemeModeOverlay = {
      */
     breadcrumb: {
       color: "#9C9C9C",
-      colorHover: "#1A1A1A",
+      colorHover: "var(--ds-color-text-primary)",
       colorActive: "#1A1A1A",
       separatorColor: "#D4D4D2",
     },
@@ -1986,7 +1986,7 @@ const OVERLAY: BrandThemeModeOverlay = {
        * @domicile seed
        * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
        */
-      border: "#E5E5E3",
+      border: "var(--ds-color-border)",
       /**
        * @domicile seed
        * @governor dial: palette.seeds
@@ -2001,7 +2001,7 @@ const OVERLAY: BrandThemeModeOverlay = {
        * @domicile seed
        * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
        */
-      titleBorder: "#E5E5E3",
+      titleBorder: "var(--ds-color-border)",
     },
     tooltip: {
       /**
@@ -2194,12 +2194,12 @@ const OVERLAY: BrandThemeModeOverlay = {
        * @domicile seed
        * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
        */
-      footerBorder: "#E5E5E3",
+      footerBorder: "var(--ds-color-border)",
       /**
        * @domicile seed
        * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
        */
-      headerBorder: "#E5E5E3",
+      headerBorder: "var(--ds-color-border)",
       /**
        * @domicile seed
        * @governor dial: palette.seeds
@@ -2236,7 +2236,7 @@ const OVERLAY: BrandThemeModeOverlay = {
        * @domicile seed
        * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
        */
-      itemColorHover: "#1A1A1A",
+      itemColorHover: "var(--ds-color-text-primary)",
       /**
        * @domicile seed
        * @governor dial: palette.seeds
@@ -2355,12 +2355,12 @@ const OVERLAY: BrandThemeModeOverlay = {
        * @domicile seed
        * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
        */
-      itemColorActive: "#1A1A1A",
+      itemColorActive: "var(--ds-color-text-primary)",
       /**
        * @domicile seed
        * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
        */
-      itemColorHover: "#1A1A1A",
+      itemColorHover: "var(--ds-color-text-primary)",
       /**
        * @domicile seed
        * @governor dial: token-overrides
@@ -2394,7 +2394,7 @@ const OVERLAY: BrandThemeModeOverlay = {
     message: {
       bg: "#FFFFFF",
       closeColor: "#9C9C9C",
-      closeColorHover: "#1A1A1A",
+      closeColorHover: "var(--ds-color-text-primary)",
       shadow: "0 4px 16px rgba(0, 0, 0, 0.08), 0 0 0 1px rgba(0, 0, 0, 0.04)",
     },
     notification: {
@@ -2422,7 +2422,7 @@ const OVERLAY: BrandThemeModeOverlay = {
       activeColor: "#FFFFFF",
       itemBgHover: "#FAFAF9",
       itemColorActive: "#FFFFFF",
-      itemColorHover: "#1A1A1A",
+      itemColorHover: "var(--ds-color-text-primary)",
     },
     /**
      * @domicile seed

@@ -6,41 +6,41 @@
     "artifacts": [
       {
         "file": "src/foundation/tokens/css/facade/artifacts/rottay/index.css",
-        "bytes": 90796,
+        "bytes": 91130,
         "lines": 1896,
-        "sha256": "717ef13eef798f7acedced2d9319a1f346b15bee980bedad76d73955bf1c10eb"
+        "sha256": "d09f0985c452064b75b0af8771386abd2e0ed5886544c976a5b3debfa480b948"
       },
       {
         "file": "src/foundation/tokens/css/facade/artifacts/bithire/index.css",
-        "bytes": 98057,
-        "lines": 1727,
-        "sha256": "ea301cd03eb410bb08caba39ce55bf0444f7160ef46fd9a51a79ee2470851a5b"
+        "bytes": 98023,
+        "lines": 1726,
+        "sha256": "f2c510912b4a5c0abedb0f847236d4d6cbd8bb5cf25e700475f455f9ac7144c8"
       },
       {
         "file": "src/foundation/tokens/css/facade/artifacts/evnto/index.css",
-        "bytes": 30355,
+        "bytes": 30396,
         "lines": 585,
-        "sha256": "f5fff985a6e995225407e7cb36f95ed14678e5874be7db9749c9bade1371232f"
+        "sha256": "e2e5e6f738e54524ba200fca4db4e0d5446fd36ae43dd65fc1e9c5217072b8cd"
       }
     ],
     "sources": [
       {
         "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-        "bytes": 342032,
+        "bytes": 342366,
         "lines": 9295,
-        "sha256": "de45d9a5c94568c4f22ff2f766485ffafcc2d9085838c4c66a65246970eb2e92"
+        "sha256": "eb53576087d8227234d5edf77be6fc3edbccab1ff17c81a3d424cc8e6457542e"
       },
       {
         "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-        "bytes": 340876,
+        "bytes": 340897,
         "lines": 9312,
-        "sha256": "822faf36c5fa6044b8886162482b3e6587cfe973889ad9453c91281260c3fae2"
+        "sha256": "fae4157b9500b4beff999181c0a6eb6f6ed66c85e9ec19319d6baecd04097ac8"
       },
       {
         "file": "src/foundation/tokens/ts/presentation/brand-themes/evnto/index.ts",
-        "bytes": 218458,
+        "bytes": 218499,
         "lines": 5006,
-        "sha256": "60d35e7556169ed58b27f16f41d1c829523a785b40b4f1af9f5e21e9d9b00f89"
+        "sha256": "8994e0a99f96450384d742a00b97694f412ac3cb91f830035fbcfad50565d097"
       }
     ],
     "mtimeExcluded": "Se registra sha256 y no mtime: el mtime cambia con un clon o un touch y rompe --check sin que el contenido se mueva."
@@ -51,7 +51,7 @@
       "distinctChannels": 1212
     },
     "bithire": {
-      "occurrences": 1703,
+      "occurrences": 1702,
       "distinctChannels": 1232
     },
     "evnto": {
@@ -6561,7 +6561,7 @@
     "perTenant": {
       "rottay": {
         "declaredInCascade": 154,
-        "severedTotal": 50,
+        "severedTotal": 49,
         "rootPinned": {
           "count": 9,
           "byReason": {
@@ -6695,7 +6695,7 @@
           ]
         },
         "severs": {
-          "count": 48,
+          "count": 47,
           "channels": [
             {
               "channel": "--ds-autocomplete-dropdown-shadow",
@@ -6789,13 +6789,6 @@
               "values": [
                 "base=#3A3A40",
                 "overlay-mode=#D4D4D2"
-              ]
-            },
-            {
-              "channel": "--ds-card-image-loading-active",
-              "values": [
-                "base=#ECECEC",
-                "overlay-mode=#0A0A0A"
               ]
             },
             {
@@ -7032,10 +7025,10 @@
           ]
         },
         "reDerives": {
-          "count": 95,
-          "reachingRoot": 46,
-          "reachingLiveRoot": 46,
-          "mixedRoleValues": 12,
+          "count": 96,
+          "reachingRoot": 47,
+          "reachingLiveRoot": 47,
+          "mixedRoleValues": 13,
           "blockedUpstream": 0,
           "channels": [
             {
@@ -7168,6 +7161,16 @@
               "reachesRoot": false,
               "mixed": false,
               "reachesLiveRoot": false,
+              "blockedUpstream": false
+            },
+            {
+              "channel": "--ds-card-image-loading-active",
+              "reads": [
+                "--ds-color-primary"
+              ],
+              "reachesRoot": true,
+              "mixed": true,
+              "reachesLiveRoot": true,
               "blockedUpstream": false
             },
             {
@@ -11368,8 +11371,8 @@
         "sameRoleTwiceChannels": []
       },
       "bithire": {
-        "channelsDeclaredMoreThanOnce": 471,
-        "allInDistinctRoles": 471,
+        "channelsDeclaredMoreThanOnce": 470,
+        "allInDistinctRoles": 470,
         "sameRoleTwice": 0,
         "sameRoleTwiceChannels": []
       },

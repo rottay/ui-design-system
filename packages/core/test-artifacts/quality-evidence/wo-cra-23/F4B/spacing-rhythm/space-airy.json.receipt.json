@@ -58,10 +58,10 @@
     "packages/core/src/ui/primitives/tests/EmbeddedCssRecovery.contract.test.ts",
     "packages/showroom/e2e/whitelabel/density-authority-matrix.spec.ts"
   ],
-  "sourceDigest": "ff35761ee4c3621aefecfe08010cd4859747ffcb9d50bfd98c746d9c937700f0",
+  "sourceDigest": "0ca47dca9b598098979c8b7227c6a525eab3000bb8f438ad14183a5accfbf3e2",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/spacing-rhythm/space-airy.json",
   "artifactSha256": "00df0122b929d2a830b6ec09e59f32a80ad4655965f8c0b0e176bde130fbde1d",
-  "createdAt": "2026-08-27T14:19:45.883Z",
+  "createdAt": "2026-08-27T23:50:38.721Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

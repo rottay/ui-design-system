@@ -17,8 +17,8 @@
   "stats": {
     "rows": 2006,
     "byClass": {
-      "value-shift": 1286,
-      "pure": 336,
+      "value-shift": 1307,
+      "pure": 315,
       "head-not-emitted": 384
     },
     "byVertical": {
@@ -27,11 +27,11 @@
       "rottay": 1002
     },
     "pureByRoot": {
-      "tier.base.fg": 49,
+      "tier.base.fg": 41,
       "tier.base.fg.secondary": 15,
       "tier.raised.bg": 10,
       "tier.raised.border": 8,
-      "ramp.seed.primary": 16,
+      "ramp.seed.primary": 15,
       "tier.base.border.primary": 4,
       "control.ratio.fontSize": 2,
       "control.height": 2,
@@ -40,12 +40,11 @@
       "tier.base.fg.muted": 25,
       "tier.control.bg": 11,
       "tier.control.border": 23,
-      "tier.base.border": 16,
+      "tier.base.border": 15,
       "tier.page.bg": 17,
       "tier.page.border.default": 4,
-      "tier.overlay.fg.primary": 1,
       "tier.control.fg": 14,
-      "tier.base.bg": 8,
+      "tier.base.bg": 7,
       "tier.base.border.focus": 6,
       "tier.base.border.subtle": 5,
       "ramp.seed.error": 14,
@@ -54,7 +53,7 @@
       "ramp.seed.neutral": 6,
       "ramp.seed.secondary": 6,
       "ramp.seed.success": 8,
-      "tier.base.fg.disabled": 9,
+      "tier.base.fg.disabled": 8,
       "tier.page.ink": 6,
       "tier.base.fg.tertiary": 6,
       "ramp.seed.warning": 5,
@@ -65,10 +64,8 @@
       "ramp.seed.accent": 5,
       "type.family.mono": 3,
       "type.tracking": 3,
-      "tier.page.fg.secondary": 2,
+      "tier.page.fg.secondary": 1,
       "tier.page.fg": 1,
-      "tier.control.fg.disabled": 1,
-      "tier.overlay.border": 6,
       "tier.page.fg.primary": 1,
       "elevation.ladder": 2
     },
@@ -86,15 +83,15 @@
       "--ds-material-overlay-background": 38,
       "--ds-material-overlay-foreground": 18
     },
-    "collapsibleReplacementBytes": 5079,
+    "collapsibleReplacementBytes": 4683,
     "collapsibleBytesByVertical": {
-      "bithire": 2275,
-      "evnto": 669,
-      "rottay": 2135
+      "bithire": 2254,
+      "evnto": 628,
+      "rottay": 1801
     },
     "pureByRule": {
-      "R2": 226,
-      "R5": 54,
+      "R2": 207,
+      "R5": 52,
       "R1": 13,
       "R4": 43
     }
@@ -2781,8 +2778,8 @@
       "scope": "base",
       "headChannel": "--ds-color-text-primary",
       "headEmitted": true,
-      "class": "pure",
-      "replacementDeltaBytes": 21
+      "class": "value-shift",
+      "replacementDeltaBytes": 0
     },
     {
       "slotId": "bithire:CHROME.modal.closeBgHover",
@@ -10371,8 +10368,8 @@
       "scope": "dark",
       "headChannel": "--ds-color-text-disabled",
       "headEmitted": true,
-      "class": "pure",
-      "replacementDeltaBytes": 22
+      "class": "value-shift",
+      "replacementDeltaBytes": 0
     },
     {
       "slotId": "evnto:OVERLAY.chrome.controls.input.colorPlaceholder",
@@ -10393,8 +10390,8 @@
       "scope": "dark",
       "headChannel": "--ds-color-bg-primary",
       "headEmitted": true,
-      "class": "pure",
-      "replacementDeltaBytes": 19
+      "class": "value-shift",
+      "replacementDeltaBytes": 0
     },
     {
       "slotId": "evnto:OVERLAY.chrome.layout.headerBg",
@@ -16839,8 +16836,8 @@
       "scope": "light",
       "headChannel": "--ds-color-text-primary",
       "headEmitted": true,
-      "class": "pure",
-      "replacementDeltaBytes": 21
+      "class": "value-shift",
+      "replacementDeltaBytes": 0
     },
     {
       "slotId": "rottay:OVERLAY.chrome.breadcrumb.separatorColor",
@@ -16982,8 +16979,8 @@
       "scope": "light",
       "headChannel": "--ds-color-primary",
       "headEmitted": true,
-      "class": "pure",
-      "replacementDeltaBytes": 16
+      "class": "value-shift",
+      "replacementDeltaBytes": 0
     },
     {
       "slotId": "rottay:OVERLAY.chrome.cardComponent.imagePlaceholderBg",
@@ -18005,8 +18002,8 @@
       "scope": "light",
       "headChannel": "--ds-color-border",
       "headEmitted": true,
-      "class": "pure",
-      "replacementDeltaBytes": 15
+      "class": "value-shift",
+      "replacementDeltaBytes": 0
     },
     {
       "slotId": "rottay:OVERLAY.chrome.controls.input.borderFocus",
@@ -18445,8 +18442,8 @@
       "scope": "light",
       "headChannel": "--ds-color-text-primary",
       "headEmitted": true,
-      "class": "pure",
-      "replacementDeltaBytes": 21
+      "class": "value-shift",
+      "replacementDeltaBytes": 0
     },
     {
       "slotId": "rottay:OVERLAY.chrome.controls.select.arrowColor",
@@ -18632,8 +18629,8 @@
       "scope": "light",
       "headChannel": "--ds-color-text-disabled",
       "headEmitted": true,
-      "class": "pure",
-      "replacementDeltaBytes": 22
+      "class": "value-shift",
+      "replacementDeltaBytes": 0
     },
     {
       "slotId": "rottay:OVERLAY.chrome.controls.select.optionColorSelected",
@@ -19391,8 +19388,8 @@
       "scope": "light",
       "headChannel": "--ds-color-border",
       "headEmitted": true,
-      "class": "pure",
-      "replacementDeltaBytes": 15
+      "class": "value-shift",
+      "replacementDeltaBytes": 0
     },
     {
       "slotId": "rottay:OVERLAY.chrome.drawer.headerBorder",
@@ -19402,8 +19399,8 @@
       "scope": "light",
       "headChannel": "--ds-color-border",
       "headEmitted": true,
-      "class": "pure",
-      "replacementDeltaBytes": 15
+      "class": "value-shift",
+      "replacementDeltaBytes": 0
     },
     {
       "slotId": "rottay:OVERLAY.chrome.drawer.titleColor",
@@ -19468,8 +19465,8 @@
       "scope": "light",
       "headChannel": "--ds-color-text-primary",
       "headEmitted": true,
-      "class": "pure",
-      "replacementDeltaBytes": 21
+      "class": "value-shift",
+      "replacementDeltaBytes": 0
     },
     {
       "slotId": "rottay:OVERLAY.chrome.empty.descriptionColor",
@@ -19908,8 +19905,8 @@
       "scope": "light",
       "headChannel": "--ds-color-text-primary",
       "headEmitted": true,
-      "class": "pure",
-      "replacementDeltaBytes": 21
+      "class": "value-shift",
+      "replacementDeltaBytes": 0
     },
     {
       "slotId": "rottay:OVERLAY.chrome.menu.itemColorHover",
@@ -19919,8 +19916,8 @@
       "scope": "light",
       "headChannel": "--ds-color-text-primary",
       "headEmitted": true,
-      "class": "pure",
-      "replacementDeltaBytes": 21
+      "class": "value-shift",
+      "replacementDeltaBytes": 0
     },
     {
       "slotId": "rottay:OVERLAY.chrome.menu.itemDangerColor",
@@ -20007,8 +20004,8 @@
       "scope": "light",
       "headChannel": "--ds-color-text-primary",
       "headEmitted": true,
-      "class": "pure",
-      "replacementDeltaBytes": 21
+      "class": "value-shift",
+      "replacementDeltaBytes": 0
     },
     {
       "slotId": "rottay:OVERLAY.chrome.modal.bg",
@@ -20051,8 +20048,8 @@
       "scope": "light",
       "headChannel": "--ds-color-text-primary",
       "headEmitted": true,
-      "class": "pure",
-      "replacementDeltaBytes": 21
+      "class": "value-shift",
+      "replacementDeltaBytes": 0
     },
     {
       "slotId": "rottay:OVERLAY.chrome.modal.color",
@@ -20084,8 +20081,8 @@
       "scope": "light",
       "headChannel": "--ds-color-border",
       "headEmitted": true,
-      "class": "pure",
-      "replacementDeltaBytes": 15
+      "class": "value-shift",
+      "replacementDeltaBytes": 0
     },
     {
       "slotId": "rottay:OVERLAY.chrome.modal.headerBg",
@@ -20106,8 +20103,8 @@
       "scope": "light",
       "headChannel": "--ds-color-border",
       "headEmitted": true,
-      "class": "pure",
-      "replacementDeltaBytes": 15
+      "class": "value-shift",
+      "replacementDeltaBytes": 0
     },
     {
       "slotId": "rottay:OVERLAY.chrome.modal.overlayBg",
@@ -20205,8 +20202,8 @@
       "scope": "light",
       "headChannel": "--ds-color-text-primary",
       "headEmitted": true,
-      "class": "pure",
-      "replacementDeltaBytes": 21
+      "class": "value-shift",
+      "replacementDeltaBytes": 0
     },
     {
       "slotId": "rottay:OVERLAY.chrome.popover.bg",
@@ -20227,8 +20224,8 @@
       "scope": "light",
       "headChannel": "--ds-color-border",
       "headEmitted": true,
-      "class": "pure",
-      "replacementDeltaBytes": 15
+      "class": "value-shift",
+      "replacementDeltaBytes": 0
     },
     {
       "slotId": "rottay:OVERLAY.chrome.popover.titleBorder",
@@ -20238,8 +20235,8 @@
       "scope": "light",
       "headChannel": "--ds-color-border",
       "headEmitted": true,
-      "class": "pure",
-      "replacementDeltaBytes": 15
+      "class": "value-shift",
+      "replacementDeltaBytes": 0
     },
     {
       "slotId": "rottay:OVERLAY.chrome.popover.titleColor",
@@ -20810,8 +20807,8 @@
       "scope": "light",
       "headChannel": "--ds-color-text-secondary",
       "headEmitted": true,
-      "class": "pure",
-      "replacementDeltaBytes": 23
+      "class": "value-shift",
+      "replacementDeltaBytes": 0
     },
     {
       "slotId": "rottay:OVERLAY.chrome.table.loadingOverlayBg",
@@ -22167,5 +22164,5 @@
       "replacementDeltaBytes": 28
     }
   ],
-  "digest": "439e64d52f6d77ff2f617ceb46d47e7a5e5fe8ae57a7350486772d752172a19e"
+  "digest": "89a6943c03c770620264a7ac8f149487d01b8610fe27aa87702e78c5232e91de"
 }

@@ -6,21 +6,21 @@
     "sources": [
       {
         "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-        "bytes": 342032,
+        "bytes": 342366,
         "lines": 9295,
-        "sha256": "de45d9a5c94568c4f22ff2f766485ffafcc2d9085838c4c66a65246970eb2e92"
+        "sha256": "eb53576087d8227234d5edf77be6fc3edbccab1ff17c81a3d424cc8e6457542e"
       },
       {
         "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-        "bytes": 340876,
+        "bytes": 340897,
         "lines": 9312,
-        "sha256": "822faf36c5fa6044b8886162482b3e6587cfe973889ad9453c91281260c3fae2"
+        "sha256": "fae4157b9500b4beff999181c0a6eb6f6ed66c85e9ec19319d6baecd04097ac8"
       },
       {
         "file": "src/foundation/tokens/ts/presentation/brand-themes/evnto/index.ts",
-        "bytes": 218458,
+        "bytes": 218499,
         "lines": 5006,
-        "sha256": "60d35e7556169ed58b27f16f41d1c829523a785b40b4f1af9f5e21e9d9b00f89"
+        "sha256": "8994e0a99f96450384d742a00b97694f412ac3cb91f830035fbcfad50565d097"
       }
     ],
     "mtimeExcluded": "Se registra sha256 y no mtime: el mtime cambia con un clon o un touch."

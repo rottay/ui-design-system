@@ -657,7 +657,7 @@ const OVERLAY: BrandThemeModeOverlay = {
         bg: "#131210",
         border: "#2E2C24",
         bgDisabled: "#1C1A16",
-        colorDisabled: "#484838",
+        colorDisabled: "var(--ds-color-text-disabled)",
         borderDisabled: "#222018",
         colorPlaceholder: "#686858",
       },
@@ -679,7 +679,7 @@ const OVERLAY: BrandThemeModeOverlay = {
      * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
      */
     layout: {
-      bg: "#131210",
+      bg: "var(--ds-color-bg-primary)",
       headerBg: "rgba(19, 18, 16, 0.92)",
       headerBorder: "#2E2C24",
       // Literal on purpose: an alias equal to the body emits NOTHING in a mode
