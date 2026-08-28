@@ -12,9 +12,9 @@
       },
       {
         "file": "src/foundation/tokens/css/facade/artifacts/bithire/index.css",
-        "bytes": 97153,
-        "lines": 1697,
-        "sha256": "52bf7c514fab2b69a54118bafcd4b1e6df63422346a4372c9604825fff66376e"
+        "bytes": 97035,
+        "lines": 1694,
+        "sha256": "790b03e1b3fffeea5f71408cbd77000bfcbbe6d4020c046bec3b4205c8a43701"
       },
       {
         "file": "src/foundation/tokens/css/facade/artifacts/evnto/index.css",
@@ -32,9 +32,9 @@
       },
       {
         "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-        "bytes": 341652,
+        "bytes": 341712,
         "lines": 9312,
-        "sha256": "b44f3f93f4f26afe361b067411f51c261c596f51ef04e0d4efc2045baf2e3daf"
+        "sha256": "af05fe58964ee99061297e7d4e93d9c713c66d61c4f28114cf228980c94d9696"
       },
       {
         "file": "src/foundation/tokens/ts/presentation/brand-themes/evnto/index.ts",
@@ -51,7 +51,7 @@
       "distinctChannels": 1212
     },
     "bithire": {
-      "occurrences": 1673,
+      "occurrences": 1670,
       "distinctChannels": 1232
     },
     "evnto": {
@@ -11384,8 +11384,8 @@
         "sameRoleTwiceChannels": []
       },
       "bithire": {
-        "channelsDeclaredMoreThanOnce": 441,
-        "allInDistinctRoles": 441,
+        "channelsDeclaredMoreThanOnce": 438,
+        "allInDistinctRoles": 438,
         "sameRoleTwice": 0,
         "sameRoleTwiceChannels": []
       },

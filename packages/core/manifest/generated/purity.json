@@ -17,9 +17,9 @@
   "stats": {
     "rows": 2006,
     "byClass": {
-      "value-shift": 1417,
+      "value-shift": 1420,
       "head-not-emitted": 384,
-      "pure": 205
+      "pure": 202
     },
     "byVertical": {
       "bithire": 842,
@@ -36,11 +36,11 @@
       "control.ratio.iconSize": 2,
       "control.ratio.lineHeight": 2,
       "tier.control.fg.secondary": 1,
-      "tier.base.fg": 9,
       "tier.base.fg.muted": 10,
-      "tier.control.bg": 9,
       "tier.control.border": 2,
       "tier.base.border": 10,
+      "tier.control.bg": 8,
+      "tier.base.fg": 7,
       "tier.raised.bg": 5,
       "tier.page.bg": 14,
       "tier.page.border.default": 4,
@@ -81,14 +81,14 @@
       "--ds-material-overlay-background": 38,
       "--ds-material-overlay-foreground": 18
     },
-    "collapsibleReplacementBytes": 2645,
+    "collapsibleReplacementBytes": 2585,
     "collapsibleBytesByVertical": {
-      "bithire": 1585,
+      "bithire": 1525,
       "evnto": 566,
       "rottay": 494
     },
     "pureByRule": {
-      "R2": 105,
+      "R2": 102,
       "R5": 44,
       "R1": 13,
       "R4": 43
@@ -1412,8 +1412,8 @@
       "scope": "base",
       "headChannel": "--ds-color-text-primary",
       "headEmitted": true,
-      "class": "pure",
-      "replacementDeltaBytes": 21
+      "class": "value-shift",
+      "replacementDeltaBytes": 0
     },
     {
       "slotId": "bithire:CHROME.controls.input.bg",
@@ -1610,8 +1610,8 @@
       "scope": "base",
       "headChannel": "--ds-color-text-primary",
       "headEmitted": true,
-      "class": "pure",
-      "replacementDeltaBytes": 21
+      "class": "value-shift",
+      "replacementDeltaBytes": 0
     },
     {
       "slotId": "bithire:CHROME.controls.input.clear.focusRing",
@@ -1742,8 +1742,8 @@
       "scope": "base",
       "headChannel": "--ds-surface-control",
       "headEmitted": true,
-      "class": "pure",
-      "replacementDeltaBytes": 18
+      "class": "value-shift",
+      "replacementDeltaBytes": 0
     },
     {
       "slotId": "bithire:CHROME.controls.input.filled.bgHover",
@@ -22162,5 +22162,5 @@
       "replacementDeltaBytes": 28
     }
   ],
-  "digest": "ebca1a0cbee1f4c65a94a937ab7bd8e7eca4844e92fee436a4ff5393da006481"
+  "digest": "ae132a14e73bca4ed868fb151515c41800badd46c216af93fc33e4bd56b61cc5"
 }

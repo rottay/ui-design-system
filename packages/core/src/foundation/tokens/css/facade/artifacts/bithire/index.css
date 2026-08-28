@@ -515,7 +515,7 @@
   --ds-input-affix-size-compact: 18px;
   --ds-input-autofill-bg: #F4F8FD;
   --ds-input-autofill-caret: #3A6FB0;
-  --ds-input-autofill-color: #14283B;
+  --ds-input-autofill-color: var(--ds-color-text-primary);
   --ds-input-bg: var(--ds-surface-inset, #ffffff);
   --ds-input-bg-disabled: #F8F8F8;
   --ds-input-bg-focus: var(--ds-surface-inset, #FFFFFF);
@@ -536,7 +536,7 @@
   --ds-input-clear-border: 1px solid transparent;
   --ds-input-clear-border-hover: #C4D2DE;
   --ds-input-clear-color: #71869A;
-  --ds-input-clear-color-hover: #14283B;
+  --ds-input-clear-color-hover: var(--ds-color-text-primary);
   --ds-input-color: var(--ds-color-text-primary);
   --ds-input-color-disabled: #AEBCC8;
   --ds-input-color-placeholder: #8A9AAA;
@@ -550,7 +550,7 @@
   --ds-input-error-message-color: #B83A4B;
   --ds-input-error-message-font-weight: 600;
   --ds-input-filled-bg: #F4F8FD;
-  --ds-input-filled-bg-focus: #FFFFFF;
+  --ds-input-filled-bg-focus: var(--ds-surface-control);
   --ds-input-filled-bg-hover: #EDF4FB;
   --ds-input-filled-border: #D4E0EA;
   --ds-input-font-weight: 400;
@@ -1439,7 +1439,6 @@
   --ds-input-affix-color: var(--ds-color-text-secondary);
   --ds-input-autofill-bg: var(--ds-surface-panel);
   --ds-input-autofill-caret: var(--ds-color-primary);
-  --ds-input-autofill-color: var(--ds-color-text-primary);
   --ds-input-bg: #0f1520;
   --ds-input-bg-disabled: var(--ds-material-control-background-disabled);
   --ds-input-border: var(--ds-color-border);
@@ -1453,7 +1452,6 @@
   --ds-input-clear-bg-hover: var(--ds-material-control-background-hover);
   --ds-input-clear-border-hover: var(--ds-color-neutral-500);
   --ds-input-clear-color: var(--ds-color-text-tertiary);
-  --ds-input-clear-color-hover: var(--ds-color-text-primary);
   --ds-input-color-disabled: var(--ds-color-text-muted);
   --ds-input-color-placeholder: var(--ds-color-text-muted);
   --ds-input-count-color: var(--ds-color-text-tertiary);
@@ -1462,7 +1460,6 @@
   --ds-input-error-bg: color-mix(in srgb, var(--ds-color-error) 4%, var(--ds-surface-card));
   --ds-input-error-message-color: var(--ds-color-error);
   --ds-input-filled-bg: var(--ds-surface-panel);
-  --ds-input-filled-bg-focus: var(--ds-surface-control);
   --ds-input-filled-bg-hover: var(--ds-material-control-background-hover);
   --ds-input-filled-border: var(--ds-color-border);
   --ds-input-helper-color: var(--ds-color-text-tertiary);

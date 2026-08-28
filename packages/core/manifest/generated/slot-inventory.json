@@ -43,13 +43,13 @@
       "string": 418,
       "number": 96,
       "dimension": 264,
-      "hex": 1499,
+      "hex": 1496,
       "color-fn": 302,
-      "var-reference": 985,
+      "var-reference": 988,
       "boolean": 21,
       "expression": 71
     },
-    "rowsReadingVar": 1053,
+    "rowsReadingVar": 1056,
     "expressionsCarryingLiteral": 71,
     "byRule": {
       "R4": 190,
@@ -79,7 +79,7 @@
     "paintDenominator": 3620,
     "metadataRosterSize": 36,
     "metadataRosterUnmatched": 0,
-    "literalSeedRows": 1892,
+    "literalSeedRows": 1889,
     "distinctLiteralSeedValues": 546,
     "unmappedTagScopes": 0,
     "compileFailures": 0
@@ -9542,9 +9542,9 @@
       "vertical": "bithire",
       "slotPath": "CHROME.controls.input.autofill.color",
       "evaluatedPath": "chrome.controls.input.autofill.color",
-      "authoredValue": "#14283B",
-      "valueKind": "hex",
-      "readsVar": false,
+      "authoredValue": "var(--ds-color-text-primary)",
+      "valueKind": "var-reference",
+      "readsVar": true,
       "currentDomicile": "seed",
       "governor": "mixta medida en linea compartida: 2 por dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a); 1 por dial: palette.seeds — las 3 hojas comparten una sola linea fuente y no admiten docblock propio sin reformatear",
       "taggedAtLine": 6738,
@@ -9553,7 +9553,8 @@
         "--ds-input-autofill-color"
       ],
       "emitsScoped": [
-        "base|--ds-input-autofill-color"
+        "base|--ds-input-autofill-color",
+        "dark|--ds-input-autofill-color"
       ],
       "rootId": "tier.base.fg",
       "headRootIds": [
@@ -10118,9 +10119,9 @@
       "vertical": "bithire",
       "slotPath": "CHROME.controls.input.clear.colorHover",
       "evaluatedPath": "chrome.controls.input.clear.colorHover",
-      "authoredValue": "#14283B",
-      "valueKind": "hex",
-      "readsVar": false,
+      "authoredValue": "var(--ds-color-text-primary)",
+      "valueKind": "var-reference",
+      "readsVar": true,
       "currentDomicile": "seed",
       "governor": "dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)",
       "taggedAtLine": 6723,
@@ -10129,7 +10130,8 @@
         "--ds-input-clear-color-hover"
       ],
       "emitsScoped": [
-        "base|--ds-input-clear-color-hover"
+        "base|--ds-input-clear-color-hover",
+        "dark|--ds-input-clear-color-hover"
       ],
       "rootId": "tier.base.fg",
       "headRootIds": [
@@ -10539,9 +10541,9 @@
       "vertical": "bithire",
       "slotPath": "CHROME.controls.input.filled.bgFocus",
       "evaluatedPath": "chrome.controls.input.filled.bgFocus",
-      "authoredValue": "#FFFFFF",
-      "valueKind": "hex",
-      "readsVar": false,
+      "authoredValue": "var(--ds-surface-control)",
+      "valueKind": "var-reference",
+      "readsVar": true,
       "currentDomicile": "seed",
       "governor": "dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)",
       "taggedAtLine": 6698,
@@ -10550,7 +10552,8 @@
         "--ds-input-filled-bg-focus"
       ],
       "emitsScoped": [
-        "base|--ds-input-filled-bg-focus"
+        "base|--ds-input-filled-bg-focus",
+        "dark|--ds-input-filled-bg-focus"
       ],
       "rootId": "tier.control.bg",
       "headRootIds": [
@@ -108190,5 +108193,5 @@
       }
     }
   ],
-  "digest": "d1faec327e33eb5d8275eda50f324c351868e9516b3d30425af905f039ebd1c5"
+  "digest": "7c1f264446b4a3181f94e9b9b57cfeee1af78053d8ff0a4f72787a1224bc1972"
 }

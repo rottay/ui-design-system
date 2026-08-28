@@ -53,10 +53,10 @@
     "packages/core/src/ui/primitives/feedback/Alert/engines/rustic/index.tsx",
     "packages/core/src/ui/primitives/feedback/Alert/index.tsx"
   ],
-  "sourceDigest": "a202a9ada5383c1d8319fb10eeca37c98d66f53fe3d1e0ab50a63d820dd74fb1",
+  "sourceDigest": "874bb79cbac0f2711c8f12fcb55bb78a3d55e0ef496579d92c31e1accbaf218f",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/motion-dial/rottay-intensity-low.json",
   "artifactSha256": "36ae76a2cbdccf102d9ffb3d622a2da655f7834d903c48900f0bc3ab5d31ac69",
-  "createdAt": "2026-08-28T01:36:58.802Z",
+  "createdAt": "2026-08-28T05:04:43.080Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

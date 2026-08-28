@@ -6699,7 +6699,7 @@ const CHROME: BrandChrome = {
        * @domicile seed
        * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
        */
-      filled: { bg: "#F4F8FD", bgHover: "#EDF4FB", bgFocus: "#FFFFFF", border: "#D4E0EA" },
+      filled: { bg: "#F4F8FD", bgHover: "#EDF4FB", bgFocus: "var(--ds-surface-control)", border: "#D4E0EA" },
       /**
        * @domicile seed
        * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
@@ -6724,7 +6724,7 @@ const CHROME: BrandChrome = {
        * @domicile seed
        * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
        */
-      clear: { color: "#71869A", colorHover: "#14283B", bg: "transparent", bgHover: "#EAF2FA", border: "1px solid transparent", borderHover: "#C4D2DE", shadowHover: "0 1px 3px rgba(20, 40, 59, 0.10)", focusRing: "0 0 0 2px rgba(58, 111, 176, 0.20)", activeTransform: "scale(0.94)" },
+      clear: { color: "#71869A", colorHover: "var(--ds-color-text-primary)", bg: "transparent", bgHover: "#EAF2FA", border: "1px solid transparent", borderHover: "#C4D2DE", shadowHover: "0 1px 3px rgba(20, 40, 59, 0.10)", focusRing: "0 0 0 2px rgba(58, 111, 176, 0.20)", activeTransform: "scale(0.94)" },
       /**
        * @domicile seed
        * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
@@ -6739,7 +6739,7 @@ const CHROME: BrandChrome = {
        * @domicile seed
        * @governor mixta medida en linea compartida: 2 por dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a); 1 por dial: palette.seeds — las 3 hojas comparten una sola linea fuente y no admiten docblock propio sin reformatear
        */
-      autofill: { bg: "#F4F8FD", color: "#14283B", caret: "#3A6FB0" },
+      autofill: { bg: "#F4F8FD", color: "var(--ds-color-text-primary)", caret: "#3A6FB0" },
       /**
        * @domicile seed
        * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)

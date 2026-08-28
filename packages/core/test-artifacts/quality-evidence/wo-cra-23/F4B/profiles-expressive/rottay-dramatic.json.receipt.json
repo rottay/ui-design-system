@@ -69,10 +69,10 @@
     "packages/core/src/ui/primitives/display/Card/engines/rustic/index.tsx",
     "packages/core/src/ui/primitives/display/Card/index.tsx"
   ],
-  "sourceDigest": "a06aee26a5c4fd5e759bad32f968358a9a56565cbc396823d88ecf901d6ecf0a",
+  "sourceDigest": "cc91051aee2b18e95fbc368f82e0543cbad4871cd0c9958fa58f235327d89a9b",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/profiles-expressive/rottay-dramatic.json",
   "artifactSha256": "10dea58d69f5df7c855856f78e63afdea0fb570d7117adf56771759a7787d90b",
-  "createdAt": "2026-08-28T01:36:58.802Z",
+  "createdAt": "2026-08-28T05:04:43.080Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

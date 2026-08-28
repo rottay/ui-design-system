@@ -12,9 +12,9 @@
       },
       {
         "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-        "bytes": 341652,
+        "bytes": 341712,
         "lines": 9312,
-        "sha256": "b44f3f93f4f26afe361b067411f51c261c596f51ef04e0d4efc2045baf2e3daf"
+        "sha256": "af05fe58964ee99061297e7d4e93d9c713c66d61c4f28114cf228980c94d9696"
       },
       {
         "file": "src/foundation/tokens/ts/presentation/brand-themes/evnto/index.ts",

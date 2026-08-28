@@ -48,7 +48,7 @@
     "channelsWithoutReaders": 179,
     "channelsPaintsFalse": 913,
     "channelsPaintsInModernFalse": 1962,
-    "readers": 37162,
+    "readers": 37165,
     "readersByPlane": {
       "modern-skin-css": 14737,
       "presentation-css": 10656,
@@ -62,7 +62,7 @@
       "infrastructure-tsx": 6,
       "ts-token-mirror": 1447,
       "ts-token-utils": 47,
-      "ts-other": 2914
+      "ts-other": 2917
     },
     "channelsByPlane": {
       "modern-skin-css": 3840,
@@ -126356,6 +126356,20 @@
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
           "line": 6667,
+          "prop": "color",
+          "scalars": []
+        },
+        {
+          "plane": "ts-other",
+          "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
+          "line": 6727,
+          "prop": "colorHover",
+          "scalars": []
+        },
+        {
+          "plane": "ts-other",
+          "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
+          "line": 6742,
           "prop": "color",
           "scalars": []
         },
@@ -317275,6 +317289,13 @@
           "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
           "line": 6020,
           "prop": "bg",
+          "scalars": []
+        },
+        {
+          "plane": "ts-other",
+          "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
+          "line": 6702,
+          "prop": "bgFocus",
           "scalars": []
         },
         {
