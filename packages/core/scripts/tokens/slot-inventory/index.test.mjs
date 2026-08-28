@@ -7,6 +7,10 @@ import {
   diffKeys,
   evaluatedLeaves,
   headChannelIndex,
+  countLiteralPinsOnDeclaredHead,
+  evaluateLedger,
+  isRefinedRoot,
+  measureLedger,
   readsVar,
   resolveTag,
   sentinelFor,
@@ -346,4 +350,83 @@ test('el modo sin membresia se pide por nombre: leerla por accidente es imposibl
   assert.throws(() => readMembership('/no/existe/root-membership.json'), /no existe/);
   const doc = await buildSynthetic();
   assert.equal(doc.provenance.membershipSource, 'catalog-heads-only');
+});
+
+/* ── 11. el LEDGER cableado: falla en las dos direcciones ────────────────── */
+
+const LEDGER_BASE = { counters: Object.fromEntries(
+  ['rows', 'unassignedRows', 'untaggedRows', 'rowsWithoutRootAttribution',
+   'expressionsCarryingLiteral', 'literalPinsOnDeclaredHead'].map((n) => [n, { value: 10 }]),
+) };
+const ledgerLive = (over = {}) => ({
+  rows: 10, unassignedRows: 10, untaggedRows: 10, rowsWithoutRootAttribution: 10,
+  expressionsCarryingLiteral: 10, literalPinsOnDeclaredHead: 10, ...over,
+});
+
+test('LEDGER — un contador que SUBE falla, y el mensaje prohibe re-anclar', () => {
+  const failures = evaluateLedger(ledgerLive({ rowsWithoutRootAttribution: 11 }), LEDGER_BASE);
+  assert.equal(failures.length, 1);
+  assert.match(failures[0], /rowsWithoutRootAttribution: 10 -> 11 SUBIO/);
+  assert.match(failures[0], /JAMAS el ancla/);
+});
+
+test('LEDGER — un contador que BAJA tambien falla, con la instruccion de re-anclar', () => {
+  const failures = evaluateLedger(ledgerLive({ untaggedRows: 9 }), LEDGER_BASE);
+  assert.equal(failures.length, 1);
+  assert.match(failures[0], /untaggedRows: 10 -> 9 bajo/);
+  assert.match(failures[0], /MISMO commit/);
+});
+
+test('LEDGER — baseline ausente o corrupto: FAIL cerrado', () => {
+  assert.deepEqual(evaluateLedger(ledgerLive(), null), ['[ledger] el baseline no existe o no tiene `counters`']);
+  assert.deepEqual(evaluateLedger(ledgerLive(), {}), ['[ledger] el baseline no existe o no tiene `counters`']);
+});
+
+test('LEDGER — un contador sin ancla, y un ancla sin contador, se ven los dos', () => {
+  const extra = evaluateLedger({ ...ledgerLive(), inventado: 1 }, LEDGER_BASE);
+  assert.ok(extra.some((f) => /inventado no esta anclado/.test(f)));
+  const { rows, ...sinRows } = ledgerLive();
+  const missing = evaluateLedger(sinRows, LEDGER_BASE);
+  assert.ok(missing.some((f) => /el baseline ancla rows, que el productor ya no mide/.test(f)));
+});
+
+test('LEDGER — sin desvio, cero fallos', () => {
+  assert.deepEqual(evaluateLedger(ledgerLive(), LEDGER_BASE), []);
+});
+
+test('LEDGER — la unidad de rowsWithoutRootAttribution es la que su razon pinea', async () => {
+  const { readFileSync } = await import('node:fs');
+  const doc = JSON.parse(readFileSync(new URL('../../../manifest/generated/slot-inventory.json', import.meta.url), 'utf8'));
+  const live = measureLedger(doc, 0);
+  assert.equal(live.rowsWithoutRootAttribution, doc.stats.byRootAttribution['no-persisted-membership'],
+    'medir otra cosa con el mismo nombre es como se rompio la cifra la primera vez');
+  assert.equal(live.rows, doc.stats.rows);
+});
+
+test('LEDGER — los pines se cuentan sobre raices NO REFINADAS (ley de la cohorte 2A)', () => {
+  const edges = { literalPins: [
+    { channel: '--ds-color-text-primary' },   // cabeza de nivel
+    { channel: '--ds-color-text-muted' },     // cabeza SOLO de una raiz de paso
+  ] };
+  const catalog = { roots: [
+    { rootId: 'tier.base.fg', channel: '--ds-color-text-primary' },
+    { rootId: 'tier.base.fg.muted', channel: '--ds-color-text-muted' },
+  ] };
+  assert.equal(countLiteralPinsOnDeclaredHead({ edges, catalog }), 1,
+    'una raiz de paso es la misma decision indexada mas fino: su cabeza no es una cabeza nueva');
+  assert.equal(isRefinedRoot('tier.base.fg.muted'), true);
+  assert.equal(isRefinedRoot('tier.base.fg'), false);
+  assert.equal(isRefinedRoot('ramp.seed.primary'), false);
+});
+
+test('LEDGER — el arbol real esta en su ancla, contador por contador', async () => {
+  const { readFileSync } = await import('node:fs');
+  const url = (p) => new URL(p, import.meta.url);
+  const doc = JSON.parse(readFileSync(url('../../../manifest/generated/slot-inventory.json'), 'utf8'));
+  const pins = countLiteralPinsOnDeclaredHead({
+    edges: JSON.parse(readFileSync(url('../../../manifest/cascade/extracted/css-edges.json'), 'utf8')),
+    catalog: JSON.parse(readFileSync(url('../../../manifest/cascade/root-catalog.json'), 'utf8')),
+  });
+  const baseline = JSON.parse(readFileSync(url('./slot-inventory.baseline.json'), 'utf8'));
+  assert.deepEqual(evaluateLedger(measureLedger(doc, pins), baseline), []);
 });

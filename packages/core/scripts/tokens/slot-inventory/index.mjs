@@ -370,6 +370,96 @@ export function classify({ domicile, valueKindOf, rootId, root, control, authore
   };
 }
 
+/**
+ * EL LEDGER SE VERIFICA, O NO ES UN LEDGER.
+ *
+ * `BASELINE_PATH` existia desde la cohorte 0 y **nadie lo leia**: estaba
+ * declarado y no aparecia en ninguna otra linea del productor. Cuatro de sus
+ * cinco cifras no las miraba ningun gate -- solo un drill del
+ * normalization-contract-gate acoplaba `unassignedRows` -- y por eso
+ * `rowsWithoutRootAttribution` derivo de 1707 a 1467 entre la cohorte 1 y P1
+ * sin que nada enrojeciera. El frente viene persiguiendo esa clase de defecto
+ * ("un numero sin productor envejece en silencio") y la tenia adentro de casa.
+ *
+ * LA UNIDAD SE LEE DEL BASELINE, NO SE ADIVINA. `rowsWithoutRootAttribution`
+ * no es "las filas sin raiz": es exactamente
+ * `stats.byRootAttribution["no-persisted-membership"]`, que es la unidad que su
+ * propia razon pinea. Medir otra cosa con el mismo nombre es como se rompio la
+ * cifra la primera vez.
+ *
+ * LA LEY ES DECRECE-SOLO CON RE-ANCLA GOBERNADA, la misma del archivo y la
+ * misma del normalization-contract-gate: un contador que SUBE es hallazgo real
+ * y falla sin escape; uno que BAJA falla tambien, con la instruccion de bajar
+ * el baseline en el MISMO commit y con razon escrita. Las dos direcciones
+ * fallan porque un ledger que se actualiza solo deja de ser un ancla.
+ */
+export function measureLedger(doc, literalPinsOnDeclaredHead) {
+  return {
+    rows: doc.stats.rows,
+    unassignedRows: doc.stats.byDomicile?.unassigned ?? 0,
+    untaggedRows: doc.stats.byDomicile?.untagged ?? 0,
+    rowsWithoutRootAttribution: doc.stats.byRootAttribution?.['no-persisted-membership'] ?? 0,
+    expressionsCarryingLiteral: doc.stats.expressionsCarryingLiteral ?? 0,
+    literalPinsOnDeclaredHead,
+  };
+}
+
+/**
+ * `literalPinsOnDeclaredHead` no sale del inventario: cuenta pines literales
+ * del CSS autorado cuyo canal es cabeza declarada de una raiz. Se recomputa de
+ * sus dos fuentes para que el ledger no dependa de que alguien lo copie a mano.
+ *
+ * SE MIDE SOBRE LAS RAICES NO REFINADAS, y eso NO es una eleccion nueva: es la
+ * ley que el DT adjudico en la cohorte 2A para `root-exposure-gate`, aplicada a
+ * un contador que es anterior a ella. Una raiz de paso
+ * (`tier.<nivel>.<fg|border>.<paso>`) es la MISMA decision indexada mas fino,
+ * asi que sus cabezas no son cabezas nuevas.
+ *
+ * MEDIDO, y por eso importa: contando TODAS las cabezas el contador da 24
+ * contra un ancla de 20, y los 4 de diferencia son
+ * `--ds-color-text-{secondary,tertiary,muted,disabled}` -- canales que se
+ * volvieron cabeza cuando el eje paso creo `tier.*.fg.{secondary,tertiary,
+ * muted,disabled}`. Ni un solo pin literal del CSS cambio: lo que crecio fue el
+ * vocabulario de raices. Un contador que sube porque el catalogo crece no mide
+ * deuda, mide catalogo -- la misma patologia de `collapsesLegacy`. Con el
+ * filtro de nivel el contador vuelve a 20, que es su ancla vigente.
+ */
+export const isRefinedRoot = (rootId) => {
+  const parts = String(rootId ?? '').split('.');
+  return parts.length === 4 && parts[0] === 'tier';
+};
+
+export function countLiteralPinsOnDeclaredHead({ edges, catalog }) {
+  const heads = new Set(
+    (catalog.roots ?? [])
+      .filter((root) => root.channel && !isRefinedRoot(root.rootId))
+      .map((root) => root.channel),
+  );
+  return (edges.literalPins ?? []).filter((pin) => heads.has(pin.channel)).length;
+}
+
+/** Compara el ledger vivo contra su ancla. Falla en las DOS direcciones. */
+export function evaluateLedger(live, baseline) {
+  const failures = [];
+  if (!baseline?.counters) return ['[ledger] el baseline no existe o no tiene `counters`'];
+  for (const [name, value] of Object.entries(live)) {
+    const anchored = baseline.counters[name]?.value;
+    if (anchored === undefined) {
+      failures.push(`[ledger] ${name} no esta anclado en slot-inventory.baseline.json (vive ${value})`);
+      continue;
+    }
+    if (value > anchored) {
+      failures.push(`[ledger] ${name}: ${anchored} -> ${value} SUBIO — es hallazgo real; se arregla la fuente, JAMAS el ancla`);
+    } else if (value < anchored) {
+      failures.push(`[ledger] ${name}: ${anchored} -> ${value} bajo — baja el ancla en el MISMO commit, con razon escrita`);
+    }
+  }
+  for (const name of Object.keys(baseline.counters)) {
+    if (!(name in live)) failures.push(`[ledger] el baseline ancla ${name}, que el productor ya no mide`);
+  }
+  return failures;
+}
+
 export const sha256 = (text) => createHash('sha256').update(text).digest('hex');
 
 /**
@@ -678,7 +768,22 @@ async function main(argv) {
     console.error('slot-inventory: FAIL — el inventario no coincide con el arbol. Corre --write y revisa el diff.');
     process.exit(1);
   }
-  console.log(`slot-inventory: OK — ${doc.stats.rows} filas, digest ${doc.digest.slice(0, 12)}`);
+  /* El ledger se verifica DESPUES de la identidad byte a byte: si el artefacto
+   * ya divergio, el ledger no agrega informacion y el mensaje seria ruido. */
+  const pins = countLiteralPinsOnDeclaredHead({
+    edges: JSON.parse(readFileSync(join(CORE_ROOT, 'manifest/cascade/extracted/css-edges.json'), 'utf8')),
+    catalog: JSON.parse(readFileSync(join(CORE_ROOT, 'manifest/cascade/root-catalog.json'), 'utf8')),
+  });
+  const live = measureLedger(doc, pins);
+  let baseline = null;
+  try { baseline = JSON.parse(readFileSync(BASELINE_PATH, 'utf8')); } catch { baseline = null; }
+  const ledgerFailures = evaluateLedger(live, baseline);
+  if (ledgerFailures.length > 0) {
+    console.error('slot-inventory: FAIL — el ledger no coincide con su ancla:');
+    for (const failure of ledgerFailures) console.error(`  - ${failure}`);
+    process.exit(1);
+  }
+  console.log(`slot-inventory: OK — ${doc.stats.rows} filas, digest ${doc.digest.slice(0, 12)}, ledger 6/6 en su ancla`);
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {

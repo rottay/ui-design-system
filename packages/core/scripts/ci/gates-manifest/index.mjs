@@ -544,6 +544,15 @@ export const CI_GATES = Object.freeze([
     run: ['node', 'scripts/tokens/root-membership/index.mjs', '--check'],
     blocking: true,
   },
+  // El `--check` del inventario verifica DOS cosas por la misma puerta: que el
+  // artefacto sea byte-identico a su recomputo, y que sus seis contadores esten
+  // en `slot-inventory.baseline.json`. Lo segundo se cableo el 2026-08-28 y no
+  // es un agregado cosmetico: el baseline existia desde la cohorte 1 y no lo
+  // leia NADIE -- `BASELINE_PATH` estaba declarado y sin un solo lector, y solo
+  // un drill del norm-gate acoplaba `unassignedRows`. Con el ancla ciega,
+  // `rowsWithoutRootAttribution` derivo 1707 -> 1467 sin que ninguna corrida
+  // pusiera una linea roja. Una cifra que nadie verifica no es un ancla: es una
+  // nota al margen que envejece.
   {
     id: 'slot-inventory-drill',
     run: ['node', '--test', 'scripts/tokens/slot-inventory/index.test.mjs'],
