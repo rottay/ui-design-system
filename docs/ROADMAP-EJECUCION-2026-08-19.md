@@ -4569,6 +4569,43 @@ seeds reales y mover la superficie de calibración a un campo propio — la
 decisión 15 conserva su INTENT (superficie de calibración estrecha; dominio
 público 290 intacto) y se enmendará su formulación al cerrar C5.
 
+**OWNER-STEP-RULES LOTE 2 + EL HALLAZGO ESTRUCTURAL DE LA DIVERGENCIA (2026-08-27; commit
+`3cbd42d95`; autorado DT; postaudit Fable: DEFECTS-1 → condición cumplida → ACCEPT).** +46
+filas al eje paso (214→260) con dos leyes escritas: **convenciones de hoja por semántica
+AUTORADA del `BrandPalette`** (cada reason cita el contrato verbatim: placeholder→tertiary,
+*Disabled→disabled, metadata/captions→muted, supporting/affordance→secondary, tinta de
+cromo→primary, borde de panel→border primary) y **LEY DE ESPEJO + CONCORDANCIA** (gemelos
+CHROME/OVERLAY del mismo canal llevan el mismo paso; TODOS los contribuyentes reciben fila o
+el canal no refina — el fail-closed del productor se verificó EN ACCIÓN dos veces durante el
+lote). **Efecto:** purity pure 315→**333** (+18); 22 canales refinados padre→paso; 3 inertes
+por la **ley de alias** (piden `tier.control.fg.primary`, inexistente: el paso por defecto ES
+la raíz padre). Re-ancla única por la puerta `--reattribution` con atribución 2×2 medida:
+pins 226→228 y groups 234→239 = cobertura/partición (no regresión); divergentSlots
+1649→**1639** (baja legal). Ley dura intacta (resolved-map EXIT=0). Historia honesta: un
+borrador value-routed abortado sin dejar rastro + fix de 3 gemelos reclamados por el
+productor; las lecciones quedan en el `_note`. **Censo nuevo para lote 3 (deuda, dueño: el
+frente): 60 canales alias-inertes acumulados en la membresía** (residuo de lote 1 pidiendo
+pasos removidos por la ley de alias — re-adjudicar o declarar padre-por-diseño).
+
+**EL HALLAZGO ESTRUCTURAL (medido tres veces, cambia la trayectoria):** la masa divergente
+del gate (234 grupos / 1.649 slots) es en su **~92% OFF-VOCABULARY**: de los 719 miembros de
+grupos `tier.*` fg/border sin-estado, solo 56 tienen un valor cubierto por alguna cabeza de
+paso de su familia, y solo 4 grupos cerrarían enteros por refinamiento. Ejemplo canónico
+(`rottay|tier.control.bg|base`, 47 slots/16 posiciones): cinco grises oscuros
+casi-idénticos (`#131316`×15, `#1A1A1E`×8, `#18181B`×3, `#2A2A2F`×2, `#222226`×2) elegidos
+30 veces + verdes "success" escritos dos veces (`#16A34A`/`#22C55E`). **Consecuencia de
+ley:** esa masa no puede cerrar ni por refinamiento (no hay paso que la cubra) ni por
+colapso (cero-delta prohíbe mover la pintura) — cierra solo con **adjudicación visual**
+(elegir la posición canónica por clase) o **vocabulario nuevo con contrato autorado**. Es
+trabajo de la fase CRAFT (F4C), no del frente de normalización. El frente por tanto se
+ordena así: (i) 2B plena sobre la población pura (la ley 6 no aplica a cohortes de colapso
+puro: los contadores divergent* no se mueven por construcción — probado estructuralmente y
+medido; el indicador es `purity.pure` consumida, y el gate sigue bloqueando REGRESIÓN, que
+es su propósito); (ii) el eje paleta (diseño Opus listo); (iii) la masa divergente pasa a
+ser backlog explícito de F4C con censo por clase de valor (Sonnet lo produce). Esto NO mueve
+la métrica (62%/~43%) pero cambia QUÉ la mueve: el colapso gratis es la población pura; la
+duplicación dura paga con decisiones visuales del owner en F4C.
+
 **2B SUB-LOTE 1 CERRADO — EL PRIMER COLAPSO REAL DEL FRENTE (2026-08-27; commit
 `d8592aad5`; writer Opus; postaudit Fable: ACCEPT con dos ratificaciones y un remedio
 refinado).** 21 slots colapsados literal→`var()` en 9 raíces (rottay 18 · bithire 1 · evnto
