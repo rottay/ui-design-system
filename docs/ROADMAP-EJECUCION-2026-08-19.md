@@ -4569,6 +4569,42 @@ seeds reales y mover la superficie de calibración a un campo propio — la
 decisión 15 conserva su INTENT (superficie de calibración estrecha; dominio
 público 290 intacto) y se enmendará su formulación al cerrar C5.
 
+**2B SUB-LOTE 1 CERRADO — EL PRIMER COLAPSO REAL DEL FRENTE (2026-08-27; commit
+`d8592aad5`; writer Opus; postaudit Fable: ACCEPT con dos ratificaciones y un remedio
+refinado).** 21 slots colapsados literal→`var()` en 9 raíces (rottay 18 · bithire 1 · evnto
+2), +396 B. **Cero-delta resuelto con el instrumento endurecido en su primer uso real:**
+`--against` EXIT=0, valores Y conjunto unresolved intactos, verificado dos veces
+(post-colapso y post-cadena; el pin se hizo por `cp` tras `--check`, nunca `--write`). **Ley
+3 verificada por el DT sobre el diff fuente:** 21+/21−, toda `+` es `clave: "var(--ds-…)"`,
+toda `-` literal, claves apareadas exacto. **Contrafactual tenant 3/3 raíces dial con e=1**
+(probe real, `expanded`): el colapso **amplió** el alcance del tenant a 3 canales que el dial
+no alcanzaba — ratificado por la auditora como mejora legítima hacia el contrato
+`exposure: tenant-dial`; **se declara explícito: bajo dial no-default es un cambio visible
+para tenants ya customizados, sancionado por la directiva del frente** (a dial-default el
+mapa resuelto no se movió: eso es lo que la ley protege). **Contadores quietos**
+(297/10/226/234/1649 — sin re-ancla en ninguna dirección; `shadowingLiteralPins` no baja
+porque cuenta pines del CSS autorado y el lote colapsó literales TS: poblaciones disjuntas,
+verificado contra el código del gate). **Pins congelados intactos** (4873/10312/4586). 12/12
+gates focales verdes; cadena 14/15 con los 134 receipts re-firmados por el DT (quirúrgico:
+solo sourceDigest/createdAt; `generator` y `program-check` verdes post re-firma).
+**Exclusiones por ley, con custodia probada por la auditora:** 7 slots revertidos
+byte-exactos (3 divergencia real en dark — cabeza que resuelve distinto por scope; 3
+caso-hex) + 1 por ley 3 (referencia a seeds.json). **Adjudicaciones del DT (aceptadas o
+refinadas por Fable):** (a) caso-hex queda FUERA documentado — y Fable refina el remedio:
+el lado defectuoso es **purity** (`normalise` baja el caso y sobre-declara pure; el remedio
+durable es alinear purity a string-exacto con drill, lote chico de instrumento, resolved-map
+intacto) — **deuda nombrada, dueño: el frente**; (b) **elegibilidad endurecida adoptada**:
+un slot solo es elegible si su cabeza resuelve al mismo valor (cadena cruda, caso-exacto)
+en TODOS los scopes que su emisión gobierna — el extractor de la 2B plena ya lo implementa
+(`/private/tmp/mr-2b-extract.py` v3, calibrado: reproduce los 3 de clase A como excluidos;
+población restante medida: 120 filas elegibles en 16 raíces). Hallazgo de procedimiento del
+writer (el `cd &&` que cortocircuitó el `--check` del pin): detectado y rehecho por él;
+queda como precedente de disciplina (misma clase que la regla del exit-code tras pipe).
+**Próximo:** camino (C) — el DT retoma `owner-step-rules` lote 2 (estados y
+semánticos-de-estado) para que los grupos divergentes puedan cerrar enteros; después la 2B
+plena. Métrica sin mover: 62%/~43% (un sub-lote de 21 slots no mueve el porcentaje; lo mueve
+el colapso en volumen).
+
 **2B — HALLAZGOS DE PRE-EJECUCIÓN Y ADJUDICACIÓN (2026-08-27; plan Opus + adjudicación DT
 `/private/tmp/dt-adjudicacion-2b.md`; sin una línea productiva escrita, árbol en porcelain
 0).** Opus reprodujo la población del brief (204/27/+3.365 B reproduce exacto) y frenó con
