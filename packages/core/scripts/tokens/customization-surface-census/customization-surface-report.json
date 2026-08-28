@@ -31,6 +31,7 @@
   },
   "frontierFamilies": [
     {
+      "capability": "palette.status-seeds",
       "prefixPattern": "--ds-tint-{success|warning|error|info}-{step}",
       "source": "interpolated compiler emission — palette.status-seeds (frontier capability)",
       "opensWith": "palette.status-seeds activation (C3)"

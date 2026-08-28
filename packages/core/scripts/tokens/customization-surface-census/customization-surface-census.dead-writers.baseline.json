@@ -1,5 +1,8 @@
 {
+  "schemaVersion": 1,
   "note": "Decrease-only dead-writer inventory (name-keyed). A NEW name here fails the gate; deletions are the goal. Regenerate only with --write-baseline after reviewing the diff.",
+  "lastMove": "Ancla inicial versionada en el micro-lote PRE-P0 (2026-08-28): la lista de 266 nombres NO se toca — se le agrega la version y el registro de movimiento para que la puerta gobernada tenga donde escribir. Ninguna cifra se movio.",
+  "lastMoveKind": "ancla-inicial (sin movimiento de poblacion)",
   "names": [
     "--ds-action-dock-reserved-block-end",
     "--ds-action-dock-reserved-block-start",

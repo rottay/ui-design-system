@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "generatedBy": "tokens-catalog gate re-derivation, 2026-08-27 (2B PLENA: el colapso de 128 slots literal->var() re-emitio el censo de superficies — tsReadNames 2691->2692 y conteos ts por superficie segun los sitios; deadWriters 266 intacto, figures y adjudicacion sin movimiento; solo se re-ancla el digest al reporte vigente)",
-  "basedOnReportDigest": "72af55157f2d366313d89c77e4291b503dbb33a145cd1df79faa5ce2a72ed203",
+  "generatedBy": "tokens-catalog gate re-derivation, 2026-08-28 (MICRO-LOTE PRE-P0: el reporte del censo gano UN campo, `frontierFamilies[].capability`, para que el escudo de frontera se derive del registro en vez de una lista de prefijos escrita a mano. NINGUNA cifra se movio: writers 4670, deadWriters 266, frontierReserved 20, universe 7301, capabilities 21 — verificado contador por contador antes y despues. Solo se re-ancla el digest al reporte vigente, como en la re-derivacion de 2B PLENA.)",
+  "basedOnReportDigest": "4ba14de169af1b7734c1516995f18c8ed5b8d0b49842257c05a4a668bbc9f6b6",
   "normative": {
     "writers": 4670,
     "deadWriters": 266,

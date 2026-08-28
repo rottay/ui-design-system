@@ -281,6 +281,52 @@ function scanNamesInText(files) {
   return names;
 }
 
+/**
+ * Las familias de emision INTERPOLADA y la capacidad que las reserva.
+ *
+ * Una familia interpolada no tiene nombre literal en fuente (el compilador la
+ * arma por plantilla), asi que el censo no puede descubrirla caminando: se
+ * declara. Lo que NO se declara es si esta escudada -- eso lo decide el
+ * `status` de su capacidad en el registro, que es la unica autoridad.
+ */
+export const FRONTIER_FAMILIES = Object.freeze([
+  Object.freeze({
+    capability: 'palette.status-seeds',
+    prefixPattern: '--ds-tint-{success|warning|error|info}-{step}',
+    prefixes: Object.freeze(['--ds-tint-success-', '--ds-tint-warning-', '--ds-tint-error-', '--ds-tint-info-']),
+    source: 'interpolated compiler emission — palette.status-seeds (frontier capability)',
+    /* La fase que la abre se DECLARA, no se deriva: "C3" es el id de fase del
+     * roadmap y no sale del id de la capacidad. Derivar la cadena habria perdido
+     * ese puntero, que es lo unico que ata esta familia a su lote. */
+    opensWith: 'palette.status-seeds activation (C3)',
+  }),
+]);
+
+/**
+ * Una familia esta escudada SII su capacidad existe en el registro y su
+ * `status` es `frontier`. Falla cerrado en los dos sentidos que importan: una
+ * familia que nombra una capacidad INEXISTENTE no escuda nada (no se escuda
+ * contra un fantasma), y una capacidad ACTIVA deja de escudar en el acto.
+ */
+export function buildFrontierShield(families, registryRows) {
+  const statusOf = new Map((registryRows ?? []).map((row) => [row.id, row.status]));
+  const shielded = (families ?? []).filter((family) => statusOf.get(family.capability) === 'frontier');
+  const prefixes = shielded.flatMap((family) => family.prefixes ?? []);
+  return {
+    shielded,
+    prefixes,
+    covers: (name) => prefixes.some((prefix) => name.startsWith(prefix)),
+    /* Lo que se PUBLICA en el reporte sale de aqui, no de una constante aparte:
+     * la prosa y el escudo no pueden discrepar si son el mismo objeto. */
+    families: shielded.map((family) => ({
+      capability: family.capability,
+      prefixPattern: family.prefixPattern,
+      source: family.source,
+      opensWith: family.opensWith,
+    })),
+  };
+}
+
 /** Capability registry via the TS AST (no build dependency). */
 export function parseRegistry() {
   const source = ts.createSourceFile(
@@ -469,8 +515,16 @@ function buildReport({ drill } = {}) {
     foundation.add('--ds-drill-synthetic-dead-writer');
   }
 
-  const FRONTIER_PREFIXES = ['--ds-tint-success-', '--ds-tint-warning-', '--ds-tint-error-', '--ds-tint-info-'];
-  const isFrontierName = (name) => FRONTIER_PREFIXES.some((p) => name.startsWith(p));
+  /* EL ESCUDO SE DERIVA DEL REGISTRO, NO DE UNA LISTA DE PREFIJOS.
+   *
+   * Antes `FRONTIER_PREFIXES` estaba escrito a mano y `frontierFamilies` era
+   * prosa al lado: dos declaraciones de lo mismo, sin nada que las atara. El
+   * dia que la capacidad se abra, la lista de prefijos seguiria escudando
+   * canales de una capacidad ACTIVA -- el censo diria "reservado para una
+   * frontera" de algo que ya no es frontera, y esos writers quedarian invisibles
+   * en vez de contarse. El escudo dura exactamente lo que dura la frontera. */
+  const frontierShield = buildFrontierShield(FRONTIER_FAMILIES, parseRegistry());
+  const isFrontierName = frontierShield.covers;
 
   const universe = new Set([
     ...foundation, ...component, ...tenantChannel, ...publicHooks,
@@ -637,13 +691,7 @@ function buildReport({ drill } = {}) {
     // as counts (template emissions have no concrete literal name). The
     // known frontier family is documented here so it can never be mistaken
     // for dead stock nor silently dropped from the surface.
-    frontierFamilies: [
-      {
-        prefixPattern: '--ds-tint-{success|warning|error|info}-{step}',
-        source: 'interpolated compiler emission — palette.status-seeds (frontier capability)',
-        opensWith: 'palette.status-seeds activation (C3)',
-      },
-    ],
+    frontierFamilies: frontierShield.families,
     deadByClass: {
       foundation: deadWriters.filter((n) => foundation.has(n)).length,
       component: deadWriters.filter((n) => component.has(n)).length,
@@ -660,7 +708,114 @@ function buildReport({ drill } = {}) {
 
 function loadBaselineDead() {
   if (!existsSync(DEAD_BASELINE_PATH)) return null;
-  return JSON.parse(readFileSync(DEAD_BASELINE_PATH, 'utf8'));
+  try { return JSON.parse(readFileSync(DEAD_BASELINE_PATH, 'utf8')); } catch { return null; }
+}
+
+/**
+ * EL INVENTARIO DE DEAD-WRITERS ES DECRECE-SOLO, Y DESDE AQUI CON PUERTA.
+ *
+ * Hasta hoy el `--check=dead` fallaba SOLO hacia arriba, y `--write-baseline`
+ * reescribia la lista entera sin razon, sin bandera y sin dejar rastro de que
+ * habia pasado. Las dos mitades faltaban:
+ *
+ *   (a) Un nombre que SALE de la lista es una victoria -- el writer consiguio
+ *       consumidor o dejo de emitirse -- pero salir en SILENCIO deja el ancla
+ *       declarando deuda que ya no existe, y la proxima lectura del numero
+ *       miente hacia arriba. Bajar tambien falla, con la instruccion.
+ *   (b) Un nombre que ENTRA amplia el conjunto gobernado, igual que un subpath
+ *       nuevo en el ancla de techos: se pide por nombre con `--widen`.
+ *
+ * POR QUE AHORA Y NO CON P0. La apertura de la frontera `palette.status-seeds`
+ * va a mover este numero (los canales de tinta de estado pierden su escudo), y
+ * sin esta puerta esa subida entraria por la via de la bajada, etiquetada como
+ * si fuera una limpieza. Es exactamente el defecto que costo dos rondas en
+ * DRILL-77: primero un subpath nuevo, despues un ancla corrupta. Se construye
+ * ANTES de que haga falta, para que P0 tenga donde escribir su razon.
+ */
+export const DEAD_BASELINE_SCHEMA_VERSION = 1;
+
+export function evaluateDeadBaseline(live, baseline) {
+  if (!baseline || !Array.isArray(baseline.names)) {
+    return ['dead: el baseline no existe o no tiene `names`'];
+  }
+  if (baseline.schemaVersion !== DEAD_BASELINE_SCHEMA_VERSION) {
+    return [`dead: el baseline declara schemaVersion ${JSON.stringify(baseline.schemaVersion ?? null)} `
+      + `y este censo lee la version ${DEAD_BASELINE_SCHEMA_VERSION}: no se compara un archivo cuyo formato no se entiende`];
+  }
+  const anchored = new Set(baseline.names);
+  const failures = [];
+  const grown = live.filter((name) => !anchored.has(name));
+  if (grown.length > 0) {
+    failures.push(`dead: ${grown.length} NEW dead writer(s): ${grown.slice(0, 8).join(', ')}${grown.length > 8 ? ', …' : ''}`
+      + ' — se les da consumidor o se dejan de emitir, no se amplia el ancla. Si la ampliacion esta autorizada,'
+      + ' pedila por nombre: --write-baseline --widen --reason "..."');
+  }
+  const liveSet = new Set(live);
+  const gone = baseline.names.filter((name) => !liveSet.has(name));
+  if (gone.length > 0) {
+    failures.push(`dead: ${gone.length} nombre(s) dejaron de ser dead-writer: ${gone.slice(0, 8).join(', ')}${gone.length > 8 ? ', …' : ''}`
+      + ' — es una victoria, y se registra: baja el ancla en el MISMO commit con --write-baseline --reason "..."');
+  }
+  return failures;
+}
+
+/**
+ * La puerta de escritura. Subir exige `--widen`; bajar exige razon igual. No
+ * vuelve imposible editar el JSON a mano -- lo que consigue es que la via
+ * NORMAL deje la razon escrita y que el `--check` enrojezca ante cualquier
+ * desvio, de modo que una ampliacion sin razon sea revisable en el diff.
+ */
+export function buildDeadBaselineDoc({ live, previous, reason, widen = false }) {
+  if (!reason || !String(reason).trim()) {
+    throw new Error('--write-baseline exige --reason "por que se mueve el ancla"');
+  }
+  /* NO SE RE-ANCLA SOBRE UN ARCHIVO QUE NO SE ENTIENDE. Defecto de Fable, y
+   * medido en las seis formas: con el ancla previa ilegible la puerta escribia
+   * igual, y de dos maneras distintas, las dos falsas.
+   *
+   *   - `previous === null` (archivo AUSENTE o JSON invalido -- `loadBaselineDead`
+   *     devuelve null para los dos): `added` se calculaba con un guard `previous ?`
+   *     que lo dejaba vacio, asi que no pedia `--widen` y escribia la poblacion
+   *     ENTERA etiquetada `decrece-solo: -0`. Un bootstrap silencioso disfrazado
+   *     de limpieza.
+   *   - `schemaVersion` ajena o `names` ausente: lanzaba, pero diciendo "me niego
+   *     a AMPLIAR" -- que describe mal lo que pasa -- y **con `--widen` escribia
+   *     igual**, lavando el ancla ilegible con una etiqueta plausible.
+   *
+   * Es el vector que cerro el microfix de Codex en DRILL-77, aplicado aca: la
+   * legibilidad del ancla se comprueba ANTES que cualquier logica de subida o
+   * bajada, porque `raised`/`added` se calculan CONTRA ella. Un bootstrap
+   * legitimo tiene que ser un acto explicito y separado -- nunca la ruta del
+   * decrece-solo, que es la que menos mira nadie. */
+  if (!previous || !Array.isArray(previous.names)) {
+    throw new Error('no se re-ancla sobre un archivo que no se entiende: el ancla previa no existe, '
+      + 'no es JSON valido o no declara `names`. Restaurala, o crea el ancla como un acto deliberado y declarado; '
+      + 'la puerta de movimiento no fabrica inventarios.');
+  }
+  if (previous.schemaVersion !== DEAD_BASELINE_SCHEMA_VERSION) {
+    throw new Error(`no se re-ancla sobre un archivo que no se entiende: el ancla previa declara schemaVersion `
+      + `${JSON.stringify(previous.schemaVersion ?? null)} y esta puerta escribe la version ${DEAD_BASELINE_SCHEMA_VERSION}.`);
+  }
+  const anchored = new Set(previous.names);
+  const added = live.filter((name) => !anchored.has(name));
+  if (added.length > 0 && !widen) {
+    throw new Error(`me niego a AMPLIAR el inventario de dead-writers en ${added.length} nombre(s): `
+      + `${added.slice(0, 8).join(', ')}${added.length > 8 ? ', …' : ''}`
+      + '. Un writer sin consumidor se cablea o se retira. Si la ampliacion esta autorizada,'
+      + ' pedila por nombre: --widen --reason "..."');
+  }
+  const liveSet = new Set(live);
+  const removed = previous.names.filter((name) => !liveSet.has(name));
+  return {
+    schemaVersion: DEAD_BASELINE_SCHEMA_VERSION,
+    note: previous.note
+      ?? 'Decrease-only dead-writer inventory (name-keyed). A NEW name here fails the gate; deletions are the goal.',
+    lastMove: reason,
+    lastMoveKind: added.length > 0
+      ? `ampliacion autorizada por nombre (--widen): +${added.length} nombre(s), -${removed.length}`
+      : `decrece-solo: -${removed.length} nombre(s)`,
+    names: live,
+  };
 }
 
 function main() {
@@ -677,11 +832,20 @@ function main() {
     console.log(`customization-surface: wrote ${relative(ROOT, REPORT_PATH)} (universe=${report.counts.universe}, dead=${report.counts.deadWriters}, unclassified=${report.counts.unclassified})`);
   }
   if (writeBaseline) {
-    writeFileSync(DEAD_BASELINE_PATH, `${JSON.stringify({
-      note: 'Decrease-only dead-writer inventory (name-keyed). A NEW name here fails the gate; deletions are the goal. Regenerate only with --write-baseline after reviewing the diff.',
-      names: report.deadWriters,
-    }, null, 2)}\n`);
-    console.log(`customization-surface: wrote dead-writer baseline (${report.deadWriters.length} names)`);
+    const reasonIndex = args.indexOf('--reason');
+    try {
+      const doc = buildDeadBaselineDoc({
+        live: report.deadWriters,
+        previous: loadBaselineDead(),
+        reason: reasonIndex >= 0 ? args[reasonIndex + 1] : flagValue('--reason'),
+        widen: Boolean(flag('--widen')),
+      });
+      writeFileSync(DEAD_BASELINE_PATH, `${JSON.stringify(doc, null, 2)}\n`);
+      console.log(`customization-surface: wrote dead-writer baseline (${doc.names.length} names, ${doc.lastMoveKind})`);
+    } catch (error) {
+      console.error(`customization-surface: ${error.message}`);
+      process.exit(1);
+    }
   }
 
   const wantAll = check === 'all';
@@ -708,15 +872,7 @@ function main() {
       }
     }
     if (wantAll || check === 'dead') {
-      const baseline = loadBaselineDead();
-      if (!baseline) failures.push('dead: baseline missing — run --write-baseline');
-      else {
-        const known = new Set(baseline.names);
-        const grown = report.deadWriters.filter((n) => !known.has(n));
-        if (grown.length > 0) {
-          failures.push(`dead: ${grown.length} NEW dead writer(s): ${grown.slice(0, 8).join(', ')}${grown.length > 8 ? ', …' : ''}`);
-        }
-      }
+      failures.push(...evaluateDeadBaseline(report.deadWriters, loadBaselineDead()));
     }
   }
 
