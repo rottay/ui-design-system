@@ -4569,6 +4569,24 @@ seeds reales y mover la superficie de calibración a un campo propio — la
 decisión 15 conserva su INTENT (superficie de calibración estrecha; dominio
 público 290 intacto) y se enmendará su formulación al cerrar C5.
 
+**LOTE GATE-HYGIENE CERRADO — LOS DOS MENORES DE INSTRUMENTO DEL DÍA, CERRADOS EL MISMO DÍA
+(2026-08-28; commit `e149538ba`; writer Opus; postaudit Fable: ACCEPT sin defectos, con
+plantados propios sobre la tabla real).** (1) **La puerta `--write-baseline` del norm-gate
+escribe ahora la razón DEL MOVIMIENTO** cuando el valor cambia (o no había ancla previa) y
+conserva la de los quietos — antes conservaba la vieja y por eso 3B había quedado con `242` y
+una razón que decía "solo pueden bajar" (lo re-escribí a mano en ese commit; desde este lote la
+puerta lo hace sola). Extracción declarada: `buildBaselineDoc` pura y exportada (era
+indrilleable dentro de `main()`). Fable lo probó de punta a punta por `main()` con 4 plantados
+(incluida la subida sin `--reattribution`: rc=1). (2) **Drill de cobertura `@parent`:** toda
+regla `@parent` de la tabla es ejercida por ≥1 fila que llega al predicado (72/72 hoy) — SIN
+pin numérico (el writer cazó que su primer plantado disparaba el pin, no la cobertura, y lo
+retiró: la lección del frente aplicada antes de que se pudra). Cero cambio de comportamiento:
+gates vivos EXIT=0 con digests sin mover, cadena diff cero, ley dura EXIT=0 sin re-pin,
+barrido 103/0/2. **Menor de forma (deuda, no re-abre):** dos copias de la aritmética de
+cobertura (drill real vs sintético) — una línea de extracción pendiente. Métrica sin mover:
+**62% / ~43%**.
+
+
 **LOTE DRILL-77 CERRADO — LA LEY DECREASE-ONLY DE LOS 77 TECHOS PASA DE PROSA A ANCLA VERIFICADA
 (2026-08-28; commit `36b1b1303`; writer Opus; postaudit Fable: DEFECTS-1 (la puerta lavaba un ancla corrupta sin --widen — un paso mas alla de CODEX-2) -> remedio de una linea integrado y verificado (added por VALIDEZ del ancla previa) -> ACCEPT sin nueva ronda).** Deuda E-2 cerrada: los
 `budget.maxSourceBytes` de los 77 subpaths quedan anclados en
