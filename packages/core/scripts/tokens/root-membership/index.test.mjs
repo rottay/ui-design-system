@@ -568,3 +568,87 @@ test('@parent — el arbol real: 39 decididas, 0 ilegales, y CERO reglas apuntan
     doc.rows.filter((r) => r.step !== null && r.step !== PARENT_BY_DESIGN).length);
   assert.ok(doc.rows.every((r) => r.step !== PARENT_BY_DESIGN || r.rootId.split('.').length === 3));
 });
+
+test('@parent — COBERTURA: toda regla de la tabla es EJERCIDA por al menos una fila', async () => {
+  /* Observacion 1 de Fable sobre el lote 3A: el predicado relocalizado valida
+   * toda regla CON EFECTO, y una regla `@parent` cuyo canal quede sin raiz o en
+   * "sin adjudicar" no se evalua hasta que lo tenga. Eso NO es un agujero
+   * mientras las 72 tengan efecto -- pero nada lo garantizaba, y una regla que
+   * no se ejerce es una regla que el guard nunca mira: podria estar apuntando a
+   * un padre ilegal y nadie se enteraria hasta que la fila apareciera.
+   *
+   * Se cuenta como ejercida la regla cuyo par (owner, hoja) contribuye a una
+   * fila que LLEGO al predicado: o decidio `@parent`, o fue rechazada por el.
+   * Las dos son "el guard la miro"; lo que el drill persigue es la tercera, la
+   * que no se mira. Hoy: 72/72. */
+  const { readFileSync } = await import('node:fs');
+  const { join } = await import('node:path');
+  const { PARENT_BY_DESIGN, CORE_ROOT } = await import('./index.mjs');
+  const url = (relative) => join(CORE_ROOT, relative);
+  const table = JSON.parse(readFileSync(url('manifest/cascade/owner-step-rules.json'), 'utf8'));
+  const doc = JSON.parse(readFileSync(url('manifest/generated/root-membership.json'), 'utf8'));
+
+  const ownerOf = (slotPath) => slotPath.slice(0, slotPath.lastIndexOf('.'));
+  const leafOf = (slotPath) => slotPath.slice(slotPath.lastIndexOf('.') + 1);
+  const key = (owner, property, leaf) => `${owner}|${property}|${leaf}`;
+
+  const exercised = new Set();
+  for (const row of doc.rows) {
+    const reachedPredicate = row.step === PARENT_BY_DESIGN
+      || String(row.stepNote ?? '').includes(`${PARENT_BY_DESIGN} es ilegal`);
+    if (!reachedPredicate) continue;
+    const property = String(row.rootId).split('.')[2];
+    for (const slotId of row.contributingSlots) {
+      const slotPath = slotId.slice(slotId.indexOf(':') + 1);
+      exercised.add(key(ownerOf(slotPath), property, leafOf(slotPath)));
+    }
+  }
+
+  const declared = (Array.isArray(table) ? table : table.rows).filter((rule) => rule.step === PARENT_BY_DESIGN);
+  /* SIN PIN NUMERICO. La poblacion medida al escribir este drill era 72/72, y
+   * esa cifra vive en el asiento del lote 3A. Congelarla aqui haria que el drill
+   * enrojeciera cada vez que la tabla gane una regla `@parent` legitima, y un
+   * pin que hay que re-teclear con cada crecimiento deja de ser detector -- es
+   * la leccion del 162/458/230 y la del `rowsRefinedByStep: 44`. Lo que se
+   * afirma es que el drill TIENE sujeto y que la cobertura es total. */
+  assert.ok(declared.length > 0, 'sin reglas @parent este drill no prueba nada');
+  const unexercised = declared
+    .map((rule) => key(rule.ownerPath, rule.property, rule.leaf))
+    .filter((k) => !exercised.has(k));
+  assert.deepEqual(unexercised, [],
+    'una regla @parent que ninguna fila ejerce es una regla que el guard nunca mira');
+});
+
+test('@parent — COBERTURA: una regla que NADIE ejerce se nombra (anti-coincidencia)', async () => {
+  /* El drill de arriba lee el arbol real, donde no hay ninguna sin ejercer. Este
+   * planta el caso sobre datos sinteticos con la MISMA aritmetica, para probar
+   * que el detector detecta y no que el arbol esta limpio. */
+  const { PARENT_BY_DESIGN } = await import('./index.mjs');
+  const ownerOf = (slotPath) => slotPath.slice(0, slotPath.lastIndexOf('.'));
+  const leafOf = (slotPath) => slotPath.slice(slotPath.lastIndexOf('.') + 1);
+  const key = (owner, property, leaf) => `${owner}|${property}|${leaf}`;
+  const coverage = (rows, declared) => {
+    const exercised = new Set();
+    for (const row of rows) {
+      if (row.step !== PARENT_BY_DESIGN) continue;
+      const property = String(row.rootId).split('.')[2];
+      for (const slotPath of row.contributingSlots) exercised.add(key(ownerOf(slotPath), property, leafOf(slotPath)));
+    }
+    return declared.map((r) => key(r.ownerPath, r.property, r.leaf)).filter((k) => !exercised.has(k));
+  };
+  const rows = [{ rootId: 'tier.base.fg', step: PARENT_BY_DESIGN, contributingSlots: ['CHROME.card.color'] }];
+  assert.deepEqual(coverage(rows, [{ ownerPath: 'CHROME.card', property: 'fg', leaf: 'color' }]), []);
+  // La regla plantada sobre un owner que ninguna fila toca: se nombra.
+  assert.deepEqual(
+    coverage(rows, [
+      { ownerPath: 'CHROME.card', property: 'fg', leaf: 'color' },
+      { ownerPath: 'CHROME.fantasma', property: 'fg', leaf: 'color' },
+    ]),
+    ['CHROME.fantasma|fg|color'],
+  );
+  // Y una fila que NO llego al predicado no cuenta como ejercicio.
+  assert.deepEqual(
+    coverage([{ ...rows[0], step: null }], [{ ownerPath: 'CHROME.card', property: 'fg', leaf: 'color' }]),
+    ['CHROME.card|fg|color'],
+  );
+});

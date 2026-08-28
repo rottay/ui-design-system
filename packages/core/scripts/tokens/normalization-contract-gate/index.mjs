@@ -324,6 +324,46 @@ function render(result) {
   return lines.join('\n');
 }
 
+/**
+ * La forma del baseline, PURA y exportada: la puerta no se puede drillear si su
+ * unica salida es un writeFileSync.
+ */
+export function buildBaselineDoc({ result, previous, reason, reattribution }) {
+  const doc = {
+    schemaVersion: 1,
+    law: previous?.law ?? 'decrece-solo, sin excepcion tacita. Jamas se re-ancla un hallazgo nuevo.',
+    /* LA RAZON VIAJA CON EL VALOR QUE SE MOVIO. Antes esta linea conservaba
+     * SIEMPRE la razon anterior, asi que tras una re-ancla el contador quedaba
+     * con el valor nuevo y la explicacion del valor viejo -- una fila que se
+     * contradice a si misma. Paso de verdad: en el lote 3B, `divergentGroups`
+     * quedo en 242 con una razon que terminaba en "solo pueden bajar", y el DT
+     * tuvo que reescribirla a mano al commitear. Una puerta que exige un
+     * hand-edit para no mentir no esta cerrada: la razon del `--reason` es
+     * exactamente la del movimiento, y es la que corresponde al contador que se
+     * movio.
+     *
+     * Los contadores QUIETOS conservan la suya: su historia no cambio, y
+     * pisarla con la razon de un movimiento ajeno seria el mismo defecto al
+     * reves. */
+    counters: Object.fromEntries(Object.entries(result.counters).map(([name, value]) => {
+      const anchored = previous?.counters?.[name]?.value;
+      const moved = anchored === undefined || value !== anchored;
+      return [name, { value, reason: moved ? reason : (previous?.counters?.[name]?.reason ?? reason) }];
+    })),
+    /* La deuda va ENUMERADA, no solo contada: un numero que baja sin decir
+     * cual caso se cerro no es auditable, y un caso que reaparece con otro
+     * nombre no se veria en el total. */
+    namedDebt: {
+      governorsNamingMissingAuthority: result.governorFindings.map((finding) => finding.detail),
+      shadowingLiteralPins: result.shadows.map((shadow) => `${shadow.channel} -> ${shadow.rootId} (${shadow.via}) @ ${shadow.site}`),
+      divergentGroupsTop: result.divergent.slice(0, 15).map((group) => `${group.key}: ${group.slots} slots, ${group.positions} posiciones`),
+    },
+    lastMove: reason,
+    lastMoveKind: reattribution ? 're-atribucion (subida autorizada por nombre)' : 'decrece-solo',
+  };
+  return doc;
+}
+
 async function main(argv) {
   const flags = argv.slice(2);
   const mode = flags.length === 0 ? '--check' : flags[0];
@@ -355,23 +395,7 @@ async function main(argv) {
         process.exit(1);
       }
     }
-    const doc = {
-      schemaVersion: 1,
-      law: previous?.law ?? 'decrece-solo, sin excepcion tacita. Jamas se re-ancla un hallazgo nuevo.',
-      counters: Object.fromEntries(Object.entries(result.counters).map(([name, value]) => [
-        name, { value, reason: previous?.counters?.[name]?.reason ?? reason },
-      ])),
-      /* La deuda va ENUMERADA, no solo contada: un numero que baja sin decir
-       * cual caso se cerro no es auditable, y un caso que reaparece con otro
-       * nombre no se veria en el total. */
-      namedDebt: {
-        governorsNamingMissingAuthority: result.governorFindings.map((finding) => finding.detail),
-        shadowingLiteralPins: result.shadows.map((shadow) => `${shadow.channel} -> ${shadow.rootId} (${shadow.via}) @ ${shadow.site}`),
-        divergentGroupsTop: result.divergent.slice(0, 15).map((group) => `${group.key}: ${group.slots} slots, ${group.positions} posiciones`),
-      },
-      lastMove: reason,
-      lastMoveKind: reattribution ? 're-atribucion (subida autorizada por nombre)' : 'decrece-solo',
-    };
+    const doc = buildBaselineDoc({ result, previous, reason, reattribution });
     writeFileSync(BASELINE_PATH, `${JSON.stringify(doc, null, 2)}\n`);
     console.log(`normalization-contract-gate: ancla escrita\n${render(result)}`);
     return;

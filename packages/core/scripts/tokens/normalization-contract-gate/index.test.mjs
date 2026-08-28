@@ -5,6 +5,7 @@ import {
   ALLOWLIST_TOTAL,
   REQUIRED_THEME_KEYS,
   analyse,
+  buildBaselineDoc,
   checkContractShape,
   checkGovernorAuthorities,
   evaluate,
@@ -264,4 +265,45 @@ test('el ancla registra QUE CLASE de movimiento la produjo', async () => {
     assert.match(baseline.lastMove, /re-atribucion|RE-ATRIBUCION/i,
       'una subida autorizada tiene que decir en su razon por que no es regresion');
   }
+});
+
+/* ── la puerta escribe la razon DEL MOVIMIENTO, no la vieja ──────────────── */
+
+const doorFixture = (counters) => ({
+  result: { counters, findings: [], governorFindings: [], shadows: [], divergent: [] },
+  previous: { counters: {
+    unassignedSlots: { value: 10, reason: 'VIEJA unassigned' },
+    divergentGroups: { value: 20, reason: 'VIEJA divergentGroups: solo pueden bajar' },
+  } },
+});
+
+test('PUERTA — el contador que SE MUEVE recibe la razon del movimiento', () => {
+  /* Antes la puerta conservaba SIEMPRE la razon anterior, asi que tras una
+   * re-ancla el contador quedaba con el valor nuevo y la explicacion del viejo:
+   * una fila que se contradice a si misma. Paso de verdad en el lote 3B --
+   * `divergentGroups` quedo en 242 con una razon terminada en "solo pueden
+   * bajar" y hubo que reescribirla a mano al commitear. Una puerta que exige un
+   * hand-edit para no mentir no esta cerrada. */
+  const { result, previous } = doorFixture({ unassignedSlots: 10, divergentGroups: 24 });
+  const doc = buildBaselineDoc({ result, previous, reason: 'RAZON DEL MOVIMIENTO', reattribution: true });
+  assert.equal(doc.counters.divergentGroups.value, 24);
+  assert.equal(doc.counters.divergentGroups.reason, 'RAZON DEL MOVIMIENTO');
+  assert.doesNotMatch(doc.counters.divergentGroups.reason, /solo pueden bajar/,
+    'la razon vieja describia el valor viejo');
+});
+
+test('PUERTA — los contadores QUIETOS conservan la suya: pisarlas seria el mismo defecto al reves', () => {
+  const { result, previous } = doorFixture({ unassignedSlots: 10, divergentGroups: 24 });
+  const doc = buildBaselineDoc({ result, previous, reason: 'RAZON DEL MOVIMIENTO', reattribution: true });
+  assert.equal(doc.counters.unassignedSlots.value, 10);
+  assert.equal(doc.counters.unassignedSlots.reason, 'VIEJA unassigned', 'no se movio: su historia no cambio');
+});
+
+test('PUERTA — vale en las DOS direcciones, y un contador nuevo estrena razon', () => {
+  const { result, previous } = doorFixture({ unassignedSlots: 8, divergentGroups: 20, inventado: 3 });
+  const doc = buildBaselineDoc({ result, previous, reason: 'MOVIMIENTO', reattribution: false });
+  assert.equal(doc.counters.unassignedSlots.reason, 'MOVIMIENTO', 'bajar tambien es moverse');
+  assert.equal(doc.counters.divergentGroups.reason, 'VIEJA divergentGroups: solo pueden bajar');
+  assert.equal(doc.counters.inventado.reason, 'MOVIMIENTO', 'un contador sin ancla previa estrena la razon');
+  assert.equal(doc.lastMoveKind, 'decrece-solo');
 });
