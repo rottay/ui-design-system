@@ -4569,6 +4569,26 @@ seeds reales y mover la superficie de calibración a un campo propio — la
 decisión 15 conserva su INTENT (superficie de calibración estrecha; dominio
 público 290 intacto) y se enmendará su formulación al cerrar C5.
 
+**MICRO-LOTE PRE-P0 CERRADO — LA PUERTA DEAD-WRITERS EXISTE Y EL ESCUDO FRONTIER SE DERIVA DEL
+REGISTRO (2026-08-28; commit `60d6b953c`; writer Opus; postaudit Fable: DEFECTS-1 → remedio
+integrado → ACCEPT).** Sale del DEFECTS-3 del preaudit de P0 (D3): sin esta puerta, la apertura
+de la frontera no tenía dónde escribir su razón, y el escudo quedaba mintiendo. (1) **Puerta
+gobernada del baseline dead-writers, en las DOS direcciones:** un nombre nuevo exige `--widen
+--reason`; un nombre que SALE también falla sin razón ("es una victoria, y se registra");
+`lastMove`+`lastMoveKind` con el reparto; `schemaVersion` verificado desde el nacimiento.
+**Defecto Fable cerrado:** la puerta falla cerrado sobre ancla previa ausente/ilegible/versión
+ajena (antes escribía la población entera etiquetada "decrece-solo: -0" — bootstrap silencioso;
+verificado por el DT sobre el árbol real: EXIT 1, no escribe). (2) **Escudo frontier derivado del
+registro** (`frontierFamilies[].capability` → `status==='frontier'`), no de prefijos hardcodeados:
+flipear la fila quita el escudo SOLO de esa familia; la prosa publicada y la mecánica salen del
+MISMO objeto. **Cero movimiento sobre el árbol vivo** (universe 7301, deadWriters 266,
+frontierReserved 20 — contador por contador). **El ensayo de P0 en copia (Fable) ya mostró la
+mecánica entera:** escudo 20→0 solo, dead 266→274 exactamente los 8 pasos 16/24 sin lector.
+**Hueco de cadena nombrado (deuda menor):** `customization-reconciliation.json` no se regenera en
+la cadena canónica. Drills 23/23 con anti-coincidencia en 4 mutantes; ley dura EXIT=0 sin re-pin.
+**Próximo: P0 (a+b fundidos).** Métrica sin mover: **62% / ~43%**.
+
+
 **MICROFIX CODEX CERRADO (2026-08-28; commit `ecdc01a61`; writer Opus; postaudit Fable omitido
 por razón escrita: microfix ordenado por Codex con spec exacta + verificación adversarial DT sobre
 el árbol real — ausente/999/"1" → EXIT 1 cada una, restaurado byte-idéntico — NO es precedente
