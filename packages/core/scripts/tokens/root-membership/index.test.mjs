@@ -358,9 +358,16 @@ test('el gate de forma de owner-step-rules nombra la fila mala', async () => {
   assert.match(table.formFailures[2], /paso "inventado" fuera del vocabulario autorado/);
   assert.match(table.formFailures[3], /reason vacia/);
   assert.match(table.formFailures[4], /clave duplicada D\|border\|border/);
-  // El vocabulario sale de BrandPalette; nada se inventa.
-  assert.equal(STEP_VOCABULARY.fg.length, 8);
-  assert.equal(STEP_VOCABULARY.border.length, 6);
+  // El vocabulario sale de BrandPalette; nada se inventa. El +1 de cada eje es
+  // `@parent`, que no es un paso sino la declaracion de que el padre ES la
+  // respuesta -- por eso se asserta aparte y no se esconde en el conteo.
+  const { PARENT_BY_DESIGN } = await import('./index.mjs');
+  assert.equal(STEP_VOCABULARY.fg.length, 9);
+  assert.equal(STEP_VOCABULARY.border.length, 7);
+  assert.ok(STEP_VOCABULARY.fg.includes(PARENT_BY_DESIGN));
+  assert.ok(STEP_VOCABULARY.border.includes(PARENT_BY_DESIGN));
+  assert.ok(STEP_VOCABULARY.fg.every((s) => s === PARENT_BY_DESIGN || !s.startsWith('@')),
+    'ningun paso real usa el prefijo reservado');
 });
 
 test('el mecanismo esta ACTIVO y su artefacto lo declara', async () => {
@@ -369,9 +376,185 @@ test('el mecanismo esta ACTIVO y su artefacto lo declara', async () => {
   assert.equal(doc.stats.stepRulesPresent, true);
   assert.ok(doc.stats.stepRulesAdjudicated > 0);
   assert.ok(doc.stats.rowsRefinedByStep > 0);
+  const { PARENT_BY_DESIGN } = await import('./index.mjs');
   for (const row of doc.rows) {
     if (row.step === null) continue;
+    if (row.step === PARENT_BY_DESIGN) {
+      /* Padre-por-disenio es la EXCEPCION deliberada a esta invariante: declara
+       * paso y NO se mueve de su raiz. Se asserta lo contrario explicitamente
+       * para que la excepcion no sea un agujero por el que se cuele otra cosa. */
+      assert.equal(row.rootId.split('.').length, 3, '@parent jamas fabrica una raiz refinada');
+      assert.equal(row.stepNote, null, '@parent es una decision, no una nota pendiente');
+      continue;
+    }
     assert.equal(row.rootId.split('.').length, 4, 'una fila con paso vive en una raiz refinada');
     assert.ok(row.parentRootId, 'y declara de que raiz padre vino');
   }
+});
+
+/* ── padre-por-diseño: `@parent` ─────────────────────────────────────────── */
+
+const PARENT_CATALOG = {
+  roots: [
+    // Los dos ejes con su paso-default VIVO: de ahí sale la cabeza natural.
+    { rootId: 'tier.base.fg', channel: '--ds-ink' },
+    { rootId: 'tier.page.fg', channel: '--ds-sidebar-ink' },
+    { rootId: 'tier.page.fg.primary', channel: '--ds-ink' },
+    { rootId: 'tier.raised.fg', channel: '--ds-raised-ink' },
+    { rootId: 'tier.base.border', channel: '--ds-line' },
+    { rootId: 'tier.page.border', channel: '--ds-line-subtle' },
+    { rootId: 'tier.page.border.default', channel: '--ds-line' },
+  ],
+};
+const headOfParent = (id) => PARENT_CATALOG.roots.find((r) => r.rootId === id)?.channel ?? null;
+
+test('@parent — la cabeza natural se DERIVA del catalogo, y falla cerrado si no se puede', async () => {
+  const { naturalDefaultHead } = await import('./index.mjs');
+  assert.equal(naturalDefaultHead(PARENT_CATALOG, 'fg').channel, '--ds-ink');
+  assert.equal(naturalDefaultHead(PARENT_CATALOG, 'border').channel, '--ds-line');
+  const vacio = naturalDefaultHead({ roots: [{ rootId: 'tier.base.fg', channel: '--ds-ink' }] }, 'fg');
+  assert.equal(vacio.channel, null);
+  assert.match(vacio.reason, /ninguna raiz viva tier\.\*\.fg\.primary/);
+  const ambiguo = naturalDefaultHead({ roots: [
+    { rootId: 'tier.page.fg.primary', channel: '--ds-ink' },
+    { rootId: 'tier.overlay.fg.primary', channel: '--ds-otra' },
+  ] }, 'fg');
+  assert.equal(ambiguo.channel, null);
+  assert.match(ambiguo.reason, /declaran 2 cabezas distintas/);
+});
+
+test('@parent — el predicado se evalua sobre la RAIZ PADRE EFECTIVA, no sobre el owner', async () => {
+  const { checkParentByDesign, naturalDefaultHead } = await import('./index.mjs');
+  const naturalHead = (property) => naturalDefaultHead(PARENT_CATALOG, property);
+  const ctx = { headOf: headOfParent, naturalHead };
+  // Legal: la cabeza del padre ES la natural del paso-default.
+  assert.equal(checkParentByDesign({ rootId: 'tier.base.fg', property: 'fg' }, ctx), null);
+  assert.equal(checkParentByDesign({ rootId: 'tier.base.border', property: 'border' }, ctx), null);
+  // Ilegal: cabeza distinta -> vocabulario que falta, no el padre.
+  const raised = checkParentByDesign({ rootId: 'tier.raised.fg', property: 'fg' }, ctx);
+  assert.match(raised, /ilegal sobre tier\.raised\.fg/);
+  assert.match(raised, /--ds-raised-ink/, 'nombra la cabeza del padre');
+  assert.match(raised, /--ds-ink/, 'y la cabeza natural contra la que se comparo');
+  assert.match(raised, /vocabulario que falta, no el padre/);
+  assert.match(checkParentByDesign({ rootId: 'tier.page.border', property: 'border' }, ctx), /ilegal sobre tier\.page\.border/);
+});
+
+test('@parent — sin resolutor o sin cabeza natural NO se valida, y por eso se RECHAZA', async () => {
+  const { checkParentByDesign, naturalDefaultHead } = await import('./index.mjs');
+  const naturalHead = (property) => naturalDefaultHead(PARENT_CATALOG, property);
+  assert.match(checkParentByDesign({ rootId: 'tier.base.fg', property: 'fg' }, { headOf: null, naturalHead }), /sin el resolutor de cabezas/);
+  assert.match(checkParentByDesign({ rootId: 'tier.base.fg', property: 'fg' }, { headOf: headOfParent, naturalHead: null }), /sin la cabeza natural/);
+  assert.match(checkParentByDesign({ rootId: 'tier.no.existe', property: 'fg' }, { headOf: headOfParent, naturalHead }), /no declara cabeza/);
+});
+
+test('@parent — deja la raiz en el padre, sin nota, y NO fabrica una raiz refinada', async () => {
+  const { refineWithStep, naturalDefaultHead, PARENT_BY_DESIGN } = await import('./index.mjs');
+  const naturalHead = (property) => naturalDefaultHead(PARENT_CATALOG, property);
+  const stepRules = { present: true, byKey: new Map([
+    ['CHROME.card|fg|color', { ownerPath: 'CHROME.card', property: 'fg', leaf: 'color', step: PARENT_BY_DESIGN, reason: 'el default del eje ES el padre' }],
+  ]) };
+  const base = { contributors: ['CHROME.card.color'], stepRules, headOf: headOfParent, naturalHead };
+  const out = refineWithStep({ rootId: 'tier.base.fg', ...base, rootExists: () => false });
+  assert.equal(out.rootId, 'tier.base.fg', 'la raiz no se mueve');
+  assert.equal(out.step, PARENT_BY_DESIGN);
+  assert.equal(out.stepNote, null, 'es una decision, no una nota pendiente');
+  assert.equal(out.illegal, undefined);
+  // ANTI-FABRICACION: ni con rootExists en true el centinela crea una raíz.
+  assert.equal(refineWithStep({ rootId: 'tier.base.fg', ...base, rootExists: () => true }).rootId, 'tier.base.fg');
+});
+
+test('@parent — PLANTADO V2: un padre por fallback con cabeza DISTINTA se frena, nombrandola', async () => {
+  const { buildMembership, naturalDefaultHead, PARENT_BY_DESIGN } = await import('./index.mjs');
+  /* EL CASO QUE COSTO EL ROJO, AL REVES. El owner es de tier `base` (su tabla
+   * lo dice), pero el canal llega por `declared-fallback` a `tier.raised.fg`,
+   * cuya cabeza NO es la natural del paso-default. El guard viejo -- que
+   * derivaba el padre del tier del OWNER -- habria dicho "legal" y dejado
+   * pasar el disfraz. El predicado sobre la raiz efectiva lo caza. */
+  const catalog = { roots: [
+    { rootId: 'tier.base.fg', channel: '--ds-ink' },
+    { rootId: 'tier.page.fg.primary', channel: '--ds-ink' },
+    { rootId: 'tier.raised.fg', channel: '--ds-raised-ink' },
+  ] };
+  const edges = { edges: [
+    { from: '--ds-raised-ink', to: '--ds-guarded-raised', edgeClass: 'decl-fallback', guardPrimary: '--ds-guarded-raised', file: 'a.css', line: 1 },
+  ] };
+  const inventory = { rows: [
+    { slotId: 'demo:CHROME.card.color', slotPath: 'CHROME.card.color', authoredValue: '#111', emitsChannels: ['--ds-guarded-raised'] },
+  ] };
+  const doc = await buildMembership({
+    inventory, catalog, edges,
+    ownerTiers: { present: true, formFailures: [], byOwner: new Map([['CHROME.card', { ownerPath: 'CHROME.card', tier: 'base', reason: 'x' }]]) },
+    stepRules: { present: true, formFailures: [], byKey: new Map([
+      ['CHROME.card|fg|color', { ownerPath: 'CHROME.card', property: 'fg', leaf: 'color', step: PARENT_BY_DESIGN, reason: 'disfraz' }],
+    ]) },
+  });
+  const row = doc.rows.find((r) => r.channel === '--ds-guarded-raised');
+  assert.equal(row.via, 'declared-fallback', 'el padre lo fijo el grafo de fallback, no el tier del owner');
+  assert.equal(row.rootId, 'tier.raised.fg');
+  assert.equal(row.step, null, 'la regla ilegal NO decide');
+  assert.equal(doc.provenance.parentByDesignFailures.length, 1, 'y bloquea: main() sale rc=1 con esta lista');
+  assert.match(doc.provenance.parentByDesignFailures[0], /--ds-guarded-raised/);
+  assert.match(doc.provenance.parentByDesignFailures[0], /via declared-fallback/);
+  assert.match(doc.provenance.parentByDesignFailures[0], /--ds-raised-ink/, 'nombra la cabeza del padre efectivo');
+  assert.match(doc.provenance.parentByDesignFailures[0], /--ds-ink/, 'y la natural');
+  assert.equal(naturalDefaultHead(catalog, 'fg').channel, '--ds-ink');
+});
+
+test('@parent — CONTROL del plantado: el mismo owner sobre un padre legal SI decide', async () => {
+  const { buildMembership, PARENT_BY_DESIGN } = await import('./index.mjs');
+  const catalog = { roots: [
+    { rootId: 'tier.base.fg', channel: '--ds-ink' },
+    { rootId: 'tier.page.fg.primary', channel: '--ds-ink' },
+  ] };
+  const doc = await buildMembership({
+    inventory: { rows: [{ slotId: 'demo:CHROME.card.color', slotPath: 'CHROME.card.color', authoredValue: '#111', emitsChannels: ['--ds-ink'] }] },
+    catalog, edges: { edges: [] },
+    ownerTiers: { present: true, formFailures: [], byOwner: new Map([['CHROME.card', { ownerPath: 'CHROME.card', tier: 'base', reason: 'x' }]]) },
+    stepRules: { present: true, formFailures: [], byKey: new Map([
+      ['CHROME.card|fg|color', { ownerPath: 'CHROME.card', property: 'fg', leaf: 'color', step: PARENT_BY_DESIGN, reason: 'legitima' }],
+    ]) },
+  });
+  const row = doc.rows.find((r) => r.channel === '--ds-ink');
+  assert.equal(row.step, PARENT_BY_DESIGN);
+  assert.equal(row.stepNote, null);
+  assert.equal(doc.provenance.parentByDesignFailures.length, 0);
+  assert.equal(doc.stats.rowsParentByDesign, 1);
+  assert.equal(doc.stats.rowsRefinedByStep, 0, '@parent no cuenta como refinada por tabla');
+});
+
+test('@parent — NO se funde con "sin adjudicar": los dos estados siguen separados', async () => {
+  const { refineWithStep, naturalDefaultHead, PARENT_BY_DESIGN } = await import('./index.mjs');
+  const naturalHead = (property) => naturalDefaultHead(PARENT_CATALOG, property);
+  const stepRules = { present: true, byKey: new Map([
+    ['A|fg|color', { ownerPath: 'A', property: 'fg', leaf: 'color', step: PARENT_BY_DESIGN, reason: 'x' }],
+  ]) };
+  const ctx = { stepRules, rootExists: () => false, headOf: headOfParent, naturalHead };
+  const decidido = refineWithStep({ rootId: 'tier.base.fg', contributors: ['A.color'], ...ctx });
+  const pendiente = refineWithStep({ rootId: 'tier.base.fg', contributors: ['Z.color'], ...ctx });
+  assert.equal(decidido.stepNote, null);
+  assert.match(pendiente.stepNote, /sin adjudicar/);
+  assert.notEqual(decidido.step, pendiente.step);
+});
+
+test('@parent — un contribuyente @parent y otro con paso real DISCREPAN, no se mezclan', async () => {
+  const { refineWithStep, naturalDefaultHead, PARENT_BY_DESIGN } = await import('./index.mjs');
+  const naturalHead = (property) => naturalDefaultHead(PARENT_CATALOG, property);
+  const stepRules = { present: true, byKey: new Map([
+    ['A|fg|color', { ownerPath: 'A', property: 'fg', leaf: 'color', step: PARENT_BY_DESIGN, reason: 'x' }],
+    ['B|fg|color', { ownerPath: 'B', property: 'fg', leaf: 'color', step: 'secondary', reason: 'y' }],
+  ]) };
+  const out = refineWithStep({ rootId: 'tier.base.fg', contributors: ['A.color', 'B.color'], stepRules, rootExists: () => true, headOf: headOfParent, naturalHead });
+  assert.equal(out.step, null);
+  assert.match(out.stepNote, /discrepan de paso/);
+});
+
+test('@parent — el arbol real: 39 decididas, 0 ilegales, y el refinamiento por tabla quieto', async () => {
+  const { readFileSync } = await import('node:fs');
+  const doc = JSON.parse(readFileSync(new URL('../../../manifest/generated/root-membership.json', import.meta.url), 'utf8'));
+  assert.equal(doc.stats.rowsParentByDesign, 39);
+  assert.equal(doc.stats.rowsRefinedByStep, 44);
+  assert.deepEqual(doc.provenance.parentByDesignFailures, []);
+  const inertes = doc.rows.filter((r) => /y esa raiz no existe en el catalogo$/.test(r.stepNote ?? ''));
+  assert.equal(inertes.length, 21, 'lo que queda inerte es exactamente la clase B');
+  assert.deepEqual([...new Set(inertes.map((r) => r.rootId))], ['tier.raised.fg']);
 });

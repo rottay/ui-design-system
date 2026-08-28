@@ -26,8 +26,8 @@
       "ownerPath": "CHROME.cardComponent",
       "property": "border",
       "leaf": "border",
-      "step": "default",
-      "reason": "borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso"
+      "step": "@parent",
+      "reason": "padre-por-disenio (ley @parent, lote 3A 2026-08-28): el paso por defecto del eje border ES la raiz padre (--ds-color-border); pedir 'default' por nombre seria la hija que duplica al padre — prohibido por la ley de alias 2A. [origen: borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso]"
     },
     {
       "ownerPath": "CHROME.cardComponent",
@@ -40,15 +40,15 @@
       "ownerPath": "CHROME.cardComponent",
       "property": "border",
       "leaf": "footerBorder",
-      "step": "default",
-      "reason": "borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso"
+      "step": "@parent",
+      "reason": "padre-por-disenio (ley @parent, lote 3A 2026-08-28): el paso por defecto del eje border ES la raiz padre (--ds-color-border); pedir 'default' por nombre seria la hija que duplica al padre — prohibido por la ley de alias 2A. [origen: borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso]"
     },
     {
       "ownerPath": "CHROME.cardComponent",
       "property": "border",
       "leaf": "headerBorder",
-      "step": "default",
-      "reason": "borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso"
+      "step": "@parent",
+      "reason": "padre-por-disenio (ley @parent, lote 3A 2026-08-28): el paso por defecto del eje border ES la raiz padre (--ds-color-border); pedir 'default' por nombre seria la hija que duplica al padre — prohibido por la ley de alias 2A. [origen: borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso]"
     },
     {
       "ownerPath": "CHROME.cardComponent",
@@ -61,8 +61,8 @@
       "ownerPath": "CHROME.cardComponent",
       "property": "fg",
       "leaf": "color",
-      "step": "primary",
-      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso"
+      "step": "@parent",
+      "reason": "padre-por-disenio (ley @parent, lote 3A 2026-08-28): el paso por defecto del eje fg ES la raiz padre (--ds-color-text-primary); pedir 'primary' por nombre seria la hija que duplica al padre — prohibido por la ley de alias 2A. [origen: tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso]"
     },
     {
       "ownerPath": "CHROME.cardComponent",
@@ -103,8 +103,8 @@
       "ownerPath": "CHROME.cardComponent",
       "property": "fg",
       "leaf": "titleColor",
-      "step": "primary",
-      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso"
+      "step": "@parent",
+      "reason": "padre-por-disenio (ley @parent, lote 3A 2026-08-28): el paso por defecto del eje fg ES la raiz padre (--ds-color-text-primary); pedir 'primary' por nombre seria la hija que duplica al padre — prohibido por la ley de alias 2A. [origen: tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso]"
     },
     {
       "ownerPath": "CHROME.collapse",
@@ -208,8 +208,8 @@
       "ownerPath": "CHROME.controls.buttonGhost",
       "property": "fg",
       "leaf": "color",
-      "step": "primary",
-      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso"
+      "step": "@parent",
+      "reason": "padre-por-disenio (ley @parent, lote 3A 2026-08-28): el paso por defecto del eje fg ES la raiz padre (--ds-color-text-primary); pedir 'primary' por nombre seria la hija que duplica al padre — prohibido por la ley de alias 2A. [origen: tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso]"
     },
     {
       "ownerPath": "CHROME.controls.buttonLink",
@@ -229,22 +229,22 @@
       "ownerPath": "CHROME.controls.buttonSecondary",
       "property": "border",
       "leaf": "border",
-      "step": "default",
-      "reason": "borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso"
+      "step": "@parent",
+      "reason": "padre-por-disenio (ley @parent, lote 3A 2026-08-28): el paso por defecto del eje border ES la raiz padre (--ds-color-border); pedir 'default' por nombre seria la hija que duplica al padre — prohibido por la ley de alias 2A. [origen: borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso]"
     },
     {
       "ownerPath": "CHROME.controls.buttonSecondary",
       "property": "fg",
       "leaf": "color",
-      "step": "primary",
-      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso"
+      "step": "@parent",
+      "reason": "padre-por-disenio (ley @parent, lote 3A 2026-08-28): el paso por defecto del eje fg ES la raiz padre (--ds-color-text-primary); pedir 'primary' por nombre seria la hija que duplica al padre — prohibido por la ley de alias 2A. [origen: tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso]"
     },
     {
       "ownerPath": "CHROME.controls.buttonText",
       "property": "fg",
       "leaf": "color",
-      "step": "primary",
-      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso"
+      "step": "@parent",
+      "reason": "padre-por-disenio (ley @parent, lote 3A 2026-08-28): el paso por defecto del eje fg ES la raiz padre (--ds-color-text-primary); pedir 'primary' por nombre seria la hija que duplica al padre — prohibido por la ley de alias 2A. [origen: tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso]"
     },
     {
       "ownerPath": "CHROME.controls.checkbox",
@@ -285,15 +285,15 @@
       "ownerPath": "CHROME.controls.input",
       "property": "border",
       "leaf": "border",
-      "step": "default",
-      "reason": "borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso"
+      "step": "@parent",
+      "reason": "padre-por-disenio (ley @parent, lote 3A 2026-08-28): el paso por defecto del eje border ES la raiz padre (--ds-color-border); pedir 'default' por nombre seria la hija que duplica al padre — prohibido por la ley de alias 2A. [origen: borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso]"
     },
     {
       "ownerPath": "CHROME.controls.input",
       "property": "fg",
       "leaf": "color",
-      "step": "primary",
-      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso"
+      "step": "@parent",
+      "reason": "padre-por-disenio (ley @parent, lote 3A 2026-08-28): el paso por defecto del eje fg ES la raiz padre (--ds-color-text-primary); pedir 'primary' por nombre seria la hija que duplica al padre — prohibido por la ley de alias 2A. [origen: tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso]"
     },
     {
       "ownerPath": "CHROME.controls.input",
@@ -320,8 +320,8 @@
       "ownerPath": "CHROME.controls.input.clear",
       "property": "fg",
       "leaf": "color",
-      "step": "primary",
-      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso"
+      "step": "@parent",
+      "reason": "padre-por-disenio (ley @parent, lote 3A 2026-08-28): el paso por defecto del eje fg ES la raiz padre (--ds-color-text-primary); pedir 'primary' por nombre seria la hija que duplica al padre — prohibido por la ley de alias 2A. [origen: tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso]"
     },
     {
       "ownerPath": "CHROME.controls.input.readOnly",
@@ -334,15 +334,15 @@
       "ownerPath": "CHROME.controls.inputNumber",
       "property": "border",
       "leaf": "addonBorder",
-      "step": "default",
-      "reason": "borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso"
+      "step": "@parent",
+      "reason": "padre-por-disenio (ley @parent, lote 3A 2026-08-28): el paso por defecto del eje border ES la raiz padre (--ds-color-border); pedir 'default' por nombre seria la hija que duplica al padre — prohibido por la ley de alias 2A. [origen: borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso]"
     },
     {
       "ownerPath": "CHROME.controls.inputNumber",
       "property": "border",
       "leaf": "border",
-      "step": "default",
-      "reason": "borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso"
+      "step": "@parent",
+      "reason": "padre-por-disenio (ley @parent, lote 3A 2026-08-28): el paso por defecto del eje border ES la raiz padre (--ds-color-border); pedir 'default' por nombre seria la hija que duplica al padre — prohibido por la ley de alias 2A. [origen: borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso]"
     },
     {
       "ownerPath": "CHROME.controls.inputNumber",
@@ -369,15 +369,15 @@
       "ownerPath": "CHROME.controls.inputNumber",
       "property": "fg",
       "leaf": "color",
-      "step": "primary",
-      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso"
+      "step": "@parent",
+      "reason": "padre-por-disenio (ley @parent, lote 3A 2026-08-28): el paso por defecto del eje fg ES la raiz padre (--ds-color-text-primary); pedir 'primary' por nombre seria la hija que duplica al padre — prohibido por la ley de alias 2A. [origen: tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso]"
     },
     {
       "ownerPath": "CHROME.controls.inputNumber",
       "property": "fg",
       "leaf": "controlColor",
-      "step": "primary",
-      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso"
+      "step": "@parent",
+      "reason": "padre-por-disenio (ley @parent, lote 3A 2026-08-28): el paso por defecto del eje fg ES la raiz padre (--ds-color-text-primary); pedir 'primary' por nombre seria la hija que duplica al padre — prohibido por la ley de alias 2A. [origen: tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso]"
     },
     {
       "ownerPath": "CHROME.controls.radio",
@@ -418,8 +418,8 @@
       "ownerPath": "CHROME.controls.select",
       "property": "border",
       "leaf": "border",
-      "step": "default",
-      "reason": "borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso"
+      "step": "@parent",
+      "reason": "padre-por-disenio (ley @parent, lote 3A 2026-08-28): el paso por defecto del eje border ES la raiz padre (--ds-color-border); pedir 'default' por nombre seria la hija que duplica al padre — prohibido por la ley de alias 2A. [origen: borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso]"
     },
     {
       "ownerPath": "CHROME.controls.select",
@@ -446,8 +446,8 @@
       "ownerPath": "CHROME.controls.select",
       "property": "fg",
       "leaf": "color",
-      "step": "primary",
-      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso"
+      "step": "@parent",
+      "reason": "padre-por-disenio (ley @parent, lote 3A 2026-08-28): el paso por defecto del eje fg ES la raiz padre (--ds-color-text-primary); pedir 'primary' por nombre seria la hija que duplica al padre — prohibido por la ley de alias 2A. [origen: tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso]"
     },
     {
       "ownerPath": "CHROME.controls.select",
@@ -495,8 +495,8 @@
       "ownerPath": "CHROME.controls.textarea",
       "property": "border",
       "leaf": "border",
-      "step": "default",
-      "reason": "borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso"
+      "step": "@parent",
+      "reason": "padre-por-disenio (ley @parent, lote 3A 2026-08-28): el paso por defecto del eje border ES la raiz padre (--ds-color-border); pedir 'default' por nombre seria la hija que duplica al padre — prohibido por la ley de alias 2A. [origen: borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso]"
     },
     {
       "ownerPath": "CHROME.controls.textarea",
@@ -551,29 +551,29 @@
       "ownerPath": "CHROME.controls.upload",
       "property": "border",
       "leaf": "border",
-      "step": "default",
-      "reason": "borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso"
+      "step": "@parent",
+      "reason": "padre-por-disenio (ley @parent, lote 3A 2026-08-28): el paso por defecto del eje border ES la raiz padre (--ds-color-border); pedir 'default' por nombre seria la hija que duplica al padre — prohibido por la ley de alias 2A. [origen: borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso]"
     },
     {
       "ownerPath": "CHROME.controls.upload",
       "property": "border",
       "leaf": "buttonBorder",
-      "step": "default",
-      "reason": "borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso"
+      "step": "@parent",
+      "reason": "padre-por-disenio (ley @parent, lote 3A 2026-08-28): el paso por defecto del eje border ES la raiz padre (--ds-color-border); pedir 'default' por nombre seria la hija que duplica al padre — prohibido por la ley de alias 2A. [origen: borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso]"
     },
     {
       "ownerPath": "CHROME.controls.upload",
       "property": "border",
       "leaf": "cardBorder",
-      "step": "default",
-      "reason": "borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso"
+      "step": "@parent",
+      "reason": "padre-por-disenio (ley @parent, lote 3A 2026-08-28): el paso por defecto del eje border ES la raiz padre (--ds-color-border); pedir 'default' por nombre seria la hija que duplica al padre — prohibido por la ley de alias 2A. [origen: borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso]"
     },
     {
       "ownerPath": "CHROME.controls.upload",
       "property": "border",
       "leaf": "draggerBorder",
-      "step": "default",
-      "reason": "borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso"
+      "step": "@parent",
+      "reason": "padre-por-disenio (ley @parent, lote 3A 2026-08-28): el paso por defecto del eje border ES la raiz padre (--ds-color-border); pedir 'default' por nombre seria la hija que duplica al padre — prohibido por la ley de alias 2A. [origen: borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso]"
     },
     {
       "ownerPath": "CHROME.controls.upload",
@@ -649,15 +649,15 @@
       "ownerPath": "CHROME.metricCard",
       "property": "border",
       "leaf": "border",
-      "step": "default",
-      "reason": "borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso"
+      "step": "@parent",
+      "reason": "padre-por-disenio (ley @parent, lote 3A 2026-08-28): el paso por defecto del eje border ES la raiz padre (--ds-color-border); pedir 'default' por nombre seria la hija que duplica al padre — prohibido por la ley de alias 2A. [origen: borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso]"
     },
     {
       "ownerPath": "CHROME.metricCard",
       "property": "border",
       "leaf": "iconBorder",
-      "step": "default",
-      "reason": "borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso"
+      "step": "@parent",
+      "reason": "padre-por-disenio (ley @parent, lote 3A 2026-08-28): el paso por defecto del eje border ES la raiz padre (--ds-color-border); pedir 'default' por nombre seria la hija que duplica al padre — prohibido por la ley de alias 2A. [origen: borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso]"
     },
     {
       "ownerPath": "CHROME.metricCard",
@@ -670,15 +670,15 @@
       "ownerPath": "CHROME.modal",
       "property": "border",
       "leaf": "footerBorder",
-      "step": "default",
-      "reason": "borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso"
+      "step": "@parent",
+      "reason": "padre-por-disenio (ley @parent, lote 3A 2026-08-28): el paso por defecto del eje border ES la raiz padre (--ds-color-border); pedir 'default' por nombre seria la hija que duplica al padre — prohibido por la ley de alias 2A. [origen: borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso]"
     },
     {
       "ownerPath": "CHROME.modal",
       "property": "border",
       "leaf": "headerBorder",
-      "step": "default",
-      "reason": "borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso"
+      "step": "@parent",
+      "reason": "padre-por-disenio (ley @parent, lote 3A 2026-08-28): el paso por defecto del eje border ES la raiz padre (--ds-color-border); pedir 'default' por nombre seria la hija que duplica al padre — prohibido por la ley de alias 2A. [origen: borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso]"
     },
     {
       "ownerPath": "CHROME.modal",
@@ -698,8 +698,8 @@
       "ownerPath": "CHROME.modal",
       "property": "fg",
       "leaf": "color",
-      "step": "primary",
-      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso"
+      "step": "@parent",
+      "reason": "padre-por-disenio (ley @parent, lote 3A 2026-08-28): el paso por defecto del eje fg ES la raiz padre (--ds-color-text-primary); pedir 'primary' por nombre seria la hija que duplica al padre — prohibido por la ley de alias 2A. [origen: tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso]"
     },
     {
       "ownerPath": "CHROME.modal",
@@ -712,22 +712,22 @@
       "ownerPath": "CHROME.modal",
       "property": "fg",
       "leaf": "titleColor",
-      "step": "primary",
-      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso"
+      "step": "@parent",
+      "reason": "padre-por-disenio (ley @parent, lote 3A 2026-08-28): el paso por defecto del eje fg ES la raiz padre (--ds-color-text-primary); pedir 'primary' por nombre seria la hija que duplica al padre — prohibido por la ley de alias 2A. [origen: tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso]"
     },
     {
       "ownerPath": "CHROME.pagination",
       "property": "fg",
       "leaf": "itemColor",
-      "step": "primary",
-      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso"
+      "step": "@parent",
+      "reason": "padre-por-disenio (ley @parent, lote 3A 2026-08-28): el paso por defecto del eje fg ES la raiz padre (--ds-color-text-primary); pedir 'primary' por nombre seria la hija que duplica al padre — prohibido por la ley de alias 2A. [origen: tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso]"
     },
     {
       "ownerPath": "CHROME.premiumCard",
       "property": "border",
       "leaf": "border",
-      "step": "default",
-      "reason": "borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso"
+      "step": "@parent",
+      "reason": "padre-por-disenio (ley @parent, lote 3A 2026-08-28): el paso por defecto del eje border ES la raiz padre (--ds-color-border); pedir 'default' por nombre seria la hija que duplica al padre — prohibido por la ley de alias 2A. [origen: borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso]"
     },
     {
       "ownerPath": "CHROME.search",
@@ -740,8 +740,8 @@
       "ownerPath": "CHROME.search",
       "property": "fg",
       "leaf": "color",
-      "step": "primary",
-      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso"
+      "step": "@parent",
+      "reason": "padre-por-disenio (ley @parent, lote 3A 2026-08-28): el paso por defecto del eje fg ES la raiz padre (--ds-color-text-primary); pedir 'primary' por nombre seria la hija que duplica al padre — prohibido por la ley de alias 2A. [origen: tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso]"
     },
     {
       "ownerPath": "CHROME.shell",
@@ -775,8 +775,8 @@
       "ownerPath": "CHROME.signalCard",
       "property": "border",
       "leaf": "iconBorder",
-      "step": "default",
-      "reason": "borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso"
+      "step": "@parent",
+      "reason": "padre-por-disenio (ley @parent, lote 3A 2026-08-28): el paso por defecto del eje border ES la raiz padre (--ds-color-border); pedir 'default' por nombre seria la hija que duplica al padre — prohibido por la ley de alias 2A. [origen: borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso]"
     },
     {
       "ownerPath": "CHROME.signalCard",
@@ -831,8 +831,8 @@
       "ownerPath": "CHROME.tabs",
       "property": "border",
       "leaf": "listBorder",
-      "step": "default",
-      "reason": "borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso"
+      "step": "@parent",
+      "reason": "padre-por-disenio (ley @parent, lote 3A 2026-08-28): el paso por defecto del eje border ES la raiz padre (--ds-color-border); pedir 'default' por nombre seria la hija que duplica al padre — prohibido por la ley de alias 2A. [origen: borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso]"
     },
     {
       "ownerPath": "CHROME.tabs",
@@ -845,8 +845,8 @@
       "ownerPath": "CHROME.tabs",
       "property": "fg",
       "leaf": "color",
-      "step": "primary",
-      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso"
+      "step": "@parent",
+      "reason": "padre-por-disenio (ley @parent, lote 3A 2026-08-28): el paso por defecto del eje fg ES la raiz padre (--ds-color-text-primary); pedir 'primary' por nombre seria la hija que duplica al padre — prohibido por la ley de alias 2A. [origen: tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso]"
     },
     {
       "ownerPath": "CHROME.tallCard",
@@ -971,22 +971,22 @@
       "ownerPath": "OVERLAY.chrome.cardComponent",
       "property": "border",
       "leaf": "border",
-      "step": "default",
-      "reason": "borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso"
+      "step": "@parent",
+      "reason": "padre-por-disenio (ley @parent, lote 3A 2026-08-28): el paso por defecto del eje border ES la raiz padre (--ds-color-border); pedir 'default' por nombre seria la hija que duplica al padre — prohibido por la ley de alias 2A. [origen: borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso]"
     },
     {
       "ownerPath": "OVERLAY.chrome.cardComponent",
       "property": "border",
       "leaf": "footerBorder",
-      "step": "default",
-      "reason": "borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso"
+      "step": "@parent",
+      "reason": "padre-por-disenio (ley @parent, lote 3A 2026-08-28): el paso por defecto del eje border ES la raiz padre (--ds-color-border); pedir 'default' por nombre seria la hija que duplica al padre — prohibido por la ley de alias 2A. [origen: borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso]"
     },
     {
       "ownerPath": "OVERLAY.chrome.cardComponent",
       "property": "border",
       "leaf": "headerBorder",
-      "step": "default",
-      "reason": "borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso"
+      "step": "@parent",
+      "reason": "padre-por-disenio (ley @parent, lote 3A 2026-08-28): el paso por defecto del eje border ES la raiz padre (--ds-color-border); pedir 'default' por nombre seria la hija que duplica al padre — prohibido por la ley de alias 2A. [origen: borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso]"
     },
     {
       "ownerPath": "OVERLAY.chrome.cardComponent",
@@ -999,8 +999,8 @@
       "ownerPath": "OVERLAY.chrome.cardComponent",
       "property": "fg",
       "leaf": "color",
-      "step": "primary",
-      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso"
+      "step": "@parent",
+      "reason": "padre-por-disenio (ley @parent, lote 3A 2026-08-28): el paso por defecto del eje fg ES la raiz padre (--ds-color-text-primary); pedir 'primary' por nombre seria la hija que duplica al padre — prohibido por la ley de alias 2A. [origen: tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso]"
     },
     {
       "ownerPath": "OVERLAY.chrome.cardComponent",
@@ -1041,8 +1041,8 @@
       "ownerPath": "OVERLAY.chrome.cardComponent",
       "property": "fg",
       "leaf": "titleColor",
-      "step": "primary",
-      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso"
+      "step": "@parent",
+      "reason": "padre-por-disenio (ley @parent, lote 3A 2026-08-28): el paso por defecto del eje fg ES la raiz padre (--ds-color-text-primary); pedir 'primary' por nombre seria la hija que duplica al padre — prohibido por la ley de alias 2A. [origen: tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso]"
     },
     {
       "ownerPath": "OVERLAY.chrome.collapse",
@@ -1125,22 +1125,22 @@
       "ownerPath": "OVERLAY.chrome.controls.buttonGhost",
       "property": "fg",
       "leaf": "color",
-      "step": "primary",
-      "reason": "tinta principal de lectura del cromo — el paso fuerte del eje de tinta. adjudicacion DT lote 2 (2026-08-27), eje paso (fila espejo: la variante de capa OVERLAY/SURFACES de la familia es la MISMA superficie logica y lleva el MISMO paso — ley de espejo)"
+      "step": "@parent",
+      "reason": "padre-por-disenio (ley @parent, lote 3A 2026-08-28): el paso por defecto del eje fg ES la raiz padre (--ds-color-text-primary); pedir 'primary' por nombre seria la hija que duplica al padre — prohibido por la ley de alias 2A. [origen: tinta principal de lectura del cromo — el paso fuerte del eje de tinta. adjudicacion DT lote 2 (2026-08-27), eje paso (fila espejo: la variante de capa OVERLAY/SURFACES de la familia es la MISMA superficie logica y lleva el MISMO paso — ley de espejo)]"
     },
     {
       "ownerPath": "OVERLAY.chrome.controls.buttonSecondary",
       "property": "border",
       "leaf": "border",
-      "step": "default",
-      "reason": "borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso"
+      "step": "@parent",
+      "reason": "padre-por-disenio (ley @parent, lote 3A 2026-08-28): el paso por defecto del eje border ES la raiz padre (--ds-color-border); pedir 'default' por nombre seria la hija que duplica al padre — prohibido por la ley de alias 2A. [origen: borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso]"
     },
     {
       "ownerPath": "OVERLAY.chrome.controls.buttonSecondary",
       "property": "fg",
       "leaf": "color",
-      "step": "primary",
-      "reason": "tinta principal de lectura del cromo — el paso fuerte del eje de tinta. adjudicacion DT lote 2 (2026-08-27), eje paso (fila espejo: la variante de capa OVERLAY/SURFACES de la familia es la MISMA superficie logica y lleva el MISMO paso — ley de espejo)"
+      "step": "@parent",
+      "reason": "padre-por-disenio (ley @parent, lote 3A 2026-08-28): el paso por defecto del eje fg ES la raiz padre (--ds-color-text-primary); pedir 'primary' por nombre seria la hija que duplica al padre — prohibido por la ley de alias 2A. [origen: tinta principal de lectura del cromo — el paso fuerte del eje de tinta. adjudicacion DT lote 2 (2026-08-27), eje paso (fila espejo: la variante de capa OVERLAY/SURFACES de la familia es la MISMA superficie logica y lleva el MISMO paso — ley de espejo)]"
     },
     {
       "ownerPath": "OVERLAY.chrome.controls.checkbox",
@@ -1167,15 +1167,15 @@
       "ownerPath": "OVERLAY.chrome.controls.input",
       "property": "border",
       "leaf": "border",
-      "step": "default",
-      "reason": "borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso"
+      "step": "@parent",
+      "reason": "padre-por-disenio (ley @parent, lote 3A 2026-08-28): el paso por defecto del eje border ES la raiz padre (--ds-color-border); pedir 'default' por nombre seria la hija que duplica al padre — prohibido por la ley de alias 2A. [origen: borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso]"
     },
     {
       "ownerPath": "OVERLAY.chrome.controls.input",
       "property": "fg",
       "leaf": "color",
-      "step": "primary",
-      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso"
+      "step": "@parent",
+      "reason": "padre-por-disenio (ley @parent, lote 3A 2026-08-28): el paso por defecto del eje fg ES la raiz padre (--ds-color-text-primary); pedir 'primary' por nombre seria la hija que duplica al padre — prohibido por la ley de alias 2A. [origen: tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso]"
     },
     {
       "ownerPath": "OVERLAY.chrome.controls.input",
@@ -1202,22 +1202,22 @@
       "ownerPath": "OVERLAY.chrome.controls.input.clear",
       "property": "fg",
       "leaf": "color",
-      "step": "primary",
-      "reason": "tinta principal de lectura del cromo — el paso fuerte del eje de tinta. adjudicacion DT lote 2 (2026-08-27), eje paso (fila espejo: la variante de capa OVERLAY/SURFACES de la familia es la MISMA superficie logica y lleva el MISMO paso — ley de espejo)"
+      "step": "@parent",
+      "reason": "padre-por-disenio (ley @parent, lote 3A 2026-08-28): el paso por defecto del eje fg ES la raiz padre (--ds-color-text-primary); pedir 'primary' por nombre seria la hija que duplica al padre — prohibido por la ley de alias 2A. [origen: tinta principal de lectura del cromo — el paso fuerte del eje de tinta. adjudicacion DT lote 2 (2026-08-27), eje paso (fila espejo: la variante de capa OVERLAY/SURFACES de la familia es la MISMA superficie logica y lleva el MISMO paso — ley de espejo)]"
     },
     {
       "ownerPath": "OVERLAY.chrome.controls.inputNumber",
       "property": "border",
       "leaf": "addonBorder",
-      "step": "default",
-      "reason": "borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso"
+      "step": "@parent",
+      "reason": "padre-por-disenio (ley @parent, lote 3A 2026-08-28): el paso por defecto del eje border ES la raiz padre (--ds-color-border); pedir 'default' por nombre seria la hija que duplica al padre — prohibido por la ley de alias 2A. [origen: borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso]"
     },
     {
       "ownerPath": "OVERLAY.chrome.controls.inputNumber",
       "property": "border",
       "leaf": "border",
-      "step": "default",
-      "reason": "borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso"
+      "step": "@parent",
+      "reason": "padre-por-disenio (ley @parent, lote 3A 2026-08-28): el paso por defecto del eje border ES la raiz padre (--ds-color-border); pedir 'default' por nombre seria la hija que duplica al padre — prohibido por la ley de alias 2A. [origen: borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso]"
     },
     {
       "ownerPath": "OVERLAY.chrome.controls.inputNumber",
@@ -1244,15 +1244,15 @@
       "ownerPath": "OVERLAY.chrome.controls.inputNumber",
       "property": "fg",
       "leaf": "color",
-      "step": "primary",
-      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso"
+      "step": "@parent",
+      "reason": "padre-por-disenio (ley @parent, lote 3A 2026-08-28): el paso por defecto del eje fg ES la raiz padre (--ds-color-text-primary); pedir 'primary' por nombre seria la hija que duplica al padre — prohibido por la ley de alias 2A. [origen: tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso]"
     },
     {
       "ownerPath": "OVERLAY.chrome.controls.inputNumber",
       "property": "fg",
       "leaf": "controlColor",
-      "step": "primary",
-      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso"
+      "step": "@parent",
+      "reason": "padre-por-disenio (ley @parent, lote 3A 2026-08-28): el paso por defecto del eje fg ES la raiz padre (--ds-color-text-primary); pedir 'primary' por nombre seria la hija que duplica al padre — prohibido por la ley de alias 2A. [origen: tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso]"
     },
     {
       "ownerPath": "OVERLAY.chrome.controls.radio",
@@ -1279,8 +1279,8 @@
       "ownerPath": "OVERLAY.chrome.controls.select",
       "property": "border",
       "leaf": "border",
-      "step": "default",
-      "reason": "borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso"
+      "step": "@parent",
+      "reason": "padre-por-disenio (ley @parent, lote 3A 2026-08-28): el paso por defecto del eje border ES la raiz padre (--ds-color-border); pedir 'default' por nombre seria la hija que duplica al padre — prohibido por la ley de alias 2A. [origen: borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso]"
     },
     {
       "ownerPath": "OVERLAY.chrome.controls.select",
@@ -1307,8 +1307,8 @@
       "ownerPath": "OVERLAY.chrome.controls.select",
       "property": "fg",
       "leaf": "color",
-      "step": "primary",
-      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso"
+      "step": "@parent",
+      "reason": "padre-por-disenio (ley @parent, lote 3A 2026-08-28): el paso por defecto del eje fg ES la raiz padre (--ds-color-text-primary); pedir 'primary' por nombre seria la hija que duplica al padre — prohibido por la ley de alias 2A. [origen: tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso]"
     },
     {
       "ownerPath": "OVERLAY.chrome.controls.select",
@@ -1356,8 +1356,8 @@
       "ownerPath": "OVERLAY.chrome.controls.textarea",
       "property": "border",
       "leaf": "border",
-      "step": "default",
-      "reason": "borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso"
+      "step": "@parent",
+      "reason": "padre-por-disenio (ley @parent, lote 3A 2026-08-28): el paso por defecto del eje border ES la raiz padre (--ds-color-border); pedir 'default' por nombre seria la hija que duplica al padre — prohibido por la ley de alias 2A. [origen: borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso]"
     },
     {
       "ownerPath": "OVERLAY.chrome.controls.textarea",
@@ -1405,29 +1405,29 @@
       "ownerPath": "OVERLAY.chrome.controls.upload",
       "property": "border",
       "leaf": "border",
-      "step": "default",
-      "reason": "borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso"
+      "step": "@parent",
+      "reason": "padre-por-disenio (ley @parent, lote 3A 2026-08-28): el paso por defecto del eje border ES la raiz padre (--ds-color-border); pedir 'default' por nombre seria la hija que duplica al padre — prohibido por la ley de alias 2A. [origen: borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso]"
     },
     {
       "ownerPath": "OVERLAY.chrome.controls.upload",
       "property": "border",
       "leaf": "buttonBorder",
-      "step": "default",
-      "reason": "borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso"
+      "step": "@parent",
+      "reason": "padre-por-disenio (ley @parent, lote 3A 2026-08-28): el paso por defecto del eje border ES la raiz padre (--ds-color-border); pedir 'default' por nombre seria la hija que duplica al padre — prohibido por la ley de alias 2A. [origen: borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso]"
     },
     {
       "ownerPath": "OVERLAY.chrome.controls.upload",
       "property": "border",
       "leaf": "cardBorder",
-      "step": "default",
-      "reason": "borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso"
+      "step": "@parent",
+      "reason": "padre-por-disenio (ley @parent, lote 3A 2026-08-28): el paso por defecto del eje border ES la raiz padre (--ds-color-border); pedir 'default' por nombre seria la hija que duplica al padre — prohibido por la ley de alias 2A. [origen: borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso]"
     },
     {
       "ownerPath": "OVERLAY.chrome.controls.upload",
       "property": "border",
       "leaf": "draggerBorder",
-      "step": "default",
-      "reason": "borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso"
+      "step": "@parent",
+      "reason": "padre-por-disenio (ley @parent, lote 3A 2026-08-28): el paso por defecto del eje border ES la raiz padre (--ds-color-border); pedir 'default' por nombre seria la hija que duplica al padre — prohibido por la ley de alias 2A. [origen: borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso]"
     },
     {
       "ownerPath": "OVERLAY.chrome.controls.upload",
@@ -1475,15 +1475,15 @@
       "ownerPath": "OVERLAY.chrome.modal",
       "property": "border",
       "leaf": "footerBorder",
-      "step": "default",
-      "reason": "borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso"
+      "step": "@parent",
+      "reason": "padre-por-disenio (ley @parent, lote 3A 2026-08-28): el paso por defecto del eje border ES la raiz padre (--ds-color-border); pedir 'default' por nombre seria la hija que duplica al padre — prohibido por la ley de alias 2A. [origen: borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso]"
     },
     {
       "ownerPath": "OVERLAY.chrome.modal",
       "property": "border",
       "leaf": "headerBorder",
-      "step": "default",
-      "reason": "borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso"
+      "step": "@parent",
+      "reason": "padre-por-disenio (ley @parent, lote 3A 2026-08-28): el paso por defecto del eje border ES la raiz padre (--ds-color-border); pedir 'default' por nombre seria la hija que duplica al padre — prohibido por la ley de alias 2A. [origen: borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso]"
     },
     {
       "ownerPath": "OVERLAY.chrome.modal",
@@ -1503,8 +1503,8 @@
       "ownerPath": "OVERLAY.chrome.modal",
       "property": "fg",
       "leaf": "color",
-      "step": "primary",
-      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso"
+      "step": "@parent",
+      "reason": "padre-por-disenio (ley @parent, lote 3A 2026-08-28): el paso por defecto del eje fg ES la raiz padre (--ds-color-text-primary); pedir 'primary' por nombre seria la hija que duplica al padre — prohibido por la ley de alias 2A. [origen: tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso]"
     },
     {
       "ownerPath": "OVERLAY.chrome.modal",
@@ -1517,8 +1517,8 @@
       "ownerPath": "OVERLAY.chrome.modal",
       "property": "fg",
       "leaf": "titleColor",
-      "step": "primary",
-      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso"
+      "step": "@parent",
+      "reason": "padre-por-disenio (ley @parent, lote 3A 2026-08-28): el paso por defecto del eje fg ES la raiz padre (--ds-color-text-primary); pedir 'primary' por nombre seria la hija que duplica al padre — prohibido por la ley de alias 2A. [origen: tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso]"
     },
     {
       "ownerPath": "OVERLAY.chrome.search",
@@ -1531,8 +1531,8 @@
       "ownerPath": "OVERLAY.chrome.search",
       "property": "fg",
       "leaf": "color",
-      "step": "primary",
-      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso"
+      "step": "@parent",
+      "reason": "padre-por-disenio (ley @parent, lote 3A 2026-08-28): el paso por defecto del eje fg ES la raiz padre (--ds-color-text-primary); pedir 'primary' por nombre seria la hija que duplica al padre — prohibido por la ley de alias 2A. [origen: tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso]"
     },
     {
       "ownerPath": "OVERLAY.chrome.shell",
@@ -1587,8 +1587,8 @@
       "ownerPath": "OVERLAY.chrome.tabs",
       "property": "border",
       "leaf": "listBorder",
-      "step": "default",
-      "reason": "borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso"
+      "step": "@parent",
+      "reason": "padre-por-disenio (ley @parent, lote 3A 2026-08-28): el paso por defecto del eje border ES la raiz padre (--ds-color-border); pedir 'default' por nombre seria la hija que duplica al padre — prohibido por la ley de alias 2A. [origen: borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso]"
     },
     {
       "ownerPath": "OVERLAY.chrome.tabs",
@@ -1601,8 +1601,8 @@
       "ownerPath": "OVERLAY.chrome.tabs",
       "property": "fg",
       "leaf": "color",
-      "step": "primary",
-      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso"
+      "step": "@parent",
+      "reason": "padre-por-disenio (ley @parent, lote 3A 2026-08-28): el paso por defecto del eje fg ES la raiz padre (--ds-color-text-primary); pedir 'primary' por nombre seria la hija que duplica al padre — prohibido por la ley de alias 2A. [origen: tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso]"
     },
     {
       "ownerPath": "OVERLAY.chrome.tallCard",
@@ -1685,8 +1685,8 @@
       "ownerPath": "OVERLAY.surfaces.surfaceRoles.card",
       "property": "border",
       "leaf": "border",
-      "step": "default",
-      "reason": "borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso"
+      "step": "@parent",
+      "reason": "padre-por-disenio (ley @parent, lote 3A 2026-08-28): el paso por defecto del eje border ES la raiz padre (--ds-color-border); pedir 'default' por nombre seria la hija que duplica al padre — prohibido por la ley de alias 2A. [origen: borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso]"
     },
     {
       "ownerPath": "OVERLAY.surfaces.surfaceRoles.card",
@@ -1699,8 +1699,8 @@
       "ownerPath": "OVERLAY.surfaces.surfaceRoles.control",
       "property": "border",
       "leaf": "border",
-      "step": "default",
-      "reason": "borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso"
+      "step": "@parent",
+      "reason": "padre-por-disenio (ley @parent, lote 3A 2026-08-28): el paso por defecto del eje border ES la raiz padre (--ds-color-border); pedir 'default' por nombre seria la hija que duplica al padre — prohibido por la ley de alias 2A. [origen: borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso]"
     },
     {
       "ownerPath": "OVERLAY.surfaces.surfaceRoles.control",
@@ -1713,8 +1713,8 @@
       "ownerPath": "OVERLAY.surfaces.surfaceRoles.panel",
       "property": "border",
       "leaf": "border",
-      "step": "default",
-      "reason": "borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso"
+      "step": "@parent",
+      "reason": "padre-por-disenio (ley @parent, lote 3A 2026-08-28): el paso por defecto del eje border ES la raiz padre (--ds-color-border); pedir 'default' por nombre seria la hija que duplica al padre — prohibido por la ley de alias 2A. [origen: borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso]"
     },
     {
       "ownerPath": "OVERLAY.surfaces.surfaceRoles.panel",
@@ -1727,8 +1727,8 @@
       "ownerPath": "OVERLAY.surfaces.surfaceRoles.panel",
       "property": "fg",
       "leaf": "foreground",
-      "step": "primary",
-      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso"
+      "step": "@parent",
+      "reason": "padre-por-disenio (ley @parent, lote 3A 2026-08-28): el paso por defecto del eje fg ES la raiz padre (--ds-color-text-primary); pedir 'primary' por nombre seria la hija que duplica al padre — prohibido por la ley de alias 2A. [origen: tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso]"
     },
     {
       "ownerPath": "OVERLAY.surfaces.surfaceRoles.panel",
@@ -1755,8 +1755,8 @@
       "ownerPath": "SURFACES.surfaceRoles.card",
       "property": "border",
       "leaf": "border",
-      "step": "default",
-      "reason": "borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso"
+      "step": "@parent",
+      "reason": "padre-por-disenio (ley @parent, lote 3A 2026-08-28): el paso por defecto del eje border ES la raiz padre (--ds-color-border); pedir 'default' por nombre seria la hija que duplica al padre — prohibido por la ley de alias 2A. [origen: borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso]"
     },
     {
       "ownerPath": "SURFACES.surfaceRoles.card",
@@ -1769,8 +1769,8 @@
       "ownerPath": "SURFACES.surfaceRoles.control",
       "property": "border",
       "leaf": "border",
-      "step": "default",
-      "reason": "borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso"
+      "step": "@parent",
+      "reason": "padre-por-disenio (ley @parent, lote 3A 2026-08-28): el paso por defecto del eje border ES la raiz padre (--ds-color-border); pedir 'default' por nombre seria la hija que duplica al padre — prohibido por la ley de alias 2A. [origen: borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso]"
     },
     {
       "ownerPath": "SURFACES.surfaceRoles.control",
@@ -1783,8 +1783,8 @@
       "ownerPath": "SURFACES.surfaceRoles.panel",
       "property": "border",
       "leaf": "border",
-      "step": "default",
-      "reason": "borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso"
+      "step": "@parent",
+      "reason": "padre-por-disenio (ley @parent, lote 3A 2026-08-28): el paso por defecto del eje border ES la raiz padre (--ds-color-border); pedir 'default' por nombre seria la hija que duplica al padre — prohibido por la ley de alias 2A. [origen: borde estructural por defecto de la parte — paso default del eje de borde; adjudicacion DT lote 1 (2026-08-27), eje paso]"
     },
     {
       "ownerPath": "SURFACES.surfaceRoles.panel",
@@ -1797,8 +1797,8 @@
       "ownerPath": "SURFACES.surfaceRoles.panel",
       "property": "fg",
       "leaf": "foreground",
-      "step": "primary",
-      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso"
+      "step": "@parent",
+      "reason": "padre-por-disenio (ley @parent, lote 3A 2026-08-28): el paso por defecto del eje fg ES la raiz padre (--ds-color-text-primary); pedir 'primary' por nombre seria la hija que duplica al padre — prohibido por la ley de alias 2A. [origen: tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta; adjudicacion DT lote 1 (2026-08-27), eje paso]"
     },
     {
       "ownerPath": "SURFACES.surfaceRoles.panel",

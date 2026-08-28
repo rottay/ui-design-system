@@ -277,10 +277,105 @@ export const OWNER_STEP_RULES_PATH = join(CORE_ROOT, 'manifest/cascade/owner-ste
  * un canal. La identidad de valor resuelto es VERIFICACION posterior (la ley
  * cero-delta de `resolved-map-diff`), nunca evidencia de ruteo.
  */
+/**
+ * PADRE-POR-DISENIO. `@parent` no es un paso mas del vocabulario: es la
+ * declaracion de que el paso por defecto de este eje ES la raiz padre, y que
+ * pedirlo por nombre seria la hija que duplica al padre -- prohibida por la ley
+ * de alias de la cohorte 2A.
+ *
+ * POR QUE UN CENTINELA Y NO BORRAR LA REGLA. Sin regla, `refineWithStep` emite
+ * `sin adjudicar`, que es LA MISMA cadena que produce un owner que nadie
+ * decidio todavia: 268 canales estan hoy en ese bucket. Borrar las reglas
+ * decididas las volveria indistinguibles de las pendientes -- fail-open dentro
+ * de un productor disenado fail-closed. El centinela dice la decision.
+ *
+ * EL PREFIJO `@` NO PUEDE COLISIONAR con un paso real (el vocabulario autorado
+ * no lo usa) y es el que el repo ya emplea para ausencia declarada (`@absent` /
+ * `@governor` en brand-themes).
+ */
+export const PARENT_BY_DESIGN = '@parent';
+
+/** El paso que, por eje, ES el padre. `fg` -> primary; `border` -> default. */
+export const DEFAULT_STEP = Object.freeze({ fg: 'primary', border: 'default' });
+
 export const STEP_VOCABULARY = Object.freeze({
-  fg: Object.freeze(['primary', 'secondary', 'page', 'muted', 'tertiary', 'disabled', 'inverse', 'on-primary']),
-  border: Object.freeze(['primary', 'secondary', 'default', 'tertiary', 'subtle', 'focus']),
+  fg: Object.freeze(['primary', 'secondary', 'page', 'muted', 'tertiary', 'disabled', 'inverse', 'on-primary', PARENT_BY_DESIGN]),
+  border: Object.freeze(['primary', 'secondary', 'default', 'tertiary', 'subtle', 'focus', PARENT_BY_DESIGN]),
 });
+
+/**
+ * LA CABEZA NATURAL SE DERIVA DEL CATALOGO, NO SE ESCRIBE A MANO. La cabeza del
+ * paso-default de un eje es la que ya llevan las raices de paso vivas de ese
+ * par (propiedad, paso): `fg.primary` -> `--ds-color-text-primary`,
+ * `border.default` -> `--ds-color-border`. Medido: las 9 combinaciones vivas
+ * mapean cada una a UN solo canal, sin una excepcion entre niveles.
+ *
+ * Derivarla en vez de pinearla importa: una constante escrita a mano se
+ * desincroniza del catalogo en silencio, y este predicado es justamente el que
+ * impide que una clase B se disfrace de clase A.
+ *
+ * FALLA CERRADO: si el par no tiene ninguna raiz viva, o si dos raices del
+ * mismo par declaran canales distintos, no hay cabeza natural y `@parent` no se
+ * puede validar -- entonces se rechaza, no se aprueba por defecto.
+ */
+export function naturalDefaultHead(catalog, property) {
+  const step = DEFAULT_STEP[property];
+  if (!step) return { channel: null, reason: `la propiedad "${property}" no tiene paso-default declarado` };
+  const channels = new Set();
+  for (const root of catalog?.roots ?? []) {
+    const parts = String(root.rootId).split('.');
+    if (parts.length === 4 && parts[0] === 'tier' && parts[2] === property && parts[3] === step && root.channel) {
+      channels.add(root.channel);
+    }
+  }
+  if (channels.size === 1) return { channel: [...channels][0], reason: null };
+  if (channels.size === 0) {
+    return { channel: null, reason: `ninguna raiz viva tier.*.${property}.${step} define la cabeza natural del paso-default` };
+  }
+  return { channel: null, reason: `las raices tier.*.${property}.${step} declaran ${channels.size} cabezas distintas (${[...channels].sort().join(', ')})` };
+}
+
+/**
+ * EL GUARD MECANICO DE `@parent` -- la ley de alias de 2A, mecanizada.
+ *
+ * `@parent` es legal SII la cabeza de la raiz padre EFECTIVA ES la cabeza
+ * natural del paso-default de ese eje. Es literalmente el test de la ley de
+ * alias: si coinciden, crear la raiz-hija duplicaria al padre y esta prohibido,
+ * asi que el padre ES la respuesta. Si NO coinciden, el paso pedido es una
+ * cabeza distinta -- vocabulario que falta, no un default -- y llamarlo
+ * `@parent` seria disfrazar el hueco.
+ *
+ * LA LEGALIDAD ES PROPIEDAD DEL PAR (regla, raiz padre efectiva), NO DE LA
+ * REGLA SOLA. Esta es la correccion del 2026-08-28, y se pago con un rojo: el
+ * predicado vivia en el reader y derivaba el padre del TIER DEL OWNER, que es
+ * valido para V3 (`governed-owner-table`) y falso para V2
+ * (`declared-fallback`), donde el padre lo fija el grafo de fallback del CSS y
+ * puede ser de otro nivel que el del owner. Rechazo 12 reglas legitimas cuyos 6
+ * canales llegan por V2 a `tier.base.*` -- donde el test da LEGAL. Medido:
+ * 12/12 falsos positivos, 0 falsos negativos.
+ *
+ * POR ESO VIVE EN EL PUNTO DE REFINAMIENTO, donde `rootId` ES el padre
+ * efectivo. Ademas de correcto es ESTRICTAMENTE MAS FUERTE: el reader solo
+ * podia opinar de reglas cuyo owner tuviera tier adjudicado; aca se evalua
+ * TODA fila, venga de V1, V2 o V3.
+ *
+ * FALLA CERRADO: sin resolutor de cabezas o sin cabeza natural computable,
+ * `@parent` no se puede probar legal y se rechaza -- no se admite por defecto.
+ */
+export function checkParentByDesign({ rootId, property }, { headOf, naturalHead }) {
+  if (typeof headOf !== 'function') return `${PARENT_BY_DESIGN} no se puede validar sin el resolutor de cabezas del catalogo`;
+  if (typeof naturalHead !== 'function') return `${PARENT_BY_DESIGN} no se puede validar sin la cabeza natural del paso-default`;
+  const parentHead = headOf(rootId);
+  if (!parentHead) return `${PARENT_BY_DESIGN} apunta a ${rootId}, que no declara cabeza en el catalogo`;
+  const natural = naturalHead(property);
+  if (!natural?.channel) return `${PARENT_BY_DESIGN} no verificable: ${natural?.reason ?? 'sin cabeza natural'}`;
+  if (parentHead !== natural.channel) {
+    return `${PARENT_BY_DESIGN} es ilegal sobre ${rootId}: su cabeza es ${parentHead}, `
+      + `distinta de la cabeza natural del paso-default (${natural.channel}) -- el paso pedido es `
+      + 'vocabulario que falta, no el padre';
+  }
+  return null;
+}
 
 export function readOwnerStepRules(path = OWNER_STEP_RULES_PATH) {
   if (!existsSync(path)) return { present: false, byKey: new Map(), formFailures: [] };
@@ -340,7 +435,7 @@ export const leafOfSlotPath = (slotPath) => String(slotPath).split('.').pop();
  * catalogo no declara deja la fila en su padre y lo declara: jamas se fabrica
  * una raiz desde una tabla.
  */
-export function refineWithStep({ rootId, contributors, stepRules, rootExists }) {
+export function refineWithStep({ rootId, contributors, stepRules, rootExists, headOf = null, naturalHead = null }) {
   if (!stepRules?.present) return { rootId, step: null, stepNote: 'la tabla owner-step-rules no existe todavia' };
   const parts = String(rootId ?? '').split('.');
   if (parts.length !== 3 || parts[0] !== 'tier' || !STEP_VOCABULARY[parts[2]]) {
@@ -363,6 +458,18 @@ export function refineWithStep({ rootId, contributors, stepRules, rootExists }) 
     return { rootId, step: null, stepNote: `los contribuyentes discrepan de paso: ${[...steps].sort().join(' vs ')}` };
   }
   const [step] = [...steps];
+  /* PADRE-POR-DISENIO: la raiz no se mueve y NO queda nota pendiente. Es una
+   * decision escrita, no un refinamiento que falto. Y ACA se prueba su
+   * legalidad, contra la raiz padre EFECTIVA -- no contra la que se adivinaria
+   * del tier del owner, que es lo que hacia el guard anterior y le costaba 12
+   * falsos positivos sobre las filas que llegan por declared-fallback. Una
+   * violacion no cae a un fallback silencioso: viaja en `illegal` y hace salir
+   * al productor con rc=1. */
+  if (step === PARENT_BY_DESIGN) {
+    const illegal = checkParentByDesign({ rootId, property }, { headOf, naturalHead });
+    if (illegal) return { rootId, step: null, stepNote: illegal, illegal };
+    return { rootId, step: PARENT_BY_DESIGN, stepNote: null };
+  }
   const refined = `${rootId}.${step}`;
   if (!rootExists(refined)) return { rootId, step: null, stepNote: `la tabla pide ${refined} y esa raiz no existe en el catalogo` };
   return { rootId: refined, step, stepNote: null };
@@ -522,6 +629,19 @@ export async function buildMembership({
    * de TODOS sus contribuyentes, la fila baja un escalon. La VIA no cambia: el
    * paso refina la raiz, no re-atribuye la evidencia. */
   const rootExists = (id) => rootById.has(id);
+  const headOf = (id) => rootById.get(id)?.channel ?? null;
+  /* La cabeza natural se computa UNA vez por eje: el predicado se evalua por
+   * fila y derivarla en cada una recorreria el catalogo entero cada vez. */
+  const naturalHeadCache = new Map();
+  const naturalHead = (property) => {
+    if (!naturalHeadCache.has(property)) naturalHeadCache.set(property, naturalDefaultHead(catalog, property));
+    return naturalHeadCache.get(property);
+  };
+  /* LAS VIOLACIONES DE `@parent` SE JUNTAN Y BLOQUEAN. No es una nota por fila
+   * que alguien puede no mirar: `main()` sale con rc=1 si esta lista no esta
+   * vacia, igual que con los errores de forma de las dos tablas. La potencia de
+   * freno no cambio de lugar con el predicado. */
+  const parentByDesignFailures = [];
   for (const row of rows) {
     if (!row.rootId) { row.step = null; row.stepNote = 'sin raiz que refinar'; continue; }
     const refined = refineWithStep({
@@ -529,7 +649,10 @@ export async function buildMembership({
       contributors: row.contributingSlots.map((slotId) => slotId.slice(slotId.indexOf(':') + 1)),
       stepRules,
       rootExists,
+      headOf,
+      naturalHead,
     });
+    if (refined.illegal) parentByDesignFailures.push(`${row.channel} (raiz efectiva ${row.rootId}, via ${row.via}): ${refined.illegal}`);
     if (refined.rootId !== row.rootId) {
       row.parentRootId = row.rootId;
       row.rootId = refined.rootId;
@@ -604,6 +727,7 @@ export async function buildMembership({
       ownerTiersFormFailures: table.formFailures,
       ownerStepRules: stepRules.present ? 'manifest/cascade/owner-step-rules.json' : 'AUSENTE',
       ownerStepRulesFormFailures: stepRules.formFailures,
+      parentByDesignFailures,
     },
     stats: {
       rows: rows.length,
@@ -618,7 +742,22 @@ export async function buildMembership({
       ownersAdjudicated: table.byOwner.size,
       stepRulesPresent: stepRules.present,
       stepRulesAdjudicated: stepRules.byKey.size,
-      rowsRefinedByStep: rows.filter((row) => row.step !== null).length,
+      /* MIDE REFINAMIENTO POR TABLA, Y EXCLUYE EL CENTINELA. Contar `step !==
+       * null` a secas haria que `@parent` inflara el numero sin que se refinara
+       * nada: la `rootId` de una fila padre-por-disenio no se mueve (habria
+       * subido de 44 a 83 con las 39 filas del lote 3A).
+       *
+       * Y NO se mide por `isRefinedRoot(rootId)`, que es lo que el disenio de
+       * este lote propuso primero: MEDIDO, eso da 125, no 44, porque 81 filas
+       * llegan a una raiz de paso sin pasar por la tabla (74 por
+       * declared-fallback y 7 por head-exact). Serian dos cosas distintas con un
+       * nombre: "refinada por la tabla" y "parada sobre una raiz refinada". Este
+       * contador es el primero. */
+      rowsRefinedByStep: rows.filter((row) => row.step !== null && row.step !== PARENT_BY_DESIGN).length,
+      /* La otra mitad de la verdad, visible por separado: filas donde la tabla
+       * declara que el padre ES la respuesta. Ninguna de las dos se disfraza de
+       * la otra. */
+      rowsParentByDesign: rows.filter((row) => row.step === PARENT_BY_DESIGN).length,
       byStep: tally((row) => row.step ?? 'sin-paso'),
       r2Floor,
       r2FloorRoots: [...r2FloorRoots].sort(),
@@ -652,6 +791,11 @@ async function main(argv) {
   if (doc.provenance.ownerStepRulesFormFailures.length > 0) {
     console.error('root-membership: FAIL — owner-step-rules.json tiene errores de forma:');
     for (const failure of doc.provenance.ownerStepRulesFormFailures) console.error(`  - ${failure}`);
+    process.exit(1);
+  }
+  if (doc.provenance.parentByDesignFailures.length > 0) {
+    console.error('root-membership: FAIL — hay reglas @parent ilegales sobre su raiz padre efectiva:');
+    for (const failure of doc.provenance.parentByDesignFailures) console.error(`  - ${failure}`);
     process.exit(1);
   }
   if (doc.provenance.ownerTiersFormFailures.length > 0) {

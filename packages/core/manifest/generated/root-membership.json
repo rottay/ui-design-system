@@ -24,7 +24,8 @@
     "ownerTiers": "manifest/cascade/owner-tiers.json",
     "ownerTiersFormFailures": [],
     "ownerStepRules": "manifest/cascade/owner-step-rules.json",
-    "ownerStepRulesFormFailures": []
+    "ownerStepRulesFormFailures": [],
+    "parentByDesignFailures": []
   },
   "stats": {
     "rows": 1610,
@@ -82,8 +83,10 @@
     "stepRulesPresent": true,
     "stepRulesAdjudicated": 260,
     "rowsRefinedByStep": 44,
+    "rowsParentByDesign": 39,
     "byStep": {
-      "sin-paso": 1566,
+      "sin-paso": 1527,
+      "@parent": 39,
       "primary": 12,
       "disabled": 4,
       "secondary": 10,
@@ -6878,8 +6881,8 @@
       ],
       "rootExposure": "internal-head",
       "rootHasDerivationLaw": true,
-      "step": null,
-      "stepNote": "la tabla pide tier.control.fg.primary y esa raiz no existe en el catalogo"
+      "step": "@parent",
+      "stepNote": null
     },
     {
       "channel": "--ds-button-ghost-color-active",
@@ -8287,8 +8290,8 @@
       ],
       "rootExposure": "internal-head",
       "rootHasDerivationLaw": true,
-      "step": null,
-      "stepNote": "la tabla pide tier.control.border.default y esa raiz no existe en el catalogo"
+      "step": "@parent",
+      "stepNote": null
     },
     {
       "channel": "--ds-button-secondary-border-hover",
@@ -8359,8 +8362,8 @@
       ],
       "rootExposure": "internal-head",
       "rootHasDerivationLaw": true,
-      "step": null,
-      "stepNote": "la tabla pide tier.control.fg.primary y esa raiz no existe en el catalogo"
+      "step": "@parent",
+      "stepNote": null
     },
     {
       "channel": "--ds-button-secondary-hover-bg",
@@ -9012,8 +9015,8 @@
       ],
       "rootExposure": "internal-head",
       "rootHasDerivationLaw": true,
-      "step": null,
-      "stepNote": "la tabla pide tier.control.fg.primary y esa raiz no existe en el catalogo"
+      "step": "@parent",
+      "stepNote": null
     },
     {
       "channel": "--ds-button-text-color-active",
@@ -10052,8 +10055,8 @@
       ],
       "rootExposure": "gap",
       "rootHasDerivationLaw": false,
-      "step": null,
-      "stepNote": "la tabla pide tier.raised.border.default y esa raiz no existe en el catalogo"
+      "step": "@parent",
+      "stepNote": null
     },
     {
       "channel": "--ds-card-border-accent-hover",
@@ -10238,8 +10241,8 @@
       ],
       "rootExposure": "internal-head",
       "rootHasDerivationLaw": true,
-      "step": null,
-      "stepNote": "la tabla pide tier.base.fg.primary y esa raiz no existe en el catalogo"
+      "step": "@parent",
+      "stepNote": null
     },
     {
       "channel": "--ds-card-color-muted",
@@ -10419,8 +10422,8 @@
       ],
       "rootExposure": "gap",
       "rootHasDerivationLaw": false,
-      "step": null,
-      "stepNote": "la tabla pide tier.raised.border.default y esa raiz no existe en el catalogo"
+      "step": "@parent",
+      "stepNote": null
     },
     {
       "channel": "--ds-card-footer-border-color",
@@ -10570,8 +10573,8 @@
       ],
       "rootExposure": "internal-head",
       "rootHasDerivationLaw": true,
-      "step": null,
-      "stepNote": "la tabla pide tier.base.border.default y esa raiz no existe en el catalogo"
+      "step": "@parent",
+      "stepNote": null
     },
     {
       "channel": "--ds-card-header-border-color",
@@ -11233,8 +11236,8 @@
       ],
       "rootExposure": "internal-head",
       "rootHasDerivationLaw": true,
-      "step": null,
-      "stepNote": "la tabla pide tier.base.fg.primary y esa raiz no existe en el catalogo"
+      "step": "@parent",
+      "stepNote": null
     },
     {
       "channel": "--ds-card-title-font-size",
@@ -23424,8 +23427,8 @@
       ],
       "rootExposure": "internal-head",
       "rootHasDerivationLaw": true,
-      "step": null,
-      "stepNote": "la tabla pide tier.control.border.default y esa raiz no existe en el catalogo"
+      "step": "@parent",
+      "stepNote": null
     },
     {
       "channel": "--ds-input-border-color",
@@ -23886,8 +23889,8 @@
       ],
       "rootExposure": "internal-head",
       "rootHasDerivationLaw": true,
-      "step": null,
-      "stepNote": "la tabla pide tier.control.fg.primary y esa raiz no existe en el catalogo"
+      "step": "@parent",
+      "stepNote": null
     },
     {
       "channel": "--ds-input-clear-color-hover",
@@ -23942,8 +23945,8 @@
       ],
       "rootExposure": "internal-head",
       "rootHasDerivationLaw": true,
-      "step": null,
-      "stepNote": "la tabla pide tier.base.fg.primary y esa raiz no existe en el catalogo"
+      "step": "@parent",
+      "stepNote": null
     },
     {
       "channel": "--ds-input-color-disabled",
@@ -26581,8 +26584,8 @@
       ],
       "rootExposure": "internal-head",
       "rootHasDerivationLaw": true,
-      "step": null,
-      "stepNote": "la tabla pide tier.control.border.default y esa raiz no existe en el catalogo"
+      "step": "@parent",
+      "stepNote": null
     },
     {
       "channel": "--ds-inputnumber-addon-color",
@@ -26755,8 +26758,8 @@
       ],
       "rootExposure": "internal-head",
       "rootHasDerivationLaw": true,
-      "step": null,
-      "stepNote": "la tabla pide tier.control.border.default y esa raiz no existe en el catalogo"
+      "step": "@parent",
+      "stepNote": null
     },
     {
       "channel": "--ds-inputnumber-border-focus",
@@ -26825,8 +26828,8 @@
       ],
       "rootExposure": "internal-head",
       "rootHasDerivationLaw": true,
-      "step": null,
-      "stepNote": "la tabla pide tier.control.fg.primary y esa raiz no existe en el catalogo"
+      "step": "@parent",
+      "stepNote": null
     },
     {
       "channel": "--ds-inputnumber-control-color",
@@ -26859,8 +26862,8 @@
       ],
       "rootExposure": "internal-head",
       "rootHasDerivationLaw": true,
-      "step": null,
-      "stepNote": "la tabla pide tier.control.fg.primary y esa raiz no existe en el catalogo"
+      "step": "@parent",
+      "stepNote": null
     },
     {
       "channel": "--ds-inputnumber-error-border",
@@ -28831,8 +28834,8 @@
       ],
       "rootExposure": "gap",
       "rootHasDerivationLaw": false,
-      "step": null,
-      "stepNote": "la tabla pide tier.raised.border.default y esa raiz no existe en el catalogo"
+      "step": "@parent",
+      "stepNote": null
     },
     {
       "channel": "--ds-material-card-border-active",
@@ -29415,8 +29418,8 @@
       ],
       "rootExposure": "internal-head",
       "rootHasDerivationLaw": true,
-      "step": null,
-      "stepNote": "la tabla pide tier.control.border.default y esa raiz no existe en el catalogo"
+      "step": "@parent",
+      "stepNote": null
     },
     {
       "channel": "--ds-material-control-border-active",
@@ -30055,8 +30058,8 @@
       ],
       "rootExposure": "internal-head",
       "rootHasDerivationLaw": true,
-      "step": null,
-      "stepNote": "la tabla pide tier.base.border.default y esa raiz no existe en el catalogo"
+      "step": "@parent",
+      "stepNote": null
     },
     {
       "channel": "--ds-material-panel-border-active",
@@ -30273,8 +30276,8 @@
       ],
       "rootExposure": "internal-head",
       "rootHasDerivationLaw": true,
-      "step": null,
-      "stepNote": "la tabla pide tier.base.fg.primary y esa raiz no existe en el catalogo"
+      "step": "@parent",
+      "stepNote": null
     },
     {
       "channel": "--ds-material-panel-foreground-disabled",
@@ -31299,8 +31302,8 @@
       ],
       "rootExposure": "gap",
       "rootHasDerivationLaw": false,
-      "step": null,
-      "stepNote": "la tabla pide tier.raised.border.default y esa raiz no existe en el catalogo"
+      "step": "@parent",
+      "stepNote": null
     },
     {
       "channel": "--ds-metric-card-border-hover",
@@ -31393,8 +31396,8 @@
       ],
       "rootExposure": "gap",
       "rootHasDerivationLaw": false,
-      "step": null,
-      "stepNote": "la tabla pide tier.raised.border.default y esa raiz no existe en el catalogo"
+      "step": "@parent",
+      "stepNote": null
     },
     {
       "channel": "--ds-metric-card-label-color",
@@ -31985,8 +31988,8 @@
       ],
       "rootExposure": "internal-head",
       "rootHasDerivationLaw": true,
-      "step": null,
-      "stepNote": "la tabla pide tier.base.fg.primary y esa raiz no existe en el catalogo"
+      "step": "@parent",
+      "stepNote": null
     },
     {
       "channel": "--ds-modal-footer-bg",
@@ -32057,8 +32060,8 @@
       ],
       "rootExposure": "internal-head",
       "rootHasDerivationLaw": true,
-      "step": null,
-      "stepNote": "la tabla pide tier.overlay.border.default y esa raiz no existe en el catalogo"
+      "step": "@parent",
+      "stepNote": null
     },
     {
       "channel": "--ds-modal-header-bg",
@@ -32129,8 +32132,8 @@
       ],
       "rootExposure": "internal-head",
       "rootHasDerivationLaw": true,
-      "step": null,
-      "stepNote": "la tabla pide tier.overlay.border.default y esa raiz no existe en el catalogo"
+      "step": "@parent",
+      "stepNote": null
     },
     {
       "channel": "--ds-modal-overlay-backdrop",
@@ -32267,8 +32270,8 @@
       ],
       "rootExposure": "internal-head",
       "rootHasDerivationLaw": true,
-      "step": null,
-      "stepNote": "la tabla pide tier.base.fg.primary y esa raiz no existe en el catalogo"
+      "step": "@parent",
+      "stepNote": null
     },
     {
       "channel": "--ds-motion-calm",
@@ -32790,8 +32793,8 @@
       ],
       "rootExposure": "internal-head",
       "rootHasDerivationLaw": true,
-      "step": null,
-      "stepNote": "la tabla pide tier.base.fg.primary y esa raiz no existe en el catalogo"
+      "step": "@parent",
+      "stepNote": null
     },
     {
       "channel": "--ds-pagination-item-color-active",
@@ -33092,8 +33095,8 @@
       ],
       "rootExposure": "gap",
       "rootHasDerivationLaw": false,
-      "step": null,
-      "stepNote": "la tabla pide tier.raised.border.default y esa raiz no existe en el catalogo"
+      "step": "@parent",
+      "stepNote": null
     },
     {
       "channel": "--ds-premium-card-border-hover",
@@ -34451,8 +34454,8 @@
       ],
       "rootExposure": "internal-head",
       "rootHasDerivationLaw": true,
-      "step": null,
-      "stepNote": "la tabla pide tier.base.fg.primary y esa raiz no existe en el catalogo"
+      "step": "@parent",
+      "stepNote": null
     },
     {
       "channel": "--ds-search-empty-bg",
@@ -36032,8 +36035,8 @@
       ],
       "rootExposure": "internal-head",
       "rootHasDerivationLaw": true,
-      "step": null,
-      "stepNote": "la tabla pide tier.control.border.default y esa raiz no existe en el catalogo"
+      "step": "@parent",
+      "stepNote": null
     },
     {
       "channel": "--ds-select-border-color",
@@ -36317,8 +36320,8 @@
       ],
       "rootExposure": "internal-head",
       "rootHasDerivationLaw": true,
-      "step": null,
-      "stepNote": "la tabla pide tier.base.fg.primary y esa raiz no existe en el catalogo"
+      "step": "@parent",
+      "stepNote": null
     },
     {
       "channel": "--ds-select-color-disabled",
@@ -38717,8 +38720,8 @@
       ],
       "rootExposure": "gap",
       "rootHasDerivationLaw": false,
-      "step": null,
-      "stepNote": "la tabla pide tier.raised.border.default y esa raiz no existe en el catalogo"
+      "step": "@parent",
+      "stepNote": null
     },
     {
       "channel": "--ds-signal-card-meter-fill",
@@ -41033,8 +41036,8 @@
       ],
       "rootExposure": "internal-head",
       "rootHasDerivationLaw": true,
-      "step": null,
-      "stepNote": "la tabla pide tier.control.fg.primary y esa raiz no existe en el catalogo"
+      "step": "@parent",
+      "stepNote": null
     },
     {
       "channel": "--ds-tab-color-active",
@@ -42881,8 +42884,8 @@
       ],
       "rootExposure": "internal-head",
       "rootHasDerivationLaw": true,
-      "step": null,
-      "stepNote": "la tabla pide tier.control.border.default y esa raiz no existe en el catalogo"
+      "step": "@parent",
+      "stepNote": null
     },
     {
       "channel": "--ds-tabs-list-highlight",
@@ -44631,8 +44634,8 @@
       ],
       "rootExposure": "internal-head",
       "rootHasDerivationLaw": true,
-      "step": null,
-      "stepNote": "la tabla pide tier.control.border.default y esa raiz no existe en el catalogo"
+      "step": "@parent",
+      "stepNote": null
     },
     {
       "channel": "--ds-textarea-border-focus",
@@ -47130,8 +47133,8 @@
       ],
       "rootExposure": "internal-head",
       "rootHasDerivationLaw": true,
-      "step": null,
-      "stepNote": "la tabla pide tier.control.border.default y esa raiz no existe en el catalogo"
+      "step": "@parent",
+      "stepNote": null
     },
     {
       "channel": "--ds-upload-border-hover",
@@ -47232,8 +47235,8 @@
       ],
       "rootExposure": "internal-head",
       "rootHasDerivationLaw": true,
-      "step": null,
-      "stepNote": "la tabla pide tier.control.border.default y esa raiz no existe en el catalogo"
+      "step": "@parent",
+      "stepNote": null
     },
     {
       "channel": "--ds-upload-button-color",
@@ -47330,8 +47333,8 @@
       ],
       "rootExposure": "internal-head",
       "rootHasDerivationLaw": true,
-      "step": null,
-      "stepNote": "la tabla pide tier.control.border.default y esa raiz no existe en el catalogo"
+      "step": "@parent",
+      "stepNote": null
     },
     {
       "channel": "--ds-upload-dragger-bg",
@@ -47432,8 +47435,8 @@
       ],
       "rootExposure": "internal-head",
       "rootHasDerivationLaw": true,
-      "step": null,
-      "stepNote": "la tabla pide tier.control.border.default y esa raiz no existe en el catalogo"
+      "step": "@parent",
+      "stepNote": null
     },
     {
       "channel": "--ds-upload-dragger-border-active",
@@ -48571,5 +48574,5 @@
       "stepNote": "sin raiz que refinar"
     }
   ],
-  "digest": "8a947cd74423056401a9918dc842fedc9e6ce3a7f44924816340f7c612b35714"
+  "digest": "408074eeff18f0f4976eec17a6ffb3a26540e783bed7cdd799a4bcbcad271092"
 }
