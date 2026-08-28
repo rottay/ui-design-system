@@ -259,6 +259,29 @@ export const CI_GATES = Object.freeze([
   { id: 'application-boundary-drill', run: ['node', '--test', 'scripts/boundaries/application-boundary-gate/index.test.mjs'], blocking: true },
   { id: 'application-boundary-gate', run: ['node', 'scripts/boundaries/application-boundary-gate/index.mjs', '--check'], blocking: true },
   { id: 'pattern-surface-ownership', run: ['node', 'scripts/boundaries/pattern-surface-ownership-gate/index.mjs', '--check'], blocking: true },
+  // Este gate verifica DOS cosas por la misma corrida: la FORMA de los 77
+  // entrypoints publicos (owner, boundary, simbolos, fan-out, barriles
+  // prohibidos) y, desde el lote DRILL-77 (2026-08-28), el ANCLA DECRECE-SOLO de
+  // sus `budget.maxSourceBytes`.
+  //
+  // POR QUE ENTRA AL BARRIDO AHORA. Hasta hoy corria SOLO en `prebuild` y
+  // `prepack` (`public-entrypoints:check`): 0 entradas aca. Eso alcanzaba
+  // mientras la unica ley era la forma, que cambia cuando alguien toca el
+  // manifest a proposito. El techo es otra cosa: engorda por acumulacion, un
+  // import a la vez, y enterarse recien al empaquetar es enterarse tarde. El
+  // asiento E-2 dejo la ley decrece-solo escrita en prosa y sin verificador; el
+  // lote DRILL-77 le puso el ancla y esta entrada le pone la corrida.
+  //
+  // EL DRILL VA PRIMERO, y aca la razon vale doble. `public-entrypoints:test`
+  // estaba definido en package.json y no lo invocaba NADIE -- una sola aparicion
+  // en el archivo, la de su propia definicion -- asi que estos drills no corrian
+  // ni en el barrido, ni en prebuild, ni en prepack. El gate se entera tarde si
+  // solo corre en prepack; sus drills no se enteraban nunca. Y sin ellos el
+  // ancla decrece-solo se puede desarmar sin que nada enrojezca: medido en este
+  // mismo lote, `isValidCeiling` devolviendo `true` deja pasar diez formas
+  // corruptas de techo con el gate en verde.
+  { id: 'public-entrypoint-boundary-drill', run: ['node', '--test', 'scripts/boundaries/public-entrypoint-boundary-gate/index.test.mjs'], blocking: true },
+  { id: 'public-entrypoint-boundary', run: ['node', 'scripts/boundaries/public-entrypoint-boundary-gate/index.mjs'], blocking: true },
   { id: 'engine-freeze-gate', run: ['node', 'scripts/engine/freeze-gate/index.mjs', '--check'], blocking: true },
   { id: 'portal-substrate-gate', run: ['node', 'scripts/boundaries/portal-substrate-gate/index.mjs', '--check'], blocking: true },
   // Bidirectional identity between every `--_ds-proto-*` in the sources and its
