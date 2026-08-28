@@ -4569,6 +4569,32 @@ seeds reales y mover la superficie de calibración a un campo propio — la
 decisión 15 conserva su INTENT (superficie de calibración estrecha; dominio
 público 290 intacto) y se enmendará su formulación al cerrar C5.
 
+**LOTE LEDGER-GATE CERRADO — EL BASELINE DE SLOT-INVENTORY AHORA LO VERIFICA SU PROPIO PRODUCTOR
+(2026-08-28; commit `d3322f695`; writer Opus; postaudit Fable: ACCEPT — verifico la no-sombra EN POSITIVO (los 4 canales siguen enumerados en el censo L4a del norm-gate; clase residual vacia, 0/33 raices refinadas sin ley)).** Cierra el hallazgo de
+P1 en el mismo día: `BASELINE_PATH` existía desde la cohorte 0 y **nadie lo leía** — 4 de las 5
+cifras del ledger sin verificador, y por eso `rowsWithoutRootAttribution` derivó 1.707→1.467 en
+silencio. Ahora el `--check` del productor verifica el ledger contador por contador (6, con
+`stats.rows` anclado por primera vez en 3.629 — anclar por primera vez no es re-anclar) en las DOS
+direcciones (sube → hallazgo real, jamás se re-ancla; baja → baja el ancla en el MISMO commit con
+razón escrita), con baseline ausente = FAIL cerrado. **La unidad se lee del baseline, no se
+adivina** (`no-persisted-membership`, con drill que la asserta) y `literalPinsOnDeclaredHead` se
+recomputa de sus dos fuentes en vez de depender de copia manual. **Hallazgo del cableado (resuelto
+con ratificación DT escrita):** el check nuevo dio rojo sobre HEAD — `literalPinsOnDeclaredHead` 24
+vs ancla 20 sin que un solo pin del CSS cambiara: los 4 (`--ds-color-text-{secondary,tertiary,
+muted,disabled}`) se volvieron cabeza cuando 2A creó las raíces de paso. Se mide ahora sobre
+**raíces no refinadas** (mi ley 2A §3.1 extendida a este contador: una raíz de paso es la misma
+decisión indexada más fino; ratificada por el DT con la unidad declarada en la razón del baseline;
+la alternativa — re-anclar hacia arriba — estaba prohibida por la ley 5 del lote). **Deuda nueva
+nombrada (dueño: el frente):** 2 gates con guard débil (`root-exposure-gate`,
+`cascade-wiring-ratchet`) — `process.argv[1].endsWith('index.mjs')` es verdadero para todo entry
+del árbol (ley folder/index), así que importarlos ejecuta su main(); latente (nadie los importa
+hoy; 19 modulos con el guard correcto (correccion Fable: el 19 es el propio productor del lote)), una línea cada uno. Desviación declarada: `isRefinedRoot`
+duplicado byte a byte (importarlo disparaba el hallazgo). Drills 26/26 (eran 18) + inyección de
+falla sobre el árbol real. Write-set: 4 archivos; cadena con diff cero; cero cambio en temas,
+artefactos y visual; cero movimiento de cifras. Barrido del writer: 101 blocking passed (el lote no stalea receipts ni artefactos); receipts intactos. Glosas corregidas por Fable: baseline +6/−2 (el lote
+no los stalea). Métrica sin mover: **62% / ~43%**.
+
+
 **PALETA P1 CERRADA — 27 HOJAS REDUNDANTES RETIRADAS CON AUSENCIA DECLARADA, CERO BYTES DE
 ARTEFACTO MOVIDOS (2026-08-28; commit `e66eaf1ad`; writer Opus; postaudit Fable: DEFECTS-1 condicionado (declarar la relocalizacion evnto + corregir el conteo) → condicion cumplida con el addendum del writer y la declaracion en este asiento → ACCEPT).**
 Primer sub-lote de la cohorte PALETA (diseño Opus P0–P5): retire de las hojas que la **prueba
