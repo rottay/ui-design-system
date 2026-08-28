@@ -1914,18 +1914,16 @@ const PALETTE: BrandPalette = {
    * @governor deriva de: --ds-color-border (raiz canonica del par, K2)
    */
   infoBorderColor: 'color-mix(in srgb, var(--ds-color-info) 20%, transparent)',
-  /**
-   * @domicile seed
-   * @governor dial: palette.seeds
-   */
-  borderFocusColor: '#171717',
-  /**
-   * @domicile seed
-   * @governor dial: palette.seeds
-   */
-  linkColor: '#171717',
   linkHoverColor: '#525252',
   linkVisitedColor: '#737373',
+  /**
+   * @absent PALETTE.borderFocusColor
+   * @governor retirada en PALETA P1 (2026-08-28): redundante probado por ausencia caso-exacta -- la derivacion emite el mismo canal con el mismo valor
+   */
+  /**
+   * @absent PALETTE.linkColor
+   * @governor retirada en PALETA P1 (2026-08-28): redundante probado por ausencia caso-exacta -- la derivacion emite el mismo canal con el mismo valor
+   */
 };
 
 // ── TYPOGRAPHY ──

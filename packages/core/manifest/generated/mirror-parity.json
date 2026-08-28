@@ -26,21 +26,21 @@
     "sources": [
       {
         "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-        "bytes": 343958,
-        "lines": 9295,
-        "sha256": "1b70d362a4186523e6b619deeed63cf9b603482bfc5f185b93d40611c2e0db71"
+        "bytes": 348982,
+        "lines": 9367,
+        "sha256": "0646e861806bc77773c0f4cd96e04973ecfac1c6ec1f45c5ab47b41a7c25de3e"
       },
       {
         "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-        "bytes": 341712,
-        "lines": 9312,
-        "sha256": "af05fe58964ee99061297e7d4e93d9c713c66d61c4f28114cf228980c94d9696"
+        "bytes": 341775,
+        "lines": 9311,
+        "sha256": "10d1a201802380f398c0cb72a5317723681171d4a1d7bd899efbf36ae57ceee2"
       },
       {
         "file": "src/foundation/tokens/ts/presentation/brand-themes/evnto/index.ts",
-        "bytes": 218561,
-        "lines": 5006,
-        "sha256": "925f174a1f3ff0f6decea894a64ba9236b13c972837789cd1efa1dd1a811ee88"
+        "bytes": 218769,
+        "lines": 5004,
+        "sha256": "1777a83184948575d063fd4dc5e64a4fa6bc544be172eb1dfb2d53bb442fd336"
       }
     ],
     "mtimeExcluded": "Se registra sha256 y no mtime: el mtime cambia con un clon o un touch y rompe --check sin que el contenido se mueva."
@@ -11401,37 +11401,37 @@
     "unit": "authored-decision-leaf-path",
     "note": "Unidad distinta de la del artefacto. NUNCA fusionar con `surface`.",
     "authors": {
-      "rottay": 1757,
-      "bithire": 1496,
-      "evnto": 397
+      "rottay": 1733,
+      "bithire": 1495,
+      "evnto": 395
     },
     "union": 2552,
-    "intersection": 345,
-    "intersectionPct": 13.5,
-    "intersectionPctOfSmallest": 86.9,
+    "intersection": 321,
+    "intersectionPct": 12.6,
+    "intersectionPctOfSmallest": 81.3,
     "pairwise": {
       "rottay+bithire": {
-        "shared": 704,
+        "shared": 679,
         "union": 2549,
-        "pctOfUnion": 27.6,
-        "pctOfSmaller": 47.1
+        "pctOfUnion": 26.6,
+        "pctOfSmaller": 45.4
       },
       "rottay+evnto": {
-        "shared": 390,
-        "union": 1764,
-        "pctOfUnion": 22.1,
-        "pctOfSmaller": 98.2
+        "shared": 367,
+        "union": 1761,
+        "pctOfUnion": 20.8,
+        "pctOfSmaller": 92.9
       },
       "bithire+evnto": {
-        "shared": 349,
+        "shared": 346,
         "union": 1544,
-        "pctOfUnion": 22.6,
-        "pctOfSmaller": 87.9
+        "pctOfUnion": 22.4,
+        "pctOfSmaller": 87.6
       }
     },
     "exclusive": {
       "rottay": 1008,
-      "bithire": 788,
+      "bithire": 791,
       "evnto": 3
     },
     "exclusiveSamples": {

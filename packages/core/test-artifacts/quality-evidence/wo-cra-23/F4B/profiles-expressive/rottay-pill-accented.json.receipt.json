@@ -69,10 +69,10 @@
     "packages/core/src/ui/primitives/display/Card/engines/rustic/index.tsx",
     "packages/core/src/ui/primitives/display/Card/index.tsx"
   ],
-  "sourceDigest": "cc91051aee2b18e95fbc368f82e0543cbad4871cd0c9958fa58f235327d89a9b",
+  "sourceDigest": "64ad092957484e0907f9b09d3fe01d88e6ffaa8c52d207f0f5f9131947fd2d42",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/profiles-expressive/rottay-pill-accented.json",
   "artifactSha256": "111bf06f42d7ff75f4244cfb77bb79a202e8815c47820de030487d983fb3af02",
-  "createdAt": "2026-08-28T05:04:43.080Z",
+  "createdAt": "2026-08-28T06:23:29.114Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

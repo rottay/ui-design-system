@@ -92,7 +92,7 @@
       "default": 5,
       "tertiary": 2
     },
-    "r2Floor": 593,
+    "r2Floor": 592,
     "r2FloorRoots": [
       "control.ratio.fontSize",
       "control.ratio.iconSize",
@@ -215,10 +215,10 @@
   },
   "byOwner": {
     "THEME.palette": {
-      "channels": 137,
-      "unattributed": 104,
+      "channels": 142,
+      "unattributed": 109,
       "properties": {
-        "fg": 95,
+        "fg": 100,
         "sin-propiedad": 9
       }
     },
@@ -11381,7 +11381,7 @@
       "evidence": {
         "whyNotV1": "el canal no es cabeza declarada de ninguna raiz",
         "whyNotV2": "ningun fallback declarado lo guarda desde una cabeza",
-        "whyNotV3": "owners sin adjudicar: OVERLAY.palette, PALETTE, THEME.appearance",
+        "whyNotV3": "owners sin adjudicar: OVERLAY.palette, PALETTE, THEME.appearance, THEME.palette",
         "coincidenceGuard": "no-value-match-used"
       },
       "tier": null,
@@ -11390,7 +11390,8 @@
       "owners": [
         "OVERLAY.palette",
         "PALETTE",
-        "THEME.appearance"
+        "THEME.appearance",
+        "THEME.palette"
       ],
       "contributingSlots": [
         "bithire:OVERLAY.palette.primaryColor",
@@ -11399,7 +11400,8 @@
         "evnto:PALETTE.primaryColor",
         "rottay:OVERLAY.palette.primaryColor",
         "rottay:PALETTE.primaryColor",
-        "rottay:THEME.appearance.defaultMode"
+        "rottay:THEME.appearance.defaultMode",
+        "rottay:THEME.palette.backgroundColor"
       ],
       "rootExposure": null,
       "rootHasDerivationLaw": false,
@@ -11413,7 +11415,7 @@
       "evidence": {
         "whyNotV1": "el canal no es cabeza declarada de ninguna raiz",
         "whyNotV2": "ningun fallback declarado lo guarda desde una cabeza",
-        "whyNotV3": "owners sin adjudicar: OVERLAY.palette, PALETTE, THEME.appearance",
+        "whyNotV3": "owners sin adjudicar: OVERLAY.palette, PALETTE, THEME.appearance, THEME.palette",
         "coincidenceGuard": "no-value-match-used"
       },
       "tier": null,
@@ -11422,7 +11424,8 @@
       "owners": [
         "OVERLAY.palette",
         "PALETTE",
-        "THEME.appearance"
+        "THEME.appearance",
+        "THEME.palette"
       ],
       "contributingSlots": [
         "bithire:OVERLAY.palette.primaryColor",
@@ -11431,7 +11434,8 @@
         "evnto:PALETTE.primaryColor",
         "rottay:OVERLAY.palette.primaryColor",
         "rottay:PALETTE.primaryColor",
-        "rottay:THEME.appearance.defaultMode"
+        "rottay:THEME.appearance.defaultMode",
+        "rottay:THEME.palette.backgroundColor"
       ],
       "rootExposure": null,
       "rootHasDerivationLaw": false,
@@ -11487,7 +11491,7 @@
       "evidence": {
         "whyNotV1": "el canal no es cabeza declarada de ninguna raiz",
         "whyNotV2": "ningun fallback declarado lo guarda desde una cabeza",
-        "whyNotV3": "owners sin adjudicar: OVERLAY.palette, PALETTE, THEME.appearance",
+        "whyNotV3": "owners sin adjudicar: OVERLAY.palette, PALETTE, THEME.appearance, THEME.palette",
         "coincidenceGuard": "no-value-match-used"
       },
       "tier": null,
@@ -11496,7 +11500,8 @@
       "owners": [
         "OVERLAY.palette",
         "PALETTE",
-        "THEME.appearance"
+        "THEME.appearance",
+        "THEME.palette"
       ],
       "contributingSlots": [
         "bithire:OVERLAY.palette.primaryColor",
@@ -11506,7 +11511,8 @@
         "rottay:OVERLAY.palette.backgroundColor",
         "rottay:OVERLAY.palette.primaryColor",
         "rottay:PALETTE.primaryColor",
-        "rottay:THEME.appearance.defaultMode"
+        "rottay:THEME.appearance.defaultMode",
+        "rottay:THEME.palette.backgroundColor"
       ],
       "rootExposure": null,
       "rootHasDerivationLaw": false,
@@ -11560,7 +11566,7 @@
       "evidence": {
         "whyNotV1": "el canal no es cabeza declarada de ninguna raiz",
         "whyNotV2": "ningun fallback declarado lo guarda desde una cabeza",
-        "whyNotV3": "owners sin adjudicar: OVERLAY.palette, PALETTE, THEME.appearance",
+        "whyNotV3": "owners sin adjudicar: OVERLAY.palette, PALETTE, THEME.appearance, THEME.palette",
         "coincidenceGuard": "no-value-match-used"
       },
       "tier": null,
@@ -11570,7 +11576,8 @@
         "OVERLAY.palette",
         "PALETTE",
         "SURFACES.surfaceRoles.inset",
-        "THEME.appearance"
+        "THEME.appearance",
+        "THEME.palette"
       ],
       "contributingSlots": [
         "bithire:OVERLAY.palette.primaryColor",
@@ -11581,7 +11588,8 @@
         "rottay:OVERLAY.palette.backgroundColor",
         "rottay:OVERLAY.palette.primaryColor",
         "rottay:PALETTE.primaryColor",
-        "rottay:THEME.appearance.defaultMode"
+        "rottay:THEME.appearance.defaultMode",
+        "rottay:THEME.palette.backgroundColor"
       ],
       "rootExposure": null,
       "rootHasDerivationLaw": false,
@@ -11631,7 +11639,7 @@
       "evidence": {
         "whyNotV1": "el canal no es cabeza declarada de ninguna raiz",
         "whyNotV2": "ningun fallback declarado lo guarda desde una cabeza",
-        "whyNotV3": "owners sin adjudicar: OVERLAY.palette, PALETTE, THEME.appearance",
+        "whyNotV3": "owners sin adjudicar: OVERLAY.palette, PALETTE, THEME.appearance, THEME.palette",
         "coincidenceGuard": "no-value-match-used"
       },
       "tier": null,
@@ -11640,7 +11648,8 @@
       "owners": [
         "OVERLAY.palette",
         "PALETTE",
-        "THEME.appearance"
+        "THEME.appearance",
+        "THEME.palette"
       ],
       "contributingSlots": [
         "bithire:OVERLAY.palette.primaryColor",
@@ -11649,7 +11658,8 @@
         "evnto:PALETTE.primaryColor",
         "rottay:OVERLAY.palette.primaryColor",
         "rottay:PALETTE.primaryColor",
-        "rottay:THEME.appearance.defaultMode"
+        "rottay:THEME.appearance.defaultMode",
+        "rottay:THEME.palette.backgroundColor"
       ],
       "rootExposure": null,
       "rootHasDerivationLaw": false,
@@ -14001,7 +14011,7 @@
         "bithire:OVERLAY.palette.borderFocusColor",
         "bithire:PALETTE.borderFocusColor",
         "evnto:OVERLAY.palette.borderFocusColor",
-        "evnto:PALETTE.borderFocusColor",
+        "evnto:PALETTE.primaryColor",
         "rottay:OVERLAY.palette.borderFocusColor",
         "rottay:PALETTE.borderFocusColor"
       ],
@@ -14226,7 +14236,6 @@
         "evnto:OVERLAY.palette.ramps.error.200",
         "evnto:PALETTE.errorColor",
         "evnto:THEME.palette.backgroundColor",
-        "rottay:OVERLAY.palette.ramps.error.200",
         "rottay:THEME.palette.ramps.error.200"
       ],
       "rootExposure": null,
@@ -14260,7 +14269,6 @@
         "evnto:OVERLAY.palette.ramps.error.300",
         "evnto:PALETTE.errorColor",
         "evnto:THEME.palette.backgroundColor",
-        "rottay:OVERLAY.palette.ramps.error.300",
         "rottay:THEME.palette.ramps.error.300"
       ],
       "rootExposure": null,
@@ -14294,7 +14302,6 @@
         "evnto:OVERLAY.palette.ramps.error.400",
         "evnto:PALETTE.errorColor",
         "evnto:THEME.palette.backgroundColor",
-        "rottay:OVERLAY.palette.ramps.error.400",
         "rottay:THEME.palette.ramps.error.400"
       ],
       "rootExposure": null,
@@ -14363,7 +14370,6 @@
         "evnto:OVERLAY.palette.ramps.error.500",
         "evnto:PALETTE.errorColor",
         "evnto:THEME.palette.backgroundColor",
-        "rottay:OVERLAY.palette.ramps.error.500",
         "rottay:THEME.palette.ramps.error.500"
       ],
       "rootExposure": "gap",
@@ -14397,7 +14403,6 @@
         "evnto:OVERLAY.palette.ramps.error.600",
         "evnto:PALETTE.errorColor",
         "evnto:THEME.palette.backgroundColor",
-        "rottay:OVERLAY.palette.ramps.error.600",
         "rottay:THEME.palette.ramps.error.600"
       ],
       "rootExposure": null,
@@ -14431,7 +14436,6 @@
         "evnto:OVERLAY.palette.ramps.error.700",
         "evnto:PALETTE.errorColor",
         "evnto:THEME.palette.backgroundColor",
-        "rottay:OVERLAY.palette.ramps.error.700",
         "rottay:THEME.palette.ramps.error.700"
       ],
       "rootExposure": null,
@@ -14465,7 +14469,6 @@
         "evnto:OVERLAY.palette.ramps.error.800",
         "evnto:PALETTE.errorColor",
         "evnto:THEME.palette.backgroundColor",
-        "rottay:OVERLAY.palette.ramps.error.800",
         "rottay:THEME.palette.ramps.error.800"
       ],
       "rootExposure": null,
@@ -14495,7 +14498,6 @@
         "bithire:OVERLAY.palette.ramps.error.900",
         "bithire:PALETTE.errorColor",
         "evnto:PALETTE.errorColor",
-        "rottay:OVERLAY.palette.ramps.error.900",
         "rottay:THEME.palette.ramps.error.900"
       ],
       "rootExposure": null,
@@ -14650,7 +14652,6 @@
         "evnto:OVERLAY.palette.ramps.info.200",
         "evnto:THEME.palette.backgroundColor",
         "evnto:THEME.palette.infoColor",
-        "rottay:OVERLAY.palette.ramps.info.200",
         "rottay:THEME.palette.ramps.info.200"
       ],
       "rootExposure": null,
@@ -14683,7 +14684,6 @@
         "evnto:OVERLAY.palette.ramps.info.300",
         "evnto:THEME.palette.backgroundColor",
         "evnto:THEME.palette.infoColor",
-        "rottay:OVERLAY.palette.ramps.info.300",
         "rottay:THEME.palette.ramps.info.300"
       ],
       "rootExposure": null,
@@ -14716,7 +14716,6 @@
         "evnto:OVERLAY.palette.ramps.info.400",
         "evnto:THEME.palette.backgroundColor",
         "evnto:THEME.palette.infoColor",
-        "rottay:OVERLAY.palette.ramps.info.400",
         "rottay:THEME.palette.ramps.info.400"
       ],
       "rootExposure": null,
@@ -14781,7 +14780,6 @@
         "evnto:OVERLAY.palette.ramps.info.500",
         "evnto:THEME.palette.backgroundColor",
         "evnto:THEME.palette.infoColor",
-        "rottay:OVERLAY.palette.ramps.info.500",
         "rottay:THEME.palette.ramps.info.500"
       ],
       "rootExposure": null,
@@ -14814,7 +14812,6 @@
         "evnto:OVERLAY.palette.ramps.info.600",
         "evnto:THEME.palette.backgroundColor",
         "evnto:THEME.palette.infoColor",
-        "rottay:OVERLAY.palette.ramps.info.600",
         "rottay:THEME.palette.ramps.info.600"
       ],
       "rootExposure": null,
@@ -14847,7 +14844,6 @@
         "evnto:OVERLAY.palette.ramps.info.700",
         "evnto:THEME.palette.backgroundColor",
         "evnto:THEME.palette.infoColor",
-        "rottay:OVERLAY.palette.ramps.info.700",
         "rottay:THEME.palette.ramps.info.700"
       ],
       "rootExposure": null,
@@ -14880,7 +14876,6 @@
         "evnto:OVERLAY.palette.ramps.info.800",
         "evnto:THEME.palette.backgroundColor",
         "evnto:THEME.palette.infoColor",
-        "rottay:OVERLAY.palette.ramps.info.800",
         "rottay:THEME.palette.ramps.info.800"
       ],
       "rootExposure": null,
@@ -14910,7 +14905,6 @@
         "bithire:OVERLAY.palette.ramps.info.900",
         "bithire:THEME.palette.infoColor",
         "evnto:THEME.palette.infoColor",
-        "rottay:OVERLAY.palette.ramps.info.900",
         "rottay:THEME.palette.ramps.info.900"
       ],
       "rootExposure": null,
@@ -15137,7 +15131,7 @@
         "bithire:OVERLAY.palette.linkColor",
         "bithire:PALETTE.linkColor",
         "evnto:OVERLAY.palette.linkColor",
-        "evnto:PALETTE.linkColor",
+        "evnto:PALETTE.primaryColor",
         "rottay:OVERLAY.palette.linkColor",
         "rottay:PALETTE.linkColor"
       ],
@@ -17205,7 +17199,6 @@
         "THEME.palette"
       ],
       "contributingSlots": [
-        "bithire:OVERLAY.palette.onPrimaryColor",
         "bithire:THEME.palette.onPrimaryColor",
         "evnto:OVERLAY.palette.onPrimaryColor",
         "evnto:THEME.palette.onPrimaryColor",
@@ -17437,7 +17430,6 @@
         "evnto:OVERLAY.palette.ramps.warning.200",
         "evnto:THEME.palette.backgroundColor",
         "evnto:THEME.palette.warningColor",
-        "rottay:OVERLAY.palette.ramps.warning.200",
         "rottay:THEME.palette.ramps.warning.200"
       ],
       "rootExposure": null,
@@ -17470,7 +17462,6 @@
         "evnto:OVERLAY.palette.ramps.warning.300",
         "evnto:THEME.palette.backgroundColor",
         "evnto:THEME.palette.warningColor",
-        "rottay:OVERLAY.palette.ramps.warning.300",
         "rottay:THEME.palette.ramps.warning.300"
       ],
       "rootExposure": null,
@@ -17503,7 +17494,6 @@
         "evnto:OVERLAY.palette.ramps.warning.400",
         "evnto:THEME.palette.backgroundColor",
         "evnto:THEME.palette.warningColor",
-        "rottay:OVERLAY.palette.ramps.warning.400",
         "rottay:THEME.palette.ramps.warning.400"
       ],
       "rootExposure": null,
@@ -17569,7 +17559,6 @@
         "evnto:OVERLAY.palette.ramps.warning.500",
         "evnto:THEME.palette.backgroundColor",
         "evnto:THEME.palette.warningColor",
-        "rottay:OVERLAY.palette.ramps.warning.500",
         "rottay:THEME.palette.ramps.warning.500"
       ],
       "rootExposure": null,
@@ -17602,7 +17591,6 @@
         "evnto:OVERLAY.palette.ramps.warning.600",
         "evnto:THEME.palette.backgroundColor",
         "evnto:THEME.palette.warningColor",
-        "rottay:OVERLAY.palette.ramps.warning.600",
         "rottay:THEME.palette.ramps.warning.600"
       ],
       "rootExposure": null,
@@ -17635,7 +17623,6 @@
         "evnto:OVERLAY.palette.ramps.warning.700",
         "evnto:THEME.palette.backgroundColor",
         "evnto:THEME.palette.warningColor",
-        "rottay:OVERLAY.palette.ramps.warning.700",
         "rottay:THEME.palette.ramps.warning.700"
       ],
       "rootExposure": null,
@@ -17668,7 +17655,6 @@
         "evnto:OVERLAY.palette.ramps.warning.800",
         "evnto:THEME.palette.backgroundColor",
         "evnto:THEME.palette.warningColor",
-        "rottay:OVERLAY.palette.ramps.warning.800",
         "rottay:THEME.palette.ramps.warning.800"
       ],
       "rootExposure": null,
@@ -17698,7 +17684,6 @@
         "bithire:OVERLAY.palette.ramps.warning.900",
         "bithire:THEME.palette.warningColor",
         "evnto:THEME.palette.warningColor",
-        "rottay:OVERLAY.palette.ramps.warning.900",
         "rottay:THEME.palette.ramps.warning.900"
       ],
       "rootExposure": null,
@@ -48586,5 +48571,5 @@
       "stepNote": "sin raiz que refinar"
     }
   ],
-  "digest": "2cdb4727a5766f60593d8edd9f76f049734bc833a5352e0848567d5adba83755"
+  "digest": "8a947cd74423056401a9918dc842fedc9e6ce3a7f44924816340f7c612b35714"
 }

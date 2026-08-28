@@ -65,10 +65,10 @@
     "packages/core/src/ui/primitives/display/Typography/tests/Typography.test.tsx",
     "packages/core/src/ui/primitives/display/Typography/tests/Typography.type-roles.test.tsx"
   ],
-  "sourceDigest": "a0cb4e39c354633d491095c7e2befd9e33f89986308f7d89a9a033e6b54e0058",
+  "sourceDigest": "82c3294dbf78218a14c541a9a032a5225901393b51e782888e1315d6140fd615",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/typography-families/rottay-base-quoted.json",
   "artifactSha256": "c9177523e9e3f53b5984eae97bbd480a0107cd2fa246326749cc42267ccb303e",
-  "createdAt": "2026-08-28T05:04:43.080Z",
+  "createdAt": "2026-08-28T06:23:29.114Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

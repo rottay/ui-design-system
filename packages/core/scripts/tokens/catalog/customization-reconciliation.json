@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "generatedBy": "tokens-catalog gate re-derivation, 2026-08-27 (2B PLENA: el colapso de 128 slots literal->var() re-emitio el censo de superficies — tsReadNames 2691->2692 y conteos ts por superficie segun los sitios; deadWriters 266 intacto, figures y adjudicacion sin movimiento; solo se re-ancla el digest al reporte vigente)",
-  "basedOnReportDigest": "3ca2535606117c8aa4fb521de58734209874503e7912fe58f1da86094d86e1ed",
+  "basedOnReportDigest": "72af55157f2d366313d89c77e4291b503dbb33a145cd1df79faa5ce2a72ed203",
   "normative": {
     "writers": 4670,
     "deadWriters": 266,
@@ -137,6 +137,6 @@
       "previousCount": 81
     }
   ],
-  "note": "Family counts recompute MECHANICALLY from the final deadWriters set; dispositions are the adjudication SEED — owner sign-off required for RETIRE, nothing auto-approved. Name-level set algebra: scratchpad evidence superseded by this versioned projection. RE-PROYECCION 2B COLA (2026-08-28): el censo de superficie se re-emitio porque el colapso de 3 literales movio los artefactos que lee, asi que el puntero basedOnReportDigest se re-ancla al reporte vigente (b59ceab91742... -> 3ca253560611...). Las cifras NORMATIVAS no se movieron y por eso no llevan razon propia: writers 4670 y deadWriters 266 son identicos antes y despues -- verificado por asercion antes de tocar el puntero. Es re-proyeccion de digest, no cambio de cifra.",
+  "note": "Family counts recompute MECHANICALLY from the final deadWriters set; dispositions are the adjudication SEED — owner sign-off required for RETIRE, nothing auto-approved. Name-level set algebra: scratchpad evidence superseded by this versioned projection. RE-PROYECCION 2B COLA (2026-08-28): el censo de superficie se re-emitio porque el colapso de 3 literales movio los artefactos que lee, asi que el puntero basedOnReportDigest se re-ancla al reporte vigente (b59ceab91742... -> 3ca253560611...). Las cifras NORMATIVAS no se movieron y por eso no llevan razon propia: writers 4670 y deadWriters 266 son identicos antes y despues -- verificado por asercion antes de tocar el puntero. Es re-proyeccion de digest, no cambio de cifra. RE-PROYECCION PALETA P1 (2026-08-28): el retire de 27 hojas redundantes re-emitio el censo, y el puntero se re-ancla (3ca253560611... -> 72af55157f2d...). MEDIDO, contra la expectativa del despacho: las cifras NORMATIVAS NO se movieron -- writers 4670 y deadWriters 266 identicos. El reporte cambio UNA sola linea, su inputsDigest; los demas contadores son byte-identicos. La razon es la misma que deja los pins de canal quietos: `writers` cuenta NOMBRES DE CANAL con al menos un escritor, y una hoja redundante nunca es el unico escritor de su canal -- la derivacion lo sigue escribiendo. Por eso esta re-proyeccion es solo-puntero y NO lleva cambio de cifra normativa: la ley 5 del despacho preveia una caida de ~-29 que la medicion no confirma.",
   "preservationManifest": "KIMI-CUSTOMIZATION-PRESERVATION-MANIFEST.json (same report digest; its laws override any RETIRE here)"
 }

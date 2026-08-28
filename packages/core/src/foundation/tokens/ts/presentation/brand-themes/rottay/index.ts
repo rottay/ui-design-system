@@ -140,38 +140,110 @@ const OVERLAY: BrandThemeModeOverlay = {
       warning: {
         50: "rgba(217, 119, 6, 0.06)",
         100: "rgba(217, 119, 6, 0.10)",
-        200: "#FDE68A",
-        300: "#FCD34D",
-        400: "#FBBF24",
-        500: "#F59E0B",
-        600: "#D97706",
-        700: "#B45309",
-        800: "#92400E",
-        900: "#78350F",
+        /**
+         * @absent OVERLAY.palette.ramps.warning.200
+         * @governor retirada en PALETA P1 (2026-08-28): redundante probado por ausencia caso-exacta -- la derivacion emite el mismo canal con el mismo valor
+         */
+        /**
+         * @absent OVERLAY.palette.ramps.warning.300
+         * @governor retirada en PALETA P1 (2026-08-28): redundante probado por ausencia caso-exacta -- la derivacion emite el mismo canal con el mismo valor
+         */
+        /**
+         * @absent OVERLAY.palette.ramps.warning.400
+         * @governor retirada en PALETA P1 (2026-08-28): redundante probado por ausencia caso-exacta -- la derivacion emite el mismo canal con el mismo valor
+         */
+        /**
+         * @absent OVERLAY.palette.ramps.warning.500
+         * @governor retirada en PALETA P1 (2026-08-28): redundante probado por ausencia caso-exacta -- la derivacion emite el mismo canal con el mismo valor
+         */
+        /**
+         * @absent OVERLAY.palette.ramps.warning.600
+         * @governor retirada en PALETA P1 (2026-08-28): redundante probado por ausencia caso-exacta -- la derivacion emite el mismo canal con el mismo valor
+         */
+        /**
+         * @absent OVERLAY.palette.ramps.warning.700
+         * @governor retirada en PALETA P1 (2026-08-28): redundante probado por ausencia caso-exacta -- la derivacion emite el mismo canal con el mismo valor
+         */
+        /**
+         * @absent OVERLAY.palette.ramps.warning.800
+         * @governor retirada en PALETA P1 (2026-08-28): redundante probado por ausencia caso-exacta -- la derivacion emite el mismo canal con el mismo valor
+         */
+        /**
+         * @absent OVERLAY.palette.ramps.warning.900
+         * @governor retirada en PALETA P1 (2026-08-28): redundante probado por ausencia caso-exacta -- la derivacion emite el mismo canal con el mismo valor
+         */
       },
       error: {
         50: "rgba(220, 38, 38, 0.06)",
         100: "rgba(220, 38, 38, 0.10)",
-        200: "#FECACA",
-        300: "#FCA5A5",
-        400: "#F87171",
-        500: "#EF4444",
-        600: "#DC2626",
-        700: "#B91C1C",
-        800: "#991B1B",
-        900: "#7F1D1D",
+        /**
+         * @absent OVERLAY.palette.ramps.error.200
+         * @governor retirada en PALETA P1 (2026-08-28): redundante probado por ausencia caso-exacta -- la derivacion emite el mismo canal con el mismo valor
+         */
+        /**
+         * @absent OVERLAY.palette.ramps.error.300
+         * @governor retirada en PALETA P1 (2026-08-28): redundante probado por ausencia caso-exacta -- la derivacion emite el mismo canal con el mismo valor
+         */
+        /**
+         * @absent OVERLAY.palette.ramps.error.400
+         * @governor retirada en PALETA P1 (2026-08-28): redundante probado por ausencia caso-exacta -- la derivacion emite el mismo canal con el mismo valor
+         */
+        /**
+         * @absent OVERLAY.palette.ramps.error.500
+         * @governor retirada en PALETA P1 (2026-08-28): redundante probado por ausencia caso-exacta -- la derivacion emite el mismo canal con el mismo valor
+         */
+        /**
+         * @absent OVERLAY.palette.ramps.error.600
+         * @governor retirada en PALETA P1 (2026-08-28): redundante probado por ausencia caso-exacta -- la derivacion emite el mismo canal con el mismo valor
+         */
+        /**
+         * @absent OVERLAY.palette.ramps.error.700
+         * @governor retirada en PALETA P1 (2026-08-28): redundante probado por ausencia caso-exacta -- la derivacion emite el mismo canal con el mismo valor
+         */
+        /**
+         * @absent OVERLAY.palette.ramps.error.800
+         * @governor retirada en PALETA P1 (2026-08-28): redundante probado por ausencia caso-exacta -- la derivacion emite el mismo canal con el mismo valor
+         */
+        /**
+         * @absent OVERLAY.palette.ramps.error.900
+         * @governor retirada en PALETA P1 (2026-08-28): redundante probado por ausencia caso-exacta -- la derivacion emite el mismo canal con el mismo valor
+         */
       },
       info: {
         50: "rgba(37, 99, 235, 0.06)",
         100: "rgba(37, 99, 235, 0.10)",
-        200: "#BFDBFE",
-        300: "#93C5FD",
-        400: "#60A5FA",
-        500: "#3B82F6",
-        600: "#2563EB",
-        700: "#1D4ED8",
-        800: "#1E40AF",
-        900: "#1E3A8A",
+        /**
+         * @absent OVERLAY.palette.ramps.info.200
+         * @governor retirada en PALETA P1 (2026-08-28): redundante probado por ausencia caso-exacta -- la derivacion emite el mismo canal con el mismo valor
+         */
+        /**
+         * @absent OVERLAY.palette.ramps.info.300
+         * @governor retirada en PALETA P1 (2026-08-28): redundante probado por ausencia caso-exacta -- la derivacion emite el mismo canal con el mismo valor
+         */
+        /**
+         * @absent OVERLAY.palette.ramps.info.400
+         * @governor retirada en PALETA P1 (2026-08-28): redundante probado por ausencia caso-exacta -- la derivacion emite el mismo canal con el mismo valor
+         */
+        /**
+         * @absent OVERLAY.palette.ramps.info.500
+         * @governor retirada en PALETA P1 (2026-08-28): redundante probado por ausencia caso-exacta -- la derivacion emite el mismo canal con el mismo valor
+         */
+        /**
+         * @absent OVERLAY.palette.ramps.info.600
+         * @governor retirada en PALETA P1 (2026-08-28): redundante probado por ausencia caso-exacta -- la derivacion emite el mismo canal con el mismo valor
+         */
+        /**
+         * @absent OVERLAY.palette.ramps.info.700
+         * @governor retirada en PALETA P1 (2026-08-28): redundante probado por ausencia caso-exacta -- la derivacion emite el mismo canal con el mismo valor
+         */
+        /**
+         * @absent OVERLAY.palette.ramps.info.800
+         * @governor retirada en PALETA P1 (2026-08-28): redundante probado por ausencia caso-exacta -- la derivacion emite el mismo canal con el mismo valor
+         */
+        /**
+         * @absent OVERLAY.palette.ramps.info.900
+         * @governor retirada en PALETA P1 (2026-08-28): redundante probado por ausencia caso-exacta -- la derivacion emite el mismo canal con el mismo valor
+         */
       },
     },
     /**

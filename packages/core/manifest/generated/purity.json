@@ -15,21 +15,21 @@
     "valueLaw": "la comparacion de valores NO decide pertenencia -- la raiz viene de la membresia, construida sin mirar valores. Decide si el colapso hacia esa raiz seria inocuo: verificacion post-hoc, jamas ruteo."
   },
   "stats": {
-    "rows": 2006,
+    "rows": 2003,
     "byClass": {
-      "value-shift": 1420,
+      "value-shift": 1419,
       "head-not-emitted": 384,
-      "pure": 202
+      "pure": 200
     },
     "byVertical": {
       "bithire": 842,
-      "evnto": 162,
-      "rottay": 1002
+      "evnto": 160,
+      "rottay": 1001
     },
     "pureByRoot": {
       "tier.base.fg.secondary": 12,
       "tier.raised.border": 8,
-      "ramp.seed.primary": 10,
+      "ramp.seed.primary": 9,
       "tier.base.border.primary": 4,
       "control.ratio.fontSize": 2,
       "control.height": 2,
@@ -45,7 +45,7 @@
       "tier.page.bg": 14,
       "tier.page.border.default": 4,
       "tier.base.bg": 4,
-      "tier.base.border.focus": 6,
+      "tier.base.border.focus": 5,
       "tier.base.border.subtle": 5,
       "ramp.seed.error": 14,
       "ramp.seed.info": 6,
@@ -81,15 +81,15 @@
       "--ds-material-overlay-background": 38,
       "--ds-material-overlay-foreground": 18
     },
-    "collapsibleReplacementBytes": 2585,
+    "collapsibleReplacementBytes": 2548,
     "collapsibleBytesByVertical": {
       "bithire": 1525,
-      "evnto": 566,
+      "evnto": 529,
       "rottay": 494
     },
     "pureByRule": {
-      "R2": 102,
-      "R5": 44,
+      "R2": 101,
+      "R5": 43,
       "R1": 13,
       "R4": 43
     }
@@ -10744,17 +10744,6 @@
       "replacementDeltaBytes": 2
     },
     {
-      "slotId": "evnto:PALETTE.borderFocusColor",
-      "vertical": "evnto",
-      "rootId": "tier.base.border.focus",
-      "rule": "R2",
-      "scope": "base",
-      "headChannel": "--ds-color-border-focus",
-      "headEmitted": true,
-      "class": "pure",
-      "replacementDeltaBytes": 21
-    },
-    {
       "slotId": "evnto:PALETTE.borderPrimaryColor",
       "vertical": "evnto",
       "rootId": "tier.base.border.primary",
@@ -10819,17 +10808,6 @@
       "headEmitted": true,
       "class": "value-shift",
       "replacementDeltaBytes": -37
-    },
-    {
-      "slotId": "evnto:PALETTE.linkColor",
-      "vertical": "evnto",
-      "rootId": "ramp.seed.primary",
-      "rule": "R5",
-      "scope": "base",
-      "headChannel": "--ds-color-primary",
-      "headEmitted": true,
-      "class": "pure",
-      "replacementDeltaBytes": 16
     },
     {
       "slotId": "evnto:PALETTE.successBorderColor",
@@ -21238,17 +21216,6 @@
       "replacementDeltaBytes": 16
     },
     {
-      "slotId": "rottay:OVERLAY.palette.ramps.error.500",
-      "vertical": "rottay",
-      "rootId": "ramp.seed.error",
-      "rule": "R5",
-      "scope": "light",
-      "headChannel": "--ds-color-error",
-      "headEmitted": true,
-      "class": "value-shift",
-      "replacementDeltaBytes": 14
-    },
-    {
       "slotId": "rottay:OVERLAY.palette.ramps.neutral.500",
       "vertical": "rottay",
       "rootId": "ramp.seed.neutral",
@@ -22162,5 +22129,5 @@
       "replacementDeltaBytes": 28
     }
   ],
-  "digest": "ae132a14e73bca4ed868fb151515c41800badd46c216af93fc33e4bd56b61cc5"
+  "digest": "5e36453ec1d7c7d08c285058277ea1abc2d56e2ac8fe5f1cc0e3164348c5a2a2"
 }

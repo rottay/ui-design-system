@@ -48,10 +48,10 @@
     "packages/core/src/tooling/resolution-probe/runtime/measure/index.mjs",
     "packages/core/src/ui/structures/shell/navigation/sidebar-surface/index.tsx"
   ],
-  "sourceDigest": "ded99f94bb66ca702ade2286a831cee65f7ba69e3352c86c17d028f4846a807a",
+  "sourceDigest": "38467c173da789aafc8a4352e62bd01dc95d4c0c4c2936d4daf5853a4b0c1ce4",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/navigation-sidebar-tone/rottay-inverse.json",
   "artifactSha256": "1374214269b22393866961e47c780d0b6356b601ef338c96503697fdb66fe247",
-  "createdAt": "2026-08-28T05:04:43.080Z",
+  "createdAt": "2026-08-28T06:23:29.114Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

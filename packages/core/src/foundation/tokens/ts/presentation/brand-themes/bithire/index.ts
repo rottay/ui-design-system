@@ -271,11 +271,6 @@ const OVERLAY: BrandThemeModeOverlay = {
      * @domicile seed
      * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
      */
-    onPrimaryColor: "#ffffff",
-    /**
-     * @domicile seed
-     * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
-     */
     borderColor: "#253545",
     /**
      * @domicile seed
@@ -542,6 +537,10 @@ const OVERLAY: BrandThemeModeOverlay = {
    * @domicile unassigned
    * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
    */
+    /**
+     * @absent OVERLAY.palette.onPrimaryColor
+     * @governor retirada en PALETA P1 (2026-08-28): redundante probado por ausencia caso-exacta -- la derivacion emite el mismo canal con el mismo valor
+     */
   },
   /**
    * Vocabulario de forma: el compilador lo consume como argumento; no baja a canal. Disposicion: F4A-close.
