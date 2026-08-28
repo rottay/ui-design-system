@@ -4569,6 +4569,41 @@ seeds reales y mover la superficie de calibración a un campo propio — la
 decisión 15 conserva su INTENT (superficie de calibración estrecha; dominio
 público 290 intacto) y se enmendará su formulación al cerrar C5.
 
+**LOTE DRILL-77 CERRADO — LA LEY DECREASE-ONLY DE LOS 77 TECHOS PASA DE PROSA A ANCLA VERIFICADA
+(2026-08-28; commit `36b1b1303`; writer Opus; postaudit Fable: DEFECTS-1 (la puerta lavaba un ancla corrupta sin --widen — un paso mas alla de CODEX-2) -> remedio de una linea integrado y verificado (added por VALIDEZ del ancla previa) -> ACCEPT sin nueva ronda).** Deuda E-2 cerrada: los
+`budget.maxSourceBytes` de los 77 subpaths quedan anclados en
+`public-entrypoint-boundary-gate.ceilings.baseline.json` (ninguno movido; los 18 de la E-2
+derivados de su propio `budgetNote`, no de una lista), con el check en el GATE (falla en las dos
+direcciones y en los dos desacuerdos de conjunto; ancla ausente/corrupta = FAIL cerrado) y la
+puerta `--write-baseline --widen --reason`. **La auditoría Codex (owner, 2026-08-28) quedó
+integrada entera:** ratificó 3A/3B (no se reabrió nada) y frenó ESTE lote con 2 defectos reales,
+ambos corregidos y drilleados antes del commit: (1) `evaluateCeilings` no fallaba cerrado — en JS
+`>` y `<` son ambas falsas contra no-números, así que un baseline corrupto pasaba en verde; ahora
+`isValidCeiling` exige entero finito positivo en ambos lados (las 10 formas corruptas + las 6 del
+lado vivo fallan, una por una; y el segundo orden: `readCeilings` ya no vuelve invisible lo
+inválido — "le puso basura" no se disfraza de "ya no le pone techo"); (2) un subpath NUEVO es
+expansión del conjunto y exige `--widen`, registrado como ampliación y no como decrece-solo. Más
+dos del camino: el nombre del ancla violaba la ley R3 (renombrado con drill — la convención ES la
+regla) y el "imposible" del docblock retirado (la verdad: una ampliación sin razón es REVISABLE en
+el diff, no invisible — "esa es toda la pretensión, y conviene no decir de más"). **Verificación
+adversarial del DT, sobre el árbol real:** baseline corrupto → EXIT 1; restaurado → EXIT 0. **Dos
+extensiones adjudicadas por el DT (la pregunta de cableado de Codex era la correcta):** el gate no
+estaba en el runner (0/103; solo prebuild/prepack — una ley decrease-only que se entera al
+empaquetar se entera tarde) y sus 18 drills no corrían en NINGÚN lado (`public-entrypoints:test`
+no lo invocaba nadie). Ahora ambos son entradas blocking del barrido — **drill ANTES que gate**
+(si el detector se rompe, enterarse por el detector es más barato que por un gate en verde que
+dejó de mirar) — y el **barrido pasa a 103 PASS/0 FAIL**, con ambas líneas PASS nombradas. Drill
+del cableado: 7 afirmaciones con anti-coincidencia medida. "El 101 no es un ancla, es el conteo:
+un gate blocking nuevo es cobertura ganada." Cero cambio de techos, cero cambio de comportamiento
+sobre el árbol vivo, cadena diff cero, ley dura `resolved-map --check` EXIT=0 sin re-pin.
+**También en este bloque (commit documental separado, `7a72da56d`):** los dos textos que Codex
+encontró desactualizados — `owner-step-rules._note` (narraba tabs.color "inertes" y el censo de
+60 como pendiente; ahora cuenta el cierre real del lote 3) y el `lastMove` del baseline del
+norm-gate ("dos slots" → "3 slots en 2 clases"). **Queda medido (no es de este lote):** 66
+entradas del barrido siguen sin su drill emparejado — estado general del repo. Métrica sin mover:
+**62% / ~43%** — se reevalúa al cierre de la cohorte paleta.
+
+
 **LOTE 3B CERRADO — LAS 3 RAÍCES `tier.raised.fg.{primary,secondary,muted}` EXISTEN, Y LA CLASE B
 SALE DE STOP (2026-08-28; commit `f72699056`; writer Opus; postaudit Fable: ACCEPT — la re-ancla hacia arriba probada a nivel SLOT (conjunto de slots divergentes nuevo ⊆ viejo: ganaron 0, salieron 3), la tríada cumplida en el artefacto, y las mutaciones de la re-ancla #2 probadas por él (gate y drill se reparten la vigilancia sin hueco); un menor de instrumento cerrado en este commit (razones por contador re-escritas a mano) y la correccion de la puerta queda como deuda menor (que escriba reason cuando value !== anchored)).** Segundo y
 último ítem del lote 3. Catálogo 97→100 raíces; las 3 nuevas con cabeza compartida
