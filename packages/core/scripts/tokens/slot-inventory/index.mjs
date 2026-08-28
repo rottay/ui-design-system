@@ -51,6 +51,7 @@ import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
 import { packageRoot as findPackageRoot } from '../../lib/repo-root/index.mjs';
+import { isRefinedRoot } from '../root-exposure-gate/index.mjs';
 import { assertDistFresh } from '../../packaging/dist-freshness-gate/index.mjs';
 import {
   DOMICILES,
@@ -415,6 +416,13 @@ export function measureLedger(doc, literalPinsOnDeclaredHead) {
  * (`tier.<nivel>.<fg|border>.<paso>`) es la MISMA decision indexada mas fino,
  * asi que sus cabezas no son cabezas nuevas.
  *
+ * EL PREDICADO SE IMPORTA, NO SE COPIA. `isRefinedRoot` tiene UNA definicion, en
+ * el gate que la adjudico. En el lote LEDGER-GATE quedo duplicada aqui byte a
+ * byte porque importarla era inseguro: el guard de entry de ese modulo corria su
+ * main con solo importarlo. Arreglado el guard (lote HYGIENE, 2026-08-28), la
+ * duplicacion no tiene excusa -- dos copias de una regla adjudicada divergen en
+ * silencio, que es la clase de defecto que este frente persigue.
+ *
  * MEDIDO, y por eso importa: contando TODAS las cabezas el contador da 24
  * contra un ancla de 20, y los 4 de diferencia son
  * `--ds-color-text-{secondary,tertiary,muted,disabled}` -- canales que se
@@ -424,11 +432,6 @@ export function measureLedger(doc, literalPinsOnDeclaredHead) {
  * deuda, mide catalogo -- la misma patologia de `collapsesLegacy`. Con el
  * filtro de nivel el contador vuelve a 20, que es su ancla vigente.
  */
-export const isRefinedRoot = (rootId) => {
-  const parts = String(rootId ?? '').split('.');
-  return parts.length === 4 && parts[0] === 'tier';
-};
-
 export function countLiteralPinsOnDeclaredHead({ edges, catalog }) {
   const heads = new Set(
     (catalog.roots ?? [])
@@ -459,6 +462,8 @@ export function evaluateLedger(live, baseline) {
   }
   return failures;
 }
+
+export { isRefinedRoot };
 
 export const sha256 = (text) => createHash('sha256').update(text).digest('hex');
 

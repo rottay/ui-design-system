@@ -47,7 +47,7 @@
 
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 
 import { packageRoot as findPackageRoot } from '../../lib/repo-root/index.mjs';
 
@@ -149,6 +149,28 @@ export function collectFindings({
       findings.push(
         `${root?.rootId ?? '<unnamed>'}: exposure ${JSON.stringify(root?.exposure ?? null)} is not one of ` +
           EXPOSURES.join(' | '),
+      );
+    }
+  }
+
+  // 0b. LA PREMISA DEL FILTRO, verificada donde vive el filtro. `countByExposure`
+  //     descuenta las raices refinadas del vocabulario porque una hija es "la
+  //     MISMA decision indexada mas fino" que su padre -- y lo que hace cierta
+  //     esa frase es la evidencia de derivacion que la hija lleva escrita. Una
+  //     refinada SIN `derivationDebt` + `derivation` no es una decision indexada
+  //     mas fino: es una raiz por derecho propio a la que el filtro le estaria
+  //     tapando la boca, y de paso rebajaria el `literalPinsOnDeclaredHead` del
+  //     slot-inventory, que descuenta por el mismo predicado. El invariante se
+  //     mide aca y no en el freshness-gate porque aquel compara el catalogo
+  //     contra el CSS autorado; este es una condicion INTERNA del catalogo que
+  //     sostiene una exclusion. Hoy: 33/33.
+  for (const root of roots) {
+    if (!isRefinedRoot(root?.rootId)) continue;
+    const missing = ['derivationDebt', 'derivation'].filter((field) => !root?.[field]);
+    if (missing.length > 0) {
+      findings.push(
+        `${root.rootId}: refined root without ${missing.join(' + ')} -- countByExposure discounts it as a ` +
+          'derivation of its parent, and that discount needs the derivation written down',
       );
     }
   }
@@ -255,4 +277,10 @@ function main() {
   );
 }
 
-if (process.argv[1] && process.argv[1].endsWith('index.mjs')) main();
+/* El guard nombra el ARCHIVO, no el nombre del entry. La forma anterior era
+ * `process.argv[1].endsWith('index.mjs')`, verdadera para CUALQUIER entry del
+ * arbol: por la ley folder/index todo productor se llama `index.mjs`, asi que
+ * importar este modulo desde otro productor le ejecutaba el main -- y un fallo
+ * habria matado al importador con un `process.exit(1)` ajeno. Latente hasta el
+ * 2026-08-28 solo porque nadie lo importaba todavia. */
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) main();

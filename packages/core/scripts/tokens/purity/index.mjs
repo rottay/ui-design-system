@@ -33,6 +33,12 @@
  * frescura, igual que `slot-inventory` y `root-membership`. Un segundo emisor
  * seria STOP del programa.
  *
+ * ESTE MODULO ADEMAS ES LIBRERIA. `resolved-map-diff` importa de aca `loadArm` y
+ * `scopesOf` (`resolved-map-diff/index.mjs:69`) en vez de abrir un segundo brazo
+ * de compilacion -- que es precisamente lo que el parrafo de arriba prohibe.
+ * Consecuencia practica: cambiar la firma o la semantica de esos dos exports
+ * mueve el instrumento del cero-delta resuelto, no solo el censo de pureza.
+ *
  * LA COMPARACION DE VALORES AQUI ES LEGITIMA Y ESTA ACOTADA. No decide
  * pertenencia -- la raiz de cada fila viene de la membresia, que se construyo
  * sin mirar un solo valor. Decide si el colapso hacia esa raiz ya adjudicada

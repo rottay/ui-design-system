@@ -44,7 +44,7 @@
 
 import { existsSync, readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 
 import { collectSkinFiles } from '../../lib/engine/skin-files/index.mjs';
 
@@ -207,4 +207,10 @@ function main() {
   );
 }
 
-if (process.argv[1] && process.argv[1].endsWith('index.mjs')) main();
+/* El guard nombra el ARCHIVO, no el nombre del entry. La forma anterior era
+ * `process.argv[1].endsWith('index.mjs')`, verdadera para CUALQUIER entry del
+ * arbol: por la ley folder/index todo productor se llama `index.mjs`, asi que
+ * importar este modulo desde otro productor le ejecutaba el main -- y un fallo
+ * habria matado al importador con un `process.exit(1)` ajeno. Latente hasta el
+ * 2026-08-28 solo porque nadie lo importaba todavia. */
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) main();

@@ -178,17 +178,22 @@ test('sobre el arbol real: NINGUNA fila pure difiere de su cabeza solo por el ca
   }
   const overlayNameOf = (vertical) => Object.keys(scopes[vertical]).find((name) => name !== 'base') ?? 'base';
 
+  /* Los dos colectores se llenan ANTES de asertar. La version anterior asertaba
+   * dentro del bucle, asi que el primer desvio cortaba la corrida y el colector
+   * de caso-hex era inalcanzable: el mensaje decia una fila cuando podian ser
+   * cuarenta y tres. Un drill que enumera vale mas que uno que aborta. */
   const caseOnly = [];
+  const otherMismatch = [];
   for (const row of doc.rows) {
     if (row.class !== 'pure') continue;
-    const authored = authoredOf.get(row.slotId);
+    const authored = String(authoredOf.get(row.slotId)).trim();
     const scope = scopes[row.vertical][modeOfSlot(row.slotPath ?? row.slotId.split(':')[1]) === 'overlay' ? overlayNameOf(row.vertical) : 'base'];
-    const head = scope?.[row.headChannel];
-    assert.equal(String(head).trim(), String(authored).trim(),
-      `${row.slotId} esta clasificada pure pero su cabeza no emite ese valor exacto`);
-    if (String(head).trim() !== String(authored).trim() && String(head).trim().toLowerCase() === String(authored).trim().toLowerCase()) {
-      caseOnly.push(row.slotId);
-    }
+    const head = String(scope?.[row.headChannel]).trim();
+    if (head === authored) continue;
+    (head.toLowerCase() === authored.toLowerCase() ? caseOnly : otherMismatch).push(
+      `${row.slotId} (autorado ${authored} / cabeza ${head})`,
+    );
   }
   assert.deepEqual(caseOnly, [], 'una fila pure que difiere solo por el caso es la deuda que este lote cerro');
+  assert.deepEqual(otherMismatch, [], 'una fila pure cuya cabeza no emite ese valor exacto no es pure');
 });

@@ -10,11 +10,18 @@
  */
 
 import assert from 'node:assert/strict';
-import { readFileSync, writeFileSync } from 'node:fs';
+import { spawnSync } from 'node:child_process';
+import { mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import test from 'node:test';
+import { fileURLToPath } from 'node:url';
 
 import { CATALOG_PATH, CONTROLS_DIR, collectFindings, countByExposure, isRefinedRoot } from './index.mjs';
+
+const MODULE_URL = new URL('./index.mjs', import.meta.url).href;
+const BANNER = /root-exposure-gate OK/;
+
 
 function expectFinding(findings, fragment, message) {
   assert.ok(
@@ -65,6 +72,53 @@ test('the live snapshot is the measured one, not a guess', () => {
   // typography.families (medido; calibrado F4B-14) -- 10->8 gaps, 26->28
   // tenant-dial.
   assert.deepEqual(counts, { 'tenant-dial': 28, 'internal-head': 28, gap: 8 });
+});
+
+/* ------- LAW 0b: the premise that makes the refined-root discount honest ------ */
+
+test('LAW 0b: every refined root in the live tree carries its derivation evidence', () => {
+  const roots = JSON.parse(readFileSync(CATALOG_PATH, 'utf8')).roots;
+  const refined = roots.filter((root) => isRefinedRoot(root.rootId));
+  assert.equal(refined.length, 33, 'if this moved, the census below moved with it');
+  assert.deepEqual(
+    refined.filter((root) => !(root.derivationDebt && root.derivation)).map((root) => root.rootId),
+    [],
+    'a refined root without derivation evidence is a root the filter is silencing',
+  );
+});
+
+test('LAW 0b: a refined root that loses derivationDebt fails', () => {
+  withCatalog(
+    (doc) => {
+      delete doc.roots.find((root) => isRefinedRoot(root.rootId)).derivationDebt;
+    },
+    (findings) => expectFinding(findings, 'refined root without derivationDebt', 'the discount needs its premise'),
+  );
+});
+
+test('LAW 0b: a refined root that loses derivation fails', () => {
+  withCatalog(
+    (doc) => {
+      delete doc.roots.find((root) => isRefinedRoot(root.rootId)).derivation;
+    },
+    (findings) => expectFinding(findings, 'refined root without derivation', 'the discount needs its premise'),
+  );
+});
+
+test('LAW 0b: the invariant reaches ONLY refined roots (a parent may lack both)', () => {
+  withCatalog(
+    (doc) => {
+      const parent = doc.roots.find((root) => !isRefinedRoot(root.rootId));
+      delete parent.derivationDebt;
+      delete parent.derivation;
+    },
+    (findings) =>
+      assert.deepEqual(
+        findings.filter((f) => f.includes('refined root without')),
+        [],
+        'the filter discounts refined roots only, so only they owe the evidence',
+      ),
+  );
 });
 
 /* ---------------- LAW 1: a dial with no owner ---------------- */
@@ -256,4 +310,31 @@ test('isRefinedRoot distingue la raiz de nivel de su hija de paso', () => {
   assert.equal(isRefinedRoot('state.delta.hover'), false);
   assert.equal(isRefinedRoot('ramp.seed.primary'), false);
   assert.equal(isRefinedRoot(undefined), false);
+});
+
+/* ── el guard del entry: importar NO ejecuta el main ─────────────────────── */
+
+test('importar este modulo desde un entry llamado index.mjs NO corre su main', () => {
+  /* LA LATENCIA QUEDA DRILLEADA, NO SOLO ARREGLADA. El guard anterior era
+   * `process.argv[1].endsWith('index.mjs')` y por la ley folder/index eso es
+   * verdadero para CUALQUIER productor del arbol: importar este modulo desde
+   * otro le ejecutaba el main, y un fallo habria matado al importador con un
+   * `process.exit(1)` ajeno. El entry de prueba se llama `index.mjs` a
+   * proposito -- es el nombre que disparaba el defecto. */
+  const dir = mkdtempSync(join(tmpdir(), 'guard-drill-'));
+  try {
+    writeFileSync(join(dir, 'index.mjs'), `await import(${JSON.stringify(MODULE_URL)});\nconsole.log('IMPORT-OK');\n`);
+    const run = spawnSync(process.execPath, [join(dir, 'index.mjs')], { encoding: 'utf8' });
+    assert.equal(run.status, 0, `el import no debe fallar:\n${run.stderr}`);
+    assert.match(run.stdout, /IMPORT-OK/, 'el entry de prueba corrio');
+    assert.doesNotMatch(run.stdout, BANNER, 'el main corrio por el solo hecho de importar el modulo');
+    assert.doesNotMatch(run.stderr, BANNER);
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test('el modulo SIGUE corriendo cuando es el entry (el guard no lo desarmo)', () => {
+  const run = spawnSync(process.execPath, [fileURLToPath(MODULE_URL)], { encoding: 'utf8' });
+  assert.match(`${run.stdout}${run.stderr}`, BANNER, 'el guard endurecido no debe matar la invocacion CLI');
 });

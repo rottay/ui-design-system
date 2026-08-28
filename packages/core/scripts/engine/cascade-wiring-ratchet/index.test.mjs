@@ -16,10 +16,12 @@
  */
 
 import assert from 'node:assert/strict';
+import { spawnSync } from 'node:child_process';
 import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import test from 'node:test';
+import { fileURLToPath } from 'node:url';
 
 import { collectSkinFiles } from '../../lib/engine/skin-files/index.mjs';
 import {
@@ -29,6 +31,9 @@ import {
   shapeFailures,
   varCalls,
 } from './index.mjs';
+
+const MODULE_URL = new URL('./index.mjs', import.meta.url).href;
+const BANNER = /cascade-wiring-ratchet OK/;
 
 function expectFinding(findings, fragment, message) {
   assert.ok(
@@ -170,4 +175,31 @@ test('cerca PRE_F4B (C-3): rootsExcluded es |fallbackTargets| y el ratchet trata
   assert.ok(r.fallbackTargets.has('--ds-input-md-icon-size'));      // testigo C-3, medido true hoy
   assert.ok(!r.reachesRoot.has('--ds-input-md-icon-size'));         // medido false hoy
   assert.ok(!r.denominator.includes('--ds-input-md-icon-size'));    // excluido del denominador, medido
+});
+
+/* ── el guard del entry: importar NO ejecuta el main ─────────────────────── */
+
+test('importar este modulo desde un entry llamado index.mjs NO corre su main', () => {
+  /* LA LATENCIA QUEDA DRILLEADA, NO SOLO ARREGLADA. El guard anterior era
+   * `process.argv[1].endsWith('index.mjs')` y por la ley folder/index eso es
+   * verdadero para CUALQUIER productor del arbol: importar este modulo desde
+   * otro le ejecutaba el main, y un fallo habria matado al importador con un
+   * `process.exit(1)` ajeno. El entry de prueba se llama `index.mjs` a
+   * proposito -- es el nombre que disparaba el defecto. */
+  const dir = mkdtempSync(join(tmpdir(), 'guard-drill-'));
+  try {
+    writeFileSync(join(dir, 'index.mjs'), `await import(${JSON.stringify(MODULE_URL)});\nconsole.log('IMPORT-OK');\n`);
+    const run = spawnSync(process.execPath, [join(dir, 'index.mjs')], { encoding: 'utf8' });
+    assert.equal(run.status, 0, `el import no debe fallar:\n${run.stderr}`);
+    assert.match(run.stdout, /IMPORT-OK/, 'el entry de prueba corrio');
+    assert.doesNotMatch(run.stdout, BANNER, 'el main corrio por el solo hecho de importar el modulo');
+    assert.doesNotMatch(run.stderr, BANNER);
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test('el modulo SIGUE corriendo cuando es el entry (el guard no lo desarmo)', () => {
+  const run = spawnSync(process.execPath, [fileURLToPath(MODULE_URL)], { encoding: 'utf8' });
+  assert.match(`${run.stdout}${run.stderr}`, BANNER, 'el guard endurecido no debe matar la invocacion CLI');
 });
