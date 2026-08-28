@@ -4569,6 +4569,38 @@ seeds reales y mover la superficie de calibración a un campo propio — la
 decisión 15 conserva su INTENT (superficie de calibración estrecha; dominio
 público 290 intacto) y se enmendará su formulación al cerrar C5.
 
+**LOTE 3A CERRADO — LEY NUEVA `@parent` (PADRE-POR-DISEÑO): 39 CANALES DECIDIDOS, Y EL GUARD
+CAZÓ SU PROPIA LEY (2026-08-28; commit `a8d9ead19`; writer Opus + tabla DT; postaudit Fable:
+ACCEPT sin defectos, sesión nueva con reproducción propia completa).** Primer ítem del lote 3
+(alias-inertes; censo Sonnet: 62 canales, re-cortado por el diseño a A=39/B=21/C=0 — mi encuadre
+52/8/2 quedó corregido por medición: la regularidad real es "un paso existe si y sólo si su cabeza
+natural NO es la de su padre"). **Ley nueva mínima:** una regla `owner-step-rules` puede declarar
+`step: "@parent"` = el paso por defecto del eje ES la raíz padre; mantiene `rootId`, emite
+`stepNote: null`, no cuenta como refinada, y jamás produce una raíz de 4 segmentos. Borrar las
+filas quedó rechazado (las mezclaría con los 268 "sin adjudicar": una decisión invisible se lee
+como omisión). **Guard mecánico (remedio Fable, ley de alias mecanizada):** `@parent` es legal
+sii la cabeza del padre ES la cabeza natural del paso-default — el disfraz clase-B-como-A queda
+imposible incluso para la tabla del DT. **Historia del freno (queda en el ledger):** el guard en
+el reader rechazó 12 filas — falsos positivos medidos: sus 6 canales llegan por
+`declared-fallback` (V2) a `tier.base.*`, donde el test da LEGAL (verificado por el DT). La
+formulación correcta, adoptada: **la legalidad de `@parent` es propiedad del PAR (regla, raíz
+padre efectiva), no de la regla sola** — predicado relocalizado al punto de refinamiento,
+estrictamente más fuerte (V1/V2/V3), con 0 falsos negativos medidos y rc=1 bloqueante conservado
+(`parentByDesignFailures`). **Corrección al acta:** el "72 reglas" del diseño estaba inflado por
+el camino V2 (60 con padre clase A + 12 por fallback) — error del diseño, declarado por el writer;
+la tabla era correcta y no se tocó. **Verificaciones exactas:** `rowsParentByDesign` **39** ·
+`rowsRefinedByStep` **44** quieto (forma `step !== null && !== '@parent'`; `isRefinedRoot` medía
+125 — otra verdad, desviación ratificada) · `stepNote` inerte **60→21** (las 21 = TODAS
+`tier.raised.fg`: la clase B queda aislada para el ítem B) · `rootId` de las 39 sin cambio ·
+contadores quietos (1610/881/729/9/260). Ley dura: `resolved-map --check` EXIT=0 sin re-pin,
+mismo digest. Drills 33/33 con plantado V2 + su control + anti-coincidencia (desarmado = 3
+rojos). Fable además plantó su propia regla ilegal: rc=1 de punta a punta, artefacto sin cambio.
+Observaciones Fable (no bloquean): drill opcional "toda regla `@parent` es ejercida por ≥1 fila"
+(72/72 hoy); concordancia antes de legalidad (anotada). **Próximo: ítem B** — crear
+`tier.raised.fg.{primary,secondary,muted}` (46 filas salen de STOP, 9 pasan a colapsables;
+re-anclas declaradas: `refinedRootsExcluded` 33→36). Métrica sin mover: **62% / ~43%**.
+
+
 **LOTE HYGIENE-INSTRUMENTO CERRADO — 4 MENORES DE INSTRUMENTO DEL DÍA, EN UN SOLO LOTE
 (2026-08-28; commit `59d5f2ac1`; writer Opus; postaudit Fable: ACCEPT sin defectos ni menores
 de sustancia).** (1) **Guard débil ×2 arreglado y drilleado:** `root-exposure-gate` y
