@@ -16,7 +16,7 @@
     "freshnessProven": true,
     "membershipSource": "manifest/generated/root-membership.json",
     "catalog": "manifest/cascade/root-catalog.json",
-    "catalogRoots": 97,
+    "catalogRoots": 100,
     "tagParser": "manifest/variant-parity/index.mjs (parseDocblocks + pathIndex + analyzeSource)",
     "domicileVocabulary": [
       "seed",
@@ -2635,16 +2635,16 @@
       "emitsScoped": [
         "base|--ds-card-body-color"
       ],
-      "rootId": "tier.raised.fg",
+      "rootId": "tier.raised.fg.primary",
       "headRootIds": [
-        "tier.raised.fg"
+        "tier.raised.fg.primary"
       ],
       "rootAttribution": "governed-owner-table",
       "rule": "R2",
       "verdict": "collapse",
       "evidence": {
-        "rootId": "tier.raised.fg",
-        "rootDerivation": "Tinta sobre el nivel elevado: comparte cabeza con tier.base.fg porque el contraste se calcula contra el fondo del nivel, no contra la marca.",
+        "rootId": "tier.raised.fg.primary",
+        "rootDerivation": "Paso \"primary\" del eje tinta sobre el nivel raised. La cabeza --ds-color-text-primary ya es vocabulario AUTORADO de BrandPalette; esta raiz solo la promueve a cabeza de cascada para que una hoja de ese paso derive en vez de repetir su literal. La cabeza pertenece a tier.base.fg por la regla de generalidad (un solo reclamante de tier base); esta raiz la REFERENCIA, no la disputa.",
         "coincidenceGuard": "no-value-match-used"
       }
     },
@@ -2815,16 +2815,16 @@
       "emitsScoped": [
         "base|--ds-card-color-muted"
       ],
-      "rootId": "tier.raised.fg",
+      "rootId": "tier.raised.fg.muted",
       "headRootIds": [
-        "tier.raised.fg"
+        "tier.raised.fg.muted"
       ],
       "rootAttribution": "governed-owner-table",
       "rule": "R2",
       "verdict": "collapse",
       "evidence": {
-        "rootId": "tier.raised.fg",
-        "rootDerivation": "Tinta sobre el nivel elevado: comparte cabeza con tier.base.fg porque el contraste se calcula contra el fondo del nivel, no contra la marca.",
+        "rootId": "tier.raised.fg.muted",
+        "rootDerivation": "Paso \"muted\" del eje tinta sobre el nivel raised. La cabeza --ds-color-text-muted ya es vocabulario AUTORADO de BrandPalette; esta raiz solo la promueve a cabeza de cascada para que una hoja de ese paso derive en vez de repetir su literal. La cabeza pertenece a tier.base.fg.muted por la regla de generalidad (un solo reclamante de tier base); esta raiz la REFERENCIA, no la disputa.",
         "coincidenceGuard": "no-value-match-used"
       }
     },
@@ -3115,16 +3115,16 @@
       "emitsScoped": [
         "base|--ds-card-header-color"
       ],
-      "rootId": "tier.raised.fg",
+      "rootId": "tier.raised.fg.secondary",
       "headRootIds": [
-        "tier.raised.fg"
+        "tier.raised.fg.secondary"
       ],
       "rootAttribution": "governed-owner-table",
       "rule": "R2",
       "verdict": "collapse",
       "evidence": {
-        "rootId": "tier.raised.fg",
-        "rootDerivation": "Tinta sobre el nivel elevado: comparte cabeza con tier.base.fg porque el contraste se calcula contra el fondo del nivel, no contra la marca.",
+        "rootId": "tier.raised.fg.secondary",
+        "rootDerivation": "Paso \"secondary\" del eje tinta sobre el nivel raised. La cabeza --ds-color-text-secondary ya es vocabulario AUTORADO de BrandPalette; esta raiz solo la promueve a cabeza de cascada para que una hoja de ese paso derive en vez de repetir su literal. La cabeza pertenece a tier.base.fg.secondary por la regla de generalidad (un solo reclamante de tier base); esta raiz la REFERENCIA, no la disputa.",
         "coincidenceGuard": "no-value-match-used"
       }
     },
@@ -3501,16 +3501,16 @@
       "emitsScoped": [
         "base|--ds-card-subtitle-color"
       ],
-      "rootId": "tier.raised.fg",
+      "rootId": "tier.raised.fg.secondary",
       "headRootIds": [
-        "tier.raised.fg"
+        "tier.raised.fg.secondary"
       ],
       "rootAttribution": "governed-owner-table",
       "rule": "R2",
       "verdict": "collapse",
       "evidence": {
-        "rootId": "tier.raised.fg",
-        "rootDerivation": "Tinta sobre el nivel elevado: comparte cabeza con tier.base.fg porque el contraste se calcula contra el fondo del nivel, no contra la marca.",
+        "rootId": "tier.raised.fg.secondary",
+        "rootDerivation": "Paso \"secondary\" del eje tinta sobre el nivel raised. La cabeza --ds-color-text-secondary ya es vocabulario AUTORADO de BrandPalette; esta raiz solo la promueve a cabeza de cascada para que una hoja de ese paso derive en vez de repetir su literal. La cabeza pertenece a tier.base.fg.secondary por la regla de generalidad (un solo reclamante de tier base); esta raiz la REFERENCIA, no la disputa.",
         "coincidenceGuard": "no-value-match-used"
       }
     },
@@ -3711,16 +3711,16 @@
       "emitsScoped": [
         "base|--ds-collection-card-body-color"
       ],
-      "rootId": "tier.raised.fg",
+      "rootId": "tier.raised.fg.primary",
       "headRootIds": [
-        "tier.raised.fg"
+        "tier.raised.fg.primary"
       ],
       "rootAttribution": "governed-owner-table",
       "rule": "R2",
       "verdict": "collapse",
       "evidence": {
-        "rootId": "tier.raised.fg",
-        "rootDerivation": "Tinta sobre el nivel elevado: comparte cabeza con tier.base.fg porque el contraste se calcula contra el fondo del nivel, no contra la marca.",
+        "rootId": "tier.raised.fg.primary",
+        "rootDerivation": "Paso \"primary\" del eje tinta sobre el nivel raised. La cabeza --ds-color-text-primary ya es vocabulario AUTORADO de BrandPalette; esta raiz solo la promueve a cabeza de cascada para que una hoja de ese paso derive en vez de repetir su literal. La cabeza pertenece a tier.base.fg por la regla de generalidad (un solo reclamante de tier base); esta raiz la REFERENCIA, no la disputa.",
         "coincidenceGuard": "no-value-match-used"
       }
     },
@@ -3830,16 +3830,16 @@
       "emitsScoped": [
         "base|--ds-collection-card-label-color"
       ],
-      "rootId": "tier.raised.fg",
+      "rootId": "tier.raised.fg.secondary",
       "headRootIds": [
-        "tier.raised.fg"
+        "tier.raised.fg.secondary"
       ],
       "rootAttribution": "governed-owner-table",
       "rule": "R2",
       "verdict": "collapse",
       "evidence": {
-        "rootId": "tier.raised.fg",
-        "rootDerivation": "Tinta sobre el nivel elevado: comparte cabeza con tier.base.fg porque el contraste se calcula contra el fondo del nivel, no contra la marca.",
+        "rootId": "tier.raised.fg.secondary",
+        "rootDerivation": "Paso \"secondary\" del eje tinta sobre el nivel raised. La cabeza --ds-color-text-secondary ya es vocabulario AUTORADO de BrandPalette; esta raiz solo la promueve a cabeza de cascada para que una hoja de ese paso derive en vez de repetir su literal. La cabeza pertenece a tier.base.fg.secondary por la regla de generalidad (un solo reclamante de tier base); esta raiz la REFERENCIA, no la disputa.",
         "coincidenceGuard": "no-value-match-used"
       }
     },
@@ -4130,16 +4130,16 @@
       "emitsScoped": [
         "base|--ds-collection-card-title-color"
       ],
-      "rootId": "tier.raised.fg",
+      "rootId": "tier.raised.fg.primary",
       "headRootIds": [
-        "tier.raised.fg"
+        "tier.raised.fg.primary"
       ],
       "rootAttribution": "governed-owner-table",
       "rule": "R2",
       "verdict": "collapse",
       "evidence": {
-        "rootId": "tier.raised.fg",
-        "rootDerivation": "Tinta sobre el nivel elevado: comparte cabeza con tier.base.fg porque el contraste se calcula contra el fondo del nivel, no contra la marca.",
+        "rootId": "tier.raised.fg.primary",
+        "rootDerivation": "Paso \"primary\" del eje tinta sobre el nivel raised. La cabeza --ds-color-text-primary ya es vocabulario AUTORADO de BrandPalette; esta raiz solo la promueve a cabeza de cascada para que una hoja de ese paso derive en vez de repetir su literal. La cabeza pertenece a tier.base.fg por la regla de generalidad (un solo reclamante de tier base); esta raiz la REFERENCIA, no la disputa.",
         "coincidenceGuard": "no-value-match-used"
       }
     },
@@ -4161,16 +4161,16 @@
       "emitsScoped": [
         "base|--ds-collection-card-value-color"
       ],
-      "rootId": "tier.raised.fg",
+      "rootId": "tier.raised.fg.primary",
       "headRootIds": [
-        "tier.raised.fg"
+        "tier.raised.fg.primary"
       ],
       "rootAttribution": "governed-owner-table",
       "rule": "R2",
       "verdict": "collapse",
       "evidence": {
-        "rootId": "tier.raised.fg",
-        "rootDerivation": "Tinta sobre el nivel elevado: comparte cabeza con tier.base.fg porque el contraste se calcula contra el fondo del nivel, no contra la marca.",
+        "rootId": "tier.raised.fg.primary",
+        "rootDerivation": "Paso \"primary\" del eje tinta sobre el nivel raised. La cabeza --ds-color-text-primary ya es vocabulario AUTORADO de BrandPalette; esta raiz solo la promueve a cabeza de cascada para que una hoja de ese paso derive en vez de repetir su literal. La cabeza pertenece a tier.base.fg por la regla de generalidad (un solo reclamante de tier base); esta raiz la REFERENCIA, no la disputa.",
         "coincidenceGuard": "no-value-match-used"
       }
     },
@@ -4255,16 +4255,16 @@
       "emitsScoped": [
         "base|--ds-compact-card-body-color"
       ],
-      "rootId": "tier.raised.fg",
+      "rootId": "tier.raised.fg.primary",
       "headRootIds": [
-        "tier.raised.fg"
+        "tier.raised.fg.primary"
       ],
       "rootAttribution": "governed-owner-table",
       "rule": "R2",
       "verdict": "collapse",
       "evidence": {
-        "rootId": "tier.raised.fg",
-        "rootDerivation": "Tinta sobre el nivel elevado: comparte cabeza con tier.base.fg porque el contraste se calcula contra el fondo del nivel, no contra la marca.",
+        "rootId": "tier.raised.fg.primary",
+        "rootDerivation": "Paso \"primary\" del eje tinta sobre el nivel raised. La cabeza --ds-color-text-primary ya es vocabulario AUTORADO de BrandPalette; esta raiz solo la promueve a cabeza de cascada para que una hoja de ese paso derive en vez de repetir su literal. La cabeza pertenece a tier.base.fg por la regla de generalidad (un solo reclamante de tier base); esta raiz la REFERENCIA, no la disputa.",
         "coincidenceGuard": "no-value-match-used"
       }
     },
@@ -4374,16 +4374,16 @@
       "emitsScoped": [
         "base|--ds-compact-card-label-color"
       ],
-      "rootId": "tier.raised.fg",
+      "rootId": "tier.raised.fg.secondary",
       "headRootIds": [
-        "tier.raised.fg"
+        "tier.raised.fg.secondary"
       ],
       "rootAttribution": "governed-owner-table",
       "rule": "R2",
       "verdict": "collapse",
       "evidence": {
-        "rootId": "tier.raised.fg",
-        "rootDerivation": "Tinta sobre el nivel elevado: comparte cabeza con tier.base.fg porque el contraste se calcula contra el fondo del nivel, no contra la marca.",
+        "rootId": "tier.raised.fg.secondary",
+        "rootDerivation": "Paso \"secondary\" del eje tinta sobre el nivel raised. La cabeza --ds-color-text-secondary ya es vocabulario AUTORADO de BrandPalette; esta raiz solo la promueve a cabeza de cascada para que una hoja de ese paso derive en vez de repetir su literal. La cabeza pertenece a tier.base.fg.secondary por la regla de generalidad (un solo reclamante de tier base); esta raiz la REFERENCIA, no la disputa.",
         "coincidenceGuard": "no-value-match-used"
       }
     },
@@ -4492,16 +4492,16 @@
       "emitsScoped": [
         "base|--ds-compact-card-title-color"
       ],
-      "rootId": "tier.raised.fg",
+      "rootId": "tier.raised.fg.primary",
       "headRootIds": [
-        "tier.raised.fg"
+        "tier.raised.fg.primary"
       ],
       "rootAttribution": "governed-owner-table",
       "rule": "R2",
       "verdict": "collapse",
       "evidence": {
-        "rootId": "tier.raised.fg",
-        "rootDerivation": "Tinta sobre el nivel elevado: comparte cabeza con tier.base.fg porque el contraste se calcula contra el fondo del nivel, no contra la marca.",
+        "rootId": "tier.raised.fg.primary",
+        "rootDerivation": "Paso \"primary\" del eje tinta sobre el nivel raised. La cabeza --ds-color-text-primary ya es vocabulario AUTORADO de BrandPalette; esta raiz solo la promueve a cabeza de cascada para que una hoja de ese paso derive en vez de repetir su literal. La cabeza pertenece a tier.base.fg por la regla de generalidad (un solo reclamante de tier base); esta raiz la REFERENCIA, no la disputa.",
         "coincidenceGuard": "no-value-match-used"
       }
     },
@@ -4523,16 +4523,16 @@
       "emitsScoped": [
         "base|--ds-compact-card-value-color"
       ],
-      "rootId": "tier.raised.fg",
+      "rootId": "tier.raised.fg.primary",
       "headRootIds": [
-        "tier.raised.fg"
+        "tier.raised.fg.primary"
       ],
       "rootAttribution": "governed-owner-table",
       "rule": "R2",
       "verdict": "collapse",
       "evidence": {
-        "rootId": "tier.raised.fg",
-        "rootDerivation": "Tinta sobre el nivel elevado: comparte cabeza con tier.base.fg porque el contraste se calcula contra el fondo del nivel, no contra la marca.",
+        "rootId": "tier.raised.fg.primary",
+        "rootDerivation": "Paso \"primary\" del eje tinta sobre el nivel raised. La cabeza --ds-color-text-primary ya es vocabulario AUTORADO de BrandPalette; esta raiz solo la promueve a cabeza de cascada para que una hoja de ese paso derive en vez de repetir su literal. La cabeza pertenece a tier.base.fg por la regla de generalidad (un solo reclamante de tier base); esta raiz la REFERENCIA, no la disputa.",
         "coincidenceGuard": "no-value-match-used"
       }
     },
@@ -22277,16 +22277,16 @@
       "emitsScoped": [
         "base|--ds-tall-card-body-color"
       ],
-      "rootId": "tier.raised.fg",
+      "rootId": "tier.raised.fg.primary",
       "headRootIds": [
-        "tier.raised.fg"
+        "tier.raised.fg.primary"
       ],
       "rootAttribution": "governed-owner-table",
       "rule": "R2",
       "verdict": "collapse",
       "evidence": {
-        "rootId": "tier.raised.fg",
-        "rootDerivation": "Tinta sobre el nivel elevado: comparte cabeza con tier.base.fg porque el contraste se calcula contra el fondo del nivel, no contra la marca.",
+        "rootId": "tier.raised.fg.primary",
+        "rootDerivation": "Paso \"primary\" del eje tinta sobre el nivel raised. La cabeza --ds-color-text-primary ya es vocabulario AUTORADO de BrandPalette; esta raiz solo la promueve a cabeza de cascada para que una hoja de ese paso derive en vez de repetir su literal. La cabeza pertenece a tier.base.fg por la regla de generalidad (un solo reclamante de tier base); esta raiz la REFERENCIA, no la disputa.",
         "coincidenceGuard": "no-value-match-used"
       }
     },
@@ -22396,16 +22396,16 @@
       "emitsScoped": [
         "base|--ds-tall-card-label-color"
       ],
-      "rootId": "tier.raised.fg",
+      "rootId": "tier.raised.fg.secondary",
       "headRootIds": [
-        "tier.raised.fg"
+        "tier.raised.fg.secondary"
       ],
       "rootAttribution": "governed-owner-table",
       "rule": "R2",
       "verdict": "collapse",
       "evidence": {
-        "rootId": "tier.raised.fg",
-        "rootDerivation": "Tinta sobre el nivel elevado: comparte cabeza con tier.base.fg porque el contraste se calcula contra el fondo del nivel, no contra la marca.",
+        "rootId": "tier.raised.fg.secondary",
+        "rootDerivation": "Paso \"secondary\" del eje tinta sobre el nivel raised. La cabeza --ds-color-text-secondary ya es vocabulario AUTORADO de BrandPalette; esta raiz solo la promueve a cabeza de cascada para que una hoja de ese paso derive en vez de repetir su literal. La cabeza pertenece a tier.base.fg.secondary por la regla de generalidad (un solo reclamante de tier base); esta raiz la REFERENCIA, no la disputa.",
         "coincidenceGuard": "no-value-match-used"
       }
     },
@@ -22511,16 +22511,16 @@
       "emitsScoped": [
         "base|--ds-tall-card-title-color"
       ],
-      "rootId": "tier.raised.fg",
+      "rootId": "tier.raised.fg.primary",
       "headRootIds": [
-        "tier.raised.fg"
+        "tier.raised.fg.primary"
       ],
       "rootAttribution": "governed-owner-table",
       "rule": "R2",
       "verdict": "collapse",
       "evidence": {
-        "rootId": "tier.raised.fg",
-        "rootDerivation": "Tinta sobre el nivel elevado: comparte cabeza con tier.base.fg porque el contraste se calcula contra el fondo del nivel, no contra la marca.",
+        "rootId": "tier.raised.fg.primary",
+        "rootDerivation": "Paso \"primary\" del eje tinta sobre el nivel raised. La cabeza --ds-color-text-primary ya es vocabulario AUTORADO de BrandPalette; esta raiz solo la promueve a cabeza de cascada para que una hoja de ese paso derive en vez de repetir su literal. La cabeza pertenece a tier.base.fg por la regla de generalidad (un solo reclamante de tier base); esta raiz la REFERENCIA, no la disputa.",
         "coincidenceGuard": "no-value-match-used"
       }
     },
@@ -22542,16 +22542,16 @@
       "emitsScoped": [
         "base|--ds-tall-card-value-color"
       ],
-      "rootId": "tier.raised.fg",
+      "rootId": "tier.raised.fg.primary",
       "headRootIds": [
-        "tier.raised.fg"
+        "tier.raised.fg.primary"
       ],
       "rootAttribution": "governed-owner-table",
       "rule": "R2",
       "verdict": "collapse",
       "evidence": {
-        "rootId": "tier.raised.fg",
-        "rootDerivation": "Tinta sobre el nivel elevado: comparte cabeza con tier.base.fg porque el contraste se calcula contra el fondo del nivel, no contra la marca.",
+        "rootId": "tier.raised.fg.primary",
+        "rootDerivation": "Paso \"primary\" del eje tinta sobre el nivel raised. La cabeza --ds-color-text-primary ya es vocabulario AUTORADO de BrandPalette; esta raiz solo la promueve a cabeza de cascada para que una hoja de ese paso derive en vez de repetir su literal. La cabeza pertenece a tier.base.fg por la regla de generalidad (un solo reclamante de tier base); esta raiz la REFERENCIA, no la disputa.",
         "coincidenceGuard": "no-value-match-used"
       }
     },
@@ -23026,16 +23026,16 @@
       "emitsScoped": [
         "base|--ds-workspace-card-body-color"
       ],
-      "rootId": "tier.raised.fg",
+      "rootId": "tier.raised.fg.primary",
       "headRootIds": [
-        "tier.raised.fg"
+        "tier.raised.fg.primary"
       ],
       "rootAttribution": "governed-owner-table",
       "rule": "R2",
       "verdict": "collapse",
       "evidence": {
-        "rootId": "tier.raised.fg",
-        "rootDerivation": "Tinta sobre el nivel elevado: comparte cabeza con tier.base.fg porque el contraste se calcula contra el fondo del nivel, no contra la marca.",
+        "rootId": "tier.raised.fg.primary",
+        "rootDerivation": "Paso \"primary\" del eje tinta sobre el nivel raised. La cabeza --ds-color-text-primary ya es vocabulario AUTORADO de BrandPalette; esta raiz solo la promueve a cabeza de cascada para que una hoja de ese paso derive en vez de repetir su literal. La cabeza pertenece a tier.base.fg por la regla de generalidad (un solo reclamante de tier base); esta raiz la REFERENCIA, no la disputa.",
         "coincidenceGuard": "no-value-match-used"
       }
     },
@@ -23179,16 +23179,16 @@
       "emitsScoped": [
         "base|--ds-workspace-card-footer-color"
       ],
-      "rootId": "tier.raised.fg",
+      "rootId": "tier.raised.fg.secondary",
       "headRootIds": [
-        "tier.raised.fg"
+        "tier.raised.fg.secondary"
       ],
       "rootAttribution": "governed-owner-table",
       "rule": "R2",
       "verdict": "collapse",
       "evidence": {
-        "rootId": "tier.raised.fg",
-        "rootDerivation": "Tinta sobre el nivel elevado: comparte cabeza con tier.base.fg porque el contraste se calcula contra el fondo del nivel, no contra la marca.",
+        "rootId": "tier.raised.fg.secondary",
+        "rootDerivation": "Paso \"secondary\" del eje tinta sobre el nivel raised. La cabeza --ds-color-text-secondary ya es vocabulario AUTORADO de BrandPalette; esta raiz solo la promueve a cabeza de cascada para que una hoja de ese paso derive en vez de repetir su literal. La cabeza pertenece a tier.base.fg.secondary por la regla de generalidad (un solo reclamante de tier base); esta raiz la REFERENCIA, no la disputa.",
         "coincidenceGuard": "no-value-match-used"
       }
     },
@@ -23359,16 +23359,16 @@
       "emitsScoped": [
         "base|--ds-workspace-card-label-color"
       ],
-      "rootId": "tier.raised.fg",
+      "rootId": "tier.raised.fg.secondary",
       "headRootIds": [
-        "tier.raised.fg"
+        "tier.raised.fg.secondary"
       ],
       "rootAttribution": "governed-owner-table",
       "rule": "R2",
       "verdict": "collapse",
       "evidence": {
-        "rootId": "tier.raised.fg",
-        "rootDerivation": "Tinta sobre el nivel elevado: comparte cabeza con tier.base.fg porque el contraste se calcula contra el fondo del nivel, no contra la marca.",
+        "rootId": "tier.raised.fg.secondary",
+        "rootDerivation": "Paso \"secondary\" del eje tinta sobre el nivel raised. La cabeza --ds-color-text-secondary ya es vocabulario AUTORADO de BrandPalette; esta raiz solo la promueve a cabeza de cascada para que una hoja de ese paso derive en vez de repetir su literal. La cabeza pertenece a tier.base.fg.secondary por la regla de generalidad (un solo reclamante de tier base); esta raiz la REFERENCIA, no la disputa.",
         "coincidenceGuard": "no-value-match-used"
       }
     },
@@ -23505,16 +23505,16 @@
       "emitsScoped": [
         "base|--ds-workspace-card-title-color"
       ],
-      "rootId": "tier.raised.fg",
+      "rootId": "tier.raised.fg.primary",
       "headRootIds": [
-        "tier.raised.fg"
+        "tier.raised.fg.primary"
       ],
       "rootAttribution": "governed-owner-table",
       "rule": "R2",
       "verdict": "collapse",
       "evidence": {
-        "rootId": "tier.raised.fg",
-        "rootDerivation": "Tinta sobre el nivel elevado: comparte cabeza con tier.base.fg porque el contraste se calcula contra el fondo del nivel, no contra la marca.",
+        "rootId": "tier.raised.fg.primary",
+        "rootDerivation": "Paso \"primary\" del eje tinta sobre el nivel raised. La cabeza --ds-color-text-primary ya es vocabulario AUTORADO de BrandPalette; esta raiz solo la promueve a cabeza de cascada para que una hoja de ese paso derive en vez de repetir su literal. La cabeza pertenece a tier.base.fg por la regla de generalidad (un solo reclamante de tier base); esta raiz la REFERENCIA, no la disputa.",
         "coincidenceGuard": "no-value-match-used"
       }
     },
@@ -23536,16 +23536,16 @@
       "emitsScoped": [
         "base|--ds-workspace-card-value-color"
       ],
-      "rootId": "tier.raised.fg",
+      "rootId": "tier.raised.fg.primary",
       "headRootIds": [
-        "tier.raised.fg"
+        "tier.raised.fg.primary"
       ],
       "rootAttribution": "governed-owner-table",
       "rule": "R2",
       "verdict": "collapse",
       "evidence": {
-        "rootId": "tier.raised.fg",
-        "rootDerivation": "Tinta sobre el nivel elevado: comparte cabeza con tier.base.fg porque el contraste se calcula contra el fondo del nivel, no contra la marca.",
+        "rootId": "tier.raised.fg.primary",
+        "rootDerivation": "Paso \"primary\" del eje tinta sobre el nivel raised. La cabeza --ds-color-text-primary ya es vocabulario AUTORADO de BrandPalette; esta raiz solo la promueve a cabeza de cascada para que una hoja de ese paso derive en vez de repetir su literal. La cabeza pertenece a tier.base.fg por la regla de generalidad (un solo reclamante de tier base); esta raiz la REFERENCIA, no la disputa.",
         "coincidenceGuard": "no-value-match-used"
       }
     },
@@ -24074,9 +24074,9 @@
       "emitsScoped": [
         "dark|--ds-card-body-color"
       ],
-      "rootId": "tier.raised.fg",
+      "rootId": "tier.raised.fg.primary",
       "headRootIds": [
-        "tier.raised.fg"
+        "tier.raised.fg.primary"
       ],
       "rootAttribution": "governed-owner-table",
       "rule": "R1",
@@ -24162,9 +24162,9 @@
       "emitsScoped": [
         "dark|--ds-card-color-muted"
       ],
-      "rootId": "tier.raised.fg",
+      "rootId": "tier.raised.fg.muted",
       "headRootIds": [
-        "tier.raised.fg"
+        "tier.raised.fg.muted"
       ],
       "rootAttribution": "governed-owner-table",
       "rule": "R1",
@@ -24365,9 +24365,9 @@
       "emitsScoped": [
         "dark|--ds-card-header-color"
       ],
-      "rootId": "tier.raised.fg",
+      "rootId": "tier.raised.fg.secondary",
       "headRootIds": [
-        "tier.raised.fg"
+        "tier.raised.fg.secondary"
       ],
       "rootAttribution": "governed-owner-table",
       "rule": "R1",
@@ -24511,9 +24511,9 @@
       "emitsScoped": [
         "dark|--ds-card-subtitle-color"
       ],
-      "rootId": "tier.raised.fg",
+      "rootId": "tier.raised.fg.secondary",
       "headRootIds": [
-        "tier.raised.fg"
+        "tier.raised.fg.secondary"
       ],
       "rootAttribution": "governed-owner-table",
       "rule": "R1",
@@ -24627,9 +24627,9 @@
       "emitsScoped": [
         "dark|--ds-collection-card-body-color"
       ],
-      "rootId": "tier.raised.fg",
+      "rootId": "tier.raised.fg.primary",
       "headRootIds": [
-        "tier.raised.fg"
+        "tier.raised.fg.primary"
       ],
       "rootAttribution": "governed-owner-table",
       "rule": "R1",
@@ -24685,9 +24685,9 @@
       "emitsScoped": [
         "dark|--ds-collection-card-label-color"
       ],
-      "rootId": "tier.raised.fg",
+      "rootId": "tier.raised.fg.secondary",
       "headRootIds": [
-        "tier.raised.fg"
+        "tier.raised.fg.secondary"
       ],
       "rootAttribution": "governed-owner-table",
       "rule": "R1",
@@ -24801,9 +24801,9 @@
       "emitsScoped": [
         "dark|--ds-collection-card-title-color"
       ],
-      "rootId": "tier.raised.fg",
+      "rootId": "tier.raised.fg.primary",
       "headRootIds": [
-        "tier.raised.fg"
+        "tier.raised.fg.primary"
       ],
       "rootAttribution": "governed-owner-table",
       "rule": "R1",
@@ -24830,9 +24830,9 @@
       "emitsScoped": [
         "dark|--ds-collection-card-value-color"
       ],
-      "rootId": "tier.raised.fg",
+      "rootId": "tier.raised.fg.primary",
       "headRootIds": [
-        "tier.raised.fg"
+        "tier.raised.fg.primary"
       ],
       "rootAttribution": "governed-owner-table",
       "rule": "R1",
@@ -24917,9 +24917,9 @@
       "emitsScoped": [
         "dark|--ds-compact-card-body-color"
       ],
-      "rootId": "tier.raised.fg",
+      "rootId": "tier.raised.fg.primary",
       "headRootIds": [
-        "tier.raised.fg"
+        "tier.raised.fg.primary"
       ],
       "rootAttribution": "governed-owner-table",
       "rule": "R1",
@@ -24975,9 +24975,9 @@
       "emitsScoped": [
         "dark|--ds-compact-card-label-color"
       ],
-      "rootId": "tier.raised.fg",
+      "rootId": "tier.raised.fg.secondary",
       "headRootIds": [
-        "tier.raised.fg"
+        "tier.raised.fg.secondary"
       ],
       "rootAttribution": "governed-owner-table",
       "rule": "R1",
@@ -25004,9 +25004,9 @@
       "emitsScoped": [
         "dark|--ds-compact-card-title-color"
       ],
-      "rootId": "tier.raised.fg",
+      "rootId": "tier.raised.fg.primary",
       "headRootIds": [
-        "tier.raised.fg"
+        "tier.raised.fg.primary"
       ],
       "rootAttribution": "governed-owner-table",
       "rule": "R1",
@@ -25033,9 +25033,9 @@
       "emitsScoped": [
         "dark|--ds-compact-card-value-color"
       ],
-      "rootId": "tier.raised.fg",
+      "rootId": "tier.raised.fg.primary",
       "headRootIds": [
-        "tier.raised.fg"
+        "tier.raised.fg.primary"
       ],
       "rootAttribution": "governed-owner-table",
       "rule": "R1",
@@ -31205,9 +31205,9 @@
       "emitsScoped": [
         "dark|--ds-tall-card-body-color"
       ],
-      "rootId": "tier.raised.fg",
+      "rootId": "tier.raised.fg.primary",
       "headRootIds": [
-        "tier.raised.fg"
+        "tier.raised.fg.primary"
       ],
       "rootAttribution": "governed-owner-table",
       "rule": "R1",
@@ -31263,9 +31263,9 @@
       "emitsScoped": [
         "dark|--ds-tall-card-label-color"
       ],
-      "rootId": "tier.raised.fg",
+      "rootId": "tier.raised.fg.secondary",
       "headRootIds": [
-        "tier.raised.fg"
+        "tier.raised.fg.secondary"
       ],
       "rootAttribution": "governed-owner-table",
       "rule": "R1",
@@ -31292,9 +31292,9 @@
       "emitsScoped": [
         "dark|--ds-tall-card-title-color"
       ],
-      "rootId": "tier.raised.fg",
+      "rootId": "tier.raised.fg.primary",
       "headRootIds": [
-        "tier.raised.fg"
+        "tier.raised.fg.primary"
       ],
       "rootAttribution": "governed-owner-table",
       "rule": "R1",
@@ -31321,9 +31321,9 @@
       "emitsScoped": [
         "dark|--ds-tall-card-value-color"
       ],
-      "rootId": "tier.raised.fg",
+      "rootId": "tier.raised.fg.primary",
       "headRootIds": [
-        "tier.raised.fg"
+        "tier.raised.fg.primary"
       ],
       "rootAttribution": "governed-owner-table",
       "rule": "R1",
@@ -31638,9 +31638,9 @@
       "emitsScoped": [
         "dark|--ds-workspace-card-body-color"
       ],
-      "rootId": "tier.raised.fg",
+      "rootId": "tier.raised.fg.primary",
       "headRootIds": [
-        "tier.raised.fg"
+        "tier.raised.fg.primary"
       ],
       "rootAttribution": "governed-owner-table",
       "rule": "R1",
@@ -31754,9 +31754,9 @@
       "emitsScoped": [
         "dark|--ds-workspace-card-footer-color"
       ],
-      "rootId": "tier.raised.fg",
+      "rootId": "tier.raised.fg.secondary",
       "headRootIds": [
-        "tier.raised.fg"
+        "tier.raised.fg.secondary"
       ],
       "rootAttribution": "governed-owner-table",
       "rule": "R1",
@@ -31841,9 +31841,9 @@
       "emitsScoped": [
         "dark|--ds-workspace-card-label-color"
       ],
-      "rootId": "tier.raised.fg",
+      "rootId": "tier.raised.fg.secondary",
       "headRootIds": [
-        "tier.raised.fg"
+        "tier.raised.fg.secondary"
       ],
       "rootAttribution": "governed-owner-table",
       "rule": "R1",
@@ -31870,9 +31870,9 @@
       "emitsScoped": [
         "dark|--ds-workspace-card-title-color"
       ],
-      "rootId": "tier.raised.fg",
+      "rootId": "tier.raised.fg.primary",
       "headRootIds": [
-        "tier.raised.fg"
+        "tier.raised.fg.primary"
       ],
       "rootAttribution": "governed-owner-table",
       "rule": "R1",
@@ -31899,9 +31899,9 @@
       "emitsScoped": [
         "dark|--ds-workspace-card-value-color"
       ],
-      "rootId": "tier.raised.fg",
+      "rootId": "tier.raised.fg.primary",
       "headRootIds": [
-        "tier.raised.fg"
+        "tier.raised.fg.primary"
       ],
       "rootAttribution": "governed-owner-table",
       "rule": "R1",
@@ -59007,9 +59007,9 @@
       "emitsScoped": [
         "base|--ds-card-body-color"
       ],
-      "rootId": "tier.raised.fg",
+      "rootId": "tier.raised.fg.primary",
       "headRootIds": [
-        "tier.raised.fg"
+        "tier.raised.fg.primary"
       ],
       "rootAttribution": "governed-owner-table",
       "rule": "R1",
@@ -59313,16 +59313,16 @@
       "emitsScoped": [
         "base|--ds-card-header-color"
       ],
-      "rootId": "tier.raised.fg",
+      "rootId": "tier.raised.fg.secondary",
       "headRootIds": [
-        "tier.raised.fg"
+        "tier.raised.fg.secondary"
       ],
       "rootAttribution": "governed-owner-table",
       "rule": "R2",
       "verdict": "collapse",
       "evidence": {
-        "rootId": "tier.raised.fg",
-        "rootDerivation": "Tinta sobre el nivel elevado: comparte cabeza con tier.base.fg porque el contraste se calcula contra el fondo del nivel, no contra la marca.",
+        "rootId": "tier.raised.fg.secondary",
+        "rootDerivation": "Paso \"secondary\" del eje tinta sobre el nivel raised. La cabeza --ds-color-text-secondary ya es vocabulario AUTORADO de BrandPalette; esta raiz solo la promueve a cabeza de cascada para que una hoja de ese paso derive en vez de repetir su literal. La cabeza pertenece a tier.base.fg.secondary por la regla de generalidad (un solo reclamante de tier base); esta raiz la REFERENCIA, no la disputa.",
         "coincidenceGuard": "no-value-match-used"
       }
     },
@@ -59692,9 +59692,9 @@
       "emitsScoped": [
         "base|--ds-card-subtitle-color"
       ],
-      "rootId": "tier.raised.fg",
+      "rootId": "tier.raised.fg.secondary",
       "headRootIds": [
-        "tier.raised.fg"
+        "tier.raised.fg.secondary"
       ],
       "rootAttribution": "governed-owner-table",
       "rule": "R1",
@@ -82974,16 +82974,16 @@
       "emitsScoped": [
         "light|--ds-card-header-color"
       ],
-      "rootId": "tier.raised.fg",
+      "rootId": "tier.raised.fg.secondary",
       "headRootIds": [
-        "tier.raised.fg"
+        "tier.raised.fg.secondary"
       ],
       "rootAttribution": "governed-owner-table",
       "rule": "R2",
       "verdict": "collapse",
       "evidence": {
-        "rootId": "tier.raised.fg",
-        "rootDerivation": "Tinta sobre el nivel elevado: comparte cabeza con tier.base.fg porque el contraste se calcula contra el fondo del nivel, no contra la marca.",
+        "rootId": "tier.raised.fg.secondary",
+        "rootDerivation": "Paso \"secondary\" del eje tinta sobre el nivel raised. La cabeza --ds-color-text-secondary ya es vocabulario AUTORADO de BrandPalette; esta raiz solo la promueve a cabeza de cascada para que una hoja de ese paso derive en vez de repetir su literal. La cabeza pertenece a tier.base.fg.secondary por la regla de generalidad (un solo reclamante de tier base); esta raiz la REFERENCIA, no la disputa.",
         "coincidenceGuard": "no-value-match-used"
       }
     },
@@ -107420,5 +107420,5 @@
       }
     }
   ],
-  "digest": "d2e4a871256d79f5169485ab413f03f68a29307cb85938599a3924648ac8267b"
+  "digest": "6f11f75caec8dabb6d9e9440943036627d7c1e2a540eb267612584b29262530d"
 }

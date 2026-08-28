@@ -548,13 +548,23 @@ test('@parent — un contribuyente @parent y otro con paso real DISCREPAN, no se
   assert.match(out.stepNote, /discrepan de paso/);
 });
 
-test('@parent — el arbol real: 39 decididas, 0 ilegales, y el refinamiento por tabla quieto', async () => {
+test('@parent — el arbol real: 39 decididas, 0 ilegales, y CERO reglas apuntando a raices que no existen', async () => {
   const { readFileSync } = await import('node:fs');
   const doc = JSON.parse(readFileSync(new URL('../../../manifest/generated/root-membership.json', import.meta.url), 'utf8'));
   assert.equal(doc.stats.rowsParentByDesign, 39);
-  assert.equal(doc.stats.rowsRefinedByStep, 44);
   assert.deepEqual(doc.provenance.parentByDesignFailures, []);
+  /* PIN RETIRADO A PROPOSITO. Este drill congelaba `rowsRefinedByStep` en 44 y
+   * las inertes en 21, que eran ciertas MIENTRAS la clase B seguia abierta. El
+   * lote 3B creo tier.raised.fg.{primary,secondary,muted} y las movio a 65 y 0
+   * legitimamente: un pin que hay que re-teclear cada vez que el eje crece deja
+   * de ser detector. Lo que se afirma ahora es la PROPIEDAD durable, y es mas
+   * fuerte que el pin: la tabla no puede pedir un paso cuya raiz no exista. */
   const inertes = doc.rows.filter((r) => /y esa raiz no existe en el catalogo$/.test(r.stepNote ?? ''));
-  assert.equal(inertes.length, 21, 'lo que queda inerte es exactamente la clase B');
-  assert.deepEqual([...new Set(inertes.map((r) => r.rootId))], ['tier.raised.fg']);
+  assert.deepEqual(inertes.map((r) => `${r.channel} -> ${r.stepNote}`), [],
+    'ninguna regla de la tabla puede apuntar a una raiz que el catalogo no declara');
+  // Y el refinamiento por tabla sigue midiendo lo suyo: nunca cuenta el centinela.
+  const { PARENT_BY_DESIGN } = await import('./index.mjs');
+  assert.equal(doc.stats.rowsRefinedByStep,
+    doc.rows.filter((r) => r.step !== null && r.step !== PARENT_BY_DESIGN).length);
+  assert.ok(doc.rows.every((r) => r.step !== PARENT_BY_DESIGN || r.rootId.split('.').length === 3));
 });

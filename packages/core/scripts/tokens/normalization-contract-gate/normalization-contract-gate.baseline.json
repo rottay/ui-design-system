@@ -15,12 +15,12 @@
       "reason": "Ancla inicial del lote normalization-contract-gate (2026-08-27), medida sobre HEAD 73bda7ac1. Es deuda PREEXISTENTE que este gate hace visible por primera vez, no un hallazgo de esta sesion: los governors que nombran autoridad inexistente vienen de F4B (los 6 'dial: tenant-dial' de textPageColor esperan su control en F4B) y de 4 canales derivados que nunca nacieron; los literales que sombrean solo se pudieron medir cuando la cohorte 1 persistio la membresia (la cohorte 0 solo pudo aproximar 20 pines sobre cabezas declaradas); y los grupos divergentes son la premisa del frente -- un corpus que todavia no colapso ES una masa de decisiones repetidas. Desde aqui los cinco contadores solo pueden bajar."
     },
     "divergentGroups": {
-      "value": 238,
-      "reason": "Ancla inicial del lote normalization-contract-gate (2026-08-27), medida sobre HEAD 73bda7ac1. Es deuda PREEXISTENTE que este gate hace visible por primera vez, no un hallazgo de esta sesion: los governors que nombran autoridad inexistente vienen de F4B (los 6 'dial: tenant-dial' de textPageColor esperan su control en F4B) y de 4 canales derivados que nunca nacieron; los literales que sombrean solo se pudieron medir cuando la cohorte 1 persistio la membresia (la cohorte 0 solo pudo aproximar 20 pines sobre cabezas declaradas); y los grupos divergentes son la premisa del frente -- un corpus que todavia no colapso ES una masa de decisiones repetidas. Desde aqui los cinco contadores solo pueden bajar."
+      "value": 242,
+      "reason": "Re-anclado HACIA ARRIBA en el lote 3B (2026-08-28) por la puerta gobernada --reattribution: 238 -> 242. NO es regresion ni cobertura nueva: tier.raised.fg.{primary,secondary,muted} refinaron la clave de agrupacion (vertical|raiz|propiedad|estado|modo), y un grupo bithire de 24 slots/5 posiciones se partio en subgrupos mas finos (3+13+7+1 por modo) y uno rottay 3->1+2. Los grupos suben porque la clave es mas fina; los slots divergentes BAJAN 1633->1630 y el conjunto de slots divergentes nuevo es SUBCONJUNTO del viejo (ganaron divergencia: 0; salieron: 3, verificado slot por slot por Fable). Cero duplicacion nueva: es re-atribucion sobre claves mas finas, el caso que la puerta anticipa en su docblock. La subida fue autorizada por nombre con la razon completa en lastMove. Los otros contadores quietos: unassignedSlots 297, governorsNamingMissingAuthority 10, shadowingLiteralPins 228."
     },
     "divergentSlots": {
-      "value": 1633,
-      "reason": "PALETA P1 (2026-08-28): BAJA por retire con ausencia declarada. 27 hojas redundantes del eje paleta retiradas (@absent + @governor, agrupados al final del objeto contenedor); 2 de ellas eran miembros de grupos divergentes de paleta (evnto:PALETTE.linkColor del grupo evnto|ramp.seed.primary|base 3->2 y rottay:OVERLAY.palette.ramps.error.500 del grupo rottay|ramp.seed.error|overlay 5->4 — conjunto de grupos identico, verificado por Fable replicando L4b): al desaparecer la hoja desaparece su posicion y el grupo pasa a tener un miembro menos. divergentGroups 238 QUIETO (ningun grupo cambio de estado): la baja es de slots, no de grupos. Los otros tres contadores quietos: unassignedSlots 297, governorsNamingMissingAuthority 10, shadowingLiteralPins 228 (mide pines del CSS autorado; este lote toca TS: poblaciones disjuntas). Ley dura sostenida: resolved-map --against EXIT=0 (valores + unresolved), verificado tras el retire y tras la cadena; cero bytes de artefacto movidos (styles/ y facade/artifacts/ sin diff)."
+      "value": 1630,
+      "reason": "Re-anclado en el lote 3B (2026-08-28): 1633 -> 1630, BAJA por la misma re-atribucion de la raiz de paso (3 slots salieron de la divergencia al quedar uniformes sus subgrupos: muted bithire x2 modos + primary rottay). Historia previa: PALETA P1 (1635->1633, retire de 2 hojas miembros de grupos divergentes de paleta) y 2B PLENA (1639->1635, el primer grupo cerrado por colapso real). Este contador solo baja por colapso o por particion en claves mas finas; subir esta prohibido sin la puerta."
     }
   },
   "namedDebt": {
@@ -280,10 +280,10 @@
       "bithire|tier.raised.bg|bg|sin-estado|overlay: 26 slots, 16 posiciones",
       "rottay|tier.control.border|border|sin-estado|overlay: 26 slots, 5 posiciones",
       "bithire|tier.page.bg|bg|sin-estado|overlay: 24 slots, 15 posiciones",
-      "bithire|tier.raised.fg|fg|sin-estado|base: 24 slots, 5 posiciones",
-      "bithire|tier.raised.fg|fg|sin-estado|overlay: 24 slots, 5 posiciones"
+      "rottay|tier.base.fg|fg|sin-estado|overlay: 24 slots, 7 posiciones",
+      "bithire|tier.base.fg|fg|sin-estado|overlay: 23 slots, 7 posiciones"
     ]
   },
-  "lastMove": "PALETA P1 (2026-08-28): divergentSlots 1635 -> 1633, BAJA por retire de 27 hojas redundantes de paleta con ausencia declarada (@absent). 2 retiradas eran miembros de grupos divergentes; al desaparecer la hoja desaparece su posicion. divergentGroups 238 quieto; los otros tres contadores quietos. Cero-delta resuelto --against EXIT=0 x2; cero bytes de artefacto movidos. Aritmetica replicada por Fable (conjunto de grupos identico, 238/1633). Ancla previa: 1635 (2B PLENA).",
-  "lastMoveKind": "decrece-solo"
+  "lastMove": "Lote 3B (2026-08-28): tier.raised.fg.{primary,secondary,muted} refinan la clave de agrupacion. Un grupo bithire de 24 slots/5 posiciones se parte en 3+13+7+1 por modo y uno rottay de 3 en 1+2: los GRUPOS suben 238->242 (+4) porque la clave es mas fina, y los SLOTS divergentes bajan 1633->1630 (-3) porque dos subgrupos quedaron uniformes y dos slots salieron de la divergencia por completo. Cero duplicacion nueva: es re-atribucion sobre claves mas finas, el caso que esta puerta existe para cubrir (anticipado en el docblock del gate). Medido grupo por grupo por el writer; verificado por el DT contra el gate; re-ancla ejecutada por el DT al commit, como manda la regla writer-propone/DT-ejecuta.",
+  "lastMoveKind": "re-atribucion (subida autorizada por nombre)"
 }

@@ -17,9 +17,9 @@
   "stats": {
     "rows": 2003,
     "byClass": {
-      "value-shift": 1462,
-      "head-not-emitted": 384,
-      "pure": 157
+      "value-shift": 1499,
+      "head-not-emitted": 338,
+      "pure": 166
     },
     "byVertical": {
       "bithire": 842,
@@ -27,6 +27,7 @@
       "rottay": 1001
     },
     "pureByRoot": {
+      "tier.raised.fg.primary": 9,
       "ramp.seed.primary": 6,
       "tier.base.border.primary": 4,
       "control.ratio.fontSize": 2,
@@ -67,7 +68,7 @@
     },
     "headlessByChannel": {
       "--ds-radius-md": 10,
-      "--ds-material-raised-foreground": 52,
+      "--ds-material-raised-foreground": 6,
       "--ds-spacing-2": 9,
       "--ds-font-weight-medium": 13,
       "--ds-density-effective-scale": 14,
@@ -79,16 +80,16 @@
       "--ds-material-overlay-background": 38,
       "--ds-material-overlay-foreground": 18
     },
-    "collapsibleReplacementBytes": 1833,
+    "collapsibleReplacementBytes": 2022,
     "collapsibleBytesByVertical": {
-      "bithire": 810,
+      "bithire": 999,
       "evnto": 529,
       "rottay": 494
     },
     "pureByRule": {
+      "R2": 76,
       "R5": 35,
       "R1": 13,
-      "R2": 67,
       "R4": 42
     }
   },
@@ -239,13 +240,13 @@
     {
       "slotId": "bithire:CHROME.cardComponent.bodyColor",
       "vertical": "bithire",
-      "rootId": "tier.raised.fg",
+      "rootId": "tier.raised.fg.primary",
       "rule": "R2",
       "scope": "base",
-      "headChannel": "--ds-material-raised-foreground",
-      "headEmitted": false,
-      "class": "head-not-emitted",
-      "replacementDeltaBytes": 29
+      "headChannel": "--ds-color-text-primary",
+      "headEmitted": true,
+      "class": "pure",
+      "replacementDeltaBytes": 21
     },
     {
       "slotId": "bithire:CHROME.cardComponent.border",
@@ -294,13 +295,13 @@
     {
       "slotId": "bithire:CHROME.cardComponent.colorMuted",
       "vertical": "bithire",
-      "rootId": "tier.raised.fg",
+      "rootId": "tier.raised.fg.muted",
       "rule": "R2",
       "scope": "base",
-      "headChannel": "--ds-material-raised-foreground",
-      "headEmitted": false,
-      "class": "head-not-emitted",
-      "replacementDeltaBytes": 29
+      "headChannel": "--ds-color-text-muted",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": 19
     },
     {
       "slotId": "bithire:CHROME.cardComponent.footerBg",
@@ -382,13 +383,13 @@
     {
       "slotId": "bithire:CHROME.cardComponent.headerColor",
       "vertical": "bithire",
-      "rootId": "tier.raised.fg",
+      "rootId": "tier.raised.fg.secondary",
       "rule": "R2",
       "scope": "base",
-      "headChannel": "--ds-material-raised-foreground",
-      "headEmitted": false,
-      "class": "head-not-emitted",
-      "replacementDeltaBytes": 29
+      "headChannel": "--ds-color-text-secondary",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": 23
     },
     {
       "slotId": "bithire:CHROME.cardComponent.imagePlaceholderBg",
@@ -426,13 +427,13 @@
     {
       "slotId": "bithire:CHROME.cardComponent.subtitleColor",
       "vertical": "bithire",
-      "rootId": "tier.raised.fg",
+      "rootId": "tier.raised.fg.secondary",
       "rule": "R2",
       "scope": "base",
-      "headChannel": "--ds-material-raised-foreground",
-      "headEmitted": false,
-      "class": "head-not-emitted",
-      "replacementDeltaBytes": 29
+      "headChannel": "--ds-color-text-secondary",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": 23
     },
     {
       "slotId": "bithire:CHROME.cardComponent.titleColor",
@@ -470,13 +471,13 @@
     {
       "slotId": "bithire:CHROME.collectionCard.bodyColor",
       "vertical": "bithire",
-      "rootId": "tier.raised.fg",
+      "rootId": "tier.raised.fg.primary",
       "rule": "R2",
       "scope": "base",
-      "headChannel": "--ds-material-raised-foreground",
-      "headEmitted": false,
-      "class": "head-not-emitted",
-      "replacementDeltaBytes": 29
+      "headChannel": "--ds-color-text-primary",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": 21
     },
     {
       "slotId": "bithire:CHROME.collectionCard.border",
@@ -503,13 +504,13 @@
     {
       "slotId": "bithire:CHROME.collectionCard.labelColor",
       "vertical": "bithire",
-      "rootId": "tier.raised.fg",
+      "rootId": "tier.raised.fg.secondary",
       "rule": "R2",
       "scope": "base",
-      "headChannel": "--ds-material-raised-foreground",
-      "headEmitted": false,
-      "class": "head-not-emitted",
-      "replacementDeltaBytes": 29
+      "headChannel": "--ds-color-text-secondary",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": 23
     },
     {
       "slotId": "bithire:CHROME.collectionCard.selectedBorder",
@@ -591,24 +592,24 @@
     {
       "slotId": "bithire:CHROME.collectionCard.titleColor",
       "vertical": "bithire",
-      "rootId": "tier.raised.fg",
+      "rootId": "tier.raised.fg.primary",
       "rule": "R2",
       "scope": "base",
-      "headChannel": "--ds-material-raised-foreground",
-      "headEmitted": false,
-      "class": "head-not-emitted",
-      "replacementDeltaBytes": 29
+      "headChannel": "--ds-color-text-primary",
+      "headEmitted": true,
+      "class": "pure",
+      "replacementDeltaBytes": 21
     },
     {
       "slotId": "bithire:CHROME.collectionCard.valueColor",
       "vertical": "bithire",
-      "rootId": "tier.raised.fg",
+      "rootId": "tier.raised.fg.primary",
       "rule": "R2",
       "scope": "base",
-      "headChannel": "--ds-material-raised-foreground",
-      "headEmitted": false,
-      "class": "head-not-emitted",
-      "replacementDeltaBytes": 29
+      "headChannel": "--ds-color-text-primary",
+      "headEmitted": true,
+      "class": "pure",
+      "replacementDeltaBytes": 21
     },
     {
       "slotId": "bithire:CHROME.compactCard.bg",
@@ -635,13 +636,13 @@
     {
       "slotId": "bithire:CHROME.compactCard.bodyColor",
       "vertical": "bithire",
-      "rootId": "tier.raised.fg",
+      "rootId": "tier.raised.fg.primary",
       "rule": "R2",
       "scope": "base",
-      "headChannel": "--ds-material-raised-foreground",
-      "headEmitted": false,
-      "class": "head-not-emitted",
-      "replacementDeltaBytes": 29
+      "headChannel": "--ds-color-text-primary",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": 21
     },
     {
       "slotId": "bithire:CHROME.compactCard.border",
@@ -668,13 +669,13 @@
     {
       "slotId": "bithire:CHROME.compactCard.labelColor",
       "vertical": "bithire",
-      "rootId": "tier.raised.fg",
+      "rootId": "tier.raised.fg.secondary",
       "rule": "R2",
       "scope": "base",
-      "headChannel": "--ds-material-raised-foreground",
-      "headEmitted": false,
-      "class": "head-not-emitted",
-      "replacementDeltaBytes": 29
+      "headChannel": "--ds-color-text-secondary",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": 23
     },
     {
       "slotId": "bithire:CHROME.compactCard.radius",
@@ -690,24 +691,24 @@
     {
       "slotId": "bithire:CHROME.compactCard.titleColor",
       "vertical": "bithire",
-      "rootId": "tier.raised.fg",
+      "rootId": "tier.raised.fg.primary",
       "rule": "R2",
       "scope": "base",
-      "headChannel": "--ds-material-raised-foreground",
-      "headEmitted": false,
-      "class": "head-not-emitted",
-      "replacementDeltaBytes": 29
+      "headChannel": "--ds-color-text-primary",
+      "headEmitted": true,
+      "class": "pure",
+      "replacementDeltaBytes": 21
     },
     {
       "slotId": "bithire:CHROME.compactCard.valueColor",
       "vertical": "bithire",
-      "rootId": "tier.raised.fg",
+      "rootId": "tier.raised.fg.primary",
       "rule": "R2",
       "scope": "base",
-      "headChannel": "--ds-material-raised-foreground",
-      "headEmitted": false,
-      "class": "head-not-emitted",
-      "replacementDeltaBytes": 29
+      "headChannel": "--ds-color-text-primary",
+      "headEmitted": true,
+      "class": "pure",
+      "replacementDeltaBytes": 21
     },
     {
       "slotId": "bithire:CHROME.controls.buttonDefault.bg",
@@ -4254,13 +4255,13 @@
     {
       "slotId": "bithire:CHROME.tallCard.bodyColor",
       "vertical": "bithire",
-      "rootId": "tier.raised.fg",
+      "rootId": "tier.raised.fg.primary",
       "rule": "R2",
       "scope": "base",
-      "headChannel": "--ds-material-raised-foreground",
-      "headEmitted": false,
-      "class": "head-not-emitted",
-      "replacementDeltaBytes": 29
+      "headChannel": "--ds-color-text-primary",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": 21
     },
     {
       "slotId": "bithire:CHROME.tallCard.border",
@@ -4287,35 +4288,35 @@
     {
       "slotId": "bithire:CHROME.tallCard.labelColor",
       "vertical": "bithire",
-      "rootId": "tier.raised.fg",
+      "rootId": "tier.raised.fg.secondary",
       "rule": "R2",
       "scope": "base",
-      "headChannel": "--ds-material-raised-foreground",
-      "headEmitted": false,
-      "class": "head-not-emitted",
-      "replacementDeltaBytes": 29
+      "headChannel": "--ds-color-text-secondary",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": 23
     },
     {
       "slotId": "bithire:CHROME.tallCard.titleColor",
       "vertical": "bithire",
-      "rootId": "tier.raised.fg",
+      "rootId": "tier.raised.fg.primary",
       "rule": "R2",
       "scope": "base",
-      "headChannel": "--ds-material-raised-foreground",
-      "headEmitted": false,
-      "class": "head-not-emitted",
-      "replacementDeltaBytes": 29
+      "headChannel": "--ds-color-text-primary",
+      "headEmitted": true,
+      "class": "pure",
+      "replacementDeltaBytes": 21
     },
     {
       "slotId": "bithire:CHROME.tallCard.valueColor",
       "vertical": "bithire",
-      "rootId": "tier.raised.fg",
+      "rootId": "tier.raised.fg.primary",
       "rule": "R2",
       "scope": "base",
-      "headChannel": "--ds-material-raised-foreground",
-      "headEmitted": false,
-      "class": "head-not-emitted",
-      "replacementDeltaBytes": 29
+      "headChannel": "--ds-color-text-primary",
+      "headEmitted": true,
+      "class": "pure",
+      "replacementDeltaBytes": 21
     },
     {
       "slotId": "bithire:CHROME.toolbar.bg",
@@ -4430,13 +4431,13 @@
     {
       "slotId": "bithire:CHROME.workspaceCard.bodyColor",
       "vertical": "bithire",
-      "rootId": "tier.raised.fg",
+      "rootId": "tier.raised.fg.primary",
       "rule": "R2",
       "scope": "base",
-      "headChannel": "--ds-material-raised-foreground",
-      "headEmitted": false,
-      "class": "head-not-emitted",
-      "replacementDeltaBytes": 29
+      "headChannel": "--ds-color-text-primary",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": 21
     },
     {
       "slotId": "bithire:CHROME.workspaceCard.border",
@@ -4485,13 +4486,13 @@
     {
       "slotId": "bithire:CHROME.workspaceCard.footerColor",
       "vertical": "bithire",
-      "rootId": "tier.raised.fg",
+      "rootId": "tier.raised.fg.secondary",
       "rule": "R2",
       "scope": "base",
-      "headChannel": "--ds-material-raised-foreground",
-      "headEmitted": false,
-      "class": "head-not-emitted",
-      "replacementDeltaBytes": 29
+      "headChannel": "--ds-color-text-secondary",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": 23
     },
     {
       "slotId": "bithire:CHROME.workspaceCard.iconBg",
@@ -4529,13 +4530,13 @@
     {
       "slotId": "bithire:CHROME.workspaceCard.labelColor",
       "vertical": "bithire",
-      "rootId": "tier.raised.fg",
+      "rootId": "tier.raised.fg.secondary",
       "rule": "R2",
       "scope": "base",
-      "headChannel": "--ds-material-raised-foreground",
-      "headEmitted": false,
-      "class": "head-not-emitted",
-      "replacementDeltaBytes": 29
+      "headChannel": "--ds-color-text-secondary",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": 23
     },
     {
       "slotId": "bithire:CHROME.workspaceCard.shadow",
@@ -4551,24 +4552,24 @@
     {
       "slotId": "bithire:CHROME.workspaceCard.titleColor",
       "vertical": "bithire",
-      "rootId": "tier.raised.fg",
+      "rootId": "tier.raised.fg.primary",
       "rule": "R2",
       "scope": "base",
-      "headChannel": "--ds-material-raised-foreground",
-      "headEmitted": false,
-      "class": "head-not-emitted",
-      "replacementDeltaBytes": 29
+      "headChannel": "--ds-color-text-primary",
+      "headEmitted": true,
+      "class": "pure",
+      "replacementDeltaBytes": 21
     },
     {
       "slotId": "bithire:CHROME.workspaceCard.valueColor",
       "vertical": "bithire",
-      "rootId": "tier.raised.fg",
+      "rootId": "tier.raised.fg.primary",
       "rule": "R2",
       "scope": "base",
-      "headChannel": "--ds-material-raised-foreground",
-      "headEmitted": false,
-      "class": "head-not-emitted",
-      "replacementDeltaBytes": 29
+      "headChannel": "--ds-color-text-primary",
+      "headEmitted": true,
+      "class": "pure",
+      "replacementDeltaBytes": 21
     },
     {
       "slotId": "bithire:OVERLAY.chrome.badge.ink",
@@ -4650,13 +4651,13 @@
     {
       "slotId": "bithire:OVERLAY.chrome.cardComponent.bodyColor",
       "vertical": "bithire",
-      "rootId": "tier.raised.fg",
+      "rootId": "tier.raised.fg.primary",
       "rule": "R1",
       "scope": "dark",
-      "headChannel": "--ds-material-raised-foreground",
-      "headEmitted": false,
-      "class": "head-not-emitted",
-      "replacementDeltaBytes": 8
+      "headChannel": "--ds-color-text-primary",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": 0
     },
     {
       "slotId": "bithire:OVERLAY.chrome.cardComponent.border",
@@ -4683,13 +4684,13 @@
     {
       "slotId": "bithire:OVERLAY.chrome.cardComponent.colorMuted",
       "vertical": "bithire",
-      "rootId": "tier.raised.fg",
+      "rootId": "tier.raised.fg.muted",
       "rule": "R1",
       "scope": "dark",
-      "headChannel": "--ds-material-raised-foreground",
-      "headEmitted": false,
-      "class": "head-not-emitted",
-      "replacementDeltaBytes": 7
+      "headChannel": "--ds-color-text-muted",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": -3
     },
     {
       "slotId": "bithire:OVERLAY.chrome.cardComponent.footerBorder",
@@ -4760,13 +4761,13 @@
     {
       "slotId": "bithire:OVERLAY.chrome.cardComponent.headerColor",
       "vertical": "bithire",
-      "rootId": "tier.raised.fg",
+      "rootId": "tier.raised.fg.secondary",
       "rule": "R1",
       "scope": "dark",
-      "headChannel": "--ds-material-raised-foreground",
-      "headEmitted": false,
-      "class": "head-not-emitted",
-      "replacementDeltaBytes": 6
+      "headChannel": "--ds-color-text-secondary",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": 0
     },
     {
       "slotId": "bithire:OVERLAY.chrome.cardComponent.imagePlaceholderBg",
@@ -4804,13 +4805,13 @@
     {
       "slotId": "bithire:OVERLAY.chrome.cardComponent.subtitleColor",
       "vertical": "bithire",
-      "rootId": "tier.raised.fg",
+      "rootId": "tier.raised.fg.secondary",
       "rule": "R1",
       "scope": "dark",
-      "headChannel": "--ds-material-raised-foreground",
-      "headEmitted": false,
-      "class": "head-not-emitted",
-      "replacementDeltaBytes": 7
+      "headChannel": "--ds-color-text-secondary",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": 1
     },
     {
       "slotId": "bithire:OVERLAY.chrome.cardComponent.titleColor",
@@ -4848,13 +4849,13 @@
     {
       "slotId": "bithire:OVERLAY.chrome.collectionCard.bodyColor",
       "vertical": "bithire",
-      "rootId": "tier.raised.fg",
+      "rootId": "tier.raised.fg.primary",
       "rule": "R1",
       "scope": "dark",
-      "headChannel": "--ds-material-raised-foreground",
-      "headEmitted": false,
-      "class": "head-not-emitted",
-      "replacementDeltaBytes": 6
+      "headChannel": "--ds-color-text-primary",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": -2
     },
     {
       "slotId": "bithire:OVERLAY.chrome.collectionCard.border",
@@ -4870,13 +4871,13 @@
     {
       "slotId": "bithire:OVERLAY.chrome.collectionCard.labelColor",
       "vertical": "bithire",
-      "rootId": "tier.raised.fg",
+      "rootId": "tier.raised.fg.secondary",
       "rule": "R1",
       "scope": "dark",
-      "headChannel": "--ds-material-raised-foreground",
-      "headEmitted": false,
-      "class": "head-not-emitted",
-      "replacementDeltaBytes": 7
+      "headChannel": "--ds-color-text-secondary",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": 1
     },
     {
       "slotId": "bithire:OVERLAY.chrome.collectionCard.statusBg",
@@ -4914,24 +4915,24 @@
     {
       "slotId": "bithire:OVERLAY.chrome.collectionCard.titleColor",
       "vertical": "bithire",
-      "rootId": "tier.raised.fg",
+      "rootId": "tier.raised.fg.primary",
       "rule": "R1",
       "scope": "dark",
-      "headChannel": "--ds-material-raised-foreground",
-      "headEmitted": false,
-      "class": "head-not-emitted",
-      "replacementDeltaBytes": 8
+      "headChannel": "--ds-color-text-primary",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": 0
     },
     {
       "slotId": "bithire:OVERLAY.chrome.collectionCard.valueColor",
       "vertical": "bithire",
-      "rootId": "tier.raised.fg",
+      "rootId": "tier.raised.fg.primary",
       "rule": "R1",
       "scope": "dark",
-      "headChannel": "--ds-material-raised-foreground",
-      "headEmitted": false,
-      "class": "head-not-emitted",
-      "replacementDeltaBytes": 8
+      "headChannel": "--ds-color-text-primary",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": 0
     },
     {
       "slotId": "bithire:OVERLAY.chrome.compactCard.bg",
@@ -4958,13 +4959,13 @@
     {
       "slotId": "bithire:OVERLAY.chrome.compactCard.bodyColor",
       "vertical": "bithire",
-      "rootId": "tier.raised.fg",
+      "rootId": "tier.raised.fg.primary",
       "rule": "R1",
       "scope": "dark",
-      "headChannel": "--ds-material-raised-foreground",
-      "headEmitted": false,
-      "class": "head-not-emitted",
-      "replacementDeltaBytes": 6
+      "headChannel": "--ds-color-text-primary",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": -2
     },
     {
       "slotId": "bithire:OVERLAY.chrome.compactCard.border",
@@ -4980,35 +4981,35 @@
     {
       "slotId": "bithire:OVERLAY.chrome.compactCard.labelColor",
       "vertical": "bithire",
-      "rootId": "tier.raised.fg",
+      "rootId": "tier.raised.fg.secondary",
       "rule": "R1",
       "scope": "dark",
-      "headChannel": "--ds-material-raised-foreground",
-      "headEmitted": false,
-      "class": "head-not-emitted",
-      "replacementDeltaBytes": 7
+      "headChannel": "--ds-color-text-secondary",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": 1
     },
     {
       "slotId": "bithire:OVERLAY.chrome.compactCard.titleColor",
       "vertical": "bithire",
-      "rootId": "tier.raised.fg",
+      "rootId": "tier.raised.fg.primary",
       "rule": "R1",
       "scope": "dark",
-      "headChannel": "--ds-material-raised-foreground",
-      "headEmitted": false,
-      "class": "head-not-emitted",
-      "replacementDeltaBytes": 8
+      "headChannel": "--ds-color-text-primary",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": 0
     },
     {
       "slotId": "bithire:OVERLAY.chrome.compactCard.valueColor",
       "vertical": "bithire",
-      "rootId": "tier.raised.fg",
+      "rootId": "tier.raised.fg.primary",
       "rule": "R1",
       "scope": "dark",
-      "headChannel": "--ds-material-raised-foreground",
-      "headEmitted": false,
-      "class": "head-not-emitted",
-      "replacementDeltaBytes": 8
+      "headChannel": "--ds-color-text-primary",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": 0
     },
     {
       "slotId": "bithire:OVERLAY.chrome.controls.buttonPrimary.bg",
@@ -7059,13 +7060,13 @@
     {
       "slotId": "bithire:OVERLAY.chrome.tallCard.bodyColor",
       "vertical": "bithire",
-      "rootId": "tier.raised.fg",
+      "rootId": "tier.raised.fg.primary",
       "rule": "R1",
       "scope": "dark",
-      "headChannel": "--ds-material-raised-foreground",
-      "headEmitted": false,
-      "class": "head-not-emitted",
-      "replacementDeltaBytes": 6
+      "headChannel": "--ds-color-text-primary",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": -2
     },
     {
       "slotId": "bithire:OVERLAY.chrome.tallCard.border",
@@ -7081,35 +7082,35 @@
     {
       "slotId": "bithire:OVERLAY.chrome.tallCard.labelColor",
       "vertical": "bithire",
-      "rootId": "tier.raised.fg",
+      "rootId": "tier.raised.fg.secondary",
       "rule": "R1",
       "scope": "dark",
-      "headChannel": "--ds-material-raised-foreground",
-      "headEmitted": false,
-      "class": "head-not-emitted",
-      "replacementDeltaBytes": 7
+      "headChannel": "--ds-color-text-secondary",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": 1
     },
     {
       "slotId": "bithire:OVERLAY.chrome.tallCard.titleColor",
       "vertical": "bithire",
-      "rootId": "tier.raised.fg",
+      "rootId": "tier.raised.fg.primary",
       "rule": "R1",
       "scope": "dark",
-      "headChannel": "--ds-material-raised-foreground",
-      "headEmitted": false,
-      "class": "head-not-emitted",
-      "replacementDeltaBytes": 8
+      "headChannel": "--ds-color-text-primary",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": 0
     },
     {
       "slotId": "bithire:OVERLAY.chrome.tallCard.valueColor",
       "vertical": "bithire",
-      "rootId": "tier.raised.fg",
+      "rootId": "tier.raised.fg.primary",
       "rule": "R1",
       "scope": "dark",
-      "headChannel": "--ds-material-raised-foreground",
-      "headEmitted": false,
-      "class": "head-not-emitted",
-      "replacementDeltaBytes": 8
+      "headChannel": "--ds-color-text-primary",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": 0
     },
     {
       "slotId": "bithire:OVERLAY.chrome.toolbar.bg",
@@ -7213,13 +7214,13 @@
     {
       "slotId": "bithire:OVERLAY.chrome.workspaceCard.bodyColor",
       "vertical": "bithire",
-      "rootId": "tier.raised.fg",
+      "rootId": "tier.raised.fg.primary",
       "rule": "R1",
       "scope": "dark",
-      "headChannel": "--ds-material-raised-foreground",
-      "headEmitted": false,
-      "class": "head-not-emitted",
-      "replacementDeltaBytes": 6
+      "headChannel": "--ds-color-text-primary",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": -2
     },
     {
       "slotId": "bithire:OVERLAY.chrome.workspaceCard.border",
@@ -7257,13 +7258,13 @@
     {
       "slotId": "bithire:OVERLAY.chrome.workspaceCard.footerColor",
       "vertical": "bithire",
-      "rootId": "tier.raised.fg",
+      "rootId": "tier.raised.fg.secondary",
       "rule": "R1",
       "scope": "dark",
-      "headChannel": "--ds-material-raised-foreground",
-      "headEmitted": false,
-      "class": "head-not-emitted",
-      "replacementDeltaBytes": 6
+      "headChannel": "--ds-color-text-secondary",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": 0
     },
     {
       "slotId": "bithire:OVERLAY.chrome.workspaceCard.iconBg",
@@ -7290,35 +7291,35 @@
     {
       "slotId": "bithire:OVERLAY.chrome.workspaceCard.labelColor",
       "vertical": "bithire",
-      "rootId": "tier.raised.fg",
+      "rootId": "tier.raised.fg.secondary",
       "rule": "R1",
       "scope": "dark",
-      "headChannel": "--ds-material-raised-foreground",
-      "headEmitted": false,
-      "class": "head-not-emitted",
-      "replacementDeltaBytes": 7
+      "headChannel": "--ds-color-text-secondary",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": 1
     },
     {
       "slotId": "bithire:OVERLAY.chrome.workspaceCard.titleColor",
       "vertical": "bithire",
-      "rootId": "tier.raised.fg",
+      "rootId": "tier.raised.fg.primary",
       "rule": "R1",
       "scope": "dark",
-      "headChannel": "--ds-material-raised-foreground",
-      "headEmitted": false,
-      "class": "head-not-emitted",
-      "replacementDeltaBytes": 8
+      "headChannel": "--ds-color-text-primary",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": 0
     },
     {
       "slotId": "bithire:OVERLAY.chrome.workspaceCard.valueColor",
       "vertical": "bithire",
-      "rootId": "tier.raised.fg",
+      "rootId": "tier.raised.fg.primary",
       "rule": "R1",
       "scope": "dark",
-      "headChannel": "--ds-material-raised-foreground",
-      "headEmitted": false,
-      "class": "head-not-emitted",
-      "replacementDeltaBytes": 8
+      "headChannel": "--ds-color-text-primary",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": 0
     },
     {
       "slotId": "bithire:OVERLAY.palette.backgroundColor",
@@ -11272,13 +11273,13 @@
     {
       "slotId": "rottay:CHROME.cardComponent.bodyColor",
       "vertical": "rottay",
-      "rootId": "tier.raised.fg",
+      "rootId": "tier.raised.fg.primary",
       "rule": "R1",
       "scope": "base",
-      "headChannel": "--ds-material-raised-foreground",
-      "headEmitted": false,
-      "class": "head-not-emitted",
-      "replacementDeltaBytes": 11
+      "headChannel": "--ds-color-text-primary",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": 3
     },
     {
       "slotId": "rottay:CHROME.cardComponent.borderAccentHover",
@@ -11327,13 +11328,13 @@
     {
       "slotId": "rottay:CHROME.cardComponent.headerColor",
       "vertical": "rottay",
-      "rootId": "tier.raised.fg",
+      "rootId": "tier.raised.fg.secondary",
       "rule": "R2",
       "scope": "base",
-      "headChannel": "--ds-material-raised-foreground",
-      "headEmitted": false,
-      "class": "head-not-emitted",
-      "replacementDeltaBytes": 29
+      "headChannel": "--ds-color-text-secondary",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": 23
     },
     {
       "slotId": "rottay:CHROME.cardComponent.imageLoadingActive",
@@ -11382,13 +11383,13 @@
     {
       "slotId": "rottay:CHROME.cardComponent.subtitleColor",
       "vertical": "rottay",
-      "rootId": "tier.raised.fg",
+      "rootId": "tier.raised.fg.secondary",
       "rule": "R1",
       "scope": "base",
-      "headChannel": "--ds-material-raised-foreground",
-      "headEmitted": false,
-      "class": "head-not-emitted",
-      "replacementDeltaBytes": 11
+      "headChannel": "--ds-color-text-secondary",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": 5
     },
     {
       "slotId": "rottay:CHROME.cardComponent.titleColor",
@@ -16937,13 +16938,13 @@
     {
       "slotId": "rottay:OVERLAY.chrome.cardComponent.headerColor",
       "vertical": "rottay",
-      "rootId": "tier.raised.fg",
+      "rootId": "tier.raised.fg.secondary",
       "rule": "R2",
       "scope": "light",
-      "headChannel": "--ds-material-raised-foreground",
-      "headEmitted": false,
-      "class": "head-not-emitted",
-      "replacementDeltaBytes": 29
+      "headChannel": "--ds-color-text-secondary",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": 23
     },
     {
       "slotId": "rottay:OVERLAY.chrome.cardComponent.imageLoadingActive",
@@ -22127,5 +22128,5 @@
       "replacementDeltaBytes": 28
     }
   ],
-  "digest": "8ce02af20399472ee51f10d2da65c82fb85b8befd469cc14c2f13fd5b4531647"
+  "digest": "626a922ff2c02fe72b6360e22cc5277c2b01c658241d67bfc1ad97d5771d18f5"
 }

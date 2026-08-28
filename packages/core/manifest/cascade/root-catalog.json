@@ -335,6 +335,84 @@
       }
     },
     {
+      "rootId": "tier.raised.fg.primary",
+      "group": "superficie-por-nivel",
+      "channel": "--ds-color-text-primary",
+      "channelStatus": "existe",
+      "collapsesLegacy": {
+        "total": 0,
+        "rottay": 0,
+        "bithire": 0,
+        "evnto": 0
+      },
+      "assignments": {
+        "total": 0,
+        "rottay": 0,
+        "bithire": 0,
+        "evnto": 0,
+        "modes": {}
+      },
+      "derivation": "Paso \"primary\" del eje tinta sobre el nivel raised. La cabeza --ds-color-text-primary ya es vocabulario AUTORADO de BrandPalette; esta raiz solo la promueve a cabeza de cascada para que una hoja de ese paso derive en vez de repetir su literal. La cabeza pertenece a tier.base.fg por la regla de generalidad (un solo reclamante de tier base); esta raiz la REFERENCIA, no la disputa.",
+      "evidence": "--ds-color-text-primary es vocabulario AUTORADO de BrandPalette; emision medida por scripts/tokens/purity: emitida-en-los-3 ({\"rottay\":true,\"bithire\":true,\"evnto\":true})",
+      "governedBy": null,
+      "governanceScope": "ninguna",
+      "exposure": "internal-head",
+      "exposureNote": "EJE PASO, lote 3B (2026-08-28). Hija de tier.raised.fg: promueve a cabeza de cascada el paso \"primary\" del vocabulario AUTORADO de BrandPalette. Hereda exposure y governedBy del padre porque no es una perilla nueva sino la misma decision indexada por su paso -- por eso root-exposure-gate mide el vocabulario sobre las raices NO refinadas (adjudicacion DT 3.1). collapsesLegacy nace en cero a proposito: ese campo es censo FECHADO de 2026-08-18 y una raiz de 2026-08-28 no puede tener historia ahi; su cifra viva es su poblacion en manifest/generated/root-membership.json. POR QUE NACE ESTA RAIZ Y NO OTRAS: tier.raised.fg era el UNICO padre del eje sin ningun paso, y su cabeza --ds-material-raised-foreground no se emite en NINGUNO de los 6 scopes -- sus 52 filas de purity eran 52/52 head-not-emitted, es decir el padre no era una respuesta. Las cabezas de este paso si se emiten en los 3 temas, y por eso la raiz saca filas de la clase STOP en vez de mover un valor.",
+      "derivationDebt": true
+    },
+    {
+      "rootId": "tier.raised.fg.secondary",
+      "group": "superficie-por-nivel",
+      "channel": "--ds-color-text-secondary",
+      "channelStatus": "existe",
+      "collapsesLegacy": {
+        "total": 0,
+        "rottay": 0,
+        "bithire": 0,
+        "evnto": 0
+      },
+      "assignments": {
+        "total": 0,
+        "rottay": 0,
+        "bithire": 0,
+        "evnto": 0,
+        "modes": {}
+      },
+      "derivation": "Paso \"secondary\" del eje tinta sobre el nivel raised. La cabeza --ds-color-text-secondary ya es vocabulario AUTORADO de BrandPalette; esta raiz solo la promueve a cabeza de cascada para que una hoja de ese paso derive en vez de repetir su literal. La cabeza pertenece a tier.base.fg.secondary por la regla de generalidad (un solo reclamante de tier base); esta raiz la REFERENCIA, no la disputa.",
+      "evidence": "--ds-color-text-secondary es vocabulario AUTORADO de BrandPalette; emision medida por scripts/tokens/purity: emitida-en-los-3 ({\"rottay\":true,\"bithire\":true,\"evnto\":true})",
+      "governedBy": null,
+      "governanceScope": "ninguna",
+      "exposure": "internal-head",
+      "exposureNote": "EJE PASO, lote 3B (2026-08-28). Hija de tier.raised.fg: promueve a cabeza de cascada el paso \"secondary\" del vocabulario AUTORADO de BrandPalette. Hereda exposure y governedBy del padre porque no es una perilla nueva sino la misma decision indexada por su paso -- por eso root-exposure-gate mide el vocabulario sobre las raices NO refinadas (adjudicacion DT 3.1). collapsesLegacy nace en cero a proposito: ese campo es censo FECHADO de 2026-08-18 y una raiz de 2026-08-28 no puede tener historia ahi; su cifra viva es su poblacion en manifest/generated/root-membership.json. POR QUE NACE ESTA RAIZ Y NO OTRAS: tier.raised.fg era el UNICO padre del eje sin ningun paso, y su cabeza --ds-material-raised-foreground no se emite en NINGUNO de los 6 scopes -- sus 52 filas de purity eran 52/52 head-not-emitted, es decir el padre no era una respuesta. Las cabezas de este paso si se emiten en los 3 temas, y por eso la raiz saca filas de la clase STOP en vez de mover un valor.",
+      "derivationDebt": true
+    },
+    {
+      "rootId": "tier.raised.fg.muted",
+      "group": "superficie-por-nivel",
+      "channel": "--ds-color-text-muted",
+      "channelStatus": "existe",
+      "collapsesLegacy": {
+        "total": 0,
+        "rottay": 0,
+        "bithire": 0,
+        "evnto": 0
+      },
+      "assignments": {
+        "total": 0,
+        "rottay": 0,
+        "bithire": 0,
+        "evnto": 0,
+        "modes": {}
+      },
+      "derivation": "Paso \"muted\" del eje tinta sobre el nivel raised. La cabeza --ds-color-text-muted ya es vocabulario AUTORADO de BrandPalette; esta raiz solo la promueve a cabeza de cascada para que una hoja de ese paso derive en vez de repetir su literal. La cabeza pertenece a tier.base.fg.muted por la regla de generalidad (un solo reclamante de tier base); esta raiz la REFERENCIA, no la disputa.",
+      "evidence": "--ds-color-text-muted es vocabulario AUTORADO de BrandPalette; emision medida por scripts/tokens/purity: emitida-en-los-3 ({\"rottay\":true,\"bithire\":true,\"evnto\":true})",
+      "governedBy": null,
+      "governanceScope": "ninguna",
+      "exposure": "internal-head",
+      "exposureNote": "EJE PASO, lote 3B (2026-08-28). Hija de tier.raised.fg: promueve a cabeza de cascada el paso \"muted\" del vocabulario AUTORADO de BrandPalette. Hereda exposure y governedBy del padre porque no es una perilla nueva sino la misma decision indexada por su paso -- por eso root-exposure-gate mide el vocabulario sobre las raices NO refinadas (adjudicacion DT 3.1). collapsesLegacy nace en cero a proposito: ese campo es censo FECHADO de 2026-08-18 y una raiz de 2026-08-28 no puede tener historia ahi; su cifra viva es su poblacion en manifest/generated/root-membership.json. POR QUE NACE ESTA RAIZ Y NO OTRAS: tier.raised.fg era el UNICO padre del eje sin ningun paso, y su cabeza --ds-material-raised-foreground no se emite en NINGUNO de los 6 scopes -- sus 52 filas de purity eran 52/52 head-not-emitted, es decir el padre no era una respuesta. Las cabezas de este paso si se emiten en los 3 temas, y por eso la raiz saca filas de la clase STOP en vez de mover un valor.",
+      "derivationDebt": true
+    },
+    {
       "rootId": "tier.base.bg",
       "group": "superficie-por-nivel",
       "channel": "--ds-color-bg-primary",
@@ -2412,7 +2490,7 @@
       "governedBy": null,
       "governanceScope": "ninguna",
       "exposure": "gap",
-      "exposureNote": "EJE PASO, cohorte 2A (2026-08-27). Hija de tier.page.border: promueve a cabeza de cascada el paso \"primary\" del vocabulario AUTORADO de BrandPalette. Hereda exposure y governedBy del padre porque no es una perilla nueva sino la misma decision indexada por su paso -- por eso root-exposure-gate mide el vocabulario sobre las raices NO refinadas (adjudicacion DT 3.1). collapsesLegacy nace en cero a proposito: ese campo es censo FECHADO de 2026-08-18 y una raiz de 2026-08-27 no puede tener historia ahi; su cifra viva es su poblacion en manifest/generated/root-membership.json.",
+      "exposureNote": "EJE PASO, cohorte 2A (2026-08-27). Hija de tier.page.border: promueve a cabeza de cascada el paso \"primary\" del vocabulario AUTORADO de BrandPalette. Hereda exposure y governedBy del padre porque no es una perilla nueva sino la misma decision indexada por su paso -- por eso root-exposure-gate mide el vocabulario sobre las raices NO refinadas (adjudicacion DT 3.1). collapsesLegacy nace en cero a proposito: ese campo es censo FECHADO de 2026-08-18 y una raiz de 2026-08-27 no puede tener historia ahi; su cifra viva es su poblacion en manifest/generated/root-membership.json. CLASE C, lote 3 (2026-08-28): esta raiz-paso resuelve byte-identica a su padre --ds-color-border en los 6 scopes, y eso NO es un alias sin terminar: es un colapso YA HECHO a proposito por K2 en los 3 temas (borderPrimaryColor: var(--ds-color-border), con @governor deriva de: --ds-color-border). El socket autorado es real y distinto -- foundation/themes/default.css lo declara var(--ds-color-neutral-200)/-300 y monochrome/invert-section var(--ds-color-hairline-strong). Leer el @governor antes de reportar alias: la identidad de valor resuelto no distingue un alias pendiente de un colapso terminado.",
       "derivationDebt": true
     },
     {
@@ -2724,7 +2802,7 @@
       "governedBy": null,
       "governanceScope": "ninguna",
       "exposure": "gap",
-      "exposureNote": "EJE PASO, cohorte 2A (2026-08-27). Hija de tier.raised.border: promueve a cabeza de cascada el paso \"primary\" del vocabulario AUTORADO de BrandPalette. Hereda exposure y governedBy del padre porque no es una perilla nueva sino la misma decision indexada por su paso -- por eso root-exposure-gate mide el vocabulario sobre las raices NO refinadas (adjudicacion DT 3.1). collapsesLegacy nace en cero a proposito: ese campo es censo FECHADO de 2026-08-18 y una raiz de 2026-08-27 no puede tener historia ahi; su cifra viva es su poblacion en manifest/generated/root-membership.json.",
+      "exposureNote": "EJE PASO, cohorte 2A (2026-08-27). Hija de tier.raised.border: promueve a cabeza de cascada el paso \"primary\" del vocabulario AUTORADO de BrandPalette. Hereda exposure y governedBy del padre porque no es una perilla nueva sino la misma decision indexada por su paso -- por eso root-exposure-gate mide el vocabulario sobre las raices NO refinadas (adjudicacion DT 3.1). collapsesLegacy nace en cero a proposito: ese campo es censo FECHADO de 2026-08-18 y una raiz de 2026-08-27 no puede tener historia ahi; su cifra viva es su poblacion en manifest/generated/root-membership.json. CLASE C, lote 3 (2026-08-28): esta raiz-paso resuelve byte-identica a su padre --ds-color-border en los 6 scopes, y eso NO es un alias sin terminar: es un colapso YA HECHO a proposito por K2 en los 3 temas (borderPrimaryColor: var(--ds-color-border), con @governor deriva de: --ds-color-border). El socket autorado es real y distinto -- foundation/themes/default.css lo declara var(--ds-color-neutral-200)/-300 y monochrome/invert-section var(--ds-color-hairline-strong). Leer el @governor antes de reportar alias: la identidad de valor resuelto no distingue un alias pendiente de un colapso terminado.",
       "derivationDebt": true
     },
     {
@@ -2802,7 +2880,7 @@
       "governedBy": null,
       "governanceScope": "ninguna",
       "exposure": "internal-head",
-      "exposureNote": "EJE PASO, cohorte 2A (2026-08-27). Hija de tier.base.border: promueve a cabeza de cascada el paso \"primary\" del vocabulario AUTORADO de BrandPalette. Hereda exposure y governedBy del padre porque no es una perilla nueva sino la misma decision indexada por su paso -- por eso root-exposure-gate mide el vocabulario sobre las raices NO refinadas (adjudicacion DT 3.1). collapsesLegacy nace en cero a proposito: ese campo es censo FECHADO de 2026-08-18 y una raiz de 2026-08-27 no puede tener historia ahi; su cifra viva es su poblacion en manifest/generated/root-membership.json.",
+      "exposureNote": "EJE PASO, cohorte 2A (2026-08-27). Hija de tier.base.border: promueve a cabeza de cascada el paso \"primary\" del vocabulario AUTORADO de BrandPalette. Hereda exposure y governedBy del padre porque no es una perilla nueva sino la misma decision indexada por su paso -- por eso root-exposure-gate mide el vocabulario sobre las raices NO refinadas (adjudicacion DT 3.1). collapsesLegacy nace en cero a proposito: ese campo es censo FECHADO de 2026-08-18 y una raiz de 2026-08-27 no puede tener historia ahi; su cifra viva es su poblacion en manifest/generated/root-membership.json. CLASE C, lote 3 (2026-08-28): esta raiz-paso resuelve byte-identica a su padre --ds-color-border en los 6 scopes, y eso NO es un alias sin terminar: es un colapso YA HECHO a proposito por K2 en los 3 temas (borderPrimaryColor: var(--ds-color-border), con @governor deriva de: --ds-color-border). El socket autorado es real y distinto -- foundation/themes/default.css lo declara var(--ds-color-neutral-200)/-300 y monochrome/invert-section var(--ds-color-hairline-strong). Leer el @governor antes de reportar alias: la identidad de valor resuelto no distingue un alias pendiente de un colapso terminado.",
       "derivationDebt": true
     },
     {
@@ -2880,7 +2958,7 @@
       "governedBy": null,
       "governanceScope": "ninguna",
       "exposure": "internal-head",
-      "exposureNote": "EJE PASO, cohorte 2A (2026-08-27). Hija de tier.control.border: promueve a cabeza de cascada el paso \"primary\" del vocabulario AUTORADO de BrandPalette. Hereda exposure y governedBy del padre porque no es una perilla nueva sino la misma decision indexada por su paso -- por eso root-exposure-gate mide el vocabulario sobre las raices NO refinadas (adjudicacion DT 3.1). collapsesLegacy nace en cero a proposito: ese campo es censo FECHADO de 2026-08-18 y una raiz de 2026-08-27 no puede tener historia ahi; su cifra viva es su poblacion en manifest/generated/root-membership.json.",
+      "exposureNote": "EJE PASO, cohorte 2A (2026-08-27). Hija de tier.control.border: promueve a cabeza de cascada el paso \"primary\" del vocabulario AUTORADO de BrandPalette. Hereda exposure y governedBy del padre porque no es una perilla nueva sino la misma decision indexada por su paso -- por eso root-exposure-gate mide el vocabulario sobre las raices NO refinadas (adjudicacion DT 3.1). collapsesLegacy nace en cero a proposito: ese campo es censo FECHADO de 2026-08-18 y una raiz de 2026-08-27 no puede tener historia ahi; su cifra viva es su poblacion en manifest/generated/root-membership.json. CLASE C, lote 3 (2026-08-28): esta raiz-paso resuelve byte-identica a su padre --ds-color-border en los 6 scopes, y eso NO es un alias sin terminar: es un colapso YA HECHO a proposito por K2 en los 3 temas (borderPrimaryColor: var(--ds-color-border), con @governor deriva de: --ds-color-border). El socket autorado es real y distinto -- foundation/themes/default.css lo declara var(--ds-color-neutral-200)/-300 y monochrome/invert-section var(--ds-color-hairline-strong). Leer el @governor antes de reportar alias: la identidad de valor resuelto no distingue un alias pendiente de un colapso terminado.",
       "derivationDebt": true
     },
     {
@@ -3192,7 +3270,7 @@
       "governedBy": null,
       "governanceScope": "ninguna",
       "exposure": "internal-head",
-      "exposureNote": "EJE PASO, cohorte 2A (2026-08-27). Hija de tier.overlay.border: promueve a cabeza de cascada el paso \"primary\" del vocabulario AUTORADO de BrandPalette. Hereda exposure y governedBy del padre porque no es una perilla nueva sino la misma decision indexada por su paso -- por eso root-exposure-gate mide el vocabulario sobre las raices NO refinadas (adjudicacion DT 3.1). collapsesLegacy nace en cero a proposito: ese campo es censo FECHADO de 2026-08-18 y una raiz de 2026-08-27 no puede tener historia ahi; su cifra viva es su poblacion en manifest/generated/root-membership.json.",
+      "exposureNote": "EJE PASO, cohorte 2A (2026-08-27). Hija de tier.overlay.border: promueve a cabeza de cascada el paso \"primary\" del vocabulario AUTORADO de BrandPalette. Hereda exposure y governedBy del padre porque no es una perilla nueva sino la misma decision indexada por su paso -- por eso root-exposure-gate mide el vocabulario sobre las raices NO refinadas (adjudicacion DT 3.1). collapsesLegacy nace en cero a proposito: ese campo es censo FECHADO de 2026-08-18 y una raiz de 2026-08-27 no puede tener historia ahi; su cifra viva es su poblacion en manifest/generated/root-membership.json. CLASE C, lote 3 (2026-08-28): esta raiz-paso resuelve byte-identica a su padre --ds-color-border en los 6 scopes, y eso NO es un alias sin terminar: es un colapso YA HECHO a proposito por K2 en los 3 temas (borderPrimaryColor: var(--ds-color-border), con @governor deriva de: --ds-color-border). El socket autorado es real y distinto -- foundation/themes/default.css lo declara var(--ds-color-neutral-200)/-300 y monochrome/invert-section var(--ds-color-hairline-strong). Leer el @governor antes de reportar alias: la identidad de valor resuelto no distingue un alias pendiente de un colapso terminado.",
       "derivationDebt": true
     },
     {
@@ -3261,7 +3339,7 @@
         "tenant-dial": 1308,
         "gap": 490
       },
-      "reading": "De las 64 raices NO REFINADAS, 28 tienen control o dial declarado (1308 canales), 28 son cabezas internas correctas sin perilla (1512) y 8 son huecos de perilla (490). RECOMPUTADO de las filas en la cohorte 2A (2026-08-27). El catalogo tiene ademas 33 raices REFINADAS del eje paso, excluidas de este vocabulario por adjudicacion del DT: una hija hereda el exposure de su padre porque es la MISMA decision indexada mas fino, y contarlas por separado inflaria el backlog de perillas faltantes sin que la deuda crezca. Su cifra viva es su poblacion en manifest/generated/root-membership.json; collapsesLegacy vale cero en ellas porque es censo fechado de 2026-08-18. El grueso de la pintura NO deberia ser perilla nunca: deberia ser cascada. Ese sigue siendo el hallazgo estructural.",
+      "reading": "De las 64 raices NO REFINADAS, 28 tienen control o dial declarado (1308 canales), 28 son cabezas internas correctas sin perilla (1512) y 8 son huecos de perilla (490). RECOMPUTADO de las filas en la cohorte 2A (2026-08-27). El catalogo tiene ademas 36 raices REFINADAS del eje paso, excluidas de este vocabulario por adjudicacion del DT: una hija hereda el exposure de su padre porque es la MISMA decision indexada mas fino, y contarlas por separado inflaria el backlog de perillas faltantes sin que la deuda crezca. Su cifra viva es su poblacion en manifest/generated/root-membership.json; collapsesLegacy vale cero en ellas porque es censo fechado de 2026-08-18. El grueso de la pintura NO deberia ser perilla nunca: deberia ser cascada. Ese sigue siendo el hallazgo estructural.",
       "derivation": "1308 + 1512 + 490 = 3310 = Σ collapsesLegacy.total de las 64 raices, recomputado de las filas. El campo se llama collapsesLegacy desde la cohorte 1: es un censo FECHADO (2026-08-18) que NO se reconcilia con la membresia viva por canal (manifest/generated/root-membership.json), medida sobre los canales que los temas emiten HOY y con criterios que sobreviven a la ley del owner. Ver corrections."
     },
     "byGroup": {

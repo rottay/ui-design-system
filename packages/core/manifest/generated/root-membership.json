@@ -18,7 +18,7 @@
   },
   "provenance": {
     "catalog": "manifest/cascade/root-catalog.json",
-    "catalogRoots": 97,
+    "catalogRoots": 100,
     "edges": "manifest/cascade/extracted/css-edges.json",
     "inventory": "scripts/tokens/slot-inventory/index.mjs (funcion pura, no el artefacto: leerlo crearia un ciclo)",
     "ownerTiers": "manifest/cascade/owner-tiers.json",
@@ -82,15 +82,15 @@
     "ownersAdjudicated": 174,
     "stepRulesPresent": true,
     "stepRulesAdjudicated": 260,
-    "rowsRefinedByStep": 44,
+    "rowsRefinedByStep": 65,
     "rowsParentByDesign": 39,
     "byStep": {
-      "sin-paso": 1527,
+      "sin-paso": 1506,
       "@parent": 39,
-      "primary": 12,
+      "primary": 25,
+      "muted": 9,
+      "secondary": 17,
       "disabled": 4,
-      "secondary": 10,
-      "muted": 8,
       "focus": 3,
       "default": 5,
       "tertiary": 2
@@ -134,7 +134,8 @@
         "references": [
           "tier.control.fg",
           "tier.overlay.fg.primary",
-          "tier.page.fg.primary"
+          "tier.page.fg.primary",
+          "tier.raised.fg.primary"
         ]
       },
       {
@@ -145,6 +146,26 @@
           "tier.overlay.border",
           "tier.page.border.default",
           "tier.raised.border"
+        ]
+      },
+      {
+        "channel": "--ds-color-text-secondary",
+        "rootId": "tier.base.fg.secondary",
+        "references": [
+          "tier.control.fg.secondary",
+          "tier.overlay.fg.secondary",
+          "tier.page.fg.secondary",
+          "tier.raised.fg.secondary"
+        ]
+      },
+      {
+        "channel": "--ds-color-text-muted",
+        "rootId": "tier.base.fg.muted",
+        "references": [
+          "tier.control.fg.muted",
+          "tier.overlay.fg.muted",
+          "tier.page.fg.muted",
+          "tier.raised.fg.muted"
         ]
       },
       {
@@ -175,24 +196,6 @@
           "tier.overlay.border.focus",
           "tier.page.border.focus",
           "tier.raised.border.focus"
-        ]
-      },
-      {
-        "channel": "--ds-color-text-secondary",
-        "rootId": "tier.base.fg.secondary",
-        "references": [
-          "tier.control.fg.secondary",
-          "tier.overlay.fg.secondary",
-          "tier.page.fg.secondary"
-        ]
-      },
-      {
-        "channel": "--ds-color-text-muted",
-        "rootId": "tier.base.fg.muted",
-        "references": [
-          "tier.control.fg.muted",
-          "tier.overlay.fg.muted",
-          "tier.page.fg.muted"
         ]
       },
       {
@@ -9963,7 +9966,7 @@
     },
     {
       "channel": "--ds-card-body-color",
-      "rootId": "tier.raised.fg",
+      "rootId": "tier.raised.fg.primary",
       "via": "governed-owner-table",
       "evidence": {
         "ownerPaths": [
@@ -9977,7 +9980,8 @@
         ],
         "propertyFromLeaf": "fg",
         "concordance": "2 owners concuerdan en tier",
-        "coincidenceGuard": "no-value-match-used"
+        "coincidenceGuard": "no-value-match-used",
+        "stepFrom": "owner-step-rules.json (owner x propiedad x hoja, por concordancia)"
       },
       "tier": "raised",
       "property": "fg",
@@ -9993,8 +9997,9 @@
       ],
       "rootExposure": "internal-head",
       "rootHasDerivationLaw": true,
-      "step": null,
-      "stepNote": "la tabla pide tier.raised.fg.primary y esa raiz no existe en el catalogo"
+      "parentRootId": "tier.raised.fg",
+      "step": "primary",
+      "stepNote": null
     },
     {
       "channel": "--ds-card-body-padding",
@@ -10246,7 +10251,7 @@
     },
     {
       "channel": "--ds-card-color-muted",
-      "rootId": "tier.raised.fg",
+      "rootId": "tier.raised.fg.muted",
       "via": "governed-owner-table",
       "evidence": {
         "ownerPaths": [
@@ -10260,7 +10265,8 @@
         ],
         "propertyFromLeaf": "fg",
         "concordance": "2 owners concuerdan en tier",
-        "coincidenceGuard": "no-value-match-used"
+        "coincidenceGuard": "no-value-match-used",
+        "stepFrom": "owner-step-rules.json (owner x propiedad x hoja, por concordancia)"
       },
       "tier": "raised",
       "property": "fg",
@@ -10275,8 +10281,9 @@
       ],
       "rootExposure": "internal-head",
       "rootHasDerivationLaw": true,
-      "step": null,
-      "stepNote": "la tabla pide tier.raised.fg.muted y esa raiz no existe en el catalogo"
+      "parentRootId": "tier.raised.fg",
+      "step": "muted",
+      "stepNote": null
     },
     {
       "channel": "--ds-card-cover-overlay-bg",
@@ -10614,7 +10621,7 @@
     },
     {
       "channel": "--ds-card-header-color",
-      "rootId": "tier.raised.fg",
+      "rootId": "tier.raised.fg.secondary",
       "via": "governed-owner-table",
       "evidence": {
         "ownerPaths": [
@@ -10628,7 +10635,8 @@
         ],
         "propertyFromLeaf": "fg",
         "concordance": "2 owners concuerdan en tier",
-        "coincidenceGuard": "no-value-match-used"
+        "coincidenceGuard": "no-value-match-used",
+        "stepFrom": "owner-step-rules.json (owner x propiedad x hoja, por concordancia)"
       },
       "tier": "raised",
       "property": "fg",
@@ -10645,8 +10653,9 @@
       ],
       "rootExposure": "internal-head",
       "rootHasDerivationLaw": true,
-      "step": null,
-      "stepNote": "la tabla pide tier.raised.fg.secondary y esa raiz no existe en el catalogo"
+      "parentRootId": "tier.raised.fg",
+      "step": "secondary",
+      "stepNote": null
     },
     {
       "channel": "--ds-card-header-padding",
@@ -11177,7 +11186,7 @@
     },
     {
       "channel": "--ds-card-subtitle-color",
-      "rootId": "tier.raised.fg",
+      "rootId": "tier.raised.fg.secondary",
       "via": "governed-owner-table",
       "evidence": {
         "ownerPaths": [
@@ -11191,7 +11200,8 @@
         ],
         "propertyFromLeaf": "fg",
         "concordance": "2 owners concuerdan en tier",
-        "coincidenceGuard": "no-value-match-used"
+        "coincidenceGuard": "no-value-match-used",
+        "stepFrom": "owner-step-rules.json (owner x propiedad x hoja, por concordancia)"
       },
       "tier": "raised",
       "property": "fg",
@@ -11207,8 +11217,9 @@
       ],
       "rootExposure": "internal-head",
       "rootHasDerivationLaw": true,
-      "step": null,
-      "stepNote": "la tabla pide tier.raised.fg.secondary y esa raiz no existe en el catalogo"
+      "parentRootId": "tier.raised.fg",
+      "step": "secondary",
+      "stepNote": null
     },
     {
       "channel": "--ds-card-title-color",
@@ -12388,7 +12399,7 @@
     },
     {
       "channel": "--ds-collection-card-body-color",
-      "rootId": "tier.raised.fg",
+      "rootId": "tier.raised.fg.primary",
       "via": "governed-owner-table",
       "evidence": {
         "ownerPaths": [
@@ -12402,7 +12413,8 @@
         ],
         "propertyFromLeaf": "fg",
         "concordance": "2 owners concuerdan en tier",
-        "coincidenceGuard": "no-value-match-used"
+        "coincidenceGuard": "no-value-match-used",
+        "stepFrom": "owner-step-rules.json (owner x propiedad x hoja, por concordancia)"
       },
       "tier": "raised",
       "property": "fg",
@@ -12417,8 +12429,9 @@
       ],
       "rootExposure": "internal-head",
       "rootHasDerivationLaw": true,
-      "step": null,
-      "stepNote": "la tabla pide tier.raised.fg.primary y esa raiz no existe en el catalogo"
+      "parentRootId": "tier.raised.fg",
+      "step": "primary",
+      "stepNote": null
     },
     {
       "channel": "--ds-collection-card-border",
@@ -12510,7 +12523,7 @@
     },
     {
       "channel": "--ds-collection-card-label-color",
-      "rootId": "tier.raised.fg",
+      "rootId": "tier.raised.fg.secondary",
       "via": "governed-owner-table",
       "evidence": {
         "ownerPaths": [
@@ -12524,7 +12537,8 @@
         ],
         "propertyFromLeaf": "fg",
         "concordance": "2 owners concuerdan en tier",
-        "coincidenceGuard": "no-value-match-used"
+        "coincidenceGuard": "no-value-match-used",
+        "stepFrom": "owner-step-rules.json (owner x propiedad x hoja, por concordancia)"
       },
       "tier": "raised",
       "property": "fg",
@@ -12539,8 +12553,9 @@
       ],
       "rootExposure": "internal-head",
       "rootHasDerivationLaw": true,
-      "step": null,
-      "stepNote": "la tabla pide tier.raised.fg.secondary y esa raiz no existe en el catalogo"
+      "parentRootId": "tier.raised.fg",
+      "step": "secondary",
+      "stepNote": null
     },
     {
       "channel": "--ds-collection-card-padding",
@@ -12798,7 +12813,7 @@
     },
     {
       "channel": "--ds-collection-card-title-color",
-      "rootId": "tier.raised.fg",
+      "rootId": "tier.raised.fg.primary",
       "via": "governed-owner-table",
       "evidence": {
         "ownerPaths": [
@@ -12812,7 +12827,8 @@
         ],
         "propertyFromLeaf": "fg",
         "concordance": "2 owners concuerdan en tier",
-        "coincidenceGuard": "no-value-match-used"
+        "coincidenceGuard": "no-value-match-used",
+        "stepFrom": "owner-step-rules.json (owner x propiedad x hoja, por concordancia)"
       },
       "tier": "raised",
       "property": "fg",
@@ -12827,12 +12843,13 @@
       ],
       "rootExposure": "internal-head",
       "rootHasDerivationLaw": true,
-      "step": null,
-      "stepNote": "la tabla pide tier.raised.fg.primary y esa raiz no existe en el catalogo"
+      "parentRootId": "tier.raised.fg",
+      "step": "primary",
+      "stepNote": null
     },
     {
       "channel": "--ds-collection-card-value-color",
-      "rootId": "tier.raised.fg",
+      "rootId": "tier.raised.fg.primary",
       "via": "governed-owner-table",
       "evidence": {
         "ownerPaths": [
@@ -12846,7 +12863,8 @@
         ],
         "propertyFromLeaf": "fg",
         "concordance": "2 owners concuerdan en tier",
-        "coincidenceGuard": "no-value-match-used"
+        "coincidenceGuard": "no-value-match-used",
+        "stepFrom": "owner-step-rules.json (owner x propiedad x hoja, por concordancia)"
       },
       "tier": "raised",
       "property": "fg",
@@ -12861,8 +12879,9 @@
       ],
       "rootExposure": "internal-head",
       "rootHasDerivationLaw": true,
-      "step": null,
-      "stepNote": "la tabla pide tier.raised.fg.primary y esa raiz no existe en el catalogo"
+      "parentRootId": "tier.raised.fg",
+      "step": "primary",
+      "stepNote": null
     },
     {
       "channel": "--ds-color-accent",
@@ -17159,7 +17178,8 @@
         "referencesHead": [
           "tier.control.fg.muted",
           "tier.overlay.fg.muted",
-          "tier.page.fg.muted"
+          "tier.page.fg.muted",
+          "tier.raised.fg.muted"
         ],
         "generalityEvidence": "src/foundation/contracts/composition/tenants/themes/index.ts -- BrandPalette.borderColor: \"The unqualified separator token components fall back to\"; BrandPalette.textPrimaryColor: \"Global reading ink used on the tenant canvas and neutral surfaces.\"",
         "coincidenceGuard": "no-value-match-used"
@@ -17252,7 +17272,8 @@
         "referencesHead": [
           "tier.control.fg",
           "tier.overlay.fg.primary",
-          "tier.page.fg.primary"
+          "tier.page.fg.primary",
+          "tier.raised.fg.primary"
         ],
         "generalityEvidence": "src/foundation/contracts/composition/tenants/themes/index.ts -- BrandPalette.borderColor: \"The unqualified separator token components fall back to\"; BrandPalette.textPrimaryColor: \"Global reading ink used on the tenant canvas and neutral surfaces.\"",
         "coincidenceGuard": "no-value-match-used"
@@ -17287,7 +17308,8 @@
         "referencesHead": [
           "tier.control.fg.secondary",
           "tier.overlay.fg.secondary",
-          "tier.page.fg.secondary"
+          "tier.page.fg.secondary",
+          "tier.raised.fg.secondary"
         ],
         "generalityEvidence": "src/foundation/contracts/composition/tenants/themes/index.ts -- BrandPalette.borderColor: \"The unqualified separator token components fall back to\"; BrandPalette.textPrimaryColor: \"Global reading ink used on the tenant canvas and neutral surfaces.\"",
         "coincidenceGuard": "no-value-match-used"
@@ -18997,7 +19019,7 @@
     },
     {
       "channel": "--ds-compact-card-body-color",
-      "rootId": "tier.raised.fg",
+      "rootId": "tier.raised.fg.primary",
       "via": "governed-owner-table",
       "evidence": {
         "ownerPaths": [
@@ -19011,7 +19033,8 @@
         ],
         "propertyFromLeaf": "fg",
         "concordance": "2 owners concuerdan en tier",
-        "coincidenceGuard": "no-value-match-used"
+        "coincidenceGuard": "no-value-match-used",
+        "stepFrom": "owner-step-rules.json (owner x propiedad x hoja, por concordancia)"
       },
       "tier": "raised",
       "property": "fg",
@@ -19026,8 +19049,9 @@
       ],
       "rootExposure": "internal-head",
       "rootHasDerivationLaw": true,
-      "step": null,
-      "stepNote": "la tabla pide tier.raised.fg.primary y esa raiz no existe en el catalogo"
+      "parentRootId": "tier.raised.fg",
+      "step": "primary",
+      "stepNote": null
     },
     {
       "channel": "--ds-compact-card-border",
@@ -19119,7 +19143,7 @@
     },
     {
       "channel": "--ds-compact-card-label-color",
-      "rootId": "tier.raised.fg",
+      "rootId": "tier.raised.fg.secondary",
       "via": "governed-owner-table",
       "evidence": {
         "ownerPaths": [
@@ -19133,7 +19157,8 @@
         ],
         "propertyFromLeaf": "fg",
         "concordance": "2 owners concuerdan en tier",
-        "coincidenceGuard": "no-value-match-used"
+        "coincidenceGuard": "no-value-match-used",
+        "stepFrom": "owner-step-rules.json (owner x propiedad x hoja, por concordancia)"
       },
       "tier": "raised",
       "property": "fg",
@@ -19148,8 +19173,9 @@
       ],
       "rootExposure": "internal-head",
       "rootHasDerivationLaw": true,
-      "step": null,
-      "stepNote": "la tabla pide tier.raised.fg.secondary y esa raiz no existe en el catalogo"
+      "parentRootId": "tier.raised.fg",
+      "step": "secondary",
+      "stepNote": null
     },
     {
       "channel": "--ds-compact-card-padding",
@@ -19230,7 +19256,7 @@
     },
     {
       "channel": "--ds-compact-card-title-color",
-      "rootId": "tier.raised.fg",
+      "rootId": "tier.raised.fg.primary",
       "via": "governed-owner-table",
       "evidence": {
         "ownerPaths": [
@@ -19244,7 +19270,8 @@
         ],
         "propertyFromLeaf": "fg",
         "concordance": "2 owners concuerdan en tier",
-        "coincidenceGuard": "no-value-match-used"
+        "coincidenceGuard": "no-value-match-used",
+        "stepFrom": "owner-step-rules.json (owner x propiedad x hoja, por concordancia)"
       },
       "tier": "raised",
       "property": "fg",
@@ -19259,12 +19286,13 @@
       ],
       "rootExposure": "internal-head",
       "rootHasDerivationLaw": true,
-      "step": null,
-      "stepNote": "la tabla pide tier.raised.fg.primary y esa raiz no existe en el catalogo"
+      "parentRootId": "tier.raised.fg",
+      "step": "primary",
+      "stepNote": null
     },
     {
       "channel": "--ds-compact-card-value-color",
-      "rootId": "tier.raised.fg",
+      "rootId": "tier.raised.fg.primary",
       "via": "governed-owner-table",
       "evidence": {
         "ownerPaths": [
@@ -19278,7 +19306,8 @@
         ],
         "propertyFromLeaf": "fg",
         "concordance": "2 owners concuerdan en tier",
-        "coincidenceGuard": "no-value-match-used"
+        "coincidenceGuard": "no-value-match-used",
+        "stepFrom": "owner-step-rules.json (owner x propiedad x hoja, por concordancia)"
       },
       "tier": "raised",
       "property": "fg",
@@ -19293,8 +19322,9 @@
       ],
       "rootExposure": "internal-head",
       "rootHasDerivationLaw": true,
-      "step": null,
-      "stepNote": "la tabla pide tier.raised.fg.primary y esa raiz no existe en el catalogo"
+      "parentRootId": "tier.raised.fg",
+      "step": "primary",
+      "stepNote": null
     },
     {
       "channel": "--ds-control-brand-border",
@@ -44113,7 +44143,7 @@
     },
     {
       "channel": "--ds-tall-card-body-color",
-      "rootId": "tier.raised.fg",
+      "rootId": "tier.raised.fg.primary",
       "via": "governed-owner-table",
       "evidence": {
         "ownerPaths": [
@@ -44127,7 +44157,8 @@
         ],
         "propertyFromLeaf": "fg",
         "concordance": "2 owners concuerdan en tier",
-        "coincidenceGuard": "no-value-match-used"
+        "coincidenceGuard": "no-value-match-used",
+        "stepFrom": "owner-step-rules.json (owner x propiedad x hoja, por concordancia)"
       },
       "tier": "raised",
       "property": "fg",
@@ -44142,8 +44173,9 @@
       ],
       "rootExposure": "internal-head",
       "rootHasDerivationLaw": true,
-      "step": null,
-      "stepNote": "la tabla pide tier.raised.fg.primary y esa raiz no existe en el catalogo"
+      "parentRootId": "tier.raised.fg",
+      "step": "primary",
+      "stepNote": null
     },
     {
       "channel": "--ds-tall-card-border",
@@ -44235,7 +44267,7 @@
     },
     {
       "channel": "--ds-tall-card-label-color",
-      "rootId": "tier.raised.fg",
+      "rootId": "tier.raised.fg.secondary",
       "via": "governed-owner-table",
       "evidence": {
         "ownerPaths": [
@@ -44249,7 +44281,8 @@
         ],
         "propertyFromLeaf": "fg",
         "concordance": "2 owners concuerdan en tier",
-        "coincidenceGuard": "no-value-match-used"
+        "coincidenceGuard": "no-value-match-used",
+        "stepFrom": "owner-step-rules.json (owner x propiedad x hoja, por concordancia)"
       },
       "tier": "raised",
       "property": "fg",
@@ -44264,8 +44297,9 @@
       ],
       "rootExposure": "internal-head",
       "rootHasDerivationLaw": true,
-      "step": null,
-      "stepNote": "la tabla pide tier.raised.fg.secondary y esa raiz no existe en el catalogo"
+      "parentRootId": "tier.raised.fg",
+      "step": "secondary",
+      "stepNote": null
     },
     {
       "channel": "--ds-tall-card-padding",
@@ -44345,7 +44379,7 @@
     },
     {
       "channel": "--ds-tall-card-title-color",
-      "rootId": "tier.raised.fg",
+      "rootId": "tier.raised.fg.primary",
       "via": "governed-owner-table",
       "evidence": {
         "ownerPaths": [
@@ -44359,7 +44393,8 @@
         ],
         "propertyFromLeaf": "fg",
         "concordance": "2 owners concuerdan en tier",
-        "coincidenceGuard": "no-value-match-used"
+        "coincidenceGuard": "no-value-match-used",
+        "stepFrom": "owner-step-rules.json (owner x propiedad x hoja, por concordancia)"
       },
       "tier": "raised",
       "property": "fg",
@@ -44374,12 +44409,13 @@
       ],
       "rootExposure": "internal-head",
       "rootHasDerivationLaw": true,
-      "step": null,
-      "stepNote": "la tabla pide tier.raised.fg.primary y esa raiz no existe en el catalogo"
+      "parentRootId": "tier.raised.fg",
+      "step": "primary",
+      "stepNote": null
     },
     {
       "channel": "--ds-tall-card-value-color",
-      "rootId": "tier.raised.fg",
+      "rootId": "tier.raised.fg.primary",
       "via": "governed-owner-table",
       "evidence": {
         "ownerPaths": [
@@ -44393,7 +44429,8 @@
         ],
         "propertyFromLeaf": "fg",
         "concordance": "2 owners concuerdan en tier",
-        "coincidenceGuard": "no-value-match-used"
+        "coincidenceGuard": "no-value-match-used",
+        "stepFrom": "owner-step-rules.json (owner x propiedad x hoja, por concordancia)"
       },
       "tier": "raised",
       "property": "fg",
@@ -44408,8 +44445,9 @@
       ],
       "rootExposure": "internal-head",
       "rootHasDerivationLaw": true,
-      "step": null,
-      "stepNote": "la tabla pide tier.raised.fg.primary y esa raiz no existe en el catalogo"
+      "parentRootId": "tier.raised.fg",
+      "step": "primary",
+      "stepNote": null
     },
     {
       "channel": "--ds-text-disabled",
@@ -47857,7 +47895,7 @@
     },
     {
       "channel": "--ds-workspace-card-body-color",
-      "rootId": "tier.raised.fg",
+      "rootId": "tier.raised.fg.primary",
       "via": "governed-owner-table",
       "evidence": {
         "ownerPaths": [
@@ -47871,7 +47909,8 @@
         ],
         "propertyFromLeaf": "fg",
         "concordance": "2 owners concuerdan en tier",
-        "coincidenceGuard": "no-value-match-used"
+        "coincidenceGuard": "no-value-match-used",
+        "stepFrom": "owner-step-rules.json (owner x propiedad x hoja, por concordancia)"
       },
       "tier": "raised",
       "property": "fg",
@@ -47886,8 +47925,9 @@
       ],
       "rootExposure": "internal-head",
       "rootHasDerivationLaw": true,
-      "step": null,
-      "stepNote": "la tabla pide tier.raised.fg.primary y esa raiz no existe en el catalogo"
+      "parentRootId": "tier.raised.fg",
+      "step": "primary",
+      "stepNote": null
     },
     {
       "channel": "--ds-workspace-card-border",
@@ -48016,7 +48056,7 @@
     },
     {
       "channel": "--ds-workspace-card-footer-color",
-      "rootId": "tier.raised.fg",
+      "rootId": "tier.raised.fg.secondary",
       "via": "governed-owner-table",
       "evidence": {
         "ownerPaths": [
@@ -48030,7 +48070,8 @@
         ],
         "propertyFromLeaf": "fg",
         "concordance": "2 owners concuerdan en tier",
-        "coincidenceGuard": "no-value-match-used"
+        "coincidenceGuard": "no-value-match-used",
+        "stepFrom": "owner-step-rules.json (owner x propiedad x hoja, por concordancia)"
       },
       "tier": "raised",
       "property": "fg",
@@ -48045,8 +48086,9 @@
       ],
       "rootExposure": "internal-head",
       "rootHasDerivationLaw": true,
-      "step": null,
-      "stepNote": "la tabla pide tier.raised.fg.secondary y esa raiz no existe en el catalogo"
+      "parentRootId": "tier.raised.fg",
+      "step": "secondary",
+      "stepNote": null
     },
     {
       "channel": "--ds-workspace-card-gap",
@@ -48177,7 +48219,7 @@
     },
     {
       "channel": "--ds-workspace-card-label-color",
-      "rootId": "tier.raised.fg",
+      "rootId": "tier.raised.fg.secondary",
       "via": "governed-owner-table",
       "evidence": {
         "ownerPaths": [
@@ -48191,7 +48233,8 @@
         ],
         "propertyFromLeaf": "fg",
         "concordance": "2 owners concuerdan en tier",
-        "coincidenceGuard": "no-value-match-used"
+        "coincidenceGuard": "no-value-match-used",
+        "stepFrom": "owner-step-rules.json (owner x propiedad x hoja, por concordancia)"
       },
       "tier": "raised",
       "property": "fg",
@@ -48206,8 +48249,9 @@
       ],
       "rootExposure": "internal-head",
       "rootHasDerivationLaw": true,
-      "step": null,
-      "stepNote": "la tabla pide tier.raised.fg.secondary y esa raiz no existe en el catalogo"
+      "parentRootId": "tier.raised.fg",
+      "step": "secondary",
+      "stepNote": null
     },
     {
       "channel": "--ds-workspace-card-padding",
@@ -48312,7 +48356,7 @@
     },
     {
       "channel": "--ds-workspace-card-title-color",
-      "rootId": "tier.raised.fg",
+      "rootId": "tier.raised.fg.primary",
       "via": "governed-owner-table",
       "evidence": {
         "ownerPaths": [
@@ -48326,7 +48370,8 @@
         ],
         "propertyFromLeaf": "fg",
         "concordance": "2 owners concuerdan en tier",
-        "coincidenceGuard": "no-value-match-used"
+        "coincidenceGuard": "no-value-match-used",
+        "stepFrom": "owner-step-rules.json (owner x propiedad x hoja, por concordancia)"
       },
       "tier": "raised",
       "property": "fg",
@@ -48341,12 +48386,13 @@
       ],
       "rootExposure": "internal-head",
       "rootHasDerivationLaw": true,
-      "step": null,
-      "stepNote": "la tabla pide tier.raised.fg.primary y esa raiz no existe en el catalogo"
+      "parentRootId": "tier.raised.fg",
+      "step": "primary",
+      "stepNote": null
     },
     {
       "channel": "--ds-workspace-card-value-color",
-      "rootId": "tier.raised.fg",
+      "rootId": "tier.raised.fg.primary",
       "via": "governed-owner-table",
       "evidence": {
         "ownerPaths": [
@@ -48360,7 +48406,8 @@
         ],
         "propertyFromLeaf": "fg",
         "concordance": "2 owners concuerdan en tier",
-        "coincidenceGuard": "no-value-match-used"
+        "coincidenceGuard": "no-value-match-used",
+        "stepFrom": "owner-step-rules.json (owner x propiedad x hoja, por concordancia)"
       },
       "tier": "raised",
       "property": "fg",
@@ -48375,8 +48422,9 @@
       ],
       "rootExposure": "internal-head",
       "rootHasDerivationLaw": true,
-      "step": null,
-      "stepNote": "la tabla pide tier.raised.fg.primary y esa raiz no existe en el catalogo"
+      "parentRootId": "tier.raised.fg",
+      "step": "primary",
+      "stepNote": null
     },
     {
       "channel": "--ds-workspace-shell-bg",
@@ -48574,5 +48622,5 @@
       "stepNote": "sin raiz que refinar"
     }
   ],
-  "digest": "408074eeff18f0f4976eec17a6ffb3a26540e783bed7cdd799a4bcbcad271092"
+  "digest": "2c525e4f43c16fc20610806b32d0c141211ea7ce7ea53a7aec531a26bf42ebec"
 }

@@ -7,6 +7,6 @@
     "internal-head": 28,
     "gap": 8
   },
-  "reading": "De las 64 raices NO REFINADAS, 28 tienen control o dial declarado (1308 canales), 28 son cabezas internas correctas sin perilla (1512) y 8 son huecos de perilla (490). RECOMPUTADO de las filas en la cohorte 2A (2026-08-27). El catalogo tiene ademas 33 raices REFINADAS del eje paso, excluidas de este vocabulario por adjudicacion del DT: una hija hereda el exposure de su padre porque es la MISMA decision indexada mas fino, y contarlas por separado inflaria el backlog de perillas faltantes sin que la deuda crezca. Su cifra viva es su poblacion en manifest/generated/root-membership.json; collapsesLegacy vale cero en ellas porque es censo fechado de 2026-08-18. El grueso de la pintura NO deberia ser perilla nunca: deberia ser cascada. Ese sigue siendo el hallazgo estructural.",
-  "refinedRootsExcluded": 33
+  "reading": "De las 64 raices NO REFINADAS, 28 tienen control o dial declarado (1308 canales), 28 son cabezas internas correctas sin perilla (1512) y 8 son huecos de perilla (490). RECOMPUTADO de las filas en la cohorte 2A (2026-08-27). El catalogo tiene ademas 36 raices REFINADAS del eje paso, excluidas de este vocabulario por adjudicacion del DT: una hija hereda el exposure de su padre porque es la MISMA decision indexada mas fino, y contarlas por separado inflaria el backlog de perillas faltantes sin que la deuda crezca. Su cifra viva es su poblacion en manifest/generated/root-membership.json; collapsesLegacy vale cero en ellas porque es censo fechado de 2026-08-18. El grueso de la pintura NO deberia ser perilla nunca: deberia ser cascada. Ese sigue siendo el hallazgo estructural.",
+  "refinedRootsExcluded": 36
 }

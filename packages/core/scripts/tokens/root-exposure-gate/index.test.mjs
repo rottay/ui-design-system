@@ -17,7 +17,7 @@ import { join } from 'node:path';
 import test from 'node:test';
 import { fileURLToPath } from 'node:url';
 
-import { CATALOG_PATH, CONTROLS_DIR, collectFindings, countByExposure, isRefinedRoot } from './index.mjs';
+import { BASELINE_PATH, CATALOG_PATH, CONTROLS_DIR, collectFindings, countByExposure, isRefinedRoot } from './index.mjs';
 
 const MODULE_URL = new URL('./index.mjs', import.meta.url).href;
 const BANNER = /root-exposure-gate OK/;
@@ -79,7 +79,17 @@ test('the live snapshot is the measured one, not a guess', () => {
 test('LAW 0b: every refined root in the live tree carries its derivation evidence', () => {
   const roots = JSON.parse(readFileSync(CATALOG_PATH, 'utf8')).roots;
   const refined = roots.filter((root) => isRefinedRoot(root.rootId));
-  assert.equal(refined.length, 33, 'if this moved, the census below moved with it');
+  /* EL NUMERO NO SE TECLEA DOS VECES. Antes esta linea decia `33` a mano, al
+   * lado de un baseline que declara `refinedRootsExcluded` -- dos copias del
+   * mismo hecho que pueden divergir en silencio, que es la patologia que este
+   * frente persigue. Ahora el drill EXIGE que coincidan: cuando el eje paso
+   * crece legitimamente (lote 3B: +3 raices de tier.raised.fg), este drill se
+   * pone rojo hasta que la re-ancla del baseline se escriba con su razon. Un
+   * solo numero que mover, y el rojo es la señal de que hay que moverlo. */
+  const baseline = JSON.parse(readFileSync(BASELINE_PATH, 'utf8'));
+  assert.equal(refined.length, baseline.refinedRootsExcluded,
+    `el arbol tiene ${refined.length} raices refinadas y el baseline declara ${baseline.refinedRootsExcluded}: `
+    + 're-ancla `refinedRootsExcluded` (y su parrafo `reading`) con razon escrita');
   assert.deepEqual(
     refined.filter((root) => !(root.derivationDebt && root.derivation)).map((root) => root.rootId),
     [],
