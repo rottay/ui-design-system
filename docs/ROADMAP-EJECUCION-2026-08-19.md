@@ -4569,6 +4569,24 @@ seeds reales y mover la superficie de calibración a un campo propio — la
 decisión 15 conserva su INTENT (superficie de calibración estrecha; dominio
 público 290 intacto) y se enmendará su formulación al cerrar C5.
 
+**MICROFIX CODEX CERRADO (2026-08-28; commit `ecdc01a61`; writer Opus; postaudit Fable omitido
+por razón escrita: microfix ordenado por Codex con spec exacta + verificación adversarial DT sobre
+el árbol real — ausente/999/"1" → EXIT 1 cada una, restaurado byte-idéntico — NO es precedente
+para lotes sin spec auditada).** El defecto restante de DRILL-77: el ancla de techos declaraba
+`schemaVersion: 1` y **no lo leía nadie** — un campo de versión que no se comprueba no versiona
+nada. Ahora exige `=== 1`, fail-closed en `--check` Y en `--write-baseline` (éste importa:
+`previous` se esparce al documento nuevo — reparar sobre un archivo que no se entiende no es
+reparar). El defecto era más ancho que los 3 casos: 7 formas frenan (ausente/null/999/"1"/0/2/
+true). Drills 25/25 con anti-coincidencia en 3 mutantes. Cero techos movidos. **Incidente de
+árbol (deuda con dueño, no de este lote):** un drill de `cascade-producers` muta el artefacto
+REAL en disco y un Ctrl-C lo deja corrupto y trackeado — pegajoso (cada corrida posterior lo
+consolida) y con síntoma que no se parece a la causa (16 rojos que parecen bug del parser).
+Restaurado con su productor canónico, byte-idéntico a HEAD. Deuda: ese drill escribe su fixture
+en tmpdir o restaura con handler de señal. **Directorio ajeno `docs/reauditoria-cloud/`
+presente, sin tocar** (WIP de otro flujo; stageo paths exactos desde ahora). Métrica sin mover:
+**62% / ~43%**.
+
+
 **LOTE GATE-HYGIENE CERRADO — LOS DOS MENORES DE INSTRUMENTO DEL DÍA, CERRADOS EL MISMO DÍA
 (2026-08-28; commit `e149538ba`; writer Opus; postaudit Fable: ACCEPT sin defectos, con
 plantados propios sobre la tabla real).** (1) **La puerta `--write-baseline` del norm-gate
