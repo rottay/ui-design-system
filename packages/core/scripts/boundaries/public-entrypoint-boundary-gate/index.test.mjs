@@ -5,6 +5,7 @@ import path from 'node:path';
 import test from 'node:test';
 import {
   CEILINGS_BASELINE_RELATIVE,
+  CEILINGS_SCHEMA_VERSION,
   evaluateCeilings,
   isValidCeiling,
   readCeilings,
@@ -177,12 +178,12 @@ test('TECHO — ancla ausente o corrupta: FALLA CERRADO', () => {
 });
 
 test('TECHO — los dos desacuerdos de CONJUNTO se ven, no solo los de valor', () => {
-  assert.deepEqual(evaluateCeilings({ './a': 10 }, { ceilings: { './a': 10 } }), []);
-  const nuevo = evaluateCeilings({ './a': 10, './b': 20 }, { ceilings: { './a': 10 } });
+  assert.deepEqual(evaluateCeilings({ './a': 10 }, { schemaVersion: 1, ceilings: { './a': 10 } }), []);
+  const nuevo = evaluateCeilings({ './a': 10, './b': 20 }, { schemaVersion: 1, ceilings: { './a': 10 } });
   assert.equal(nuevo.length, 1);
   assert.match(nuevo[0], /\.\/b: techo 20 sin anclar/);
   assert.match(nuevo[0], /entra por revision, no por omision/);
-  const huerfano = evaluateCeilings({ './a': 10 }, { ceilings: { './a': 10, './z': 5 } });
+  const huerfano = evaluateCeilings({ './a': 10 }, { schemaVersion: 1, ceilings: { './a': 10, './z': 5 } });
   assert.deepEqual(huerfano, ['./z: el ancla lo declara y el manifest ya no le pone techo']);
 });
 
@@ -236,20 +237,20 @@ test('TECHO/CODEX-1 — un ancla CORRUPTA no pasa en silencio, en ninguna de sus
    * el ancla rota daba cero errores. Cada forma va nombrada para que el arreglo
    * no se pueda deshacer sin que algo enrojezca. */
   for (const corrupto of ['not-a-number', null, [1000], {}, NaN, Infinity, -5, 10.5, 0, true]) {
-    const failures = evaluateCeilings({ './a': 1000 }, { ceilings: { './a': corrupto } });
+    const failures = evaluateCeilings({ './a': 1000 }, { schemaVersion: 1, ceilings: { './a': corrupto } });
     assert.equal(failures.length, 1, `ancla ${JSON.stringify(corrupto)} paso en silencio`);
     assert.match(failures[0], /el techo anclado .* no es un entero positivo/);
   }
   // Y del lado VIVO igual: un manifest con basura tampoco se compara.
   for (const corrupto of ['x', null, NaN, -5, 10.5, 0]) {
-    const failures = evaluateCeilings({ './a': corrupto }, { ceilings: { './a': 1000 } });
+    const failures = evaluateCeilings({ './a': corrupto }, { schemaVersion: 1, ceilings: { './a': 1000 } });
     assert.equal(failures.length, 1, `vivo ${JSON.stringify(corrupto)} paso en silencio`);
     assert.match(failures[0], /el techo vivo .* no es un entero positivo/);
   }
   // Un ancla huerfana Y corrupta se nombra por las dos cosas, no por una.
-  assert.match(evaluateCeilings({}, { ceilings: { './z': 'x' } })[0], /ni siquiera es un techo/);
+  assert.match(evaluateCeilings({}, { schemaVersion: 1, ceilings: { './z': 'x' } })[0], /ni siquiera es un techo/);
   // `ceilings` como array es corrupcion de la raiz, no un mapa vacio.
-  assert.deepEqual(evaluateCeilings({ './a': 1 }, { ceilings: [] }), ['el ancla de techos no existe o no tiene `ceilings`']);
+  assert.deepEqual(evaluateCeilings({ './a': 1 }, { schemaVersion: 1, ceilings: [] }), ['el ancla de techos no existe o no tiene `ceilings`']);
   assert.equal(isValidCeiling(1), true);
   assert.equal(isValidCeiling(1.5), false);
 });
@@ -260,7 +261,7 @@ test('TECHO/CODEX-1 — un techo invalido en el manifest NO se vuelve invisible'
    * el mensaje diria "ya no le pone techo" cuando la verdad es "le puso basura". */
   const live = readCeilings({ entries: { './a': { budget: { maxSourceBytes: 'x' } } } });
   assert.deepEqual(live, { './a': 'x' });
-  assert.match(evaluateCeilings(live, { ceilings: { './a': 1000 } })[0], /el techo vivo "x" no es un entero positivo/);
+  assert.match(evaluateCeilings(live, { schemaVersion: 1, ceilings: { './a': 1000 } })[0], /el techo vivo "x" no es un entero positivo/);
 });
 
 test('TECHO/CODEX-2 — un subpath NUEVO es ampliacion: exige --widen y se registra como tal', () => {
@@ -285,7 +286,7 @@ test('TECHO/CODEX-2 — un subpath NUEVO es ampliacion: exige --widen y se regis
 test('TECHO/CODEX-2 — el gate ya veia el subpath nuevo; lo que fallaba era la ESCRITURA', () => {
   // El --check nunca dejo pasar un techo sin anclar: el agujero estaba en la
   // puerta, y por eso el drill afirma las dos mitades por separado.
-  assert.match(evaluateCeilings({ './b': 20 }, { ceilings: {} })[0], /\.\/b: techo 20 sin anclar/);
+  assert.match(evaluateCeilings({ './b': 20 }, { schemaVersion: 1, ceilings: {} })[0], /\.\/b: techo 20 sin anclar/);
 });
 
 test('TECHO — el ancla vive donde la ley R3 la admite', () => {
@@ -373,4 +374,80 @@ test('TECHO/FABLE — el texto no llama "nuevo" a un subpath que ya existia', ()
   anchorCeilings(root, manifest, { './primitives/box': 'x' });
   assert.throws(() => writeCeilingsBaseline({ root, reason: 'r' }), /sin ancla valida/);
   assert.throws(() => writeCeilingsBaseline({ root, reason: 'r' }), (error) => !/\(nuevo,/.test(error.message));
+});
+
+/* ── el schemaVersion del ancla se verifica, en las DOS rutas ─────────────── */
+
+/** Escribe un ancla valida salvo por su `schemaVersion`. */
+function anchorWithSchema(root, manifest, schemaVersion) {
+  const ceilings = Object.fromEntries(
+    Object.entries(manifest.entries).map(([subpath, entry]) => [subpath, entry.budget.maxSourceBytes]),
+  );
+  const doc = { law: 'fixture', ceilings };
+  if (schemaVersion !== undefined) doc.schemaVersion = schemaVersion;
+  write(root, CEILINGS_BASELINE_RELATIVE, `${JSON.stringify(doc, null, 2)}\n`);
+}
+
+test('SCHEMA — un ancla con schemaVersion ausente, null o desconocido NO se compara', () => {
+  /* El archivo declaraba `schemaVersion: 1` desde que nacio y no lo leia nadie.
+   * Un campo de version que no se comprueba no versiona nada: la primera vez que
+   * el formato cambie de verdad, el gate leera un archivo de otra forma creyendo
+   * que entiende lo que dice. Se compara con `===`, asi que el string "1"
+   * tampoco pasa -- un numero serializado como texto ES una discrepancia de
+   * formato, y es justo lo que este campo existe para atrapar. */
+  for (const schemaVersion of [undefined, null, 999, '1', 0, 2, true]) {
+    const failures = evaluateCeilings({ './a': 1000 }, { schemaVersion, ceilings: { './a': 1000 } });
+    assert.equal(failures.length, 1, `schemaVersion ${JSON.stringify(schemaVersion)} paso en silencio`);
+    assert.match(failures[0], /schemaVersion .* y este gate lee la version 1/);
+    assert.match(failures[0], /no se compara un archivo cuyo formato no se entiende/);
+  }
+  // Y la version correcta no estorba: sin desvio, cero fallos.
+  assert.deepEqual(evaluateCeilings({ './a': 1000 }, { schemaVersion: 1, ceilings: { './a': 1000 } }), []);
+  assert.equal(CEILINGS_SCHEMA_VERSION, 1);
+});
+
+test('SCHEMA — el gate falla cerrado sobre un arbol real con el ancla de otra version', () => {
+  for (const schemaVersion of [undefined, null, 999]) {
+    const { root, manifest } = runtimeFixture();
+    anchorWithSchema(root, manifest, schemaVersion);
+    assert.throws(
+      () => runPublicEntrypointGate({ root, silent: true }),
+      /\[techo\] el ancla declara schemaVersion .* y este gate lee la version 1/,
+      `schemaVersion ${JSON.stringify(schemaVersion)} no freno el gate`,
+    );
+  }
+});
+
+test('SCHEMA — la ruta --write-baseline tambien: no se re-ancla sobre un formato ajeno', () => {
+  /* La escritura importa tanto como la lectura: `previous` se esparce al
+   * documento nuevo, asi que un ancla de otro formato se propagaria intacta, y
+   * ademas `raised`/`added` se calculan contra ella. Reparar sobre un archivo
+   * que no se entiende no es reparar. */
+  for (const schemaVersion of [undefined, null, 999]) {
+    const { root, manifest } = runtimeFixture();
+    anchorWithSchema(root, manifest, schemaVersion);
+    assert.throws(
+      () => writeCeilingsBaseline({ root, reason: 'reparo el ancla', widen: true }),
+      /schemaVersion .* y este gate escribe la version 1/,
+      `schemaVersion ${JSON.stringify(schemaVersion)} dejo escribir`,
+    );
+    // Y no dejo rastro: el ancla ajena queda tal cual estaba.
+    const intacta = JSON.parse(fs.readFileSync(path.join(root, CEILINGS_BASELINE_RELATIVE), 'utf8'));
+    assert.equal(intacta.schemaVersion ?? null, schemaVersion ?? null);
+  }
+});
+
+test('SCHEMA — el documento escrito lleva SIEMPRE la version que el gate entiende', () => {
+  const { root, manifest } = runtimeFixture();
+  anchorCeilings(root, manifest, { './primitives/box': 1200 });          // baja: no necesita --widen
+  writeCeilingsBaseline({ root, reason: 'el grafo adelgazo' });
+  const written = JSON.parse(fs.readFileSync(path.join(root, CEILINGS_BASELINE_RELATIVE), 'utf8'));
+  assert.equal(written.schemaVersion, CEILINGS_SCHEMA_VERSION);
+});
+
+test('SCHEMA — el ancla REAL declara la version que el gate lee', () => {
+  const root = path.resolve(path.dirname(new URL(import.meta.url).pathname), '../../..');
+  const baseline = JSON.parse(fs.readFileSync(path.join(root, CEILINGS_BASELINE_RELATIVE), 'utf8'));
+  assert.equal(baseline.schemaVersion, CEILINGS_SCHEMA_VERSION);
+  assert.equal(Object.keys(baseline.ceilings).length, 77, 'los 77 techos, intactos');
 });

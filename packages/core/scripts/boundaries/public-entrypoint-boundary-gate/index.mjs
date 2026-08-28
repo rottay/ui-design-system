@@ -63,6 +63,21 @@ export function readCeilings(manifest) {
  * roto, que es la forma mas cara de fallar. Un techo es un conteo de bytes:
  * entero, finito y positivo. Cualquier otra cosa es corrupcion y se nombra.
  */
+/**
+ * LA VERSION DEL ANCLA SE VERIFICA, O NO ES UN CONTRATO.
+ *
+ * El archivo declara `schemaVersion: 1` desde que nacio y nadie lo leia: un
+ * ancla sin el campo, con `null`, con `999`, con el string `"1"` o con `0`
+ * pasaba igual. Un `schemaVersion` que no se comprueba no versiona nada -- es
+ * una etiqueta decorativa, y la primera vez que el formato cambie de verdad el
+ * gate leera un archivo de otra forma creyendo que entiende lo que dice.
+ *
+ * Se compara con `===`, asi que el string `"1"` tampoco pasa: si el archivo se
+ * genero con otra herramienta que serializo el numero como texto, eso ES una
+ * discrepancia de formato y es justo lo que este campo existe para atrapar.
+ */
+export const CEILINGS_SCHEMA_VERSION = 1;
+
 export function isValidCeiling(value) {
   return typeof value === 'number' && Number.isInteger(value) && value > 0;
 }
@@ -71,6 +86,10 @@ export function evaluateCeilings(live, baseline) {
   if (!baseline || typeof baseline.ceilings !== 'object' || baseline.ceilings === null
     || Array.isArray(baseline.ceilings)) {
     return ['el ancla de techos no existe o no tiene `ceilings`'];
+  }
+  if (baseline.schemaVersion !== CEILINGS_SCHEMA_VERSION) {
+    return [`el ancla declara schemaVersion ${JSON.stringify(baseline.schemaVersion ?? null)} `
+      + `y este gate lee la version ${CEILINGS_SCHEMA_VERSION}: no se compara un archivo cuyo formato no se entiende`];
   }
   const failures = [];
   for (const [subpath, value] of Object.entries(live)) {
@@ -394,6 +413,14 @@ export function writeCeilingsBaseline({ root = DEFAULT_ROOT, reason, widen = fal
   if (!reason || !String(reason).trim()) throw new Error('--write-baseline exige --reason "por que se mueve el ancla"');
   const baselinePath = path.join(root, CEILINGS_BASELINE_RELATIVE);
   const previous = readJson(baselinePath);
+  /* La escritura valida la version igual que la lectura: `previous` se esparce
+   * al documento nuevo, asi que un ancla de otro formato se propagaria intacta
+   * -- y ademas `raised`/`added` se calculan contra ella. Reparar sobre un
+   * archivo que no se entiende no es reparar. */
+  if (previous?.schemaVersion !== CEILINGS_SCHEMA_VERSION) {
+    throw new Error(`el ancla declara schemaVersion ${JSON.stringify(previous?.schemaVersion ?? null)} `
+      + `y este gate escribe la version ${CEILINGS_SCHEMA_VERSION}: no se re-ancla sobre un formato que no se entiende`);
+  }
   const live = readCeilings(readJson(path.join(root, 'public-entrypoints.manifest.json')));
   for (const [subpath, value] of Object.entries(live)) {
     if (!isValidCeiling(value)) throw new Error(`${subpath}: el techo vivo ${JSON.stringify(value)} no es un entero positivo; no se ancla basura`);
@@ -441,6 +468,9 @@ export function writeCeilingsBaseline({ root = DEFAULT_ROOT, reason, widen = fal
   }
   const doc = {
     ...previous,
+    /* Explicito despues del spread: el documento escrito lleva SIEMPRE la
+     * version que este gate entiende, sin depender de que el spread la traiga. */
+    schemaVersion: CEILINGS_SCHEMA_VERSION,
     ceilings: Object.fromEntries(Object.entries(live).sort(([a], [b]) => a.localeCompare(b))),
     lastMove: reason,
     lastMoveKind: widening.length > 0
