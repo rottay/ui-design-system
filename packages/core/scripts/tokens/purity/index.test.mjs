@@ -84,18 +84,26 @@ test('una fila sin raiz no entra al censo', async () => {
   assert.equal(doc.stats.rows, 5);
 });
 
-test('la clasificacion no distingue mayusculas de minusculas en el valor', () => {
+/* VUELCO (2026-08-28). Este drill afirmaba lo contrario -- "CSS no distingue el
+ * caso de un hex: un STOP por mayusculas seria ruido" -- y por eso la deuda
+ * caso-hex vivio protegida por un test EN VERDE desde la cohorte 2. La premisa
+ * era cierta y la conclusion no: el navegador no distingue el caso, pero la ley
+ * de aceptacion del colapso (cero-delta resuelto) compara STRING-EXACTO, asi
+ * que un flip de caso mueve bytes y el `--against` lo frena. La clase cobro dos
+ * veces en produccion antes de que alguien releyera este test. */
+test('la clasificacion SI distingue mayusculas de minusculas en el valor', () => {
   const verdict = classify({
     row: { authoredValue: '#ffffff', rootId: 'tier.control.bg' },
     headChannel: '--ds-control-bg', scope: { '--ds-control-bg': '#FFFFFF' },
   });
-  assert.equal(verdict.klass, 'pure', 'CSS no distingue el caso de un hex: un STOP por mayusculas seria ruido');
+  assert.equal(verdict.klass, 'value-shift', 'declararla pure la manda a un colapso que el --against frena');
+  assert.equal(verdict.headValue, '#FFFFFF', 'el veredicto conserva el valor de la cabeza tal cual se emitio');
 });
 
 test('helpers puros', () => {
   assert.equal(modeOfSlot('OVERLAY.chrome.x'), 'overlay');
   assert.equal(modeOfSlot('CHROME.x'), 'base');
-  assert.equal(normalise('  #FFF  '), '#fff');
+  assert.equal(normalise('  #FFF  '), '#FFF', 'trim si, toLowerCase no');
   assert.equal(replacementDelta('#14283B', '--ds-ink'), '"var(--ds-ink)"'.length - '"#14283B"'.length);
   const scopes = scopesOf(arm.compile());
   assert.deepEqual(Object.keys(scopes).sort(), ['base', 'dark']);
@@ -127,4 +135,60 @@ test('sobre el arbol real: las clases PARTICIONAN la poblacion y ninguna se fabr
     if (item.class === 'pure') assert.ok(item.headChannel, 'una fila pura nombra la cabeza contra la que se comparo');
   }
   assert.equal(doc.stats.byClass.pure + doc.stats.byClass['value-shift'] + doc.stats.byClass['head-not-emitted'], doc.stats.rows);
+});
+
+/* ── string-exacto: el caso separa, el whitespace de bordes no ───────────── */
+
+test('el trim SE QUEDA: los mismos bytes con whitespace de borde siguen siendo pure', () => {
+  for (const authored of ['  #FFFFFF', '#FFFFFF  ', '\t#FFFFFF\n']) {
+    const verdict = classify({
+      row: { rootId: 'tier.control.bg', authoredValue: authored },
+      headChannel: '--ds-control-bg',
+      scope: { '--ds-control-bg': '#FFFFFF' },
+    });
+    assert.equal(verdict.klass, 'pure', `${JSON.stringify(authored)}: el whitespace de bordes no lo distingue ningun navegador`);
+  }
+  assert.equal(normalise('  #FFFFFF  '), '#FFFFFF', 'trim si, toLowerCase no');
+  assert.notEqual(normalise('#FFFFFF'), normalise('#ffffff'), 'el caso separa');
+});
+
+test('caso y whitespace son ejes INDEPENDIENTES: trim no rescata un flip de caso', () => {
+  const verdict = classify({
+    row: { rootId: 'tier.control.bg', authoredValue: '  #ffffff  ' },
+    headChannel: '--ds-control-bg',
+    scope: { '--ds-control-bg': '#FFFFFF' },
+  });
+  assert.equal(verdict.klass, 'value-shift');
+});
+
+test('sobre el arbol real: NINGUNA fila pure difiere de su cabeza solo por el caso', async () => {
+  const { readFileSync } = await import('node:fs');
+  const { join } = await import('node:path');
+  const { loadArm, CORE_ROOT } = await import('./index.mjs');
+  /* Se afirma la PROPIEDAD, no la lista de las 43: una lista congelada se rompe
+   * con cada re-atribucion legitima del frente y deja de ser un detector. El
+   * censo POR NOMBRE vive en el asiento del lote; el invariante vive aca. */
+  const doc = JSON.parse(readFileSync(new URL('../../../manifest/generated/purity.json', import.meta.url), 'utf8'));
+  const inventory = JSON.parse(readFileSync(join(CORE_ROOT, 'manifest/generated/slot-inventory.json'), 'utf8'));
+  const authoredOf = new Map(inventory.rows.map((row) => [row.slotId, row.authoredValue]));
+  const arm = await loadArm({ coreRoot: CORE_ROOT });
+  const scopes = {};
+  for (const [vertical, theme] of Object.entries(arm.themes)) {
+    scopes[vertical] = scopesOf(arm.compile({ brandTheme: theme, tenantSlug: vertical }));
+  }
+  const overlayNameOf = (vertical) => Object.keys(scopes[vertical]).find((name) => name !== 'base') ?? 'base';
+
+  const caseOnly = [];
+  for (const row of doc.rows) {
+    if (row.class !== 'pure') continue;
+    const authored = authoredOf.get(row.slotId);
+    const scope = scopes[row.vertical][modeOfSlot(row.slotPath ?? row.slotId.split(':')[1]) === 'overlay' ? overlayNameOf(row.vertical) : 'base'];
+    const head = scope?.[row.headChannel];
+    assert.equal(String(head).trim(), String(authored).trim(),
+      `${row.slotId} esta clasificada pure pero su cabeza no emite ese valor exacto`);
+    if (String(head).trim() !== String(authored).trim() && String(head).trim().toLowerCase() === String(authored).trim().toLowerCase()) {
+      caseOnly.push(row.slotId);
+    }
+  }
+  assert.deepEqual(caseOnly, [], 'una fila pure que difiere solo por el caso es la deuda que este lote cerro');
 });

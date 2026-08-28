@@ -17,9 +17,9 @@
   "stats": {
     "rows": 2003,
     "byClass": {
-      "value-shift": 1419,
+      "value-shift": 1462,
       "head-not-emitted": 384,
-      "pure": 200
+      "pure": 157
     },
     "byVertical": {
       "bithire": 842,
@@ -27,23 +27,15 @@
       "rottay": 1001
     },
     "pureByRoot": {
-      "tier.base.fg.secondary": 12,
-      "tier.raised.border": 8,
-      "ramp.seed.primary": 9,
+      "ramp.seed.primary": 6,
       "tier.base.border.primary": 4,
       "control.ratio.fontSize": 2,
       "control.height": 2,
       "control.ratio.iconSize": 2,
       "control.ratio.lineHeight": 2,
-      "tier.control.fg.secondary": 1,
-      "tier.base.fg.muted": 10,
-      "tier.control.border": 2,
-      "tier.base.border": 10,
-      "tier.control.bg": 8,
-      "tier.base.fg": 7,
-      "tier.raised.bg": 5,
-      "tier.page.bg": 14,
-      "tier.page.border.default": 4,
+      "tier.base.border": 7,
+      "tier.page.bg": 6,
+      "tier.raised.border": 2,
       "tier.base.bg": 4,
       "tier.base.border.focus": 5,
       "tier.base.border.subtle": 5,
@@ -54,9 +46,14 @@
       "ramp.seed.secondary": 6,
       "ramp.seed.success": 8,
       "tier.base.fg.disabled": 7,
+      "tier.base.fg.muted": 8,
       "tier.page.ink": 6,
+      "tier.base.fg": 6,
+      "tier.base.fg.secondary": 7,
       "tier.base.fg.tertiary": 6,
       "ramp.seed.warning": 5,
+      "tier.raised.bg": 2,
+      "tier.control.bg": 1,
       "tier.overlay.fg": 2,
       "effect.intensity": 1,
       "gradient.recipe": 1,
@@ -65,6 +62,7 @@
       "type.family.mono": 3,
       "type.tracking": 3,
       "tier.page.fg.secondary": 1,
+      "tier.page.border.default": 2,
       "elevation.ladder": 2
     },
     "headlessByChannel": {
@@ -81,17 +79,17 @@
       "--ds-material-overlay-background": 38,
       "--ds-material-overlay-foreground": 18
     },
-    "collapsibleReplacementBytes": 2548,
+    "collapsibleReplacementBytes": 1833,
     "collapsibleBytesByVertical": {
-      "bithire": 1525,
+      "bithire": 810,
       "evnto": 529,
       "rottay": 494
     },
     "pureByRule": {
-      "R2": 101,
-      "R5": 43,
+      "R5": 35,
       "R1": 13,
-      "R4": 43
+      "R2": 67,
+      "R4": 42
     }
   },
   "rows": [
@@ -169,7 +167,7 @@
       "scope": "base",
       "headChannel": "--ds-color-text-secondary",
       "headEmitted": true,
-      "class": "pure",
+      "class": "value-shift",
       "replacementDeltaBytes": 23
     },
     {
@@ -191,7 +189,7 @@
       "scope": "base",
       "headChannel": "--ds-color-text-secondary",
       "headEmitted": true,
-      "class": "pure",
+      "class": "value-shift",
       "replacementDeltaBytes": 23
     },
     {
@@ -345,7 +343,7 @@
       "scope": "base",
       "headChannel": "--ds-color-text-secondary",
       "headEmitted": true,
-      "class": "pure",
+      "class": "value-shift",
       "replacementDeltaBytes": 23
     },
     {
@@ -488,7 +486,7 @@
       "scope": "base",
       "headChannel": "--ds-color-border",
       "headEmitted": true,
-      "class": "pure",
+      "class": "value-shift",
       "replacementDeltaBytes": 15
     },
     {
@@ -653,7 +651,7 @@
       "scope": "base",
       "headChannel": "--ds-color-border",
       "headEmitted": true,
-      "class": "pure",
+      "class": "value-shift",
       "replacementDeltaBytes": 15
     },
     {
@@ -1346,7 +1344,7 @@
       "scope": "base",
       "headChannel": "--ds-color-text-secondary",
       "headEmitted": true,
-      "class": "pure",
+      "class": "value-shift",
       "replacementDeltaBytes": 23
     },
     {
@@ -1654,7 +1652,7 @@
       "scope": "base",
       "headChannel": "--ds-color-text-muted",
       "headEmitted": true,
-      "class": "pure",
+      "class": "value-shift",
       "replacementDeltaBytes": 19
     },
     {
@@ -1764,7 +1762,7 @@
       "scope": "base",
       "headChannel": "--ds-color-border",
       "headEmitted": true,
-      "class": "pure",
+      "class": "value-shift",
       "replacementDeltaBytes": 15
     },
     {
@@ -1863,7 +1861,7 @@
       "scope": "base",
       "headChannel": "--ds-color-border",
       "headEmitted": true,
-      "class": "pure",
+      "class": "value-shift",
       "replacementDeltaBytes": 15
     },
     {
@@ -2094,7 +2092,7 @@
       "scope": "base",
       "headChannel": "--ds-surface-control",
       "headEmitted": true,
-      "class": "pure",
+      "class": "value-shift",
       "replacementDeltaBytes": 18
     },
     {
@@ -2105,7 +2103,7 @@
       "scope": "base",
       "headChannel": "--ds-surface-control",
       "headEmitted": true,
-      "class": "pure",
+      "class": "value-shift",
       "replacementDeltaBytes": 18
     },
     {
@@ -2116,7 +2114,7 @@
       "scope": "base",
       "headChannel": "--ds-surface-control",
       "headEmitted": true,
-      "class": "pure",
+      "class": "value-shift",
       "replacementDeltaBytes": 18
     },
     {
@@ -2138,7 +2136,7 @@
       "scope": "base",
       "headChannel": "--ds-color-primary",
       "headEmitted": true,
-      "class": "pure",
+      "class": "value-shift",
       "replacementDeltaBytes": 16
     },
     {
@@ -2160,7 +2158,7 @@
       "scope": "base",
       "headChannel": "--ds-color-text-primary",
       "headEmitted": true,
-      "class": "pure",
+      "class": "value-shift",
       "replacementDeltaBytes": 21
     },
     {
@@ -2182,7 +2180,7 @@
       "scope": "base",
       "headChannel": "--ds-surface-card",
       "headEmitted": true,
-      "class": "pure",
+      "class": "value-shift",
       "replacementDeltaBytes": 15
     },
     {
@@ -2237,7 +2235,7 @@
       "scope": "base",
       "headChannel": "--ds-color-primary",
       "headEmitted": true,
-      "class": "pure",
+      "class": "value-shift",
       "replacementDeltaBytes": 16
     },
     {
@@ -2402,7 +2400,7 @@
       "scope": "base",
       "headChannel": "--ds-surface-control",
       "headEmitted": true,
-      "class": "pure",
+      "class": "value-shift",
       "replacementDeltaBytes": 18
     },
     {
@@ -2413,7 +2411,7 @@
       "scope": "base",
       "headChannel": "--ds-color-border",
       "headEmitted": true,
-      "class": "pure",
+      "class": "value-shift",
       "replacementDeltaBytes": 15
     },
     {
@@ -2424,7 +2422,7 @@
       "scope": "base",
       "headChannel": "--ds-color-text-secondary",
       "headEmitted": true,
-      "class": "pure",
+      "class": "value-shift",
       "replacementDeltaBytes": 23
     },
     {
@@ -2545,7 +2543,7 @@
       "scope": "base",
       "headChannel": "--ds-sidebar-bg",
       "headEmitted": true,
-      "class": "pure",
+      "class": "value-shift",
       "replacementDeltaBytes": 13
     },
     {
@@ -2556,7 +2554,7 @@
       "scope": "base",
       "headChannel": "--ds-color-border",
       "headEmitted": true,
-      "class": "pure",
+      "class": "value-shift",
       "replacementDeltaBytes": 15
     },
     {
@@ -2600,7 +2598,7 @@
       "scope": "base",
       "headChannel": "--ds-sidebar-bg",
       "headEmitted": true,
-      "class": "pure",
+      "class": "value-shift",
       "replacementDeltaBytes": 13
     },
     {
@@ -3007,7 +3005,7 @@
       "scope": "base",
       "headChannel": "--ds-surface-control",
       "headEmitted": true,
-      "class": "pure",
+      "class": "value-shift",
       "replacementDeltaBytes": 18
     },
     {
@@ -3018,7 +3016,7 @@
       "scope": "base",
       "headChannel": "--ds-color-border",
       "headEmitted": true,
-      "class": "pure",
+      "class": "value-shift",
       "replacementDeltaBytes": 15
     },
     {
@@ -3040,7 +3038,7 @@
       "scope": "base",
       "headChannel": "--ds-color-text-secondary",
       "headEmitted": true,
-      "class": "pure",
+      "class": "value-shift",
       "replacementDeltaBytes": 23
     },
     {
@@ -3073,7 +3071,7 @@
       "scope": "base",
       "headChannel": "--ds-surface-control",
       "headEmitted": true,
-      "class": "pure",
+      "class": "value-shift",
       "replacementDeltaBytes": 18
     },
     {
@@ -3106,7 +3104,7 @@
       "scope": "base",
       "headChannel": "--ds-color-text-muted",
       "headEmitted": true,
-      "class": "pure",
+      "class": "value-shift",
       "replacementDeltaBytes": 19
     },
     {
@@ -3117,7 +3115,7 @@
       "scope": "base",
       "headChannel": "--ds-surface-control",
       "headEmitted": true,
-      "class": "pure",
+      "class": "value-shift",
       "replacementDeltaBytes": 18
     },
     {
@@ -3194,7 +3192,7 @@
       "scope": "base",
       "headChannel": "--ds-color-border",
       "headEmitted": true,
-      "class": "pure",
+      "class": "value-shift",
       "replacementDeltaBytes": 15
     },
     {
@@ -3238,7 +3236,7 @@
       "scope": "base",
       "headChannel": "--ds-sidebar-bg",
       "headEmitted": true,
-      "class": "pure",
+      "class": "value-shift",
       "replacementDeltaBytes": 13
     },
     {
@@ -3282,7 +3280,7 @@
       "scope": "base",
       "headChannel": "--ds-sidebar-bg",
       "headEmitted": true,
-      "class": "pure",
+      "class": "value-shift",
       "replacementDeltaBytes": 13
     },
     {
@@ -3326,7 +3324,7 @@
       "scope": "base",
       "headChannel": "--ds-sidebar-bg",
       "headEmitted": true,
-      "class": "pure",
+      "class": "value-shift",
       "replacementDeltaBytes": 13
     },
     {
@@ -3337,7 +3335,7 @@
       "scope": "base",
       "headChannel": "--ds-sidebar-bg",
       "headEmitted": true,
-      "class": "pure",
+      "class": "value-shift",
       "replacementDeltaBytes": 13
     },
     {
@@ -3370,7 +3368,7 @@
       "scope": "base",
       "headChannel": "--ds-sidebar-bg",
       "headEmitted": true,
-      "class": "pure",
+      "class": "value-shift",
       "replacementDeltaBytes": 13
     },
     {
@@ -3381,7 +3379,7 @@
       "scope": "base",
       "headChannel": "--ds-sidebar-bg",
       "headEmitted": true,
-      "class": "pure",
+      "class": "value-shift",
       "replacementDeltaBytes": 13
     },
     {
@@ -3601,7 +3599,7 @@
       "scope": "base",
       "headChannel": "--ds-surface-card",
       "headEmitted": true,
-      "class": "pure",
+      "class": "value-shift",
       "replacementDeltaBytes": 15
     },
     {
@@ -3623,7 +3621,7 @@
       "scope": "base",
       "headChannel": "--ds-color-border",
       "headEmitted": true,
-      "class": "pure",
+      "class": "value-shift",
       "replacementDeltaBytes": 15
     },
     {
@@ -4272,7 +4270,7 @@
       "scope": "base",
       "headChannel": "--ds-color-border",
       "headEmitted": true,
-      "class": "pure",
+      "class": "value-shift",
       "replacementDeltaBytes": 15
     },
     {
@@ -4371,7 +4369,7 @@
       "scope": "base",
       "headChannel": "--ds-surface-card",
       "headEmitted": true,
-      "class": "pure",
+      "class": "value-shift",
       "replacementDeltaBytes": 15
     },
     {
@@ -4448,7 +4446,7 @@
       "scope": "base",
       "headChannel": "--ds-color-border",
       "headEmitted": true,
-      "class": "pure",
+      "class": "value-shift",
       "replacementDeltaBytes": 15
     },
     {
@@ -8397,7 +8395,7 @@
       "scope": "base",
       "headChannel": "--ds-color-primary",
       "headEmitted": true,
-      "class": "pure",
+      "class": "value-shift",
       "replacementDeltaBytes": 16
     },
     {
@@ -8551,7 +8549,7 @@
       "scope": "base",
       "headChannel": "--ds-color-border",
       "headEmitted": true,
-      "class": "pure",
+      "class": "value-shift",
       "replacementDeltaBytes": 15
     },
     {
@@ -8892,7 +8890,7 @@
       "scope": "base",
       "headChannel": "--ds-color-border",
       "headEmitted": true,
-      "class": "pure",
+      "class": "value-shift",
       "replacementDeltaBytes": 15
     },
     {
@@ -22129,5 +22127,5 @@
       "replacementDeltaBytes": 28
     }
   ],
-  "digest": "5e36453ec1d7c7d08c285058277ea1abc2d56e2ac8fe5f1cc0e3164348c5a2a2"
+  "digest": "8ce02af20399472ee51f10d2da65c82fb85b8befd469cc14c2f13fd5b4531647"
 }

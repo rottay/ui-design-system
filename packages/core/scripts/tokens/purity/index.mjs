@@ -54,7 +54,33 @@ export const OUT_PATH = join(CORE_ROOT, 'manifest/generated/purity.json');
 
 export const CLASSES = Object.freeze(['pure', 'value-shift', 'head-not-emitted', 'no-root']);
 
-export const normalise = (value) => String(value).trim().toLowerCase();
+/**
+ * LA COMPARACION ES STRING-EXACTA. El `trim` SE QUEDA -- es whitespace de
+ * bordes, que ningun navegador distingue; el `toLowerCase` SE FUE.
+ *
+ * POR QUE, con la historia completa. Bajar el caso sobre-declaraba `pure`:
+ * decia que `#53697E` autorado y `#53697e` emitido por la cabeza son el mismo
+ * valor, y para el colapso NO lo son -- el `--against` del cero-delta resuelto
+ * es caso-exacto y los frena. La clase cobro dos veces en produccion: en el
+ * sub-lote 1 de 2B se nombro la deuda ("purity normaliza caso y sobre-declara
+ * pure; remedio durable: alinear a string-exacto con drill"), la 2B plena la
+ * reafirmo, y en PALETA P1 se volvio ley del eje ("lo que depende del caso no
+ * colapsa ni se retira") tras cazar `bithire:PALETTE.linkColor`.
+ *
+ * POBLACION MEDIDA Y ADJUDICADA (2026-08-28): 43 filas dejan de ser `pure`
+ * (200 -> 157), TODAS hex-case y todas de bithire -- el unico tema que mezcla
+ * las dos convenciones en volumen (277 cabezas hex mayuscula contra 65
+ * minuscula; rottay 462/5 y evnto 75/28 autoran parejo y no tienen con que
+ * chocar). Es RECLASIFICACION del instrumento, no regresion: las 43 ya eran
+ * incolapsables, solo que el censo no lo mostraba.
+ *
+ * NO CONFUNDIR CON LA CAPA DE EMISION. `bithire:PALETTE.borderFocusColor` NO
+ * esta entre las 43 y no debe estarlo: su cabeza `--ds-color-border-focus`
+ * emite `#3a6fb0` minuscula, byte-identica a lo autorado. Su caso-hex vive en
+ * la capa de emision (la sonda de ausencia de P1), no aca. Dos capas, dos
+ * veredictos, los dos correctos.
+ */
+export const normalise = (value) => String(value).trim();
 
 /** Modo del slot: la superposicion se autora bajo `OVERLAY.`. */
 export const modeOfSlot = (slotPath) => (String(slotPath).startsWith('OVERLAY.') ? 'overlay' : 'base');
