@@ -4601,8 +4601,15 @@ esbuild calibrado en reposo con verificación vinculante sobre `dist` real; prin
 índice mal ordenado del despacho — error de transcripción mío). **Regla fija adoptada (propuesta
 DT, ratificada Fable): el writer PROPONE las re-anclas en su memo, el DT las EJECUTA al commit,
 en ambas direcciones.** Cola de 8 filas elegibles post-plena (extractor v3) queda para la
-próxima pasada. Métrica: la normalización profunda tiene su primer colapso en volumen — el
-porcentaje del frente se reevalúa al cierre de la cohorte paleta; por hoy **62%/~43%** (el
+próxima pasada. **Cierre formal:** cascada downstream del censo regenerado commiteada
+(`dfab2099a`: preservation-manifest + controls-catalog + reconciliation re-anclada al digest
+vigente, deadWriters 266 intacto — los 5 rojos del primer barrido eran todos ese staleo);
+`gat07:write` tras el sello documental (`9d788fff3`, 2 corridas deterministas de acuerdo,
+3.326 contadores / 3.226 ceros exactos); **barrido final 101 PASS / 0 FAIL**. Las 4 vistas del
+catálogo quedaron regeneradas en docs-engineering SIN commitear (WIP ajeno en ese repo; el
+contenido lo regenera el productor canónico). Métrica: la normalización profunda tiene su
+primer colapso en volumen — el porcentaje del frente se reevalúa al cierre de la cohorte
+paleta; por hoy **62%/~43%** (el
 movimiento de la métrica espera la cohorte de paleta y el craft).
 
 **OWNER-STEP-RULES LOTE 2 + EL HALLAZGO ESTRUCTURAL DE LA DIVERGENCIA (2026-08-27; commit
