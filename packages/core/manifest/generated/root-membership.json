@@ -80,16 +80,17 @@
     "ownersCensused": 256,
     "ownersAdjudicated": 174,
     "stepRulesPresent": true,
-    "stepRulesAdjudicated": 214,
-    "rowsRefinedByStep": 22,
+    "stepRulesAdjudicated": 260,
+    "rowsRefinedByStep": 44,
     "byStep": {
-      "sin-paso": 1588,
-      "secondary": 6,
+      "sin-paso": 1566,
+      "primary": 12,
+      "disabled": 4,
+      "secondary": 10,
+      "muted": 8,
       "focus": 3,
       "default": 5,
-      "primary": 6,
-      "tertiary": 1,
-      "disabled": 1
+      "tertiary": 2
     },
     "r2Floor": 593,
     "r2FloorRoots": [
@@ -6878,7 +6879,7 @@
       "rootExposure": "internal-head",
       "rootHasDerivationLaw": true,
       "step": null,
-      "stepNote": "sin adjudicar: OVERLAY.chrome.controls.buttonGhost|fg|color"
+      "stepNote": "la tabla pide tier.control.fg.primary y esa raiz no existe en el catalogo"
     },
     {
       "channel": "--ds-button-ghost-color-active",
@@ -8359,7 +8360,7 @@
       "rootExposure": "internal-head",
       "rootHasDerivationLaw": true,
       "step": null,
-      "stepNote": "sin adjudicar: OVERLAY.chrome.controls.buttonSecondary|fg|color"
+      "stepNote": "la tabla pide tier.control.fg.primary y esa raiz no existe en el catalogo"
     },
     {
       "channel": "--ds-button-secondary-hover-bg",
@@ -9808,7 +9809,7 @@
     },
     {
       "channel": "--ds-calendar-border",
-      "rootId": "tier.page.border",
+      "rootId": "tier.page.border.primary",
       "via": "governed-owner-table",
       "evidence": {
         "ownerPaths": [
@@ -9822,7 +9823,8 @@
         ],
         "propertyFromLeaf": "border",
         "concordance": "2 owners concuerdan en tier",
-        "coincidenceGuard": "no-value-match-used"
+        "coincidenceGuard": "no-value-match-used",
+        "stepFrom": "owner-step-rules.json (owner x propiedad x hoja, por concordancia)"
       },
       "tier": "page",
       "property": "border",
@@ -9836,9 +9838,10 @@
         "rottay:OVERLAY.chrome.calendar.border"
       ],
       "rootExposure": "gap",
-      "rootHasDerivationLaw": false,
-      "step": null,
-      "stepNote": "sin adjudicar: CHROME.calendar|border|border, OVERLAY.chrome.calendar|border|border"
+      "rootHasDerivationLaw": true,
+      "parentRootId": "tier.page.border",
+      "step": "primary",
+      "stepNote": null
     },
     {
       "channel": "--ds-calendar-day-color-other",
@@ -12060,7 +12063,7 @@
     },
     {
       "channel": "--ds-checkbox-label-color-disabled",
-      "rootId": "tier.control.fg",
+      "rootId": "tier.control.fg.disabled",
       "via": "governed-owner-table",
       "evidence": {
         "ownerPaths": [
@@ -12074,7 +12077,8 @@
         ],
         "propertyFromLeaf": "fg",
         "concordance": "2 owners concuerdan en tier",
-        "coincidenceGuard": "no-value-match-used"
+        "coincidenceGuard": "no-value-match-used",
+        "stepFrom": "owner-step-rules.json (owner x propiedad x hoja, por concordancia)"
       },
       "tier": "control",
       "property": "fg",
@@ -12089,8 +12093,9 @@
       ],
       "rootExposure": "internal-head",
       "rootHasDerivationLaw": true,
-      "step": null,
-      "stepNote": "sin adjudicar: CHROME.controls.checkbox|fg|labelColorDisabled, OVERLAY.chrome.controls.checkbox|fg|labelColorDisabled"
+      "parentRootId": "tier.control.fg",
+      "step": "disabled",
+      "stepNote": null
     },
     {
       "channel": "--ds-collapse-bg",
@@ -12128,7 +12133,7 @@
     },
     {
       "channel": "--ds-collapse-border",
-      "rootId": "tier.page.border",
+      "rootId": "tier.page.border.primary",
       "via": "governed-owner-table",
       "evidence": {
         "ownerPaths": [
@@ -12142,7 +12147,8 @@
         ],
         "propertyFromLeaf": "border",
         "concordance": "2 owners concuerdan en tier",
-        "coincidenceGuard": "no-value-match-used"
+        "coincidenceGuard": "no-value-match-used",
+        "stepFrom": "owner-step-rules.json (owner x propiedad x hoja, por concordancia)"
       },
       "tier": "page",
       "property": "border",
@@ -12156,9 +12162,10 @@
         "rottay:OVERLAY.chrome.collapse.border"
       ],
       "rootExposure": "gap",
-      "rootHasDerivationLaw": false,
-      "step": null,
-      "stepNote": "sin adjudicar: CHROME.collapse|border|border, OVERLAY.chrome.collapse|border|border"
+      "rootHasDerivationLaw": true,
+      "parentRootId": "tier.page.border",
+      "step": "primary",
+      "stepNote": null
     },
     {
       "channel": "--ds-collapse-content-bg",
@@ -12264,7 +12271,7 @@
     },
     {
       "channel": "--ds-collapse-header-color",
-      "rootId": "tier.page.fg",
+      "rootId": "tier.page.fg.secondary",
       "via": "governed-owner-table",
       "evidence": {
         "ownerPaths": [
@@ -12278,7 +12285,8 @@
         ],
         "propertyFromLeaf": "fg",
         "concordance": "2 owners concuerdan en tier",
-        "coincidenceGuard": "no-value-match-used"
+        "coincidenceGuard": "no-value-match-used",
+        "stepFrom": "owner-step-rules.json (owner x propiedad x hoja, por concordancia)"
       },
       "tier": "page",
       "property": "fg",
@@ -12293,8 +12301,9 @@
       ],
       "rootExposure": "tenant-dial",
       "rootHasDerivationLaw": true,
-      "step": null,
-      "stepNote": "sin adjudicar: CHROME.collapse|fg|headerColor, OVERLAY.chrome.collapse|fg|headerColor"
+      "parentRootId": "tier.page.fg",
+      "step": "secondary",
+      "stepNote": null
     },
     {
       "channel": "--ds-collection-card-bg",
@@ -20418,7 +20427,7 @@
     },
     {
       "channel": "--ds-divider-text-color",
-      "rootId": "tier.page.fg",
+      "rootId": "tier.page.fg.primary",
       "via": "governed-owner-table",
       "evidence": {
         "ownerPaths": [
@@ -20432,7 +20441,8 @@
         ],
         "propertyFromLeaf": "fg",
         "concordance": "2 owners concuerdan en tier",
-        "coincidenceGuard": "no-value-match-used"
+        "coincidenceGuard": "no-value-match-used",
+        "stepFrom": "owner-step-rules.json (owner x propiedad x hoja, por concordancia)"
       },
       "tier": "page",
       "property": "fg",
@@ -20447,8 +20457,9 @@
       ],
       "rootExposure": "tenant-dial",
       "rootHasDerivationLaw": true,
-      "step": null,
-      "stepNote": "sin adjudicar: CHROME.layout|fg|dividerTextColor, OVERLAY.chrome.layout|fg|dividerTextColor"
+      "parentRootId": "tier.page.fg",
+      "step": "primary",
+      "stepNote": null
     },
     {
       "channel": "--ds-drawer-bg",
@@ -22108,7 +22119,7 @@
     },
     {
       "channel": "--ds-form-extra-color",
-      "rootId": "tier.control.fg",
+      "rootId": "tier.control.fg.muted",
       "via": "governed-owner-table",
       "evidence": {
         "ownerPaths": [
@@ -22122,7 +22133,8 @@
         ],
         "propertyFromLeaf": "fg",
         "concordance": "2 owners concuerdan en tier",
-        "coincidenceGuard": "no-value-match-used"
+        "coincidenceGuard": "no-value-match-used",
+        "stepFrom": "owner-step-rules.json (owner x propiedad x hoja, por concordancia)"
       },
       "tier": "control",
       "property": "fg",
@@ -22137,8 +22149,9 @@
       ],
       "rootExposure": "internal-head",
       "rootHasDerivationLaw": true,
-      "step": null,
-      "stepNote": "sin adjudicar: CHROME.controls.form|fg|extraColor, OVERLAY.chrome.controls.form|fg|extraColor"
+      "parentRootId": "tier.control.fg",
+      "step": "muted",
+      "stepNote": null
     },
     {
       "channel": "--ds-form-field-disabled-opacity",
@@ -22263,7 +22276,7 @@
     },
     {
       "channel": "--ds-form-help-color",
-      "rootId": "tier.control.fg",
+      "rootId": "tier.control.fg.muted",
       "via": "governed-owner-table",
       "evidence": {
         "ownerPaths": [
@@ -22277,7 +22290,8 @@
         ],
         "propertyFromLeaf": "fg",
         "concordance": "2 owners concuerdan en tier",
-        "coincidenceGuard": "no-value-match-used"
+        "coincidenceGuard": "no-value-match-used",
+        "stepFrom": "owner-step-rules.json (owner x propiedad x hoja, por concordancia)"
       },
       "tier": "control",
       "property": "fg",
@@ -22292,8 +22306,9 @@
       ],
       "rootExposure": "internal-head",
       "rootHasDerivationLaw": true,
-      "step": null,
-      "stepNote": "sin adjudicar: CHROME.controls.form|fg|helpColor, OVERLAY.chrome.controls.form|fg|helpColor"
+      "parentRootId": "tier.control.fg",
+      "step": "muted",
+      "stepNote": null
     },
     {
       "channel": "--ds-form-label-color",
@@ -22875,7 +22890,7 @@
     },
     {
       "channel": "--ds-input-addon-color",
-      "rootId": "tier.control.fg",
+      "rootId": "tier.control.fg.secondary",
       "via": "governed-owner-table",
       "evidence": {
         "ownerPaths": [
@@ -22889,7 +22904,8 @@
         ],
         "propertyFromLeaf": "fg",
         "concordance": "2 owners concuerdan en tier",
-        "coincidenceGuard": "no-value-match-used"
+        "coincidenceGuard": "no-value-match-used",
+        "stepFrom": "owner-step-rules.json (owner x propiedad x hoja, por concordancia)"
       },
       "tier": "control",
       "property": "fg",
@@ -22906,8 +22922,9 @@
       ],
       "rootExposure": "internal-head",
       "rootHasDerivationLaw": true,
-      "step": null,
-      "stepNote": "sin adjudicar: CHROME.controls.input.addon|fg|color, OVERLAY.chrome.controls.input.addon|fg|color"
+      "parentRootId": "tier.control.fg",
+      "step": "secondary",
+      "stepNote": null
     },
     {
       "channel": "--ds-input-addon-font-weight",
@@ -23885,7 +23902,7 @@
       "rootExposure": "internal-head",
       "rootHasDerivationLaw": true,
       "step": null,
-      "stepNote": "sin adjudicar: OVERLAY.chrome.controls.input.clear|fg|color"
+      "stepNote": "la tabla pide tier.control.fg.primary y esa raiz no existe en el catalogo"
     },
     {
       "channel": "--ds-input-clear-color-hover",
@@ -26584,7 +26601,7 @@
     },
     {
       "channel": "--ds-inputnumber-addon-color",
-      "rootId": "tier.control.fg",
+      "rootId": "tier.control.fg.secondary",
       "via": "governed-owner-table",
       "evidence": {
         "ownerPaths": [
@@ -26598,7 +26615,8 @@
         ],
         "propertyFromLeaf": "fg",
         "concordance": "2 owners concuerdan en tier",
-        "coincidenceGuard": "no-value-match-used"
+        "coincidenceGuard": "no-value-match-used",
+        "stepFrom": "owner-step-rules.json (owner x propiedad x hoja, por concordancia)"
       },
       "tier": "control",
       "property": "fg",
@@ -26613,12 +26631,13 @@
       ],
       "rootExposure": "internal-head",
       "rootHasDerivationLaw": true,
-      "step": null,
-      "stepNote": "sin adjudicar: CHROME.controls.inputNumber|fg|addonColor, OVERLAY.chrome.controls.inputNumber|fg|addonColor"
+      "parentRootId": "tier.control.fg",
+      "step": "secondary",
+      "stepNote": null
     },
     {
       "channel": "--ds-inputnumber-affix-color",
-      "rootId": "tier.control.fg",
+      "rootId": "tier.control.fg.muted",
       "via": "governed-owner-table",
       "evidence": {
         "ownerPaths": [
@@ -26632,7 +26651,8 @@
         ],
         "propertyFromLeaf": "fg",
         "concordance": "2 owners concuerdan en tier",
-        "coincidenceGuard": "no-value-match-used"
+        "coincidenceGuard": "no-value-match-used",
+        "stepFrom": "owner-step-rules.json (owner x propiedad x hoja, por concordancia)"
       },
       "tier": "control",
       "property": "fg",
@@ -26647,8 +26667,9 @@
       ],
       "rootExposure": "internal-head",
       "rootHasDerivationLaw": true,
-      "step": null,
-      "stepNote": "sin adjudicar: CHROME.controls.inputNumber|fg|affixColor, OVERLAY.chrome.controls.inputNumber|fg|affixColor"
+      "parentRootId": "tier.control.fg",
+      "step": "muted",
+      "stepNote": null
     },
     {
       "channel": "--ds-inputnumber-bg",
@@ -30576,7 +30597,7 @@
     },
     {
       "channel": "--ds-material-shell-foreground",
-      "rootId": "tier.page.fg",
+      "rootId": "tier.page.fg.primary",
       "via": "governed-owner-table",
       "evidence": {
         "ownerPaths": [
@@ -30590,7 +30611,8 @@
         ],
         "propertyFromLeaf": "fg",
         "concordance": "2 owners concuerdan en tier",
-        "coincidenceGuard": "no-value-match-used"
+        "coincidenceGuard": "no-value-match-used",
+        "stepFrom": "owner-step-rules.json (owner x propiedad x hoja, por concordancia)"
       },
       "tier": "page",
       "property": "fg",
@@ -30605,8 +30627,9 @@
       ],
       "rootExposure": "tenant-dial",
       "rootHasDerivationLaw": true,
-      "step": null,
-      "stepNote": "sin adjudicar: OVERLAY.surfaces.surfaceRoles.shell|fg|foreground, SURFACES.surfaceRoles.shell|fg|foreground"
+      "parentRootId": "tier.page.fg",
+      "step": "primary",
+      "stepNote": null
     },
     {
       "channel": "--ds-menu-bg",
@@ -33868,7 +33891,7 @@
     },
     {
       "channel": "--ds-radio-label-color-disabled",
-      "rootId": "tier.control.fg",
+      "rootId": "tier.control.fg.disabled",
       "via": "governed-owner-table",
       "evidence": {
         "ownerPaths": [
@@ -33882,7 +33905,8 @@
         ],
         "propertyFromLeaf": "fg",
         "concordance": "2 owners concuerdan en tier",
-        "coincidenceGuard": "no-value-match-used"
+        "coincidenceGuard": "no-value-match-used",
+        "stepFrom": "owner-step-rules.json (owner x propiedad x hoja, por concordancia)"
       },
       "tier": "control",
       "property": "fg",
@@ -33897,8 +33921,9 @@
       ],
       "rootExposure": "internal-head",
       "rootHasDerivationLaw": true,
-      "step": null,
-      "stepNote": "sin adjudicar: CHROME.controls.radio|fg|labelColorDisabled, OVERLAY.chrome.controls.radio|fg|labelColorDisabled"
+      "parentRootId": "tier.control.fg",
+      "step": "disabled",
+      "stepNote": null
     },
     {
       "channel": "--ds-radius-button",
@@ -39161,7 +39186,7 @@
     },
     {
       "channel": "--ds-slider-mark-color",
-      "rootId": "tier.control.fg",
+      "rootId": "tier.control.fg.muted",
       "via": "governed-owner-table",
       "evidence": {
         "ownerPaths": [
@@ -39175,7 +39200,8 @@
         ],
         "propertyFromLeaf": "fg",
         "concordance": "2 owners concuerdan en tier",
-        "coincidenceGuard": "no-value-match-used"
+        "coincidenceGuard": "no-value-match-used",
+        "stepFrom": "owner-step-rules.json (owner x propiedad x hoja, por concordancia)"
       },
       "tier": "control",
       "property": "fg",
@@ -39190,8 +39216,9 @@
       ],
       "rootExposure": "internal-head",
       "rootHasDerivationLaw": true,
-      "step": null,
-      "stepNote": "sin adjudicar: CHROME.controls.slider|fg|markColor, OVERLAY.chrome.controls.slider|fg|markColor"
+      "parentRootId": "tier.control.fg",
+      "step": "muted",
+      "stepNote": null
     },
     {
       "channel": "--ds-slider-rail-color",
@@ -39259,7 +39286,7 @@
     },
     {
       "channel": "--ds-slider-track-color-disabled",
-      "rootId": "tier.control.fg",
+      "rootId": "tier.control.fg.disabled",
       "via": "governed-owner-table",
       "evidence": {
         "ownerPaths": [
@@ -39273,7 +39300,8 @@
         ],
         "propertyFromLeaf": "fg",
         "concordance": "2 owners concuerdan en tier",
-        "coincidenceGuard": "no-value-match-used"
+        "coincidenceGuard": "no-value-match-used",
+        "stepFrom": "owner-step-rules.json (owner x propiedad x hoja, por concordancia)"
       },
       "tier": "control",
       "property": "fg",
@@ -39288,8 +39316,9 @@
       ],
       "rootExposure": "internal-head",
       "rootHasDerivationLaw": true,
-      "step": null,
-      "stepNote": "sin adjudicar: CHROME.controls.slider|fg|trackColorDisabled, OVERLAY.chrome.controls.slider|fg|trackColorDisabled"
+      "parentRootId": "tier.control.fg",
+      "step": "disabled",
+      "stepNote": null
     },
     {
       "channel": "--ds-spinner-color",
@@ -44719,7 +44748,7 @@
     },
     {
       "channel": "--ds-textarea-color-placeholder",
-      "rootId": "tier.control.fg",
+      "rootId": "tier.control.fg.tertiary",
       "via": "governed-owner-table",
       "evidence": {
         "ownerPaths": [
@@ -44733,7 +44762,8 @@
         ],
         "propertyFromLeaf": "fg",
         "concordance": "2 owners concuerdan en tier",
-        "coincidenceGuard": "no-value-match-used"
+        "coincidenceGuard": "no-value-match-used",
+        "stepFrom": "owner-step-rules.json (owner x propiedad x hoja, por concordancia)"
       },
       "tier": "control",
       "property": "fg",
@@ -44748,19 +44778,21 @@
       ],
       "rootExposure": "internal-head",
       "rootHasDerivationLaw": true,
-      "step": null,
-      "stepNote": "sin adjudicar: OVERLAY.chrome.controls.textarea|fg|colorPlaceholder"
+      "parentRootId": "tier.control.fg",
+      "step": "tertiary",
+      "stepNote": null
     },
     {
       "channel": "--ds-textarea-count-color",
-      "rootId": "tier.base.fg",
+      "rootId": "tier.base.fg.muted",
       "via": "declared-fallback",
       "evidence": {
         "fallbackFrom": "--ds-color-text-primary",
         "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css:314",
         "edgeClass": "leaf-fallback",
         "guardPrimary": "--ds-textarea-count-color",
-        "coincidenceGuard": "no-value-match-used"
+        "coincidenceGuard": "no-value-match-used",
+        "stepFrom": "owner-step-rules.json (owner x propiedad x hoja, por concordancia)"
       },
       "tier": "base",
       "property": "fg",
@@ -44775,8 +44807,9 @@
       ],
       "rootExposure": "internal-head",
       "rootHasDerivationLaw": true,
-      "step": null,
-      "stepNote": "sin adjudicar: CHROME.controls.textarea|fg|countColor, OVERLAY.chrome.controls.textarea|fg|countColor"
+      "parentRootId": "tier.base.fg",
+      "step": "muted",
+      "stepNote": null
     },
     {
       "channel": "--ds-textarea-error-border",
@@ -45336,7 +45369,7 @@
     },
     {
       "channel": "--ds-timepicker-clear-color",
-      "rootId": "tier.control.fg",
+      "rootId": "tier.control.fg.secondary",
       "via": "governed-owner-table",
       "evidence": {
         "ownerPaths": [
@@ -45350,7 +45383,8 @@
         ],
         "propertyFromLeaf": "fg",
         "concordance": "2 owners concuerdan en tier",
-        "coincidenceGuard": "no-value-match-used"
+        "coincidenceGuard": "no-value-match-used",
+        "stepFrom": "owner-step-rules.json (owner x propiedad x hoja, por concordancia)"
       },
       "tier": "control",
       "property": "fg",
@@ -45365,8 +45399,9 @@
       ],
       "rootExposure": "internal-head",
       "rootHasDerivationLaw": true,
-      "step": null,
-      "stepNote": "sin adjudicar: CHROME.controls.timePicker|fg|clearColor, OVERLAY.chrome.controls.timePicker|fg|clearColor"
+      "parentRootId": "tier.control.fg",
+      "step": "secondary",
+      "stepNote": null
     },
     {
       "channel": "--ds-timepicker-color",
@@ -45434,7 +45469,7 @@
     },
     {
       "channel": "--ds-timepicker-icon-color",
-      "rootId": "tier.control.fg",
+      "rootId": "tier.control.fg.muted",
       "via": "governed-owner-table",
       "evidence": {
         "ownerPaths": [
@@ -45448,7 +45483,8 @@
         ],
         "propertyFromLeaf": "fg",
         "concordance": "2 owners concuerdan en tier",
-        "coincidenceGuard": "no-value-match-used"
+        "coincidenceGuard": "no-value-match-used",
+        "stepFrom": "owner-step-rules.json (owner x propiedad x hoja, por concordancia)"
       },
       "tier": "control",
       "property": "fg",
@@ -45463,8 +45499,9 @@
       ],
       "rootExposure": "internal-head",
       "rootHasDerivationLaw": true,
-      "step": null,
-      "stepNote": "sin adjudicar: CHROME.controls.timePicker|fg|iconColor, OVERLAY.chrome.controls.timePicker|fg|iconColor"
+      "parentRootId": "tier.control.fg",
+      "step": "muted",
+      "stepNote": null
     },
     {
       "channel": "--ds-timepicker-panel-shadow",
@@ -45496,7 +45533,7 @@
     },
     {
       "channel": "--ds-timepicker-separator-color",
-      "rootId": "tier.control.fg",
+      "rootId": "tier.control.fg.muted",
       "via": "governed-owner-table",
       "evidence": {
         "ownerPaths": [
@@ -45510,7 +45547,8 @@
         ],
         "propertyFromLeaf": "fg",
         "concordance": "2 owners concuerdan en tier",
-        "coincidenceGuard": "no-value-match-used"
+        "coincidenceGuard": "no-value-match-used",
+        "stepFrom": "owner-step-rules.json (owner x propiedad x hoja, por concordancia)"
       },
       "tier": "control",
       "property": "fg",
@@ -45525,8 +45563,9 @@
       ],
       "rootExposure": "internal-head",
       "rootHasDerivationLaw": true,
-      "step": null,
-      "stepNote": "sin adjudicar: CHROME.controls.timePicker|fg|separatorColor, OVERLAY.chrome.controls.timePicker|fg|separatorColor"
+      "parentRootId": "tier.control.fg",
+      "step": "muted",
+      "stepNote": null
     },
     {
       "channel": "--ds-timepicker-shadow-focus",
@@ -46045,7 +46084,7 @@
     },
     {
       "channel": "--ds-toolbar-color",
-      "rootId": "tier.page.fg",
+      "rootId": "tier.page.fg.primary",
       "via": "governed-owner-table",
       "evidence": {
         "ownerPaths": [
@@ -46059,7 +46098,8 @@
         ],
         "propertyFromLeaf": "fg",
         "concordance": "2 owners concuerdan en tier",
-        "coincidenceGuard": "no-value-match-used"
+        "coincidenceGuard": "no-value-match-used",
+        "stepFrom": "owner-step-rules.json (owner x propiedad x hoja, por concordancia)"
       },
       "tier": "page",
       "property": "fg",
@@ -46074,8 +46114,9 @@
       ],
       "rootExposure": "tenant-dial",
       "rootHasDerivationLaw": true,
-      "step": null,
-      "stepNote": "sin adjudicar: CHROME.toolbar|fg|color, OVERLAY.chrome.toolbar|fg|color"
+      "parentRootId": "tier.page.fg",
+      "step": "primary",
+      "stepNote": null
     },
     {
       "channel": "--ds-toolbar-control-bg",
@@ -46140,7 +46181,7 @@
     },
     {
       "channel": "--ds-toolbar-control-color",
-      "rootId": "tier.page.fg",
+      "rootId": "tier.page.fg.primary",
       "via": "governed-owner-table",
       "evidence": {
         "ownerPaths": [
@@ -46154,7 +46195,8 @@
         ],
         "propertyFromLeaf": "fg",
         "concordance": "2 owners concuerdan en tier",
-        "coincidenceGuard": "no-value-match-used"
+        "coincidenceGuard": "no-value-match-used",
+        "stepFrom": "owner-step-rules.json (owner x propiedad x hoja, por concordancia)"
       },
       "tier": "page",
       "property": "fg",
@@ -46169,8 +46211,9 @@
       ],
       "rootExposure": "tenant-dial",
       "rootHasDerivationLaw": true,
-      "step": null,
-      "stepNote": "sin adjudicar: CHROME.toolbar|fg|controlColor, OVERLAY.chrome.toolbar|fg|controlColor"
+      "parentRootId": "tier.page.fg",
+      "step": "primary",
+      "stepNote": null
     },
     {
       "channel": "--ds-toolbar-divider",
@@ -47439,7 +47482,7 @@
     },
     {
       "channel": "--ds-upload-dragger-icon-color",
-      "rootId": "tier.control.fg",
+      "rootId": "tier.control.fg.muted",
       "via": "governed-owner-table",
       "evidence": {
         "ownerPaths": [
@@ -47453,7 +47496,8 @@
         ],
         "propertyFromLeaf": "fg",
         "concordance": "2 owners concuerdan en tier",
-        "coincidenceGuard": "no-value-match-used"
+        "coincidenceGuard": "no-value-match-used",
+        "stepFrom": "owner-step-rules.json (owner x propiedad x hoja, por concordancia)"
       },
       "tier": "control",
       "property": "fg",
@@ -47468,8 +47512,9 @@
       ],
       "rootExposure": "internal-head",
       "rootHasDerivationLaw": true,
-      "step": null,
-      "stepNote": "sin adjudicar: CHROME.controls.upload|fg|draggerIconColor, OVERLAY.chrome.controls.upload|fg|draggerIconColor"
+      "parentRootId": "tier.control.fg",
+      "step": "muted",
+      "stepNote": null
     },
     {
       "channel": "--ds-upload-dragger-text-color",
@@ -48541,5 +48586,5 @@
       "stepNote": "sin raiz que refinar"
     }
   ],
-  "digest": "ff42df5fc030ea4bd2f90d04c8c2b198aca89d427b6d7f1025beeb168e590afd"
+  "digest": "2cdb4727a5766f60593d8edd9f76f049734bc833a5352e0848567d5adba83755"
 }

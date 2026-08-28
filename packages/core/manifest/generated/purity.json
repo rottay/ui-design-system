@@ -17,8 +17,8 @@
   "stats": {
     "rows": 2006,
     "byClass": {
-      "value-shift": 1307,
-      "pure": 315,
+      "value-shift": 1289,
+      "pure": 333,
       "head-not-emitted": 384
     },
     "byVertical": {
@@ -37,13 +37,15 @@
       "control.height": 2,
       "control.ratio.iconSize": 2,
       "control.ratio.lineHeight": 2,
-      "tier.base.fg.muted": 25,
+      "tier.control.fg.secondary": 3,
+      "tier.base.fg.muted": 26,
       "tier.control.bg": 11,
       "tier.control.border": 23,
       "tier.base.border": 15,
       "tier.page.bg": 17,
       "tier.page.border.default": 4,
       "tier.control.fg": 14,
+      "tier.page.fg.primary": 5,
       "tier.base.bg": 7,
       "tier.base.border.focus": 6,
       "tier.base.border.subtle": 5,
@@ -66,7 +68,8 @@
       "type.tracking": 3,
       "tier.page.fg.secondary": 1,
       "tier.page.fg": 1,
-      "tier.page.fg.primary": 1,
+      "tier.control.fg.disabled": 3,
+      "tier.control.fg.muted": 7,
       "elevation.ladder": 2
     },
     "headlessByChannel": {
@@ -83,14 +86,14 @@
       "--ds-material-overlay-background": 38,
       "--ds-material-overlay-foreground": 18
     },
-    "collapsibleReplacementBytes": 4683,
+    "collapsibleReplacementBytes": 5054,
     "collapsibleBytesByVertical": {
-      "bithire": 2254,
+      "bithire": 2340,
       "evnto": 628,
-      "rottay": 1801
+      "rottay": 2086
     },
     "pureByRule": {
-      "R2": 207,
+      "R2": 225,
       "R5": 52,
       "R1": 13,
       "R4": 43
@@ -1343,13 +1346,13 @@
     {
       "slotId": "bithire:CHROME.controls.input.addon.color",
       "vertical": "bithire",
-      "rootId": "tier.control.fg",
+      "rootId": "tier.control.fg.secondary",
       "rule": "R2",
       "scope": "base",
-      "headChannel": "--ds-color-text-primary",
+      "headChannel": "--ds-color-text-secondary",
       "headEmitted": true,
-      "class": "value-shift",
-      "replacementDeltaBytes": 21
+      "class": "pure",
+      "replacementDeltaBytes": 23
     },
     {
       "slotId": "bithire:CHROME.controls.input.addon.fontWeight",
@@ -4357,12 +4360,12 @@
     {
       "slotId": "bithire:CHROME.toolbar.color",
       "vertical": "bithire",
-      "rootId": "tier.page.fg",
+      "rootId": "tier.page.fg.primary",
       "rule": "R2",
       "scope": "base",
-      "headChannel": "--ds-sidebar-item-color",
+      "headChannel": "--ds-color-text-primary",
       "headEmitted": true,
-      "class": "value-shift",
+      "class": "pure",
       "replacementDeltaBytes": 21
     },
     {
@@ -4390,12 +4393,12 @@
     {
       "slotId": "bithire:CHROME.toolbar.controlColor",
       "vertical": "bithire",
-      "rootId": "tier.page.fg",
+      "rootId": "tier.page.fg.primary",
       "rule": "R2",
       "scope": "base",
-      "headChannel": "--ds-sidebar-item-color",
+      "headChannel": "--ds-color-text-primary",
       "headEmitted": true,
-      "class": "value-shift",
+      "class": "pure",
       "replacementDeltaBytes": 21
     },
     {
@@ -5160,13 +5163,13 @@
     {
       "slotId": "bithire:OVERLAY.chrome.controls.input.addon.color",
       "vertical": "bithire",
-      "rootId": "tier.control.fg",
+      "rootId": "tier.control.fg.secondary",
       "rule": "R1",
       "scope": "dark",
-      "headChannel": "--ds-color-text-primary",
+      "headChannel": "--ds-color-text-secondary",
       "headEmitted": true,
       "class": "value-shift",
-      "replacementDeltaBytes": -2
+      "replacementDeltaBytes": 0
     },
     {
       "slotId": "bithire:OVERLAY.chrome.controls.input.affix.bg",
@@ -7151,10 +7154,10 @@
     {
       "slotId": "bithire:OVERLAY.chrome.toolbar.color",
       "vertical": "bithire",
-      "rootId": "tier.page.fg",
+      "rootId": "tier.page.fg.primary",
       "rule": "R1",
       "scope": "dark",
-      "headChannel": "--ds-sidebar-item-color",
+      "headChannel": "--ds-color-text-primary",
       "headEmitted": true,
       "class": "value-shift",
       "replacementDeltaBytes": 0
@@ -7184,10 +7187,10 @@
     {
       "slotId": "bithire:OVERLAY.chrome.toolbar.controlColor",
       "vertical": "bithire",
-      "rootId": "tier.page.fg",
+      "rootId": "tier.page.fg.primary",
       "rule": "R1",
       "scope": "dark",
-      "headChannel": "--ds-sidebar-item-color",
+      "headChannel": "--ds-color-text-primary",
       "headEmitted": true,
       "class": "value-shift",
       "replacementDeltaBytes": 0
@@ -8339,10 +8342,10 @@
     {
       "slotId": "bithire:OVERLAY.surfaces.surfaceRoles.shell.foreground",
       "vertical": "bithire",
-      "rootId": "tier.page.fg",
+      "rootId": "tier.page.fg.primary",
       "rule": "R1",
       "scope": "dark",
-      "headChannel": "--ds-sidebar-item-color",
+      "headChannel": "--ds-color-text-primary",
       "headEmitted": true,
       "class": "value-shift",
       "replacementDeltaBytes": -2
@@ -9043,12 +9046,12 @@
     {
       "slotId": "bithire:SURFACES.surfaceRoles.shell.foreground",
       "vertical": "bithire",
-      "rootId": "tier.page.fg",
+      "rootId": "tier.page.fg.primary",
       "rule": "R2",
       "scope": "base",
-      "headChannel": "--ds-sidebar-item-color",
+      "headChannel": "--ds-color-text-primary",
       "headEmitted": true,
-      "class": "value-shift",
+      "class": "pure",
       "replacementDeltaBytes": 21
     },
     {
@@ -11243,13 +11246,13 @@
     {
       "slotId": "rottay:CHROME.calendar.border",
       "vertical": "rottay",
-      "rootId": "tier.page.border",
-      "rule": "R5",
+      "rootId": "tier.page.border.primary",
+      "rule": "R2",
       "scope": "base",
-      "headChannel": "--ds-color-border-subtle",
+      "headChannel": "--ds-color-border-primary",
       "headEmitted": true,
       "class": "value-shift",
-      "replacementDeltaBytes": 22
+      "replacementDeltaBytes": 23
     },
     {
       "slotId": "rottay:CHROME.calendar.dayColorOther",
@@ -11441,13 +11444,13 @@
     {
       "slotId": "rottay:CHROME.collapse.border",
       "vertical": "rottay",
-      "rootId": "tier.page.border",
-      "rule": "R5",
+      "rootId": "tier.page.border.primary",
+      "rule": "R2",
       "scope": "base",
-      "headChannel": "--ds-color-border-subtle",
+      "headChannel": "--ds-color-border-primary",
       "headEmitted": true,
       "class": "value-shift",
-      "replacementDeltaBytes": 22
+      "replacementDeltaBytes": 23
     },
     {
       "slotId": "rottay:CHROME.collapse.contentBg",
@@ -11485,13 +11488,13 @@
     {
       "slotId": "rottay:CHROME.collapse.headerColor",
       "vertical": "rottay",
-      "rootId": "tier.page.fg",
+      "rootId": "tier.page.fg.secondary",
       "rule": "R2",
       "scope": "base",
-      "headChannel": "--ds-sidebar-item-color",
+      "headChannel": "--ds-color-text-secondary",
       "headEmitted": true,
       "class": "value-shift",
-      "replacementDeltaBytes": 21
+      "replacementDeltaBytes": 23
     },
     {
       "slotId": "rottay:CHROME.controls.autocomplete.bg",
@@ -12321,13 +12324,13 @@
     {
       "slotId": "rottay:CHROME.controls.checkbox.labelColorDisabled",
       "vertical": "rottay",
-      "rootId": "tier.control.fg",
+      "rootId": "tier.control.fg.disabled",
       "rule": "R2",
       "scope": "base",
-      "headChannel": "--ds-color-text-primary",
+      "headChannel": "--ds-color-text-disabled",
       "headEmitted": true,
       "class": "value-shift",
-      "replacementDeltaBytes": 21
+      "replacementDeltaBytes": 22
     },
     {
       "slotId": "rottay:CHROME.controls.datePicker.bg",
@@ -12552,24 +12555,24 @@
     {
       "slotId": "rottay:CHROME.controls.form.extraColor",
       "vertical": "rottay",
-      "rootId": "tier.control.fg",
+      "rootId": "tier.control.fg.muted",
       "rule": "R2",
       "scope": "base",
-      "headChannel": "--ds-color-text-primary",
+      "headChannel": "--ds-color-text-muted",
       "headEmitted": true,
       "class": "value-shift",
-      "replacementDeltaBytes": 21
+      "replacementDeltaBytes": 19
     },
     {
       "slotId": "rottay:CHROME.controls.form.helpColor",
       "vertical": "rottay",
-      "rootId": "tier.control.fg",
+      "rootId": "tier.control.fg.muted",
       "rule": "R2",
       "scope": "base",
-      "headChannel": "--ds-color-text-primary",
+      "headChannel": "--ds-color-text-muted",
       "headEmitted": true,
       "class": "value-shift",
-      "replacementDeltaBytes": 21
+      "replacementDeltaBytes": 19
     },
     {
       "slotId": "rottay:CHROME.controls.form.labelColor",
@@ -12618,13 +12621,13 @@
     {
       "slotId": "rottay:CHROME.controls.input.addon.color",
       "vertical": "rottay",
-      "rootId": "tier.control.fg",
+      "rootId": "tier.control.fg.secondary",
       "rule": "R2",
       "scope": "base",
-      "headChannel": "--ds-color-text-primary",
+      "headChannel": "--ds-color-text-secondary",
       "headEmitted": true,
       "class": "value-shift",
-      "replacementDeltaBytes": 21
+      "replacementDeltaBytes": 23
     },
     {
       "slotId": "rottay:CHROME.controls.input.bg",
@@ -12915,24 +12918,24 @@
     {
       "slotId": "rottay:CHROME.controls.inputNumber.addonColor",
       "vertical": "rottay",
-      "rootId": "tier.control.fg",
+      "rootId": "tier.control.fg.secondary",
       "rule": "R2",
       "scope": "base",
-      "headChannel": "--ds-color-text-primary",
+      "headChannel": "--ds-color-text-secondary",
       "headEmitted": true,
       "class": "value-shift",
-      "replacementDeltaBytes": 21
+      "replacementDeltaBytes": 23
     },
     {
       "slotId": "rottay:CHROME.controls.inputNumber.affixColor",
       "vertical": "rottay",
-      "rootId": "tier.control.fg",
+      "rootId": "tier.control.fg.muted",
       "rule": "R2",
       "scope": "base",
-      "headChannel": "--ds-color-text-primary",
+      "headChannel": "--ds-color-text-muted",
       "headEmitted": true,
       "class": "value-shift",
-      "replacementDeltaBytes": 21
+      "replacementDeltaBytes": 19
     },
     {
       "slotId": "rottay:CHROME.controls.inputNumber.bg",
@@ -13135,13 +13138,13 @@
     {
       "slotId": "rottay:CHROME.controls.radio.labelColorDisabled",
       "vertical": "rottay",
-      "rootId": "tier.control.fg",
+      "rootId": "tier.control.fg.disabled",
       "rule": "R2",
       "scope": "base",
-      "headChannel": "--ds-color-text-primary",
+      "headChannel": "--ds-color-text-disabled",
       "headEmitted": true,
       "class": "value-shift",
-      "replacementDeltaBytes": 21
+      "replacementDeltaBytes": 22
     },
     {
       "slotId": "rottay:CHROME.controls.rate.color",
@@ -13597,13 +13600,13 @@
     {
       "slotId": "rottay:CHROME.controls.slider.markColor",
       "vertical": "rottay",
-      "rootId": "tier.control.fg",
+      "rootId": "tier.control.fg.muted",
       "rule": "R2",
       "scope": "base",
-      "headChannel": "--ds-color-text-primary",
+      "headChannel": "--ds-color-text-muted",
       "headEmitted": true,
       "class": "value-shift",
-      "replacementDeltaBytes": 21
+      "replacementDeltaBytes": 19
     },
     {
       "slotId": "rottay:CHROME.controls.slider.railColor",
@@ -13630,13 +13633,13 @@
     {
       "slotId": "rottay:CHROME.controls.slider.trackColorDisabled",
       "vertical": "rottay",
-      "rootId": "tier.control.fg",
+      "rootId": "tier.control.fg.disabled",
       "rule": "R2",
       "scope": "base",
-      "headChannel": "--ds-color-text-primary",
+      "headChannel": "--ds-color-text-disabled",
       "headEmitted": true,
       "class": "value-shift",
-      "replacementDeltaBytes": 21
+      "replacementDeltaBytes": 22
     },
     {
       "slotId": "rottay:CHROME.controls.switch.bg",
@@ -13784,24 +13787,24 @@
     {
       "slotId": "rottay:CHROME.controls.textarea.colorPlaceholder",
       "vertical": "rottay",
-      "rootId": "tier.control.fg",
+      "rootId": "tier.control.fg.tertiary",
       "rule": "R2",
       "scope": "base",
-      "headChannel": "--ds-color-text-primary",
+      "headChannel": "--ds-color-text-tertiary",
       "headEmitted": true,
       "class": "value-shift",
-      "replacementDeltaBytes": 21
+      "replacementDeltaBytes": 22
     },
     {
       "slotId": "rottay:CHROME.controls.textarea.countColor",
       "vertical": "rottay",
-      "rootId": "tier.base.fg",
+      "rootId": "tier.base.fg.muted",
       "rule": "R2",
       "scope": "base",
-      "headChannel": "--ds-color-text-primary",
+      "headChannel": "--ds-color-text-muted",
       "headEmitted": true,
       "class": "value-shift",
-      "replacementDeltaBytes": 21
+      "replacementDeltaBytes": 19
     },
     {
       "slotId": "rottay:CHROME.controls.textarea.filledBg",
@@ -13894,13 +13897,13 @@
     {
       "slotId": "rottay:CHROME.controls.timePicker.clearColor",
       "vertical": "rottay",
-      "rootId": "tier.control.fg",
+      "rootId": "tier.control.fg.secondary",
       "rule": "R2",
       "scope": "base",
-      "headChannel": "--ds-color-text-primary",
+      "headChannel": "--ds-color-text-secondary",
       "headEmitted": true,
       "class": "value-shift",
-      "replacementDeltaBytes": 21
+      "replacementDeltaBytes": 23
     },
     {
       "slotId": "rottay:CHROME.controls.timePicker.color",
@@ -13916,24 +13919,24 @@
     {
       "slotId": "rottay:CHROME.controls.timePicker.iconColor",
       "vertical": "rottay",
-      "rootId": "tier.control.fg",
+      "rootId": "tier.control.fg.muted",
       "rule": "R2",
       "scope": "base",
-      "headChannel": "--ds-color-text-primary",
+      "headChannel": "--ds-color-text-muted",
       "headEmitted": true,
       "class": "value-shift",
-      "replacementDeltaBytes": 21
+      "replacementDeltaBytes": 19
     },
     {
       "slotId": "rottay:CHROME.controls.timePicker.separatorColor",
       "vertical": "rottay",
-      "rootId": "tier.control.fg",
+      "rootId": "tier.control.fg.muted",
       "rule": "R2",
       "scope": "base",
-      "headChannel": "--ds-color-text-primary",
+      "headChannel": "--ds-color-text-muted",
       "headEmitted": true,
       "class": "value-shift",
-      "replacementDeltaBytes": 21
+      "replacementDeltaBytes": 19
     },
     {
       "slotId": "rottay:CHROME.controls.timePicker.warningBorder",
@@ -14246,13 +14249,13 @@
     {
       "slotId": "rottay:CHROME.controls.upload.draggerIconColor",
       "vertical": "rottay",
-      "rootId": "tier.control.fg",
+      "rootId": "tier.control.fg.muted",
       "rule": "R2",
       "scope": "base",
-      "headChannel": "--ds-color-text-primary",
+      "headChannel": "--ds-color-text-muted",
       "headEmitted": true,
       "class": "value-shift",
-      "replacementDeltaBytes": 21
+      "replacementDeltaBytes": 19
     },
     {
       "slotId": "rottay:CHROME.controls.upload.draggerTextColor",
@@ -14598,10 +14601,10 @@
     {
       "slotId": "rottay:CHROME.layout.dividerTextColor",
       "vertical": "rottay",
-      "rootId": "tier.page.fg",
+      "rootId": "tier.page.fg.primary",
       "rule": "R2",
       "scope": "base",
-      "headChannel": "--ds-sidebar-item-color",
+      "headChannel": "--ds-color-text-primary",
       "headEmitted": true,
       "class": "value-shift",
       "replacementDeltaBytes": 21
@@ -16864,13 +16867,13 @@
     {
       "slotId": "rottay:OVERLAY.chrome.calendar.border",
       "vertical": "rottay",
-      "rootId": "tier.page.border",
-      "rule": "R5",
+      "rootId": "tier.page.border.primary",
+      "rule": "R2",
       "scope": "light",
-      "headChannel": "--ds-color-border-subtle",
+      "headChannel": "--ds-color-border-primary",
       "headEmitted": true,
       "class": "value-shift",
-      "replacementDeltaBytes": 22
+      "replacementDeltaBytes": 23
     },
     {
       "slotId": "rottay:OVERLAY.chrome.calendar.dayColorOther",
@@ -17040,13 +17043,13 @@
     {
       "slotId": "rottay:OVERLAY.chrome.collapse.border",
       "vertical": "rottay",
-      "rootId": "tier.page.border",
-      "rule": "R5",
+      "rootId": "tier.page.border.primary",
+      "rule": "R2",
       "scope": "light",
-      "headChannel": "--ds-color-border-subtle",
+      "headChannel": "--ds-color-border-primary",
       "headEmitted": true,
       "class": "value-shift",
-      "replacementDeltaBytes": 22
+      "replacementDeltaBytes": 23
     },
     {
       "slotId": "rottay:OVERLAY.chrome.collapse.contentBg",
@@ -17084,13 +17087,13 @@
     {
       "slotId": "rottay:OVERLAY.chrome.collapse.headerColor",
       "vertical": "rottay",
-      "rootId": "tier.page.fg",
+      "rootId": "tier.page.fg.secondary",
       "rule": "R2",
       "scope": "light",
-      "headChannel": "--ds-sidebar-item-color",
+      "headChannel": "--ds-color-text-secondary",
       "headEmitted": true,
       "class": "value-shift",
-      "replacementDeltaBytes": 21
+      "replacementDeltaBytes": 23
     },
     {
       "slotId": "rottay:OVERLAY.chrome.controls.autocomplete.bg",
@@ -17689,13 +17692,13 @@
     {
       "slotId": "rottay:OVERLAY.chrome.controls.checkbox.labelColorDisabled",
       "vertical": "rottay",
-      "rootId": "tier.control.fg",
+      "rootId": "tier.control.fg.disabled",
       "rule": "R2",
       "scope": "light",
-      "headChannel": "--ds-color-text-primary",
+      "headChannel": "--ds-color-text-disabled",
       "headEmitted": true,
-      "class": "value-shift",
-      "replacementDeltaBytes": 21
+      "class": "pure",
+      "replacementDeltaBytes": 22
     },
     {
       "slotId": "rottay:OVERLAY.chrome.controls.datePicker.bg",
@@ -17854,24 +17857,24 @@
     {
       "slotId": "rottay:OVERLAY.chrome.controls.form.extraColor",
       "vertical": "rottay",
-      "rootId": "tier.control.fg",
+      "rootId": "tier.control.fg.muted",
       "rule": "R2",
       "scope": "light",
-      "headChannel": "--ds-color-text-primary",
+      "headChannel": "--ds-color-text-muted",
       "headEmitted": true,
-      "class": "value-shift",
-      "replacementDeltaBytes": 21
+      "class": "pure",
+      "replacementDeltaBytes": 19
     },
     {
       "slotId": "rottay:OVERLAY.chrome.controls.form.helpColor",
       "vertical": "rottay",
-      "rootId": "tier.control.fg",
+      "rootId": "tier.control.fg.muted",
       "rule": "R2",
       "scope": "light",
-      "headChannel": "--ds-color-text-primary",
+      "headChannel": "--ds-color-text-muted",
       "headEmitted": true,
-      "class": "value-shift",
-      "replacementDeltaBytes": 21
+      "class": "pure",
+      "replacementDeltaBytes": 19
     },
     {
       "slotId": "rottay:OVERLAY.chrome.controls.form.requiredColor",
@@ -17931,13 +17934,13 @@
     {
       "slotId": "rottay:OVERLAY.chrome.controls.input.addon.color",
       "vertical": "rottay",
-      "rootId": "tier.control.fg",
+      "rootId": "tier.control.fg.secondary",
       "rule": "R2",
       "scope": "light",
-      "headChannel": "--ds-color-text-primary",
+      "headChannel": "--ds-color-text-secondary",
       "headEmitted": true,
-      "class": "value-shift",
-      "replacementDeltaBytes": 21
+      "class": "pure",
+      "replacementDeltaBytes": 23
     },
     {
       "slotId": "rottay:OVERLAY.chrome.controls.input.bg",
@@ -18162,24 +18165,24 @@
     {
       "slotId": "rottay:OVERLAY.chrome.controls.inputNumber.addonColor",
       "vertical": "rottay",
-      "rootId": "tier.control.fg",
+      "rootId": "tier.control.fg.secondary",
       "rule": "R2",
       "scope": "light",
-      "headChannel": "--ds-color-text-primary",
+      "headChannel": "--ds-color-text-secondary",
       "headEmitted": true,
-      "class": "value-shift",
-      "replacementDeltaBytes": 21
+      "class": "pure",
+      "replacementDeltaBytes": 23
     },
     {
       "slotId": "rottay:OVERLAY.chrome.controls.inputNumber.affixColor",
       "vertical": "rottay",
-      "rootId": "tier.control.fg",
+      "rootId": "tier.control.fg.muted",
       "rule": "R2",
       "scope": "light",
-      "headChannel": "--ds-color-text-primary",
+      "headChannel": "--ds-color-text-muted",
       "headEmitted": true,
-      "class": "value-shift",
-      "replacementDeltaBytes": 21
+      "class": "pure",
+      "replacementDeltaBytes": 19
     },
     {
       "slotId": "rottay:OVERLAY.chrome.controls.inputNumber.bg",
@@ -18371,13 +18374,13 @@
     {
       "slotId": "rottay:OVERLAY.chrome.controls.radio.labelColorDisabled",
       "vertical": "rottay",
-      "rootId": "tier.control.fg",
+      "rootId": "tier.control.fg.disabled",
       "rule": "R2",
       "scope": "light",
-      "headChannel": "--ds-color-text-primary",
+      "headChannel": "--ds-color-text-disabled",
       "headEmitted": true,
-      "class": "value-shift",
-      "replacementDeltaBytes": 21
+      "class": "pure",
+      "replacementDeltaBytes": 22
     },
     {
       "slotId": "rottay:OVERLAY.chrome.controls.rate.color",
@@ -18690,13 +18693,13 @@
     {
       "slotId": "rottay:OVERLAY.chrome.controls.slider.markColor",
       "vertical": "rottay",
-      "rootId": "tier.control.fg",
+      "rootId": "tier.control.fg.muted",
       "rule": "R2",
       "scope": "light",
-      "headChannel": "--ds-color-text-primary",
+      "headChannel": "--ds-color-text-muted",
       "headEmitted": true,
-      "class": "value-shift",
-      "replacementDeltaBytes": 21
+      "class": "pure",
+      "replacementDeltaBytes": 19
     },
     {
       "slotId": "rottay:OVERLAY.chrome.controls.slider.railColor",
@@ -18712,13 +18715,13 @@
     {
       "slotId": "rottay:OVERLAY.chrome.controls.slider.trackColorDisabled",
       "vertical": "rottay",
-      "rootId": "tier.control.fg",
+      "rootId": "tier.control.fg.disabled",
       "rule": "R2",
       "scope": "light",
-      "headChannel": "--ds-color-text-primary",
+      "headChannel": "--ds-color-text-disabled",
       "headEmitted": true,
-      "class": "value-shift",
-      "replacementDeltaBytes": 21
+      "class": "pure",
+      "replacementDeltaBytes": 22
     },
     {
       "slotId": "rottay:OVERLAY.chrome.controls.switch.bg",
@@ -18855,24 +18858,24 @@
     {
       "slotId": "rottay:OVERLAY.chrome.controls.textarea.colorPlaceholder",
       "vertical": "rottay",
-      "rootId": "tier.control.fg",
+      "rootId": "tier.control.fg.tertiary",
       "rule": "R2",
       "scope": "light",
-      "headChannel": "--ds-color-text-primary",
+      "headChannel": "--ds-color-text-tertiary",
       "headEmitted": true,
       "class": "value-shift",
-      "replacementDeltaBytes": 21
+      "replacementDeltaBytes": 22
     },
     {
       "slotId": "rottay:OVERLAY.chrome.controls.textarea.countColor",
       "vertical": "rottay",
-      "rootId": "tier.base.fg",
+      "rootId": "tier.base.fg.muted",
       "rule": "R2",
       "scope": "light",
-      "headChannel": "--ds-color-text-primary",
+      "headChannel": "--ds-color-text-muted",
       "headEmitted": true,
-      "class": "value-shift",
-      "replacementDeltaBytes": 21
+      "class": "pure",
+      "replacementDeltaBytes": 19
     },
     {
       "slotId": "rottay:OVERLAY.chrome.controls.textarea.errorBorder",
@@ -18954,13 +18957,13 @@
     {
       "slotId": "rottay:OVERLAY.chrome.controls.timePicker.clearColor",
       "vertical": "rottay",
-      "rootId": "tier.control.fg",
+      "rootId": "tier.control.fg.secondary",
       "rule": "R2",
       "scope": "light",
-      "headChannel": "--ds-color-text-primary",
+      "headChannel": "--ds-color-text-secondary",
       "headEmitted": true,
       "class": "value-shift",
-      "replacementDeltaBytes": 21
+      "replacementDeltaBytes": 23
     },
     {
       "slotId": "rottay:OVERLAY.chrome.controls.timePicker.color",
@@ -18987,24 +18990,24 @@
     {
       "slotId": "rottay:OVERLAY.chrome.controls.timePicker.iconColor",
       "vertical": "rottay",
-      "rootId": "tier.control.fg",
+      "rootId": "tier.control.fg.muted",
       "rule": "R2",
       "scope": "light",
-      "headChannel": "--ds-color-text-primary",
+      "headChannel": "--ds-color-text-muted",
       "headEmitted": true,
-      "class": "value-shift",
-      "replacementDeltaBytes": 21
+      "class": "pure",
+      "replacementDeltaBytes": 19
     },
     {
       "slotId": "rottay:OVERLAY.chrome.controls.timePicker.separatorColor",
       "vertical": "rottay",
-      "rootId": "tier.control.fg",
+      "rootId": "tier.control.fg.muted",
       "rule": "R2",
       "scope": "light",
-      "headChannel": "--ds-color-text-primary",
+      "headChannel": "--ds-color-text-muted",
       "headEmitted": true,
-      "class": "value-shift",
-      "replacementDeltaBytes": 21
+      "class": "pure",
+      "replacementDeltaBytes": 19
     },
     {
       "slotId": "rottay:OVERLAY.chrome.controls.toggle.descriptionColor",
@@ -19284,13 +19287,13 @@
     {
       "slotId": "rottay:OVERLAY.chrome.controls.upload.draggerIconColor",
       "vertical": "rottay",
-      "rootId": "tier.control.fg",
+      "rootId": "tier.control.fg.muted",
       "rule": "R2",
       "scope": "light",
-      "headChannel": "--ds-color-text-primary",
+      "headChannel": "--ds-color-text-muted",
       "headEmitted": true,
-      "class": "value-shift",
-      "replacementDeltaBytes": 21
+      "class": "pure",
+      "replacementDeltaBytes": 19
     },
     {
       "slotId": "rottay:OVERLAY.chrome.controls.upload.errorBorder",
@@ -19548,12 +19551,12 @@
     {
       "slotId": "rottay:OVERLAY.chrome.layout.dividerTextColor",
       "vertical": "rottay",
-      "rootId": "tier.page.fg",
+      "rootId": "tier.page.fg.primary",
       "rule": "R2",
       "scope": "light",
-      "headChannel": "--ds-sidebar-item-color",
+      "headChannel": "--ds-color-text-primary",
       "headEmitted": true,
-      "class": "value-shift",
+      "class": "pure",
       "replacementDeltaBytes": 21
     },
     {
@@ -22164,5 +22167,5 @@
       "replacementDeltaBytes": 28
     }
   ],
-  "digest": "89a6943c03c770620264a7ac8f149487d01b8610fe27aa87702e78c5232e91de"
+  "digest": "c5270b1127d8c490001880aa0499e6eb0db8ae307747e52b3c99ab3d2b932f86"
 }

@@ -53,15 +53,15 @@
     "expressionsCarryingLiteral": 71,
     "byRule": {
       "R4": 190,
-      "R5": 1550,
+      "R5": 1546,
       "R1": 760,
-      "R2": 1156
+      "R2": 1160
     },
     "byVerdict": {
       "pro-expert": 190,
-      "adjudicate": 1550,
+      "adjudicate": 1546,
       "already-collapsed": 760,
-      "collapse": 1156
+      "collapse": 1160
     },
     "byRootAttribution": {
       "emits-no-channel": 149,
@@ -9281,16 +9281,16 @@
       "emitsScoped": [
         "base|--ds-input-addon-color"
       ],
-      "rootId": "tier.control.fg",
+      "rootId": "tier.control.fg.secondary",
       "headRootIds": [
-        "tier.control.fg"
+        "tier.control.fg.secondary"
       ],
       "rootAttribution": "governed-owner-table",
       "rule": "R2",
       "verdict": "collapse",
       "evidence": {
-        "rootId": "tier.control.fg",
-        "rootDerivation": "Tinta sobre controles. Sobre relleno de marca la tinta ya tiene canal derivado (--ds-color-text-on-primary, packages/core/src/foundation/tokens/css/foundation/themes/default.css:225); sobre relleno neutro cae en la tinta general.",
+        "rootId": "tier.control.fg.secondary",
+        "rootDerivation": "Paso \"secondary\" del eje tinta sobre el nivel control. La cabeza --ds-color-text-secondary ya es vocabulario AUTORADO de BrandPalette; esta raiz solo la promueve a cabeza de cascada para que una hoja de ese paso derive en vez de repetir su literal.",
         "coincidenceGuard": "no-value-match-used"
       }
     },
@@ -22641,16 +22641,16 @@
       "emitsScoped": [
         "base|--ds-toolbar-color"
       ],
-      "rootId": "tier.page.fg",
+      "rootId": "tier.page.fg.primary",
       "headRootIds": [
-        "tier.page.fg"
+        "tier.page.fg.primary"
       ],
       "rootAttribution": "governed-owner-table",
       "rule": "R2",
       "verdict": "collapse",
       "evidence": {
-        "rootId": "tier.page.fg",
-        "rootDerivation": "Tinta del chrome de pagina; el lector la resuelve en cascada con fallback: color: var(--ds-menu-item-color, var(--ds-sidebar-item-color, var(--ds-color-text-secondary))) (packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/menu.css:198).",
+        "rootId": "tier.page.fg.primary",
+        "rootDerivation": "Paso \"primary\" del eje tinta sobre el nivel page. La cabeza --ds-color-text-primary ya es vocabulario AUTORADO de BrandPalette; esta raiz solo la promueve a cabeza de cascada para que una hoja de ese paso derive en vez de repetir su literal.",
         "coincidenceGuard": "no-value-match-used"
       }
     },
@@ -22733,16 +22733,16 @@
       "emitsScoped": [
         "base|--ds-toolbar-control-color"
       ],
-      "rootId": "tier.page.fg",
+      "rootId": "tier.page.fg.primary",
       "headRootIds": [
-        "tier.page.fg"
+        "tier.page.fg.primary"
       ],
       "rootAttribution": "governed-owner-table",
       "rule": "R2",
       "verdict": "collapse",
       "evidence": {
-        "rootId": "tier.page.fg",
-        "rootDerivation": "Tinta del chrome de pagina; el lector la resuelve en cascada con fallback: color: var(--ds-menu-item-color, var(--ds-sidebar-item-color, var(--ds-color-text-secondary))) (packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/menu.css:198).",
+        "rootId": "tier.page.fg.primary",
+        "rootDerivation": "Paso \"primary\" del eje tinta sobre el nivel page. La cabeza --ds-color-text-primary ya es vocabulario AUTORADO de BrandPalette; esta raiz solo la promueve a cabeza de cascada para que una hoja de ese paso derive en vez de repetir su literal.",
         "coincidenceGuard": "no-value-match-used"
       }
     },
@@ -25457,9 +25457,9 @@
       "emitsScoped": [
         "dark|--ds-input-addon-color"
       ],
-      "rootId": "tier.control.fg",
+      "rootId": "tier.control.fg.secondary",
       "headRootIds": [
-        "tier.control.fg"
+        "tier.control.fg.secondary"
       ],
       "rootAttribution": "governed-owner-table",
       "rule": "R1",
@@ -31409,9 +31409,9 @@
       "emitsScoped": [
         "dark|--ds-toolbar-color"
       ],
-      "rootId": "tier.page.fg",
+      "rootId": "tier.page.fg.primary",
       "headRootIds": [
-        "tier.page.fg"
+        "tier.page.fg.primary"
       ],
       "rootAttribution": "governed-owner-table",
       "rule": "R1",
@@ -31496,9 +31496,9 @@
       "emitsScoped": [
         "dark|--ds-toolbar-control-color"
       ],
-      "rootId": "tier.page.fg",
+      "rootId": "tier.page.fg.primary",
       "headRootIds": [
-        "tier.page.fg"
+        "tier.page.fg.primary"
       ],
       "rootAttribution": "governed-owner-table",
       "rule": "R1",
@@ -37684,9 +37684,9 @@
       "emitsScoped": [
         "dark|--ds-material-shell-foreground"
       ],
-      "rootId": "tier.page.fg",
+      "rootId": "tier.page.fg.primary",
       "headRootIds": [
-        "tier.page.fg"
+        "tier.page.fg.primary"
       ],
       "rootAttribution": "governed-owner-table",
       "rule": "R1",
@@ -40920,16 +40920,16 @@
       "emitsScoped": [
         "base|--ds-material-shell-foreground"
       ],
-      "rootId": "tier.page.fg",
+      "rootId": "tier.page.fg.primary",
       "headRootIds": [
-        "tier.page.fg"
+        "tier.page.fg.primary"
       ],
       "rootAttribution": "governed-owner-table",
       "rule": "R2",
       "verdict": "collapse",
       "evidence": {
-        "rootId": "tier.page.fg",
-        "rootDerivation": "Tinta del chrome de pagina; el lector la resuelve en cascada con fallback: color: var(--ds-menu-item-color, var(--ds-sidebar-item-color, var(--ds-color-text-secondary))) (packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/menu.css:198).",
+        "rootId": "tier.page.fg.primary",
+        "rootDerivation": "Paso \"primary\" del eje tinta sobre el nivel page. La cabeza --ds-color-text-primary ya es vocabulario AUTORADO de BrandPalette; esta raiz solo la promueve a cabeza de cascada para que una hoja de ese paso derive en vez de repetir su literal.",
         "coincidenceGuard": "no-value-match-used"
       }
     },
@@ -58783,16 +58783,17 @@
       "emitsScoped": [
         "base|--ds-calendar-border"
       ],
-      "rootId": "tier.page.border",
+      "rootId": "tier.page.border.primary",
       "headRootIds": [
-        "tier.page.border"
+        "tier.page.border.primary"
       ],
       "rootAttribution": "governed-owner-table",
-      "rule": "R5",
-      "verdict": "adjudicate",
+      "rule": "R2",
+      "verdict": "collapse",
       "evidence": {
-        "whyNotR2": "la raiz no tiene deuda de derivacion con ley citada",
-        "whyNotR3": "el tema no autora un nombre de stop de un control gobernante"
+        "rootId": "tier.page.border.primary",
+        "rootDerivation": "Paso \"primary\" del eje borde sobre el nivel page. La cabeza --ds-color-border-primary ya es vocabulario AUTORADO de BrandPalette; esta raiz solo la promueve a cabeza de cascada para que una hoja de ese paso derive en vez de repetir su literal.",
+        "coincidenceGuard": "no-value-match-used"
       }
     },
     {
@@ -59887,16 +59888,17 @@
       "emitsScoped": [
         "base|--ds-collapse-border"
       ],
-      "rootId": "tier.page.border",
+      "rootId": "tier.page.border.primary",
       "headRootIds": [
-        "tier.page.border"
+        "tier.page.border.primary"
       ],
       "rootAttribution": "governed-owner-table",
-      "rule": "R5",
-      "verdict": "adjudicate",
+      "rule": "R2",
+      "verdict": "collapse",
       "evidence": {
-        "whyNotR2": "la raiz no tiene deuda de derivacion con ley citada",
-        "whyNotR3": "el tema no autora un nombre de stop de un control gobernante"
+        "rootId": "tier.page.border.primary",
+        "rootDerivation": "Paso \"primary\" del eje borde sobre el nivel page. La cabeza --ds-color-border-primary ya es vocabulario AUTORADO de BrandPalette; esta raiz solo la promueve a cabeza de cascada para que una hoja de ese paso derive en vez de repetir su literal.",
+        "coincidenceGuard": "no-value-match-used"
       }
     },
     {
@@ -60010,16 +60012,16 @@
       "emitsScoped": [
         "base|--ds-collapse-header-color"
       ],
-      "rootId": "tier.page.fg",
+      "rootId": "tier.page.fg.secondary",
       "headRootIds": [
-        "tier.page.fg"
+        "tier.page.fg.secondary"
       ],
       "rootAttribution": "governed-owner-table",
       "rule": "R2",
       "verdict": "collapse",
       "evidence": {
-        "rootId": "tier.page.fg",
-        "rootDerivation": "Tinta del chrome de pagina; el lector la resuelve en cascada con fallback: color: var(--ds-menu-item-color, var(--ds-sidebar-item-color, var(--ds-color-text-secondary))) (packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/menu.css:198).",
+        "rootId": "tier.page.fg.secondary",
+        "rootDerivation": "Paso \"secondary\" del eje tinta sobre el nivel page. La cabeza --ds-color-text-secondary ya es vocabulario AUTORADO de BrandPalette; esta raiz solo la promueve a cabeza de cascada para que una hoja de ese paso derive en vez de repetir su literal.",
         "coincidenceGuard": "no-value-match-used"
       }
     },
@@ -64549,16 +64551,16 @@
       "emitsScoped": [
         "base|--ds-checkbox-label-color-disabled"
       ],
-      "rootId": "tier.control.fg",
+      "rootId": "tier.control.fg.disabled",
       "headRootIds": [
-        "tier.control.fg"
+        "tier.control.fg.disabled"
       ],
       "rootAttribution": "governed-owner-table",
       "rule": "R2",
       "verdict": "collapse",
       "evidence": {
-        "rootId": "tier.control.fg",
-        "rootDerivation": "Tinta sobre controles. Sobre relleno de marca la tinta ya tiene canal derivado (--ds-color-text-on-primary, packages/core/src/foundation/tokens/css/foundation/themes/default.css:225); sobre relleno neutro cae en la tinta general.",
+        "rootId": "tier.control.fg.disabled",
+        "rootDerivation": "Paso \"disabled\" del eje tinta sobre el nivel control. La cabeza --ds-color-text-disabled ya es vocabulario AUTORADO de BrandPalette; esta raiz solo la promueve a cabeza de cascada para que una hoja de ese paso derive en vez de repetir su literal.",
         "coincidenceGuard": "no-value-match-used"
       }
     },
@@ -66191,16 +66193,16 @@
       "emitsScoped": [
         "base|--ds-form-extra-color"
       ],
-      "rootId": "tier.control.fg",
+      "rootId": "tier.control.fg.muted",
       "headRootIds": [
-        "tier.control.fg"
+        "tier.control.fg.muted"
       ],
       "rootAttribution": "governed-owner-table",
       "rule": "R2",
       "verdict": "collapse",
       "evidence": {
-        "rootId": "tier.control.fg",
-        "rootDerivation": "Tinta sobre controles. Sobre relleno de marca la tinta ya tiene canal derivado (--ds-color-text-on-primary, packages/core/src/foundation/tokens/css/foundation/themes/default.css:225); sobre relleno neutro cae en la tinta general.",
+        "rootId": "tier.control.fg.muted",
+        "rootDerivation": "Paso \"muted\" del eje tinta sobre el nivel control. La cabeza --ds-color-text-muted ya es vocabulario AUTORADO de BrandPalette; esta raiz solo la promueve a cabeza de cascada para que una hoja de ese paso derive en vez de repetir su literal.",
         "coincidenceGuard": "no-value-match-used"
       }
     },
@@ -66222,16 +66224,16 @@
       "emitsScoped": [
         "base|--ds-form-help-color"
       ],
-      "rootId": "tier.control.fg",
+      "rootId": "tier.control.fg.muted",
       "headRootIds": [
-        "tier.control.fg"
+        "tier.control.fg.muted"
       ],
       "rootAttribution": "governed-owner-table",
       "rule": "R2",
       "verdict": "collapse",
       "evidence": {
-        "rootId": "tier.control.fg",
-        "rootDerivation": "Tinta sobre controles. Sobre relleno de marca la tinta ya tiene canal derivado (--ds-color-text-on-primary, packages/core/src/foundation/tokens/css/foundation/themes/default.css:225); sobre relleno neutro cae en la tinta general.",
+        "rootId": "tier.control.fg.muted",
+        "rootDerivation": "Paso \"muted\" del eje tinta sobre el nivel control. La cabeza --ds-color-text-muted ya es vocabulario AUTORADO de BrandPalette; esta raiz solo la promueve a cabeza de cascada para que una hoja de ese paso derive en vez de repetir su literal.",
         "coincidenceGuard": "no-value-match-used"
       }
     },
@@ -66374,16 +66376,16 @@
       "emitsScoped": [
         "base|--ds-input-addon-color"
       ],
-      "rootId": "tier.control.fg",
+      "rootId": "tier.control.fg.secondary",
       "headRootIds": [
-        "tier.control.fg"
+        "tier.control.fg.secondary"
       ],
       "rootAttribution": "governed-owner-table",
       "rule": "R2",
       "verdict": "collapse",
       "evidence": {
-        "rootId": "tier.control.fg",
-        "rootDerivation": "Tinta sobre controles. Sobre relleno de marca la tinta ya tiene canal derivado (--ds-color-text-on-primary, packages/core/src/foundation/tokens/css/foundation/themes/default.css:225); sobre relleno neutro cae en la tinta general.",
+        "rootId": "tier.control.fg.secondary",
+        "rootDerivation": "Paso \"secondary\" del eje tinta sobre el nivel control. La cabeza --ds-color-text-secondary ya es vocabulario AUTORADO de BrandPalette; esta raiz solo la promueve a cabeza de cascada para que una hoja de ese paso derive en vez de repetir su literal.",
         "coincidenceGuard": "no-value-match-used"
       }
     },
@@ -67375,16 +67377,16 @@
       "emitsScoped": [
         "base|--ds-inputnumber-addon-color"
       ],
-      "rootId": "tier.control.fg",
+      "rootId": "tier.control.fg.secondary",
       "headRootIds": [
-        "tier.control.fg"
+        "tier.control.fg.secondary"
       ],
       "rootAttribution": "governed-owner-table",
       "rule": "R2",
       "verdict": "collapse",
       "evidence": {
-        "rootId": "tier.control.fg",
-        "rootDerivation": "Tinta sobre controles. Sobre relleno de marca la tinta ya tiene canal derivado (--ds-color-text-on-primary, packages/core/src/foundation/tokens/css/foundation/themes/default.css:225); sobre relleno neutro cae en la tinta general.",
+        "rootId": "tier.control.fg.secondary",
+        "rootDerivation": "Paso \"secondary\" del eje tinta sobre el nivel control. La cabeza --ds-color-text-secondary ya es vocabulario AUTORADO de BrandPalette; esta raiz solo la promueve a cabeza de cascada para que una hoja de ese paso derive en vez de repetir su literal.",
         "coincidenceGuard": "no-value-match-used"
       }
     },
@@ -67406,16 +67408,16 @@
       "emitsScoped": [
         "base|--ds-inputnumber-affix-color"
       ],
-      "rootId": "tier.control.fg",
+      "rootId": "tier.control.fg.muted",
       "headRootIds": [
-        "tier.control.fg"
+        "tier.control.fg.muted"
       ],
       "rootAttribution": "governed-owner-table",
       "rule": "R2",
       "verdict": "collapse",
       "evidence": {
-        "rootId": "tier.control.fg",
-        "rootDerivation": "Tinta sobre controles. Sobre relleno de marca la tinta ya tiene canal derivado (--ds-color-text-on-primary, packages/core/src/foundation/tokens/css/foundation/themes/default.css:225); sobre relleno neutro cae en la tinta general.",
+        "rootId": "tier.control.fg.muted",
+        "rootDerivation": "Paso \"muted\" del eje tinta sobre el nivel control. La cabeza --ds-color-text-muted ya es vocabulario AUTORADO de BrandPalette; esta raiz solo la promueve a cabeza de cascada para que una hoja de ese paso derive en vez de repetir su literal.",
         "coincidenceGuard": "no-value-match-used"
       }
     },
@@ -68047,16 +68049,16 @@
       "emitsScoped": [
         "base|--ds-radio-label-color-disabled"
       ],
-      "rootId": "tier.control.fg",
+      "rootId": "tier.control.fg.disabled",
       "headRootIds": [
-        "tier.control.fg"
+        "tier.control.fg.disabled"
       ],
       "rootAttribution": "governed-owner-table",
       "rule": "R2",
       "verdict": "collapse",
       "evidence": {
-        "rootId": "tier.control.fg",
-        "rootDerivation": "Tinta sobre controles. Sobre relleno de marca la tinta ya tiene canal derivado (--ds-color-text-on-primary, packages/core/src/foundation/tokens/css/foundation/themes/default.css:225); sobre relleno neutro cae en la tinta general.",
+        "rootId": "tier.control.fg.disabled",
+        "rootDerivation": "Paso \"disabled\" del eje tinta sobre el nivel control. La cabeza --ds-color-text-disabled ya es vocabulario AUTORADO de BrandPalette; esta raiz solo la promueve a cabeza de cascada para que una hoja de ese paso derive en vez de repetir su literal.",
         "coincidenceGuard": "no-value-match-used"
       }
     },
@@ -69682,16 +69684,16 @@
       "emitsScoped": [
         "base|--ds-slider-mark-color"
       ],
-      "rootId": "tier.control.fg",
+      "rootId": "tier.control.fg.muted",
       "headRootIds": [
-        "tier.control.fg"
+        "tier.control.fg.muted"
       ],
       "rootAttribution": "governed-owner-table",
       "rule": "R2",
       "verdict": "collapse",
       "evidence": {
-        "rootId": "tier.control.fg",
-        "rootDerivation": "Tinta sobre controles. Sobre relleno de marca la tinta ya tiene canal derivado (--ds-color-text-on-primary, packages/core/src/foundation/tokens/css/foundation/themes/default.css:225); sobre relleno neutro cae en la tinta general.",
+        "rootId": "tier.control.fg.muted",
+        "rootDerivation": "Paso \"muted\" del eje tinta sobre el nivel control. La cabeza --ds-color-text-muted ya es vocabulario AUTORADO de BrandPalette; esta raiz solo la promueve a cabeza de cascada para que una hoja de ese paso derive en vez de repetir su literal.",
         "coincidenceGuard": "no-value-match-used"
       }
     },
@@ -69773,16 +69775,16 @@
       "emitsScoped": [
         "base|--ds-slider-track-color-disabled"
       ],
-      "rootId": "tier.control.fg",
+      "rootId": "tier.control.fg.disabled",
       "headRootIds": [
-        "tier.control.fg"
+        "tier.control.fg.disabled"
       ],
       "rootAttribution": "governed-owner-table",
       "rule": "R2",
       "verdict": "collapse",
       "evidence": {
-        "rootId": "tier.control.fg",
-        "rootDerivation": "Tinta sobre controles. Sobre relleno de marca la tinta ya tiene canal derivado (--ds-color-text-on-primary, packages/core/src/foundation/tokens/css/foundation/themes/default.css:225); sobre relleno neutro cae en la tinta general.",
+        "rootId": "tier.control.fg.disabled",
+        "rootDerivation": "Paso \"disabled\" del eje tinta sobre el nivel control. La cabeza --ds-color-text-disabled ya es vocabulario AUTORADO de BrandPalette; esta raiz solo la promueve a cabeza de cascada para que una hoja de ese paso derive en vez de repetir su literal.",
         "coincidenceGuard": "no-value-match-used"
       }
     },
@@ -70233,16 +70235,16 @@
       "emitsScoped": [
         "base|--ds-textarea-color-placeholder"
       ],
-      "rootId": "tier.control.fg",
+      "rootId": "tier.control.fg.tertiary",
       "headRootIds": [
-        "tier.control.fg"
+        "tier.control.fg.tertiary"
       ],
       "rootAttribution": "governed-owner-table",
       "rule": "R2",
       "verdict": "collapse",
       "evidence": {
-        "rootId": "tier.control.fg",
-        "rootDerivation": "Tinta sobre controles. Sobre relleno de marca la tinta ya tiene canal derivado (--ds-color-text-on-primary, packages/core/src/foundation/tokens/css/foundation/themes/default.css:225); sobre relleno neutro cae en la tinta general.",
+        "rootId": "tier.control.fg.tertiary",
+        "rootDerivation": "Paso \"tertiary\" del eje tinta sobre el nivel control. La cabeza --ds-color-text-tertiary ya es vocabulario AUTORADO de BrandPalette; esta raiz solo la promueve a cabeza de cascada para que una hoja de ese paso derive en vez de repetir su literal.",
         "coincidenceGuard": "no-value-match-used"
       }
     },
@@ -70264,16 +70266,16 @@
       "emitsScoped": [
         "base|--ds-textarea-count-color"
       ],
-      "rootId": "tier.base.fg",
+      "rootId": "tier.base.fg.muted",
       "headRootIds": [
-        "tier.base.fg"
+        "tier.base.fg.muted"
       ],
       "rootAttribution": "declared-fallback",
       "rule": "R2",
       "verdict": "collapse",
       "evidence": {
-        "rootId": "tier.base.fg",
-        "rootDerivation": "Tinta sobre el suelo: se DERIVA por contraste del fondo, no se autora. Es exactamente la figura de la autoridad on-tone-ink (packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts:593-606): \"shared WCAG readable-ink over each status seed\".",
+        "rootId": "tier.base.fg.muted",
+        "rootDerivation": "Paso \"muted\" del eje tinta sobre el nivel base. La cabeza --ds-color-text-muted ya es vocabulario AUTORADO de BrandPalette; esta raiz solo la promueve a cabeza de cascada para que una hoja de ese paso derive en vez de repetir su literal.",
         "coincidenceGuard": "no-value-match-used"
       }
     },
@@ -70542,16 +70544,16 @@
       "emitsScoped": [
         "base|--ds-timepicker-clear-color"
       ],
-      "rootId": "tier.control.fg",
+      "rootId": "tier.control.fg.secondary",
       "headRootIds": [
-        "tier.control.fg"
+        "tier.control.fg.secondary"
       ],
       "rootAttribution": "governed-owner-table",
       "rule": "R2",
       "verdict": "collapse",
       "evidence": {
-        "rootId": "tier.control.fg",
-        "rootDerivation": "Tinta sobre controles. Sobre relleno de marca la tinta ya tiene canal derivado (--ds-color-text-on-primary, packages/core/src/foundation/tokens/css/foundation/themes/default.css:225); sobre relleno neutro cae en la tinta general.",
+        "rootId": "tier.control.fg.secondary",
+        "rootDerivation": "Paso \"secondary\" del eje tinta sobre el nivel control. La cabeza --ds-color-text-secondary ya es vocabulario AUTORADO de BrandPalette; esta raiz solo la promueve a cabeza de cascada para que una hoja de ese paso derive en vez de repetir su literal.",
         "coincidenceGuard": "no-value-match-used"
       }
     },
@@ -70604,16 +70606,16 @@
       "emitsScoped": [
         "base|--ds-timepicker-icon-color"
       ],
-      "rootId": "tier.control.fg",
+      "rootId": "tier.control.fg.muted",
       "headRootIds": [
-        "tier.control.fg"
+        "tier.control.fg.muted"
       ],
       "rootAttribution": "governed-owner-table",
       "rule": "R2",
       "verdict": "collapse",
       "evidence": {
-        "rootId": "tier.control.fg",
-        "rootDerivation": "Tinta sobre controles. Sobre relleno de marca la tinta ya tiene canal derivado (--ds-color-text-on-primary, packages/core/src/foundation/tokens/css/foundation/themes/default.css:225); sobre relleno neutro cae en la tinta general.",
+        "rootId": "tier.control.fg.muted",
+        "rootDerivation": "Paso \"muted\" del eje tinta sobre el nivel control. La cabeza --ds-color-text-muted ya es vocabulario AUTORADO de BrandPalette; esta raiz solo la promueve a cabeza de cascada para que una hoja de ese paso derive en vez de repetir su literal.",
         "coincidenceGuard": "no-value-match-used"
       }
     },
@@ -70635,16 +70637,16 @@
       "emitsScoped": [
         "base|--ds-timepicker-separator-color"
       ],
-      "rootId": "tier.control.fg",
+      "rootId": "tier.control.fg.muted",
       "headRootIds": [
-        "tier.control.fg"
+        "tier.control.fg.muted"
       ],
       "rootAttribution": "governed-owner-table",
       "rule": "R2",
       "verdict": "collapse",
       "evidence": {
-        "rootId": "tier.control.fg",
-        "rootDerivation": "Tinta sobre controles. Sobre relleno de marca la tinta ya tiene canal derivado (--ds-color-text-on-primary, packages/core/src/foundation/tokens/css/foundation/themes/default.css:225); sobre relleno neutro cae en la tinta general.",
+        "rootId": "tier.control.fg.muted",
+        "rootDerivation": "Paso \"muted\" del eje tinta sobre el nivel control. La cabeza --ds-color-text-muted ya es vocabulario AUTORADO de BrandPalette; esta raiz solo la promueve a cabeza de cascada para que una hoja de ese paso derive en vez de repetir su literal.",
         "coincidenceGuard": "no-value-match-used"
       }
     },
@@ -71584,16 +71586,16 @@
       "emitsScoped": [
         "base|--ds-upload-dragger-icon-color"
       ],
-      "rootId": "tier.control.fg",
+      "rootId": "tier.control.fg.muted",
       "headRootIds": [
-        "tier.control.fg"
+        "tier.control.fg.muted"
       ],
       "rootAttribution": "governed-owner-table",
       "rule": "R2",
       "verdict": "collapse",
       "evidence": {
-        "rootId": "tier.control.fg",
-        "rootDerivation": "Tinta sobre controles. Sobre relleno de marca la tinta ya tiene canal derivado (--ds-color-text-on-primary, packages/core/src/foundation/tokens/css/foundation/themes/default.css:225); sobre relleno neutro cae en la tinta general.",
+        "rootId": "tier.control.fg.muted",
+        "rootDerivation": "Paso \"muted\" del eje tinta sobre el nivel control. La cabeza --ds-color-text-muted ya es vocabulario AUTORADO de BrandPalette; esta raiz solo la promueve a cabeza de cascada para que una hoja de ese paso derive en vez de repetir su literal.",
         "coincidenceGuard": "no-value-match-used"
       }
     },
@@ -72727,16 +72729,16 @@
       "emitsScoped": [
         "base|--ds-divider-text-color"
       ],
-      "rootId": "tier.page.fg",
+      "rootId": "tier.page.fg.primary",
       "headRootIds": [
-        "tier.page.fg"
+        "tier.page.fg.primary"
       ],
       "rootAttribution": "governed-owner-table",
       "rule": "R2",
       "verdict": "collapse",
       "evidence": {
-        "rootId": "tier.page.fg",
-        "rootDerivation": "Tinta del chrome de pagina; el lector la resuelve en cascada con fallback: color: var(--ds-menu-item-color, var(--ds-sidebar-item-color, var(--ds-color-text-secondary))) (packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/menu.css:198).",
+        "rootId": "tier.page.fg.primary",
+        "rootDerivation": "Paso \"primary\" del eje tinta sobre el nivel page. La cabeza --ds-color-text-primary ya es vocabulario AUTORADO de BrandPalette; esta raiz solo la promueve a cabeza de cascada para que una hoja de ese paso derive en vez de repetir su literal.",
         "coincidenceGuard": "no-value-match-used"
       }
     },
@@ -82643,16 +82645,17 @@
       "emitsScoped": [
         "light|--ds-calendar-border"
       ],
-      "rootId": "tier.page.border",
+      "rootId": "tier.page.border.primary",
       "headRootIds": [
-        "tier.page.border"
+        "tier.page.border.primary"
       ],
       "rootAttribution": "governed-owner-table",
-      "rule": "R5",
-      "verdict": "adjudicate",
+      "rule": "R2",
+      "verdict": "collapse",
       "evidence": {
-        "whyNotR2": "la raiz no tiene deuda de derivacion con ley citada",
-        "whyNotR3": "el tema no autora un nombre de stop de un control gobernante"
+        "rootId": "tier.page.border.primary",
+        "rootDerivation": "Paso \"primary\" del eje borde sobre el nivel page. La cabeza --ds-color-border-primary ya es vocabulario AUTORADO de BrandPalette; esta raiz solo la promueve a cabeza de cascada para que una hoja de ese paso derive en vez de repetir su literal.",
+        "coincidenceGuard": "no-value-match-used"
       }
     },
     {
@@ -83322,16 +83325,17 @@
       "emitsScoped": [
         "light|--ds-collapse-border"
       ],
-      "rootId": "tier.page.border",
+      "rootId": "tier.page.border.primary",
       "headRootIds": [
-        "tier.page.border"
+        "tier.page.border.primary"
       ],
       "rootAttribution": "governed-owner-table",
-      "rule": "R5",
-      "verdict": "adjudicate",
+      "rule": "R2",
+      "verdict": "collapse",
       "evidence": {
-        "whyNotR2": "la raiz no tiene deuda de derivacion con ley citada",
-        "whyNotR3": "el tema no autora un nombre de stop de un control gobernante"
+        "rootId": "tier.page.border.primary",
+        "rootDerivation": "Paso \"primary\" del eje borde sobre el nivel page. La cabeza --ds-color-border-primary ya es vocabulario AUTORADO de BrandPalette; esta raiz solo la promueve a cabeza de cascada para que una hoja de ese paso derive en vez de repetir su literal.",
+        "coincidenceGuard": "no-value-match-used"
       }
     },
     {
@@ -83445,16 +83449,16 @@
       "emitsScoped": [
         "light|--ds-collapse-header-color"
       ],
-      "rootId": "tier.page.fg",
+      "rootId": "tier.page.fg.secondary",
       "headRootIds": [
-        "tier.page.fg"
+        "tier.page.fg.secondary"
       ],
       "rootAttribution": "governed-owner-table",
       "rule": "R2",
       "verdict": "collapse",
       "evidence": {
-        "rootId": "tier.page.fg",
-        "rootDerivation": "Tinta del chrome de pagina; el lector la resuelve en cascada con fallback: color: var(--ds-menu-item-color, var(--ds-sidebar-item-color, var(--ds-color-text-secondary))) (packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/menu.css:198).",
+        "rootId": "tier.page.fg.secondary",
+        "rootDerivation": "Paso \"secondary\" del eje tinta sobre el nivel page. La cabeza --ds-color-text-secondary ya es vocabulario AUTORADO de BrandPalette; esta raiz solo la promueve a cabeza de cascada para que una hoja de ese paso derive en vez de repetir su literal.",
         "coincidenceGuard": "no-value-match-used"
       }
     },
@@ -85305,16 +85309,16 @@
       "emitsScoped": [
         "light|--ds-checkbox-label-color-disabled"
       ],
-      "rootId": "tier.control.fg",
+      "rootId": "tier.control.fg.disabled",
       "headRootIds": [
-        "tier.control.fg"
+        "tier.control.fg.disabled"
       ],
       "rootAttribution": "governed-owner-table",
       "rule": "R2",
       "verdict": "collapse",
       "evidence": {
-        "rootId": "tier.control.fg",
-        "rootDerivation": "Tinta sobre controles. Sobre relleno de marca la tinta ya tiene canal derivado (--ds-color-text-on-primary, packages/core/src/foundation/tokens/css/foundation/themes/default.css:225); sobre relleno neutro cae en la tinta general.",
+        "rootId": "tier.control.fg.disabled",
+        "rootDerivation": "Paso \"disabled\" del eje tinta sobre el nivel control. La cabeza --ds-color-text-disabled ya es vocabulario AUTORADO de BrandPalette; esta raiz solo la promueve a cabeza de cascada para que una hoja de ese paso derive en vez de repetir su literal.",
         "coincidenceGuard": "no-value-match-used"
       }
     },
@@ -85827,16 +85831,16 @@
       "emitsScoped": [
         "light|--ds-form-extra-color"
       ],
-      "rootId": "tier.control.fg",
+      "rootId": "tier.control.fg.muted",
       "headRootIds": [
-        "tier.control.fg"
+        "tier.control.fg.muted"
       ],
       "rootAttribution": "governed-owner-table",
       "rule": "R2",
       "verdict": "collapse",
       "evidence": {
-        "rootId": "tier.control.fg",
-        "rootDerivation": "Tinta sobre controles. Sobre relleno de marca la tinta ya tiene canal derivado (--ds-color-text-on-primary, packages/core/src/foundation/tokens/css/foundation/themes/default.css:225); sobre relleno neutro cae en la tinta general.",
+        "rootId": "tier.control.fg.muted",
+        "rootDerivation": "Paso \"muted\" del eje tinta sobre el nivel control. La cabeza --ds-color-text-muted ya es vocabulario AUTORADO de BrandPalette; esta raiz solo la promueve a cabeza de cascada para que una hoja de ese paso derive en vez de repetir su literal.",
         "coincidenceGuard": "no-value-match-used"
       }
     },
@@ -85858,16 +85862,16 @@
       "emitsScoped": [
         "light|--ds-form-help-color"
       ],
-      "rootId": "tier.control.fg",
+      "rootId": "tier.control.fg.muted",
       "headRootIds": [
-        "tier.control.fg"
+        "tier.control.fg.muted"
       ],
       "rootAttribution": "governed-owner-table",
       "rule": "R2",
       "verdict": "collapse",
       "evidence": {
-        "rootId": "tier.control.fg",
-        "rootDerivation": "Tinta sobre controles. Sobre relleno de marca la tinta ya tiene canal derivado (--ds-color-text-on-primary, packages/core/src/foundation/tokens/css/foundation/themes/default.css:225); sobre relleno neutro cae en la tinta general.",
+        "rootId": "tier.control.fg.muted",
+        "rootDerivation": "Paso \"muted\" del eje tinta sobre el nivel control. La cabeza --ds-color-text-muted ya es vocabulario AUTORADO de BrandPalette; esta raiz solo la promueve a cabeza de cascada para que una hoja de ese paso derive en vez de repetir su literal.",
         "coincidenceGuard": "no-value-match-used"
       }
     },
@@ -86044,16 +86048,16 @@
       "emitsScoped": [
         "light|--ds-input-addon-color"
       ],
-      "rootId": "tier.control.fg",
+      "rootId": "tier.control.fg.secondary",
       "headRootIds": [
-        "tier.control.fg"
+        "tier.control.fg.secondary"
       ],
       "rootAttribution": "governed-owner-table",
       "rule": "R2",
       "verdict": "collapse",
       "evidence": {
-        "rootId": "tier.control.fg",
-        "rootDerivation": "Tinta sobre controles. Sobre relleno de marca la tinta ya tiene canal derivado (--ds-color-text-on-primary, packages/core/src/foundation/tokens/css/foundation/themes/default.css:225); sobre relleno neutro cae en la tinta general.",
+        "rootId": "tier.control.fg.secondary",
+        "rootDerivation": "Paso \"secondary\" del eje tinta sobre el nivel control. La cabeza --ds-color-text-secondary ya es vocabulario AUTORADO de BrandPalette; esta raiz solo la promueve a cabeza de cascada para que una hoja de ese paso derive en vez de repetir su literal.",
         "coincidenceGuard": "no-value-match-used"
       }
     },
@@ -86806,16 +86810,16 @@
       "emitsScoped": [
         "light|--ds-inputnumber-addon-color"
       ],
-      "rootId": "tier.control.fg",
+      "rootId": "tier.control.fg.secondary",
       "headRootIds": [
-        "tier.control.fg"
+        "tier.control.fg.secondary"
       ],
       "rootAttribution": "governed-owner-table",
       "rule": "R2",
       "verdict": "collapse",
       "evidence": {
-        "rootId": "tier.control.fg",
-        "rootDerivation": "Tinta sobre controles. Sobre relleno de marca la tinta ya tiene canal derivado (--ds-color-text-on-primary, packages/core/src/foundation/tokens/css/foundation/themes/default.css:225); sobre relleno neutro cae en la tinta general.",
+        "rootId": "tier.control.fg.secondary",
+        "rootDerivation": "Paso \"secondary\" del eje tinta sobre el nivel control. La cabeza --ds-color-text-secondary ya es vocabulario AUTORADO de BrandPalette; esta raiz solo la promueve a cabeza de cascada para que una hoja de ese paso derive en vez de repetir su literal.",
         "coincidenceGuard": "no-value-match-used"
       }
     },
@@ -86837,16 +86841,16 @@
       "emitsScoped": [
         "light|--ds-inputnumber-affix-color"
       ],
-      "rootId": "tier.control.fg",
+      "rootId": "tier.control.fg.muted",
       "headRootIds": [
-        "tier.control.fg"
+        "tier.control.fg.muted"
       ],
       "rootAttribution": "governed-owner-table",
       "rule": "R2",
       "verdict": "collapse",
       "evidence": {
-        "rootId": "tier.control.fg",
-        "rootDerivation": "Tinta sobre controles. Sobre relleno de marca la tinta ya tiene canal derivado (--ds-color-text-on-primary, packages/core/src/foundation/tokens/css/foundation/themes/default.css:225); sobre relleno neutro cae en la tinta general.",
+        "rootId": "tier.control.fg.muted",
+        "rootDerivation": "Paso \"muted\" del eje tinta sobre el nivel control. La cabeza --ds-color-text-muted ya es vocabulario AUTORADO de BrandPalette; esta raiz solo la promueve a cabeza de cascada para que una hoja de ese paso derive en vez de repetir su literal.",
         "coincidenceGuard": "no-value-match-used"
       }
     },
@@ -87451,16 +87455,16 @@
       "emitsScoped": [
         "light|--ds-radio-label-color-disabled"
       ],
-      "rootId": "tier.control.fg",
+      "rootId": "tier.control.fg.disabled",
       "headRootIds": [
-        "tier.control.fg"
+        "tier.control.fg.disabled"
       ],
       "rootAttribution": "governed-owner-table",
       "rule": "R2",
       "verdict": "collapse",
       "evidence": {
-        "rootId": "tier.control.fg",
-        "rootDerivation": "Tinta sobre controles. Sobre relleno de marca la tinta ya tiene canal derivado (--ds-color-text-on-primary, packages/core/src/foundation/tokens/css/foundation/themes/default.css:225); sobre relleno neutro cae en la tinta general.",
+        "rootId": "tier.control.fg.disabled",
+        "rootDerivation": "Paso \"disabled\" del eje tinta sobre el nivel control. La cabeza --ds-color-text-disabled ya es vocabulario AUTORADO de BrandPalette; esta raiz solo la promueve a cabeza de cascada para que una hoja de ese paso derive en vez de repetir su literal.",
         "coincidenceGuard": "no-value-match-used"
       }
     },
@@ -88459,16 +88463,16 @@
       "emitsScoped": [
         "light|--ds-slider-mark-color"
       ],
-      "rootId": "tier.control.fg",
+      "rootId": "tier.control.fg.muted",
       "headRootIds": [
-        "tier.control.fg"
+        "tier.control.fg.muted"
       ],
       "rootAttribution": "governed-owner-table",
       "rule": "R2",
       "verdict": "collapse",
       "evidence": {
-        "rootId": "tier.control.fg",
-        "rootDerivation": "Tinta sobre controles. Sobre relleno de marca la tinta ya tiene canal derivado (--ds-color-text-on-primary, packages/core/src/foundation/tokens/css/foundation/themes/default.css:225); sobre relleno neutro cae en la tinta general.",
+        "rootId": "tier.control.fg.muted",
+        "rootDerivation": "Paso \"muted\" del eje tinta sobre el nivel control. La cabeza --ds-color-text-muted ya es vocabulario AUTORADO de BrandPalette; esta raiz solo la promueve a cabeza de cascada para que una hoja de ese paso derive en vez de repetir su literal.",
         "coincidenceGuard": "no-value-match-used"
       }
     },
@@ -88521,16 +88525,16 @@
       "emitsScoped": [
         "light|--ds-slider-track-color-disabled"
       ],
-      "rootId": "tier.control.fg",
+      "rootId": "tier.control.fg.disabled",
       "headRootIds": [
-        "tier.control.fg"
+        "tier.control.fg.disabled"
       ],
       "rootAttribution": "governed-owner-table",
       "rule": "R2",
       "verdict": "collapse",
       "evidence": {
-        "rootId": "tier.control.fg",
-        "rootDerivation": "Tinta sobre controles. Sobre relleno de marca la tinta ya tiene canal derivado (--ds-color-text-on-primary, packages/core/src/foundation/tokens/css/foundation/themes/default.css:225); sobre relleno neutro cae en la tinta general.",
+        "rootId": "tier.control.fg.disabled",
+        "rootDerivation": "Paso \"disabled\" del eje tinta sobre el nivel control. La cabeza --ds-color-text-disabled ya es vocabulario AUTORADO de BrandPalette; esta raiz solo la promueve a cabeza de cascada para que una hoja de ese paso derive en vez de repetir su literal.",
         "coincidenceGuard": "no-value-match-used"
       }
     },
@@ -88952,16 +88956,16 @@
       "emitsScoped": [
         "light|--ds-textarea-color-placeholder"
       ],
-      "rootId": "tier.control.fg",
+      "rootId": "tier.control.fg.tertiary",
       "headRootIds": [
-        "tier.control.fg"
+        "tier.control.fg.tertiary"
       ],
       "rootAttribution": "governed-owner-table",
       "rule": "R2",
       "verdict": "collapse",
       "evidence": {
-        "rootId": "tier.control.fg",
-        "rootDerivation": "Tinta sobre controles. Sobre relleno de marca la tinta ya tiene canal derivado (--ds-color-text-on-primary, packages/core/src/foundation/tokens/css/foundation/themes/default.css:225); sobre relleno neutro cae en la tinta general.",
+        "rootId": "tier.control.fg.tertiary",
+        "rootDerivation": "Paso \"tertiary\" del eje tinta sobre el nivel control. La cabeza --ds-color-text-tertiary ya es vocabulario AUTORADO de BrandPalette; esta raiz solo la promueve a cabeza de cascada para que una hoja de ese paso derive en vez de repetir su literal.",
         "coincidenceGuard": "no-value-match-used"
       }
     },
@@ -88983,16 +88987,16 @@
       "emitsScoped": [
         "light|--ds-textarea-count-color"
       ],
-      "rootId": "tier.base.fg",
+      "rootId": "tier.base.fg.muted",
       "headRootIds": [
-        "tier.base.fg"
+        "tier.base.fg.muted"
       ],
       "rootAttribution": "declared-fallback",
       "rule": "R2",
       "verdict": "collapse",
       "evidence": {
-        "rootId": "tier.base.fg",
-        "rootDerivation": "Tinta sobre el suelo: se DERIVA por contraste del fondo, no se autora. Es exactamente la figura de la autoridad on-tone-ink (packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts:593-606): \"shared WCAG readable-ink over each status seed\".",
+        "rootId": "tier.base.fg.muted",
+        "rootDerivation": "Paso \"muted\" del eje tinta sobre el nivel base. La cabeza --ds-color-text-muted ya es vocabulario AUTORADO de BrandPalette; esta raiz solo la promueve a cabeza de cascada para que una hoja de ese paso derive en vez de repetir su literal.",
         "coincidenceGuard": "no-value-match-used"
       }
     },
@@ -89230,16 +89234,16 @@
       "emitsScoped": [
         "light|--ds-timepicker-clear-color"
       ],
-      "rootId": "tier.control.fg",
+      "rootId": "tier.control.fg.secondary",
       "headRootIds": [
-        "tier.control.fg"
+        "tier.control.fg.secondary"
       ],
       "rootAttribution": "governed-owner-table",
       "rule": "R2",
       "verdict": "collapse",
       "evidence": {
-        "rootId": "tier.control.fg",
-        "rootDerivation": "Tinta sobre controles. Sobre relleno de marca la tinta ya tiene canal derivado (--ds-color-text-on-primary, packages/core/src/foundation/tokens/css/foundation/themes/default.css:225); sobre relleno neutro cae en la tinta general.",
+        "rootId": "tier.control.fg.secondary",
+        "rootDerivation": "Paso \"secondary\" del eje tinta sobre el nivel control. La cabeza --ds-color-text-secondary ya es vocabulario AUTORADO de BrandPalette; esta raiz solo la promueve a cabeza de cascada para que una hoja de ese paso derive en vez de repetir su literal.",
         "coincidenceGuard": "no-value-match-used"
       }
     },
@@ -89323,16 +89327,16 @@
       "emitsScoped": [
         "light|--ds-timepicker-icon-color"
       ],
-      "rootId": "tier.control.fg",
+      "rootId": "tier.control.fg.muted",
       "headRootIds": [
-        "tier.control.fg"
+        "tier.control.fg.muted"
       ],
       "rootAttribution": "governed-owner-table",
       "rule": "R2",
       "verdict": "collapse",
       "evidence": {
-        "rootId": "tier.control.fg",
-        "rootDerivation": "Tinta sobre controles. Sobre relleno de marca la tinta ya tiene canal derivado (--ds-color-text-on-primary, packages/core/src/foundation/tokens/css/foundation/themes/default.css:225); sobre relleno neutro cae en la tinta general.",
+        "rootId": "tier.control.fg.muted",
+        "rootDerivation": "Paso \"muted\" del eje tinta sobre el nivel control. La cabeza --ds-color-text-muted ya es vocabulario AUTORADO de BrandPalette; esta raiz solo la promueve a cabeza de cascada para que una hoja de ese paso derive en vez de repetir su literal.",
         "coincidenceGuard": "no-value-match-used"
       }
     },
@@ -89354,16 +89358,16 @@
       "emitsScoped": [
         "light|--ds-timepicker-separator-color"
       ],
-      "rootId": "tier.control.fg",
+      "rootId": "tier.control.fg.muted",
       "headRootIds": [
-        "tier.control.fg"
+        "tier.control.fg.muted"
       ],
       "rootAttribution": "governed-owner-table",
       "rule": "R2",
       "verdict": "collapse",
       "evidence": {
-        "rootId": "tier.control.fg",
-        "rootDerivation": "Tinta sobre controles. Sobre relleno de marca la tinta ya tiene canal derivado (--ds-color-text-on-primary, packages/core/src/foundation/tokens/css/foundation/themes/default.css:225); sobre relleno neutro cae en la tinta general.",
+        "rootId": "tier.control.fg.muted",
+        "rootDerivation": "Paso \"muted\" del eje tinta sobre el nivel control. La cabeza --ds-color-text-muted ya es vocabulario AUTORADO de BrandPalette; esta raiz solo la promueve a cabeza de cascada para que una hoja de ese paso derive en vez de repetir su literal.",
         "coincidenceGuard": "no-value-match-used"
       }
     },
@@ -90216,16 +90220,16 @@
       "emitsScoped": [
         "light|--ds-upload-dragger-icon-color"
       ],
-      "rootId": "tier.control.fg",
+      "rootId": "tier.control.fg.muted",
       "headRootIds": [
-        "tier.control.fg"
+        "tier.control.fg.muted"
       ],
       "rootAttribution": "governed-owner-table",
       "rule": "R2",
       "verdict": "collapse",
       "evidence": {
-        "rootId": "tier.control.fg",
-        "rootDerivation": "Tinta sobre controles. Sobre relleno de marca la tinta ya tiene canal derivado (--ds-color-text-on-primary, packages/core/src/foundation/tokens/css/foundation/themes/default.css:225); sobre relleno neutro cae en la tinta general.",
+        "rootId": "tier.control.fg.muted",
+        "rootDerivation": "Paso \"muted\" del eje tinta sobre el nivel control. La cabeza --ds-color-text-muted ya es vocabulario AUTORADO de BrandPalette; esta raiz solo la promueve a cabeza de cascada para que una hoja de ese paso derive en vez de repetir su literal.",
         "coincidenceGuard": "no-value-match-used"
       }
     },
@@ -91098,16 +91102,16 @@
       "emitsScoped": [
         "light|--ds-divider-text-color"
       ],
-      "rootId": "tier.page.fg",
+      "rootId": "tier.page.fg.primary",
       "headRootIds": [
-        "tier.page.fg"
+        "tier.page.fg.primary"
       ],
       "rootAttribution": "governed-owner-table",
       "rule": "R2",
       "verdict": "collapse",
       "evidence": {
-        "rootId": "tier.page.fg",
-        "rootDerivation": "Tinta del chrome de pagina; el lector la resuelve en cascada con fallback: color: var(--ds-menu-item-color, var(--ds-sidebar-item-color, var(--ds-color-text-secondary))) (packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/menu.css:198).",
+        "rootId": "tier.page.fg.primary",
+        "rootDerivation": "Paso \"primary\" del eje tinta sobre el nivel page. La cabeza --ds-color-text-primary ya es vocabulario AUTORADO de BrandPalette; esta raiz solo la promueve a cabeza de cascada para que una hoja de ese paso derive en vez de repetir su literal.",
         "coincidenceGuard": "no-value-match-used"
       }
     },
@@ -108153,5 +108157,5 @@
       }
     }
   ],
-  "digest": "f984dd86a6993084842b8938f925e5a234b325596fbfcb60177819aebc628e57"
+  "digest": "d81aaf26fbd88c7e9df4362f72f3a2c183c6460a30ea498a4f1ef1fb068b3892"
 }
