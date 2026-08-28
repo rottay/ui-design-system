@@ -4569,6 +4569,33 @@ seeds reales y mover la superficie de calibración a un campo propio — la
 decisión 15 conserva su INTENT (superficie de calibración estrecha; dominio
 público 290 intacto) y se enmendará su formulación al cerrar C5.
 
+**LOTE HYGIENE-INSTRUMENTO CERRADO — 4 MENORES DE INSTRUMENTO DEL DÍA, EN UN SOLO LOTE
+(2026-08-28; commit `59d5f2ac1`; writer Opus; postaudit Fable: ACCEPT sin defectos ni menores
+de sustancia).** (1) **Guard débil ×2 arreglado y drilleado:** `root-exposure-gate` y
+`cascade-wiring-ratchet` pasan a `import.meta.url === pathToFileURL(process.argv[1]).href` —
+la ley folder/index hacía verdadero el guard viejo para TODO entry del árbol (latente: nadie
+los importaba; 19 módulos ya tenían la forma correcta). Dos drills por módulo (importar desde
+un entry `index.mjs` NO corre main; invocado como entry SÍ corre) + anti-coincidencia medida
+(guard viejo repuesto = 1 rojo en cada batería). Prueba en producción gratis: el ítem 2
+importa root-exposure-gate desde slot-inventory y el banner no aparece. (2) **`isRefinedRoot`
+single-source:** la duplicación byte-a-byte se borró; slot-inventory importa la única
+definición — "dos copias de una regla adjudicada divergen en silencio". Ledger 6/6, digest
+SIN MOVER (la prueba de que el refactor no movió una cifra). (3) **Invariante de cobertura
+cableado como FINDING del gate** (menor Fable del ledger-gate): toda raíz refinada lleva
+`derivationDebt && derivation` — 33/33 hoy; fail-closed en la puerta (no en una suite que
+alguien tiene que correr), con 4 drills incluido **anti-alcance** (un padre sin evidencia NO
+dispara). La elegancia estructural (Fable): el alcance del invariante queda definicionalmente
+atado al del filtro porque ambos usan la MISMA función — no puede divergir lo que es un solo
+símbolo. (4) **Documentales:** purity declara que resolved-map-diff importa `loadArm`/
+`scopesOf` de ahí (tocar su firma mueve el instrumento del cero-delta); el colector `caseOnly`
+del drill de árbol real ahora enumera (asserts después del bucle — un drill que enumera vale
+más que uno que aborta). Cero artefactos movidos (cadena con diff CERO en `manifest/`,
+verificado dos veces por Fable), cero temas, ley dura EXIT=0 sin re-pin, receipts intactos.
+Suites: 22/22, 12/12, 26/26, 13/13. Nota de proceso del writer (anotada, sin consecuencia):
+no insertar por posición calculada en un archivo cuyo encabezado no leyó entero. Métrica sin
+mover: **62% / ~43%**.
+
+
 **LOTE PURITY STRING-EXACTO CERRADO — LA DEUDA CASO-HEX DEL INSTRUMENTO QUEDA CERRADA (Y ESTABA
 DRILLEADA EN VERDE) (2026-08-28; commit `b468f205f`; writer Opus; postaudit Fable: ACCEPT (el drill prueba una propiedad MAS FUERTE que la pedida; la no-sombra verificada; dos menores no bloqueantes quedan en cola: codigo muerto en el drill (c) + docblock del consumidor loadArm/scopesOf)).**
 `purity.normalise` pierde el `toLowerCase` (el `trim` se queda — whitespace de bordes, que ningún
