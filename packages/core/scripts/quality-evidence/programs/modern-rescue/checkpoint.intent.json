@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "currentWave": "F3 — la pintura vive en las skins: la superficie de migración medida quedó DRENADA por completo (2026-08-27; asientos en §13 del roadmap). Piloto v3 (cell-renderers, cero-delta), cohorte Typography/runtime (la matriz de rol sale del inline modern vía flag includeRoleMatrix — la factorización era imposible bajo el validador), mini-lotes C-02 (clear-button entra a la ley de densidad) y C-02b (la clearance deriva de la geometría del botón; el offset ganó su seed única); presence descalificado (gobierno nuevo, no traslado). La clasificación medida del pool supersede a las cifras históricas: 97 ocurrencias de producción, 31 dinámicas legítimas por mecanismo, superficie genuina de un dígito. Lo que queda del frente es el eje craft (pasada Quiet Premium por familia), cuya apertura como cohortes espera la revisión Codex del hito (consulta empaquetada, relevo por el owner).",
-  "blockedOn": "Nada bloquea la cohorte siguiente. Diferidos con dueño (capa de contrato/validador, no de migración de pintura): channel-liveness (49 findings) y lane-control-drills (10/13) vuelven a blocking cuando existan sus enumeradores; la propagación mode-aware de la decisión 18 y el validador APCA cascade-aware son F5; la pregunta sighted del glass de bithire sobre backdrop oscuro es de F4C (evidencia A/B ya producida). Decisiones del owner pendientes, sin apuro: el valor del --ds-input-md-line-height de bithire (forma adjudicada: ratio sin unidad, dueño typography.scale; recomendación DT: preservar 1.5385 como ratio seed, identidad exacta) y la pregunta satélite de la capa base. El stash pre-programa sigue owner-gated.",
+  "currentWave": "F4 — gobierno del árbol vivo y evidencia causal. LOTE P0 palette.status-seeds CERRADO (Fable ACCEPT tras DEFECTS-6 remediado; lote ya commiteado localmente): Standard #14 operativo, celdas status adjudicadas una a una (MUST_REACH/MUST_NOT_REACH medidos por el auditor), cascade root y catálogo reconciliados, denominadores derivados del registry vivo, sonda causal no vacua y receipts F4B re-ejecutados por sus productores. Cola inmediata: T-1 — Expert pasa de pin histórico a source-linked contra la fuente viva tenant-reach, sin revivir los tokens dark retirados; después F4C — canary visual en el DS reference lab.",
+  "blockedOn": "Nada bloquea la cola T-1 → F4C. Diferidos con dueño (capa de contrato/validador, no de migración de pintura): channel-liveness (49 findings) y lane-control-drills (10/13) vuelven a blocking cuando existan sus enumeradores; la propagación mode-aware de la decisión 18 y el validador APCA cascade-aware son F5; la pregunta sighted del glass de bithire sobre backdrop oscuro es de F4C (evidencia A/B ya producida). Decisiones del owner pendientes, sin apuro: el valor del --ds-input-md-line-height de bithire (forma adjudicada: ratio sin unidad, dueño typography.scale; recomendación DT: preservar 1.5385 como ratio seed, identidad exacta) y la pregunta satélite de la capa base. El stash pre-programa sigue owner-gated. Deuda conocida no bloqueante del LOTE P0 (asentada en el roadmap): dos foreign reds de canonical-digest-identity cuyo re-anclaje recompila tenants productivos (BLOCKED_OWNER); la identidad DT stale en notes del registry; el productor one-off del caso compuesto E-2 esperando decisión de CLI; roundId sin gobierno contra rounds.json; y los menores Fable (bindings sin root id en chart, celdas con migratedToInternalChannels huérfano, MUST_REACH con uncoveredByDesign como portador de notas).",
   "allowedLiterals": [
     {
       "value": 4,
@@ -26,13 +26,13 @@
     },
     {
       "id": "control-calibration",
-      "work": "F4B is complete in its honest form (all twenty public controls settled: nine COMPUTED_VERIFIED, ten SOURCE_BOUND, chrome.families BY_REFERENCE umbrella — see roadmap §13). What remains for the SOURCE_BOUND controls to rise (propertyGroup ratification, cell calibration) is F4C/F5 work, not this phase.",
+      "work": "T-1 constitucional: Expert pasa de pin histórico a source-linked contra la fuente viva (tenant-reach overrideTokens), el bloqueo control.size↔density.mode queda asentado, y los fences de la enmienda owner 2026-08-28 se incorporan al árbol canónico (README del programa + program.json invariants), sin revivir los tokens dark retirados.",
       "model": "strong-implementation",
       "modelReason": "The packet spans schemas, both compiler paths, CSS ownership and browser evidence; it is bounded but not a mechanical substitution."
     },
     {
       "id": "family-closure",
-      "work": "F3 is underway in coherent cohorts (Codex law, adopted: one derived-chain regeneration per lot close, not per micro-edit; no second lot opens before the pilot closed — it closed 2026-08-27). Next cohort: Typography/runtime (the residue that shadows the skin every render) with its own zero-delta proof. The measured classification of the F3 universe lives in roadmap §6/§13.",
+      "work": "F4C visible: canary en el DS reference lab con familias representativas de primitive, pattern, structure y surface; cobertura static BrandTheme + DB TenantTheme; viewports móvil, tablet y escritorio; cambio intended, negative control y restore exacto; capturas comparables para el owner y observación con stop condition escrita. No se abren controles nuevos ni expansión arquitectónica antes de este slice visible.",
       "model": "disjoint-family-writers",
       "modelReason": "A family packet becomes mechanical only after applicability, stops, parts, invariants and evidence commands are closed by the calibration work."
     },
@@ -51,7 +51,9 @@
     "family-private customization outside the manifest",
     "full-suite repair loops before failure classification",
     "broad family propagation before static DB and restore calibration",
-    "R7 execution"
+    "R7 execution",
+    "typed denominators where a derivation exists",
+    "manual receipt rehashing instead of producer re-execution"
   ],
   "notes": [
     "The operational traversal is two-axis: calibrate each public control on representative families, then close each canonical family once against the stabilized full applicability matrix.",
