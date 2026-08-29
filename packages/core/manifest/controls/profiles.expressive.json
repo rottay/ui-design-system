@@ -7,7 +7,7 @@
   "semanticOwner": {
     "owner": "design-system",
     "registryPath": "packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts",
-    "registryDigest": "79ba7a0ba67f6d2560654122285d068c64677af4d7dd3b0103981c15bba8959f"
+    "registryDigest": "830ee81559d219aa6fd764b62be7228003a84ab6b9b9c7d53a9cd16a644e9655"
   },
   "title": "Explicit expressive axes",
   "valueType": "enum",

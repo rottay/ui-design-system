@@ -1957,6 +1957,36 @@
       }
     },
     {
+      "controlId": "palette.status-seeds",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "palette.status-seeds",
+            "socketPattern": null,
+            "prop": "color del marcador (dot) por tono (red/green mapeados a error/success)",
+            "tier": "standard",
+            "examples": [
+              "--ds-color-error",
+              "--ds-color-success"
+            ],
+            "noSocketReason": "background: var(--ds-timeline-color-red, var(--ds-color-error)) bajo [data-tone='red'] y var(--ds-timeline-color-green, var(--ds-color-success)) bajo [data-tone='green']; evidencia verificada en skin/timeline.css:221-226.",
+            "socketsResolved": true,
+            "carrier": "shared-channel"
+          }
+        ],
+        "reviewedFrom": "anatomy",
+        "sourceBindings": [
+          "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/timeline.css"
+        ]
+      }
+    },
+    {
       "controlId": "profiles.icon",
       "disposition": "UNKNOWN",
       "verificationState": "UNKNOWN",

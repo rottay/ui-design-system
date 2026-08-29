@@ -842,6 +842,24 @@
       }
     },
     {
+      "controlId": "palette.status-seeds",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reviewedFrom": "anatomy",
+        "reasons": [
+          {
+            "root": "palette.status-seeds",
+            "why": "la anatomia de flex no lee ningun canal de color de estado (success/warning/error/info): es un primitivo de layout que gobierna geometria/posicion/visibilidad, no expresa estado semantico; cero lecturas de --ds-color-(success|warning|error|info) en foundation/tokens/css/** (modern+rustic+presentation) ni en la anatomia TSX de primitive/layout/flex. Solo 5/20 familias de layout tienen skin propio (collapse, divider, layout, scroll-area, splitter) y las 5 dieron 0 hits."
+          }
+        ]
+      }
+    },
+    {
       "controlId": "profiles.icon",
       "disposition": "UNKNOWN",
       "verificationState": "SOURCE_BOUND",

@@ -1802,6 +1802,38 @@
       }
     },
     {
+      "controlId": "palette.status-seeds",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "palette.status-seeds",
+            "socketPattern": null,
+            "prop": "idem",
+            "tier": "standard",
+            "examples": [],
+            "noSocketReason": "sin socket propio; lectura directa de canales derivados de la semilla success, propia del part 'toast'",
+            "socketsResolved": true,
+            "carrier": "shared-channel"
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazo compartido status (barrido F2, sourceBindings propios de esta familia; mapeo canal-a-semilla, DT nota 2)": [
+            "--ds-color-success-bg",
+            "--ds-color-success-ink"
+          ]
+        },
+        "evidence": "export-button.css:50-51 -- [data-part='toast'] background: var(--ds-color-success-bg); color: var(--ds-color-success-ink). --ds-color-success-bg/-ink no figuran literalmente en declaredOutputs.channels de palette.status-seeds (controls/palette.status-seeds.json:24-32, representativeOnly:true); ambos derivan de la semilla success (mapeo canal->semilla, no son la lista representativa del control) -- DT nota 2 del brief",
+        "reviewedFrom": "anatomy",
+        "migratedToInternalChannels": true
+      }
+    },
+    {
       "controlId": "profiles.icon",
       "disposition": "UNKNOWN",
       "verificationState": "UNKNOWN",

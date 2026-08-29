@@ -1,11 +1,11 @@
 {
   "schemaVersion": 2,
-  "roundId": "R5",
+  "roundId": "R6",
   "familyId": "primitive/layout/space",
   "scenarioId": "density.mode/compact/rottay/static-and-db",
   "evidenceKind": "static-db-computed-parity",
   "commandOrTool": "node src/tooling/resolution-probe/public/cli/index.mjs causal",
-  "toolVersion": "resolution-probe@cc010704a6aa",
+  "toolVersion": "resolution-probe@fe0cd6c5e27b",
   "exitCode": 0,
   "sourceFiles": [
     "packages/core/dist/build-stamp.json",
@@ -58,10 +58,10 @@
     "packages/core/src/ui/primitives/layout/Space/tests/Space.modern-fragment-children.test.tsx",
     "packages/core/src/ui/primitives/layout/Space/tests/Space.test.tsx"
   ],
-  "sourceDigest": "bae098467de41263fa98f6456fc812a53336442031b984823fc077b28479a51c",
+  "sourceDigest": "24ba8ddea7cc383575887f810735d2db2e747aaf3e0f60f55c41fdc10d80ba97",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/density-mode/rottay-compact.json",
-  "artifactSha256": "a247d4b9e3c636e02d91ec41c32c2da6ea069736ef26121918732f30f08bdceb",
-  "createdAt": "2026-08-28T06:23:29.114Z",
+  "artifactSha256": "2d39a3cf91371fe3aee530d19e49958c4a1a2230ab6d259d70978db6eafdf777",
+  "createdAt": "2026-08-29T02:34:28.664Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

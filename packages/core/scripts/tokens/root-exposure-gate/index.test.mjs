@@ -71,7 +71,12 @@ test('the live snapshot is the measured one, not a guess', () => {
   // type.family.display reclasificados gap->tenant-dial bajo
   // typography.families (medido; calibrado F4B-14) -- 10->8 gaps, 26->28
   // tenant-dial.
-  assert.deepEqual(counts, { 'tenant-dial': 28, 'internal-head': 28, gap: 8 });
+  // P0 (2026-08-28): se abrio la ultima fila `frontier`, `palette.status-seeds`
+  // (tier Standard), y las 4 raices ramp.seed.{error,info,success,warning}
+  // pasaron de gap a tenant-dial. gap BAJA 8->4, la direccion legal. neutral NO
+  // acompanio: no tiene semilla en ninguna via, asi que un dial suyo seria una
+  // perilla que no mueve nada -- su adjudicacion subio al owner.
+  assert.deepEqual(counts, { 'tenant-dial': 32, 'internal-head': 28, gap: 4 });
 });
 
 /* ------- LAW 0b: the premise that makes the refined-root discount honest ------ */
@@ -210,19 +215,42 @@ test('LAW 3: a gap whose channel a control declares, with no written adjudicatio
 });
 
 test('CONTROL: the written gap adjudication is load-bearing, not a shrug', () => {
-  // `ramp.seed.error` is green today ONLY because its exposureNote names
-  // `token-overrides` and says why a per-channel allowlist is not a seed.
-  // Strip the name and the same tree goes red.
+  /* EL SUJETO SE PLANTA, NO SE TOMA PRESTADO DEL ARBOL. Este drill usaba
+   * `ramp.seed.error`, que era el UNICO gap vivo cuyo canal declaraba un
+   * control. P0 lo hizo `tenant-dial` y la ley se quedo sin sujeto: medido,
+   * ninguno de los 4 gaps restantes tiene su cabeza declarada por un control,
+   * asi que el drill habria pasado a verde por AUSENCIA de caso -- que es la
+   * peor forma de verde. Se planta el caso en su lugar: un gap cuya cabeza SI
+   * declara un control. Asi la ley se prueba aunque el arbol la deje sin
+   * ejemplar, que es exactamente lo que acaba de pasar. */
+  const declared = '--ds-color-primary';   // lo declara palette.seeds
   withCatalog(
     (doc) => {
-      const root = doc.roots.find((entry) => entry.rootId === 'ramp.seed.error');
-      root.exposureNote = 'no reason recorded';
+      const gap = doc.roots.find((entry) => entry.exposure === 'gap');
+      gap.channel = declared;
+      gap.exposureNote = 'no reason recorded';
     },
     (findings) =>
       expectFinding(
         findings,
-        "ramp.seed.error: exposure 'gap' but token-overrides declares its head channel",
+        "exposure 'gap' but palette.seeds declares its head channel --ds-color-primary",
         'the adjudication must be what admits the mention',
+      ),
+  );
+  // Y el CONTROL del control: con la razon que NOMBRA al control, el mismo
+  // arbol queda verde. Sin esta mitad, el drill probaria que algo falla, no que
+  // la razon escrita es lo que lo admite.
+  withCatalog(
+    (doc) => {
+      const gap = doc.roots.find((entry) => entry.exposure === 'gap');
+      gap.channel = declared;
+      gap.exposureNote = 'palette.seeds menciona este canal, pero un seed de marca no es una perilla de esta raiz';
+    },
+    (findings) =>
+      assert.deepEqual(
+        findings.filter((finding) => /declares its head channel --ds-color-primary/.test(finding)),
+        [],
+        'nombrar el control en la razon es lo que admite la mencion',
       ),
   );
 });
@@ -235,7 +263,7 @@ test('LAW 3: gap is decrease-only -- growth fails', () => {
       doc.reconciliation.byExposure.counts['internal-head'] -= 1;
       doc.reconciliation.byExposure.counts.gap += 1;
     },
-    (findings) => expectFinding(findings, 'snapshot: gap moved from 8 to 9', 'gap may never grow'),
+    (findings) => expectFinding(findings, 'snapshot: gap moved from 4 to 5', 'gap may never grow'),
   );
 });
 
@@ -249,7 +277,7 @@ test('LAW 3: a gap that closes still fails until the snapshot is updated', () =>
       doc.reconciliation.byExposure.counts['tenant-dial'] += 1;
     },
     (findings) =>
-      expectFinding(findings, 'snapshot: gap shrank from 8 to 7', 'good news still has to be written down'),
+      expectFinding(findings, 'snapshot: gap shrank from 4 to 3', 'good news still has to be written down'),
   );
 });
 
@@ -260,7 +288,7 @@ test('the catalog must agree with its own reconciliation counts', () => {
     (doc) => {
       doc.reconciliation.byExposure.counts.gap = 99;
     },
-    (findings) => expectFinding(findings, 'but roots[] holds 8', 'a catalog that miscounts itself must fail'),
+    (findings) => expectFinding(findings, 'but roots[] holds 4', 'a catalog that miscounts itself must fail'),
   );
 });
 

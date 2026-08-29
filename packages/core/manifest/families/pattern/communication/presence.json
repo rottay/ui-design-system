@@ -1194,6 +1194,24 @@
       }
     },
     {
+      "controlId": "palette.status-seeds",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "palette.status-seeds",
+            "why": "presence no lee ningun canal de status: cero lecturas en presence.css (grep -c = 0); el color se pinta por caller (DEFAULT_COLOR='var(--ds-color-primary)' en presence/index.tsx:103, rings/cursores per-user :172,343), no via seed de status."
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
+    },
+    {
       "controlId": "profiles.icon",
       "disposition": "UNKNOWN",
       "verificationState": "UNKNOWN",

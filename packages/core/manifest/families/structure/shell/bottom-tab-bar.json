@@ -2443,6 +2443,37 @@
       }
     },
     {
+      "controlId": "palette.status-seeds",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "palette.status-seeds",
+            "socketPattern": null,
+            "prop": "idem",
+            "tier": "standard",
+            "examples": [],
+            "noSocketReason": "sin socket propio; lectura directa del canal publico de status, propia del part 'badge'",
+            "socketsResolved": true,
+            "carrier": "shared-channel"
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazo compartido status (barrido F2, sourceBindings propios de esta familia)": [
+            "--ds-color-error"
+          ]
+        },
+        "evidence": "bottom-tab-bar.css:268 -- [data-part='badge'] background: var(--ds-color-error) (badge de notificacion sobre el tab)",
+        "reviewedFrom": "anatomy",
+        "migratedToInternalChannels": true
+      }
+    },
+    {
       "controlId": "profiles.icon",
       "disposition": "UNKNOWN",
       "verificationState": "UNKNOWN",

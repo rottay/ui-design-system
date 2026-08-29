@@ -361,11 +361,29 @@ describe("digest identity across the canonicalization extraction", () => {
     expect(TENANT_THEME_CONFIG_SCHEMA_DIGEST).not.toBe(
       POST_ROTTAY_T3_DB_MIRROR_CONFIG_DIGEST
     );
-    expect(TENANT_THEME_DOCUMENT_SCHEMA_DIGEST).toBe(
+    // P0 re-anchor (2026-08-28): the envelope gained `general.palette.status`
+    // -- the four status tone seeds of the `palette.status-seeds` dial, opened
+    // in place from its frontier row. Same law as the F4A-6 note directly
+    // above: an AMPLIATION of the closed field set, not a narrowing. The
+    // previous positive pin drops to `not.toBe` so the ratchet keeps every
+    // superseded value asserted, and the two new values are re-derived from the
+    // tree (not copied from another file's pins).
+    const POST_P0_STATUS_SEEDS_DOCUMENT_DIGEST =
+      "sha256-e1875114d48a83e2d28ba9fa1b4a3af801c3a311183dc8126c2019af1e65cb8c";
+    const POST_P0_STATUS_SEEDS_CONFIG_DIGEST =
+      "sha256-6b8503c4d6e472a0091bf41da16bc9b3514b39d2cee8a201fcf0568a16d05a18";
+
+    expect(TENANT_THEME_DOCUMENT_SCHEMA_DIGEST).not.toBe(
       POST_F4A6_TEXT_PAGE_ROOT_DOCUMENT_DIGEST
     );
-    expect(TENANT_THEME_CONFIG_SCHEMA_DIGEST).toBe(
+    expect(TENANT_THEME_CONFIG_SCHEMA_DIGEST).not.toBe(
       POST_F4A6_TEXT_PAGE_ROOT_CONFIG_DIGEST
+    );
+    expect(TENANT_THEME_DOCUMENT_SCHEMA_DIGEST).toBe(
+      POST_P0_STATUS_SEEDS_DOCUMENT_DIGEST
+    );
+    expect(TENANT_THEME_CONFIG_SCHEMA_DIGEST).toBe(
+      POST_P0_STATUS_SEEDS_CONFIG_DIGEST
     );
   });
 

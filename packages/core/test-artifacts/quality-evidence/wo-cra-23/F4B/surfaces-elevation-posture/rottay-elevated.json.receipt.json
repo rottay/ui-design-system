@@ -1,11 +1,11 @@
 {
   "schemaVersion": 2,
-  "roundId": "R7",
+  "roundId": "R6",
   "familyId": "primitive/display/card",
   "scenarioId": "surfaces.elevation-posture/elevated/rottay/static-and-db",
   "evidenceKind": "exact-restore",
   "commandOrTool": "node src/tooling/resolution-probe/public/cli/index.mjs causal",
-  "toolVersion": "resolution-probe@cc010704a6aa",
+  "toolVersion": "resolution-probe@fe0cd6c5e27b",
   "exitCode": 0,
   "sourceFiles": [
     "packages/core/dist/build-stamp.json",
@@ -68,10 +68,10 @@
     "packages/core/src/ui/primitives/display/Card/engines/rustic/index.tsx",
     "packages/core/src/ui/primitives/display/Card/index.tsx"
   ],
-  "sourceDigest": "ef936a8687cdea2acf4c7535eaa649859431a2c239e5b17bc086f2a2c870bc5b",
+  "sourceDigest": "cacf6695f7d095ff1337f0b4ebdd88fd65429be49e9c58037c41a628f3f4e03f",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/surfaces-elevation-posture/rottay-elevated.json",
-  "artifactSha256": "9129849c36d30a8a6ca506b61d16ddfc0fbd9f7b5d7573012fba22495d4ae873",
-  "createdAt": "2026-08-28T06:23:29.114Z",
+  "artifactSha256": "9ee88e89416d80d58d5a9c245217092763882a98b71189f5c2451fbe5e7aea94",
+  "createdAt": "2026-08-29T02:20:52.241Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

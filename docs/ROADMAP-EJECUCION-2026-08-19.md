@@ -662,12 +662,83 @@ histórico y no reaparece**.
     `radius-scale` se mueve; (iv) nada de esto autoriza caer a los genéricos
     ni doble escalado.
 
+**Enmienda del owner (2026-08-28): `ROADMAP-OWNER-AMENDMENT-2026-08-28`.**
+Adjudicada por el DT en consulta read-only el mismo día. SUPERSEDE la decisión
+14 donde corresponda: BitHire ya NO entra como vertical activo de trabajo
+visual/migración; entra sólo como consumer-readiness al final. Lo demás de la
+decisión 14 (F8 no se declara completo globalmente) se mantiene.
+
+21. **El DS es el objetivo de construcción y de certificación.** La calidad y
+    la certificación visual/causal viven en el DS y su reference lab del mismo
+    árbol, con fixtures genéricos en los dos transportes (static BrandTheme +
+    DB TenantTheme). Ninguna app certifica nada visual.
+22. **BitHire no es objetivo visual ni de migración en esta etapa.** Será
+    rehecha completamente: ninguna pantalla/UI actual es destino ni referencia
+    visual. Su alcance aquí se reduce a consumer-readiness final:
+    install/pin, resolución de exports/imports, build, typecheck y un smoke
+    mínimo de integración que pruebe que la futura refactorización puede
+    consumir las familias y controles. **Prohibido** abrir agentes o lotes de
+    migración/adopción, hardcode-drain o canary sobre las pantallas de la UI
+    BitHire actual. Ninguna semántica BitHire entra al DS.
+23. **app-platform y app-evnto quedan DEFERRED:** no se abren lotes de
+    migración contra ellas; sus garantías genéricas (transporte fail-closed,
+    contrato de exports) se preservan intactas. Diferido es un estado de
+    secuencia, no una baja.
+24. **Dark mode sin trabajo dedicado en esta etapa.** Sólo no-regresión: un
+    lote que toque superficies compartidas no puede degradar los baselines
+    dark ya autorados; no existe objetivo de aceptación dark.
+25. **Expert 294/67→290 con gate source-linked** es el próximo T-1, tras el
+    cierre limpio del lote en vuelo: corregir los 4 puntos de la constitución,
+    los "67" de la capa cascade en su fuente (con regeneración), y añadir el
+    check que compara contra la fuente ejecutable
+    (`TENANT_THEME_OVERRIDE_TOKENS`), no contra otra copia. Los 4 canales
+    muertos retirados en `dcadb84743` NO se reviven.
+26. **`focus.identity` y `control.size` entran como controles públicos nuevos
+    en estado `PROPOSED_NOT_IMPLEMENTED`:** otorgan cero cobertura, no
+    coexisten con un control operacional equivalente, y se activan sólo por
+    migración atómica (autoridad única de lowering, transporte static+DB,
+    propagación a consumidores, restore exacto, retiro del predecesor).
+    `control.size` queda además bloqueado hasta un veredicto escrito de
+    ortogonalidad contra `density.mode`.
+27. **Precedencia genérica:** para cada canal gobernado, valor explícito del
+    tenant > valor autoral de la vertical > base DS. Un control público mueve
+    un canal sólo donde esa cadena no autora nada explícito; la ausencia de
+    selección preserva el baseline de la vertical. Ningún compilador, gate o
+    componente bifurca por nombre de tenant o vertical.
+28. **Overrides por instancia usan el tier existente** (`profileOverrides`,
+    `RecipeProfileProvider`, atributos scoped); NO se agrega `scope` al
+    registry de capacidades de tenant (ley fechada 2026-08-18 intacta).
+29. **No-push y acumulación local ahead son política del owner, no defecto ni
+    bloqueo.** El respaldo local externo es higiene recomendada, nunca un
+    gate.
+30. **Salida temprana por cohorte, no por cierre de celdas:** un *cohort
+    release gate* (instrumentos confiables + canary F4C aceptado + cero
+    hardcodes brandable activos en la cohorte adoptada + certificación de lab
+    static+DB) autoriza salida temprana. **No es cierre del programa:** el
+    cierre sigue exigiendo disposición honesta de cada familia del inventario
+    activo.
+31. **Canary F4C visible de 48h en el reference lab**, con stop condition
+    explícita antes de cualquier expansión de cohortes.
+32. **Denominadores siempre derivados.** El estado en vuelo del worktree
+    (21 controles / 5.355 celdas) NO se fija en ninguna autoridad hasta que el
+    lote `palette.status-seeds` commitee; si después `focus.identity` y
+    `control.size` pasan a activos, 23×255=5.865 es sólo aritmética
+    condicional, nunca una cifra pineada.
+33. **Paralelismo agresivo posterior por paquetes disjuntos** según el
+    conflict graph vigente, con un solo DT/integrador y
+    compiler/generator/serializados como singletons.
+34. **Esta enmienda NO cambia la cola ejecutiva actual:** el lote
+    `palette.status-seeds` termina primero y sin interrupción; el paquete T-1
+    constitucional completo se ejecuta en un lote limpio posterior.
+
 **Regla de alcance vigente (del dueño, 2026-08-19):** el DS primero; las apps
 después, vertical por vertical. Libertad para **publicar versiones**; **push
 prohibido**. Las ventanas de rotura de apps (§1) dejan de bloquear la
 ejecución y pasan a ser checklist de la fase de cada vertical. El DT trabaja
 autónomo; **Fable audita cada hito antes de pasar al frente siguiente**; este
-roadmap se mantiene al estado real (ver §13).
+roadmap se mantiene al estado real (ver §13). *(Alcance afinado por la
+enmienda 2026-08-28 de §12: la certificación visual es del DS/lab; BitHire =
+consumer-readiness final; platform/evnto DEFERRED.)*
 
 ---
 

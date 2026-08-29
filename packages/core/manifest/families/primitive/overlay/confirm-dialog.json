@@ -2729,6 +2729,36 @@
       }
     },
     {
+      "controlId": "palette.status-seeds",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "palette.status-seeds",
+            "socketPattern": null,
+            "prop": "fondo/box-shadow/color del pozo de icono por data-variant (info/warning/danger)",
+            "tier": "standard",
+            "examples": [
+              "--ds-color-warning-500",
+              "--ds-color-error-500"
+            ],
+            "noSocketReason": "color: var(--ds-color-warning-500) bajo [data-variant='warning'] y var(--ds-color-error-500) bajo [data-variant='danger']; evidencia verificada en skin/confirm-dialog.css:198-206.",
+            "socketsResolved": true,
+            "carrier": "shared-channel"
+          }
+        ],
+        "reviewedFrom": "anatomy",
+        "sourceBindings": [
+          "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog.css"
+        ]
+      }
+    },
+    {
       "controlId": "profiles.icon",
       "disposition": "UNKNOWN",
       "verificationState": "UNKNOWN",

@@ -2205,14 +2205,10 @@
           "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
             "--ds-color-border",
             "--ds-color-border-subtle",
-            "--ds-color-error",
-            "--ds-color-info",
             "--ds-color-primary",
-            "--ds-color-success",
             "--ds-color-text-muted",
             "--ds-color-text-primary",
-            "--ds-color-text-secondary",
-            "--ds-color-warning"
+            "--ds-color-text-secondary"
           ],
           "Canales compartidos porque OTRA familia los lee de verdad (nivel 2; el socket vive en la familia duena del namespace)": [
             "--ds-surface-card"
@@ -2674,6 +2670,32 @@
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
         "adjudicatedFrom": "controls/profiles.expressive.json"
+      }
+    },
+    {
+      "controlId": "palette.status-seeds",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "palette.status-seeds",
+            "why": "notification-center lee los 4 canales status (--ds-color-error/-info/-success/-warning) via consumo del canal compartido de la raiz (notification-center.css:205-214 modern + :99-105 rustic), sin socket propio de familia."
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazos foundation compartidos (nivel 2/3 de la forma canonica), re-hogados desde la celda palette.seeds de esta misma familia": [
+            "--ds-color-error",
+            "--ds-color-info",
+            "--ds-color-success",
+            "--ds-color-warning"
+          ]
+        },
+        "reviewedFrom": "anatomy"
       }
     },
     {

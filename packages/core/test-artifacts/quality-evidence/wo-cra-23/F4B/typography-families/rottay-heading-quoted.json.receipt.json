@@ -1,11 +1,11 @@
 {
   "schemaVersion": 2,
-  "roundId": "R7",
+  "roundId": "R6",
   "familyId": "primitive/display/typography",
   "scenarioId": "typography.families/heading-quoted/rottay/static-and-db",
   "evidenceKind": "static-db-computed-parity",
   "commandOrTool": "node src/tooling/resolution-probe/public/cli/index.mjs causal",
-  "toolVersion": "resolution-probe@cc010704a6aa",
+  "toolVersion": "resolution-probe@fe0cd6c5e27b",
   "exitCode": 0,
   "sourceFiles": [
     "packages/core/dist/build-stamp.json",
@@ -65,10 +65,10 @@
     "packages/core/src/ui/primitives/display/Typography/tests/Typography.test.tsx",
     "packages/core/src/ui/primitives/display/Typography/tests/Typography.type-roles.test.tsx"
   ],
-  "sourceDigest": "82c3294dbf78218a14c541a9a032a5225901393b51e782888e1315d6140fd615",
+  "sourceDigest": "75c83e0bbb197d5e9a39e4963cbe482d6c940e8c86d969212cd5bb22627f881b",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/typography-families/rottay-heading-quoted.json",
-  "artifactSha256": "1a90cef00c3c68c9d66dfe6215f8a6233d7a33024b023b593196f94622481ae0",
-  "createdAt": "2026-08-28T06:23:29.114Z",
+  "artifactSha256": "33908d278222ba8c3187e108586e4d9ccc9459eaec2c7be42a4168314c64140b",
+  "createdAt": "2026-08-29T02:27:08.299Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

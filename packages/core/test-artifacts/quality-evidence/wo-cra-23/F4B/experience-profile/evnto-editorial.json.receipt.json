@@ -1,11 +1,11 @@
 {
   "schemaVersion": 2,
-  "roundId": "R4",
+  "roundId": "R6",
   "familyId": "primitive/display/card",
   "scenarioId": "experience.profile/editorial/evnto/static-and-db",
   "evidenceKind": "exact-restore",
   "commandOrTool": "node src/tooling/resolution-probe/public/cli/index.mjs causal",
-  "toolVersion": "resolution-probe@cc010704a6aa",
+  "toolVersion": "resolution-probe@fe0cd6c5e27b",
   "exitCode": 0,
   "sourceFiles": [
     "packages/core/dist/build-stamp.json",
@@ -71,10 +71,10 @@
     "packages/core/src/ui/primitives/display/Card/engines/rustic/index.tsx",
     "packages/core/src/ui/primitives/display/Card/index.tsx"
   ],
-  "sourceDigest": "8d17d88fb6670ec386d1ba49284aebc40f329a1abf1afda4470699d990c8e3ce",
+  "sourceDigest": "b641d1376cb4ae808976fe46cd94847162f186f26ffd6c9a239c3616510ca13c",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/experience-profile/evnto-editorial.json",
-  "artifactSha256": "623ef3996d5f00ac339f047823184d3c7339792482c8ac694efe843ad75ead59",
-  "createdAt": "2026-08-28T06:23:29.114Z",
+  "artifactSha256": "2f9e037c9fdc4321c070cda9a41c084120863f5de8a1b29846ca82c61d26843f",
+  "createdAt": "2026-08-29T01:53:34.191Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

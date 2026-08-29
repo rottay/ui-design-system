@@ -2741,6 +2741,20 @@
       }
     },
     {
+      "controlId": "palette.status-seeds",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "sus parts (summary-strip, summary-grid, summary-item, summary-item-label, summary-item-value, summary-item-helper, summary-item-skeleton-label, summary-item-skeleton-value) no intersectan las lecturas de estado de record.css:314-393, scopeadas a [data-part='field']/[data-part='field-grid'] -- parts de otra familia record; corrobora la celda hermana palette.seeds de este mismo archivo, que ya documenta 'VERIFICADO SIN PINTURA PROPIA... cero canales propios'",
+        "source": "adjudicacion-w-cells-fix",
+        "reviewedFrom": "anatomy"
+      }
+    },
+    {
       "controlId": "profiles.icon",
       "disposition": "UNKNOWN",
       "verificationState": "UNKNOWN",

@@ -3137,6 +3137,28 @@ export interface TenantAppearanceGeneral {
       primary?: string;
       secondary?: string;
     };
+    /**
+     * Status tone seeds. VOCABULARIO CERRADO: estas cuatro y ninguna mas.
+     *
+     * Agrupadas en un sub-objeto y no como hermanas de `primary` por la misma
+     * gramatica que ya usan `foreground` y `border`: agrupar por eje hace el
+     * vocabulario cerrado VISIBLE en el tipo, de modo que una quinta clave no
+     * compila en vez de descubrirse en runtime.
+     *
+     * `neutral` NO vive aqui y no es un olvido: no tiene semilla en ninguna via
+     * (`neutral has no seed of its own and is therefore authored-only`), asi que
+     * darle un dial seria una perilla que no mueve nada. Su adjudicacion subio
+     * al owner; hasta que vuelva, se gobierna dentro de `palette.seeds`.
+     *
+     * Sin gemelo en `dark`: el modo oscuro de estas semillas es un lote propio
+     * con su propio cero-delta, y `dark.status` se rechaza fail-closed.
+     */
+    status?: {
+      success?: string;
+      warning?: string;
+      error?: string;
+      info?: string;
+    };
     /** Feeds ThemeProvider theme resolution (not a CSS variable). */
     backgroundMode?: "light" | "dark" | "auto";
     /**

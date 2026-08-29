@@ -4523,6 +4523,35 @@
       }
     },
     {
+      "controlId": "palette.status-seeds",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "palette.status-seeds",
+            "socketPattern": null,
+            "prop": "color de estado (error) leido directo del canal compartido de la raiz en la skin modern",
+            "tier": "standard",
+            "examples": [
+              "--ds-color-error"
+            ],
+            "noSocketReason": "sin socket propio; consumo directo de --ds-color-error via canal compartido; evidencia verificada en runtime/engines/modern/skin/color-picker.css:283,288.",
+            "socketsResolved": true,
+            "carrier": "shared-channel"
+          }
+        ],
+        "reviewedFrom": "anatomy",
+        "sourceBindings": [
+          "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css"
+        ]
+      }
+    },
+    {
       "controlId": "profiles.icon",
       "disposition": "UNKNOWN",
       "verificationState": "UNKNOWN",

@@ -2511,6 +2511,37 @@
       }
     },
     {
+      "controlId": "palette.status-seeds",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "carrier": "shared-channel",
+            "ownedBy": "palette.status-seeds",
+            "channels": [
+              "--ds-color-error",
+              "--ds-color-warning",
+              "--ds-color-success",
+              "--ds-color-info"
+            ],
+            "socketsResolved": true,
+            "prop": "consumo directo skin (nivel 1): guided-draft-form.css error:102,207-208,241,305,332,348 warning:90,336,352 success:98 info:269,281"
+          }
+        ],
+        "uncoveredByDesign": {
+          "CONSUMO, no propio: --ds-color-info-bg en guided-draft-form.css:280 lo emite otro mapeo (brand-theme/index.ts:509-516), no este control": [
+            "--ds-color-info-bg"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
+    },
+    {
       "controlId": "profiles.icon",
       "disposition": "UNKNOWN",
       "verificationState": "UNKNOWN",

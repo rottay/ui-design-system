@@ -1,11 +1,11 @@
 {
   "schemaVersion": 2,
-  "roundId": "R2",
+  "roundId": "R6",
   "familyId": "primitive/display/card",
   "scenarioId": "surfaces.effect-intensity/mate/evnto/static-and-db",
   "evidenceKind": "static-db-computed-parity",
   "commandOrTool": "node src/tooling/resolution-probe/public/cli/index.mjs causal",
-  "toolVersion": "resolution-probe@cc010704a6aa",
+  "toolVersion": "resolution-probe@fe0cd6c5e27b",
   "exitCode": 0,
   "sourceFiles": [
     "packages/core/dist/build-stamp.json",
@@ -70,10 +70,10 @@
     "packages/core/src/ui/primitives/display/Card/engines/rustic/index.tsx",
     "packages/core/src/ui/primitives/display/Card/index.tsx"
   ],
-  "sourceDigest": "2cca85c4c209ff6b04bcf2c0c6662cc90d65c1299a1ef0f772505b9a73834a81",
+  "sourceDigest": "c4431a36f58a17bfd960a65e3a53f4c98026b8af1c0e5b0d70fdcba762a3d0a9",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/surfaces-effect-intensity/evnto-mate.json",
-  "artifactSha256": "83a8ea39ce32b79e180b9ba1bde82a5958940db7e475a874b9dde71ce3f8f39b",
-  "createdAt": "2026-08-28T06:23:29.114Z",
+  "artifactSha256": "637fd50a4eaa46cb3b2cafd9adcdf236fff031bf6e21607ded1100eccfead8a9",
+  "createdAt": "2026-08-29T02:22:03.630Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

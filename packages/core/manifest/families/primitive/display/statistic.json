@@ -2181,6 +2181,36 @@
       }
     },
     {
+      "controlId": "palette.status-seeds",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "palette.status-seeds",
+            "socketPattern": null,
+            "prop": "color del valor segun tendencia (positive/negative)",
+            "tier": "standard",
+            "examples": [
+              "--ds-color-success",
+              "--ds-color-error"
+            ],
+            "noSocketReason": "color: var(--ds-statistic-positive-color, color-mix(...var(--ds-color-success)...)) bajo [data-trend='positive'] y var(--ds-statistic-negative-color, var(--ds-color-error)) bajo [data-trend='negative']; evidencia verificada en skin/statistic.css:151-153,156-157.",
+            "socketsResolved": true,
+            "carrier": "shared-channel"
+          }
+        ],
+        "reviewedFrom": "anatomy",
+        "sourceBindings": [
+          "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css"
+        ]
+      }
+    },
+    {
       "controlId": "profiles.icon",
       "disposition": "UNKNOWN",
       "verificationState": "UNKNOWN",

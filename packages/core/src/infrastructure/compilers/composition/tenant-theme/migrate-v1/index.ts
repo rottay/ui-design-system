@@ -323,14 +323,34 @@ function migratePalette(
     "background",
     "foreground",
     "border",
+    "status",
   ]);
   const foregroundKeys = new Set(["primary", "secondary", "muted", "disabled"]);
   const borderKeys = new Set(["primary", "secondary"]);
+  // P0: vocabulario CERRADO de tonos de estado. La lista es literal porque la
+  // fila DB es JSON no confiable: el tipo protege al autor, esta lista protege
+  // contra el documento. Es la leccion del "undefined" textual.
+  const statusKeys = new Set(["success", "warning", "error", "info"]);
 
-  const validateSeeds = (source: PaletteSeeds, path: string): void => {
+  const validateSeeds = (
+    source: PaletteSeeds,
+    path: string,
+    { allowStatus = false }: { allowStatus?: boolean } = {}
+  ): void => {
     for (const key of Object.keys(source)) {
       if (!seedKeys.has(key)) {
         throw new ThemePatchMigrationError(`unsupported ${path}.${key}`);
+      }
+    }
+    // Sin gemelo `dark` en P0 (adjudicado): el modo oscuro de las semillas de
+    // estado es un lote propio con su propio cero-delta. `dark.status` se
+    // rechaza aqui y no por omision del tipo, porque el documento no lo respeta.
+    if (!allowStatus && source.status !== undefined) {
+      throw new ThemePatchMigrationError(`unsupported ${path}.status`);
+    }
+    for (const key of Object.keys(source.status ?? {})) {
+      if (!statusKeys.has(key)) {
+        throw new ThemePatchMigrationError(`unsupported ${path}.status.${key}`);
       }
     }
     for (const key of Object.keys(source.foreground ?? {})) {
@@ -374,8 +394,9 @@ function migratePalette(
     background: palette.background,
     foreground: palette.foreground,
     border: palette.border,
+    status: palette.status,
   };
-  validateSeeds(baseSeeds, "general.palette");
+  validateSeeds(baseSeeds, "general.palette", { allowStatus: true });
   if (palette.dark) validateSeeds(palette.dark, "general.palette.dark");
 
   const paletteFields = (
@@ -391,6 +412,14 @@ function migratePalette(
     textDisabledColor: source.foreground?.disabled,
     borderPrimaryColor: source.border?.primary,
     borderSecondaryColor: source.border?.secondary,
+    // AQUI y en ningun otro lado: las semillas de estado confluyen en
+    // BrandPalette ANTES del unico lowering, de modo que la via DB y la via
+    // estatica entran a `deriveTenantColorRamps` por la misma puerta. No hay un
+    // segundo emisor y P0 no lo crea.
+    successColor: source.status?.success,
+    warningColor: source.status?.warning,
+    errorColor: source.status?.error,
+    infoColor: source.status?.info,
   });
 
   const mode = palette.backgroundMode ?? "light";

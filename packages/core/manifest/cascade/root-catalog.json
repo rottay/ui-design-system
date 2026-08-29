@@ -1078,10 +1078,10 @@
       },
       "derivation": "Misma ley que success.",
       "evidence": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:179",
-      "governedBy": null,
-      "governanceScope": "ninguna",
-      "exposure": "gap",
-      "exposureNote": "Mismo frontier palette.status-seeds (packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts:507).",
+      "governedBy": "palette.status-seeds",
+      "governanceScope": "tenant",
+      "exposure": "tenant-dial",
+      "exposureNote": "Mismo frontier palette.status-seeds (packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts:822). P0 (2026-08-28): gobernada por el dial publico Standard `palette.status-seeds`. Deja de ser `gap` porque la perilla existe y llega: la semilla entra por `BrandPalette.{rol}Color` (estatico) o por `appearance.general.palette.status.{rol}` (DB), las dos confluyen en BrandPalette ANTES del unico lowering y salen por `deriveTenantColorRamps`. NO se creo ninguna raiz por paso: los `-{50..900}` son la derivacion de esta semilla, no raices hermanas. `ramp.seed.neutral` NO acompanio este movimiento y sigue `gap`: no tiene semilla en ninguna via, asi que un dial suyo seria una perilla que no mueve nada — su adjudicacion subio al owner.",
       "derivationDebt": false,
       "collapsesLegacy": {
         "total": 50,
@@ -1193,10 +1193,10 @@
       },
       "derivation": "Semilla de estado -> rampa de 10 pasos + tinta legible derivada por la autoridad on-tone-ink (packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts:593-606).",
       "evidence": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:175",
-      "governedBy": null,
-      "governanceScope": "ninguna",
-      "exposure": "gap",
-      "exposureNote": "GAP YA REGISTRADO EN FUENTE: la capability palette.status-seeds existe con status frontier (packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts:507) y su defaultBehavior dice textual \"DB General cannot author status tones today; Advanced tokenOverrides is the only DB route, while BrandTheme authors them directly -- the recorded static/DB asymmetry this frontier closes\". Una frontier es contrato declarado que el schema TODAVIA rechaza (packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts:18-20). F2A-1 Lote E (2026-08-26): cierre por referencia a la decision 18/F5, sin escritura en este lote. Conteo canonico (data-v2.json): 299 lectores de produccion (282 core + 17 showroom).",
+      "governedBy": "palette.status-seeds",
+      "governanceScope": "tenant",
+      "exposure": "tenant-dial",
+      "exposureNote": "HISTORIA PRE-P0 (superseded, ver P0 mas abajo): la capability palette.status-seeds existia con status frontier (packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts:822) y su defaultBehavior decia textual \"DB General cannot author status tones today; Advanced tokenOverrides is the only DB route, while BrandTheme authors them directly -- the recorded static/DB asymmetry this frontier closes\". Una frontier era contrato declarado que el schema rechazaba (packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts:18-20) hasta que P0 (2026-08-28) activo este id (status: 'active' en capabilities/index.ts:822). F2A-1 Lote E (2026-08-26): cierre por referencia a la decision 18/F5, sin escritura en este lote. Conteo canonico (data-v2.json): 299 lectores de produccion (282 core + 17 showroom). P0 (2026-08-28): gobernada por el dial publico Standard `palette.status-seeds`. Deja de ser `gap` porque la perilla existe y llega: la semilla entra por `BrandPalette.{rol}Color` (estatico) o por `appearance.general.palette.status.{rol}` (DB), las dos confluyen en BrandPalette ANTES del unico lowering y salen por `deriveTenantColorRamps`. NO se creo ninguna raiz por paso: los `-{50..900}` son la derivacion de esta semilla, no raices hermanas. `ramp.seed.neutral` NO acompanio este movimiento y sigue `gap`: no tiene semilla en ninguna via, asi que un dial suyo seria una perilla que no mueve nada — su adjudicacion subio al owner.",
       "derivationDebt": false,
       "collapsesLegacy": {
         "total": 47,
@@ -1231,10 +1231,10 @@
       },
       "derivation": "Misma ley que success.",
       "evidence": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:177",
-      "governedBy": null,
-      "governanceScope": "canal-por-canal",
-      "exposure": "gap",
-      "exposureNote": "token-overrides declara --ds-color-error entre sus salidas, pero eso es la allowlist pro canal por canal, NO una semilla: mover el tono de error completo sigue exigiendo escribir la rampa a mano. El frontier palette.status-seeds (packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts:507) es la puerta correcta y aun no existe. F2A-1 Lote E (2026-08-26): cierre por referencia a la decision 18/F5, sin escritura en este lote. Conteo canonico (data-v2.json): 433 lectores de produccion (422 core + 11 showroom).",
+      "governedBy": "palette.status-seeds",
+      "governanceScope": "tenant",
+      "exposure": "tenant-dial",
+      "exposureNote": "token-overrides declara --ds-color-error entre sus salidas, pero eso es la allowlist pro canal por canal, NO una semilla: mover el tono de error completo sigue exigiendo escribir la rampa a mano. HISTORIA PRE-P0 (superseded, ver P0 mas abajo): el frontier palette.status-seeds (packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts:822) era la puerta correcta y hasta 2026-08-27 aun no existia. F2A-1 Lote E (2026-08-26): cierre por referencia a la decision 18/F5, sin escritura en este lote. Conteo canonico (data-v2.json): 433 lectores de produccion (422 core + 11 showroom). P0 (2026-08-28): gobernada por el dial publico Standard `palette.status-seeds`. Deja de ser `gap` porque la perilla existe y llega: la semilla entra por `BrandPalette.{rol}Color` (estatico) o por `appearance.general.palette.status.{rol}` (DB), las dos confluyen en BrandPalette ANTES del unico lowering y salen por `deriveTenantColorRamps`. NO se creo ninguna raiz por paso: los `-{50..900}` son la derivacion de esta semilla, no raices hermanas. `ramp.seed.neutral` NO acompanio este movimiento y sigue `gap`: no tiene semilla en ninguna via, asi que un dial suyo seria una perilla que no mueve nada — su adjudicacion subio al owner.",
       "derivationDebt": false,
       "collapsesLegacy": {
         "total": 47,
@@ -1269,10 +1269,10 @@
       },
       "derivation": "Misma ley que success.",
       "evidence": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:176",
-      "governedBy": null,
-      "governanceScope": "ninguna",
-      "exposure": "gap",
-      "exposureNote": "Mismo frontier palette.status-seeds (packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts:507). F2A-1 Lote E (2026-08-26): cierre por referencia a la decision 18/F5, sin escritura en este lote. Conteo canonico (data-v2.json): 239 lectores de produccion (225 core + 14 showroom).",
+      "governedBy": "palette.status-seeds",
+      "governanceScope": "tenant",
+      "exposure": "tenant-dial",
+      "exposureNote": "Mismo frontier palette.status-seeds (packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts:822). F2A-1 Lote E (2026-08-26): cierre por referencia a la decision 18/F5, sin escritura en este lote. Conteo canonico (data-v2.json): 239 lectores de produccion (225 core + 14 showroom). P0 (2026-08-28): gobernada por el dial publico Standard `palette.status-seeds`. Deja de ser `gap` porque la perilla existe y llega: la semilla entra por `BrandPalette.{rol}Color` (estatico) o por `appearance.general.palette.status.{rol}` (DB), las dos confluyen en BrandPalette ANTES del unico lowering y salen por `deriveTenantColorRamps`. NO se creo ninguna raiz por paso: los `-{50..900}` son la derivacion de esta semilla, no raices hermanas. `ramp.seed.neutral` NO acompanio este movimiento y sigue `gap`: no tiene semilla en ninguna via, asi que un dial suyo seria una perilla que no mueve nada — su adjudicacion subio al owner.",
       "derivationDebt": false,
       "collapsesLegacy": {
         "total": 45,
@@ -3331,16 +3331,16 @@
     "byExposure": {
       "counts": {
         "internal-head": 28,
-        "tenant-dial": 28,
-        "gap": 8
+        "tenant-dial": 32,
+        "gap": 4
       },
       "channels": {
         "internal-head": 1512,
-        "tenant-dial": 1308,
-        "gap": 490
+        "tenant-dial": 1497,
+        "gap": 301
       },
-      "reading": "De las 64 raices NO REFINADAS, 28 tienen control o dial declarado (1308 canales), 28 son cabezas internas correctas sin perilla (1512) y 8 son huecos de perilla (490). RECOMPUTADO de las filas en la cohorte 2A (2026-08-27). El catalogo tiene ademas 36 raices REFINADAS del eje paso, excluidas de este vocabulario por adjudicacion del DT: una hija hereda el exposure de su padre porque es la MISMA decision indexada mas fino, y contarlas por separado inflaria el backlog de perillas faltantes sin que la deuda crezca. Su cifra viva es su poblacion en manifest/generated/root-membership.json; collapsesLegacy vale cero en ellas porque es censo fechado de 2026-08-18. El grueso de la pintura NO deberia ser perilla nunca: deberia ser cascada. Ese sigue siendo el hallazgo estructural.",
-      "derivation": "1308 + 1512 + 490 = 3310 = Σ collapsesLegacy.total de las 64 raices, recomputado de las filas. El campo se llama collapsesLegacy desde la cohorte 1: es un censo FECHADO (2026-08-18) que NO se reconcilia con la membresia viva por canal (manifest/generated/root-membership.json), medida sobre los canales que los temas emiten HOY y con criterios que sobreviven a la ley del owner. Ver corrections."
+      "reading": "De las 64 raices NO REFINADAS, 32 tienen control o dial declarado, 28 son cabezas internas correctas sin perilla y 4 son huecos de perilla. P0 (2026-08-28) abrio el dial publico Standard `palette.status-seeds` y las 4 raices ramp.seed.{error,info,success,warning} pasaron de gap a tenant-dial: gap BAJA 8->4, que es la direccion legal del trinquete. `ramp.seed.neutral` NO acompanio el movimiento y sigue gap: no tiene semilla en ninguna via, asi que un dial suyo seria una perilla que no mueve nada — su adjudicacion subio al owner. RECOMPUTADO de las filas en la cohorte 2A (2026-08-27). El catalogo tiene ademas 36 raices REFINADAS del eje paso, excluidas de este vocabulario por adjudicacion del DT: una hija hereda el exposure de su padre porque es la MISMA decision indexada mas fino, y contarlas por separado inflaria el backlog de perillas faltantes sin que la deuda crezca. Su cifra viva es su poblacion en manifest/generated/root-membership.json; collapsesLegacy vale cero en ellas porque es censo fechado de 2026-08-18. El grueso de la pintura NO deberia ser perilla nunca: deberia ser cascada. Ese sigue siendo el hallazgo estructural.",
+      "derivation": "1497 + 1512 + 301 = 3310 = Σ collapsesLegacy.total de las 64 raices, recomputado de las filas. El campo se llama collapsesLegacy desde la cohorte 1: es un censo FECHADO (2026-08-18) que NO se reconcilia con la membresia viva por canal (manifest/generated/root-membership.json), medida sobre los canales que los temas emiten HOY y con criterios que sobreviven a la ley del owner. Ver corrections."
     },
     "byGroup": {
       "superficie-por-nivel": 18,
@@ -3374,7 +3374,7 @@
       ]
     },
     "gapBacklog": {
-      "statement": "EL BACKLOG REAL DE PERILLAS FALTANTES. 8 raices, 490 canales de tema.",
+      "statement": "EL BACKLOG REAL DE PERILLAS FALTANTES. 4 raices, 301 canales de tema.",
       "items": [
         {
           "rootId": "ramp.seed.neutral",
@@ -3395,41 +3395,16 @@
           "why": "La eleccion borde-fuerte contra elevacion-fuerte ES identidad de marca declarada en fuente, y no hay perilla que la exprese. Deberia haberla: es el eje que separa visualmente bithire de rottay."
         },
         {
-          "rootId": "ramp.seed.info",
-          "channels": 50,
-          "channelStatus": "--ds-color-info",
-          "why": "Mismo frontier palette.status-seeds (packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts:507)."
-        },
-        {
           "rootId": "tier.page.border",
           "channels": 50,
           "channelStatus": "--ds-color-border-subtle",
           "why": "Ningun control nombra un borde de chrome de pagina. 50 canales autorados a mano y el tenant que quiere una separacion mas o menos marcada en el shell no tiene perilla: hoy solo llega por la allowlist pro, canal por canal."
-        },
-        {
-          "rootId": "ramp.seed.success",
-          "channels": 47,
-          "channelStatus": "--ds-color-success",
-          "why": "GAP YA REGISTRADO EN FUENTE: la capability palette.status-seeds existe con status frontier (packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts:507) y su defaultBehavior dice textual \"DB General cannot author status tones today; Advanced tokenOverrides is the only DB route, while BrandTheme authors them directly -- the recorded static/DB asymmetry this frontier closes\". Una frontier es contrato declarado que el schema TODAVIA rechaza (packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts:18-20)."
-        },
-        {
-          "rootId": "ramp.seed.error",
-          "channels": 47,
-          "channelStatus": "--ds-color-error",
-          "why": "token-overrides declara --ds-color-error entre sus salidas, pero eso es la allowlist pro canal por canal, NO una semilla: mover el tono de error completo sigue exigiendo escribir la rampa a mano. El frontier palette.status-seeds (packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts:507) es la puerta correcta y aun no existe."
-        },
-        {
-          "rootId": "ramp.seed.warning",
-          "channels": 45,
-          "channelStatus": "--ds-color-warning",
-          "why": "Mismo frontier palette.status-seeds (packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts:507)."
         }
       ],
       "priority": [
         "PRIMERO ramp.seed.neutral (132 canales, el mayor). Certificado en fuente: el compilador dice que neutral no tiene semilla de la que derivar (packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts:353-356). Sin semilla no hay rampa, y sin rampa cada tema escribe 10 pasos por rol.",
-        "SEGUNDO las cuatro semillas de estado (success/warning/error/info, 189 canales juntos). NO ES UN HALLAZGO NUEVO: el repo YA lo tiene registrado como frontier palette.status-seeds (packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts:507-522), con el defaultBehavior que nombra la asimetria estatico/DB. Este catalogo solo lo cuantifica.",
-        "TERCERO el nivel acento sin cabeza (tier.accent.bg, 63 canales): --ds-badge-bg, --ds-tag-bg y --ds-alert-bg tienen cero declaraciones en todo src/.",
-        "CUARTO los dos bordes sin gobierno (tier.raised.border 56 + tier.page.border 50 = 106 canales). El de nivel elevado es especialmente caro porque bithire declara EN FUENTE que su identidad es borde-fuerte contra elevacion-fuerte (packages/core/src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts:912-913) y no hay perilla que exprese esa eleccion."
+        "SEGUNDO el nivel acento sin cabeza (tier.accent.bg, 63 canales): --ds-badge-bg, --ds-tag-bg y --ds-alert-bg tienen cero declaraciones en todo src/.",
+        "TERCERO los dos bordes sin gobierno (tier.raised.border 56 + tier.page.border 50 = 106 canales). El de nivel elevado es especialmente caro porque bithire declara EN FUENTE que su identidad es borde-fuerte contra elevacion-fuerte (packages/core/src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts:912-913) y no hay perilla que exprese esa eleccion."
       ]
     },
     "derivationDebtBacklog": {

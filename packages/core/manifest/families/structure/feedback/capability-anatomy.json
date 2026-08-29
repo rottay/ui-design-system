@@ -966,6 +966,20 @@
       }
     },
     {
+      "controlId": "palette.status-seeds",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "sus parts propias (capability, capability-anatomy, capability-anatomy-label, capability-label, capability-list) mapean a surface-states.css:71-103, que solo lee --ds-color-border; la regla de estado de ese archivo (banner info, linea 7) pertenece al part 'banner' de structure/feedback/surface-lifecycle, otra familia",
+        "source": "adjudicacion-w-cells-fix",
+        "reviewedFrom": "anatomy"
+      }
+    },
+    {
       "controlId": "profiles.icon",
       "disposition": "UNKNOWN",
       "verificationState": "UNKNOWN",

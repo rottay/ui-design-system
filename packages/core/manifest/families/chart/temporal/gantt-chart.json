@@ -2898,6 +2898,41 @@
       }
     },
     {
+      "controlId": "palette.status-seeds",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": null,
+            "socketPattern": null,
+            "prop": "chart-scaffold error state (frame border-color + error state-label color) via var(--ds-color-error)",
+            "tier": "standard",
+            "examples": [],
+            "noSocketReason": "sin socket status propio; las 18 familias chart montan ChartScaffold (presentation/scaffold/index.tsx:341,365 estampan data-state=\"error\") y ese estado ya pinta con var(--ds-color-error) en el chrome compartido (chart-foundation.css:1396-1412, comentario :1374-1378 declara el error de scaffold \"meaning-bearing status, not a category\"); socketear por familia duplicaria el mismo canal 18 veces.",
+            "socketsResolved": true,
+            "carrier": "shared-channel",
+            "ownedBy": null,
+            "carrierFile": "packages/core/src/foundation/tokens/css/presentation/components/skin/chart-foundation.css",
+            "channels": [
+              "--ds-color-error"
+            ]
+          }
+        ],
+        "uncoveredByDesign": {
+          "Prueba negativa (sin socket status propio): grep var(--ds-color-{success|warning|danger|error|info}...) sobre packages/core/src/ui/patterns/visualization/charts/families/gantt-chart/index.tsx": [
+            "0 coincidencias"
+          ]
+        },
+        "reviewedFrom": "anatomy",
+        "remediatedFrom": "cells-chart-status-seeds"
+      }
+    },
+    {
       "controlId": "profiles.icon",
       "disposition": "UNKNOWN",
       "verificationState": "UNKNOWN",

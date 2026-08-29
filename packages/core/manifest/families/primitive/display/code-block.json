@@ -2090,6 +2090,35 @@
       }
     },
     {
+      "controlId": "palette.status-seeds",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "palette.status-seeds",
+            "socketPattern": null,
+            "prop": "fondo/borde de la linea resaltada (highlightLines) via var(--ds-color-warning)",
+            "tier": "standard",
+            "examples": [
+              "--ds-color-warning"
+            ],
+            "noSocketReason": "SIN skin file (componente single-engine, TSX inline, sin engines/modern): background y borderInlineStart leen var(--ds-color-warning) directamente cuando data-highlighted='true'; evidencia verificada en ui/primitives/display/CodeBlock/index.tsx:334,345.",
+            "socketsResolved": true,
+            "carrier": "shared-channel"
+          }
+        ],
+        "reviewedFrom": "anatomy",
+        "sourceBindings": [
+          "packages/core/src/ui/primitives/display/CodeBlock/index.tsx"
+        ]
+      }
+    },
+    {
       "controlId": "profiles.icon",
       "disposition": "UNKNOWN",
       "verificationState": "UNKNOWN",

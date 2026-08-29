@@ -3854,6 +3854,40 @@
       }
     },
     {
+      "controlId": "palette.status-seeds",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "palette.status-seeds",
+            "socketPattern": null,
+            "prop": "badge de exceptionCount (classic) + accion danger (modern)",
+            "tier": "standard",
+            "examples": [],
+            "noSocketReason": "sin socket propio; consumo directo de --ds-color-error y su escala -600/-200/-50/-300",
+            "socketsResolved": true,
+            "carrier": "shared-channel"
+          }
+        ],
+        "uncoveredByDesign": {
+          "Canales --ds-color-* medidos en la anatomia (palette.status-seeds)": [
+            "--ds-color-error",
+            "--ds-color-error-600",
+            "--ds-color-error-200",
+            "--ds-color-error-50",
+            "--ds-color-error-300"
+          ]
+        },
+        "reviewedFrom": "anatomy",
+        "migratedToInternalChannels": true
+      }
+    },
+    {
       "controlId": "profiles.icon",
       "disposition": "UNKNOWN",
       "verificationState": "UNKNOWN",

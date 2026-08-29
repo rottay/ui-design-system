@@ -27033,6 +27033,38 @@
       }
     },
     {
+      "controlId": "palette.status-seeds",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "palette.status-seeds",
+            "carrier": "shared-channel",
+            "socketPattern": null,
+            "socketsResolved": true,
+            "noSocketReason": "sin socket propio; consumo directo de --ds-color-success/-warning/-error/-info via canal compartido en data-table.css y cell-renderers.css",
+            "channels": [
+              "--ds-color-success",
+              "--ds-color-warning",
+              "--ds-color-error",
+              "--ds-color-info"
+            ],
+            "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table.css",
+            "sourceBindings": [
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table.css:369,370,1475,1479,1561,1095,1102",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/cell-renderers.css:50-66,166,191"
+            ]
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
+    },
+    {
       "controlId": "profiles.icon",
       "disposition": "UNKNOWN",
       "verificationState": "UNKNOWN",

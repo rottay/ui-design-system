@@ -3343,6 +3343,32 @@
       }
     },
     {
+      "controlId": "palette.status-seeds",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "reviewedFrom": "anatomy",
+        "bindings": [
+          {
+            "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css",
+            "channels": [
+              "--ds-color-success",
+              "--ds-color-warning",
+              "--ds-color-error",
+              "--ds-color-info"
+            ],
+            "sourceBindings": [
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css"
+            ]
+          }
+        ]
+      }
+    },
+    {
       "controlId": "profiles.icon",
       "disposition": "UNKNOWN",
       "verificationState": "UNKNOWN",

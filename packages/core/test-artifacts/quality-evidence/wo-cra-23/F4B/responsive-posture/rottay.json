@@ -79,16 +79,7 @@
     "law": "Restore is EXACT: every measured computed property, every measured CSS custom property and every root attribute must be byte-identical between the baseline and removal phases. There is no numeric tolerance and no ignored property. A single differing row makes the run restore.exact=false and the row is named."
   },
   "dataGuards": [],
-  "bypass": {
-    "requestedId": "not-a-posture",
-    "writeTime": {
-      "threw": true
-    },
-    "renderTime": {
-      "resolvedId": "balanced"
-    },
-    "expectedDefaultId": "balanced"
-  },
+  "bypass": null,
   "behaviouralWitnesses": [
     {
       "id": "S2",

@@ -7824,7 +7824,7 @@
         "freshnessProven": true,
         "input": {
           "baseline": {
-            "digest": "8500910e0508452a3d403e0d5d2a3d840f368c5d0038b33e9b56711cbc7e43f0",
+            "digest": "9736c5900cc9dd41cb54e0f87eb2fdda7026a235ac96face5b0a51f0ffa49d22",
             "source": "dist/index.js#rottayBrandTheme"
           },
           "compileOptions": {},
@@ -8538,7 +8538,7 @@
                   "primaryColor": "#0C0C0E"
                 },
                 "layout": {
-                  "bg": "#0C0C0E",
+                  "bg": "var(--ds-color-bg-primary)",
                   "dividerColor": "#2A2A2F",
                   "dividerTextColor": "#ECECEC",
                   "headerBackdrop": "blur(12px)",
@@ -8555,7 +8555,7 @@
                   "itemBgHover": "#222226",
                   "itemHoverBackgroundColor": "#222226",
                   "metaDescriptionColor": "#A0A0A5",
-                  "secondaryTextColor": "#A0A0A5",
+                  "secondaryTextColor": "var(--ds-sidebar-item-color)",
                   "skeletonBg": "#2A2A2F",
                   "splitColor": "#222226",
                   "textColor": "#ECECEC"
@@ -8781,7 +8781,7 @@
                   "bg": "#0C0C0E",
                   "border": "#2A2A2F",
                   "cellColor": "var(--ds-color-text)",
-                  "cellFontSize": "var(--ds-text-body-size)",
+                  "cellFontSize": "calc(var(--ds-text-body-size) * var(--ds-type-scale, 1))",
                   "cellPadding": "0.875rem 1rem",
                   "headerBg": "#131316",
                   "headerBlockSize": "calc(var(--ds-input-md-height) - 0.25rem)",
@@ -8944,7 +8944,7 @@
                     "breadcrumb": {
                       "color": "#9C9C9C",
                       "colorActive": "#1A1A1A",
-                      "colorHover": "#1A1A1A",
+                      "colorHover": "var(--ds-color-text-primary)",
                       "separatorColor": "#D4D4D2"
                     },
                     "calendar": {
@@ -8959,19 +8959,19 @@
                       "border": "#E5E5E3",
                       "borderAccentHover": "rgba(10, 10, 10, 0.16)",
                       "borderHover": "#D4D4D2",
-                      "color": "#1A1A1A",
+                      "color": "var(--ds-color-text-primary)",
                       "footerBg": "#FAFAF9",
                       "footerBorder": "#E5E5E3",
                       "headerBorder": "#E5E5E3",
                       "headerColor": "#1A1A1A",
-                      "imageLoadingActive": "#0A0A0A",
+                      "imageLoadingActive": "var(--ds-color-primary)",
                       "imageLoadingTrack": "#EDEDEC",
                       "imagePlaceholderBg": "#F4F4F3",
                       "imagePlaceholderColor": "#9C9C9C",
                       "shadow": "0 1px 2px rgba(0, 0, 0, 0.04), 0 1px 3px rgba(0, 0, 0, 0.02)",
                       "shadowElevated": "0 8px 24px rgba(0, 0, 0, 0.08), 0 4px 8px rgba(0, 0, 0, 0.04)",
                       "shadowHover": "0 4px 12px rgba(0, 0, 0, 0.06), 0 2px 4px rgba(0, 0, 0, 0.04)",
-                      "titleColor": "#1A1A1A"
+                      "titleColor": "var(--ds-color-text-primary)"
                     },
                     "collapse": {
                       "bg": "#FFFFFF",
@@ -8984,12 +8984,12 @@
                     "controls": {
                       "autocomplete": {
                         "bg": "#FFFFFF",
-                        "border": "#E5E5E3",
+                        "border": "var(--ds-color-border)",
                         "borderFocus": "rgba(10, 10, 10, 0.40)",
-                        "clearColor": "#9C9C9C",
+                        "clearColor": "var(--ds-color-text-muted)",
                         "dropdownBg": "#FFFFFF",
                         "dropdownShadow": "0 4px 16px rgba(0, 0, 0, 0.08), 0 0 0 1px rgba(0, 0, 0, 0.04)",
-                        "emptyColor": "#9C9C9C",
+                        "emptyColor": "var(--ds-color-text-muted)",
                         "errorBorder": "#DC2626",
                         "optionBgHover": "#FAFAF9"
                       },
@@ -9000,9 +9000,9 @@
                         "border": "#E5E5E3",
                         "borderActive": "#C4C4C2",
                         "borderHover": "#D4D4D2",
-                        "color": "#1A1A1A",
-                        "colorActive": "#1A1A1A",
-                        "colorHover": "#1A1A1A"
+                        "color": "var(--ds-color-text-primary)",
+                        "colorActive": "var(--ds-color-text-primary)",
+                        "colorHover": "var(--ds-color-text-primary)"
                       },
                       "buttonError": {
                         "bg": "#DC2626",
@@ -9016,7 +9016,7 @@
                         "border": "transparent",
                         "borderActive": "transparent",
                         "borderHover": "transparent",
-                        "colorHover": "#1A1A1A"
+                        "colorHover": "var(--ds-color-text-primary)"
                       },
                       "buttonInfo": {
                         "bg": "#2563EB",
@@ -9024,7 +9024,7 @@
                         "bgHover": "#1D4ED8"
                       },
                       "buttonLink": {
-                        "color": "#1A1A1A",
+                        "color": "var(--ds-color-text-primary)",
                         "colorActive": "#0A0A0A",
                         "colorHover": "#6B6B6B"
                       },
@@ -9039,15 +9039,15 @@
                         "bg": "#FFFFFF",
                         "bgActive": "#EDEDEC",
                         "bgHover": "#F4F4F3",
-                        "border": "#E5E5E3",
+                        "border": "var(--ds-color-border)",
                         "borderHover": "#D4D4D2",
-                        "color": "#1A1A1A"
+                        "color": "var(--ds-color-text-primary)"
                       },
                       "buttonText": {
                         "bg": "transparent",
                         "bgActive": "rgba(0, 0, 0, 0.08)",
                         "bgHover": "rgba(0, 0, 0, 0.04)",
-                        "colorHover": "#1A1A1A"
+                        "colorHover": "var(--ds-color-text-primary)"
                       },
                       "checkbox": {
                         "bg": "#FFFFFF",
@@ -9059,17 +9059,17 @@
                         "errorColor": "#DC2626",
                         "focusRing": "0 0 0 2px rgba(10, 10, 10, 0.12)",
                         "focusRingColor": "rgba(10, 10, 10, 0.08)",
-                        "labelColor": "#1A1A1A",
-                        "labelColorDisabled": "#C4C4C2"
+                        "labelColor": "var(--ds-color-text-primary)",
+                        "labelColorDisabled": "var(--ds-color-text-disabled)"
                       },
                       "datePicker": {
                         "bg": "#FFFFFF",
                         "bgDisabled": "#F4F4F3",
-                        "border": "#E5E5E3",
+                        "border": "var(--ds-color-border)",
                         "borderFocus": "rgba(10, 10, 10, 0.40)",
                         "borderHover": "#D4D4D2",
                         "clearColor": "#9C9C9C",
-                        "color": "#1A1A1A",
+                        "color": "var(--ds-color-text-primary)",
                         "errorBorder": "#DC2626",
                         "iconColor": "#9C9C9C",
                         "separatorColor": "#9C9C9C",
@@ -9077,14 +9077,14 @@
                       },
                       "disabled": {
                         "bg": "#F4F4F3",
-                        "border": "#E5E5E3",
+                        "border": "var(--ds-color-border)",
                         "borderColor": "#E5E5E3",
                         "text": "#A1A1AA"
                       },
                       "form": {
                         "errorColor": "#DC2626",
-                        "extraColor": "#9C9C9C",
-                        "helpColor": "#9C9C9C",
+                        "extraColor": "var(--ds-color-text-muted)",
+                        "helpColor": "var(--ds-color-text-muted)",
                         "requiredColor": "#DC2626",
                         "successColor": "#16A34A",
                         "warningColor": "#D97706"
@@ -9092,23 +9092,23 @@
                       "input": {
                         "addon": {
                           "bg": "#F4F4F3",
-                          "border": "#E5E5E3",
-                          "color": "#6B6B6B"
+                          "border": "var(--ds-color-border)",
+                          "color": "var(--ds-color-text-secondary)"
                         },
                         "bg": "#FFFFFF",
                         "bgDisabled": "#F4F4F3",
                         "bgFocus": "#FFFFFF",
                         "bgHover": "#FAFAF9",
-                        "border": "#E5E5E3",
-                        "borderDisabled": "#E5E5E3",
+                        "border": "var(--ds-color-border)",
+                        "borderDisabled": "var(--ds-color-border)",
                         "borderFocus": "rgba(10, 10, 10, 0.40)",
                         "borderHover": "#D4D4D2",
                         "clear": {
                           "color": "#9C9C9C"
                         },
-                        "color": "#1A1A1A",
+                        "color": "var(--ds-color-text-primary)",
                         "colorDisabled": "#A1A1AA",
-                        "colorPlaceholder": "#9C9C9C",
+                        "colorPlaceholder": "var(--ds-color-text-muted)",
                         "errorBorder": "#DC2626",
                         "errorColor": "#DC2626",
                         "errorShadowFocus": "0 0 0 2px rgba(220, 38, 38, 0.14)",
@@ -9126,14 +9126,14 @@
                       },
                       "inputNumber": {
                         "addonBg": "#F4F4F3",
-                        "addonBorder": "#E5E5E3",
-                        "addonColor": "#6B6B6B",
-                        "affixColor": "#9C9C9C",
+                        "addonBorder": "var(--ds-color-border)",
+                        "addonColor": "var(--ds-color-text-secondary)",
+                        "affixColor": "var(--ds-color-text-muted)",
                         "bg": "#FFFFFF",
                         "bgDisabled": "#F4F4F3",
-                        "border": "#E5E5E3",
+                        "border": "var(--ds-color-border)",
                         "borderFocus": "rgba(10, 10, 10, 0.40)",
-                        "color": "#1A1A1A",
+                        "color": "var(--ds-color-text-primary)",
                         "controlColor": "#9C9C9C",
                         "errorBorder": "#DC2626",
                         "shadowFocus": "0 0 0 2px rgba(10, 10, 10, 0.08)"
@@ -9144,13 +9144,13 @@
                         "border": "#D4D4D2",
                         "borderHover": "#A3A3A1",
                         "checkedBg": "#FFFFFF",
-                        "descriptionColor": "#9C9C9C",
+                        "descriptionColor": "var(--ds-color-text-muted)",
                         "errorBorder": "#DC2626",
                         "errorColor": "#DC2626",
                         "focusRing": "0 0 0 2px rgba(10, 10, 10, 0.12)",
                         "focusRingColor": "rgba(10, 10, 10, 0.08)",
                         "labelColor": "#1A1A1A",
-                        "labelColorDisabled": "#C4C4C2"
+                        "labelColorDisabled": "var(--ds-color-text-disabled)"
                       },
                       "rate": {
                         "color": "#EDEDEC"
@@ -9160,28 +9160,28 @@
                         "itemBg": "transparent",
                         "itemBgSelected": "#FFFFFF",
                         "itemColor": "#9C9C9C",
-                        "itemColorSelected": "#1A1A1A",
+                        "itemColorSelected": "var(--ds-color-text-primary)",
                         "shadow": "0 1px 2px rgba(0, 0, 0, 0.04)"
                       },
                       "select": {
-                        "arrowColor": "#9C9C9C",
+                        "arrowColor": "var(--ds-color-text-muted)",
                         "bg": "#FFFFFF",
                         "bgDisabled": "#F4F4F3",
-                        "border": "#E5E5E3",
+                        "border": "var(--ds-color-border)",
                         "borderFocus": "rgba(10, 10, 10, 0.40)",
                         "borderHover": "#D4D4D2",
                         "clearColor": "#9C9C9C",
-                        "color": "#1A1A1A",
-                        "colorDisabled": "#C4C4C2",
+                        "color": "var(--ds-color-text-primary)",
+                        "colorDisabled": "var(--ds-color-text-disabled)",
                         "colorPlaceholder": "#9C9C9C",
                         "dropdownBg": "#FFFFFF",
-                        "dropdownBorder": "#E5E5E3",
+                        "dropdownBorder": "var(--ds-color-border)",
                         "dropdownShadow": "0 4px 16px rgba(0, 0, 0, 0.08), 0 0 0 1px rgba(0, 0, 0, 0.04)",
                         "errorBorder": "#DC2626",
                         "filledBg": "#F4F4F3",
                         "optionBgHover": "#FAFAF9",
                         "optionBgSelected": "#F4F4F3",
-                        "optionColorDisabled": "#C4C4C2",
+                        "optionColorDisabled": "var(--ds-color-text-disabled)",
                         "optionColorSelected": "#1A1A1A",
                         "shadowFocus": "0 0 0 2px rgba(10, 10, 10, 0.08)",
                         "tagBg": "#F4F4F3"
@@ -9191,28 +9191,28 @@
                         "handleBgDisabled": "#F4F4F3",
                         "handleBorder": "#0A0A0A",
                         "handleShadow": "0 1px 3px rgba(0, 0, 0, 0.12)",
-                        "markColor": "#9C9C9C",
+                        "markColor": "var(--ds-color-text-muted)",
                         "railColor": "#E5E5E3",
-                        "trackColorDisabled": "#C4C4C2"
+                        "trackColorDisabled": "var(--ds-color-text-disabled)"
                       },
                       "switch": {
                         "bg": "#D4D4D2",
                         "bgHover": "#C4C4C2",
                         "checkedBgHover": "#2A2A2A",
                         "focusRing": "0 0 0 2px rgba(10, 10, 10, 0.12)",
-                        "labelColor": "#1A1A1A",
+                        "labelColor": "var(--ds-color-text-primary)",
                         "thumbBg": "#FFFFFF",
                         "thumbShadow": "0 1px 3px rgba(0, 0, 0, 0.10)"
                       },
                       "textarea": {
                         "bg": "#ffffff",
                         "bgDisabled": "#F4F4F3",
-                        "border": "#E5E5E3",
+                        "border": "var(--ds-color-border)",
                         "borderFocus": "rgba(10, 10, 10, 0.40)",
                         "borderHover": "#D4D4D2",
-                        "color": "#1A1A1A",
+                        "color": "var(--ds-color-text-primary)",
                         "colorPlaceholder": "#9C9C9C",
-                        "countColor": "#9C9C9C",
+                        "countColor": "var(--ds-color-text-muted)",
                         "errorBorder": "#DC2626",
                         "filledBg": "#F4F4F3",
                         "shadowFocus": "0 0 0 2px rgba(10, 10, 10, 0.08)"
@@ -9220,47 +9220,47 @@
                       "timePicker": {
                         "bg": "#FFFFFF",
                         "bgDisabled": "#F4F4F3",
-                        "border": "#E5E5E3",
+                        "border": "var(--ds-color-border)",
                         "borderFocus": "rgba(10, 10, 10, 0.40)",
                         "clearColor": "#9C9C9C",
-                        "color": "#1A1A1A",
+                        "color": "var(--ds-color-text-primary)",
                         "errorBorder": "#DC2626",
-                        "iconColor": "#9C9C9C",
-                        "separatorColor": "#9C9C9C",
+                        "iconColor": "var(--ds-color-text-muted)",
+                        "separatorColor": "var(--ds-color-text-muted)",
                         "shadowFocus": "0 0 0 2px rgba(10, 10, 10, 0.08)"
                       },
                       "toggle": {
-                        "descriptionColor": "#9C9C9C",
+                        "descriptionColor": "var(--ds-color-text-muted)",
                         "dotBg": "#FFFFFF",
                         "dotShadow": "0 1px 2px rgba(0, 0, 0, 0.10)",
                         "errorBg": "#DC2626",
                         "errorColor": "#DC2626",
                         "focusRing": "0 0 0 2px rgba(10, 10, 10, 0.12)",
                         "innerLabelColor": "#FFFFFF",
-                        "labelColor": "#1A1A1A",
+                        "labelColor": "var(--ds-color-text-primary)",
                         "successBg": "#16A34A",
                         "trackBg": "#D4D4D2",
                         "warningBg": "#D97706"
                       },
                       "transfer": {
                         "bg": "#FFFFFF",
-                        "border": "#E5E5E3",
+                        "border": "var(--ds-color-border)",
                         "headerBg": "#FAFAF9",
-                        "headerBorder": "#E5E5E3",
+                        "headerBorder": "var(--ds-color-border)",
                         "itemBgHover": "#FAFAF9"
                       },
                       "upload": {
                         "bg": "#FFFFFF",
-                        "border": "#E5E5E3",
+                        "border": "var(--ds-color-border)",
                         "borderHover": "#D4D4D2",
                         "buttonBg": "#FFFFFF",
-                        "buttonBorder": "#E5E5E3",
+                        "buttonBorder": "var(--ds-color-border)",
                         "cardBg": "#FAFAF9",
-                        "cardBorder": "#E5E5E3",
+                        "cardBorder": "var(--ds-color-border)",
                         "draggerBg": "#FAFAF9",
                         "draggerBgHover": "#F4F4F3",
-                        "draggerBorder": "#E5E5E3",
-                        "draggerIconColor": "#9C9C9C",
+                        "draggerBorder": "var(--ds-color-border)",
+                        "draggerIconColor": "var(--ds-color-text-muted)",
                         "errorBorder": "#DC2626",
                         "fileBg": "#FAFAF9",
                         "fileRemoveColor": "#DC2626",
@@ -9271,14 +9271,14 @@
                     },
                     "descriptions": {
                       "bg": "#FAFAF9",
-                      "border": "#E5E5E3",
-                      "contentColor": "#1A1A1A",
+                      "border": "var(--ds-color-border)",
+                      "contentColor": "var(--ds-color-text-primary)",
                       "labelColor": "#9C9C9C"
                     },
                     "drawer": {
                       "bg": "#FFFFFF",
-                      "footerBorder": "#E5E5E3",
-                      "headerBorder": "#E5E5E3",
+                      "footerBorder": "var(--ds-color-border)",
+                      "headerBorder": "var(--ds-color-border)",
                       "shadow": "0 12px 40px rgba(0, 0, 0, 0.12)",
                       "titleColor": "#1A1A1A"
                     },
@@ -9287,7 +9287,7 @@
                       "itemBgActive": "#F4F4F3",
                       "itemBgHover": "#FAFAF9",
                       "itemColorActive": "#1A1A1A",
-                      "itemColorHover": "#1A1A1A",
+                      "itemColorHover": "var(--ds-color-text-primary)",
                       "shadow": "0 4px 16px rgba(0, 0, 0, 0.08), 0 0 0 1px rgba(0, 0, 0, 0.04)"
                     },
                     "empty": {
@@ -9300,12 +9300,12 @@
                       "primaryColor": "#FFFFFF"
                     },
                     "layout": {
-                      "bg": "#FAFAF9",
+                      "bg": "var(--ds-color-bg-primary)",
                       "dividerColor": "#E5E5E3",
-                      "dividerTextColor": "#1A1A1A",
+                      "dividerTextColor": "var(--ds-color-text-primary)",
                       "headerBg": "rgba(250, 250, 249, 0.82)",
                       "headerBorder": "#E5E5E3",
-                      "siderBg": "#F4F4F3",
+                      "siderBg": "var(--ds-sidebar-bg)",
                       "siderBorder": "#E5E5E3"
                     },
                     "list": {
@@ -9319,13 +9319,13 @@
                       "secondaryTextColor": "var(--ds-color-neutral-500, #6b7280)",
                       "skeletonBg": "var(--ds-color-bg-tertiary)",
                       "splitColor": "#EDEDEC",
-                      "textColor": "#1A1A1A"
+                      "textColor": "var(--ds-color-text-primary)"
                     },
                     "liveFeed": {
                       "badgeColor": "#FFFFFF",
                       "bg": "#FFFFFF",
-                      "border": "#E5E5E3",
-                      "emptyColor": "#9C9C9C",
+                      "border": "var(--ds-color-border)",
+                      "emptyColor": "var(--ds-color-text-muted)",
                       "loadMoreColor": "#1A1A1A",
                       "newBg": "rgba(37, 99, 235, 0.06)",
                       "newBorder": "rgba(37, 99, 235, 0.20)",
@@ -9336,12 +9336,12 @@
                       "bg": "#FAFAF9",
                       "darkBg": "#0A0A0A",
                       "darkItemColor": "#A3A3A1",
-                      "dividerColor": "#E5E5E3",
-                      "groupTitleColor": "#9C9C9C",
+                      "dividerColor": "var(--ds-color-border)",
+                      "groupTitleColor": "var(--ds-color-text-muted)",
                       "itemBgActive": "rgba(0, 0, 0, 0.06)",
                       "itemBgHover": "rgba(0, 0, 0, 0.03)",
-                      "itemColorActive": "#1A1A1A",
-                      "itemColorHover": "#1A1A1A",
+                      "itemColorActive": "var(--ds-color-text-primary)",
+                      "itemColorHover": "var(--ds-color-text-primary)",
                       "itemDangerColor": "#DC2626",
                       "itemHoverBg": "rgba(0, 0, 0, 0.03)",
                       "itemSelectedBg": "rgba(0, 0, 0, 0.06)",
@@ -9351,40 +9351,40 @@
                     "message": {
                       "bg": "#FFFFFF",
                       "closeColor": "#9C9C9C",
-                      "closeColorHover": "#1A1A1A",
+                      "closeColorHover": "var(--ds-color-text-primary)",
                       "shadow": "0 4px 16px rgba(0, 0, 0, 0.08), 0 0 0 1px rgba(0, 0, 0, 0.04)"
                     },
                     "modal": {
                       "bg": "#FFFFFF",
                       "closeBgHover": "rgba(0, 0, 0, 0.04)",
                       "closeColor": "#9C9C9C",
-                      "closeColorHover": "#1A1A1A",
-                      "color": "#1A1A1A",
+                      "closeColorHover": "var(--ds-color-text-primary)",
+                      "color": "var(--ds-color-text-primary)",
                       "footerBg": "#FAFAF9",
-                      "footerBorder": "#E5E5E3",
+                      "footerBorder": "var(--ds-color-border)",
                       "headerBg": "#FAFAF9",
-                      "headerBorder": "#E5E5E3",
+                      "headerBorder": "var(--ds-color-border)",
                       "overlayBg": "rgba(0, 0, 0, 0.48)",
                       "shadow": "0 12px 32px rgba(0, 0, 0, 0.10), 0 4px 12px rgba(0, 0, 0, 0.06)",
-                      "subtitleColor": "#6B6B6B",
-                      "titleColor": "#1A1A1A"
+                      "subtitleColor": "var(--ds-color-text-secondary)",
+                      "titleColor": "var(--ds-color-text-primary)"
                     },
                     "notification": {
                       "bg": "#FFFFFF",
                       "shadow": "0 4px 24px rgba(0, 0, 0, 0.10), 0 0 0 1px rgba(0, 0, 0, 0.04)",
-                      "titleColor": "#1A1A1A"
+                      "titleColor": "var(--ds-color-text-primary)"
                     },
                     "pagination": {
                       "activeColor": "#FFFFFF",
                       "itemBgHover": "#FAFAF9",
                       "itemColorActive": "#FFFFFF",
-                      "itemColorHover": "#1A1A1A"
+                      "itemColorHover": "var(--ds-color-text-primary)"
                     },
                     "popover": {
                       "bg": "#ffffff",
-                      "border": "#E5E5E3",
+                      "border": "var(--ds-color-border)",
                       "shadow": "0 4px 16px rgba(0, 0, 0, 0.08), 0 0 0 1px rgba(0, 0, 0, 0.04)",
-                      "titleBorder": "#E5E5E3",
+                      "titleBorder": "var(--ds-color-border)",
                       "titleColor": "#1A1A1A"
                     },
                     "progress": {
@@ -9395,8 +9395,8 @@
                     },
                     "result": {
                       "iconColor": "#FFFFFF",
-                      "subtitleColor": "#6B6B6B",
-                      "titleColor": "#1A1A1A"
+                      "subtitleColor": "var(--ds-color-text-secondary)",
+                      "titleColor": "var(--ds-color-text-primary)"
                     },
                     "search": {
                       "commandPalette": {
@@ -9417,7 +9417,7 @@
                       "border": "#E5E5E3",
                       "childPaddingInline": "initial",
                       "footerBg": "#F4F4F3",
-                      "groupColor": "#9C9C9C",
+                      "groupColor": "var(--ds-color-text-muted)",
                       "groupFontSize": "11px",
                       "groupLetterSpacing": "0.04em",
                       "groupMarginBottom": "4px",
@@ -9441,7 +9441,7 @@
                       "shellPaddingCollapsed": "initial",
                       "shellPaddingInline": "initial",
                       "text": "#1A1A1A",
-                      "textMuted": "#9C9C9C"
+                      "textMuted": "var(--ds-color-text-muted)"
                     },
                     "skeleton": {
                       "bg": "#EDEDEC",
@@ -9452,21 +9452,21 @@
                       "track": "#EDEDEC"
                     },
                     "statistic": {
-                      "valueColor": "#1A1A1A"
+                      "valueColor": "var(--ds-color-text-primary)"
                     },
                     "statsGrid": {
                       "cardBg": "#FFFFFF",
-                      "cardBorder": "#E5E5E3",
+                      "cardBorder": "var(--ds-color-border)",
                       "cardFilledBg": "#FAFAF9",
                       "cardGlassBg": "rgba(255, 255, 255, 0.70)",
                       "cardGlassBorder": "#E5E5E3",
-                      "descriptionColor": "#9C9C9C",
+                      "descriptionColor": "var(--ds-color-text-muted)",
                       "skeletonBg": "#EDEDEC",
                       "skeletonWaveGradient": "linear-gradient( 90deg, rgba(0, 0, 0, 0.03) 25%, rgba(0, 0, 0, 0.06) 37%, rgba(0, 0, 0, 0.03) 63% )",
                       "trendNegative": "#DC2626",
-                      "trendNeutral": "#9C9C9C",
+                      "trendNeutral": "var(--ds-color-text-muted)",
                       "trendPositive": "#16A34A",
-                      "valueColor": "#1A1A1A"
+                      "valueColor": "var(--ds-color-text-primary)"
                     },
                     "steps": {
                       "connectorColor": "#E5E5E3",
@@ -9489,7 +9489,7 @@
                       "bg": "#FFFFFF",
                       "border": "#E5E5E3",
                       "headerBg": "#FAFAF9",
-                      "headerColor": "#6B6B6B",
+                      "headerColor": "var(--ds-color-text-secondary)",
                       "loadingOverlayBg": "rgba(255, 255, 255, 0.7)",
                       "rowBg": "#FFFFFF",
                       "rowBgHover": "#FAFAF9",
@@ -9500,8 +9500,8 @@
                       "bgHover": "rgba(0, 0, 0, 0.02)",
                       "border": "#E5E5E3",
                       "color": "#9C9C9C",
-                      "colorActive": "#1A1A1A",
-                      "colorHover": "#1A1A1A"
+                      "colorActive": "var(--ds-color-text-primary)",
+                      "colorHover": "var(--ds-color-text-primary)"
                     },
                     "tag": {
                       "border": "#E5E5E3",
@@ -9525,7 +9525,7 @@
                       "lineColor": "#E5E5E3"
                     },
                     "tooltip": {
-                      "bg": "#1A1A1A",
+                      "bg": "var(--ds-color-text-primary)",
                       "color": "#FAFAF9",
                       "defaultBg": "#1A1A1A",
                       "defaultColor": "#FAFAF9",
@@ -9618,27 +9618,11 @@
                       },
                       "error": {
                         "50": "rgba(220, 38, 38, 0.06)",
-                        "100": "rgba(220, 38, 38, 0.10)",
-                        "200": "#FECACA",
-                        "300": "#FCA5A5",
-                        "400": "#F87171",
-                        "500": "#EF4444",
-                        "600": "#DC2626",
-                        "700": "#B91C1C",
-                        "800": "#991B1B",
-                        "900": "#7F1D1D"
+                        "100": "rgba(220, 38, 38, 0.10)"
                       },
                       "info": {
                         "50": "rgba(37, 99, 235, 0.06)",
-                        "100": "rgba(37, 99, 235, 0.10)",
-                        "200": "#BFDBFE",
-                        "300": "#93C5FD",
-                        "400": "#60A5FA",
-                        "500": "#3B82F6",
-                        "600": "#2563EB",
-                        "700": "#1D4ED8",
-                        "800": "#1E40AF",
-                        "900": "#1E3A8A"
+                        "100": "rgba(37, 99, 235, 0.10)"
                       },
                       "neutral": {
                         "50": "#FAFAF9",
@@ -9690,15 +9674,7 @@
                       },
                       "warning": {
                         "50": "rgba(217, 119, 6, 0.06)",
-                        "100": "rgba(217, 119, 6, 0.10)",
-                        "200": "#FDE68A",
-                        "300": "#FCD34D",
-                        "400": "#FBBF24",
-                        "500": "#F59E0B",
-                        "600": "#D97706",
-                        "700": "#B45309",
-                        "800": "#92400E",
-                        "900": "#78350F"
+                        "100": "rgba(217, 119, 6, 0.10)"
                       }
                     },
                     "secondaryColor": "#6B6B6B",
@@ -10730,7 +10706,7 @@
                 "primaryColor": "#0C0C0E"
               },
               "layout": {
-                "bg": "#0C0C0E",
+                "bg": "var(--ds-color-bg-primary)",
                 "dividerColor": "#2A2A2F",
                 "dividerTextColor": "#ECECEC",
                 "headerBackdrop": "blur(12px)",
@@ -10747,7 +10723,7 @@
                 "itemBgHover": "#222226",
                 "itemHoverBackgroundColor": "#222226",
                 "metaDescriptionColor": "#A0A0A5",
-                "secondaryTextColor": "#A0A0A5",
+                "secondaryTextColor": "var(--ds-sidebar-item-color)",
                 "skeletonBg": "#2A2A2F",
                 "splitColor": "#222226",
                 "textColor": "#ECECEC"
@@ -10973,7 +10949,7 @@
                 "bg": "#0C0C0E",
                 "border": "#2A2A2F",
                 "cellColor": "var(--ds-color-text)",
-                "cellFontSize": "var(--ds-text-body-size)",
+                "cellFontSize": "calc(var(--ds-text-body-size) * var(--ds-type-scale, 1))",
                 "cellPadding": "0.875rem 1rem",
                 "headerBg": "#131316",
                 "headerBlockSize": "calc(var(--ds-input-md-height) - 0.25rem)",
@@ -11136,7 +11112,7 @@
                   "breadcrumb": {
                     "color": "#9C9C9C",
                     "colorActive": "#1A1A1A",
-                    "colorHover": "#1A1A1A",
+                    "colorHover": "var(--ds-color-text-primary)",
                     "separatorColor": "#D4D4D2"
                   },
                   "calendar": {
@@ -11151,19 +11127,19 @@
                     "border": "#E5E5E3",
                     "borderAccentHover": "rgba(10, 10, 10, 0.16)",
                     "borderHover": "#D4D4D2",
-                    "color": "#1A1A1A",
+                    "color": "var(--ds-color-text-primary)",
                     "footerBg": "#FAFAF9",
                     "footerBorder": "#E5E5E3",
                     "headerBorder": "#E5E5E3",
                     "headerColor": "#1A1A1A",
-                    "imageLoadingActive": "#0A0A0A",
+                    "imageLoadingActive": "var(--ds-color-primary)",
                     "imageLoadingTrack": "#EDEDEC",
                     "imagePlaceholderBg": "#F4F4F3",
                     "imagePlaceholderColor": "#9C9C9C",
                     "shadow": "0 1px 2px rgba(0, 0, 0, 0.04), 0 1px 3px rgba(0, 0, 0, 0.02)",
                     "shadowElevated": "0 8px 24px rgba(0, 0, 0, 0.08), 0 4px 8px rgba(0, 0, 0, 0.04)",
                     "shadowHover": "0 4px 12px rgba(0, 0, 0, 0.06), 0 2px 4px rgba(0, 0, 0, 0.04)",
-                    "titleColor": "#1A1A1A"
+                    "titleColor": "var(--ds-color-text-primary)"
                   },
                   "collapse": {
                     "bg": "#FFFFFF",
@@ -11176,12 +11152,12 @@
                   "controls": {
                     "autocomplete": {
                       "bg": "#FFFFFF",
-                      "border": "#E5E5E3",
+                      "border": "var(--ds-color-border)",
                       "borderFocus": "rgba(10, 10, 10, 0.40)",
-                      "clearColor": "#9C9C9C",
+                      "clearColor": "var(--ds-color-text-muted)",
                       "dropdownBg": "#FFFFFF",
                       "dropdownShadow": "0 4px 16px rgba(0, 0, 0, 0.08), 0 0 0 1px rgba(0, 0, 0, 0.04)",
-                      "emptyColor": "#9C9C9C",
+                      "emptyColor": "var(--ds-color-text-muted)",
                       "errorBorder": "#DC2626",
                       "optionBgHover": "#FAFAF9"
                     },
@@ -11192,9 +11168,9 @@
                       "border": "#E5E5E3",
                       "borderActive": "#C4C4C2",
                       "borderHover": "#D4D4D2",
-                      "color": "#1A1A1A",
-                      "colorActive": "#1A1A1A",
-                      "colorHover": "#1A1A1A"
+                      "color": "var(--ds-color-text-primary)",
+                      "colorActive": "var(--ds-color-text-primary)",
+                      "colorHover": "var(--ds-color-text-primary)"
                     },
                     "buttonError": {
                       "bg": "#DC2626",
@@ -11208,7 +11184,7 @@
                       "border": "transparent",
                       "borderActive": "transparent",
                       "borderHover": "transparent",
-                      "colorHover": "#1A1A1A"
+                      "colorHover": "var(--ds-color-text-primary)"
                     },
                     "buttonInfo": {
                       "bg": "#2563EB",
@@ -11216,7 +11192,7 @@
                       "bgHover": "#1D4ED8"
                     },
                     "buttonLink": {
-                      "color": "#1A1A1A",
+                      "color": "var(--ds-color-text-primary)",
                       "colorActive": "#0A0A0A",
                       "colorHover": "#6B6B6B"
                     },
@@ -11231,15 +11207,15 @@
                       "bg": "#FFFFFF",
                       "bgActive": "#EDEDEC",
                       "bgHover": "#F4F4F3",
-                      "border": "#E5E5E3",
+                      "border": "var(--ds-color-border)",
                       "borderHover": "#D4D4D2",
-                      "color": "#1A1A1A"
+                      "color": "var(--ds-color-text-primary)"
                     },
                     "buttonText": {
                       "bg": "transparent",
                       "bgActive": "rgba(0, 0, 0, 0.08)",
                       "bgHover": "rgba(0, 0, 0, 0.04)",
-                      "colorHover": "#1A1A1A"
+                      "colorHover": "var(--ds-color-text-primary)"
                     },
                     "checkbox": {
                       "bg": "#FFFFFF",
@@ -11251,17 +11227,17 @@
                       "errorColor": "#DC2626",
                       "focusRing": "0 0 0 2px rgba(10, 10, 10, 0.12)",
                       "focusRingColor": "rgba(10, 10, 10, 0.08)",
-                      "labelColor": "#1A1A1A",
-                      "labelColorDisabled": "#C4C4C2"
+                      "labelColor": "var(--ds-color-text-primary)",
+                      "labelColorDisabled": "var(--ds-color-text-disabled)"
                     },
                     "datePicker": {
                       "bg": "#FFFFFF",
                       "bgDisabled": "#F4F4F3",
-                      "border": "#E5E5E3",
+                      "border": "var(--ds-color-border)",
                       "borderFocus": "rgba(10, 10, 10, 0.40)",
                       "borderHover": "#D4D4D2",
                       "clearColor": "#9C9C9C",
-                      "color": "#1A1A1A",
+                      "color": "var(--ds-color-text-primary)",
                       "errorBorder": "#DC2626",
                       "iconColor": "#9C9C9C",
                       "separatorColor": "#9C9C9C",
@@ -11269,14 +11245,14 @@
                     },
                     "disabled": {
                       "bg": "#F4F4F3",
-                      "border": "#E5E5E3",
+                      "border": "var(--ds-color-border)",
                       "borderColor": "#E5E5E3",
                       "text": "#A1A1AA"
                     },
                     "form": {
                       "errorColor": "#DC2626",
-                      "extraColor": "#9C9C9C",
-                      "helpColor": "#9C9C9C",
+                      "extraColor": "var(--ds-color-text-muted)",
+                      "helpColor": "var(--ds-color-text-muted)",
                       "requiredColor": "#DC2626",
                       "successColor": "#16A34A",
                       "warningColor": "#D97706"
@@ -11284,23 +11260,23 @@
                     "input": {
                       "addon": {
                         "bg": "#F4F4F3",
-                        "border": "#E5E5E3",
-                        "color": "#6B6B6B"
+                        "border": "var(--ds-color-border)",
+                        "color": "var(--ds-color-text-secondary)"
                       },
                       "bg": "#FFFFFF",
                       "bgDisabled": "#F4F4F3",
                       "bgFocus": "#FFFFFF",
                       "bgHover": "#FAFAF9",
-                      "border": "#E5E5E3",
-                      "borderDisabled": "#E5E5E3",
+                      "border": "var(--ds-color-border)",
+                      "borderDisabled": "var(--ds-color-border)",
                       "borderFocus": "rgba(10, 10, 10, 0.40)",
                       "borderHover": "#D4D4D2",
                       "clear": {
                         "color": "#9C9C9C"
                       },
-                      "color": "#1A1A1A",
+                      "color": "var(--ds-color-text-primary)",
                       "colorDisabled": "#A1A1AA",
-                      "colorPlaceholder": "#9C9C9C",
+                      "colorPlaceholder": "var(--ds-color-text-muted)",
                       "errorBorder": "#DC2626",
                       "errorColor": "#DC2626",
                       "errorShadowFocus": "0 0 0 2px rgba(220, 38, 38, 0.14)",
@@ -11318,14 +11294,14 @@
                     },
                     "inputNumber": {
                       "addonBg": "#F4F4F3",
-                      "addonBorder": "#E5E5E3",
-                      "addonColor": "#6B6B6B",
-                      "affixColor": "#9C9C9C",
+                      "addonBorder": "var(--ds-color-border)",
+                      "addonColor": "var(--ds-color-text-secondary)",
+                      "affixColor": "var(--ds-color-text-muted)",
                       "bg": "#FFFFFF",
                       "bgDisabled": "#F4F4F3",
-                      "border": "#E5E5E3",
+                      "border": "var(--ds-color-border)",
                       "borderFocus": "rgba(10, 10, 10, 0.40)",
-                      "color": "#1A1A1A",
+                      "color": "var(--ds-color-text-primary)",
                       "controlColor": "#9C9C9C",
                       "errorBorder": "#DC2626",
                       "shadowFocus": "0 0 0 2px rgba(10, 10, 10, 0.08)"
@@ -11336,13 +11312,13 @@
                       "border": "#D4D4D2",
                       "borderHover": "#A3A3A1",
                       "checkedBg": "#FFFFFF",
-                      "descriptionColor": "#9C9C9C",
+                      "descriptionColor": "var(--ds-color-text-muted)",
                       "errorBorder": "#DC2626",
                       "errorColor": "#DC2626",
                       "focusRing": "0 0 0 2px rgba(10, 10, 10, 0.12)",
                       "focusRingColor": "rgba(10, 10, 10, 0.08)",
                       "labelColor": "#1A1A1A",
-                      "labelColorDisabled": "#C4C4C2"
+                      "labelColorDisabled": "var(--ds-color-text-disabled)"
                     },
                     "rate": {
                       "color": "#EDEDEC"
@@ -11352,28 +11328,28 @@
                       "itemBg": "transparent",
                       "itemBgSelected": "#FFFFFF",
                       "itemColor": "#9C9C9C",
-                      "itemColorSelected": "#1A1A1A",
+                      "itemColorSelected": "var(--ds-color-text-primary)",
                       "shadow": "0 1px 2px rgba(0, 0, 0, 0.04)"
                     },
                     "select": {
-                      "arrowColor": "#9C9C9C",
+                      "arrowColor": "var(--ds-color-text-muted)",
                       "bg": "#FFFFFF",
                       "bgDisabled": "#F4F4F3",
-                      "border": "#E5E5E3",
+                      "border": "var(--ds-color-border)",
                       "borderFocus": "rgba(10, 10, 10, 0.40)",
                       "borderHover": "#D4D4D2",
                       "clearColor": "#9C9C9C",
-                      "color": "#1A1A1A",
-                      "colorDisabled": "#C4C4C2",
+                      "color": "var(--ds-color-text-primary)",
+                      "colorDisabled": "var(--ds-color-text-disabled)",
                       "colorPlaceholder": "#9C9C9C",
                       "dropdownBg": "#FFFFFF",
-                      "dropdownBorder": "#E5E5E3",
+                      "dropdownBorder": "var(--ds-color-border)",
                       "dropdownShadow": "0 4px 16px rgba(0, 0, 0, 0.08), 0 0 0 1px rgba(0, 0, 0, 0.04)",
                       "errorBorder": "#DC2626",
                       "filledBg": "#F4F4F3",
                       "optionBgHover": "#FAFAF9",
                       "optionBgSelected": "#F4F4F3",
-                      "optionColorDisabled": "#C4C4C2",
+                      "optionColorDisabled": "var(--ds-color-text-disabled)",
                       "optionColorSelected": "#1A1A1A",
                       "shadowFocus": "0 0 0 2px rgba(10, 10, 10, 0.08)",
                       "tagBg": "#F4F4F3"
@@ -11383,28 +11359,28 @@
                       "handleBgDisabled": "#F4F4F3",
                       "handleBorder": "#0A0A0A",
                       "handleShadow": "0 1px 3px rgba(0, 0, 0, 0.12)",
-                      "markColor": "#9C9C9C",
+                      "markColor": "var(--ds-color-text-muted)",
                       "railColor": "#E5E5E3",
-                      "trackColorDisabled": "#C4C4C2"
+                      "trackColorDisabled": "var(--ds-color-text-disabled)"
                     },
                     "switch": {
                       "bg": "#D4D4D2",
                       "bgHover": "#C4C4C2",
                       "checkedBgHover": "#2A2A2A",
                       "focusRing": "0 0 0 2px rgba(10, 10, 10, 0.12)",
-                      "labelColor": "#1A1A1A",
+                      "labelColor": "var(--ds-color-text-primary)",
                       "thumbBg": "#FFFFFF",
                       "thumbShadow": "0 1px 3px rgba(0, 0, 0, 0.10)"
                     },
                     "textarea": {
                       "bg": "#ffffff",
                       "bgDisabled": "#F4F4F3",
-                      "border": "#E5E5E3",
+                      "border": "var(--ds-color-border)",
                       "borderFocus": "rgba(10, 10, 10, 0.40)",
                       "borderHover": "#D4D4D2",
-                      "color": "#1A1A1A",
+                      "color": "var(--ds-color-text-primary)",
                       "colorPlaceholder": "#9C9C9C",
-                      "countColor": "#9C9C9C",
+                      "countColor": "var(--ds-color-text-muted)",
                       "errorBorder": "#DC2626",
                       "filledBg": "#F4F4F3",
                       "shadowFocus": "0 0 0 2px rgba(10, 10, 10, 0.08)"
@@ -11412,47 +11388,47 @@
                     "timePicker": {
                       "bg": "#FFFFFF",
                       "bgDisabled": "#F4F4F3",
-                      "border": "#E5E5E3",
+                      "border": "var(--ds-color-border)",
                       "borderFocus": "rgba(10, 10, 10, 0.40)",
                       "clearColor": "#9C9C9C",
-                      "color": "#1A1A1A",
+                      "color": "var(--ds-color-text-primary)",
                       "errorBorder": "#DC2626",
-                      "iconColor": "#9C9C9C",
-                      "separatorColor": "#9C9C9C",
+                      "iconColor": "var(--ds-color-text-muted)",
+                      "separatorColor": "var(--ds-color-text-muted)",
                       "shadowFocus": "0 0 0 2px rgba(10, 10, 10, 0.08)"
                     },
                     "toggle": {
-                      "descriptionColor": "#9C9C9C",
+                      "descriptionColor": "var(--ds-color-text-muted)",
                       "dotBg": "#FFFFFF",
                       "dotShadow": "0 1px 2px rgba(0, 0, 0, 0.10)",
                       "errorBg": "#DC2626",
                       "errorColor": "#DC2626",
                       "focusRing": "0 0 0 2px rgba(10, 10, 10, 0.12)",
                       "innerLabelColor": "#FFFFFF",
-                      "labelColor": "#1A1A1A",
+                      "labelColor": "var(--ds-color-text-primary)",
                       "successBg": "#16A34A",
                       "trackBg": "#D4D4D2",
                       "warningBg": "#D97706"
                     },
                     "transfer": {
                       "bg": "#FFFFFF",
-                      "border": "#E5E5E3",
+                      "border": "var(--ds-color-border)",
                       "headerBg": "#FAFAF9",
-                      "headerBorder": "#E5E5E3",
+                      "headerBorder": "var(--ds-color-border)",
                       "itemBgHover": "#FAFAF9"
                     },
                     "upload": {
                       "bg": "#FFFFFF",
-                      "border": "#E5E5E3",
+                      "border": "var(--ds-color-border)",
                       "borderHover": "#D4D4D2",
                       "buttonBg": "#FFFFFF",
-                      "buttonBorder": "#E5E5E3",
+                      "buttonBorder": "var(--ds-color-border)",
                       "cardBg": "#FAFAF9",
-                      "cardBorder": "#E5E5E3",
+                      "cardBorder": "var(--ds-color-border)",
                       "draggerBg": "#FAFAF9",
                       "draggerBgHover": "#F4F4F3",
-                      "draggerBorder": "#E5E5E3",
-                      "draggerIconColor": "#9C9C9C",
+                      "draggerBorder": "var(--ds-color-border)",
+                      "draggerIconColor": "var(--ds-color-text-muted)",
                       "errorBorder": "#DC2626",
                       "fileBg": "#FAFAF9",
                       "fileRemoveColor": "#DC2626",
@@ -11463,14 +11439,14 @@
                   },
                   "descriptions": {
                     "bg": "#FAFAF9",
-                    "border": "#E5E5E3",
-                    "contentColor": "#1A1A1A",
+                    "border": "var(--ds-color-border)",
+                    "contentColor": "var(--ds-color-text-primary)",
                     "labelColor": "#9C9C9C"
                   },
                   "drawer": {
                     "bg": "#FFFFFF",
-                    "footerBorder": "#E5E5E3",
-                    "headerBorder": "#E5E5E3",
+                    "footerBorder": "var(--ds-color-border)",
+                    "headerBorder": "var(--ds-color-border)",
                     "shadow": "0 12px 40px rgba(0, 0, 0, 0.12)",
                     "titleColor": "#1A1A1A"
                   },
@@ -11479,7 +11455,7 @@
                     "itemBgActive": "#F4F4F3",
                     "itemBgHover": "#FAFAF9",
                     "itemColorActive": "#1A1A1A",
-                    "itemColorHover": "#1A1A1A",
+                    "itemColorHover": "var(--ds-color-text-primary)",
                     "shadow": "0 4px 16px rgba(0, 0, 0, 0.08), 0 0 0 1px rgba(0, 0, 0, 0.04)"
                   },
                   "empty": {
@@ -11492,12 +11468,12 @@
                     "primaryColor": "#FFFFFF"
                   },
                   "layout": {
-                    "bg": "#FAFAF9",
+                    "bg": "var(--ds-color-bg-primary)",
                     "dividerColor": "#E5E5E3",
-                    "dividerTextColor": "#1A1A1A",
+                    "dividerTextColor": "var(--ds-color-text-primary)",
                     "headerBg": "rgba(250, 250, 249, 0.82)",
                     "headerBorder": "#E5E5E3",
-                    "siderBg": "#F4F4F3",
+                    "siderBg": "var(--ds-sidebar-bg)",
                     "siderBorder": "#E5E5E3"
                   },
                   "list": {
@@ -11511,13 +11487,13 @@
                     "secondaryTextColor": "var(--ds-color-neutral-500, #6b7280)",
                     "skeletonBg": "var(--ds-color-bg-tertiary)",
                     "splitColor": "#EDEDEC",
-                    "textColor": "#1A1A1A"
+                    "textColor": "var(--ds-color-text-primary)"
                   },
                   "liveFeed": {
                     "badgeColor": "#FFFFFF",
                     "bg": "#FFFFFF",
-                    "border": "#E5E5E3",
-                    "emptyColor": "#9C9C9C",
+                    "border": "var(--ds-color-border)",
+                    "emptyColor": "var(--ds-color-text-muted)",
                     "loadMoreColor": "#1A1A1A",
                     "newBg": "rgba(37, 99, 235, 0.06)",
                     "newBorder": "rgba(37, 99, 235, 0.20)",
@@ -11528,12 +11504,12 @@
                     "bg": "#FAFAF9",
                     "darkBg": "#0A0A0A",
                     "darkItemColor": "#A3A3A1",
-                    "dividerColor": "#E5E5E3",
-                    "groupTitleColor": "#9C9C9C",
+                    "dividerColor": "var(--ds-color-border)",
+                    "groupTitleColor": "var(--ds-color-text-muted)",
                     "itemBgActive": "rgba(0, 0, 0, 0.06)",
                     "itemBgHover": "rgba(0, 0, 0, 0.03)",
-                    "itemColorActive": "#1A1A1A",
-                    "itemColorHover": "#1A1A1A",
+                    "itemColorActive": "var(--ds-color-text-primary)",
+                    "itemColorHover": "var(--ds-color-text-primary)",
                     "itemDangerColor": "#DC2626",
                     "itemHoverBg": "rgba(0, 0, 0, 0.03)",
                     "itemSelectedBg": "rgba(0, 0, 0, 0.06)",
@@ -11543,40 +11519,40 @@
                   "message": {
                     "bg": "#FFFFFF",
                     "closeColor": "#9C9C9C",
-                    "closeColorHover": "#1A1A1A",
+                    "closeColorHover": "var(--ds-color-text-primary)",
                     "shadow": "0 4px 16px rgba(0, 0, 0, 0.08), 0 0 0 1px rgba(0, 0, 0, 0.04)"
                   },
                   "modal": {
                     "bg": "#FFFFFF",
                     "closeBgHover": "rgba(0, 0, 0, 0.04)",
                     "closeColor": "#9C9C9C",
-                    "closeColorHover": "#1A1A1A",
-                    "color": "#1A1A1A",
+                    "closeColorHover": "var(--ds-color-text-primary)",
+                    "color": "var(--ds-color-text-primary)",
                     "footerBg": "#FAFAF9",
-                    "footerBorder": "#E5E5E3",
+                    "footerBorder": "var(--ds-color-border)",
                     "headerBg": "#FAFAF9",
-                    "headerBorder": "#E5E5E3",
+                    "headerBorder": "var(--ds-color-border)",
                     "overlayBg": "rgba(0, 0, 0, 0.48)",
                     "shadow": "0 12px 32px rgba(0, 0, 0, 0.10), 0 4px 12px rgba(0, 0, 0, 0.06)",
-                    "subtitleColor": "#6B6B6B",
-                    "titleColor": "#1A1A1A"
+                    "subtitleColor": "var(--ds-color-text-secondary)",
+                    "titleColor": "var(--ds-color-text-primary)"
                   },
                   "notification": {
                     "bg": "#FFFFFF",
                     "shadow": "0 4px 24px rgba(0, 0, 0, 0.10), 0 0 0 1px rgba(0, 0, 0, 0.04)",
-                    "titleColor": "#1A1A1A"
+                    "titleColor": "var(--ds-color-text-primary)"
                   },
                   "pagination": {
                     "activeColor": "#FFFFFF",
                     "itemBgHover": "#FAFAF9",
                     "itemColorActive": "#FFFFFF",
-                    "itemColorHover": "#1A1A1A"
+                    "itemColorHover": "var(--ds-color-text-primary)"
                   },
                   "popover": {
                     "bg": "#ffffff",
-                    "border": "#E5E5E3",
+                    "border": "var(--ds-color-border)",
                     "shadow": "0 4px 16px rgba(0, 0, 0, 0.08), 0 0 0 1px rgba(0, 0, 0, 0.04)",
-                    "titleBorder": "#E5E5E3",
+                    "titleBorder": "var(--ds-color-border)",
                     "titleColor": "#1A1A1A"
                   },
                   "progress": {
@@ -11587,8 +11563,8 @@
                   },
                   "result": {
                     "iconColor": "#FFFFFF",
-                    "subtitleColor": "#6B6B6B",
-                    "titleColor": "#1A1A1A"
+                    "subtitleColor": "var(--ds-color-text-secondary)",
+                    "titleColor": "var(--ds-color-text-primary)"
                   },
                   "search": {
                     "commandPalette": {
@@ -11609,7 +11585,7 @@
                     "border": "#E5E5E3",
                     "childPaddingInline": "initial",
                     "footerBg": "#F4F4F3",
-                    "groupColor": "#9C9C9C",
+                    "groupColor": "var(--ds-color-text-muted)",
                     "groupFontSize": "11px",
                     "groupLetterSpacing": "0.04em",
                     "groupMarginBottom": "4px",
@@ -11633,7 +11609,7 @@
                     "shellPaddingCollapsed": "initial",
                     "shellPaddingInline": "initial",
                     "text": "#1A1A1A",
-                    "textMuted": "#9C9C9C"
+                    "textMuted": "var(--ds-color-text-muted)"
                   },
                   "skeleton": {
                     "bg": "#EDEDEC",
@@ -11644,21 +11620,21 @@
                     "track": "#EDEDEC"
                   },
                   "statistic": {
-                    "valueColor": "#1A1A1A"
+                    "valueColor": "var(--ds-color-text-primary)"
                   },
                   "statsGrid": {
                     "cardBg": "#FFFFFF",
-                    "cardBorder": "#E5E5E3",
+                    "cardBorder": "var(--ds-color-border)",
                     "cardFilledBg": "#FAFAF9",
                     "cardGlassBg": "rgba(255, 255, 255, 0.70)",
                     "cardGlassBorder": "#E5E5E3",
-                    "descriptionColor": "#9C9C9C",
+                    "descriptionColor": "var(--ds-color-text-muted)",
                     "skeletonBg": "#EDEDEC",
                     "skeletonWaveGradient": "linear-gradient( 90deg, rgba(0, 0, 0, 0.03) 25%, rgba(0, 0, 0, 0.06) 37%, rgba(0, 0, 0, 0.03) 63% )",
                     "trendNegative": "#DC2626",
-                    "trendNeutral": "#9C9C9C",
+                    "trendNeutral": "var(--ds-color-text-muted)",
                     "trendPositive": "#16A34A",
-                    "valueColor": "#1A1A1A"
+                    "valueColor": "var(--ds-color-text-primary)"
                   },
                   "steps": {
                     "connectorColor": "#E5E5E3",
@@ -11681,7 +11657,7 @@
                     "bg": "#FFFFFF",
                     "border": "#E5E5E3",
                     "headerBg": "#FAFAF9",
-                    "headerColor": "#6B6B6B",
+                    "headerColor": "var(--ds-color-text-secondary)",
                     "loadingOverlayBg": "rgba(255, 255, 255, 0.7)",
                     "rowBg": "#FFFFFF",
                     "rowBgHover": "#FAFAF9",
@@ -11692,8 +11668,8 @@
                     "bgHover": "rgba(0, 0, 0, 0.02)",
                     "border": "#E5E5E3",
                     "color": "#9C9C9C",
-                    "colorActive": "#1A1A1A",
-                    "colorHover": "#1A1A1A"
+                    "colorActive": "var(--ds-color-text-primary)",
+                    "colorHover": "var(--ds-color-text-primary)"
                   },
                   "tag": {
                     "border": "#E5E5E3",
@@ -11717,7 +11693,7 @@
                     "lineColor": "#E5E5E3"
                   },
                   "tooltip": {
-                    "bg": "#1A1A1A",
+                    "bg": "var(--ds-color-text-primary)",
                     "color": "#FAFAF9",
                     "defaultBg": "#1A1A1A",
                     "defaultColor": "#FAFAF9",
@@ -11810,27 +11786,11 @@
                     },
                     "error": {
                       "50": "rgba(220, 38, 38, 0.06)",
-                      "100": "rgba(220, 38, 38, 0.10)",
-                      "200": "#FECACA",
-                      "300": "#FCA5A5",
-                      "400": "#F87171",
-                      "500": "#EF4444",
-                      "600": "#DC2626",
-                      "700": "#B91C1C",
-                      "800": "#991B1B",
-                      "900": "#7F1D1D"
+                      "100": "rgba(220, 38, 38, 0.10)"
                     },
                     "info": {
                       "50": "rgba(37, 99, 235, 0.06)",
-                      "100": "rgba(37, 99, 235, 0.10)",
-                      "200": "#BFDBFE",
-                      "300": "#93C5FD",
-                      "400": "#60A5FA",
-                      "500": "#3B82F6",
-                      "600": "#2563EB",
-                      "700": "#1D4ED8",
-                      "800": "#1E40AF",
-                      "900": "#1E3A8A"
+                      "100": "rgba(37, 99, 235, 0.10)"
                     },
                     "neutral": {
                       "50": "#FAFAF9",
@@ -11882,15 +11842,7 @@
                     },
                     "warning": {
                       "50": "rgba(217, 119, 6, 0.06)",
-                      "100": "rgba(217, 119, 6, 0.10)",
-                      "200": "#FDE68A",
-                      "300": "#FCD34D",
-                      "400": "#FBBF24",
-                      "500": "#F59E0B",
-                      "600": "#D97706",
-                      "700": "#B45309",
-                      "800": "#92400E",
-                      "900": "#78350F"
+                      "100": "rgba(217, 119, 6, 0.10)"
                     }
                   },
                   "secondaryColor": "#6B6B6B",
@@ -12396,7 +12348,7 @@
     "bundleMode": "fresh",
     "bundles": {
       "rottay": {
-        "bytes": 5344349,
+        "bytes": 5350974,
         "distMatchesStyles": true,
         "freshnessNote": "Recomposed in memory from src/foundation/tokens/css with the formula in build-vertical-css.mjs. Omits the per-tenant --ds-motion-spring tail, which requires compiled BrandTheme modules under dist/.",
         "freshnessProven": true,
@@ -12406,7 +12358,7 @@
           "src/foundation/tokens/css/facade/artifacts/rottay/index.css"
         ],
         "mode": "fresh",
-        "sha256": "ece49e89a2e91c1ffef93ee8d45b0f1f26b66c52032495d7cb36121c7c66892b",
+        "sha256": "d796732f9b0a96533aef1a98bb95ded2b949eca9884b7c68deeb040780ea8885",
         "shippedDistDrift": {
           "identical": false,
           "meaning": "The shipped bundle is this exact text plus a trailing remainder — the expected shape, since `fresh` omits the per-tenant --ds-motion-spring tail. Whether that remainder is the sanctioned spring block is scripts/verticals/css-staleness-gate/index.mjs's question, not this harness's.",
@@ -12417,10 +12369,10 @@
       }
     },
     "sourceFreshness": {
-      "declaredDigest": "48681aaa2fe085e927325f0b1eaf085387867b879d56994dd278fdbe5a8e3abd",
-      "observedDigest": "48681aaa2fe085e927325f0b1eaf085387867b879d56994dd278fdbe5a8e3abd",
-      "postMeasurementDigest": "48681aaa2fe085e927325f0b1eaf085387867b879d56994dd278fdbe5a8e3abd",
-      "preMeasurementDigest": "48681aaa2fe085e927325f0b1eaf085387867b879d56994dd278fdbe5a8e3abd",
+      "declaredDigest": "0e8722e0d86e204264e06f71e16dcaa6937414af51a9ec26d17f3231cd17473b",
+      "observedDigest": "0e8722e0d86e204264e06f71e16dcaa6937414af51a9ec26d17f3231cd17473b",
+      "postMeasurementDigest": "0e8722e0d86e204264e06f71e16dcaa6937414af51a9ec26d17f3231cd17473b",
+      "preMeasurementDigest": "0e8722e0d86e204264e06f71e16dcaa6937414af51a9ec26d17f3231cd17473b",
       "sourceFiles": [
         "packages/core/dist/build-stamp.json",
         "packages/core/dist/infrastructure/compilers/kernel/runtime/brand-theme/index.js",
@@ -12460,33 +12412,33 @@
     "stylesheets": {
       "db-tenant-theme": {
         "rottay/dark/modern/both": {
-          "baseline": "ece49e89a2e91c1ffef93ee8d45b0f1f26b66c52032495d7cb36121c7c66892b",
-          "mutation": "f3c1996d0f7feafa2ad2f60d7b5ca2a543cca4b707904525cf4844b982adfd3a",
+          "baseline": "d796732f9b0a96533aef1a98bb95ded2b949eca9884b7c68deeb040780ea8885",
+          "mutation": "7c0845b26b237f99300d026b90d30755d742185df4ede272ba81d3287fd20b92",
           "mutationDifferedFromBaseline": true,
-          "removal": "ece49e89a2e91c1ffef93ee8d45b0f1f26b66c52032495d7cb36121c7c66892b",
+          "removal": "d796732f9b0a96533aef1a98bb95ded2b949eca9884b7c68deeb040780ea8885",
           "removalIsByteIdenticalToBaseline": true
         },
         "rottay/light/modern/both": {
-          "baseline": "ece49e89a2e91c1ffef93ee8d45b0f1f26b66c52032495d7cb36121c7c66892b",
-          "mutation": "f3c1996d0f7feafa2ad2f60d7b5ca2a543cca4b707904525cf4844b982adfd3a",
+          "baseline": "d796732f9b0a96533aef1a98bb95ded2b949eca9884b7c68deeb040780ea8885",
+          "mutation": "7c0845b26b237f99300d026b90d30755d742185df4ede272ba81d3287fd20b92",
           "mutationDifferedFromBaseline": true,
-          "removal": "ece49e89a2e91c1ffef93ee8d45b0f1f26b66c52032495d7cb36121c7c66892b",
+          "removal": "d796732f9b0a96533aef1a98bb95ded2b949eca9884b7c68deeb040780ea8885",
           "removalIsByteIdenticalToBaseline": true
         }
       },
       "static-brand-theme": {
         "rottay/dark/modern/both": {
-          "baseline": "ece49e89a2e91c1ffef93ee8d45b0f1f26b66c52032495d7cb36121c7c66892b",
-          "mutation": "6ada2fa5809a443891c95f3bf76405ea093d9bf9dea584b857ec02ae09187f64",
+          "baseline": "d796732f9b0a96533aef1a98bb95ded2b949eca9884b7c68deeb040780ea8885",
+          "mutation": "0a208db35b23e8a503227934175c1aee30a7e712a7ba74bb09e1cda57beb4a78",
           "mutationDifferedFromBaseline": true,
-          "removal": "ece49e89a2e91c1ffef93ee8d45b0f1f26b66c52032495d7cb36121c7c66892b",
+          "removal": "d796732f9b0a96533aef1a98bb95ded2b949eca9884b7c68deeb040780ea8885",
           "removalIsByteIdenticalToBaseline": true
         },
         "rottay/light/modern/both": {
-          "baseline": "ece49e89a2e91c1ffef93ee8d45b0f1f26b66c52032495d7cb36121c7c66892b",
-          "mutation": "6ada2fa5809a443891c95f3bf76405ea093d9bf9dea584b857ec02ae09187f64",
+          "baseline": "d796732f9b0a96533aef1a98bb95ded2b949eca9884b7c68deeb040780ea8885",
+          "mutation": "0a208db35b23e8a503227934175c1aee30a7e712a7ba74bb09e1cda57beb4a78",
           "mutationDifferedFromBaseline": true,
-          "removal": "ece49e89a2e91c1ffef93ee8d45b0f1f26b66c52032495d7cb36121c7c66892b",
+          "removal": "d796732f9b0a96533aef1a98bb95ded2b949eca9884b7c68deeb040780ea8885",
           "removalIsByteIdenticalToBaseline": true
         }
       }

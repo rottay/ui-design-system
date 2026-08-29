@@ -181,7 +181,8 @@
       "surfaces.elevation-posture",
       "surfaces.effect-intensity",
       "navigation.sidebar-tone",
-      "experience.profile"
+      "experience.profile",
+      "palette.status-seeds"
     ],
     "frontierCandidate": {
       "id": "palette.status-seeds",

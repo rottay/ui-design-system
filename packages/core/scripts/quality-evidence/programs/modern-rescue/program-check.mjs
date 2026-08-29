@@ -22,6 +22,7 @@ import { validateCustomizationManifest } from '../../../../manifest/generator/in
 import { DOMAIN_KINDS, validateCascadeRoot, validateCascadeSet } from '../../../../manifest/rules/index.mjs';
 import { repoRoot as findRepoRoot } from '../../../lib/repo-root/index.mjs';
 import { validateInventory } from './cascade-consumability.mjs';
+import { parseRegistry as parseCapabilityRegistry } from '../../../tokens/customization-surface-census/index.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -147,6 +148,72 @@ const SHADOW_STATE_KEYS = new Set([
   'done',
 ]);
 
+// The live capability registry: the only operational product-control
+// authority. Decision 32 (derived denominators, never hand-pinned) applies to
+// the Standard tier exactly as it applies to the family denominator, so the
+// baseline is READ from this file instead of typed into the constitution.
+const CAPABILITY_REGISTRY_PATH =
+  'packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts';
+
+/**
+ * Snapshot of the Standard tier AS THE SOURCE DECLARES IT.
+ *
+ * The predicate is the registry's own: `tier === 'standard' && status ===
+ * 'active'` is literally how `TENANT_STANDARD_MANIFEST` is built, so this
+ * cannot drift into a second definition of what Standard means. The reader is
+ * the census's `parseRegistry()` (TypeScript AST, no build dependency, already
+ * the reader behind the blocking `customization-capability-consumers` gate):
+ * one source, one parser, rather than a second one invented here.
+ *
+ * Only ids travel into the contracts bag. The registry rows carry a `status`
+ * field and that bag is swept for shadow-state keys, so the rows themselves
+ * must not enter it.
+ *
+ * Fails closed in every direction: a missing file, a throwing parse or an
+ * empty row set produce `readable: false`, and the caller must block instead
+ * of falling back to a number.
+ */
+function readCapabilityRegistrySnapshot() {
+  const unreadable = (reason) => ({
+    source: CAPABILITY_REGISTRY_PATH,
+    readable: false,
+    reason,
+    standardActiveIds: [],
+  });
+  if (!existsSync(join(repoRoot, CAPABILITY_REGISTRY_PATH))) {
+    return unreadable('the file does not exist');
+  }
+  try {
+    const rows = parseCapabilityRegistry();
+    if (!Array.isArray(rows) || rows.length === 0) {
+      return unreadable('the registry parsed to zero capability rows');
+    }
+    return {
+      source: CAPABILITY_REGISTRY_PATH,
+      readable: true,
+      reason: null,
+      standardActiveIds: rows
+        .filter((row) => row.tier === 'standard' && row.status === 'active')
+        .map((row) => row.id),
+    };
+  } catch (error) {
+    return unreadable(error.message);
+  }
+}
+
+/**
+ * The active Standard ids the source declares, or `null` when the registry
+ * could not be read. `null` never means "assume the old number": every caller
+ * either blocks or skips a comparison that the registry-unreadable failure
+ * already reports.
+ */
+function standardTruth(contracts) {
+  const snapshot = contracts?.capabilityRegistry;
+  const ids = snapshot?.standardActiveIds;
+  if (snapshot?.readable !== true || !Array.isArray(ids)) return null;
+  return ids;
+}
+
 export function readModernRescueContracts({ root = PROGRAM_ROOT } = {}) {
   const contracts = loadProgramContracts({ root, fresh: true });
   const checkpointPath = join(root, 'checkpoint.intent.json');
@@ -155,6 +222,7 @@ export function readModernRescueContracts({ root = PROGRAM_ROOT } = {}) {
   } catch {
     contracts.checkpoint = null;
   }
+  contracts.capabilityRegistry = readCapabilityRegistrySnapshot();
   return contracts;
 }
 
@@ -180,7 +248,7 @@ function readJson(rel) {
 // T-1 constitutional textual checks
 // ---------------------------------------------------------------------------
 
-function collectTextualFailures() {
+function collectTextualFailures(contracts) {
   const failures = [];
 
   // 1. Files exist
@@ -248,7 +316,11 @@ function collectTextualFailures() {
     failures.push('README.md must contain a ## Binding constitution section');
   }
   const requiredBindingTopics = [
-    '13 Standard',
+    // Not "13 Standard": the Standard size is derived from the capability
+    // registry, so the binding section must name the AUTHORITY, not a count.
+    // A literal here was itself a hand-pinned denominator (decision 32) and it
+    // kept the constitution green while the registry already said otherwise.
+    'capability registry',
     '7 Pro',
     'PROPOSED_NOT_IMPLEMENTED',
     '294-entry exact allowlist',
@@ -261,6 +333,24 @@ function collectTextualFailures() {
   for (const topic of requiredBindingTopics) {
     if (!readmeText.toLowerCase().includes(topic.toLowerCase())) {
       failures.push(`README.md binding section must mention: ${topic}`);
+    }
+  }
+
+  // Prose may DESCRIBE the Standard set; it may not PIN its size. Dropping the
+  // '13 Standard' topic above removes the requirement to write a number, and
+  // this guard removes the freedom to write a wrong one: any "<n> Standard
+  // control(s)" in the README must equal what the registry declares today.
+  // (The target-taxonomy phrasing "9 Standard + 7 Pro" is deliberately not
+  // matched: that is a proposed model, not the operational count.)
+  const readmeStandardIds = standardTruth(contracts);
+  if (readmeStandardIds) {
+    for (const match of readmeText.matchAll(/(\d+)\s+Standard\s+controls?\b/giu)) {
+      if (Number(match[1]) !== readmeStandardIds.length) {
+        failures.push(
+          `README.md pins ${JSON.stringify(match[0])} but the live capability registry declares ` +
+            `${readmeStandardIds.length} active Standard controls; the Standard count is derived, not typed`,
+        );
+      }
     }
   }
 
@@ -623,6 +713,21 @@ function collectContractFailures(contracts) {
 
   const { program, customization: model, orchestration, evidence } = contracts;
 
+  // THE THIRD TERM. Both constitution files below are checked against the live
+  // capability registry, never against each other alone and never against a
+  // literal. Two files that agree with each other prove nothing: that is
+  // exactly the shape the drift took -- program.json 13, standard.current 13
+  // lines long, registry 14 -- and the JSON<->JSON cross-check further down
+  // stayed green through all of it.
+  const standardIds = standardTruth(contracts);
+  if (!standardIds) {
+    failures.push(
+      `capability registry ${contracts?.capabilityRegistry?.source ?? CAPABILITY_REGISTRY_PATH} could not be ` +
+        `read as the Standard authority (${contracts?.capabilityRegistry?.reason ?? 'no snapshot'}): the ` +
+        'Standard baseline is derived from it and must never fall back to a pinned number',
+    );
+  }
+
   // program.json identity and denominators
   if (program) {
     if (program.r7Enabled !== false) {
@@ -634,8 +739,12 @@ function collectContractFailures(contracts) {
     if (program.denominators?.visibleFamilies !== 255) {
       failures.push('program.json visibleFamilies must be 255');
     }
-    if (program.controlBaselines?.standard !== 13) {
-      failures.push('program.json standard controls must be 13');
+    if (standardIds && program.controlBaselines?.standard !== standardIds.length) {
+      failures.push(
+        'program.json standard controls must equal the live capability registry: the registry declares ' +
+          `${standardIds.length} active Standard controls, program.json says ` +
+          `${JSON.stringify(program.controlBaselines?.standard ?? null)}`,
+      );
     }
     if (program.controlBaselines?.proCapabilities !== 7) {
       failures.push('program.json pro capabilities must be 7');
@@ -690,8 +799,25 @@ function collectContractFailures(contracts) {
     if (model.targetControlModel?.implementationState !== 'PROPOSED_NOT_IMPLEMENTED') {
       failures.push('customization-model.json targetControlModel must be PROPOSED_NOT_IMPLEMENTED');
     }
-    if (model.standard?.current?.length !== 13) {
-      failures.push('customization-model.json standard.current must contain exactly 13 controls');
+    if (standardIds) {
+      if (model.standard?.current?.length !== standardIds.length) {
+        failures.push(
+          `customization-model.json standard.current must list exactly the ${standardIds.length} active ` +
+            'Standard controls of the live capability registry, got ' +
+            `${model.standard?.current?.length ?? 0}`,
+        );
+      }
+      // Membership, not only size: a swapped id keeps the length honest and
+      // the roster wrong, which is how a tier swap hides behind a count.
+      const declared = new Set(model.standard?.current ?? []);
+      const missing = standardIds.filter((id) => !declared.has(id));
+      const foreign = [...declared].filter((id) => !standardIds.includes(id));
+      if (missing.length > 0 || foreign.length > 0) {
+        failures.push(
+          'customization-model.json standard.current does not match the live capability registry membership: ' +
+            `missing ${JSON.stringify(missing)}, not active Standard ${JSON.stringify(foreign)}`,
+        );
+      }
     }
     if (model.pro?.capabilities?.length !== 7) {
       failures.push('customization-model.json pro.capabilities must contain exactly 7 capabilities');
@@ -1267,8 +1393,15 @@ function collectHistoricalContractFailures(contracts) {
     errors.push('CSS ownership and tenant authority must remain binary contracts');
   }
 
-  if (customization?.standard?.current?.length !== 13) {
-    errors.push('customization Standard baseline must contain 13 controls');
+  const historicalStandardIds = standardTruth(contracts);
+  if (
+    historicalStandardIds &&
+    customization?.standard?.current?.length !== historicalStandardIds.length
+  ) {
+    errors.push(
+      'customization Standard baseline must contain the ' +
+        `${historicalStandardIds.length} controls the live capability registry declares active`,
+    );
   }
   if (customization?.pro?.capabilities?.length !== 7) {
     errors.push('customization Pro baseline must contain 7 capabilities');
@@ -1841,7 +1974,7 @@ export function validateModernRescueContracts(
 ) {
   const failures = [];
 
-  failures.push(...collectTextualFailures());
+  failures.push(...collectTextualFailures(contracts));
   failures.push(...collectContractFailures(contracts));
   failures.push(...collectHistoricalContractFailures(contracts));
 

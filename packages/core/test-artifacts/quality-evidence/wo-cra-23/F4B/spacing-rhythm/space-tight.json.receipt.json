@@ -1,11 +1,11 @@
 {
   "schemaVersion": 2,
-  "roundId": "R2",
+  "roundId": "R6",
   "familyId": "primitive/layout/space",
   "scenarioId": "spacing.rhythm/tight/static-and-db",
   "evidenceKind": "static-db-computed-parity",
   "commandOrTool": "node src/tooling/resolution-probe/public/cli/index.mjs causal",
-  "toolVersion": "resolution-probe@cc010704a6aa",
+  "toolVersion": "resolution-probe@fe0cd6c5e27b",
   "exitCode": 0,
   "sourceFiles": [
     "packages/core/dist/build-stamp.json",
@@ -58,10 +58,10 @@
     "packages/core/src/ui/primitives/tests/EmbeddedCssRecovery.contract.test.ts",
     "packages/showroom/e2e/whitelabel/density-authority-matrix.spec.ts"
   ],
-  "sourceDigest": "44ed3c7bb10f914c84d80fdf0cb1919a6a7be6ef6b0fae48714fe2beca4246d6",
+  "sourceDigest": "975812e921b4eb023617de5ff3a8ad12f710b0186ca761fe0f03b8962e753c66",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/spacing-rhythm/space-tight.json",
-  "artifactSha256": "5594885c7974b56fc619fbb8d68ac562b9c7e24b0b2e6b7689af7da5466d939b",
-  "createdAt": "2026-08-28T06:23:29.114Z",
+  "artifactSha256": "3c516b919e95e2e868a5f50ffc6ea84064e52c275116f586300071a7f830865d",
+  "createdAt": "2026-08-29T02:35:36.200Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

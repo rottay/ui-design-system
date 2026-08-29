@@ -2455,6 +2455,24 @@
       }
     },
     {
+      "controlId": "palette.status-seeds",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "sin socket propio / consumo neutro: runtime/engines/{modern,rustic}/skin/empty-state.css, presentation/components/skin/empty-state-surface.css y los 3 engines no leen ningun canal --ds-color-{success,warning,error,info}*.",
+        "reasons": [
+          {
+            "root": "palette.status-seeds",
+            "why": "cero lecturas de --ds-color-{success,warning,error,info}* en runtime/engines/{modern,rustic}/skin/empty-state.css, presentation/components/skin/empty-state-surface.css y ui/patterns/feedback/empty-state/** (prueba negativa cuadruple); prueba negativa verificada barriendo los 3 engines (classic/modern/rustic)."
+          }
+        ]
+      }
+    },
+    {
       "controlId": "profiles.icon",
       "disposition": "UNKNOWN",
       "verificationState": "UNKNOWN",

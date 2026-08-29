@@ -6942,6 +6942,40 @@
       }
     },
     {
+      "controlId": "palette.status-seeds",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "reviewedFrom": "anatomy",
+        "bindings": [
+          {
+            "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/step-wizard.css",
+            "channels": [
+              "--ds-color-error"
+            ],
+            "sourceBindings": [
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/step-wizard.css"
+            ]
+          },
+          {
+            "producer": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/step-wizard.css",
+            "channels": [
+              "--ds-color-error-300",
+              "--ds-color-error-50",
+              "--ds-color-error-700"
+            ],
+            "sourceBindings": [
+              "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/step-wizard.css"
+            ]
+          }
+        ]
+      }
+    },
+    {
       "controlId": "profiles.icon",
       "disposition": "UNKNOWN",
       "verificationState": "UNKNOWN",

@@ -529,16 +529,52 @@ test("implementer succession fails closed", () => {
   );
 });
 
-test("Standard14 and Pro drift fail closed", () => {
+test("Standard and Pro drift fail closed", () => {
+  // The Standard baseline is DERIVED from the live capability registry
+  // (decision 32), so the mutants move each contract away from the registry
+  // instead of away from a literal. Reading the count from the snapshot is the
+  // point: a number typed here would re-pin what the packet un-pinned.
+  const registryStandard = baseline.capabilityRegistry.standardActiveIds.length;
   expectError(
-    mutated((copy) => { copy.program.controlBaselines.standard = 14; }),
-    "standard controls must be 13",
-    "program.json standard=14 must be rejected"
+    mutated((copy) => { copy.program.controlBaselines.standard = registryStandard + 1; }),
+    "program.json standard controls must equal the live capability registry",
+    "a program.json baseline above the registry must be rejected"
+  );
+  expectError(
+    mutated((copy) => { copy.program.controlBaselines.standard = registryStandard - 1; }),
+    "program.json standard controls must equal the live capability registry",
+    "a program.json baseline below the registry must be rejected"
   );
   expectError(
     mutated((copy) => { copy.customization.standard.current.push("global.magic"); }),
-    "standard.current must contain exactly 13 controls",
-    "14th standard control must be rejected"
+    "standard.current must list exactly the",
+    "an extra standard control must be rejected"
+  );
+  expectError(
+    mutated((copy) => { copy.customization.standard.current.push("global.magic"); }),
+    "does not match the live capability registry membership",
+    "an id the registry never declared Standard must be rejected by name, not only by count"
+  );
+  // Membership, not only size: swapping one id keeps the length honest and the
+  // roster wrong.
+  expectError(
+    mutated((copy) => { copy.customization.standard.current[0] = "global.magic"; }),
+    "does not match the live capability registry membership",
+    "a swapped standard id must be rejected even though the count still matches"
+  );
+  // Fail-closed: an authority that cannot be read is not permission to keep
+  // the last number anybody typed.
+  expectError(
+    mutated((copy) => {
+      copy.capabilityRegistry = {
+        source: "packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts",
+        readable: false,
+        reason: "planted",
+        standardActiveIds: [],
+      };
+    }),
+    "could not be read as the Standard authority",
+    "an unreadable capability registry must block instead of falling back to a pinned number"
   );
   expectError(
     mutated((copy) => { copy.program.controlBaselines.proCapabilities = 8; }),
@@ -550,6 +586,95 @@ test("Standard14 and Pro drift fail closed", () => {
     "pro.capabilities must contain exactly 7 capabilities",
     "8th pro capability must be rejected"
   );
+});
+
+/*
+ * ANTI-COLUSION. The two constitution files can agree with each other and both
+ * be wrong -- that is not a hypothesis, it is what happened: `palette.status-
+ * seeds` opened as Standard in the registry (P0, 2026-08-28) while
+ * program.json said 13 and standard.current listed 13 ids, and every
+ * JSON<->JSON check stayed green. These two mutants pin both directions of the
+ * disagreement, and the second one asserts that the cross-check is BLIND to it
+ * -- which is precisely why the registry has to be a third, independent term.
+ */
+test("Standard collusion between the two contracts fails closed", () => {
+  // (a) both files raised together, source one behind. Agreement between two
+  //     documents is not evidence about the source.
+  const raisedTogether = mutated((copy) => {
+    copy.capabilityRegistry.standardActiveIds =
+      copy.capabilityRegistry.standardActiveIds.slice(0, -1);
+  });
+  expectError(
+    raisedTogether,
+    "program.json standard controls must equal the live capability registry",
+    "a baseline both files share but the registry contradicts must be rejected"
+  );
+  expectError(
+    raisedTogether,
+    "standard.current must list exactly the",
+    "the roster both files share but the registry contradicts must be rejected"
+  );
+
+  // (b) source ahead of both files: the real drift of 2026-08-28, reproduced
+  //     without naming a number -- drop whatever the registry declared last.
+  const bothBehind = mutated((copy) => {
+    const dropped = copy.capabilityRegistry.standardActiveIds.at(-1);
+    copy.program.controlBaselines.standard =
+      copy.capabilityRegistry.standardActiveIds.length - 1;
+    copy.customization.standard.current = copy.customization.standard.current.filter(
+      (id) => id !== dropped
+    );
+  });
+  expectError(
+    bothBehind,
+    "program.json standard controls must equal the live capability registry",
+    "program.json trailing the registry must be rejected even when the model agrees with it"
+  );
+  expectError(
+    bothBehind,
+    "standard.current must list exactly the",
+    "standard.current trailing the registry must be rejected even when program.json agrees with it"
+  );
+  expectError(
+    bothBehind,
+    "does not match the live capability registry membership",
+    "the missing control must be named, not merely counted"
+  );
+  assert.ok(
+    !bothBehind.some((error) =>
+      error.includes("standard baseline must equal customization-model.json")
+    ),
+    `the JSON<->JSON cross-check cannot see this drift -- that is exactly why the registry is the third term; got ${JSON.stringify(bothBehind.filter((error) => error.includes("standard")))}`
+  );
+});
+
+test("a hand-pinned Standard count in the README fails closed", () => {
+  const target = join(programRoot, "README.md");
+  const original = readFileSync(target, "utf8");
+  const count = baseline.capabilityRegistry.standardActiveIds.length;
+  const plant = (n) =>
+    original.replace(
+      "## Binding constitution",
+      `## Binding constitution\n\nOperational product truth is exactly ${n} Standard controls.\n`
+    );
+  try {
+    writeFileSync(target, plant(count - 1));
+    expectError(
+      validateModernRescueContracts(baseline, { includeManifestGate: false }),
+      "the Standard count is derived, not typed",
+      "re-pinning a wrong Standard count in prose must be rejected"
+    );
+    // CONTROL: the guard bites on DISAGREEMENT, not on the word "Standard" --
+    // otherwise it would forbid the README from describing its own subject.
+    writeFileSync(target, plant(count));
+    const agreeing = validateModernRescueContracts(baseline, { includeManifestGate: false });
+    assert.ok(
+      !agreeing.some((error) => error.includes("the Standard count is derived, not typed")),
+      `a count that agrees with the registry is not a finding; got ${JSON.stringify(agreeing.filter((error) => error.includes("Standard")))}`
+    );
+  } finally {
+    writeFileSync(target, original);
+  }
 });
 
 test("--_ds namespace loss fails closed", () => {
@@ -759,9 +884,12 @@ test("double-accept does not authorize commit or R7", () => {
 });
 
 test("cross-contract control baselines stay consistent", () => {
+  // program.json stays exactly on the derived count and only the model moves,
+  // so this drill isolates the JSON<->JSON term: the number is read from the
+  // registry snapshot rather than typed, or the mutant would re-pin 13.
   expectError(
     mutated((copy) => {
-      copy.program.controlBaselines.standard = 13;
+      copy.program.controlBaselines.standard = copy.capabilityRegistry.standardActiveIds.length;
       copy.customization.standard.current = copy.customization.standard.current.slice(1);
     }),
     "standard baseline must equal",
@@ -1267,6 +1395,12 @@ test("an empty internalChannels list does not govern by itself", () => {
 });
 
 test("a walk that misses cells fails, instead of reporting zero bare ones", () => {
+  // Derived, never pinned (owner decision 32): the expected counts come from
+  // the same manifest index the gate reads, minus the one cell the mutant
+  // removes below.
+  const declared = JSON.parse(
+    readFileSync(join(manifestRoot, "index.json"), "utf8")
+  ).denominators.controlFamilyCells;
   withFamily(
     "primitive/inputs/form.json",
     (doc) => {
@@ -1275,7 +1409,7 @@ test("a walk that misses cells fails, instead of reporting zero bare ones", () =
     (errors) =>
       expectError(
         errors,
-        "the walk saw 5099 cells but manifest/index.json declares 5100",
+        `the walk saw ${declared - 1} cells but manifest/index.json declares ${declared}`,
         "un recorrido que pierde celdas no puede parecer un arbol limpio"
       )
   );

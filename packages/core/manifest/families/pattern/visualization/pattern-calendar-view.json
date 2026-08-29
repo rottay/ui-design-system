@@ -4936,6 +4936,18 @@
       }
     },
     {
+      "controlId": "palette.status-seeds",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "cero lecturas de --ds-color-{success,warning,error,info}* en runtime/engines/{modern,rustic}/skin/pattern-calendar-view.css ni en ui/patterns/visualization/calendar-view/** (los 3 engines); prueba negativa verificada."
+      }
+    },
+    {
       "controlId": "profiles.icon",
       "disposition": "UNKNOWN",
       "verificationState": "UNKNOWN",

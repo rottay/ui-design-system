@@ -154,7 +154,7 @@ function controlPath(controlId) {
   return join(CONTROLS_ROOT, `${controlId}.json`);
 }
 
-function activePublicControls() {
+export function activePublicControls() {
   return parseRegistry().filter(
     (entry) => entry.status === 'active' && ACTIVE_PUBLIC_TIERS.has(entry.tier),
   );
@@ -842,11 +842,32 @@ export function validateCustomizationManifest() {
   const groupIds = groups.map(({ value }) => value.groupId);
   if (new Set(groupIds).size !== groupIds.length) errors.push('recipe group ids must be unique');
 
-  if (controls.filter((entry) => entry.tier === 'standard').length !== 13) {
-    errors.push('active Standard control denominator must remain 13');
-  }
-  if (controls.filter((entry) => entry.tier === 'pro').length !== 7) {
-    errors.push('active Pro capability denominator must remain 7');
+  /* RE-ANCLA P0 (2026-08-28): la ley es derivacion, nunca un pin (decision 32
+   * del owner, docs/ROADMAP-EJECUCION-2026-08-19.md:722-726). Este bloque
+   * pineaba primero 13 y despues 14 cuando `palette.status-seeds` abrio la
+   * ultima fila `frontier` del registro a tier Standard -- y la proxima
+   * apertura hubiera vuelto a dejar un numero escrito a mano quedarse atras.
+   * La invariante de abajo no nombra ninguna cifra: exige que el denominador ya
+   * escrito en manifest/index.json siga de acuerdo con el mismo registry TS que
+   * `activePublicControls()` deriva mas arriba, para standard, pro y la
+   * superficie control x familia. */
+  if (existsSync(INDEX_PATH)) {
+    const writtenDenominators = readJson(INDEX_PATH).denominators;
+    if (
+      writtenDenominators.activeStandardControls !==
+      controls.filter((entry) => entry.tier === 'standard').length
+    ) {
+      errors.push('active Standard control denominator drifted from the registry (run generator/index.mjs --write)');
+    }
+    if (
+      writtenDenominators.activeProCapabilities !==
+      controls.filter((entry) => entry.tier === 'pro').length
+    ) {
+      errors.push('active Pro capability denominator drifted from the registry (run generator/index.mjs --write)');
+    }
+    if (writtenDenominators.controlFamilyCells !== controls.length * inventory.rows.length) {
+      errors.push('control x family cell denominator drifted from controls x inventory (run generator/index.mjs --write)');
+    }
   }
   // The denominator is read from the program contract rather than restated here, so a
   // recount lands in one place. It was hardcoded twice (here and in program-check), which

@@ -1,11 +1,11 @@
 {
   "schemaVersion": 2,
-  "roundId": "R7",
+  "roundId": "R6",
   "familyId": "primitive/inputs/button",
   "scenarioId": "palette.seeds/crimson/evnto/static-and-db",
   "evidenceKind": "static-db-computed-parity",
   "commandOrTool": "node src/tooling/resolution-probe/public/cli/index.mjs causal",
-  "toolVersion": "resolution-probe@cc010704a6aa",
+  "toolVersion": "resolution-probe@fe0cd6c5e27b",
   "exitCode": 0,
   "sourceFiles": [
     "packages/core/dist/build-stamp.json",
@@ -66,10 +66,10 @@
     "packages/core/styles/index.css",
     "packages/core/styles/rottay.css"
   ],
-  "sourceDigest": "f19a3d600cf2957df1cdb27f7a90f5b7045ac6455056a38500614e08d29406bb",
+  "sourceDigest": "7008e22f6788a941b5237cd7c1a284689cc46e2f526878bbad7a1ca2a4122864",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/palette-seeds/evnto-crimson.json",
-  "artifactSha256": "9290612ee01ded4d5142cd37a3b7c18cbdab0cf284002cb766634c6885f768fa",
-  "createdAt": "2026-08-28T06:23:29.114Z",
+  "artifactSha256": "18fd012993d07c38aa3745e0134ea35da946a52a064339b35942197b16275a97",
+  "createdAt": "2026-08-29T18:12:41.245Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

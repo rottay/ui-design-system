@@ -1425,7 +1425,11 @@ test('T-14 the frozen counters survive this tranche untouched', () => {
   // C-02b (2026-08-27): +1 en producerSites/channelEmissions/distinctChannels = la seed nueva declarada --ds-textarea-clear-offset (el offset dej de vivir como fallback duplicado y gana su sitio de declaracion; la clearance deriva de la geometria del boton) => 4873 / 10312 / 4586
   assert.equal(out.stats.channelEmissions, 10312);
   assert.equal(out.stats.distinctChannels, 4586);
-  assert.equal(out.stats.emissionsWithCausalRoot, 186);
+  // P0 (2026-08-28): +10 en emissionsWithCausalRoot = la raiz cascade nueva palette.status-seeds
+  // declara 2 derivations (--ds-color-success-500 via deriveTenantColorRamps, --ds-color-on-success
+  // via ON_TONE_ROLES) que respaldan 10 sitios de emision preexistentes (6 de -500 + 4 de on-success);
+  // ningun canal ni sitio nuevo, solo cobertura causal => 186 + 10 = 196
+  assert.equal(out.stats.emissionsWithCausalRoot, 196);
   assert.equal(out.stats.ownershipConflicts, 0);
   assert.equal(out.stats.closedZeroGoverned, 627);
 });
@@ -1758,7 +1762,11 @@ test('T-23 every frozen counter and closed cohort survives T-FINAL-352 untouched
   // C-02b (2026-08-27): +1 en producerSites/channelEmissions/distinctChannels = la seed nueva declarada --ds-textarea-clear-offset (el offset dej de vivir como fallback duplicado y gana su sitio de declaracion; la clearance deriva de la geometria del boton) => 4873 / 10312 / 4586
   assert.equal(out.stats.channelEmissions, 10312);
   assert.equal(out.stats.distinctChannels, 4586);
-  assert.equal(out.stats.emissionsWithCausalRoot, 186);
+  // P0 (2026-08-28): +10 en emissionsWithCausalRoot = la raiz cascade nueva palette.status-seeds
+  // declara 2 derivations (--ds-color-success-500 via deriveTenantColorRamps, --ds-color-on-success
+  // via ON_TONE_ROLES) que respaldan 10 sitios de emision preexistentes (6 de -500 + 4 de on-success);
+  // ningun canal ni sitio nuevo, solo cobertura causal => 186 + 10 = 196
+  assert.equal(out.stats.emissionsWithCausalRoot, 196);
   assert.equal(out.stats.ownershipConflicts, 0);
   // an OPEN row may never be counted as a producer or a governed emission
   const openKeys = new Set(openRows(out).map((r) => `${r.file}|${r.ordinal}`));
@@ -2012,7 +2020,11 @@ test('B-11 the composite and every other open cohort is untouched by this tranch
   // C-02b (2026-08-27): +1 en producerSites/channelEmissions/distinctChannels = la seed nueva declarada --ds-textarea-clear-offset (el offset dej de vivir como fallback duplicado y gana su sitio de declaracion; la clearance deriva de la geometria del boton) => 4873 / 10312 / 4586
   assert.equal(out.stats.channelEmissions, 10312);
   assert.equal(out.stats.distinctChannels, 4586);
-  assert.equal(out.stats.emissionsWithCausalRoot, 186);
+  // P0 (2026-08-28): +10 en emissionsWithCausalRoot = la raiz cascade nueva palette.status-seeds
+  // declara 2 derivations (--ds-color-success-500 via deriveTenantColorRamps, --ds-color-on-success
+  // via ON_TONE_ROLES) que respaldan 10 sitios de emision preexistentes (6 de -500 + 4 de on-success);
+  // ningun canal ni sitio nuevo, solo cobertura causal => 186 + 10 = 196
+  assert.equal(out.stats.emissionsWithCausalRoot, 196);
   assert.equal(out.stats.ownershipConflicts, 0);
 });
 
@@ -2363,7 +2375,11 @@ test('R-9 the 1114 previously classified rows are byte-equivalent', () => {
   // C-02b (2026-08-27): +1 en producerSites/channelEmissions/distinctChannels = la seed nueva declarada --ds-textarea-clear-offset (el offset dej de vivir como fallback duplicado y gana su sitio de declaracion; la clearance deriva de la geometria del boton) => 4873 / 10312 / 4586
   assert.equal(out.stats.channelEmissions, 10312);
   assert.equal(out.stats.distinctChannels, 4586);
-  assert.equal(out.stats.emissionsWithCausalRoot, 186);
+  // P0 (2026-08-28): +10 en emissionsWithCausalRoot = la raiz cascade nueva palette.status-seeds
+  // declara 2 derivations (--ds-color-success-500 via deriveTenantColorRamps, --ds-color-on-success
+  // via ON_TONE_ROLES) que respaldan 10 sitios de emision preexistentes (6 de -500 + 4 de on-success);
+  // ningun canal ni sitio nuevo, solo cobertura causal => 186 + 10 = 196
+  assert.equal(out.stats.emissionsWithCausalRoot, 196);
   assert.equal(out.stats.ownershipConflicts, 0);
 });
 
@@ -2590,7 +2606,11 @@ test('D-10 the drain is exactly measured and openBlocking only went down', () =>
   // C-02b (2026-08-27): +1 en producerSites/channelEmissions/distinctChannels = la seed nueva declarada --ds-textarea-clear-offset (el offset dej de vivir como fallback duplicado y gana su sitio de declaracion; la clearance deriva de la geometria del boton) => 4873 / 10312 / 4586
   assert.equal(out.stats.channelEmissions, 10312);
   assert.equal(out.stats.distinctChannels, 4586);
-  assert.equal(out.stats.emissionsWithCausalRoot, 186);
+  // P0 (2026-08-28): +10 en emissionsWithCausalRoot = la raiz cascade nueva palette.status-seeds
+  // declara 2 derivations (--ds-color-success-500 via deriveTenantColorRamps, --ds-color-on-success
+  // via ON_TONE_ROLES) que respaldan 10 sitios de emision preexistentes (6 de -500 + 4 de on-success);
+  // ningun canal ni sitio nuevo, solo cobertura causal => 186 + 10 = 196
+  assert.equal(out.stats.emissionsWithCausalRoot, 196);
   assert.equal(out.stats.ownershipConflicts, 0);
 });
 
@@ -2760,7 +2780,11 @@ test('E-8 the invariants the correction must not disturb', () => {
   // C-02b (2026-08-27): +1 en producerSites/channelEmissions/distinctChannels = la seed nueva declarada --ds-textarea-clear-offset (el offset dej de vivir como fallback duplicado y gana su sitio de declaracion; la clearance deriva de la geometria del boton) => 4873 / 10312 / 4586
   assert.equal(out.stats.channelEmissions, 10312);
   assert.equal(out.stats.distinctChannels, 4586);
-  assert.equal(out.stats.emissionsWithCausalRoot, 186);
+  // P0 (2026-08-28): +10 en emissionsWithCausalRoot = la raiz cascade nueva palette.status-seeds
+  // declara 2 derivations (--ds-color-success-500 via deriveTenantColorRamps, --ds-color-on-success
+  // via ON_TONE_ROLES) que respaldan 10 sitios de emision preexistentes (6 de -500 + 4 de on-success);
+  // ningun canal ni sitio nuevo, solo cobertura causal => 186 + 10 = 196
+  assert.equal(out.stats.emissionsWithCausalRoot, 196);
   assert.equal(out.stats.ownershipConflicts, 0);
   // the ratified join amendment survives
   assert.equal(out.closedProducer.filter((r) => r.occurrenceProducerSiteIds).length, 15);
@@ -2871,7 +2895,11 @@ test('R-T8 the live delta is exactly 9 rows, and only two cohorts moved', () => 
   // C-02b (2026-08-27): +1 en producerSites/channelEmissions/distinctChannels = la seed nueva declarada --ds-textarea-clear-offset (el offset dej de vivir como fallback duplicado y gana su sitio de declaracion; la clearance deriva de la geometria del boton) => 4873 / 10312 / 4586
   assert.equal(out.stats.channelEmissions, 10312);
   assert.equal(out.stats.distinctChannels, 4586);
-  assert.equal(out.stats.emissionsWithCausalRoot, 186);
+  // P0 (2026-08-28): +10 en emissionsWithCausalRoot = la raiz cascade nueva palette.status-seeds
+  // declara 2 derivations (--ds-color-success-500 via deriveTenantColorRamps, --ds-color-on-success
+  // via ON_TONE_ROLES) que respaldan 10 sitios de emision preexistentes (6 de -500 + 4 de on-success);
+  // ningun canal ni sitio nuevo, solo cobertura causal => 186 + 10 = 196
+  assert.equal(out.stats.emissionsWithCausalRoot, 196);
   assert.equal(out.stats.ownershipConflicts, 0);
   // the 9 arrivals emit a governed channel -- that is WHY they are producers,
   // not ZEROs, and they stay non-consumable
@@ -3125,7 +3153,11 @@ test('S-8 the live tree closes exactly the 8 resolveTypeRoleStyle rows', () => {
   // C-02b (2026-08-27): +1 en producerSites/channelEmissions/distinctChannels = la seed nueva declarada --ds-textarea-clear-offset (el offset dej de vivir como fallback duplicado y gana su sitio de declaracion; la clearance deriva de la geometria del boton) => 4873 / 10312 / 4586
   assert.equal(out.stats.channelEmissions, 10312);
   assert.equal(out.stats.distinctChannels, 4586);
-  assert.equal(out.stats.emissionsWithCausalRoot, 186);
+  // P0 (2026-08-28): +10 en emissionsWithCausalRoot = la raiz cascade nueva palette.status-seeds
+  // declara 2 derivations (--ds-color-success-500 via deriveTenantColorRamps, --ds-color-on-success
+  // via ON_TONE_ROLES) que respaldan 10 sitios de emision preexistentes (6 de -500 + 4 de on-success);
+  // ningun canal ni sitio nuevo, solo cobertura causal => 186 + 10 = 196
+  assert.equal(out.stats.emissionsWithCausalRoot, 196);
   assert.equal(out.stats.ownershipConflicts, 0);
 });
 
@@ -3471,7 +3503,11 @@ test('SR-7 the live delta is EXACTLY 22 rows and nothing else moved', () => {
   // C-02b (2026-08-27): +1 en producerSites/channelEmissions/distinctChannels = la seed nueva declarada --ds-textarea-clear-offset (el offset dej de vivir como fallback duplicado y gana su sitio de declaracion; la clearance deriva de la geometria del boton) => 4873 / 10312 / 4586
   assert.equal(out.stats.channelEmissions, 10312);
   assert.equal(out.stats.distinctChannels, 4586);
-  assert.equal(out.stats.emissionsWithCausalRoot, 186);
+  // P0 (2026-08-28): +10 en emissionsWithCausalRoot = la raiz cascade nueva palette.status-seeds
+  // declara 2 derivations (--ds-color-success-500 via deriveTenantColorRamps, --ds-color-on-success
+  // via ON_TONE_ROLES) que respaldan 10 sitios de emision preexistentes (6 de -500 + 4 de on-success);
+  // ningun canal ni sitio nuevo, solo cobertura causal => 186 + 10 = 196
+  assert.equal(out.stats.emissionsWithCausalRoot, 196);
   assert.equal(out.stats.ownershipConflicts, 0);
   // the arrivals are exactly the 18 authored coordinates of ONE expression
   // family -- 9 source files x {member-access, spread}. The four Button rows

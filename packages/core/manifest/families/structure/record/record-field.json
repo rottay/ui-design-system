@@ -3829,6 +3829,37 @@
       }
     },
     {
+      "controlId": "palette.status-seeds",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "palette.status-seeds",
+            "socketPattern": null,
+            "prop": "idem",
+            "tier": "standard",
+            "examples": [],
+            "noSocketReason": "sin socket propio; lectura directa del canal publico de status, propia del part 'field' que esta familia estampa",
+            "socketsResolved": true,
+            "carrier": "shared-channel"
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazo compartido status (barrido F2, part propio 'field')": [
+            "--ds-color-error"
+          ]
+        },
+        "evidence": "record.css:374-375 ([data-part='field'][data-error='true'][data-mono] border-color), :382-386 ([data-part='field'][data-error='true'] [data-part='field-error-icon'] color), :392-393 ([data-part='field'][data-error='true'] [data-part='field-error'] color) -- todos via var(--ds-color-error), scopeados al part 'field' propio de esta familia",
+        "reviewedFrom": "anatomy",
+        "migratedToInternalChannels": true
+      }
+    },
+    {
       "controlId": "profiles.icon",
       "disposition": "UNKNOWN",
       "verificationState": "UNKNOWN",

@@ -11631,6 +11631,37 @@
       }
     },
     {
+      "controlId": "palette.status-seeds",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "palette.status-seeds",
+            "socketPattern": null,
+            "prop": "idem",
+            "tier": "standard",
+            "examples": [],
+            "noSocketReason": "sin socket propio; lectura directa del canal publico de status",
+            "socketsResolved": true,
+            "carrier": "shared-channel"
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazo compartido status (barrido F2, sourceBindings propios de esta familia)": [
+            "--ds-color-success"
+          ]
+        },
+        "evidence": "collection-header.css:236-239 -- [data-part='meta-item'][data-tone='success'] border/background (color-mix) y color via var(--ds-color-success)",
+        "reviewedFrom": "anatomy",
+        "migratedToInternalChannels": true
+      }
+    },
+    {
       "controlId": "profiles.icon",
       "disposition": "UNKNOWN",
       "verificationState": "UNKNOWN",

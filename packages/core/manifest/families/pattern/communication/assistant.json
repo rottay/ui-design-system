@@ -1046,12 +1046,8 @@
         "uncoveredByDesign": {
           "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
             "--ds-color-border",
-            "--ds-color-error",
-            "--ds-color-info",
             "--ds-color-primary-500",
-            "--ds-color-success",
-            "--ds-color-text-muted",
-            "--ds-color-warning"
+            "--ds-color-text-muted"
           ]
         },
         "reviewedFrom": "anatomy"
@@ -1466,6 +1462,32 @@
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
         "adjudicatedFrom": "controls/profiles.expressive.json"
+      }
+    },
+    {
+      "controlId": "palette.status-seeds",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "palette.status-seeds",
+            "why": "assistant lee los 4 canales status (--ds-color-error/-info/-success/-warning) via consumo del canal compartido de la raiz (dot data-status + tool-card data-tone en assistant.css:175-238), sin socket propio de familia."
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazos foundation compartidos (nivel 2/3 de la forma canonica), re-hogados desde la celda palette.seeds de esta misma familia": [
+            "--ds-color-error",
+            "--ds-color-info",
+            "--ds-color-success",
+            "--ds-color-warning"
+          ]
+        },
+        "reviewedFrom": "anatomy"
       }
     },
     {

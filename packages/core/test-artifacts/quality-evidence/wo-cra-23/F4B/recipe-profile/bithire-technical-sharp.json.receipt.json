@@ -1,11 +1,11 @@
 {
   "schemaVersion": 2,
-  "roundId": "R7",
+  "roundId": "R6",
   "familyId": "primitive/inputs/button",
   "scenarioId": "recipe-profile/technical-sharp/bithire/static-and-db",
   "evidenceKind": "static-db-computed-parity",
   "commandOrTool": "node src/tooling/resolution-probe/public/cli/index.mjs causal",
-  "toolVersion": "resolution-probe@cc010704a6aa",
+  "toolVersion": "resolution-probe@fe0cd6c5e27b",
   "exitCode": 0,
   "sourceFiles": [
     "packages/core/dist/build-stamp.json",
@@ -41,10 +41,10 @@
     "packages/core/src/tooling/resolution-probe/runtime/ingress/index.mjs",
     "packages/core/src/tooling/resolution-probe/runtime/measure/index.mjs"
   ],
-  "sourceDigest": "e3aa42c0feb029d30a6c9c1efd2d6778f36a20c28469a281652c8a17095732dc",
+  "sourceDigest": "2a31e41792670451e2ced0eaff45584415c86e63773823dbae0fb6dae42f4937",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/recipe-profile/bithire-technical-sharp.json",
-  "artifactSha256": "f5afcbee2d3ff42b246ae537c7fa6896516b343cef3bc469429f45d97c1b989d",
-  "createdAt": "2026-08-28T06:23:29.114Z",
+  "artifactSha256": "d812ff0c670853a036817191f3fea137e1b9f3e4133e9f23da0447af2cf13f33",
+  "createdAt": "2026-08-29T02:32:28.291Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

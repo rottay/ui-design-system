@@ -37,7 +37,11 @@ import { compileBrandTheme } from '@/infrastructure/compilers/kernel/runtime/bra
 import type { BrandTheme } from '@/foundation/contracts/composition/tenants/themes';
 import type { TenantThemeDocument } from '@/foundation/contracts/composition/tenants/themes/tenant-theme';
 import { TENANT_THEME_EFFECT_INTENSITY_BOUNDS } from '@/foundation/contracts/composition/tenants/themes/tenant-theme';
-import type { FirstPartyVerticalId } from '@/foundation/contracts/composition/tenants';
+// The roster union's OWNER is `contracts/kernel/verticals`; the tenants barrel
+// re-exports the capability contracts and never owned this symbol (verified:
+// `git log -S FirstPartyVerticalId` over that barrel is empty). The import was
+// therefore wrong from the day it was authored, not broken by a later retirement.
+import type { FirstPartyVerticalId } from '@/foundation/contracts/kernel/verticals';
 
 import {
   compileTenantThemeConfig,

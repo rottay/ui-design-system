@@ -3085,6 +3085,38 @@
       }
     },
     {
+      "controlId": "palette.status-seeds",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "palette.status-seeds",
+            "socketPattern": null,
+            "prop": "mapas de urgencia/prioridad (classic engine)",
+            "tier": "standard",
+            "examples": [],
+            "noSocketReason": "sin socket propio; consumo directo de los 3 canales",
+            "socketsResolved": true,
+            "carrier": "shared-channel"
+          }
+        ],
+        "uncoveredByDesign": {
+          "Canales --ds-color-* medidos en la anatomia (palette.status-seeds)": [
+            "--ds-color-success",
+            "--ds-color-warning",
+            "--ds-color-error"
+          ]
+        },
+        "reviewedFrom": "anatomy",
+        "migratedToInternalChannels": true
+      }
+    },
+    {
       "controlId": "profiles.icon",
       "disposition": "UNKNOWN",
       "verificationState": "UNKNOWN",

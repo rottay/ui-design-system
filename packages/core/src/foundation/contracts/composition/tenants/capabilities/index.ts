@@ -815,28 +815,126 @@ export const TENANT_CAPABILITY_REGISTRY = Object.freeze([
     // Rows below were authored as frontier boundaries and are opened by the
     // wave that lands their runtime, keeping each id at its original index
     // rather than migrating it up into the tier blocks. Read `status`, never
-    // the position: `profiles.icon` (C2) and `responsive.posture` (E2) are
-    // ACTIVE here; `palette.status-seeds` is still a boundary the schema
-    // rejects.
+    // the position: `profiles.icon` (C2), `responsive.posture` (E2) and
+    // `palette.status-seeds` (P0, 2026-08-28) are all ACTIVE here. None of the
+    // three is still a boundary the schema rejects.
     {
       id: 'palette.status-seeds',
       version: 1,
       tier: 'standard',
-      status: 'frontier',
+      status: 'active',
+      evidence: {
+        consumer: 'src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts',
+        symbol: 'vars["--ds-color-success"]',
+      },
       scope: 'tenant',
       owner: 'design-system',
       title: 'Status tone seeds (success/warning/error/info) in General',
       valueType: 'color-set',
       defaultBehavior:
-        'DB General cannot author status tones today; Advanced tokenOverrides is the only DB route, while BrandTheme authors them directly — the recorded static/DB asymmetry this frontier closes',
-      documentPath: 'appearance.general.palette.{success,warning,error,info} (REJECTED today)',
+        'vertical baseline status tones. The DB General path authors them at `palette.status.{…}` and confluences into BrandPalette BEFORE the single lowering, so both transports reach `deriveTenantColorRamps` through the same door — no parallel emitter. Absent => the vertical baseline, unchanged.',
+      documentPath: 'appearance.general.palette.status.{success,warning,error,info}',
       brandThemePath: 'palette.{successColor,warningColor,errorColor,infoColor}',
+      // Under-declared the real surface: three channels of ONE tone, for a
+      // control whose value type is `color-set` and whose documentPath names
+      // FOUR. The radius is not a sample here — it is mechanically closed and
+      // enumerable from source, exactly like `navigation.sidebar-tone`'s
+      // six-channel table above, because each of the four seeds reaches the
+      // same four emitters in the single lowering
+      // (`compilers/kernel/runtime/brand-theme/index.ts`):
+      //   1. the seed passthrough per tone (:846-851, `if (seed)`);
+      //   2. the perceptual ramp, `deriveTenantColorRamps` (:340-366) over
+      //      `rampRoleSpecs` (:316-326) × the ten `RAMP_STEPS`, reached from
+      //      the lowering at :1033 — the `-500` this row already named is one
+      //      of ten, not the family;
+      //   3. the readable ink `--ds-color-on-{tone}` over `ON_TONE_ROLES`
+      //      (:856-861); and
+      //   4. the five-step tint ramp `--ds-tint-{tone}-{4,8,12,16,24}`
+      //      (:1443-1450), whose value is seed-independent but whose EMISSION
+      //      is gated on the seed being authored.
+      // `--ds-color-{tone}-bg` / `-border` (and `--ds-color-info-ink`) are
+      // deliberately EXCLUDED: they belong to `EXTENDED_PALETTE_CHANNELS`
+      // (:493-517), a separate authored `field -> channel` record fed by
+      // `successBgColor`, `errorBorderColor`, `infoInkColor` and their
+      // siblings — one authored field reaching exactly one channel. No status
+      // SEED reaches any of them, and claiming them here would attribute to
+      // this control a radius it does not move.
       derivedChannels: [
+        // 1. seed passthrough
         '--ds-color-success',
+        '--ds-color-warning',
+        '--ds-color-error',
+        '--ds-color-info',
+        // 2. derived perceptual ramps
+        '--ds-color-success-50',
+        '--ds-color-success-100',
+        '--ds-color-success-200',
+        '--ds-color-success-300',
+        '--ds-color-success-400',
         '--ds-color-success-500',
+        '--ds-color-success-600',
+        '--ds-color-success-700',
+        '--ds-color-success-800',
+        '--ds-color-success-900',
+        '--ds-color-warning-50',
+        '--ds-color-warning-100',
+        '--ds-color-warning-200',
+        '--ds-color-warning-300',
+        '--ds-color-warning-400',
+        '--ds-color-warning-500',
+        '--ds-color-warning-600',
+        '--ds-color-warning-700',
+        '--ds-color-warning-800',
+        '--ds-color-warning-900',
+        '--ds-color-error-50',
+        '--ds-color-error-100',
+        '--ds-color-error-200',
+        '--ds-color-error-300',
+        '--ds-color-error-400',
+        '--ds-color-error-500',
+        '--ds-color-error-600',
+        '--ds-color-error-700',
+        '--ds-color-error-800',
+        '--ds-color-error-900',
+        '--ds-color-info-50',
+        '--ds-color-info-100',
+        '--ds-color-info-200',
+        '--ds-color-info-300',
+        '--ds-color-info-400',
+        '--ds-color-info-500',
+        '--ds-color-info-600',
+        '--ds-color-info-700',
+        '--ds-color-info-800',
+        '--ds-color-info-900',
+        // 3. readable ink per tone
         '--ds-color-on-success',
+        '--ds-color-on-warning',
+        '--ds-color-on-error',
+        '--ds-color-on-info',
+        // 4. tint ramps per tone
+        '--ds-tint-success-4',
+        '--ds-tint-success-8',
+        '--ds-tint-success-12',
+        '--ds-tint-success-16',
+        '--ds-tint-success-24',
+        '--ds-tint-warning-4',
+        '--ds-tint-warning-8',
+        '--ds-tint-warning-12',
+        '--ds-tint-warning-16',
+        '--ds-tint-warning-24',
+        '--ds-tint-error-4',
+        '--ds-tint-error-8',
+        '--ds-tint-error-12',
+        '--ds-tint-error-16',
+        '--ds-tint-error-24',
+        '--ds-tint-info-4',
+        '--ds-tint-info-8',
+        '--ds-tint-info-12',
+        '--ds-tint-info-16',
+        '--ds-tint-info-24',
       ],
-      compat: 'opening it is additive; requires schema + envelope + editor rows',
+      compat:
+        'opened in place (P0, 2026-08-28): schema + envelope + normalizer with a literal closed vocabulary. Additive and zero-delta — no authored override exists, and every emitter is guarded by `if (seed)`. No `dark` twin and no per-step root: the ramp steps derive from the seed. The sibling path `palette.{success,…}` stays REJECTED, so opening the axis widened nothing by accident. The declared radius was WIDENED (W-SOURCE) from 3 channels of one tone to the closed 68 the four seeds actually reach; that is a correction of the declaration, not a widening of the capability — no emitter, path or vocabulary moved, and an unauthored seed still emits none of the 68.',
     },
     {
       id: 'profiles.icon',

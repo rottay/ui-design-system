@@ -410,6 +410,15 @@ const KEYFRAME_FRAME_SEMANTICS = {
     from: { opacity: '0', transform: 'translateX(-10px)' },
     to: { opacity: '1', transform: 'translateX(0)' },
   },
+  // CI-1 re-pin: 6c9f6ccf1e (2026-08-05) added the RTL mirrors to
+  // EXPECTED_KEYFRAMES but not to this record, so the `satisfies` below stopped
+  // being satisfiable. Bodies read from the live @keyframes rules, not inferred
+  // from the LTR sibling: the mirror is the SIGN of the translate and nothing
+  // else, and pinning it is what would catch a mirror that stopped mirroring.
+  'ds-metrics-minimal-slide-in-rtl': {
+    from: { opacity: '0', transform: 'translateX(10px)' },
+    to: { opacity: '1', transform: 'translateX(0)' },
+  },
   'ds-metrics-minimal-glow': {
     '0%, 100%': {
       'box-shadow':
@@ -443,6 +452,10 @@ const KEYFRAME_FRAME_SEMANTICS = {
     from: { opacity: '0', transform: 'translateX(-10px)' },
     to: { opacity: '1', transform: 'translateX(0)' },
   },
+  'ds-metrics-chart-slide-in-rtl': {
+    from: { opacity: '0', transform: 'translateX(10px)' },
+    to: { opacity: '1', transform: 'translateX(0)' },
+  },
   'ds-metrics-chart-glow': {
     '0%, 100%': {
       'box-shadow':
@@ -458,6 +471,10 @@ const KEYFRAME_FRAME_SEMANTICS = {
   // 30px -> 12px. Verified against the tree today.
   'ds-metrics-rows-row-slide-in': {
     from: { opacity: '0', transform: 'translateX(-12px)' },
+    to: { opacity: '1', transform: 'translateX(0)' },
+  },
+  'ds-metrics-rows-row-slide-in-rtl': {
+    from: { opacity: '0', transform: 'translateX(12px)' },
     to: { opacity: '1', transform: 'translateX(0)' },
   },
   'ds-metrics-rows-shimmer': {

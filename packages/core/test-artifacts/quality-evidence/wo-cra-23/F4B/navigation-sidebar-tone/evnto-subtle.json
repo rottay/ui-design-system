@@ -7911,7 +7911,7 @@
         "freshnessProven": true,
         "input": {
           "baseline": {
-            "digest": "67dfde02f7aab0a18a6f4bcf44cf107047f2d66bcf577ad2952921d190eead3d",
+            "digest": "f2d237c613ff8f2160d9eeed5e98cab2e8f67415ca056f35c373df11b38c5cfe",
             "source": "dist/index.js#evntoBrandTheme"
           },
           "compileOptions": {},
@@ -8103,7 +8103,7 @@
                   }
                 },
                 "layout": {
-                  "bg": "#FFFFFF",
+                  "bg": "var(--ds-color-bg-primary)",
                   "headerBackdrop": "blur(10px)",
                   "headerBg": "rgba(255, 255, 255, 0.95)",
                   "headerBorder": "rgba(0, 0, 0, 0.06)",
@@ -8193,7 +8193,7 @@
                       },
                       "buttonSecondary": {
                         "bgHover": "#1C1A16",
-                        "border": "#2E2C24",
+                        "border": "var(--ds-color-border)",
                         "color": "#A8A898"
                       },
                       "disabled": {
@@ -8206,17 +8206,17 @@
                       "input": {
                         "bg": "#131210",
                         "bgDisabled": "#1C1A16",
-                        "border": "#2E2C24",
+                        "border": "var(--ds-color-border)",
                         "borderDisabled": "#222018",
-                        "colorDisabled": "#484838",
+                        "colorDisabled": "var(--ds-color-text-disabled)",
                         "colorPlaceholder": "#686858"
                       }
                     },
                     "layout": {
-                      "bg": "#131210",
+                      "bg": "var(--ds-color-bg-primary)",
                       "headerBg": "rgba(19, 18, 16, 0.92)",
                       "headerBorder": "#2E2C24",
-                      "siderBg": "#0E0D0B",
+                      "siderBg": "var(--ds-sidebar-bg)",
                       "siderBorder": "#222018"
                     },
                     "sidebar": {
@@ -8348,6 +8348,7 @@
                     "successBgColor": "var(--ds-color-success-50)",
                     "textDisabledColor": "#484838",
                     "textMutedColor": "#686858",
+                    "textPageColor": "#A8A898",
                     "textPrimaryColor": "#E8E8E0",
                     "textSecondaryColor": "#A8A898",
                     "textTertiaryColor": "var(--ds-color-neutral-600)",
@@ -8385,7 +8386,6 @@
                 "backgroundSecondaryColor": "#fafafa",
                 "backgroundTertiaryColor": "#f5f5f5",
                 "borderColor": "rgba(0, 0, 0, 0.08)",
-                "borderFocusColor": "#171717",
                 "borderPrimaryColor": "var(--ds-color-border)",
                 "borderSecondaryColor": "rgba(0, 0, 0, 0.12)",
                 "borderSubtleColor": "color-mix(in srgb, var(--ds-color-border) 66.667%, transparent)",
@@ -8396,7 +8396,6 @@
                 "infoBgColor": "#f8fafc",
                 "infoBorderColor": "color-mix(in srgb, var(--ds-color-info) 20%, transparent)",
                 "infoColor": "#475569",
-                "linkColor": "#171717",
                 "linkHoverColor": "#525252",
                 "linkVisitedColor": "#737373",
                 "onPrimaryColor": "#ffffff",
@@ -8692,7 +8691,7 @@
                 }
               },
               "layout": {
-                "bg": "#FFFFFF",
+                "bg": "var(--ds-color-bg-primary)",
                 "headerBackdrop": "blur(10px)",
                 "headerBg": "rgba(255, 255, 255, 0.95)",
                 "headerBorder": "rgba(0, 0, 0, 0.06)",
@@ -8783,7 +8782,7 @@
                     },
                     "buttonSecondary": {
                       "bgHover": "#1C1A16",
-                      "border": "#2E2C24",
+                      "border": "var(--ds-color-border)",
                       "color": "#A8A898"
                     },
                     "disabled": {
@@ -8796,17 +8795,17 @@
                     "input": {
                       "bg": "#131210",
                       "bgDisabled": "#1C1A16",
-                      "border": "#2E2C24",
+                      "border": "var(--ds-color-border)",
                       "borderDisabled": "#222018",
-                      "colorDisabled": "#484838",
+                      "colorDisabled": "var(--ds-color-text-disabled)",
                       "colorPlaceholder": "#686858"
                     }
                   },
                   "layout": {
-                    "bg": "#131210",
+                    "bg": "var(--ds-color-bg-primary)",
                     "headerBg": "rgba(19, 18, 16, 0.92)",
                     "headerBorder": "#2E2C24",
-                    "siderBg": "#0E0D0B",
+                    "siderBg": "var(--ds-sidebar-bg)",
                     "siderBorder": "#222018"
                   },
                   "sidebar": {
@@ -8938,6 +8937,7 @@
                   "successBgColor": "var(--ds-color-success-50)",
                   "textDisabledColor": "#484838",
                   "textMutedColor": "#686858",
+                  "textPageColor": "#A8A898",
                   "textPrimaryColor": "#E8E8E0",
                   "textSecondaryColor": "#A8A898",
                   "textTertiaryColor": "var(--ds-color-neutral-600)",
@@ -8975,7 +8975,6 @@
               "backgroundSecondaryColor": "#fafafa",
               "backgroundTertiaryColor": "#f5f5f5",
               "borderColor": "rgba(0, 0, 0, 0.08)",
-              "borderFocusColor": "#171717",
               "borderPrimaryColor": "var(--ds-color-border)",
               "borderSecondaryColor": "rgba(0, 0, 0, 0.12)",
               "borderSubtleColor": "color-mix(in srgb, var(--ds-color-border) 66.667%, transparent)",
@@ -8986,7 +8985,6 @@
               "infoBgColor": "#f8fafc",
               "infoBorderColor": "color-mix(in srgb, var(--ds-color-info) 20%, transparent)",
               "infoColor": "#475569",
-              "linkColor": "#171717",
               "linkHoverColor": "#525252",
               "linkVisitedColor": "#737373",
               "onPrimaryColor": "#ffffff",
@@ -9286,7 +9284,7 @@
     "bundleMode": "fresh",
     "bundles": {
       "evnto": {
-        "bytes": 5284660,
+        "bytes": 5289463,
         "distMatchesStyles": true,
         "freshnessNote": "Recomposed in memory from src/foundation/tokens/css with the formula in build-vertical-css.mjs. Omits the per-tenant --ds-motion-spring tail, which requires compiled BrandTheme modules under dist/.",
         "freshnessProven": true,
@@ -9296,7 +9294,7 @@
           "src/foundation/tokens/css/facade/artifacts/evnto/index.css"
         ],
         "mode": "fresh",
-        "sha256": "e5cbd266a60c0a17186a2ffaefdc6a846129536a6b603453756fd2c8c0eaeda2",
+        "sha256": "c82425e6f0397119bb8d955637e70c9705fb12de8446a3fcaa5d176fdaf586f7",
         "shippedDistDrift": {
           "identical": false,
           "meaning": "The shipped bundle is this exact text plus a trailing remainder — the expected shape, since `fresh` omits the per-tenant --ds-motion-spring tail. Whether that remainder is the sanctioned spring block is scripts/verticals/css-staleness-gate/index.mjs's question, not this harness's.",
@@ -9307,10 +9305,10 @@
       }
     },
     "sourceFreshness": {
-      "declaredDigest": "03d3fcdd980ce88e18329882084f5361663adb568aee809670e8732850f0f709",
-      "observedDigest": "03d3fcdd980ce88e18329882084f5361663adb568aee809670e8732850f0f709",
-      "postMeasurementDigest": "03d3fcdd980ce88e18329882084f5361663adb568aee809670e8732850f0f709",
-      "preMeasurementDigest": "03d3fcdd980ce88e18329882084f5361663adb568aee809670e8732850f0f709",
+      "declaredDigest": "b5fdc4399f0bd3f9ee5512340e37498296910d136cb4cb760b1f44a87056a8fa",
+      "observedDigest": "b5fdc4399f0bd3f9ee5512340e37498296910d136cb4cb760b1f44a87056a8fa",
+      "postMeasurementDigest": "b5fdc4399f0bd3f9ee5512340e37498296910d136cb4cb760b1f44a87056a8fa",
+      "preMeasurementDigest": "b5fdc4399f0bd3f9ee5512340e37498296910d136cb4cb760b1f44a87056a8fa",
       "sourceFiles": [
         "packages/core/dist/build-stamp.json",
         "packages/core/dist/infrastructure/compilers/kernel/runtime/brand-theme/index.js",
@@ -9357,33 +9355,33 @@
     "stylesheets": {
       "db-tenant-theme": {
         "evnto/dark/modern/both": {
-          "baseline": "e5cbd266a60c0a17186a2ffaefdc6a846129536a6b603453756fd2c8c0eaeda2",
-          "mutation": "3460ae86be626216347ea2e0fc8f5bc0595febad90502053fb67e67af022f0b1",
+          "baseline": "c82425e6f0397119bb8d955637e70c9705fb12de8446a3fcaa5d176fdaf586f7",
+          "mutation": "b5f54572556adb39e279ec030ec859ccd391a2ae65018ab1a777fed99670de33",
           "mutationDifferedFromBaseline": true,
-          "removal": "e5cbd266a60c0a17186a2ffaefdc6a846129536a6b603453756fd2c8c0eaeda2",
+          "removal": "c82425e6f0397119bb8d955637e70c9705fb12de8446a3fcaa5d176fdaf586f7",
           "removalIsByteIdenticalToBaseline": true
         },
         "evnto/light/modern/both": {
-          "baseline": "e5cbd266a60c0a17186a2ffaefdc6a846129536a6b603453756fd2c8c0eaeda2",
-          "mutation": "3460ae86be626216347ea2e0fc8f5bc0595febad90502053fb67e67af022f0b1",
+          "baseline": "c82425e6f0397119bb8d955637e70c9705fb12de8446a3fcaa5d176fdaf586f7",
+          "mutation": "b5f54572556adb39e279ec030ec859ccd391a2ae65018ab1a777fed99670de33",
           "mutationDifferedFromBaseline": true,
-          "removal": "e5cbd266a60c0a17186a2ffaefdc6a846129536a6b603453756fd2c8c0eaeda2",
+          "removal": "c82425e6f0397119bb8d955637e70c9705fb12de8446a3fcaa5d176fdaf586f7",
           "removalIsByteIdenticalToBaseline": true
         }
       },
       "static-brand-theme": {
         "evnto/dark/modern/both": {
-          "baseline": "e5cbd266a60c0a17186a2ffaefdc6a846129536a6b603453756fd2c8c0eaeda2",
-          "mutation": "6701189d04ba302d65f9c706efff8bb26a2ad6943d3aee1ec6ab083e2e3e4f58",
+          "baseline": "c82425e6f0397119bb8d955637e70c9705fb12de8446a3fcaa5d176fdaf586f7",
+          "mutation": "297a53b275b249b1d7d3503e912eefd5fda94aa42ba43c819a7249773d78e1ff",
           "mutationDifferedFromBaseline": true,
-          "removal": "e5cbd266a60c0a17186a2ffaefdc6a846129536a6b603453756fd2c8c0eaeda2",
+          "removal": "c82425e6f0397119bb8d955637e70c9705fb12de8446a3fcaa5d176fdaf586f7",
           "removalIsByteIdenticalToBaseline": true
         },
         "evnto/light/modern/both": {
-          "baseline": "e5cbd266a60c0a17186a2ffaefdc6a846129536a6b603453756fd2c8c0eaeda2",
-          "mutation": "6701189d04ba302d65f9c706efff8bb26a2ad6943d3aee1ec6ab083e2e3e4f58",
+          "baseline": "c82425e6f0397119bb8d955637e70c9705fb12de8446a3fcaa5d176fdaf586f7",
+          "mutation": "297a53b275b249b1d7d3503e912eefd5fda94aa42ba43c819a7249773d78e1ff",
           "mutationDifferedFromBaseline": true,
-          "removal": "e5cbd266a60c0a17186a2ffaefdc6a846129536a6b603453756fd2c8c0eaeda2",
+          "removal": "c82425e6f0397119bb8d955637e70c9705fb12de8446a3fcaa5d176fdaf586f7",
           "removalIsByteIdenticalToBaseline": true
         }
       }

@@ -2849,6 +2849,49 @@
       }
     },
     {
+      "controlId": "palette.status-seeds",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "palette.status-seeds",
+            "socketPattern": null,
+            "prop": "leyenda de cobertura (classic) + celdas full/gap/critical (modern skin)",
+            "tier": "standard",
+            "examples": [],
+            "noSocketReason": "sin socket propio; consumo directo de los 3 canales base (bg/border/ink son de EXTENDED_PALETTE_CHANNELS, fuera de este control)",
+            "socketsResolved": true,
+            "carrier": "shared-channel"
+          }
+        ],
+        "uncoveredByDesign": {
+          "Canales --ds-color-* medidos en la anatomia (palette.status-seeds)": [
+            "--ds-color-success",
+            "--ds-color-warning",
+            "--ds-color-error"
+          ],
+          "bg/border/ink son de EXTENDED_PALETTE_CHANNELS, fuera de este control": [
+            "--ds-color-success-bg",
+            "--ds-color-success-border",
+            "--ds-color-success-ink",
+            "--ds-color-warning-bg",
+            "--ds-color-warning-border",
+            "--ds-color-warning-ink",
+            "--ds-color-error-bg",
+            "--ds-color-error-border",
+            "--ds-color-error-ink"
+          ]
+        },
+        "reviewedFrom": "anatomy",
+        "migratedToInternalChannels": true
+      }
+    },
+    {
       "controlId": "profiles.icon",
       "disposition": "UNKNOWN",
       "verificationState": "UNKNOWN",

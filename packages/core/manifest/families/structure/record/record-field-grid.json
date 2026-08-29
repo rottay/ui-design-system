@@ -1571,6 +1571,37 @@
       }
     },
     {
+      "controlId": "palette.status-seeds",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "palette.status-seeds",
+            "socketPattern": null,
+            "prop": "idem",
+            "tier": "standard",
+            "examples": [],
+            "noSocketReason": "sin socket propio; lectura directa del canal publico de status, propia del selector scopeado a 'field-grid' que esta familia estampa",
+            "socketsResolved": true,
+            "carrier": "shared-channel"
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazo compartido status (barrido F2, part propio 'field-grid')": [
+            "--ds-color-error"
+          ]
+        },
+        "evidence": "record.css:314-317 -- [data-part='field-grid'] > [data-part='field'][data-error='true'] background (color-mix) y box-shadow (color-mix), ambos via var(--ds-color-error); el selector cuelga del contenedor 'field-grid' propio de esta familia",
+        "reviewedFrom": "anatomy",
+        "migratedToInternalChannels": true
+      }
+    },
+    {
       "controlId": "profiles.icon",
       "disposition": "UNKNOWN",
       "verificationState": "UNKNOWN",

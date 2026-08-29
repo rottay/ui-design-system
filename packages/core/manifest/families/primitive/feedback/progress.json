@@ -2192,6 +2192,36 @@
       }
     },
     {
+      "controlId": "palette.status-seeds",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "palette.status-seeds",
+            "socketPattern": null,
+            "prop": "color de relleno resuelto por data-status (normal/success/error/active)",
+            "tier": "standard",
+            "examples": [
+              "--ds-color-success",
+              "--ds-color-error"
+            ],
+            "noSocketReason": "--ds-progress-resolved-fill: var(--ds-progress-arc-color, var(--ds-color-success)) bajo [data-status='success'] y var(--ds-color-error) bajo [data-status='error']; evidencia verificada en skin/progress.css:53-61.",
+            "socketsResolved": true,
+            "carrier": "shared-channel"
+          }
+        ],
+        "reviewedFrom": "anatomy",
+        "sourceBindings": [
+          "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/progress.css"
+        ]
+      }
+    },
+    {
       "controlId": "profiles.icon",
       "disposition": "UNKNOWN",
       "verificationState": "UNKNOWN",

@@ -3,7 +3,7 @@
   "generatedBy": "scripts/tokens/customization-surface-census/index.mjs --write",
   "meta": {
     "scopeLaw": "DS-SCOPED PROJECTION (core+showroom). deadWriters is a projection for gates and catalogs, NEVER the instrument behind a deletion: on the same population an app-aware inverted index found 53 census-dead channels with LIVE app readers (F5 reconciliation, 2026-08-02 — the --ds-text-eyebrow failure at scale). Death verdicts require the app-inclusive index plus the raw-mention gate.",
-    "inputsDigest": "d85f48741076b2ef2aec00ed146e8dfc3397c2f0ddd20a4863c9854bc605cfb8",
+    "inputsDigest": "e3bc74b03325af583548ee23b74e3f809d696575ead4430887e7cbbe6c229e52",
     "manifestSchemaVersion": 4,
     "corpus": {
       "authoredCssFiles": 466,
@@ -20,8 +20,8 @@
     "tenantChannels": 2191,
     "publicHooks": 91,
     "unadjudicatedReads": 2606,
-    "deadWriters": 266,
-    "frontierReserved": 20,
+    "deadWriters": 274,
+    "frontierReserved": 0,
     "modernConsumedUnique": 3674,
     "tsReadNames": 2692,
     "tsWriteNames": 1210,
@@ -29,18 +29,11 @@
     "unclassified": 0,
     "prototypeLedgerRows": 80
   },
-  "frontierFamilies": [
-    {
-      "capability": "palette.status-seeds",
-      "prefixPattern": "--ds-tint-{success|warning|error|info}-{step}",
-      "source": "interpolated compiler emission — palette.status-seeds (frontier capability)",
-      "opensWith": "palette.status-seeds activation (C3)"
-    }
-  ],
+  "frontierFamilies": [],
   "deadByClass": {
     "foundation": 130,
     "component": 0,
-    "tenantChannel": 194,
+    "tenantChannel": 202,
     "authoredCssLocal": 6
   },
   "controls": {
@@ -57,7 +50,8 @@
       "surfaces.elevation-posture",
       "surfaces.effect-intensity",
       "navigation.sidebar-tone",
-      "experience.profile"
+      "experience.profile",
+      "palette.status-seeds"
     ],
     "tenantPro": [
       "chrome.families",
@@ -71,9 +65,7 @@
     "internal": [
       "palette.dark-mode"
     ],
-    "frontier": [
-      "palette.status-seeds"
-    ],
+    "frontier": [],
     "tenantRawAllowlist": 290,
     "tenantRawAllowlistSource": "dist-runtime",
     "tenantRawDomains": {
@@ -179,6 +171,11 @@
     {
       "id": "profiles.expressive",
       "tier": "pro",
+      "verdict": "verified"
+    },
+    {
+      "id": "palette.status-seeds",
+      "tier": "standard",
       "verdict": "verified"
     },
     {
@@ -437,6 +434,14 @@
     "--ds-tall-card-value-color-hover",
     "--ds-tint-16",
     "--ds-tint-4",
+    "--ds-tint-error-16",
+    "--ds-tint-error-24",
+    "--ds-tint-info-16",
+    "--ds-tint-info-24",
+    "--ds-tint-success-16",
+    "--ds-tint-success-24",
+    "--ds-tint-warning-16",
+    "--ds-tint-warning-24",
     "--ds-typography-body-letter-spacing",
     "--ds-typography-display-letter-spacing",
     "--ds-workflow-gap",
@@ -28081,7 +28086,7 @@
         "artifact": true
       },
       "tsWriteSites": 2,
-      "tsMetadataMentions": 6
+      "tsMetadataMentions": 7
     },
     "--ds-color-success-100": {
       "category": "canonical-authority",
@@ -97342,9 +97347,9 @@
       "tsMetadataMentions": 1
     },
     "--ds-tint-error-12": {
-      "category": "frontier-reserved",
-      "tier": "frontier",
-      "status": "frontier",
+      "category": "compiler-derived-channel",
+      "tier": "tenant-bounded",
+      "status": "active",
       "writer": true,
       "reads": {
         "css": 2,
@@ -97357,9 +97362,9 @@
       "tsMetadataMentions": 0
     },
     "--ds-tint-error-16": {
-      "category": "frontier-reserved",
-      "tier": "frontier",
-      "status": "frontier",
+      "category": "compiler-derived-channel",
+      "tier": "tenant-bounded",
+      "status": "dead-writer",
       "writer": true,
       "reads": {
         "css": 0,
@@ -97372,9 +97377,9 @@
       "tsMetadataMentions": 0
     },
     "--ds-tint-error-24": {
-      "category": "frontier-reserved",
-      "tier": "frontier",
-      "status": "frontier",
+      "category": "compiler-derived-channel",
+      "tier": "tenant-bounded",
+      "status": "dead-writer",
       "writer": true,
       "reads": {
         "css": 0,
@@ -97387,9 +97392,9 @@
       "tsMetadataMentions": 0
     },
     "--ds-tint-error-4": {
-      "category": "frontier-reserved",
-      "tier": "frontier",
-      "status": "frontier",
+      "category": "compiler-derived-channel",
+      "tier": "tenant-bounded",
+      "status": "active",
       "writer": true,
       "reads": {
         "css": 1,
@@ -97402,9 +97407,9 @@
       "tsMetadataMentions": 0
     },
     "--ds-tint-error-8": {
-      "category": "frontier-reserved",
-      "tier": "frontier",
-      "status": "frontier",
+      "category": "compiler-derived-channel",
+      "tier": "tenant-bounded",
+      "status": "active",
       "writer": true,
       "reads": {
         "css": 9,
@@ -97417,9 +97422,9 @@
       "tsMetadataMentions": 0
     },
     "--ds-tint-info-12": {
-      "category": "frontier-reserved",
-      "tier": "frontier",
-      "status": "frontier",
+      "category": "compiler-derived-channel",
+      "tier": "tenant-bounded",
+      "status": "active",
       "writer": true,
       "reads": {
         "css": 2,
@@ -97432,9 +97437,9 @@
       "tsMetadataMentions": 0
     },
     "--ds-tint-info-16": {
-      "category": "frontier-reserved",
-      "tier": "frontier",
-      "status": "frontier",
+      "category": "compiler-derived-channel",
+      "tier": "tenant-bounded",
+      "status": "dead-writer",
       "writer": true,
       "reads": {
         "css": 0,
@@ -97447,9 +97452,9 @@
       "tsMetadataMentions": 0
     },
     "--ds-tint-info-24": {
-      "category": "frontier-reserved",
-      "tier": "frontier",
-      "status": "frontier",
+      "category": "compiler-derived-channel",
+      "tier": "tenant-bounded",
+      "status": "dead-writer",
       "writer": true,
       "reads": {
         "css": 0,
@@ -97462,9 +97467,9 @@
       "tsMetadataMentions": 0
     },
     "--ds-tint-info-4": {
-      "category": "frontier-reserved",
-      "tier": "frontier",
-      "status": "frontier",
+      "category": "compiler-derived-channel",
+      "tier": "tenant-bounded",
+      "status": "active",
       "writer": true,
       "reads": {
         "css": 1,
@@ -97477,9 +97482,9 @@
       "tsMetadataMentions": 0
     },
     "--ds-tint-info-8": {
-      "category": "frontier-reserved",
-      "tier": "frontier",
-      "status": "frontier",
+      "category": "compiler-derived-channel",
+      "tier": "tenant-bounded",
+      "status": "active",
       "writer": true,
       "reads": {
         "css": 9,
@@ -97492,9 +97497,9 @@
       "tsMetadataMentions": 0
     },
     "--ds-tint-success-12": {
-      "category": "frontier-reserved",
-      "tier": "frontier",
-      "status": "frontier",
+      "category": "compiler-derived-channel",
+      "tier": "tenant-bounded",
+      "status": "active",
       "writer": true,
       "reads": {
         "css": 2,
@@ -97507,9 +97512,9 @@
       "tsMetadataMentions": 0
     },
     "--ds-tint-success-16": {
-      "category": "frontier-reserved",
-      "tier": "frontier",
-      "status": "frontier",
+      "category": "compiler-derived-channel",
+      "tier": "tenant-bounded",
+      "status": "dead-writer",
       "writer": true,
       "reads": {
         "css": 0,
@@ -97522,9 +97527,9 @@
       "tsMetadataMentions": 0
     },
     "--ds-tint-success-24": {
-      "category": "frontier-reserved",
-      "tier": "frontier",
-      "status": "frontier",
+      "category": "compiler-derived-channel",
+      "tier": "tenant-bounded",
+      "status": "dead-writer",
       "writer": true,
       "reads": {
         "css": 0,
@@ -97537,9 +97542,9 @@
       "tsMetadataMentions": 0
     },
     "--ds-tint-success-4": {
-      "category": "frontier-reserved",
-      "tier": "frontier",
-      "status": "frontier",
+      "category": "compiler-derived-channel",
+      "tier": "tenant-bounded",
+      "status": "active",
       "writer": true,
       "reads": {
         "css": 1,
@@ -97552,9 +97557,9 @@
       "tsMetadataMentions": 0
     },
     "--ds-tint-success-8": {
-      "category": "frontier-reserved",
-      "tier": "frontier",
-      "status": "frontier",
+      "category": "compiler-derived-channel",
+      "tier": "tenant-bounded",
+      "status": "active",
       "writer": true,
       "reads": {
         "css": 9,
@@ -97567,9 +97572,9 @@
       "tsMetadataMentions": 0
     },
     "--ds-tint-warning-12": {
-      "category": "frontier-reserved",
-      "tier": "frontier",
-      "status": "frontier",
+      "category": "compiler-derived-channel",
+      "tier": "tenant-bounded",
+      "status": "active",
       "writer": true,
       "reads": {
         "css": 2,
@@ -97582,9 +97587,9 @@
       "tsMetadataMentions": 0
     },
     "--ds-tint-warning-16": {
-      "category": "frontier-reserved",
-      "tier": "frontier",
-      "status": "frontier",
+      "category": "compiler-derived-channel",
+      "tier": "tenant-bounded",
+      "status": "dead-writer",
       "writer": true,
       "reads": {
         "css": 0,
@@ -97597,9 +97602,9 @@
       "tsMetadataMentions": 0
     },
     "--ds-tint-warning-24": {
-      "category": "frontier-reserved",
-      "tier": "frontier",
-      "status": "frontier",
+      "category": "compiler-derived-channel",
+      "tier": "tenant-bounded",
+      "status": "dead-writer",
       "writer": true,
       "reads": {
         "css": 0,
@@ -97612,9 +97617,9 @@
       "tsMetadataMentions": 0
     },
     "--ds-tint-warning-4": {
-      "category": "frontier-reserved",
-      "tier": "frontier",
-      "status": "frontier",
+      "category": "compiler-derived-channel",
+      "tier": "tenant-bounded",
+      "status": "active",
       "writer": true,
       "reads": {
         "css": 1,
@@ -97627,9 +97632,9 @@
       "tsMetadataMentions": 0
     },
     "--ds-tint-warning-8": {
-      "category": "frontier-reserved",
-      "tier": "frontier",
-      "status": "frontier",
+      "category": "compiler-derived-channel",
+      "tier": "tenant-bounded",
+      "status": "active",
       "writer": true,
       "reads": {
         "css": 9,

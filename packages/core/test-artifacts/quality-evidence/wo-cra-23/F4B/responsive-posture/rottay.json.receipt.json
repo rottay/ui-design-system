@@ -5,7 +5,7 @@
   "scenarioId": "responsive.posture/all-stops/rottay/db-data-terminal",
   "evidenceKind": "data-field-delta",
   "commandOrTool": "node src/tooling/resolution-probe/public/cli/index.mjs data-causal",
-  "toolVersion": "resolution-probe@cc010704a6aa",
+  "toolVersion": "resolution-probe@fe0cd6c5e27b",
   "exitCode": 0,
   "sourceFiles": [
     "packages/core/dist/build-stamp.json",
@@ -44,10 +44,10 @@
     "packages/core/src/ui/patterns/runtime/adaptive-layout/runtime/index.ts",
     "packages/core/src/ui/surfaces/presentation/pages/data/dashboard/index.tsx"
   ],
-  "sourceDigest": "87079ea6bfb44b4b45de363ed0fb7dd8591ede6e4116ee47344f0f1212930c4c",
+  "sourceDigest": "f2b2d2e24ee3c4f986f477e8b915e2d1615a4cc8134377bad9b4225f44ac95f0",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/responsive-posture/rottay.json",
-  "artifactSha256": "ef7231a69b26c0e2b3b07a93ce7ccddcaebcdc22844a23780476181eef9299de",
-  "createdAt": "2026-08-28T06:23:29.114Z",
+  "artifactSha256": "7af93796e11cba63e7bf616cab9bb4ab97a8b8c633d75dc2d2a404bd32f74736",
+  "createdAt": "2026-08-29T01:21:32.033Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

@@ -13491,6 +13491,34 @@
       }
     },
     {
+      "controlId": "palette.status-seeds",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "palette.status-seeds",
+            "carrier": "shared-channel",
+            "socketPattern": null,
+            "socketsResolved": true,
+            "noSocketReason": "sin socket propio; consumo directo de --ds-color-error via canal compartido",
+            "channels": [
+              "--ds-color-error"
+            ],
+            "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list-toolbar.css",
+            "sourceBindings": [
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list-toolbar.css:460-461,1050,1062,1078-1079"
+            ]
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
+    },
+    {
       "controlId": "profiles.icon",
       "disposition": "UNKNOWN",
       "verificationState": "UNKNOWN",

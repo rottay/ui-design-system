@@ -5,7 +5,7 @@
   "scenarioId": "profiles.icon/all-stops/evnto/db-data-terminal",
   "evidenceKind": "data-field-delta",
   "commandOrTool": "node src/tooling/resolution-probe/public/cli/index.mjs data-causal",
-  "toolVersion": "resolution-probe@cc010704a6aa",
+  "toolVersion": "resolution-probe@fe0cd6c5e27b",
   "exitCode": 0,
   "sourceFiles": [
     "packages/core/dist/build-stamp.json",
@@ -40,10 +40,10 @@
     "packages/core/src/tooling/resolution-probe/runtime/ingress/index.mjs",
     "packages/core/src/tooling/resolution-probe/runtime/measure/index.mjs"
   ],
-  "sourceDigest": "8ae2a8b8ddf16d37733a9e289cc7a708be423ac2e3cc4f8c2b52987ae5cfa4b2",
+  "sourceDigest": "9105b2b05e66c42e861a9e866ac70e0075331aafaadb27bf535d964d526b25bf",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/profiles-icon/evnto.json",
   "artifactSha256": "2dd7bcd6a619d2ae8e61ffc95d50cf6b07d725f3b606d70e82dcc7d5b7ab8768",
-  "createdAt": "2026-08-28T06:23:29.114Z",
+  "createdAt": "2026-08-29T18:12:04.629Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

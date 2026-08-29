@@ -6704,6 +6704,35 @@
       }
     },
     {
+      "controlId": "palette.status-seeds",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "palette.status-seeds",
+            "socketPattern": null,
+            "prop": "color de icono y fondo del icono del modal por variante de tono (success/warning/error/info)",
+            "tier": "standard",
+            "examples": [
+              "--ds-color-success-500"
+            ],
+            "noSocketReason": "--ds-modal-{success|warning|error|info}-icon-color: var(--ds-color-{tono}-500) y --ds-modal-{success|warning|error|info}-icon-bg: var(--ds-color-{tono}-100); evidencia verificada en modal.css:225-238.",
+            "socketsResolved": true,
+            "carrier": "shared-channel"
+          }
+        ],
+        "reviewedFrom": "anatomy",
+        "sourceBindings": [
+          "packages/core/src/foundation/tokens/css/presentation/components/modal.css"
+        ]
+      }
+    },
+    {
       "controlId": "profiles.icon",
       "disposition": "UNKNOWN",
       "verificationState": "UNKNOWN",

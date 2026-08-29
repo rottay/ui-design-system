@@ -9,7 +9,9 @@ import { fileURLToPath } from 'node:url';
 
 import { loadProgramContracts } from '../../scripts/quality-evidence/v2/contracts.mjs';
 import { computeSourceDigest, sightedApprovers } from '../../scripts/quality-evidence/v2/receipts.mjs';
+import { parseRegistry } from '../../scripts/tokens/customization-surface-census/index.mjs';
 import {
+  activePublicControls,
   certifyCustomizationManifest,
   validateCustomizationManifest,
 } from './index.mjs';
@@ -65,23 +67,39 @@ test('the segmented manifest is structurally complete without treating UNKNOWN a
   // asserts the generated index agrees with it, which is the real invariant.
   const families = PROGRAM.denominators.visibleFamilies;
   assert.equal(INDEX.denominators.canonicalFamilies, families);
-  assert.equal(INDEX.denominators.activeStandardControls, 13);
-  assert.equal(INDEX.denominators.activeProCapabilities, 7);
-  assert.equal(INDEX.denominators.controlFamilyCells, families * 20);
-  assert.equal(INDEX.rollups.controlFamilyDispositions.UNKNOWN, families * 20);
+  // Same law for the control denominators: DERIVED from the registry TS the
+  // generator itself reads (`activePublicControls()`), never restated as a
+  // literal here. A hand-pinned 13, then 14, is exactly what went stale when
+  // `palette.status-seeds` opened its last frontier row to tier Standard.
+  const controls = activePublicControls();
+  const standardControls = controls.filter((entry) => entry.tier === 'standard').length;
+  const proCapabilities = controls.filter((entry) => entry.tier === 'pro').length;
+  assert.equal(INDEX.denominators.activeStandardControls, standardControls);
+  assert.equal(INDEX.denominators.activeProCapabilities, proCapabilities);
+  assert.equal(INDEX.denominators.controlFamilyCells, families * controls.length);
+  assert.equal(INDEX.rollups.controlFamilyDispositions.UNKNOWN, families * controls.length);
   assert.equal(INDEX.rollups.familyReviews.accepted, 0);
   assert.equal(INDEX.rollups.skeletonsCountAsProgress, false);
 });
 
 test('frontier, internal and proposed controls never create R0-R6 family cells', () => {
+  // DERIVED from the registry: only active Standard/Pro rows create cells, so
+  // the excluded set is whatever is left over once activePublicControls() has
+  // taken its cut. A pinned id list is exactly what went stale when
+  // palette.status-seeds opened its frontier row to tier Standard.
+  const controls = activePublicControls();
+  const expectedExcluded = parseRegistry()
+    .filter((entry) => !controls.some((control) => control.id === entry.id))
+    .map((entry) => entry.id)
+    .sort();
   assert.deepEqual(
     INDEX.excludedRegistryRows.map((entry) => entry.controlId).sort(),
-    ['palette.dark-mode', 'palette.status-seeds'],
+    expectedExcluded,
   );
   const dataTable = JSON.parse(
     readFileSync(join(MANIFEST_ROOT, 'families/pattern/data/pattern-data-table.json'), 'utf8'),
   );
-  assert.equal(dataTable.themeControls.length, 20);
+  assert.equal(dataTable.themeControls.length, controls.length);
   assert.equal(dataTable.themeControls.some((cell) => cell.controlId === 'surface.edge'), false);
   assert.equal(dataTable.themeControls.some((cell) => cell.controlId === 'motion.character'), false);
 });
@@ -103,7 +121,7 @@ test('controls and recipe groups do not duplicate reverse family edges', () => {
 
 test('the reverse control -> family/part/channel view is generated from family cells', () => {
   const view = INDEX.generatedControlFamilyView;
-  assert.equal(view.controls.length, 20);
+  assert.equal(view.controls.length, activePublicControls().length);
 
   const rhythm = view.controls.find((entry) => entry.controlId === 'spacing.rhythm');
   // Derived from the four canary family cells, which are the only cells that

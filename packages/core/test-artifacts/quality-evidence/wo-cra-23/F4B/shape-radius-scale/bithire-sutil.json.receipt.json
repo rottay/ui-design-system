@@ -1,11 +1,11 @@
 {
   "schemaVersion": 2,
-  "roundId": "R3",
+  "roundId": "R6",
   "familyId": "primitive/display/card",
   "scenarioId": "shape.radius-scale/sutil/bithire/static-and-db",
   "evidenceKind": "static-db-computed-parity",
   "commandOrTool": "node src/tooling/resolution-probe/public/cli/index.mjs causal",
-  "toolVersion": "resolution-probe@cc010704a6aa",
+  "toolVersion": "resolution-probe@fe0cd6c5e27b",
   "exitCode": 0,
   "sourceFiles": [
     "packages/core/dist/build-stamp.json",
@@ -70,10 +70,10 @@
     "packages/core/src/ui/primitives/display/Card/engines/rustic/index.tsx",
     "packages/core/src/ui/primitives/display/Card/index.tsx"
   ],
-  "sourceDigest": "1df637369b4a334c77aa581a7c8031e1ff3fbf7e8eaa06622230bce928bf8ad9",
+  "sourceDigest": "493130ddc2228d80607b9dd203d9954f7edb4b063f6b0fc66cc23b6bd919a8bb",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/shape-radius-scale/bithire-sutil.json",
-  "artifactSha256": "24217c68e788ac716800174997f0fc008a2af65de15dbc6bbc9acc17f5cdb117",
-  "createdAt": "2026-08-28T06:23:29.114Z",
+  "artifactSha256": "ef925270c40e3af52488781d0419fd6ca353a72ed6ed746ee8890aba15ddd2ca",
+  "createdAt": "2026-08-29T02:16:53.591Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

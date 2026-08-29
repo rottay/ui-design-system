@@ -6196,6 +6196,38 @@
       }
     },
     {
+      "controlId": "palette.status-seeds",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "palette.status-seeds",
+            "carrier": "shared-channel",
+            "socketPattern": null,
+            "socketsResolved": true,
+            "noSocketReason": "sin socket propio; success/warning/error/info consumidos via mapa de valores por defecto que alimenta el preview en vivo (brand-studio/index.tsx:102-109); error confirmado tambien en skin (brand-studio.css:205, con rampa -bg derivada)",
+            "channels": [
+              "--ds-color-success",
+              "--ds-color-warning",
+              "--ds-color-error",
+              "--ds-color-info"
+            ],
+            "producer": "packages/core/src/ui/patterns/customization/brand-studio/index.tsx",
+            "sourceBindings": [
+              "packages/core/src/ui/patterns/customization/brand-studio/index.tsx:102-109",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/brand-studio.css:205"
+            ]
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
+    },
+    {
       "controlId": "profiles.icon",
       "disposition": "UNKNOWN",
       "verificationState": "UNKNOWN",

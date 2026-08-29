@@ -1,11 +1,11 @@
 {
   "schemaVersion": 2,
-  "roundId": "R5",
+  "roundId": "R6",
   "familyId": "primitive/layout/space",
   "scenarioId": "density.mode/spacious/evnto/static-and-db",
   "evidenceKind": "exact-restore",
   "commandOrTool": "node src/tooling/resolution-probe/public/cli/index.mjs causal",
-  "toolVersion": "resolution-probe@cc010704a6aa",
+  "toolVersion": "resolution-probe@fe0cd6c5e27b",
   "exitCode": 0,
   "sourceFiles": [
     "packages/core/dist/build-stamp.json",
@@ -58,10 +58,10 @@
     "packages/core/src/ui/primitives/layout/Space/tests/Space.modern-fragment-children.test.tsx",
     "packages/core/src/ui/primitives/layout/Space/tests/Space.test.tsx"
   ],
-  "sourceDigest": "f2d24e4e9a50d4fc657eba651981cb1e8e30dc2c565ac5959697d60c44d6673e",
+  "sourceDigest": "2d0822272640f6b6473f9372a13b467a1d25a72dcc79cc266b85684500fdd725",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/density-mode/evnto-spacious.json",
-  "artifactSha256": "e217882944793f38facbc1f5f717d0880acef0803122cdc0e9118196933258a9",
-  "createdAt": "2026-08-28T06:23:29.114Z",
+  "artifactSha256": "e693af7091b4d497624ae07793e7131e5557c1d0f9f53eb6109821d05238d145",
+  "createdAt": "2026-08-29T02:35:24.855Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

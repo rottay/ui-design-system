@@ -1,11 +1,11 @@
 {
   "schemaVersion": 2,
-  "roundId": "R7",
+  "roundId": "R6",
   "familyId": "primitive/display/card",
   "scenarioId": "experience.profile/technical/evnto/static-and-db/light",
   "evidenceKind": "static-db-computed-parity",
   "commandOrTool": "node src/tooling/resolution-probe/public/cli/index.mjs causal",
-  "toolVersion": "resolution-probe@cc010704a6aa",
+  "toolVersion": "resolution-probe@fe0cd6c5e27b",
   "exitCode": 0,
   "sourceFiles": [
     "packages/core/dist/build-stamp.json",
@@ -71,10 +71,10 @@
     "packages/core/src/ui/primitives/display/Card/engines/rustic/index.tsx",
     "packages/core/src/ui/primitives/display/Card/index.tsx"
   ],
-  "sourceDigest": "8d17d88fb6670ec386d1ba49284aebc40f329a1abf1afda4470699d990c8e3ce",
+  "sourceDigest": "b641d1376cb4ae808976fe46cd94847162f186f26ffd6c9a239c3616510ca13c",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/experience-profile/evnto-technical.R7-light.json",
-  "artifactSha256": "0907e990109d257f26ca19afe3b8f3f8331a13edecbc5f33a4753b1d4b3e1f57",
-  "createdAt": "2026-08-28T06:23:29.114Z",
+  "artifactSha256": "47077fc2a88efa8b693ba553553cad928fb48837ffe436cb33ea070b819f9b57",
+  "createdAt": "2026-08-29T01:54:30.931Z",
   "negativeDrill": {
     "violation": "a moved negative control, a non-restoring variable, a zero-match selector, an unhydrated target, or a stale source digest",
     "failsClosed": true,

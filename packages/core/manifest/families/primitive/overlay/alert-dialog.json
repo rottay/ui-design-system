@@ -2580,6 +2580,35 @@
       }
     },
     {
+      "controlId": "palette.status-seeds",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "palette.status-seeds",
+            "socketPattern": null,
+            "prop": "fondo/box-shadow/color del pozo de icono destructivo (uso incondicional, tono error)",
+            "tier": "standard",
+            "examples": [
+              "--ds-color-error"
+            ],
+            "noSocketReason": "background/box-shadow/color via color-mix(...var(--ds-color-error)...) en [data-part='icon'], sin condicionar a variant/tone; evidencia verificada en skin/alert-dialog.css:201-211.",
+            "socketsResolved": true,
+            "carrier": "shared-channel"
+          }
+        ],
+        "reviewedFrom": "anatomy",
+        "sourceBindings": [
+          "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/alert-dialog.css"
+        ]
+      }
+    },
+    {
       "controlId": "profiles.icon",
       "disposition": "UNKNOWN",
       "verificationState": "UNKNOWN",

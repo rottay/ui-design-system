@@ -1536,6 +1536,40 @@
       }
     },
     {
+      "controlId": "palette.status-seeds",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "palette.status-seeds",
+            "socketPattern": null,
+            "prop": "data-tone success/warning/error/info lee el color de estado y su color de contraste compartidos",
+            "tier": "standard",
+            "examples": [],
+            "channels": [
+              "--ds-color-success",
+              "--ds-color-on-success",
+              "--ds-color-warning",
+              "--ds-color-on-warning",
+              "--ds-color-error",
+              "--ds-color-on-error",
+              "--ds-color-info",
+              "--ds-color-on-info"
+            ],
+            "noSocketReason": "sin socket propio; lee los canales compartidos de estado [at packages/core/src/foundation/tokens/css/presentation/components/icon-frame.css:110-124]",
+            "socketsResolved": true,
+            "carrier": "shared-channel"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
+    },
+    {
       "controlId": "profiles.icon",
       "disposition": "UNKNOWN",
       "verificationState": "UNKNOWN",

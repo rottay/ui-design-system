@@ -140,6 +140,15 @@ const general = object({
       primary: HEX_COLOR,
       secondary: HEX_COLOR,
     }),
+    // Vocabulario CERRADO de tonos de estado. El sobre rechaza cualquier quinta
+    // clave, que es la mitad de runtime del cierre: el tipo protege al autor,
+    // esto protege contra la fila DB, que es JSON no confiable.
+    status: object({
+      success: COLOR,
+      warning: COLOR,
+      error: COLOR,
+      info: COLOR,
+    }),
     backgroundMode: enumeration("light", "dark", "auto"),
     dark: object({
       primary: COLOR,

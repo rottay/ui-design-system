@@ -2994,6 +2994,50 @@
       }
     },
     {
+      "controlId": "palette.status-seeds",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": null,
+            "socketPattern": null,
+            "prop": "linea acumulativa via prop cumulativeColor, default var(--ds-color-info)",
+            "tier": "standard",
+            "examples": [],
+            "noSocketReason": "sin socket propio; cumulativeColor es un prop con default var(--ds-color-info) consumido directo en el SVG (families/histogram/index.tsx:97; renderer runtime/chart-engine/presentation/react/renderers/histogram/index.tsx:53, DEFAULT_CUMULATIVE_PAINT).",
+            "socketsResolved": true,
+            "carrier": "shared-channel",
+            "ownedBy": null,
+            "channels": [
+              "--ds-color-info"
+            ]
+          },
+          {
+            "root": null,
+            "socketPattern": null,
+            "prop": "chart-scaffold error state (frame border-color + error state-label color) via var(--ds-color-error)",
+            "tier": "standard",
+            "examples": [],
+            "noSocketReason": "sin socket status propio; las 18 familias chart montan ChartScaffold (presentation/scaffold/index.tsx:341,365 estampan data-state=\"error\") y ese estado ya pinta con var(--ds-color-error) en el chrome compartido (chart-foundation.css:1396-1412, comentario :1374-1378 declara el error de scaffold \"meaning-bearing status, not a category\"); socketear por familia duplicaria el mismo canal 18 veces.",
+            "socketsResolved": true,
+            "carrier": "shared-channel",
+            "ownedBy": null,
+            "carrierFile": "packages/core/src/foundation/tokens/css/presentation/components/skin/chart-foundation.css",
+            "channels": [
+              "--ds-color-error"
+            ]
+          }
+        ],
+        "reviewedFrom": "anatomy",
+        "remediatedFrom": "cells-chart-status-seeds"
+      }
+    },
+    {
       "controlId": "profiles.icon",
       "disposition": "UNKNOWN",
       "verificationState": "UNKNOWN",

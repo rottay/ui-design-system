@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "generatedBy": "scripts/tokens/kimi-preservation-manifest/index.mjs --write",
-  "basedOnReportDigest": "4ba14de169af1b7734c1516995f18c8ed5b8d0b49842257c05a4a668bbc9f6b6",
+  "basedOnReportDigest": "76848dd65f1859619c37aafa9973a49ae8c345e6cf44b13d6e9a4138909dff99",
   "laws": [
     "preserve 100% of useful premium visual capability; connect it to the canon",
     "a census dead-writer verdict is never a deletion license",
@@ -2153,9 +2153,9 @@
     ]
   },
   "deadWriters": {
-    "total": 266,
+    "total": 274,
     "byProvenance": {
-      "E-reserved-frontier": 5,
+      "E-reserved-frontier": 13,
       "B-modern-current": 61,
       "D-compiler-generated": 17,
       "A-kimi-premium": 183
@@ -3864,6 +3864,62 @@
       },
       {
         "name": "--ds-tint-4",
+        "provenance": "E-reserved-frontier",
+        "decision": "INTERNAL_ROADMAP_UNTIL_OPENING",
+        "owner": "design-system/frontier",
+        "status": "dead-writer"
+      },
+      {
+        "name": "--ds-tint-error-16",
+        "provenance": "E-reserved-frontier",
+        "decision": "INTERNAL_ROADMAP_UNTIL_OPENING",
+        "owner": "design-system/frontier",
+        "status": "dead-writer"
+      },
+      {
+        "name": "--ds-tint-error-24",
+        "provenance": "E-reserved-frontier",
+        "decision": "INTERNAL_ROADMAP_UNTIL_OPENING",
+        "owner": "design-system/frontier",
+        "status": "dead-writer"
+      },
+      {
+        "name": "--ds-tint-info-16",
+        "provenance": "E-reserved-frontier",
+        "decision": "INTERNAL_ROADMAP_UNTIL_OPENING",
+        "owner": "design-system/frontier",
+        "status": "dead-writer"
+      },
+      {
+        "name": "--ds-tint-info-24",
+        "provenance": "E-reserved-frontier",
+        "decision": "INTERNAL_ROADMAP_UNTIL_OPENING",
+        "owner": "design-system/frontier",
+        "status": "dead-writer"
+      },
+      {
+        "name": "--ds-tint-success-16",
+        "provenance": "E-reserved-frontier",
+        "decision": "INTERNAL_ROADMAP_UNTIL_OPENING",
+        "owner": "design-system/frontier",
+        "status": "dead-writer"
+      },
+      {
+        "name": "--ds-tint-success-24",
+        "provenance": "E-reserved-frontier",
+        "decision": "INTERNAL_ROADMAP_UNTIL_OPENING",
+        "owner": "design-system/frontier",
+        "status": "dead-writer"
+      },
+      {
+        "name": "--ds-tint-warning-16",
+        "provenance": "E-reserved-frontier",
+        "decision": "INTERNAL_ROADMAP_UNTIL_OPENING",
+        "owner": "design-system/frontier",
+        "status": "dead-writer"
+      },
+      {
+        "name": "--ds-tint-warning-24",
         "provenance": "E-reserved-frontier",
         "decision": "INTERNAL_ROADMAP_UNTIL_OPENING",
         "owner": "design-system/frontier",

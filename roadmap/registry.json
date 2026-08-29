@@ -1,6 +1,6 @@
 {
  "$schema": "roadmap work-order state registry (single source of WO status; specs live in roadmap lane markdown files)",
- "updated": "2026-08-27",
+ "updated": "2026-08-29",
  "rules": {
   "done_requires": "status in-progress + all dependsOn done + non-empty --evidence + mustLandWith partner in-progress/done; support milestones never complete source IDs",
   "claim_requires": "all dependsOn done + DS-improvements phase claimState open",
@@ -3584,6 +3584,21 @@
      "at": "2026-08-27 02:43",
      "by": "kimi-k3-dt",
      "note": "Sucesion DT 2026-08-27 (docs/prompt-dt-succession-2026-08-27.md): el asiento DT sigue siendo Kimi K3 — transferido de terminal 1 a terminal 2 por cuota de cuenta; exactamente una autoridad DT antes, durante y despues. El campo notes superior describe la era 2026-08-21 (Codex DT) y queda STALE en su modelo operativo: el vigente es Kimi K3 DT/coordinador y unico committer local; pool Claude (Sonnet/Opus) implementa via tmux y nunca commitea; Fable 5 auditor independiente en cada cierre; Codex consultor read-only de baja frecuencia. Autoridad completa del modelo: AGENTS.md + agent-orchestration.json + roadmap §12/§13. F3 abierto: piloto v3 cerrado 2026-08-27 (roadmap §13); proxima cohorte Typography/runtime."
+    },
+    {
+     "at": "2026-08-28 18:18",
+     "by": "kimi-k3-dt",
+     "note": "ROADMAP-OWNER-AMENDMENT-2026-08-28 asentada en docs/ROADMAP-EJECUCION-2026-08-19.md §12 (items 21-34): certificación visual = DS + reference lab static+DB; BitHire = consumer-readiness final solamente (prohibidos lotes sobre su UI actual); app-platform/app-evnto DEFERRED con garantías intactas; dark = no-regresión; no-push = política owner; focus.identity/control.size entran PROPOSED_NOT_IMPLEMENTED (control.size bloqueado en veredicto de ortogonalidad vs density.mode); cohort release gate != cierre de programa; denominadores derivados (21/5355 en vuelo NO se fija; 23/5865 aritmética condicional). Sin cambio de cola: palette.status-seeds termina primero; T-1 Expert 294->290 source-linked en lote limpio posterior. Sin cambio de estado del WO."
+    },
+    {
+     "at": "2026-08-29 13:11",
+     "by": "kimi-k3-dt",
+     "note": "LOTE palette.status-seeds cerrado y verde (2026-08-29): raiz cascade materializada, root-catalog reconciliado (1512/1497/301), 255 celdas adjudicadas una a una (128 MUST_REACH, 126 MUST_NOT_REACH/uncovered, 1 NO_CSS_CHANNEL icon-frame con gap asentado), generator y denominadores derivados (decision 32, sin pins), program-check source-linked con tercer termino vivo + anti-colusion, derivedChannels 3->68, sonda -500 causal, 117 receipts F4B re-ejecutados por su productor (binds derivados del artifact HEAD), typecheck:tests baseline 0, cascade-producers 217/217, program-check CONSTITUTION_READY, program-state verde. Fanout: 24 scouts read-only + 14 writers Claude disjuntos, integracion DT. Falta: veredicto Fable 5 (en curso) y autorizacion owner para commit local."
+    },
+    {
+     "at": "2026-08-29 14:25",
+     "by": "kimi-k3-dt",
+     "note": "CORRECCION y remedio del DEFECTS-6 de Fable (2026-08-29): censo real de celdas palette.status-seeds = 119 MUST_REACH + 136 MUST_NOT_REACH (mi nota previa decia 128/126/1, refutado por Fable con recuento maquina — esta cifra es la medida). Remediado: D1 los 134 receipts del arbol re-ejecutados y validos (incl. 17 que el scan de program-check no cubre y el caso compuesto E-2 con productor reconstruido); D2 27 celdas con internalChannels de canales publicos re-hechas a MUST_REACH con bindings (cero internalChannels con semanticOwner palette.status-seeds); D3 4 celdas re-adjudicadas MUST_NOT_REACH (evidencia solo en engines read-only); D4 raiz/edges reconciliados; D5 12 scratch eliminados; D6 README:164 derivado. Deuda registrada para owner: root color.status en celdas palette.seeds (10 ocurrencias, pre-existente HEAD); productor one-off del caso compuesto; roundId no gobernado contra enabled; T-21 drill muta artefacto real sin tmpdir; emissionsWithCausalRoot pineado 9 veces en cascade-producers.test."
     }
    ],
    "claimedBy": "claude-modern-rescue",

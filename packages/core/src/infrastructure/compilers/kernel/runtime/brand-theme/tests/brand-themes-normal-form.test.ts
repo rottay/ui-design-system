@@ -219,8 +219,12 @@ describe("first-party brand themes are in normal form", () => {
       const keys = skeletonKeysOf(source(slug));
       // Everything the contract demands is present, in the contract's order.
       expect(required.filter((k) => !keys.includes(k)), slug).toEqual([]);
+      // `keys` is parsed text (`string[]`); `required` is the contract's literal
+      // union. The membership test needs the WIDER haystack, so the read is
+      // widened rather than the key narrowed — narrowing with a cast would
+      // assert the very thing this line is measuring.
       expect(
-        keys.filter((k) => required.includes(k)),
+        keys.filter((k) => (required as readonly string[]).includes(k)),
         slug,
       ).toEqual(required);
       // The optional extras sit at their fixed slots, never at the end.

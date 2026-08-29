@@ -34,12 +34,18 @@ function statik(
   paths: string[],
   brandTheme = bithireBrandTheme
 ): Record<string, string> {
+  // `tenantPatch` / `tenantAuthoredPaths` live on the implementation's
+  // `BrandCompilerProvenanceInput`, not on the public `BrandCompilerInput` that
+  // types `compileBrandTheme` — so the per-VALUE casts do not silence the
+  // excess-property check on the literal. Cast the literal itself, exactly as
+  // the sibling drill does (`brand-compiler.test.ts`, B-1 `lower()`), instead of
+  // widening the public contract for a test.
   return compileBrandTheme({
     brandTheme,
     tenantSlug: 'bithire',
     tenantPatch: tenantPatch as never,
     tenantAuthoredPaths: new Set(paths) as never,
-  }).cssVariables;
+  } as Parameters<typeof compileBrandTheme>[0]).cssVariables;
 }
 
 function dbDoor(typography: Record<string, unknown>, vertical = 'bithire') {
@@ -139,7 +145,7 @@ describe('E-2: the composed case — the tenant literal beats the tenant pairing
         tenantSlug: 'probe',
         tenantPatch: { typography: { typePairing: 'editorial' } } as never,
         tenantAuthoredPaths: new Set(['typography.typePairing']) as never,
-      }).cssVariables;
+      } as Parameters<typeof compileBrandTheme>[0]).cssVariables;
       // The tenant's pairing governs: the vertical's literal never travels in
       // the patch, so the floor has nothing of the tenant's to re-apply.
       expect(withTenantPairing[HEADING]).toContain('--ds-font-pack-editorial-display');
@@ -174,7 +180,7 @@ describe('E-2: the composed case — the tenant literal beats the tenant pairing
         'typography.typePairing',
         'typography.fontFamilyHeading',
       ]) as never,
-    });
+    } as Parameters<typeof compileBrandTheme>[0]);
     for (const block of compiled.modeBlocks ?? []) {
       const emitted = block.cssVariables[HEADING];
       // A block that restates the channel must restate the tenant's literal,

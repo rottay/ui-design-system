@@ -67,9 +67,14 @@ writing another programme.
 The following are machine-checked by `program-check.mjs` and are not subject to
 prose reinterpretation:
 
-- **Control tiers.** Operational product truth is exactly 13 Standard controls
-  and 7 Pro capabilities recorded in `customization-model.json` and
-  `program.json`. The proposed 9 Standard + 7 Pro taxonomy is a design target
+- **Control tiers.** The operational Standard set is not a number typed here:
+  it is every row the capability registry
+  (`packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts`)
+  declares `tier: 'standard'` with `status: 'active'`. `customization-model.json`
+  records that set id by id, `program.json` records its size, and
+  `program-check.mjs` derives the count from the registry and refuses any of the
+  three — including this file — that disagrees with it. 7 Pro capabilities are
+  recorded the same way. The proposed 9 Standard + 7 Pro taxonomy is a design target
   with `implementationState: PROPOSED_NOT_IMPLEMENTED`; it never counts as
   coverage and may not coexist with an equivalent operational control. Expert
   is a closed 294-entry exact allowlist with at most 200 overrides per document;
@@ -118,8 +123,10 @@ applicable.
 ## Operational controls versus the target model
 
 The capability registry is the only operational product-control authority.
-`customization-model.json` records the current 13 Standard controls and seven
-Pro capabilities from that source. The proposed 9 Standard + 7 Pro model is a
+`customization-model.json` records, id by id, the Standard controls that source
+declares active, and the seven Pro capabilities beside them; the baseline in
+`program.json` is the size of that same set, derived by `program-check.mjs` from
+the registry and never typed by hand. The proposed 9 Standard + 7 Pro model is a
 design target, not implemented product truth.
 
 Only one model is operational at a time. A target control becomes operational
@@ -153,8 +160,9 @@ edge, and the index derives reverse views and rollups. This keeps one semantic
 owner with many consumers without duplicating the relationship in two files.
 
 A bootstrap contains one `INVENTORIED_ONLY` record per canonical family and a
-`UNKNOWN` cell for every active control on every family -- currently 255 records
-and 5,100 cells. It awards zero progress. A proposed premium
+`UNKNOWN` cell for every active control on every family -- one record per row
+of `family-inventory.json` and cells = active public controls × families, both
+derived by the generator, never pinned here. It awards zero progress. A proposed premium
 feature has `countsAsCapability: false` until it is adopted through an existing
 authority or an owner-approved additive API.
 
@@ -239,7 +247,7 @@ not rerun an implementation loop for every earlier assertion.
 
 <!-- lane-control:program-state v1 — DO NOT EDIT BY HAND. Rewrite it with:
      node packages/core/src/tooling/lane-control/public/program-state/index.mjs --write --intent <intent.json>
-     head=66012af28 written=2026-08-27T11:55:05.623Z intent=38abaf567a085f9f render=5f5b0e513434797f -->
+     head=5fde45a34 written=2026-08-29T18:25:49.799Z intent=38abaf567a085f9f render=aab3f21abef35661 -->
 
 *Everything in this section is intent. Anything derivable is derived by command, not typed here.*
 
@@ -278,7 +286,7 @@ absent: pinning them here would make this document stale the moment it was commi
 | Fact | Value | Derivation |
 |---|---|---|
 | `inventory.families` | 255 | packages/core/scripts/quality-evidence/programs/modern-rescue/family-inventory.json rows.length |
-| `manifest.controlFamilyCells` | 5100 | packages/core/manifest/index.json denominators.controlFamilyCells |
+| `manifest.controlFamilyCells` | 5355 | packages/core/manifest/index.json denominators.controlFamilyCells |
 | `adjudication.accepted` | 0 | packages/core/manifest/index.json rollups.familyReviews.accepted |
 | `adjudication.assessedNotElevated` | 0 | packages/core/manifest/index.json rollups.familyReviews.assessedNotElevated |
 | `adjudication.unreviewed` | 255 | packages/core/manifest/index.json rollups.familyReviews.unreviewed |

@@ -76,6 +76,17 @@ const CUSTOMER_DOCUMENT: TenantThemeDocument = {
         secondary: "#8C6D46",
         accent: "#E2725B",
         foreground: { muted: "#6B6154", disabled: "#80766A" },
+        // P0: las 4 semillas de estado por la via DB tipada. Se autoran AQUI, en
+        // el documento local de esta prueba, y no en el fixture publicado
+        // `themanagement-db-row`: ese alimenta `tenant-theme-canary-fixtures.json`,
+        // que es artefacto de paquete, y tocarlo habria cambiado un specimen
+        // enviado sin que este lote lo necesite.
+        status: {
+          success: "#2F7A3D",
+          warning: "#B5850F",
+          error: "#A32E22",
+          info: "#2C6FA6",
+        },
       },
       typography: {
         fontFamilyBase: "Optima, Candara, 'Noto Sans', sans-serif",
@@ -193,10 +204,17 @@ const buildStaticMirror = (compiled: typeof dbCompiled): BrandTheme => {
       backgroundColor: variable("--ds-color-bg-primary"),
       textMutedColor: variable("--ds-color-text-muted"),
       textDisabledColor: variable("--ds-color-text-disabled"),
-      successColor: variable("--ds-color-success"),
-      warningColor: variable("--ds-color-warning"),
-      errorColor: variable("--ds-color-error"),
-      infoColor: variable("--ds-color-info"),
+      /* P0: el espejo deja de necesitar el ATAJO. Hasta la apertura de
+       * `palette.status-seeds` estos cuatro se leian de `variables[...]` porque
+       * la DB no tenia campo tipado y el unico camino era un `tokenOverride`
+       * crudo — la asimetria estatico/DB que la fila frontera declaraba. Ahora
+       * salen del documento, igual que primary/secondary/accent, y que este
+       * `seed(...)` no explote ES la prueba de la condicion 2: la via DB tiene
+       * el campo, no el rodeo. */
+      successColor: seed(seeds.status?.success, "status.success"),
+      warningColor: seed(seeds.status?.warning, "status.warning"),
+      errorColor: seed(seeds.status?.error, "status.error"),
+      infoColor: seed(seeds.status?.info, "status.info"),
     },
     chrome: {
       ...chrome,

@@ -2178,6 +2178,33 @@
       }
     },
     {
+      "controlId": "palette.status-seeds",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "carrier": "shared-channel",
+            "ownedBy": "palette.status-seeds",
+            "channels": [
+              "--ds-color-success",
+              "--ds-color-warning",
+              "--ds-color-error",
+              "--ds-color-info"
+            ],
+            "socketsResolved": true,
+            "prop": "consumo directo skin (nivel 1): status-badge data-variant, record-workbench.css:94-114; estampado en index.tsx:294-296",
+            "note": "bg/border/ink son de EXTENDED_PALETTE_CHANNELS, fuera de este control (brand-theme/index.ts:493-517)"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
+    },
+    {
       "controlId": "profiles.icon",
       "disposition": "UNKNOWN",
       "verificationState": "UNKNOWN",

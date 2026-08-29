@@ -3442,7 +3442,7 @@
             },
             "--ds-button-primary-bg": {
               "moved": false,
-              "value": "#3A6FB0"
+              "value": "rgb(58, 111, 176)"
             },
             "--ds-card-border-radius": {
               "moved": false,
@@ -3647,7 +3647,7 @@
             },
             "--ds-sidebar-item-color-active": {
               "moved": false,
-              "value": "#3A6FB0"
+              "value": "rgb(58, 111, 176)"
             },
             "--ds-sidebar-text": {
               "moved": false,
@@ -7314,7 +7314,7 @@
             },
             "--ds-button-primary-bg": {
               "moved": false,
-              "value": "#3A6FB0"
+              "value": "rgb(58, 111, 176)"
             },
             "--ds-card-border-radius": {
               "moved": false,
@@ -7519,7 +7519,7 @@
             },
             "--ds-sidebar-item-color-active": {
               "moved": false,
-              "value": "#3A6FB0"
+              "value": "rgb(58, 111, 176)"
             },
             "--ds-sidebar-text": {
               "moved": false,
@@ -7664,7 +7664,7 @@
         "freshnessProven": true,
         "input": {
           "baseline": {
-            "digest": "58af79982271be88f65ffeb35549d3931157b47bb8a33db1d0f9fff363459f34",
+            "digest": "fceed16a59a5c7e579c766fdd88cd15fd38377cc6a7f75c367320eff7f3f2022",
             "source": "dist/index.js#bithireBrandTheme"
           },
           "compileOptions": {},
@@ -7737,7 +7737,7 @@
                   "iconRadius": "6px",
                   "infoBg": "color-mix(in srgb, var(--ds-color-info, var(--ds-color-secondary, var(--ds-color-primary))) 12%, var(--ds-control-surface))",
                   "infoColor": "var(--ds-color-info, var(--ds-color-secondary, var(--ds-color-primary)))",
-                  "ink": "#14283B",
+                  "ink": "var(--ds-color-text-primary)",
                   "inkHover": "#2C5587",
                   "letterSpacing": "-0.008em",
                   "lineHeight": "1.2",
@@ -7800,7 +7800,7 @@
                   "border": "var(--ds-premium-card-border)",
                   "borderColor": "var(--ds-premium-card-border)",
                   "borderHover": "var(--ds-premium-card-border-hover)",
-                  "color": "#14283B",
+                  "color": "var(--ds-color-text-primary)",
                   "colorMuted": "#728398",
                   "focusRing": "0 0 0 3px var(--ds-tint-24)",
                   "footerBg": "var(--ds-premium-card-footer-bg)",
@@ -7825,20 +7825,20 @@
                   "shadow": "var(--ds-surface-shadow, var(--ds-shadow-sm))",
                   "shadowHover": "var(--ds-surface-shadow-hover, var(--ds-shadow-md))",
                   "subtitleColor": "#728398",
-                  "titleColor": "#14283B",
-                  "titleFontSize": "13px",
+                  "titleColor": "var(--ds-color-text-primary)",
+                  "titleFontSize": "calc(13px * var(--ds-type-scale, 1))",
                   "titleFontWeight": 600,
                   "titleLetterSpacing": "0"
                 },
                 "collectionCard": {
-                  "bg": "#FFFFFF",
+                  "bg": "var(--ds-surface-card)",
                   "bgHover": "#F9FBFE",
                   "bodyColor": "#53697E",
                   "border": "#D4E0EA",
                   "borderHover": "color-mix(in srgb, #3A6FB0 26%, #D4E0EA)",
                   "gap": "10px",
                   "labelColor": "#728398",
-                  "padding": "14px",
+                  "padding": "calc(14px * var(--ds-rhythm-effective-scale, 1))",
                   "radius": "12px",
                   "selectedBorder": "#3A6FB0",
                   "selectedRing": "0 0 0 3px var(--ds-tint-12)",
@@ -7851,14 +7851,14 @@
                   "valueColor": "#14283B"
                 },
                 "compactCard": {
-                  "bg": "#FFFFFF",
+                  "bg": "var(--ds-surface-card)",
                   "bgHover": "#F9FBFE",
                   "bodyColor": "#53697E",
                   "border": "#D4E0EA",
                   "borderHover": "color-mix(in srgb, #3A6FB0 22%, #D4E0EA)",
-                  "gap": "8px",
+                  "gap": "calc(8px * var(--ds-rhythm-effective-scale, 1))",
                   "labelColor": "#728398",
-                  "padding": "10px 12px",
+                  "padding": "calc(10px * var(--ds-rhythm-effective-scale, 1)) calc(12px * var(--ds-rhythm-effective-scale, 1))",
                   "radius": "10px",
                   "shadow": "0 1px 2px rgba(20, 40, 59, 0.04)",
                   "titleColor": "#14283B",
@@ -7886,7 +7886,7 @@
                     "gap": "6px",
                     "letterSpacing": "-0.005em",
                     "lg": {
-                      "fontSize": "14px",
+                      "fontSize": "calc(14px * var(--ds-type-scale, 1))",
                       "gap": "7px",
                       "height": "40px",
                       "iconSize": "16px",
@@ -7895,7 +7895,7 @@
                       "radius": "10px"
                     },
                     "md": {
-                      "fontSize": "13px",
+                      "fontSize": "calc(13px * var(--ds-type-scale, 1))",
                       "gap": "6px",
                       "height": "36px",
                       "iconSize": "15px",
@@ -7905,7 +7905,7 @@
                     },
                     "radius": "9px",
                     "sm": {
-                      "fontSize": "12px",
+                      "fontSize": "calc(12px * var(--ds-type-scale, 1))",
                       "gap": "6px",
                       "height": "32px",
                       "iconSize": "14px",
@@ -7914,7 +7914,7 @@
                       "radius": "8px"
                     },
                     "xl": {
-                      "fontSize": "15px",
+                      "fontSize": "calc(15px * var(--ds-type-scale, 1))",
                       "gap": "8px",
                       "height": "46px",
                       "iconSize": "18px",
@@ -7923,7 +7923,7 @@
                       "radius": "11px"
                     },
                     "xs": {
-                      "fontSize": "11px",
+                      "fontSize": "calc(11px * var(--ds-type-scale, 1))",
                       "gap": "4px",
                       "height": "26px",
                       "iconSize": "12px",
@@ -7950,7 +7950,7 @@
                     "colorHover": "var(--ds-color-primary-hover)"
                   },
                   "buttonPrimary": {
-                    "bg": "#3A6FB0",
+                    "bg": "var(--ds-color-primary)",
                     "bgActive": "var(--ds-color-primary-active, var(--ds-button-primary-bg-hover))",
                     "bgHover": "#2C5587",
                     "border": "var(--ds-button-primary-bg)",
@@ -8003,17 +8003,17 @@
                     "groupGapSeparated": "8px",
                     "groupMinItemWidth": "192px",
                     "groupOverlap": "-1px",
-                    "helperFontSize": "11px",
+                    "helperFontSize": "calc(11px * var(--ds-type-scale, 1))",
                     "helperLineHeight": "1.45",
                     "horizontalGap": "16px",
-                    "labelFontSize": "12px",
+                    "labelFontSize": "calc(12px * var(--ds-type-scale, 1))",
                     "labelFontWeight": 600,
                     "labelLetterSpacing": "0.02em",
                     "labelLineHeight": "1.4",
                     "labelOffsetY": "1px",
                     "letterSpacing": "0.005em",
                     "lg": {
-                      "fontSize": "14px",
+                      "fontSize": "calc(14px * var(--ds-type-scale, 1))",
                       "height": "40px",
                       "iconSize": "16px",
                       "lineHeight": "22px",
@@ -8025,7 +8025,7 @@
                     "loadingSize": "16px",
                     "loadingStroke": "1.75",
                     "md": {
-                      "fontSize": "13px",
+                      "fontSize": "calc(13px * var(--ds-type-scale, 1))",
                       "height": "36px",
                       "iconSize": "15px",
                       "lineHeight": "20px",
@@ -8037,7 +8037,7 @@
                     "radius": "9px",
                     "requiredGap": "0.25em",
                     "sm": {
-                      "fontSize": "12px",
+                      "fontSize": "calc(12px * var(--ds-type-scale, 1))",
                       "height": "32px",
                       "iconSize": "14px",
                       "lineHeight": "18px",
@@ -8055,7 +8055,7 @@
                     "transitionDuration": "160ms",
                     "transitionTiming": "cubic-bezier(0.2, 0.8, 0.2, 1)",
                     "xl": {
-                      "fontSize": "15px",
+                      "fontSize": "calc(15px * var(--ds-type-scale, 1))",
                       "height": "46px",
                       "iconSize": "18px",
                       "lineHeight": "24px",
@@ -8064,7 +8064,7 @@
                       "radius": "11px"
                     },
                     "xs": {
-                      "fontSize": "11px",
+                      "fontSize": "calc(11px * var(--ds-type-scale, 1))",
                       "height": "28px",
                       "iconSize": "13px",
                       "lineHeight": "16px",
@@ -8091,7 +8091,7 @@
                     "autofill": {
                       "bg": "#F4F8FD",
                       "caret": "#3A6FB0",
-                      "color": "#14283B"
+                      "color": "var(--ds-color-text-primary)"
                     },
                     "bg": "var(--ds-surface-inset, #ffffff)",
                     "bgDisabled": "#F8F8F8",
@@ -8104,7 +8104,7 @@
                     "borderDisabled": "#E8EEF3",
                     "borderFocus": "var(--ds-material-control-border-active, #3A6FB0)",
                     "borderHover": "var(--ds-material-control-border-hover, #9DAFC0)",
-                    "caretColor": "#3A6FB0",
+                    "caretColor": "var(--ds-color-primary)",
                     "clear": {
                       "activeTransform": "scale(0.94)",
                       "bg": "transparent",
@@ -8112,7 +8112,7 @@
                       "border": "1px solid transparent",
                       "borderHover": "#C4D2DE",
                       "color": "#71869A",
-                      "colorHover": "#14283B",
+                      "colorHover": "var(--ds-color-text-primary)",
                       "focusRing": "0 0 0 2px rgba(58, 111, 176, 0.20)",
                       "shadowHover": "0 1px 3px rgba(20, 40, 59, 0.10)"
                     },
@@ -8130,7 +8130,7 @@
                     "errorColor": "#14283B",
                     "filled": {
                       "bg": "#F4F8FD",
-                      "bgFocus": "#FFFFFF",
+                      "bgFocus": "var(--ds-surface-control)",
                       "bgHover": "#EDF4FB",
                       "border": "#D4E0EA"
                     },
@@ -8155,7 +8155,7 @@
                       "cursor": "text"
                     },
                     "selectionBg": "rgba(58, 111, 176, 0.20)",
-                    "selectionColor": "#14283B",
+                    "selectionColor": "var(--ds-color-text-primary)",
                     "shadowFocus": "var(--ds-material-control-focus-ring, 0 0 0 3px rgba(58, 111, 176, 0.16), 0 2px 8px rgba(20, 40, 59, 0.08))",
                     "shadowHover": "var(--ds-material-inset-shadow-hover, 0 3px 10px rgba(20, 40, 59, 0.07))",
                     "shadowRest": "var(--ds-material-inset-shadow, 0 1px 2px rgba(20, 40, 59, 0.035))",
@@ -8257,7 +8257,7 @@
                 "filterPill": {
                   "activeBg": "var(--ds-tint-8)",
                   "activeBorder": "color-mix(in srgb, var(--ds-color-primary) 26%, var(--ds-color-border))",
-                  "activeColor": "#3A6FB0",
+                  "activeColor": "var(--ds-color-primary)",
                   "activeShadow": "inset 0 0 0 1px var(--ds-filter-pill-active-border), 0 1px 2px color-mix(in srgb, var(--ds-control-ink) 6%, transparent)",
                   "bg": "#ffffff",
                   "border": "#D4E0EA",
@@ -8296,11 +8296,11 @@
                 "listingGrid": {
                   "cardBg": "#FFFFFF",
                   "cardBorder": "#D4E0EA",
-                  "cardGap": "10px",
+                  "cardGap": "calc(10px * var(--ds-rhythm-effective-scale, 1))",
                   "cardShadow": "0 1px 2px rgba(20, 40, 59, 0.05)",
                   "emptyBg": "#FBFCFE",
                   "emptyBorder": "#D4E0EA",
-                  "gap": "12px",
+                  "gap": "calc(12px * var(--ds-rhythm-effective-scale, 1))",
                   "minCardWidth": "260px",
                   "minCompactWidth": "220px",
                   "minTallWidth": "300px",
@@ -8308,7 +8308,7 @@
                   "skeletonBg": "#EEF3F8"
                 },
                 "metricCard": {
-                  "bg": "#FFFFFF",
+                  "bg": "var(--ds-surface-card)",
                   "border": "color-mix(in srgb, #3A6FB0 10%, #D4E0EA)",
                   "borderHover": "color-mix(in srgb, #3A6FB0 24%, #D4E0EA)",
                   "iconBg": "color-mix(in srgb, #3A6FB0 8%, #FFFFFF)",
@@ -8327,15 +8327,15 @@
                   "shadowHover": "0 2px 6px rgba(20, 40, 59, 0.08), 0 12px 28px rgba(20, 40, 59, 0.08)",
                   "sheen": "none",
                   "trendColor": "#315F86",
-                  "valueColor": "#14283B"
+                  "valueColor": "var(--ds-color-text-primary)"
                 },
                 "modal": {
                   "bg": "#FFFFFF",
-                  "bodyColor": "#14283B",
+                  "bodyColor": "var(--ds-color-text-primary)",
                   "closeBgHover": "#F4F8FD",
                   "closeColor": "#728398",
-                  "closeColorHover": "#14283B",
-                  "color": "#14283B",
+                  "closeColorHover": "var(--ds-color-text-primary)",
+                  "color": "var(--ds-color-text-primary)",
                   "footerBg": "#F8FBFF",
                   "footerBorder": "#E3EAF0",
                   "headerBg": "color-mix(in srgb, #FFFFFF 88%, #F4F8FD)",
@@ -8344,7 +8344,7 @@
                   "overlayBg": "rgba(20, 40, 59, 0.30)",
                   "shadow": "0 28px 72px rgba(20, 40, 59, 0.18), 0 8px 24px rgba(20, 40, 59, 0.10)",
                   "subtitleColor": "#728398",
-                  "titleColor": "#14283B"
+                  "titleColor": "var(--ds-color-text-primary)"
                 },
                 "premiumCard": {
                   "bg": "var(--ds-surface-card)",
@@ -8364,12 +8364,12 @@
                   "categoryColor": "#728398",
                   "clearColor": "#AEBCC8",
                   "clearColorHover": "#53697E",
-                  "color": "#14283B",
+                  "color": "var(--ds-color-text-primary)",
                   "emptyBg": "#F4F8FD",
                   "iconColor": "#8A9AAA",
                   "inputBg": "#ffffff",
                   "inputBorder": "#C4D2DE",
-                  "inputColor": "#14283B",
+                  "inputColor": "var(--ds-color-text-primary)",
                   "placeholderColor": "#8A9AAA",
                   "radius": "14px",
                   "resultBg": "#ffffff",
@@ -8377,7 +8377,7 @@
                   "resultBorder": "#E3EAF0",
                   "resultMetaColor": "#728398",
                   "resultShadow": "0 1px 2px rgba(20, 40, 59, 0.04)",
-                  "resultTitleColor": "#14283B",
+                  "resultTitleColor": "var(--ds-color-text-primary)",
                   "shadow": "0 12px 30px rgba(20, 40, 59, 0.10), 0 2px 8px rgba(20, 40, 59, 0.06)"
                 },
                 "shell": {
@@ -8396,12 +8396,12 @@
                   "commandHomeCompactActionHeight": "202px",
                   "commandHomeConsoleBg": "#F6FAFE",
                   "commandHomeConsoleMinHeight": "calc(100vh - 108px)",
-                  "commandHomeConsolePadding": "clamp(20px, 3vw, 34px) clamp(16px, 4vw, 56px) 24px",
+                  "commandHomeConsolePadding": "clamp(calc(20px * var(--ds-rhythm-effective-scale, 1)), calc(3vw * var(--ds-rhythm-effective-scale, 1)), calc(34px * var(--ds-rhythm-effective-scale, 1))) clamp(calc(16px * var(--ds-rhythm-effective-scale, 1)), calc(4vw * var(--ds-rhythm-effective-scale, 1)), calc(56px * var(--ds-rhythm-effective-scale, 1))) calc(24px * var(--ds-rhythm-effective-scale, 1))",
                   "commandHomeControlBg": "#FFFFFF",
                   "commandHomeControlBorder": "#B7D3F2",
                   "commandHomeControlHoverBg": "color-mix(in srgb, #3A6FB0 7%, #FFFFFF)",
                   "commandHomeControlHoverBorder": "color-mix(in srgb, #3A6FB0 42%, #D4E0EA)",
-                  "commandHomeGap": "16px",
+                  "commandHomeGap": "calc(16px * var(--ds-rhythm-effective-scale, 1))",
                   "commandHomeGridLine": "color-mix(in srgb, var(--ds-color-primary) 6%, transparent)",
                   "commandHomeHeroBg": "#FFFFFF",
                   "commandHomeIconBg": "color-mix(in srgb, #3A6FB0 9%, #FFFFFF)",
@@ -8413,7 +8413,7 @@
                   "commandHomePanelBgStrong": "#FFFFFF",
                   "commandHomePanelBorder": "#A9C9EA",
                   "commandHomePanelBorderSoft": "#B7D3F2",
-                  "commandHomePanelGap": "14px",
+                  "commandHomePanelGap": "calc(14px * var(--ds-rhythm-effective-scale, 1))",
                   "commandHomePanelShadow": "0 1px 2px rgba(20, 40, 59, 0.06)",
                   "commandHomeSurfaceBg": "#FFFFFF",
                   "commandLetterSpacing": "0",
@@ -8442,7 +8442,7 @@
                   "itemBgActive": "var(--ds-tint-8)",
                   "itemBgHover": "#F4F8FD",
                   "itemColor": "#53697E",
-                  "itemColorActive": "#3A6FB0",
+                  "itemColorActive": "var(--ds-color-primary)",
                   "itemFontSize": "0.875rem",
                   "itemFontWeight": 400,
                   "itemFontWeightActive": 600,
@@ -8468,7 +8468,7 @@
                   "sectionAltBg": "color-mix(in srgb, #3A6FB0 4%, #F4F8FD)",
                   "sectionBg": "#ffffff",
                   "shadow": "0 1px 2px rgba(20, 40, 59, 0.06)",
-                  "titleColor": "#14283B",
+                  "titleColor": "var(--ds-color-text-primary)",
                   "topLineDisplay": "none"
                 },
                 "surface": {
@@ -8490,7 +8490,7 @@
                   "bg": "var(--ds-surface-card)",
                   "border": "var(--ds-color-border)",
                   "cellColor": "var(--ds-color-text-primary)",
-                  "cellFontSize": "0.8125rem",
+                  "cellFontSize": "calc(0.8125rem * var(--ds-type-scale, 1))",
                   "cellPaddingComfortable": "10px 12px",
                   "cellPaddingCompact": "7px 10px",
                   "cellPaddingSpacious": "14px 16px",
@@ -8522,7 +8522,7 @@
                   "sheen": "none"
                 },
                 "tabs": {
-                  "activeBg": "#FFFFFF",
+                  "activeBg": "var(--ds-surface-control)",
                   "activeHighlight": "linear-gradient(118deg, transparent 12%, rgba(255, 255, 255, 0.72) 48%, transparent 76%)",
                   "activeHighlightOpacity": 0.42,
                   "activeRevealDuration": "var(--ds-motion-feedback, 140ms)",
@@ -8534,8 +8534,8 @@
                   "border": "#E3EAF0",
                   "borderActive": "#3A6FB0",
                   "color": "var(--ds-color-text-secondary)",
-                  "colorActive": "#14283B",
-                  "colorHover": "#14283B",
+                  "colorActive": "var(--ds-color-text-primary)",
+                  "colorHover": "var(--ds-color-text-primary)",
                   "gap": "3px",
                   "iconPadding": "4px",
                   "iconShadowActive": "inset 0 0 0 1px rgba(58, 111, 176, 0.16), 0 3px 8px rgba(58, 111, 176, 0.08)",
@@ -8561,11 +8561,11 @@
                   "mdIconSize": "15px",
                   "mdPadding": "0 12px",
                   "motionDuration": "var(--ds-motion-feedback, 140ms)",
-                  "overflowControlBg": "#FFFFFF",
+                  "overflowControlBg": "var(--ds-surface-control)",
                   "overflowControlBgHover": "#F4F8FD",
                   "overflowControlShadow": "0 1px 2px rgba(20, 40, 59, 0.06)",
                   "overflowControlShadowHover": "0 5px 14px rgba(20, 40, 59, 0.10)",
-                  "panelBg": "#FFFFFF",
+                  "panelBg": "var(--ds-surface-card)",
                   "panelBorder": "#E3EAF0",
                   "panelHighlight": "inset 0 1px 0 rgba(255, 255, 255, 0.92)",
                   "panelMotionDuration": "var(--ds-motion-reveal, 180ms)",
@@ -8583,9 +8583,9 @@
                   "bodyColor": "#53697E",
                   "border": "#D4E0EA",
                   "borderHover": "color-mix(in srgb, #3A6FB0 25%, #D4E0EA)",
-                  "gap": "16px",
+                  "gap": "calc(16px * var(--ds-rhythm-effective-scale, 1))",
                   "labelColor": "#728398",
-                  "padding": "20px",
+                  "padding": "calc(20px * var(--ds-rhythm-effective-scale, 1))",
                   "radius": "18px",
                   "shadow": "0 14px 34px -26px rgba(20, 40, 59, 0.32), 0 1px 2px rgba(20, 40, 59, 0.05)",
                   "titleColor": "#14283B",
@@ -8595,10 +8595,10 @@
                   "bg": "color-mix(in srgb, #3A6FB0 4%, #FFFFFF)",
                   "border": "#D4E0EA",
                   "borderBottom": "color-mix(in srgb, #D4E0EA 82%, transparent)",
-                  "color": "#14283B",
+                  "color": "var(--ds-color-text-primary)",
                   "controlBg": "#ffffff",
                   "controlBorder": "#C4D2DE",
-                  "controlColor": "#14283B",
+                  "controlColor": "var(--ds-color-text-primary)",
                   "divider": "#E3EAF0",
                   "gap": "0.75rem",
                   "padding": "0.75rem 1rem",
@@ -8609,7 +8609,7 @@
                   "zIndex": 2700
                 },
                 "workspaceCard": {
-                  "bg": "#FFFFFF",
+                  "bg": "var(--ds-surface-card)",
                   "bgHover": "#FBFCFE",
                   "bodyColor": "#53697E",
                   "border": "#D4E0EA",
@@ -8621,9 +8621,9 @@
                   "hoverTransform": "translateY(-1px)",
                   "iconBg": "color-mix(in srgb, #3A6FB0 8%, #FFFFFF)",
                   "iconBorder": "color-mix(in srgb, #3A6FB0 22%, #D4E0EA)",
-                  "iconColor": "#3A6FB0",
+                  "iconColor": "var(--ds-color-primary)",
                   "labelColor": "#728398",
-                  "padding": "16px",
+                  "padding": "calc(16px * var(--ds-rhythm-effective-scale, 1))",
                   "radius": "14px",
                   "shadow": "0 1px 2px rgba(20, 40, 59, 0.045)",
                   "shadowHover": "0 12px 28px -18px rgba(20, 40, 59, 0.28), 0 2px 6px rgba(20, 40, 59, 0.05)",
@@ -8715,7 +8715,7 @@
                       "buttonSecondary": {
                         "bg": "transparent",
                         "bgHover": "#1b2535",
-                        "border": "#253545",
+                        "border": "var(--ds-color-border)",
                         "color": "#9aacbf"
                       },
                       "disabled": {
@@ -8742,7 +8742,7 @@
                         },
                         "bg": "#0f1520",
                         "bgDisabled": "var(--ds-material-control-background-disabled)",
-                        "border": "#253545",
+                        "border": "var(--ds-color-border)",
                         "borderColor": "var(--ds-color-neutral-300)",
                         "borderColorFocus": "var(--ds-color-primary-500)",
                         "borderColorHover": "var(--ds-color-neutral-400)",
@@ -8757,7 +8757,7 @@
                           "colorHover": "var(--ds-color-text-primary)"
                         },
                         "colorDisabled": "var(--ds-color-text-muted)",
-                        "colorPlaceholder": "#5a7085",
+                        "colorPlaceholder": "var(--ds-color-text-muted)",
                         "count": {
                           "color": "var(--ds-color-text-tertiary)",
                           "colorError": "var(--ds-color-error)",
@@ -8901,8 +8901,8 @@
                     "sidebar": {
                       "bg": "#0a0f18",
                       "border": "#1d2a38",
-                      "footerBg": "#0a0f18",
-                      "groupColor": "#5a7085",
+                      "footerBg": "var(--ds-sidebar-bg)",
+                      "groupColor": "var(--ds-color-text-muted)",
                       "groupFontSize": "11px",
                       "groupMarginBottom": "4px",
                       "groupMarginTop": "8px",
@@ -8914,8 +8914,8 @@
                       "itemFontSize": "13px",
                       "itemFontWeightActive": "500",
                       "itemIndent": "6px",
-                      "text": "#9aacbf",
-                      "textMuted": "#5a7085"
+                      "text": "var(--ds-color-text-secondary)",
+                      "textMuted": "var(--ds-color-text-muted)"
                     },
                     "signalCard": {
                       "badgeColor": "var(--ds-color-primary)",
@@ -8943,7 +8943,7 @@
                       "bg": "#0f1520",
                       "border": "#1d2a38",
                       "cellColor": "#e4e8ed",
-                      "cellFontSize": "0.875rem",
+                      "cellFontSize": "calc(0.875rem * var(--ds-type-scale, 1))",
                       "cellPadding": "0.875rem 1rem",
                       "headerBg": "#151d2b",
                       "headerBgHover": "color-mix(in srgb, var(--ds-color-primary) 5%, var(--ds-surface-card))",
@@ -9032,7 +9032,6 @@
                     "linkColor": "#3b9af0",
                     "linkHoverColor": "#6bb5f5",
                     "linkVisitedColor": "#a78bca",
-                    "onPrimaryColor": "#ffffff",
                     "primaryColor": "#1e84e6",
                     "primaryHoverColor": "#2b8fef",
                     "ramps": {
@@ -9243,7 +9242,6 @@
                       "raised": {
                         "background": "linear-gradient(180deg, var(--ds-color-bg-elevated) 0%, var(--ds-color-bg-surface) 100%)",
                         "border": "var(--ds-color-border)",
-                        "foreground": "var(--ds-color-text-primary)",
                         "shadow": "0 16px 36px -24px color-mix(in srgb, var(--ds-color-neutral-50) 80%, transparent), 0 4px 12px color-mix(in srgb, var(--ds-color-neutral-50) 58%, transparent)"
                       },
                       "shell": {
@@ -9354,9 +9352,8 @@
                 "densityScale": 0.9,
                 "effectIntensity": 0.58,
                 "glass": {
-                  "background": "rgba(255, 255, 255, 0.84)",
-                  "blur": "12px",
-                  "border": "rgba(196, 210, 222, 0.86)"
+                  "background": "rgba(255, 255, 255, calc(0.84 * var(--ds-effect-intensity)))",
+                  "border": "rgba(196, 210, 222, calc(0.86 * var(--ds-effect-intensity)))"
                 },
                 "gradients": {
                   "mesh": "radial-gradient(circle at 84% 8%, rgba(58, 111, 176, 0.14), transparent 58%)",
@@ -9377,7 +9374,7 @@
                 "surfaceRoles": {
                   "canvas": {
                     "background": "#f8fbff",
-                    "foreground": "#14283B",
+                    "foreground": "var(--ds-color-text-primary)",
                     "texture": "radial-gradient(circle at 88% 4%, rgba(58, 111, 176, 0.055), transparent 30%)"
                   },
                   "card": {
@@ -9393,7 +9390,7 @@
                     "borderSelected": "#5F8DB6",
                     "borderStrong": "#B9CCDC",
                     "focusRing": "0 0 0 3px rgba(58, 111, 176, 0.16)",
-                    "foreground": "#14283B",
+                    "foreground": "var(--ds-color-text-primary)",
                     "foregroundDisabled": "#91A0AF",
                     "foregroundMuted": "#60758A",
                     "highlight": "inset 0 1px 0 rgba(255, 255, 255, 0.9)",
@@ -9415,7 +9412,7 @@
                     "borderSelected": "#5F8DB6",
                     "borderStrong": "#86A6C2",
                     "focusRing": "0 0 0 3px rgba(58, 111, 176, 0.16)",
-                    "foreground": "#14283B",
+                    "foreground": "var(--ds-color-text-primary)",
                     "foregroundDisabled": "#91A0AF",
                     "foregroundMuted": "#60758A",
                     "shadow": "inset 0 1px 0 rgba(255, 255, 255, 0.92)",
@@ -9445,7 +9442,7 @@
                     "borderSelected": "#5F8DB6",
                     "borderStrong": "#B9CCDC",
                     "focusRing": "0 0 0 3px rgba(58, 111, 176, 0.14)",
-                    "foreground": "#14283B",
+                    "foreground": "var(--ds-color-text-primary)",
                     "foregroundDisabled": "#91A0AF",
                     "foregroundMuted": "#60758A",
                     "highlight": "inset 0 1px 0 rgba(255, 255, 255, 0.84)",
@@ -9457,13 +9454,12 @@
                   "raised": {
                     "background": "linear-gradient(180deg, #FFFFFF 0%, #F8FBFD 100%)",
                     "border": "#C7D6E2",
-                    "foreground": "#14283B",
                     "shadow": "0 16px 36px -24px rgba(20, 40, 59, 0.36), 0 4px 12px rgba(20, 40, 59, 0.08)"
                   },
                   "shell": {
                     "background": "#EEF4F8",
                     "border": "#D4E0EA",
-                    "foreground": "#14283B"
+                    "foreground": "var(--ds-color-text-primary)"
                   }
                 }
               },
@@ -9568,7 +9564,7 @@
                 "iconRadius": "6px",
                 "infoBg": "color-mix(in srgb, var(--ds-color-info, var(--ds-color-secondary, var(--ds-color-primary))) 12%, var(--ds-control-surface))",
                 "infoColor": "var(--ds-color-info, var(--ds-color-secondary, var(--ds-color-primary)))",
-                "ink": "#14283B",
+                "ink": "var(--ds-color-text-primary)",
                 "inkHover": "#2C5587",
                 "letterSpacing": "-0.008em",
                 "lineHeight": "1.2",
@@ -9631,7 +9627,7 @@
                 "border": "var(--ds-premium-card-border)",
                 "borderColor": "var(--ds-premium-card-border)",
                 "borderHover": "var(--ds-premium-card-border-hover)",
-                "color": "#14283B",
+                "color": "var(--ds-color-text-primary)",
                 "colorMuted": "#728398",
                 "focusRing": "0 0 0 3px var(--ds-tint-24)",
                 "footerBg": "var(--ds-premium-card-footer-bg)",
@@ -9656,20 +9652,20 @@
                 "shadow": "var(--ds-surface-shadow, var(--ds-shadow-sm))",
                 "shadowHover": "var(--ds-surface-shadow-hover, var(--ds-shadow-md))",
                 "subtitleColor": "#728398",
-                "titleColor": "#14283B",
-                "titleFontSize": "13px",
+                "titleColor": "var(--ds-color-text-primary)",
+                "titleFontSize": "calc(13px * var(--ds-type-scale, 1))",
                 "titleFontWeight": 600,
                 "titleLetterSpacing": "0"
               },
               "collectionCard": {
-                "bg": "#FFFFFF",
+                "bg": "var(--ds-surface-card)",
                 "bgHover": "#F9FBFE",
                 "bodyColor": "#53697E",
                 "border": "#D4E0EA",
                 "borderHover": "color-mix(in srgb, #3A6FB0 26%, #D4E0EA)",
                 "gap": "10px",
                 "labelColor": "#728398",
-                "padding": "14px",
+                "padding": "calc(14px * var(--ds-rhythm-effective-scale, 1))",
                 "radius": "12px",
                 "selectedBorder": "#3A6FB0",
                 "selectedRing": "0 0 0 3px var(--ds-tint-12)",
@@ -9682,14 +9678,14 @@
                 "valueColor": "#14283B"
               },
               "compactCard": {
-                "bg": "#FFFFFF",
+                "bg": "var(--ds-surface-card)",
                 "bgHover": "#F9FBFE",
                 "bodyColor": "#53697E",
                 "border": "#D4E0EA",
                 "borderHover": "color-mix(in srgb, #3A6FB0 22%, #D4E0EA)",
-                "gap": "8px",
+                "gap": "calc(8px * var(--ds-rhythm-effective-scale, 1))",
                 "labelColor": "#728398",
-                "padding": "10px 12px",
+                "padding": "calc(10px * var(--ds-rhythm-effective-scale, 1)) calc(12px * var(--ds-rhythm-effective-scale, 1))",
                 "radius": "10px",
                 "shadow": "0 1px 2px rgba(20, 40, 59, 0.04)",
                 "titleColor": "#14283B",
@@ -9717,7 +9713,7 @@
                   "gap": "6px",
                   "letterSpacing": "-0.005em",
                   "lg": {
-                    "fontSize": "14px",
+                    "fontSize": "calc(14px * var(--ds-type-scale, 1))",
                     "gap": "7px",
                     "height": "40px",
                     "iconSize": "16px",
@@ -9726,7 +9722,7 @@
                     "radius": "10px"
                   },
                   "md": {
-                    "fontSize": "13px",
+                    "fontSize": "calc(13px * var(--ds-type-scale, 1))",
                     "gap": "6px",
                     "height": "36px",
                     "iconSize": "15px",
@@ -9736,7 +9732,7 @@
                   },
                   "radius": "9px",
                   "sm": {
-                    "fontSize": "12px",
+                    "fontSize": "calc(12px * var(--ds-type-scale, 1))",
                     "gap": "6px",
                     "height": "32px",
                     "iconSize": "14px",
@@ -9745,7 +9741,7 @@
                     "radius": "8px"
                   },
                   "xl": {
-                    "fontSize": "15px",
+                    "fontSize": "calc(15px * var(--ds-type-scale, 1))",
                     "gap": "8px",
                     "height": "46px",
                     "iconSize": "18px",
@@ -9754,7 +9750,7 @@
                     "radius": "11px"
                   },
                   "xs": {
-                    "fontSize": "11px",
+                    "fontSize": "calc(11px * var(--ds-type-scale, 1))",
                     "gap": "4px",
                     "height": "26px",
                     "iconSize": "12px",
@@ -9781,7 +9777,7 @@
                   "colorHover": "var(--ds-color-primary-hover)"
                 },
                 "buttonPrimary": {
-                  "bg": "#3A6FB0",
+                  "bg": "var(--ds-color-primary)",
                   "bgActive": "var(--ds-color-primary-active, var(--ds-button-primary-bg-hover))",
                   "bgHover": "#2C5587",
                   "border": "var(--ds-button-primary-bg)",
@@ -9834,17 +9830,17 @@
                   "groupGapSeparated": "8px",
                   "groupMinItemWidth": "192px",
                   "groupOverlap": "-1px",
-                  "helperFontSize": "11px",
+                  "helperFontSize": "calc(11px * var(--ds-type-scale, 1))",
                   "helperLineHeight": "1.45",
                   "horizontalGap": "16px",
-                  "labelFontSize": "12px",
+                  "labelFontSize": "calc(12px * var(--ds-type-scale, 1))",
                   "labelFontWeight": 600,
                   "labelLetterSpacing": "0.02em",
                   "labelLineHeight": "1.4",
                   "labelOffsetY": "1px",
                   "letterSpacing": "0.005em",
                   "lg": {
-                    "fontSize": "14px",
+                    "fontSize": "calc(14px * var(--ds-type-scale, 1))",
                     "height": "40px",
                     "iconSize": "16px",
                     "lineHeight": "22px",
@@ -9856,7 +9852,7 @@
                   "loadingSize": "16px",
                   "loadingStroke": "1.75",
                   "md": {
-                    "fontSize": "13px",
+                    "fontSize": "calc(13px * var(--ds-type-scale, 1))",
                     "height": "36px",
                     "iconSize": "15px",
                     "lineHeight": "20px",
@@ -9868,7 +9864,7 @@
                   "radius": "9px",
                   "requiredGap": "0.25em",
                   "sm": {
-                    "fontSize": "12px",
+                    "fontSize": "calc(12px * var(--ds-type-scale, 1))",
                     "height": "32px",
                     "iconSize": "14px",
                     "lineHeight": "18px",
@@ -9886,7 +9882,7 @@
                   "transitionDuration": "160ms",
                   "transitionTiming": "cubic-bezier(0.2, 0.8, 0.2, 1)",
                   "xl": {
-                    "fontSize": "15px",
+                    "fontSize": "calc(15px * var(--ds-type-scale, 1))",
                     "height": "46px",
                     "iconSize": "18px",
                     "lineHeight": "24px",
@@ -9895,7 +9891,7 @@
                     "radius": "11px"
                   },
                   "xs": {
-                    "fontSize": "11px",
+                    "fontSize": "calc(11px * var(--ds-type-scale, 1))",
                     "height": "28px",
                     "iconSize": "13px",
                     "lineHeight": "16px",
@@ -9922,7 +9918,7 @@
                   "autofill": {
                     "bg": "#F4F8FD",
                     "caret": "#3A6FB0",
-                    "color": "#14283B"
+                    "color": "var(--ds-color-text-primary)"
                   },
                   "bg": "var(--ds-surface-inset, #ffffff)",
                   "bgDisabled": "#F8F8F8",
@@ -9935,7 +9931,7 @@
                   "borderDisabled": "#E8EEF3",
                   "borderFocus": "var(--ds-material-control-border-active, #3A6FB0)",
                   "borderHover": "var(--ds-material-control-border-hover, #9DAFC0)",
-                  "caretColor": "#3A6FB0",
+                  "caretColor": "var(--ds-color-primary)",
                   "clear": {
                     "activeTransform": "scale(0.94)",
                     "bg": "transparent",
@@ -9943,7 +9939,7 @@
                     "border": "1px solid transparent",
                     "borderHover": "#C4D2DE",
                     "color": "#71869A",
-                    "colorHover": "#14283B",
+                    "colorHover": "var(--ds-color-text-primary)",
                     "focusRing": "0 0 0 2px rgba(58, 111, 176, 0.20)",
                     "shadowHover": "0 1px 3px rgba(20, 40, 59, 0.10)"
                   },
@@ -9961,7 +9957,7 @@
                   "errorColor": "#14283B",
                   "filled": {
                     "bg": "#F4F8FD",
-                    "bgFocus": "#FFFFFF",
+                    "bgFocus": "var(--ds-surface-control)",
                     "bgHover": "#EDF4FB",
                     "border": "#D4E0EA"
                   },
@@ -9986,7 +9982,7 @@
                     "cursor": "text"
                   },
                   "selectionBg": "rgba(58, 111, 176, 0.20)",
-                  "selectionColor": "#14283B",
+                  "selectionColor": "var(--ds-color-text-primary)",
                   "shadowFocus": "var(--ds-material-control-focus-ring, 0 0 0 3px rgba(58, 111, 176, 0.16), 0 2px 8px rgba(20, 40, 59, 0.08))",
                   "shadowHover": "var(--ds-material-inset-shadow-hover, 0 3px 10px rgba(20, 40, 59, 0.07))",
                   "shadowRest": "var(--ds-material-inset-shadow, 0 1px 2px rgba(20, 40, 59, 0.035))",
@@ -10088,7 +10084,7 @@
               "filterPill": {
                 "activeBg": "var(--ds-tint-8)",
                 "activeBorder": "color-mix(in srgb, var(--ds-color-primary) 26%, var(--ds-color-border))",
-                "activeColor": "#3A6FB0",
+                "activeColor": "var(--ds-color-primary)",
                 "activeShadow": "inset 0 0 0 1px var(--ds-filter-pill-active-border), 0 1px 2px color-mix(in srgb, var(--ds-control-ink) 6%, transparent)",
                 "bg": "#ffffff",
                 "border": "#D4E0EA",
@@ -10127,11 +10123,11 @@
               "listingGrid": {
                 "cardBg": "#FFFFFF",
                 "cardBorder": "#D4E0EA",
-                "cardGap": "10px",
+                "cardGap": "calc(10px * var(--ds-rhythm-effective-scale, 1))",
                 "cardShadow": "0 1px 2px rgba(20, 40, 59, 0.05)",
                 "emptyBg": "#FBFCFE",
                 "emptyBorder": "#D4E0EA",
-                "gap": "12px",
+                "gap": "calc(12px * var(--ds-rhythm-effective-scale, 1))",
                 "minCardWidth": "260px",
                 "minCompactWidth": "220px",
                 "minTallWidth": "300px",
@@ -10139,7 +10135,7 @@
                 "skeletonBg": "#EEF3F8"
               },
               "metricCard": {
-                "bg": "#FFFFFF",
+                "bg": "var(--ds-surface-card)",
                 "border": "color-mix(in srgb, #3A6FB0 10%, #D4E0EA)",
                 "borderHover": "color-mix(in srgb, #3A6FB0 24%, #D4E0EA)",
                 "iconBg": "color-mix(in srgb, #3A6FB0 8%, #FFFFFF)",
@@ -10158,15 +10154,15 @@
                 "shadowHover": "0 2px 6px rgba(20, 40, 59, 0.08), 0 12px 28px rgba(20, 40, 59, 0.08)",
                 "sheen": "none",
                 "trendColor": "#315F86",
-                "valueColor": "#14283B"
+                "valueColor": "var(--ds-color-text-primary)"
               },
               "modal": {
                 "bg": "#FFFFFF",
-                "bodyColor": "#14283B",
+                "bodyColor": "var(--ds-color-text-primary)",
                 "closeBgHover": "#F4F8FD",
                 "closeColor": "#728398",
-                "closeColorHover": "#14283B",
-                "color": "#14283B",
+                "closeColorHover": "var(--ds-color-text-primary)",
+                "color": "var(--ds-color-text-primary)",
                 "footerBg": "#F8FBFF",
                 "footerBorder": "#E3EAF0",
                 "headerBg": "color-mix(in srgb, #FFFFFF 88%, #F4F8FD)",
@@ -10175,7 +10171,7 @@
                 "overlayBg": "rgba(20, 40, 59, 0.30)",
                 "shadow": "0 28px 72px rgba(20, 40, 59, 0.18), 0 8px 24px rgba(20, 40, 59, 0.10)",
                 "subtitleColor": "#728398",
-                "titleColor": "#14283B"
+                "titleColor": "var(--ds-color-text-primary)"
               },
               "premiumCard": {
                 "bg": "var(--ds-surface-card)",
@@ -10195,12 +10191,12 @@
                 "categoryColor": "#728398",
                 "clearColor": "#AEBCC8",
                 "clearColorHover": "#53697E",
-                "color": "#14283B",
+                "color": "var(--ds-color-text-primary)",
                 "emptyBg": "#F4F8FD",
                 "iconColor": "#8A9AAA",
                 "inputBg": "#ffffff",
                 "inputBorder": "#C4D2DE",
-                "inputColor": "#14283B",
+                "inputColor": "var(--ds-color-text-primary)",
                 "placeholderColor": "#8A9AAA",
                 "radius": "14px",
                 "resultBg": "#ffffff",
@@ -10208,7 +10204,7 @@
                 "resultBorder": "#E3EAF0",
                 "resultMetaColor": "#728398",
                 "resultShadow": "0 1px 2px rgba(20, 40, 59, 0.04)",
-                "resultTitleColor": "#14283B",
+                "resultTitleColor": "var(--ds-color-text-primary)",
                 "shadow": "0 12px 30px rgba(20, 40, 59, 0.10), 0 2px 8px rgba(20, 40, 59, 0.06)"
               },
               "shell": {
@@ -10227,12 +10223,12 @@
                 "commandHomeCompactActionHeight": "202px",
                 "commandHomeConsoleBg": "#F6FAFE",
                 "commandHomeConsoleMinHeight": "calc(100vh - 108px)",
-                "commandHomeConsolePadding": "clamp(20px, 3vw, 34px) clamp(16px, 4vw, 56px) 24px",
+                "commandHomeConsolePadding": "clamp(calc(20px * var(--ds-rhythm-effective-scale, 1)), calc(3vw * var(--ds-rhythm-effective-scale, 1)), calc(34px * var(--ds-rhythm-effective-scale, 1))) clamp(calc(16px * var(--ds-rhythm-effective-scale, 1)), calc(4vw * var(--ds-rhythm-effective-scale, 1)), calc(56px * var(--ds-rhythm-effective-scale, 1))) calc(24px * var(--ds-rhythm-effective-scale, 1))",
                 "commandHomeControlBg": "#FFFFFF",
                 "commandHomeControlBorder": "#B7D3F2",
                 "commandHomeControlHoverBg": "color-mix(in srgb, #3A6FB0 7%, #FFFFFF)",
                 "commandHomeControlHoverBorder": "color-mix(in srgb, #3A6FB0 42%, #D4E0EA)",
-                "commandHomeGap": "16px",
+                "commandHomeGap": "calc(16px * var(--ds-rhythm-effective-scale, 1))",
                 "commandHomeGridLine": "color-mix(in srgb, var(--ds-color-primary) 6%, transparent)",
                 "commandHomeHeroBg": "#FFFFFF",
                 "commandHomeIconBg": "color-mix(in srgb, #3A6FB0 9%, #FFFFFF)",
@@ -10244,7 +10240,7 @@
                 "commandHomePanelBgStrong": "#FFFFFF",
                 "commandHomePanelBorder": "#A9C9EA",
                 "commandHomePanelBorderSoft": "#B7D3F2",
-                "commandHomePanelGap": "14px",
+                "commandHomePanelGap": "calc(14px * var(--ds-rhythm-effective-scale, 1))",
                 "commandHomePanelShadow": "0 1px 2px rgba(20, 40, 59, 0.06)",
                 "commandHomeSurfaceBg": "#FFFFFF",
                 "commandLetterSpacing": "0",
@@ -10273,7 +10269,7 @@
                 "itemBgActive": "var(--ds-tint-8)",
                 "itemBgHover": "#F4F8FD",
                 "itemColor": "#53697E",
-                "itemColorActive": "#3A6FB0",
+                "itemColorActive": "var(--ds-color-primary)",
                 "itemFontSize": "0.875rem",
                 "itemFontWeight": 400,
                 "itemFontWeightActive": 600,
@@ -10299,7 +10295,7 @@
                 "sectionAltBg": "color-mix(in srgb, #3A6FB0 4%, #F4F8FD)",
                 "sectionBg": "#ffffff",
                 "shadow": "0 1px 2px rgba(20, 40, 59, 0.06)",
-                "titleColor": "#14283B",
+                "titleColor": "var(--ds-color-text-primary)",
                 "topLineDisplay": "none"
               },
               "surface": {
@@ -10321,7 +10317,7 @@
                 "bg": "var(--ds-surface-card)",
                 "border": "var(--ds-color-border)",
                 "cellColor": "var(--ds-color-text-primary)",
-                "cellFontSize": "0.8125rem",
+                "cellFontSize": "calc(0.8125rem * var(--ds-type-scale, 1))",
                 "cellPaddingComfortable": "10px 12px",
                 "cellPaddingCompact": "7px 10px",
                 "cellPaddingSpacious": "14px 16px",
@@ -10353,7 +10349,7 @@
                 "sheen": "none"
               },
               "tabs": {
-                "activeBg": "#FFFFFF",
+                "activeBg": "var(--ds-surface-control)",
                 "activeHighlight": "linear-gradient(118deg, transparent 12%, rgba(255, 255, 255, 0.72) 48%, transparent 76%)",
                 "activeHighlightOpacity": 0.42,
                 "activeRevealDuration": "var(--ds-motion-feedback, 140ms)",
@@ -10365,8 +10361,8 @@
                 "border": "#E3EAF0",
                 "borderActive": "#3A6FB0",
                 "color": "var(--ds-color-text-secondary)",
-                "colorActive": "#14283B",
-                "colorHover": "#14283B",
+                "colorActive": "var(--ds-color-text-primary)",
+                "colorHover": "var(--ds-color-text-primary)",
                 "gap": "3px",
                 "iconPadding": "4px",
                 "iconShadowActive": "inset 0 0 0 1px rgba(58, 111, 176, 0.16), 0 3px 8px rgba(58, 111, 176, 0.08)",
@@ -10392,11 +10388,11 @@
                 "mdIconSize": "15px",
                 "mdPadding": "0 12px",
                 "motionDuration": "var(--ds-motion-feedback, 140ms)",
-                "overflowControlBg": "#FFFFFF",
+                "overflowControlBg": "var(--ds-surface-control)",
                 "overflowControlBgHover": "#F4F8FD",
                 "overflowControlShadow": "0 1px 2px rgba(20, 40, 59, 0.06)",
                 "overflowControlShadowHover": "0 5px 14px rgba(20, 40, 59, 0.10)",
-                "panelBg": "#FFFFFF",
+                "panelBg": "var(--ds-surface-card)",
                 "panelBorder": "#E3EAF0",
                 "panelHighlight": "inset 0 1px 0 rgba(255, 255, 255, 0.92)",
                 "panelMotionDuration": "var(--ds-motion-reveal, 180ms)",
@@ -10414,9 +10410,9 @@
                 "bodyColor": "#53697E",
                 "border": "#D4E0EA",
                 "borderHover": "color-mix(in srgb, #3A6FB0 25%, #D4E0EA)",
-                "gap": "16px",
+                "gap": "calc(16px * var(--ds-rhythm-effective-scale, 1))",
                 "labelColor": "#728398",
-                "padding": "20px",
+                "padding": "calc(20px * var(--ds-rhythm-effective-scale, 1))",
                 "radius": "18px",
                 "shadow": "0 14px 34px -26px rgba(20, 40, 59, 0.32), 0 1px 2px rgba(20, 40, 59, 0.05)",
                 "titleColor": "#14283B",
@@ -10426,10 +10422,10 @@
                 "bg": "color-mix(in srgb, #3A6FB0 4%, #FFFFFF)",
                 "border": "#D4E0EA",
                 "borderBottom": "color-mix(in srgb, #D4E0EA 82%, transparent)",
-                "color": "#14283B",
+                "color": "var(--ds-color-text-primary)",
                 "controlBg": "#ffffff",
                 "controlBorder": "#C4D2DE",
-                "controlColor": "#14283B",
+                "controlColor": "var(--ds-color-text-primary)",
                 "divider": "#E3EAF0",
                 "gap": "0.75rem",
                 "padding": "0.75rem 1rem",
@@ -10440,7 +10436,7 @@
                 "zIndex": 2700
               },
               "workspaceCard": {
-                "bg": "#FFFFFF",
+                "bg": "var(--ds-surface-card)",
                 "bgHover": "#FBFCFE",
                 "bodyColor": "#53697E",
                 "border": "#D4E0EA",
@@ -10452,9 +10448,9 @@
                 "hoverTransform": "translateY(-1px)",
                 "iconBg": "color-mix(in srgb, #3A6FB0 8%, #FFFFFF)",
                 "iconBorder": "color-mix(in srgb, #3A6FB0 22%, #D4E0EA)",
-                "iconColor": "#3A6FB0",
+                "iconColor": "var(--ds-color-primary)",
                 "labelColor": "#728398",
-                "padding": "16px",
+                "padding": "calc(16px * var(--ds-rhythm-effective-scale, 1))",
                 "radius": "14px",
                 "shadow": "0 1px 2px rgba(20, 40, 59, 0.045)",
                 "shadowHover": "0 12px 28px -18px rgba(20, 40, 59, 0.28), 0 2px 6px rgba(20, 40, 59, 0.05)",
@@ -10546,7 +10542,7 @@
                     "buttonSecondary": {
                       "bg": "transparent",
                       "bgHover": "#1b2535",
-                      "border": "#253545",
+                      "border": "var(--ds-color-border)",
                       "color": "#9aacbf"
                     },
                     "disabled": {
@@ -10573,7 +10569,7 @@
                       },
                       "bg": "#0f1520",
                       "bgDisabled": "var(--ds-material-control-background-disabled)",
-                      "border": "#253545",
+                      "border": "var(--ds-color-border)",
                       "borderColor": "var(--ds-color-neutral-300)",
                       "borderColorFocus": "var(--ds-color-primary-500)",
                       "borderColorHover": "var(--ds-color-neutral-400)",
@@ -10588,7 +10584,7 @@
                         "colorHover": "var(--ds-color-text-primary)"
                       },
                       "colorDisabled": "var(--ds-color-text-muted)",
-                      "colorPlaceholder": "#5a7085",
+                      "colorPlaceholder": "var(--ds-color-text-muted)",
                       "count": {
                         "color": "var(--ds-color-text-tertiary)",
                         "colorError": "var(--ds-color-error)",
@@ -10732,8 +10728,8 @@
                   "sidebar": {
                     "bg": "#0a0f18",
                     "border": "#1d2a38",
-                    "footerBg": "#0a0f18",
-                    "groupColor": "#5a7085",
+                    "footerBg": "var(--ds-sidebar-bg)",
+                    "groupColor": "var(--ds-color-text-muted)",
                     "groupFontSize": "11px",
                     "groupMarginBottom": "4px",
                     "groupMarginTop": "8px",
@@ -10745,8 +10741,8 @@
                     "itemFontSize": "13px",
                     "itemFontWeightActive": "500",
                     "itemIndent": "6px",
-                    "text": "#9aacbf",
-                    "textMuted": "#5a7085"
+                    "text": "var(--ds-color-text-secondary)",
+                    "textMuted": "var(--ds-color-text-muted)"
                   },
                   "signalCard": {
                     "badgeColor": "var(--ds-color-primary)",
@@ -10774,7 +10770,7 @@
                     "bg": "#0f1520",
                     "border": "#1d2a38",
                     "cellColor": "#e4e8ed",
-                    "cellFontSize": "0.875rem",
+                    "cellFontSize": "calc(0.875rem * var(--ds-type-scale, 1))",
                     "cellPadding": "0.875rem 1rem",
                     "headerBg": "#151d2b",
                     "headerBgHover": "color-mix(in srgb, var(--ds-color-primary) 5%, var(--ds-surface-card))",
@@ -10863,7 +10859,6 @@
                   "linkColor": "#3b9af0",
                   "linkHoverColor": "#6bb5f5",
                   "linkVisitedColor": "#a78bca",
-                  "onPrimaryColor": "#ffffff",
                   "primaryColor": "#1e84e6",
                   "primaryHoverColor": "#2b8fef",
                   "ramps": {
@@ -11074,7 +11069,6 @@
                     "raised": {
                       "background": "linear-gradient(180deg, var(--ds-color-bg-elevated) 0%, var(--ds-color-bg-surface) 100%)",
                       "border": "var(--ds-color-border)",
-                      "foreground": "var(--ds-color-text-primary)",
                       "shadow": "0 16px 36px -24px color-mix(in srgb, var(--ds-color-neutral-50) 80%, transparent), 0 4px 12px color-mix(in srgb, var(--ds-color-neutral-50) 58%, transparent)"
                     },
                     "shell": {
@@ -11186,9 +11180,8 @@
               "densityScale": 0.9,
               "effectIntensity": 0.58,
               "glass": {
-                "background": "rgba(255, 255, 255, 0.84)",
-                "blur": "12px",
-                "border": "rgba(196, 210, 222, 0.86)"
+                "background": "rgba(255, 255, 255, calc(0.84 * var(--ds-effect-intensity)))",
+                "border": "rgba(196, 210, 222, calc(0.86 * var(--ds-effect-intensity)))"
               },
               "gradients": {
                 "mesh": "radial-gradient(circle at 84% 8%, rgba(58, 111, 176, 0.14), transparent 58%)",
@@ -11209,7 +11202,7 @@
               "surfaceRoles": {
                 "canvas": {
                   "background": "#f8fbff",
-                  "foreground": "#14283B",
+                  "foreground": "var(--ds-color-text-primary)",
                   "texture": "radial-gradient(circle at 88% 4%, rgba(58, 111, 176, 0.055), transparent 30%)"
                 },
                 "card": {
@@ -11225,7 +11218,7 @@
                   "borderSelected": "#5F8DB6",
                   "borderStrong": "#B9CCDC",
                   "focusRing": "0 0 0 3px rgba(58, 111, 176, 0.16)",
-                  "foreground": "#14283B",
+                  "foreground": "var(--ds-color-text-primary)",
                   "foregroundDisabled": "#91A0AF",
                   "foregroundMuted": "#60758A",
                   "highlight": "inset 0 1px 0 rgba(255, 255, 255, 0.9)",
@@ -11247,7 +11240,7 @@
                   "borderSelected": "#5F8DB6",
                   "borderStrong": "#86A6C2",
                   "focusRing": "0 0 0 3px rgba(58, 111, 176, 0.16)",
-                  "foreground": "#14283B",
+                  "foreground": "var(--ds-color-text-primary)",
                   "foregroundDisabled": "#91A0AF",
                   "foregroundMuted": "#60758A",
                   "shadow": "inset 0 1px 0 rgba(255, 255, 255, 0.92)",
@@ -11277,7 +11270,7 @@
                   "borderSelected": "#5F8DB6",
                   "borderStrong": "#B9CCDC",
                   "focusRing": "0 0 0 3px rgba(58, 111, 176, 0.14)",
-                  "foreground": "#14283B",
+                  "foreground": "var(--ds-color-text-primary)",
                   "foregroundDisabled": "#91A0AF",
                   "foregroundMuted": "#60758A",
                   "highlight": "inset 0 1px 0 rgba(255, 255, 255, 0.84)",
@@ -11289,13 +11282,12 @@
                 "raised": {
                   "background": "linear-gradient(180deg, #FFFFFF 0%, #F8FBFD 100%)",
                   "border": "#C7D6E2",
-                  "foreground": "#14283B",
                   "shadow": "0 16px 36px -24px rgba(20, 40, 59, 0.36), 0 4px 12px rgba(20, 40, 59, 0.08)"
                 },
                 "shell": {
                   "background": "#EEF4F8",
                   "border": "#D4E0EA",
-                  "foreground": "#14283B"
+                  "foreground": "var(--ds-color-text-primary)"
                 }
               }
             },
@@ -11521,7 +11513,7 @@
     "bundleMode": "fresh",
     "bundles": {
       "bithire": {
-        "bytes": 5351223,
+        "bytes": 5356168,
         "distMatchesStyles": true,
         "freshnessNote": "Recomposed in memory from src/foundation/tokens/css with the formula in build-vertical-css.mjs. Omits the per-tenant --ds-motion-spring tail, which requires compiled BrandTheme modules under dist/.",
         "freshnessProven": true,
@@ -11531,7 +11523,7 @@
           "src/foundation/tokens/css/facade/artifacts/bithire/index.css"
         ],
         "mode": "fresh",
-        "sha256": "006ed5a882d3333112fb19f508de0eec3df42bbd4487fafb4a54ee4f5700dc01",
+        "sha256": "79a45dedc27934c3a51edd257fe157ccf3a924a12c30c1bdf25e8cc9ee801ea5",
         "shippedDistDrift": {
           "identical": true,
           "prefixIdentical": true,
@@ -11541,10 +11533,10 @@
       }
     },
     "sourceFreshness": {
-      "declaredDigest": "e63259ea0baecfbcb070236d2fb20abcbba8f2dacac39f4a4d0dcf8ace09b83a",
-      "observedDigest": "e63259ea0baecfbcb070236d2fb20abcbba8f2dacac39f4a4d0dcf8ace09b83a",
-      "postMeasurementDigest": "e63259ea0baecfbcb070236d2fb20abcbba8f2dacac39f4a4d0dcf8ace09b83a",
-      "preMeasurementDigest": "e63259ea0baecfbcb070236d2fb20abcbba8f2dacac39f4a4d0dcf8ace09b83a",
+      "declaredDigest": "d2d7762595020df8fd5695e14b63cd75c01e7d19a34a8073510a425d3914fcdd",
+      "observedDigest": "d2d7762595020df8fd5695e14b63cd75c01e7d19a34a8073510a425d3914fcdd",
+      "postMeasurementDigest": "d2d7762595020df8fd5695e14b63cd75c01e7d19a34a8073510a425d3914fcdd",
+      "preMeasurementDigest": "d2d7762595020df8fd5695e14b63cd75c01e7d19a34a8073510a425d3914fcdd",
       "sourceFiles": [
         "packages/core/dist/build-stamp.json",
         "packages/core/dist/infrastructure/compilers/kernel/runtime/brand-theme/index.js",
@@ -11596,33 +11588,33 @@
     "stylesheets": {
       "db-tenant-theme": {
         "bithire/dark/modern/both": {
-          "baseline": "006ed5a882d3333112fb19f508de0eec3df42bbd4487fafb4a54ee4f5700dc01",
-          "mutation": "a80bb33321f31b5011a17f7d9d2fb66158f8756251c220cb7f07e9c106088985",
+          "baseline": "79a45dedc27934c3a51edd257fe157ccf3a924a12c30c1bdf25e8cc9ee801ea5",
+          "mutation": "9bd5d8a7c76b34479a36d4fe39a978d3c9099f02ba1060332ad60d61a77864a8",
           "mutationDifferedFromBaseline": true,
-          "removal": "006ed5a882d3333112fb19f508de0eec3df42bbd4487fafb4a54ee4f5700dc01",
+          "removal": "79a45dedc27934c3a51edd257fe157ccf3a924a12c30c1bdf25e8cc9ee801ea5",
           "removalIsByteIdenticalToBaseline": true
         },
         "bithire/light/modern/both": {
-          "baseline": "006ed5a882d3333112fb19f508de0eec3df42bbd4487fafb4a54ee4f5700dc01",
-          "mutation": "a80bb33321f31b5011a17f7d9d2fb66158f8756251c220cb7f07e9c106088985",
+          "baseline": "79a45dedc27934c3a51edd257fe157ccf3a924a12c30c1bdf25e8cc9ee801ea5",
+          "mutation": "9bd5d8a7c76b34479a36d4fe39a978d3c9099f02ba1060332ad60d61a77864a8",
           "mutationDifferedFromBaseline": true,
-          "removal": "006ed5a882d3333112fb19f508de0eec3df42bbd4487fafb4a54ee4f5700dc01",
+          "removal": "79a45dedc27934c3a51edd257fe157ccf3a924a12c30c1bdf25e8cc9ee801ea5",
           "removalIsByteIdenticalToBaseline": true
         }
       },
       "static-brand-theme": {
         "bithire/dark/modern/both": {
-          "baseline": "006ed5a882d3333112fb19f508de0eec3df42bbd4487fafb4a54ee4f5700dc01",
-          "mutation": "c993390ddf0a5b65bd5bbaa584aea3654b2a46bad01fea3af03b7726b669ad3b",
+          "baseline": "79a45dedc27934c3a51edd257fe157ccf3a924a12c30c1bdf25e8cc9ee801ea5",
+          "mutation": "16ff2feb7ff72951af239eb3ee8d640f653406088cd5f9687f9534131f19b12e",
           "mutationDifferedFromBaseline": true,
-          "removal": "006ed5a882d3333112fb19f508de0eec3df42bbd4487fafb4a54ee4f5700dc01",
+          "removal": "79a45dedc27934c3a51edd257fe157ccf3a924a12c30c1bdf25e8cc9ee801ea5",
           "removalIsByteIdenticalToBaseline": true
         },
         "bithire/light/modern/both": {
-          "baseline": "006ed5a882d3333112fb19f508de0eec3df42bbd4487fafb4a54ee4f5700dc01",
-          "mutation": "c993390ddf0a5b65bd5bbaa584aea3654b2a46bad01fea3af03b7726b669ad3b",
+          "baseline": "79a45dedc27934c3a51edd257fe157ccf3a924a12c30c1bdf25e8cc9ee801ea5",
+          "mutation": "16ff2feb7ff72951af239eb3ee8d640f653406088cd5f9687f9534131f19b12e",
           "mutationDifferedFromBaseline": true,
-          "removal": "006ed5a882d3333112fb19f508de0eec3df42bbd4487fafb4a54ee4f5700dc01",
+          "removal": "79a45dedc27934c3a51edd257fe157ccf3a924a12c30c1bdf25e8cc9ee801ea5",
           "removalIsByteIdenticalToBaseline": true
         }
       }

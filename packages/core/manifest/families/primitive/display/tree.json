@@ -2476,6 +2476,35 @@
       }
     },
     {
+      "controlId": "palette.status-seeds",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "palette.status-seeds",
+            "socketPattern": null,
+            "prop": "fondo de highlight de coincidencia de busqueda en el label del nodo (uso incondicional, no atado a data-tone)",
+            "tier": "standard",
+            "examples": [
+              "--ds-color-warning"
+            ],
+            "noSocketReason": "background: color-mix(in srgb, var(--ds-color-warning) 30%, transparent) en [data-part='tree-node-highlight'], sin condicionar a data-tone; evidencia verificada en skin/tree.css:307-311.",
+            "socketsResolved": true,
+            "carrier": "shared-channel"
+          }
+        ],
+        "reviewedFrom": "anatomy",
+        "sourceBindings": [
+          "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css"
+        ]
+      }
+    },
+    {
       "controlId": "profiles.icon",
       "disposition": "UNKNOWN",
       "verificationState": "UNKNOWN",

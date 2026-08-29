@@ -1733,7 +1733,6 @@
         "uncoveredByDesign": {
           "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
             "--ds-color-border-subtle",
-            "--ds-color-info",
             "--ds-color-primary",
             "--ds-color-text-on-primary",
             "--ds-color-text-primary"
@@ -2421,6 +2420,31 @@
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
         "adjudicatedFrom": "controls/profiles.expressive.json"
+      }
+    },
+    {
+      "controlId": "palette.status-seeds",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "palette.status-seeds",
+            "why": "live-feed lee --ds-color-info via consumo del canal compartido de la raiz (live-feed.css:126 modern) y --ds-color-info-bg/-border via hatches --ds-live-feed-new-* (rustic :43,65,67,68), sin socket propio de familia."
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazos foundation compartidos (nivel 2/3 de la forma canonica), re-hogados desde la celda palette.seeds de esta misma familia": [
+            "--ds-color-info",
+            "--ds-color-info-bg",
+            "--ds-color-info-border"
+          ]
+        },
+        "reviewedFrom": "anatomy"
       }
     },
     {

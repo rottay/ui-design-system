@@ -1073,6 +1073,39 @@
       }
     },
     {
+      "controlId": "palette.status-seeds",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "palette.status-seeds",
+            "socketPattern": null,
+            "prop": "idem",
+            "tier": "standard",
+            "examples": [],
+            "noSocketReason": "sin socket propio; lectura directa del canal publico de status, propia del part 'banner'",
+            "socketsResolved": true,
+            "carrier": "shared-channel"
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazo compartido status (barrido F2, part propio 'banner')": [
+            "--ds-color-info",
+            "--ds-color-info-bg",
+            "--ds-color-info-border"
+          ]
+        },
+        "evidence": "surface-states.css:51-61 -- .ds-surface.ds-stale-banner[data-part='banner'] (SurfaceStaleBanner, part propio de esta familia): background/color/border via var(--ds-color-info) y --ds-color-info-bg/-border con fallback color-mix(--ds-color-info). NOTA: capability-anatomy comparte este mismo archivo pero sus propias partes (capability, capability-anatomy, capability-anatomy-label, capability-label, capability-list; surface-states.css:71-103) no leen ningun canal de status -- ver finding.",
+        "reviewedFrom": "anatomy",
+        "migratedToInternalChannels": true
+      }
+    },
+    {
       "controlId": "profiles.icon",
       "disposition": "UNKNOWN",
       "verificationState": "UNKNOWN",

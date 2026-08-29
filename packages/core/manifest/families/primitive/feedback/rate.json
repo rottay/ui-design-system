@@ -1748,6 +1748,34 @@
       }
     },
     {
+      "controlId": "palette.status-seeds",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "palette.status-seeds",
+            "socketPattern": null,
+            "prop": "el color activo/hover de la estrella deriva de la rampa de warning compartida",
+            "tier": "standard",
+            "examples": [],
+            "channels": [
+              "--ds-color-warning-400",
+              "--ds-color-warning-500"
+            ],
+            "noSocketReason": "sin socket propio; lee la rampa compartida de estado a traves de --ds-rate-active-color/--ds-rate-hover-color (palette.seeds) [at packages/core/src/foundation/tokens/css/presentation/components/rate.css:36, packages/core/src/foundation/tokens/css/presentation/components/rate.css:38]",
+            "socketsResolved": true,
+            "carrier": "shared-channel"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
+    },
+    {
       "controlId": "profiles.icon",
       "disposition": "UNKNOWN",
       "verificationState": "UNKNOWN",

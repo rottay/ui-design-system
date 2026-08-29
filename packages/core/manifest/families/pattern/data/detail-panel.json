@@ -8394,6 +8394,38 @@
       }
     },
     {
+      "controlId": "palette.status-seeds",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "palette.status-seeds",
+            "carrier": "shared-channel",
+            "socketPattern": null,
+            "socketsResolved": true,
+            "noSocketReason": "sin socket propio; consumo directo de --ds-color-error y su rampa derivada (-600/-200/-50/-300) via canal compartido",
+            "channels": [
+              "--ds-color-error",
+              "--ds-color-error-600",
+              "--ds-color-error-200",
+              "--ds-color-error-50",
+              "--ds-color-error-300"
+            ],
+            "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel.css",
+            "sourceBindings": [
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel.css:277-292"
+            ]
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
+    },
+    {
       "controlId": "profiles.icon",
       "disposition": "UNKNOWN",
       "verificationState": "UNKNOWN",

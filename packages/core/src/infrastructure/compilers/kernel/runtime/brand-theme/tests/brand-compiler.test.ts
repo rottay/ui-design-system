@@ -9,6 +9,10 @@ import {
 } from "../index";
 import { bithireBrandTheme } from "@/foundation/tokens/ts/presentation/brand-themes";
 import { getVerticalPreset } from "@/foundation/presets/verticals";
+// `BrandExpressiveSelection.schemaVersion` is REQUIRED. Derived from the
+// contract's own constant rather than restated as a literal, so a version bump
+// moves these drills with it instead of leaving them silently on v1.
+import { EXPRESSIVE_PROFILE_SCHEMA_VERSION } from "@/foundation/tokens/ts/presentation/expressive-profiles";
 
 const MOCK_BRAND_THEME: BrandTheme = {
   id: "test-brand",
@@ -725,14 +729,24 @@ describe("B-1 option B: tenant floor vs vertical baseline", () => {
     // other half: passing a patch that selects the SAME profile the baseline
     // already selects still lets the tenant floor win, because the selection now
     // arrives on the tenant floor.
-    const sameProfile = lower({ expressive: { experienceProfile: TECHNICAL } });
+    const sameProfile = lower({
+      expressive: {
+        schemaVersion: EXPRESSIVE_PROFILE_SCHEMA_VERSION,
+        experienceProfile: TECHNICAL,
+      },
+    });
     expect(sameProfile["--ds-letter-spacing-heading"]).toBe("0.01em");
     // ...while the baseline's own identical selection does not:
     expect(lower()["--ds-letter-spacing-heading"]).toBe("-0.025em");
   });
 
   it("drill 2 + Z-4: a tenant profile wins, and the promotion is VISIBLE", () => {
-    const vars = lower({ expressive: { experienceProfile: EDITORIAL } });
+    const vars = lower({
+      expressive: {
+        schemaVersion: EXPRESSIVE_PROFILE_SCHEMA_VERSION,
+        experienceProfile: EDITORIAL,
+      },
+    });
     // The canonical vocabulary is the PAIRING (owner ruling): editorial's
     // headingLs is `0`. The retired `headingTracking` for that axis was `0em`.
     expect(vars["--ds-letter-spacing-heading"]).toBe("0");
@@ -753,7 +767,12 @@ describe("B-1 option B: tenant floor vs vertical baseline", () => {
 
   it("drill 5: STRUCTURAL_WIDTH channels are untouched by the tenant floor", () => {
     const before = lower();
-    const after = lower({ expressive: { experienceProfile: EDITORIAL } });
+    const after = lower({
+      expressive: {
+        schemaVersion: EXPRESSIVE_PROFILE_SCHEMA_VERSION,
+        experienceProfile: EDITORIAL,
+      },
+    });
     for (const channel of [
       "--ds-sidebar-width",
       "--ds-sidebar-collapsed-width",

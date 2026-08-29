@@ -1754,6 +1754,38 @@
       }
     },
     {
+      "controlId": "palette.status-seeds",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "palette.status-seeds",
+            "socketPattern": null,
+            "prop": "data-threshold optimal/suboptimal/critical y data-tone success/warning/error/info leen los colores de estado compartidos",
+            "tier": "standard",
+            "examples": [],
+            "channels": [
+              "--ds-color-success",
+              "--ds-color-warning",
+              "--ds-color-on-warning",
+              "--ds-color-error",
+              "--ds-color-on-error",
+              "--ds-color-info"
+            ],
+            "noSocketReason": "sin socket propio; lee los canales compartidos de estado [at packages/core/src/foundation/tokens/css/presentation/components/meter.css:207-264]",
+            "socketsResolved": true,
+            "carrier": "shared-channel"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
+    },
+    {
       "controlId": "profiles.icon",
       "disposition": "UNKNOWN",
       "verificationState": "UNKNOWN",

@@ -3150,7 +3150,6 @@
             "--ds-color-bg-secondary",
             "--ds-color-border",
             "--ds-color-primary",
-            "--ds-color-success",
             "--ds-color-text-muted",
             "--ds-color-text-primary"
           ],
@@ -3712,6 +3711,30 @@
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
         "adjudicatedFrom": "controls/profiles.expressive.json"
+      }
+    },
+    {
+      "controlId": "palette.status-seeds",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "palette.status-seeds",
+            "why": "pricing-table lee --ds-color-success via consumo del canal compartido de la raiz (pricing-table.css:293 modern) y --ds-color-success-600 via rampa derivada (rustic :37,97; censo pricing-table.json:2046,2514,2566), sin socket propio de familia."
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazos foundation compartidos (nivel 2/3 de la forma canonica), re-hogados desde la celda palette.seeds de esta misma familia": [
+            "--ds-color-success",
+            "--ds-color-success-600"
+          ]
+        },
+        "reviewedFrom": "anatomy"
       }
     },
     {

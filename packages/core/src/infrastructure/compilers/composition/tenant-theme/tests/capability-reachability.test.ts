@@ -11,6 +11,7 @@
  */
 import { describe, expect, it } from "vitest";
 
+import type { BrandPalette } from "@/foundation/contracts/composition/tenants/themes";
 import type {
   TenantThemeConfigIdentity,
   TenantThemeDocument,
@@ -29,7 +30,11 @@ import {
   TENANT_PRO_MANIFEST,
   TENANT_STANDARD_MANIFEST,
 } from "@/foundation/contracts/composition/tenants/capabilities";
-import type { ActiveTenantCapabilityId } from "@/foundation/contracts/composition/tenants/capabilities";
+import type {
+  ActiveTenantCapabilityId,
+  CapabilityStatus,
+} from "@/foundation/contracts/composition/tenants/capabilities";
+import { deriveTenantColorRamps } from "@/infrastructure/compilers/kernel/runtime/brand-theme";
 
 const IDENTITY: TenantThemeConfigIdentity = {
   tenantId: "tenant_capability_probe",
@@ -60,6 +65,13 @@ const FULL_SURFACE_DOCUMENT: TenantThemeDocument = {
         foreground: {
           muted: "#6B6154",
           disabled: "#80766A",
+        },
+        // palette.status-seeds (P0): las 4 semillas de estado por la via DB.
+        status: {
+          success: "#5B8A3A",
+          warning: "#C08A2E",
+          error: "#B3402F",
+          info: "#3A6FA8",
         },
         backgroundMode: "auto",
         dark: {
@@ -119,6 +131,50 @@ const FULL_SURFACE_DOCUMENT: TenantThemeDocument = {
 };
 
 /**
+ * The advanced fixture, narrowed once so a probe can read its own inputs back.
+ *
+ * The `palette.status-seeds` probe compares an emitted ramp step against
+ * `deriveTenantColorRamps`, and a derivation only proves something when it runs
+ * on the SAME inputs the compiler used — the authored seed AND the authored
+ * ground. Restating either literal down in the probe would make this file a
+ * second authority for a fact the document above already states.
+ */
+const ADVANCED_FIXTURE =
+  FULL_SURFACE_DOCUMENT.mode === "advanced"
+    ? FULL_SURFACE_DOCUMENT
+    : (() => {
+        throw new Error("advanced fixture");
+      })();
+const FIXTURE_PALETTE = ADVANCED_FIXTURE.visualFoundation.general!.palette!;
+const FIXTURE_STATUS_SEEDS = FIXTURE_PALETTE.status!;
+const FIXTURE_GROUND = FIXTURE_PALETTE.background;
+const FIXTURE_ERROR_TOKEN_OVERRIDE = String(
+  ADVANCED_FIXTURE.visualFoundation.advanced!.tokenOverrides!["--ds-color-error"]
+);
+/** A seed the fixture does NOT author, used only to move a channel on purpose. */
+const OTHER_SUCCESS_SEED = "#2E7D5B";
+
+/**
+ * One step of the ramp the single lowering derives for a status tone, against
+ * the ground this fixture authors. Same function the compiler reaches at
+ * `brand-theme/index.ts:1033`, same surface, same ground — the only thing that
+ * changes between call sites is the seed, which is what makes the comparison an
+ * assertion about the seed rather than about the ramp math.
+ */
+const statusRampStep = (
+  seeds: { successColor?: string; errorColor?: string },
+  tone: "success" | "error"
+): string | undefined =>
+  deriveTenantColorRamps(
+    // `BrandPalette` requires `primaryColor`; a palette carrying ONE status
+    // seed is the shape this probe wants (`rampRoleSpecs` skips every seedless
+    // role), so the cast is the same one `color-ramps.test.ts` uses for the
+    // seedless-role drill rather than a second brand seed smuggled in here.
+    { ...seeds, backgroundColor: FIXTURE_GROUND } as BrandPalette,
+    "light"
+  )[`--ds-color-${tone}-500`];
+
+/**
  * Load-bearing coverage: every ACTIVE registry id owns an executable assertion
  * over its actual compiler output. Adding an active row without adding its
  * proof makes both TypeScript and the exact key-set assertion fail.
@@ -131,6 +187,67 @@ const ACTIVE_CAPABILITY_PROBES = {
         "--ds-color-primary"
       ]
     ).toBe("#277F76");
+  },
+  "palette.status-seeds": (artifact) => {
+    /* La sonda del dial: la semilla DB tiene que LLEGAR al canal, y su rampa
+     * tiene que derivarse de ella -- no basta con que el documento valide. */
+    expect(artifact.variables["--ds-color-success"]).toBe("#5B8A3A");
+    expect(artifact.variables["--ds-color-warning"]).toBe("#C08A2E");
+    expect(artifact.variables["--ds-color-info"]).toBe("#3A6FA8");
+    /* `error` NO se asierta contra la semilla, y eso es la aserción, no una
+     * excepción: este mismo fixture autora `--ds-color-error` como
+     * `tokenOverride` crudo, que es la capa MAS ALTA del tenant. Que el
+     * override gane sobre la semilla General es la precedencia documentada
+     * ("Advanced tokenOverrides is the only DB route" era justamente el rodeo
+     * que este dial viene a reemplazar), y se pinea aqui para que abrir el dial
+     * no la haya invertido en silencio. */
+    expect(artifact.variables["--ds-color-error"]).toBe("#7f1d1d");
+    // Y la rampa sale de la MISMA derivacion que el resto de los roles.
+    // `toBeDefined()` no probaba eso: la baseline vertical ya define
+    // `--ds-color-success-500`, asi que sobre un artifact que es DELTA el
+    // assert solo decia "el canal se movio de la baseline", y CUALQUIER valor
+    // distinto -- venido de cualquier puerta -- lo satisfacia. Se pinea el
+    // VALOR EXACTO que `deriveTenantColorRamps` produce desde la semilla del
+    // fixture contra el suelo que el fixture autora: si la semilla entrara por
+    // una puerta paralela, o el suelo fuera otro, el hex no coincidiria.
+    expect(artifact.variables["--ds-color-success-500"]).toBe(
+      statusRampStep({ successColor: FIXTURE_STATUS_SEEDS.success }, "success")
+    );
+    // `error` es el caso que separa "el override gana el canal" de "el override
+    // gana la SEMILLA", y es lo segundo: `migrateTokenOverride` mapea
+    // `--ds-color-error` -> `palette.errorColor` (migrate-v1/index.ts:129), de
+    // modo que la rampa ENTERA se re-deriva desde el override y no desde la
+    // semilla General. Se pinea en las dos direcciones -- coincide con la
+    // derivacion desde el override y NO coincide con la derivacion desde la
+    // semilla General -- para que invertir esa precedencia no pase en silencio.
+    expect(artifact.variables["--ds-color-error-500"]).toBe(
+      statusRampStep({ errorColor: FIXTURE_ERROR_TOKEN_OVERRIDE }, "error")
+    );
+    expect(artifact.variables["--ds-color-error-500"]).not.toBe(
+      statusRampStep({ errorColor: FIXTURE_STATUS_SEEDS.error }, "error")
+    );
+    // Determinismo: el paso 500 es funcion de la semilla, no una constante que
+    // cualquier semilla satisfaria. Recompilar el MISMO documento cambiando
+    // solo la semilla de estado mueve el canal, y lo mueve exactamente adonde
+    // la derivacion dice.
+    const rekeyed = structuredClone(FULL_SURFACE_DOCUMENT);
+    if (rekeyed.mode !== "advanced") throw new Error("advanced fixture");
+    (
+      rekeyed.visualFoundation.general!.palette!.status as Record<
+        string,
+        unknown
+      >
+    ).success = OTHER_SUCCESS_SEED;
+    const recompiled = compileTenantThemeConfig(
+      hydrateTenantThemeConfig(rekeyed, IDENTITY),
+      { verticalEnvelope: ENVELOPE }
+    );
+    expect(recompiled.variables["--ds-color-success-500"]).not.toBe(
+      artifact.variables["--ds-color-success-500"]
+    );
+    expect(recompiled.variables["--ds-color-success-500"]).toBe(
+      statusRampStep({ successColor: OTHER_SUCCESS_SEED }, "success")
+    );
   },
   "palette.dark-mode": (artifact) => {
     expect(artifact.normalizedAppearance.general?.palette?.backgroundMode).toBe(
@@ -260,7 +377,15 @@ describe("tenant capability registry reachability", () => {
     }
     // Frontier rows never leak into a rendered manifest.
     for (const capability of TENANT_CAPABILITY_REGISTRY) {
-      if (capability.status !== "frontier") continue;
+      // Read through the DECLARED union, not the literal the registry happens
+      // to narrow to today: P0 flipped the last `frontier` row to `active`, so
+      // a direct comparison stopped compiling ("no overlap"). The rule is the
+      // mechanism for the NEXT frontier row, so it is widened instead of
+      // deleted — deleting it would trade a standing law for today's census.
+      // The widening is an ASSERTION, not an annotation: an annotated local
+      // still narrows to its initializer's literal on assignment, so it does
+      // not lift the comparison.
+      if ((capability.status as CapabilityStatus) !== "frontier") continue;
       expect(TENANT_STANDARD_MANIFEST).not.toContain(capability.id);
       expect(TENANT_PRO_MANIFEST).not.toContain(capability.id);
       expect(TENANT_INTERNAL_MANIFEST).not.toContain(capability.id);
@@ -278,6 +403,9 @@ describe("tenant capability registry reachability", () => {
       "motion.dial",
       "navigation.sidebar-tone",
       "palette.seeds",
+      // P0 (2026-08-28): `palette.status-seeds` abre como Standard — es
+      // superficie de marca (tono), que es exactamente el remit de Standard.
+      "palette.status-seeds",
       "shape.button-style",
       "shape.radius-scale",
       "spacing.rhythm",
@@ -364,12 +492,43 @@ describe("tenant capability registry reachability", () => {
   });
 
   it("drill: frontier paths stay rejected and every opened vocabulary stays closed", () => {
+    // P0: el eje de tonos de estado esta ABIERTO, asi que este drill pasa de
+    // rechazo-de-camino a CIERRE DE VOCABULARIO, igual que hicieron
+    // responsive.posture (E2) y profiles.icon (C2) al abrirse.
+    //
+    // La hermana suelta sigue RECHAZADA: la capacidad abrio en
+    // `palette.status.{…}`, y un documento que la autora un nivel mas arriba --
+    // la forma exacta que este drill asertaba mientras la fila era frontera --
+    // sigue siendo una clave desconocida. Abrir el eje no ensancho nada por
+    // accidente.
     const statusSeeds = structuredClone(FULL_SURFACE_DOCUMENT);
     if (statusSeeds.mode !== "advanced") throw new Error("advanced fixture");
     (
       statusSeeds.visualFoundation.general!.palette as Record<string, unknown>
     ).success = "#5B8A3A";
     expect(validateTenantThemeDocument(statusSeeds).success).toBe(false);
+
+    // Las cuatro claves publicadas validan...
+    const realStatus = structuredClone(FULL_SURFACE_DOCUMENT);
+    if (realStatus.mode !== "advanced") throw new Error("advanced fixture");
+    expect(validateTenantThemeDocument(realStatus).success).toBe(true);
+
+    // ...y una quinta clave falla CERRADO en vez de resolver a la baseline, que
+    // es toda la diferencia entre un vocabulario cerrado y una sugerencia.
+    const hostileStatus = structuredClone(FULL_SURFACE_DOCUMENT);
+    if (hostileStatus.mode !== "advanced") throw new Error("advanced fixture");
+    (
+      hostileStatus.visualFoundation.general!.palette!.status as Record<string, unknown>
+    ).critical = "#000000";
+    expect(validateTenantThemeDocument(hostileStatus).success).toBe(false);
+
+    // Y el gemelo `dark` NO abrio en P0: autorarlo se rechaza.
+    const darkStatus = structuredClone(FULL_SURFACE_DOCUMENT);
+    if (darkStatus.mode !== "advanced") throw new Error("advanced fixture");
+    (
+      darkStatus.visualFoundation.general!.palette!.dark as Record<string, unknown>
+    ).status = { success: "#5B8A3A" };
+    expect(validateTenantThemeDocument(darkStatus).success).toBe(false);
 
     // E2: responsive.posture is OPEN now, so this drill flips from whole-path
     // rejection to vocabulary closure. All three published ladders validate...

@@ -60,7 +60,7 @@
     "pageSurfaces": 36
   },
   "controlBaselines": {
-    "standard": 13,
+    "standard": 14,
     "proCapabilities": 7,
     "expertExactAllowlist": 294,
     "expertMaximumOverridesPerDocument": 200,

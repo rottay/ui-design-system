@@ -8,9 +8,9 @@
 > Rollback: cada control es un INPUT — quitar la autoría restaura el baseline del vertical
 > (probado por los legs restore-equals-default del harness no-loss).
 
-digest: 4d2ad5b5de71efe04cb34b81e6941b4f01d97309e5a4f2a9a42f14c42ef8f6ce
+digest: d8c443351fb1c53700eb29d7a8e0ee2d8a0559a13ab1a6976d1f022e42865a9f
 
-## STANDARD — 13 controles (pocos diales, gran superficie)
+## STANDARD — 14 controles (pocos diales, gran superficie)
 
 | id | control | dominio/tipo | default | canal | static path (BrandTheme) | DB path (TenantThemeDocument) | lecturas vivas | consumer probado |
 |---|---|---|---|---|---|---|---|---|
@@ -27,6 +27,7 @@ digest: 4d2ad5b5de71efe04cb34b81e6941b4f01d97309e5a4f2a9a42f14c42ef8f6ce
 | `surfaces.effect-intensity` | Decoration intensity | scale | 1 for the DS default; verticals author their own floor | 1 ch | `surfaces.effectIntensity` | `appearance.general.surfaces.effectIntensity` | 64 | `overlay-modal.css` |
 | `navigation.sidebar-tone` | Sidebar tone | enum | subtle | 6 ch | `chrome.sidebar.tone` | `appearance.general.navigation.sidebarTone` | 18 | `menu.css` |
 | `experience.profile` | Experience profile | profile-id | baseline identity; a selection composes closed per-axis postures whose expansion always loses to any authored field or channel | 5 ch | `expressive.experienceProfile` | `appearance.general.experienceProfile` | 75 | `index.tsx` |
+| `palette.status-seeds` | Status tone seeds (success/warning/error/info) in General | color-set | vertical baseline status tones. The DB General path authors them at `palette.status.{…}` and confluences into BrandPalette BEFORE the single lowering, so both transports reach `deriveTenantColorRamps` through the same door — no parallel emitter. Absent => the vertical baseline, unchanged. | 68 ch | `palette.{successColor,warningColor,errorColor,infoColor}` | `appearance.general.palette.status.{success,warning,error,info}` | 1559 | `index.ts` |
 
 ## PRO — 7 controles (familias y perfiles)
 

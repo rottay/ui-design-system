@@ -2787,7 +2787,7 @@
       "contributingSlots": [
         "rottay:OVERLAY.chrome.controls.autocomplete.errorBorder"
       ],
-      "rootExposure": "gap",
+      "rootExposure": "tenant-dial",
       "rootHasDerivationLaw": false,
       "step": null,
       "stepNote": "la raiz no es un tier.<nivel>.<fg|border> refinable"
@@ -2846,7 +2846,7 @@
       "contributingSlots": [
         "rottay:CHROME.controls.autocomplete.warningBorder"
       ],
-      "rootExposure": "gap",
+      "rootExposure": "tenant-dial",
       "rootHasDerivationLaw": false,
       "step": null,
       "stepNote": "la raiz no es un tier.<nivel>.<fg|border> refinable"
@@ -14193,7 +14193,7 @@
         "rottay:OVERLAY.palette.errorColor",
         "rottay:PALETTE.errorColor"
       ],
-      "rootExposure": "gap",
+      "rootExposure": "tenant-dial",
       "rootHasDerivationLaw": false,
       "step": null,
       "stepNote": "la raiz no es un tier.<nivel>.<fg|border> refinable"
@@ -14394,7 +14394,7 @@
         "evnto:THEME.palette.backgroundColor",
         "rottay:THEME.palette.ramps.error.500"
       ],
-      "rootExposure": "gap",
+      "rootExposure": "tenant-dial",
       "rootHasDerivationLaw": false,
       "step": null,
       "stepNote": "la raiz no es un tier.<nivel>.<fg|border> refinable"
@@ -14583,7 +14583,7 @@
         "rottay:OVERLAY.palette.errorBorderColor",
         "rottay:THEME.palette.errorBorderColor"
       ],
-      "rootExposure": "gap",
+      "rootExposure": "tenant-dial",
       "rootHasDerivationLaw": false,
       "step": null,
       "stepNote": "la raiz no es un tier.<nivel>.<fg|border> refinable"
@@ -14611,7 +14611,7 @@
         "rottay:OVERLAY.palette.infoColor",
         "rottay:THEME.palette.infoColor"
       ],
-      "rootExposure": "gap",
+      "rootExposure": "tenant-dial",
       "rootHasDerivationLaw": false,
       "step": null,
       "stepNote": "la raiz no es un tier.<nivel>.<fg|border> refinable"
@@ -14961,7 +14961,7 @@
         "rottay:OVERLAY.palette.infoBgColor",
         "rottay:THEME.palette.infoBgColor"
       ],
-      "rootExposure": "gap",
+      "rootExposure": "tenant-dial",
       "rootHasDerivationLaw": false,
       "step": null,
       "stepNote": "la raiz no es un tier.<nivel>.<fg|border> refinable"
@@ -14992,7 +14992,7 @@
         "rottay:OVERLAY.palette.infoBorderColor",
         "rottay:THEME.palette.infoBorderColor"
       ],
-      "rootExposure": "gap",
+      "rootExposure": "tenant-dial",
       "rootHasDerivationLaw": false,
       "step": null,
       "stepNote": "la raiz no es un tier.<nivel>.<fg|border> refinable"
@@ -16606,7 +16606,7 @@
         "rottay:OVERLAY.palette.successColor",
         "rottay:THEME.palette.successColor"
       ],
-      "rootExposure": "gap",
+      "rootExposure": "tenant-dial",
       "rootHasDerivationLaw": false,
       "step": null,
       "stepNote": "la raiz no es un tier.<nivel>.<fg|border> refinable"
@@ -16805,7 +16805,7 @@
         "rottay:OVERLAY.palette.ramps.success.500",
         "rottay:THEME.palette.ramps.success.500"
       ],
-      "rootExposure": "gap",
+      "rootExposure": "tenant-dial",
       "rootHasDerivationLaw": false,
       "step": null,
       "stepNote": "la raiz no es un tier.<nivel>.<fg|border> refinable"
@@ -16839,7 +16839,7 @@
         "rottay:OVERLAY.palette.ramps.success.600",
         "rottay:THEME.palette.ramps.success.600"
       ],
-      "rootExposure": "gap",
+      "rootExposure": "tenant-dial",
       "rootHasDerivationLaw": false,
       "step": null,
       "stepNote": "la raiz no es un tier.<nivel>.<fg|border> refinable"
@@ -16996,7 +16996,7 @@
         "rottay:OVERLAY.palette.successBorderColor",
         "rottay:THEME.palette.successBorderColor"
       ],
-      "rootExposure": "gap",
+      "rootExposure": "tenant-dial",
       "rootHasDerivationLaw": false,
       "step": null,
       "stepNote": "la raiz no es un tier.<nivel>.<fg|border> refinable"
@@ -17392,7 +17392,7 @@
         "rottay:OVERLAY.palette.warningColor",
         "rottay:THEME.palette.warningColor"
       ],
-      "rootExposure": "gap",
+      "rootExposure": "tenant-dial",
       "rootHasDerivationLaw": false,
       "step": null,
       "stepNote": "la raiz no es un tier.<nivel>.<fg|border> refinable"
@@ -17772,7 +17772,7 @@
         "rottay:OVERLAY.palette.warningBorderColor",
         "rottay:THEME.palette.warningBorderColor"
       ],
-      "rootExposure": "gap",
+      "rootExposure": "tenant-dial",
       "rootHasDerivationLaw": false,
       "step": null,
       "stepNote": "la raiz no es un tier.<nivel>.<fg|border> refinable"
@@ -19771,7 +19771,7 @@
       "contributingSlots": [
         "rottay:OVERLAY.chrome.controls.datePicker.errorBorder"
       ],
-      "rootExposure": "gap",
+      "rootExposure": "tenant-dial",
       "rootHasDerivationLaw": false,
       "step": null,
       "stepNote": "la raiz no es un tier.<nivel>.<fg|border> refinable"
@@ -19904,7 +19904,7 @@
       "contributingSlots": [
         "rottay:CHROME.controls.datePicker.warningBorder"
       ],
-      "rootExposure": "gap",
+      "rootExposure": "tenant-dial",
       "rootHasDerivationLaw": false,
       "step": null,
       "stepNote": "la raiz no es un tier.<nivel>.<fg|border> refinable"
@@ -21797,7 +21797,7 @@
         "rottay:CHROME.floatButton.badgeBg",
         "rottay:OVERLAY.chrome.floatButton.badgeBg"
       ],
-      "rootExposure": "gap",
+      "rootExposure": "tenant-dial",
       "rootHasDerivationLaw": false,
       "step": null,
       "stepNote": "la raiz no es un tier.<nivel>.<fg|border> refinable"
@@ -24088,7 +24088,7 @@
         "bithire:CHROME.controls.input.count.colorError",
         "bithire:OVERLAY.chrome.controls.input.count.colorError"
       ],
-      "rootExposure": "gap",
+      "rootExposure": "tenant-dial",
       "rootHasDerivationLaw": false,
       "step": null,
       "stepNote": "la raiz no es un tier.<nivel>.<fg|border> refinable"
@@ -24115,7 +24115,7 @@
         "bithire:CHROME.controls.input.count.colorWarning",
         "bithire:OVERLAY.chrome.controls.input.count.colorWarning"
       ],
-      "rootExposure": "gap",
+      "rootExposure": "tenant-dial",
       "rootHasDerivationLaw": false,
       "step": null,
       "stepNote": "la raiz no es un tier.<nivel>.<fg|border> refinable"
@@ -24168,7 +24168,7 @@
         "bithire:CHROME.controls.input.errorBg",
         "bithire:OVERLAY.chrome.controls.input.errorBg"
       ],
-      "rootExposure": "gap",
+      "rootExposure": "tenant-dial",
       "rootHasDerivationLaw": false,
       "step": null,
       "stepNote": "la raiz no es un tier.<nivel>.<fg|border> refinable"
@@ -24196,7 +24196,7 @@
         "rottay:CHROME.controls.input.errorBorder",
         "rottay:OVERLAY.chrome.controls.input.errorBorder"
       ],
-      "rootExposure": "gap",
+      "rootExposure": "tenant-dial",
       "rootHasDerivationLaw": false,
       "step": null,
       "stepNote": "la raiz no es un tier.<nivel>.<fg|border> refinable"
@@ -24224,7 +24224,7 @@
         "rottay:CHROME.controls.input.errorColor",
         "rottay:OVERLAY.chrome.controls.input.errorColor"
       ],
-      "rootExposure": "gap",
+      "rootExposure": "tenant-dial",
       "rootHasDerivationLaw": false,
       "step": null,
       "stepNote": "la raiz no es un tier.<nivel>.<fg|border> refinable"
@@ -24251,7 +24251,7 @@
         "bithire:CHROME.controls.input.helper.errorColor",
         "bithire:OVERLAY.chrome.controls.input.helper.errorColor"
       ],
-      "rootExposure": "gap",
+      "rootExposure": "tenant-dial",
       "rootHasDerivationLaw": false,
       "step": null,
       "stepNote": "la raiz no es un tier.<nivel>.<fg|border> refinable"
@@ -24883,7 +24883,7 @@
         "bithire:CHROME.controls.input.label.requiredColor",
         "bithire:OVERLAY.chrome.controls.input.label.requiredColor"
       ],
-      "rootExposure": "gap",
+      "rootExposure": "tenant-dial",
       "rootHasDerivationLaw": false,
       "step": null,
       "stepNote": "la raiz no es un tier.<nivel>.<fg|border> refinable"
@@ -26002,7 +26002,7 @@
         "bithire:CHROME.controls.input.successBorder",
         "rottay:CHROME.controls.input.successBorder"
       ],
-      "rootExposure": "gap",
+      "rootExposure": "tenant-dial",
       "rootHasDerivationLaw": false,
       "step": null,
       "stepNote": "la raiz no es un tier.<nivel>.<fg|border> refinable"
@@ -26162,7 +26162,7 @@
         "bithire:CHROME.controls.input.warningBorder",
         "rottay:CHROME.controls.input.warningBorder"
       ],
-      "rootExposure": "gap",
+      "rootExposure": "tenant-dial",
       "rootHasDerivationLaw": false,
       "step": null,
       "stepNote": "la raiz no es un tier.<nivel>.<fg|border> refinable"
@@ -28593,7 +28593,7 @@
         "rottay:CHROME.liveFeed.newColor",
         "rottay:OVERLAY.chrome.liveFeed.newColor"
       ],
-      "rootExposure": "gap",
+      "rootExposure": "tenant-dial",
       "rootHasDerivationLaw": false,
       "step": null,
       "stepNote": "la raiz no es un tier.<nivel>.<fg|border> refinable"
@@ -31023,7 +31023,7 @@
         "rottay:CHROME.menu.itemDangerColor",
         "rottay:OVERLAY.chrome.menu.itemDangerColor"
       ],
-      "rootExposure": "gap",
+      "rootExposure": "tenant-dial",
       "rootHasDerivationLaw": false,
       "step": null,
       "stepNote": "la raiz no es un tier.<nivel>.<fg|border> refinable"
@@ -31784,7 +31784,7 @@
         "bithire:CHROME.metricCard.trendColor",
         "bithire:OVERLAY.chrome.metricCard.trendColor"
       ],
-      "rootExposure": "gap",
+      "rootExposure": "tenant-dial",
       "rootHasDerivationLaw": false,
       "step": null,
       "stepNote": "la raiz no es un tier.<nivel>.<fg|border> refinable"
@@ -36561,7 +36561,7 @@
       "contributingSlots": [
         "rottay:OVERLAY.chrome.controls.select.errorBorder"
       ],
-      "rootExposure": "gap",
+      "rootExposure": "tenant-dial",
       "rootHasDerivationLaw": false,
       "step": null,
       "stepNote": "la raiz no es un tier.<nivel>.<fg|border> refinable"
@@ -36842,7 +36842,7 @@
       "contributingSlots": [
         "rottay:CHROME.controls.select.successBorder"
       ],
-      "rootExposure": "gap",
+      "rootExposure": "tenant-dial",
       "rootHasDerivationLaw": false,
       "step": null,
       "stepNote": "la raiz no es un tier.<nivel>.<fg|border> refinable"
@@ -36926,7 +36926,7 @@
       "contributingSlots": [
         "rottay:CHROME.controls.select.warningBorder"
       ],
-      "rootExposure": "gap",
+      "rootExposure": "tenant-dial",
       "rootHasDerivationLaw": false,
       "step": null,
       "stepNote": "la raiz no es un tier.<nivel>.<fg|border> refinable"
@@ -38559,7 +38559,7 @@
         "bithire:CHROME.signalCard.badgeColor",
         "bithire:OVERLAY.chrome.signalCard.badgeColor"
       ],
-      "rootExposure": "gap",
+      "rootExposure": "tenant-dial",
       "rootHasDerivationLaw": false,
       "step": null,
       "stepNote": "la raiz no es un tier.<nivel>.<fg|border> refinable"
@@ -39798,7 +39798,7 @@
         "rottay:CHROME.statsGrid.trendNegative",
         "rottay:OVERLAY.chrome.statsGrid.trendNegative"
       ],
-      "rootExposure": "gap",
+      "rootExposure": "tenant-dial",
       "rootHasDerivationLaw": false,
       "step": null,
       "stepNote": "la raiz no es un tier.<nivel>.<fg|border> refinable"
@@ -39852,7 +39852,7 @@
         "rottay:CHROME.statsGrid.trendPositive",
         "rottay:OVERLAY.chrome.statsGrid.trendPositive"
       ],
-      "rootExposure": "gap",
+      "rootExposure": "tenant-dial",
       "rootHasDerivationLaw": false,
       "step": null,
       "stepNote": "la raiz no es un tier.<nivel>.<fg|border> refinable"
@@ -46517,7 +46517,7 @@
       "contributingSlots": [
         "rottay:OVERLAY.chrome.tooltip.errorBg"
       ],
-      "rootExposure": "gap",
+      "rootExposure": "tenant-dial",
       "rootHasDerivationLaw": false,
       "step": null,
       "stepNote": "la raiz no es un tier.<nivel>.<fg|border> refinable"
@@ -46688,7 +46688,7 @@
       "contributingSlots": [
         "rottay:CHROME.tooltip.successBg"
       ],
-      "rootExposure": "gap",
+      "rootExposure": "tenant-dial",
       "rootHasDerivationLaw": false,
       "step": null,
       "stepNote": "la raiz no es un tier.<nivel>.<fg|border> refinable"
@@ -46713,7 +46713,7 @@
       "contributingSlots": [
         "rottay:CHROME.tooltip.warningBg"
       ],
-      "rootExposure": "gap",
+      "rootExposure": "tenant-dial",
       "rootHasDerivationLaw": false,
       "step": null,
       "stepNote": "la raiz no es un tier.<nivel>.<fg|border> refinable"
@@ -48622,5 +48622,5 @@
       "stepNote": "sin raiz que refinar"
     }
   ],
-  "digest": "2c525e4f43c16fc20610806b32d0c141211ea7ce7ea53a7aec531a26bf42ebec"
+  "digest": "b219aa5263f1c57f5e9eaf065c383d71110685922d00050a80f16ae25e342581"
 }

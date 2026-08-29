@@ -4400,6 +4400,35 @@
       }
     },
     {
+      "controlId": "palette.status-seeds",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "palette.status-seeds",
+            "carrier": "shared-channel",
+            "socketPattern": null,
+            "socketsResolved": true,
+            "noSocketReason": "sin socket propio; consumo directo de --ds-color-success/-error via canal compartido; warning/info no encontrados en skin modern -- no sobre-reclamar (engine-asimetrico, ver finding parcial del adjudicador)",
+            "channels": [
+              "--ds-color-success",
+              "--ds-color-error"
+            ],
+            "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css",
+            "sourceBindings": [
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css:166,246-247,252-253"
+            ]
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
+    },
+    {
       "controlId": "profiles.icon",
       "disposition": "UNKNOWN",
       "verificationState": "UNKNOWN",

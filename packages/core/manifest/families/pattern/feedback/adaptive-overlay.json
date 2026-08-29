@@ -512,6 +512,24 @@
       }
     },
     {
+      "controlId": "palette.status-seeds",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "sin socket propio / consumo neutro: la unica skin (presentation/components/skin/adaptive-overlay.css) y los 3 engines no leen ningun canal --ds-color-{success,warning,error,info}*.",
+        "reasons": [
+          {
+            "root": "palette.status-seeds",
+            "why": "cero lecturas de --ds-color-{success,warning,error,info}* en presentation/components/skin/adaptive-overlay.css (unica skin) y ui/patterns/feedback/adaptive-overlay/** (classic/modern/rustic); prueba negativa verificada barriendo los 3 engines (classic/modern/rustic)."
+          }
+        ]
+      }
+    },
+    {
       "controlId": "profiles.icon",
       "disposition": "UNKNOWN",
       "verificationState": "UNKNOWN",

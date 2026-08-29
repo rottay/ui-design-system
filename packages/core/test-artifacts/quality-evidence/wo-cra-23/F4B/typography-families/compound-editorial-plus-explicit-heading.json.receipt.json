@@ -1,11 +1,11 @@
 {
   "schemaVersion": 2,
-  "roundId": "R7",
+  "roundId": "R6",
   "familyId": "primitive/display/typography",
   "scenarioId": "typography.families/compound-editorial-plus-explicit-heading/all-verticals/static-and-db",
   "evidenceKind": "data-field-delta",
-  "commandOrTool": "node /private/tmp/f4b14-compound-case.mjs (direct compile, composition/receipt writeEvidence)",
-  "toolVersion": "resolution-probe@471baf755c2a",
+  "commandOrTool": "node /tmp/mr-briefs/f4b14-compound-case.mjs (direct compile, composition/receipt writeEvidence)",
+  "toolVersion": "resolution-probe@fe0cd6c5e27b",
   "exitCode": 0,
   "sourceFiles": [
     "packages/core/dist/build-stamp.json",
@@ -44,10 +44,10 @@
     "packages/core/src/tooling/resolution-probe/runtime/ingress/index.mjs",
     "packages/core/src/tooling/resolution-probe/runtime/measure/index.mjs"
   ],
-  "sourceDigest": "14e4f5656bb3ff1f7aa910ba67e975c5fa98d8bf49bc7bbe7e48e5da53c93c3d",
+  "sourceDigest": "efca7901b2192dee000e9691ada44c52b24eee83a8628de007f6232931b11a3b",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/typography-families/compound-editorial-plus-explicit-heading.json",
   "artifactSha256": "a7c05b8467095a2694fb73cc45024c0e9e1b39273d34214ba4678dc60bfcd270",
-  "createdAt": "2026-08-28T06:23:29.114Z",
+  "createdAt": "2026-08-29T18:22:38.055Z",
   "negativeDrill": {
     "violation": "the explicit-wins fix silently overrides the whole typography family instead of only the field the document actually authored",
     "failsClosed": true,

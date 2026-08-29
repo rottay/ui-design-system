@@ -1663,6 +1663,29 @@
       }
     },
     {
+      "controlId": "palette.status-seeds",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "carrier": "shared-channel",
+            "ownedBy": "palette.status-seeds",
+            "channels": [
+              "--ds-color-warning"
+            ],
+            "socketsResolved": true,
+            "prop": "consumo directo skin (nivel 1): invalid-events-warning, scheduler-surface.css:39; estampado en scheduler/index.tsx:220"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
+    },
+    {
       "controlId": "profiles.icon",
       "disposition": "UNKNOWN",
       "verificationState": "UNKNOWN",

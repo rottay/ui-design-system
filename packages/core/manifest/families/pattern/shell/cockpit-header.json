@@ -4091,6 +4091,47 @@
       }
     },
     {
+      "controlId": "palette.status-seeds",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "palette.status-seeds",
+            "socketPattern": null,
+            "prop": "status pill (variantes success/warning/error/info)",
+            "tier": "standard",
+            "examples": [],
+            "noSocketReason": "sin socket propio; consumo directo de la escala -100/-700/-200 por variante",
+            "socketsResolved": true,
+            "carrier": "shared-channel"
+          }
+        ],
+        "uncoveredByDesign": {
+          "Canales --ds-color-* medidos en la anatomia (palette.status-seeds)": [
+            "--ds-color-success-100",
+            "--ds-color-success-700",
+            "--ds-color-success-200",
+            "--ds-color-warning-100",
+            "--ds-color-warning-700",
+            "--ds-color-warning-200",
+            "--ds-color-error-100",
+            "--ds-color-error-700",
+            "--ds-color-error-200",
+            "--ds-color-info-100",
+            "--ds-color-info-700",
+            "--ds-color-info-200"
+          ]
+        },
+        "reviewedFrom": "anatomy",
+        "migratedToInternalChannels": true
+      }
+    },
+    {
       "controlId": "profiles.icon",
       "disposition": "UNKNOWN",
       "verificationState": "UNKNOWN",
