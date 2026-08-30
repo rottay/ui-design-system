@@ -7,7 +7,7 @@
   "semanticOwner": {
     "owner": "design-system",
     "registryPath": "packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts",
-    "registryDigest": "830ee81559d219aa6fd764b62be7228003a84ab6b9b9c7d53a9cd16a644e9655"
+    "registryDigest": "94497930e7b9275fcf7e3b26dc480af20ebbd00cbb42bd38b6384153e66979d3"
   },
   "title": "Status tone seeds (success/warning/error/info) in General",
   "valueType": "color-set",
@@ -90,13 +90,28 @@
       "--ds-tint-info-8",
       "--ds-tint-info-12",
       "--ds-tint-info-16",
-      "--ds-tint-info-24"
+      "--ds-tint-info-24",
+      "--ds-color-success-bg",
+      "--ds-color-success-border",
+      "--ds-color-warning-bg",
+      "--ds-color-warning-border",
+      "--ds-color-error-bg",
+      "--ds-color-error-border",
+      "--ds-color-info-bg",
+      "--ds-color-info-border",
+      "--ds-color-alpha-success-10",
+      "--ds-color-alpha-success-20",
+      "--ds-color-alpha-warning-10",
+      "--ds-color-alpha-warning-20",
+      "--ds-color-alpha-error-10",
+      "--ds-color-alpha-error-20",
+      "--ds-color-alpha-info-10"
     ],
     "rootAttributes": [],
     "representativeOnly": true
   },
   "dependsOn": [],
-  "compatibility": "opened in place (P0, 2026-08-28): schema + envelope + normalizer with a literal closed vocabulary. Additive and zero-delta — no authored override exists, and every emitter is guarded by `if (seed)`. No `dark` twin and no per-step root: the ramp steps derive from the seed. The sibling path `palette.{success,…}` stays REJECTED, so opening the axis widened nothing by accident. The declared radius was WIDENED (W-SOURCE) from 3 channels of one tone to the closed 68 the four seeds actually reach; that is a correction of the declaration, not a widening of the capability — no emitter, path or vocabulary moved, and an unauthored seed still emits none of the 68.",
+  "compatibility": "opened in place (P0, 2026-08-28): schema + envelope + normalizer with a literal closed vocabulary. Additive and zero-delta — no authored override exists, and every emitter is guarded by `if (seed)`. No `dark` twin and no per-step root: the ramp steps derive from the seed. The sibling path `palette.{success,…}` stays REJECTED, so opening the axis widened nothing by accident. The declared radius was WIDENED (W-SOURCE) from 3 channels of one tone to 68, and again (COH-1, 2026-08-30) from 68 to 83: +8 bg/border and +7 alphas, once `deriveStatusTintFloor` made the four seeds reach them too. Each widening is a correction of the declaration, not a widening of the capability — no emitter, path or vocabulary moved, and an unauthored seed still emits none of the 83.",
   "productiveConsumerWitness": {
     "consumer": "src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
     "symbol": "vars[\"--ds-color-success\"]"
@@ -176,7 +191,22 @@
       "--ds-tint-info-8",
       "--ds-tint-info-12",
       "--ds-tint-info-16",
-      "--ds-tint-info-24"
+      "--ds-tint-info-24",
+      "--ds-color-success-bg",
+      "--ds-color-success-border",
+      "--ds-color-warning-bg",
+      "--ds-color-warning-border",
+      "--ds-color-error-bg",
+      "--ds-color-error-border",
+      "--ds-color-info-bg",
+      "--ds-color-info-border",
+      "--ds-color-alpha-success-10",
+      "--ds-color-alpha-success-20",
+      "--ds-color-alpha-warning-10",
+      "--ds-color-alpha-warning-20",
+      "--ds-color-alpha-error-10",
+      "--ds-color-alpha-error-20",
+      "--ds-color-alpha-info-10"
     ]
   },
   "retiredAliases": []

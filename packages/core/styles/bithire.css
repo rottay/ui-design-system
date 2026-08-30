@@ -124985,6 +124985,13 @@ html[lang]:lang(ar) {
   --ds-color-accent-800: #142331;
   --ds-color-accent-900: #070E15;
   --ds-color-accent-hover: #6f92b0;
+  --ds-color-alpha-error-10: color-mix(in srgb, var(--ds-color-error) 10%, transparent);
+  --ds-color-alpha-error-20: color-mix(in srgb, var(--ds-color-error) 20%, transparent);
+  --ds-color-alpha-info-10: color-mix(in srgb, var(--ds-color-info) 10%, transparent);
+  --ds-color-alpha-success-10: color-mix(in srgb, var(--ds-color-success) 10%, transparent);
+  --ds-color-alpha-success-20: color-mix(in srgb, var(--ds-color-success) 20%, transparent);
+  --ds-color-alpha-warning-10: color-mix(in srgb, var(--ds-color-warning) 10%, transparent);
+  --ds-color-alpha-warning-20: color-mix(in srgb, var(--ds-color-warning) 20%, transparent);
   --ds-color-background: #F4F8FB;
   --ds-color-bg: #F4F8FB;
   --ds-color-bg-elevated: #ffffff;
@@ -125011,8 +125018,8 @@ html[lang]:lang(ar) {
   --ds-color-error-700: #691215;
   --ds-color-error-800: #440609;
   --ds-color-error-900: #1F0303;
-  --ds-color-error-bg: #fef2f2;
-  --ds-color-error-border: rgba(204, 16, 22, 0.25);
+  --ds-color-error-bg: var(--ds-color-error-50);
+  --ds-color-error-border: color-mix(in srgb, var(--ds-color-error) 20%, transparent);
   --ds-color-info: #3A6FB0;
   --ds-color-info-100: #C1DCFF;
   --ds-color-info-200: #93BFF8;
@@ -125024,8 +125031,8 @@ html[lang]:lang(ar) {
   --ds-color-info-700: #0F3867;
   --ds-color-info-800: #052243;
   --ds-color-info-900: #020D1E;
-  --ds-color-info-bg: #f0f7ff;
-  --ds-color-info-border: rgba(10, 102, 194, 0.25);
+  --ds-color-info-bg: var(--ds-color-info-50);
+  --ds-color-info-border: color-mix(in srgb, var(--ds-color-info) 20%, transparent);
   --ds-color-interactive-bg-active: rgba(10, 102, 194, 0.08);
   --ds-color-interactive-bg-hover: rgba(10, 102, 194, 0.06);
   --ds-color-interactive-bg-muted: #f4f8fd;
@@ -125084,8 +125091,8 @@ html[lang]:lang(ar) {
   --ds-color-success-700: #003D5B;
   --ds-color-success-800: #002539;
   --ds-color-success-900: #000F1A;
-  --ds-color-success-bg: #f0fdf4;
-  --ds-color-success-border: rgba(5, 118, 66, 0.25);
+  --ds-color-success-bg: var(--ds-color-success-50);
+  --ds-color-success-border: color-mix(in srgb, var(--ds-color-success) 20%, transparent);
   --ds-color-text-disabled: #b2b6c5;
   --ds-color-text-muted: #8a9aaa;
   --ds-color-text-on-primary: #ffffff;
@@ -125104,8 +125111,8 @@ html[lang]:lang(ar) {
   --ds-color-warning-700: #4D3200;
   --ds-color-warning-800: #301E00;
   --ds-color-warning-900: #150B00;
-  --ds-color-warning-bg: #fffbeb;
-  --ds-color-warning-border: rgba(231, 163, 62, 0.25);
+  --ds-color-warning-bg: var(--ds-color-warning-50);
+  --ds-color-warning-border: color-mix(in srgb, var(--ds-color-warning) 20%, transparent);
   --ds-command-font: 'SF Mono', 'Fira Code', Menlo, monospace;
   --ds-command-glow: none;
   --ds-command-grid-bg: none;
@@ -125336,8 +125343,8 @@ html[lang]:lang(ar) {
   --ds-input-sm-padding-x: 10px;
   --ds-input-sm-padding-y: 5px;
   --ds-input-sm-radius: calc(8px / 1.25 * var(--ds-radius-scale, 1));
-  --ds-input-success-bg: color-mix(in srgb, #2F8B68 4%, #FFFFFF);
-  --ds-input-success-border: #2F8B68;
+  --ds-input-success-bg: color-mix(in srgb, var(--ds-color-success) 4%, #FFFFFF);
+  --ds-input-success-border: var(--ds-color-success);
   --ds-input-touch-target-min: 44px;
   --ds-input-transition-duration: 160ms;
   --ds-input-transition-timing: cubic-bezier(0.2, 0.8, 0.2, 1);

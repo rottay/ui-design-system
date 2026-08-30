@@ -53,6 +53,8 @@ import {
 import {
   PRIMARY_SEED_FIELD,
   SEED_SHADOWING_FIELDS,
+  STATUS_SEED_FIELDS,
+  STATUS_SEED_SHADOWING_FIELDS,
   compileTheme,
 } from "@/infrastructure/compilers/kernel/runtime/brand-theme";
 import { withExpressiveFieldDefaults } from "@/infrastructure/compilers/kernel/runtime/appearance";
@@ -475,9 +477,38 @@ describe("case C — no contested tenant authorship changes nothing", () => {
      * --ds-material-raised-foreground sigue removido: es el unico de los tres del
      * Lote F que si era duplicado sin ruta de override que proteger. */
     const counts: Record<Vertical, number> = {
-      rottay: 1192,
-      bithire: 1229,
-      evnto: 468,
+      // COH-1 (2026-08-30): 1192 -> 1196. `deriveStatusTintFloor` now
+      // explicitly emits `--ds-color-alpha-{success,warning,error,info}-10`
+      // in rottay's DARK block: rottay's light overlay authors all seven
+      // alpha channels, but its dark (default) body authors only the three
+      // `alphaSuccess20`/`alphaWarning20`/`alphaError20` fields, so these
+      // four `-10` channels used to fall through to `default.css`'s `:root`
+      // cascade default without ever appearing as an explicit compiled key.
+      // Two of the four resolve to the byte-identical rgba the cascade
+      // already gave (success/warning, whose dark seed matches the
+      // foundation literal); error/info additionally correct the resolved
+      // colour to rottay's own dark seed. Either way, the KEY is new, so the
+      // count moves regardless of which of the four also changed a byte.
+      rottay: 1196,
+      // COH-1 (2026-08-30): 1229 -> 1236. Bithire never authored ANY of the
+      // seven `--ds-color-alpha-{tone}-{10,20}` channels (info-20 excluded)
+      // in either mode, so they never appeared as explicit compiled keys;
+      // `deriveStatusTintFloor` now emits all seven in the LIGHT (base)
+      // block. Bithire's dark overlay authors its own seeds too, so its
+      // OWN floor value would be the identical channel-reference string --
+      // no new key there, hence +7 and not +14. The eight retired
+      // `*BgColor`/`*BorderColor` literals do not move this count: those
+      // channels were ALREADY explicit keys before (authored), and remain
+      // explicit keys now (derived) -- same eight keys, different producer.
+      bithire: 1236,
+      // COH-1 (2026-08-30): 468 -> 475. Same shape as bithire: evnto never
+      // authored any of the seven alpha channels in either mode, so
+      // `deriveStatusTintFloor` adds +7 new explicit keys to the base block.
+      // The four retired `*BgColor` and four retired `*BorderColor` light
+      // literals do not move this count (measured directly): each was
+      // already an explicit compiled key before retirement (authored) and
+      // remains one now (derived) -- same channel, different producer.
+      evnto: 475,
     };
     for (const vertical of VERTICALS) {
       expect(
@@ -947,14 +978,35 @@ describe("the digest tells the truth", () => {
 });
 
 describe("the consulted-provenance authority is closed", () => {
-  it("is exactly the union of the two sites' own tables", () => {
-    const union = new Set<string>([
+  /** Assembled once so the closure test and the mutant test share one truth. */
+  const THREE_SITE_UNION = (): Set<string> =>
+    new Set<string>([
       PRIMARY_SEED_FIELD,
       ...Object.values(SEED_SHADOWING_FIELDS).flat(),
       SIDEBAR_TONE_FIELD,
       ...Object.values(SIDEBAR_TONE_LEAF_FIELDS),
+      // COH-1 D3: the status-tint site's own table, the third union member.
+      ...STATUS_SEED_FIELDS,
+      ...Object.values(STATUS_SEED_SHADOWING_FIELDS).flat(),
     ]);
-    expect([...union].sort()).toEqual([...CONSULTED_PROVENANCE_FIELDS].sort());
+
+  it("is exactly the union of the three sites' own tables", () => {
+    expect([...THREE_SITE_UNION()].sort()).toEqual(
+      [...CONSULTED_PROVENANCE_FIELDS].sort()
+    );
+  });
+
+  it("mutant: dropping one entry from the union desyncs it from CONSULTED_PROVENANCE_FIELDS", () => {
+    // Proves the closure assertion above actually bites: a union missing a
+    // single status-seed field must NOT equal the closed vocabulary. Without
+    // this, a future edit that silently narrows either side could leave the
+    // test above green for the wrong reason (both sides shrinking together).
+    const mutatedUnion = [...THREE_SITE_UNION()].filter(
+      (field) => field !== "palette.successColor"
+    );
+    expect(mutatedUnion.sort()).not.toEqual(
+      [...CONSULTED_PROVENANCE_FIELDS].sort()
+    );
   });
 
   it("mP6: a profile default can never fill a consulted field", () => {
@@ -999,15 +1051,18 @@ describe("the consulted-provenance authority is closed", () => {
     // keep passing after `CONSULTED_PROVENANCE_FIELDS` was emptied, after
     // `collectPatchAuthoredPaths` stopped collecting, or after the profile
     // vocabulary was renamed out from under it. So the same pipeline is run
-    // once more over an appearance deliberately contaminated with the two
-    // field families the lattice does consult, and the intersection is
-    // required to catch both.
+    // once more over an appearance deliberately contaminated with the THREE
+    // field families the lattice does consult (COH-1 D3 added the status
+    // seed as the third), and the intersection is required to catch all three.
     const contaminated = migrateV1(
       {
         schemaVersion: 1,
         mode: "advanced",
         visualFoundation: {
-          general: { ...filled, palette: { primary: "#0F766E" } },
+          general: {
+            ...filled,
+            palette: { primary: "#0F766E", status: { success: "#7C3AED" } },
+          },
           advanced: { chrome: { sidebar: { bg: "#101014", text: "#F4F4F5" } } },
         },
       } as unknown as TenantThemeDocument,
@@ -1016,6 +1071,14 @@ describe("the consulted-provenance authority is closed", () => {
     const contaminatedHits = [
       ...collectPatchAuthoredPaths(contaminated.patch),
     ].filter((path) => CONSULTED_PROVENANCE_FIELDS.has(path));
+    // `migrateV1`'s `paletteFields()` always constructs all four
+    // `{tone}Color` keys the moment `general.palette.status` is present at
+    // all (own-key presence, `undefined` value for the three untouched
+    // tones) -- `collectPatchAuthoredPaths` collects by key presence, not
+    // value, so the pre-existing over-approximation (the same one D1's fix
+    // deliberately reads AROUND via `deriveTenantStatusSeedAuthorship`'s
+    // `!== undefined` value check) surfaces all four here, not just the one
+    // tone this document actually authored.
     expect(
       contaminatedHits.sort(),
       "the fence cannot detect a consulted field at all"
@@ -1023,6 +1086,10 @@ describe("the consulted-provenance authority is closed", () => {
       "chrome.sidebar.bg",
       "chrome.sidebar.text",
       PRIMARY_SEED_FIELD,
+      "palette.successColor",
+      "palette.warningColor",
+      "palette.errorColor",
+      "palette.infoColor",
     ].sort());
   });
 });

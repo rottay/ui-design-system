@@ -5,20 +5,20 @@
   "unit": "fila del inventario = un SLOT autorado del objeto evaluado de un tema (3629 hoy). NO es la unidad de anotacion de variant-parity (4131 tags @domicile) ni la de canal del catalogo de cascada.",
   "counters": {
     "rows": {
-      "value": 3629,
-      "reason": "Total de filas del inventario. Se ancla en el lote LEDGER-GATE (2026-08-28) al valor VIGENTE, sin moverlo: anclar una cifra que hasta ahora nadie verificaba no es re-anclarla. Baja cuando un lote retira hojas (P1 la llevo de 3656 a 3629) y sube solo si los temas ganan hojas autoradas -- eso ultimo es hallazgo."
+      "value": 3613,
+      "reason": "COH-1 (2026-08-30): 3629 -> 3613 (-16). Retiro de los 16 slots autorados baked que `deriveStatusTintFloor` reemplaza: bithire light `successBgColor`/`successBorderColor`/`warningBgColor`/`warningBorderColor`/`errorBgColor`/`errorBorderColor`/`infoBgColor`/`infoBorderColor` (8) y evnto light `successBgColor`/`warningBgColor`/`errorBgColor`/`infoBgColor`/`successBorderColor`/`warningBorderColor`/`errorBorderColor`/`infoBorderColor` (8). Ningun tema gano hojas autoradas; el piso del compilador las reemplaza sin volver a autorarlas."
     },
     "unassignedRows": {
-      "value": 297,
-      "reason": "Bala 3 del owner: 'cero unassigned requeridos o trayectoria cerrada y medida'. Son slots que el tema SI autora y cuyo docblock los domicilia unassigned. Decrece-solo: una cohorte de colapso puede sacarlos, nunca meterlos."
+      "value": 286,
+      "reason": "COH-1 (2026-08-30): 297 -> 286 (-11). Los 16 slots retirados (ver `rows`) incluian entradas domiciliadas `unassigned`; su retiro baja este contador junto con `rows`, nunca lo sube."
     },
     "untaggedRows": {
       "value": 25,
       "reason": "Hojas autoradas que ningun docblock cubre. Una hoja sin domicilio es exactamente lo que la ley F4A prohibe ('cero keypaths sin domicilio'). Decrece-solo hasta cero."
     },
     "rowsWithoutRootAttribution": {
-      "value": 1443,
-      "reason": "Re-anclado en PALETA P1 (2026-08-28): 1707 -> 1443, con la historia completa y la UNIDAD PINEADA: la metrica de este contador es stats.byRootAttribution[\"no-persisted-membership\"] del inventario (hoy convive con otra unidad medible — filas sin rootId totales, 1626 — y sin este pin la proxima deriva vuelve a ser inmedible). (a) DERIVA SILENCIOSA 1707 -> 1467: las cohortes 2A y 2B movieron filas con raiz y ningun gate lee esta cifra — peor: BASELINE_PATH esta definido en el productor y no se usa en ninguna otra linea, asi que 4 de las 5 cifras de este ledger no las verifica nadie (solo un drill del normalization-contract-gate acopla unassignedRows). Hallazgo del writer (Opus), verificado por el DT y confirmado por Fable. (b) ESTE LOTE: -24 = 23 rampas rottay retiradas + 1 bithire (onPrimaryColor), todas no-persisted-membership. Filas totales del inventario 3656 -> 3629 (las 27 retiradas). Las otras cuatro cifras quietas verificadas contra stats: unassignedRows 297, untaggedRows 25, expressionsCarryingLiteral 71, literalPinsOnDeclaredHead 20. Deuda nombrada con duenio (el frente): cablear el --check del productor contra este baseline (decrece-solo, puerta nombrada — el patron ya existente) o retirar del ledger lo no verificado. Decrece-solo desde aqui. Ancla previa: 1707 (cohorte 1)."
+      "value": 1437,
+      "reason": "COH-1 (2026-08-30): 1443 -> 1437 (-6). Seis de los 16 slots retirados (ver `rows`) median `no-persisted-membership`; su retiro baja este contador. Historia previa conservada abajo. Re-anclado en PALETA P1 (2026-08-28): 1707 -> 1443, con la historia completa y la UNIDAD PINEADA: la metrica de este contador es stats.byRootAttribution[\"no-persisted-membership\"] del inventario (hoy convive con otra unidad medible — filas sin rootId totales, 1626 — y sin este pin la proxima deriva vuelve a ser inmedible). (a) DERIVA SILENCIOSA 1707 -> 1467: las cohortes 2A y 2B movieron filas con raiz y ningun gate lee esta cifra — peor: BASELINE_PATH esta definido en el productor y no se usa en ninguna otra linea, asi que 4 de las 5 cifras de este ledger no las verifica nadie (solo un drill del normalization-contract-gate acopla unassignedRows). Hallazgo del writer (Opus), verificado por el DT y confirmado por Fable. (b) ESTE LOTE: -24 = 23 rampas rottay retiradas + 1 bithire (onPrimaryColor), todas no-persisted-membership. Filas totales del inventario 3656 -> 3629 (las 27 retiradas). Las otras cuatro cifras quietas verificadas contra stats: unassignedRows 297, untaggedRows 25, expressionsCarryingLiteral 71, literalPinsOnDeclaredHead 20. Deuda nombrada con duenio (el frente): cablear el --check del productor contra este baseline (decrece-solo, puerta nombrada — el patron ya existente) o retirar del ledger lo no verificado. Decrece-solo desde aqui. Ancla previa: 1707 (cohorte 1)."
     },
     "expressionsCarryingLiteral": {
       "value": 71,

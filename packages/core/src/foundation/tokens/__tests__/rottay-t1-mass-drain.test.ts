@@ -2172,6 +2172,29 @@ function buildDocument(path: string, field: string, value: string): unknown {
 const migrateRows = ROSTER.filter((row) => row.disposition === "migrate");
 const deleteRows = ROSTER.filter((row) => row.disposition === "delete");
 
+/**
+ * COH-1 (2026-08-30): these four dark alpha-10 rows are no longer a
+ * "deleted literal falls back to a recorded root floor" case. `FLOORS`
+ * recorded a STATIC cascade walk for a channel the compiler used to emit
+ * nothing for; `deriveStatusTintFloor` now EXPLICITLY emits all four from
+ * rottay's own dark seed, which is a real producer, not the absence the
+ * recorded floor stood in for. The generic loop below resolves
+ * `EMITTED ?? FLOORS` and expects the STRING to still name the pre-recorded
+ * paint; for these four the producer changed on purpose (see
+ * `deriveStatusTintFloor`'s docblock), so they are excluded here and
+ * verified in their own block instead of failing the generic assertion for
+ * the wrong reason.
+ */
+const COH1_SUPERSEDED_FLOOR_KEYS = new Set([
+  "dark|--ds-color-alpha-error-10",
+  "dark|--ds-color-alpha-info-10",
+  "dark|--ds-color-alpha-success-10",
+  "dark|--ds-color-alpha-warning-10",
+]);
+const deleteRowsPreCoh1Floor = deleteRows.filter(
+  (row) => !COH1_SUPERSEDED_FLOOR_KEYS.has(row.mode + "|" + row.name)
+);
+
 describe("ROTTAY-T1 MASS - census", () => {
   // PARTIALLY EXCISED (SEV-2). The file-derived half of this test is gone: the
   // four `live` length claims, the postcss raw-declaration count, and the
@@ -2437,21 +2460,80 @@ describe("ROTTAY-T1 MASS - both transports lower migrated names identically", ()
 });
 
 describe("ROTTAY-T1 MASS - the deleted channels were derivations, not paint", () => {
-  it.each(deleteRows.map((row) => [row.mode + " " + row.name, row] as const))(
-    "%s still resolves to what the line said",
-    (_label, row) => {
-      const key = row.mode + "|" + row.name;
-      const post = EMITTED[row.mode][row.name] ?? FLOORS[key];
-      const after = resolveValue(row.mode, post);
-      const before = resolveValue(row.mode, row.value);
-      expect(before, "the removed literal must itself resolve").not.toBeNull();
-      expect(after, key + " resolves to nothing after removal").not.toBeNull();
-      expect(after).toBe(before);
-    }
-  );
+  it.each(
+    deleteRowsPreCoh1Floor.map((row) => [row.mode + " " + row.name, row] as const)
+  )("%s still resolves to what the line said", (_label, row) => {
+    const key = row.mode + "|" + row.name;
+    const post = EMITTED[row.mode][row.name] ?? FLOORS[key];
+    const after = resolveValue(row.mode, post);
+    const before = resolveValue(row.mode, row.value);
+    expect(before, "the removed literal must itself resolve").not.toBeNull();
+    expect(after, key + " resolves to nothing after removal").not.toBeNull();
+    expect(after).toBe(before);
+  });
 
   it("deleted 68 declarations", () => {
     expect(deleteRows).toHaveLength(68);
+  });
+});
+
+/**
+ * COH-1 (2026-08-30) — the four dark alpha-10 rows this lot superseded.
+ *
+ * `deriveStatusTintFloor` now emits all four from rottay's OWN dark seed
+ * (`--ds-color-{error,info,success,warning}`) rather than leaving them to
+ * fall through to the recorded `FLOORS` snapshot of `default.css`'s foundation
+ * default. Two resolve to the byte-identical rgba the recorded floor already
+ * gave (rottay's dark success/warning seeds happen to equal the foundation
+ * literal); error/info additionally correct the resolved colour to rottay's
+ * own dark seed instead of the generic foundation red/blue -- a minimal,
+ * intended delta, not a regression.
+ */
+describe("COH-1 — the four superseded dark alpha-10 rows now derive from rottay's own seed", () => {
+  const EXPECTED_FORMULA: Record<string, string> = {
+    "--ds-color-alpha-error-10":
+      "color-mix(in srgb, var(--ds-color-error) 10%, transparent)",
+    "--ds-color-alpha-info-10":
+      "color-mix(in srgb, var(--ds-color-info) 10%, transparent)",
+    "--ds-color-alpha-success-10":
+      "color-mix(in srgb, var(--ds-color-success) 10%, transparent)",
+    "--ds-color-alpha-warning-10":
+      "color-mix(in srgb, var(--ds-color-warning) 10%, transparent)",
+  };
+
+  it.each([...COH1_SUPERSEDED_FLOOR_KEYS])(
+    "%s is now the floor's own formula, referencing rottay's dark seed",
+    (key) => {
+      const [mode, name] = key.split("|");
+      expect(EMITTED[mode as Mode][name]).toBe(EXPECTED_FORMULA[name]);
+    }
+  );
+
+  // Parse the recorded pre-COH-1 floor and rottay's own dark seed to prove
+  // the numeric claim from source, not from a copied hex: success/warning
+  // resolve to the SAME rgba (their dark seed happens to equal the
+  // foundation literal); error/info resolve to a DIFFERENT rgba (rottay's
+  // own dark seed corrects the generic foundation default).
+  const hexToRgbTriplet = (hex: string): string => {
+    const clean = hex.replace("#", "");
+    const r = Number.parseInt(clean.slice(0, 2), 16);
+    const g = Number.parseInt(clean.slice(2, 4), 16);
+    const b = Number.parseInt(clean.slice(4, 6), 16);
+    return `${r}, ${g}, ${b}`;
+  };
+
+  it("success/warning: rottay's own dark seed happens to equal the foundation default (cero-delta byte)", () => {
+    expect(hexToRgbTriplet(EMITTED.dark["--ds-color-success"])).toBe("34, 197, 94");
+    expect(FLOORS["dark|--ds-color-alpha-success-10"]).toBe("rgba(34, 197, 94, 0.10)");
+    expect(hexToRgbTriplet(EMITTED.dark["--ds-color-warning"])).toBe("245, 158, 11");
+    expect(FLOORS["dark|--ds-color-alpha-warning-10"]).toBe("rgba(245, 158, 11, 0.10)");
+  });
+
+  it("error/info: rottay's own dark seed differs from the foundation default (intended minimal delta)", () => {
+    expect(hexToRgbTriplet(EMITTED.dark["--ds-color-error"])).not.toBe("239, 68, 68");
+    expect(FLOORS["dark|--ds-color-alpha-error-10"]).toBe("rgba(239, 68, 68, 0.10)");
+    expect(hexToRgbTriplet(EMITTED.dark["--ds-color-info"])).not.toBe("59, 130, 246");
+    expect(FLOORS["dark|--ds-color-alpha-info-10"]).toBe("rgba(59, 130, 246, 0.10)");
   });
 });
 

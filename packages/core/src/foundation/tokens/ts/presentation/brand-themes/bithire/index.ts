@@ -3453,22 +3453,20 @@ const PALETTE: BrandPalette = {
   linkColor: "#3a6fb0",
   linkHoverColor: "#2c5587",
   linkVisitedColor: "#6b3fa0",
+  // COH-1: successBgColor/successBorderColor (and their warning/error/info
+  // siblings below) retired. They baked a green well/border (`#f0fdf4`,
+  // `rgba(5, 118, 66, 0.25)`) unrelated to this vertical's own blue success
+  // seed -- `deriveStatusTintFloor` now derives all eight bg/border channels
+  // from the four seeds below, the same way the dark overlay's own literals
+  // already are hue-consistent with them.
   successColor: "#327CA8",
-  successBgColor: "#f0fdf4",
-  successBorderColor: "rgba(5, 118, 66, 0.25)",
   warningColor: "#D6A04E",
-  warningBgColor: "#fffbeb",
-  warningBorderColor: "rgba(231, 163, 62, 0.25)",
   /**
    * @domicile seed
    * @governor dial: token-overrides
    */
   errorColor: "#C5504C",
-  errorBgColor: "#fef2f2",
-  errorBorderColor: "rgba(204, 16, 22, 0.25)",
   infoColor: "#3A6FB0",
-  infoBgColor: "#f0f7ff",
-  infoBorderColor: "rgba(10, 102, 194, 0.25)",
   interactiveBgHoverColor: "rgba(10, 102, 194, 0.06)",
   interactiveBgActiveColor: "rgba(10, 102, 194, 0.08)",
   interactiveBgMutedColor: "#f4f8fd",
@@ -6748,12 +6746,21 @@ const CHROME: BrandChrome = {
        * @domicile seed
        * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
        */
-      successBorder: "#2F8B68",
+      // COH-1: `#2F8B68` was a second baked green, unrelated to this
+      // vertical's blue success seed and inconsistent with the dark overlay
+      // of this same control (`successBg: color-mix(in srgb,
+      // var(--ds-color-success) 4%, var(--ds-surface-card))`). Now derives
+      // from the seed for parity across modes.
       /**
-       * @domicile seed
-       * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+       * @domicile derived
+       * @governor deriva de: --ds-color-success
        */
-      successBg: "color-mix(in srgb, #2F8B68 4%, #FFFFFF)",
+      successBorder: "var(--ds-color-success)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-success
+       */
+      successBg: "color-mix(in srgb, var(--ds-color-success) 4%, #FFFFFF)",
       /**
        * @domicile seed
        * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)

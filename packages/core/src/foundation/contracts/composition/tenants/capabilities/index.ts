@@ -852,13 +852,20 @@ export const TENANT_CAPABILITY_REGISTRY = Object.freeze([
       //   4. the five-step tint ramp `--ds-tint-{tone}-{4,8,12,16,24}`
       //      (:1443-1450), whose value is seed-independent but whose EMISSION
       //      is gated on the seed being authored.
-      // `--ds-color-{tone}-bg` / `-border` (and `--ds-color-info-ink`) are
-      // deliberately EXCLUDED: they belong to `EXTENDED_PALETTE_CHANNELS`
-      // (:493-517), a separate authored `field -> channel` record fed by
-      // `successBgColor`, `errorBorderColor`, `infoInkColor` and their
-      // siblings — one authored field reaching exactly one channel. No status
-      // SEED reaches any of them, and claiming them here would attribute to
-      // this control a radius it does not move.
+      // COH-1 (2026-08-30): `--ds-color-{tone}-bg` / `-border` and seven
+      // `--ds-color-alpha-{tone}-*` channels (5./6. below) are NO LONGER
+      // excluded. `deriveStatusTintFloor` (`brand-theme/index.ts`) merges a
+      // FLOOR for these fifteen channels per tone, guarded by the same
+      // `if (seed)` presence check every other emission in this family uses,
+      // merged BEFORE `setExtendedPaletteVariables` so an authored
+      // `successBgColor`/`alphaSuccess10`/etc. (`EXTENDED_PALETTE_CHANNELS`,
+      // :493-517) still overrides its own channel, per channel. A DB tenant's
+      // own status seed re-derives the same fifteen over a vertical baseline
+      // that bakes them as literals, via the sibling
+      // `applyTenantStatusSeedDerivations`/`STATUS_SEED_SHADOWING_FIELDS`.
+      // `--ds-color-info-ink` stays EXCLUDED: its authority is the
+      // `tinted-well-tone-ink` capability below (readable ink over the seed),
+      // unrelated to this control's status-seed family.
       derivedChannels: [
         // 1. seed passthrough
         '--ds-color-success',
@@ -932,9 +939,29 @@ export const TENANT_CAPABILITY_REGISTRY = Object.freeze([
         '--ds-tint-info-12',
         '--ds-tint-info-16',
         '--ds-tint-info-24',
+        // 5. bg/border floor per tone (`deriveStatusTintFloor`, guarded per
+        //    tone by the same `if (seed)` presence check as 1.-4. above)
+        '--ds-color-success-bg',
+        '--ds-color-success-border',
+        '--ds-color-warning-bg',
+        '--ds-color-warning-border',
+        '--ds-color-error-bg',
+        '--ds-color-error-border',
+        '--ds-color-info-bg',
+        '--ds-color-info-border',
+        // 6. alpha wells per tone (7, not 8: `--ds-color-alpha-info-20` is a
+        //    RETIRED channel -- `residual-adjudication.json`, "executed":
+        //    true -- and is never re-emitted from the floor)
+        '--ds-color-alpha-success-10',
+        '--ds-color-alpha-success-20',
+        '--ds-color-alpha-warning-10',
+        '--ds-color-alpha-warning-20',
+        '--ds-color-alpha-error-10',
+        '--ds-color-alpha-error-20',
+        '--ds-color-alpha-info-10',
       ],
       compat:
-        'opened in place (P0, 2026-08-28): schema + envelope + normalizer with a literal closed vocabulary. Additive and zero-delta — no authored override exists, and every emitter is guarded by `if (seed)`. No `dark` twin and no per-step root: the ramp steps derive from the seed. The sibling path `palette.{success,…}` stays REJECTED, so opening the axis widened nothing by accident. The declared radius was WIDENED (W-SOURCE) from 3 channels of one tone to the closed 68 the four seeds actually reach; that is a correction of the declaration, not a widening of the capability — no emitter, path or vocabulary moved, and an unauthored seed still emits none of the 68.',
+        'opened in place (P0, 2026-08-28): schema + envelope + normalizer with a literal closed vocabulary. Additive and zero-delta — no authored override exists, and every emitter is guarded by `if (seed)`. No `dark` twin and no per-step root: the ramp steps derive from the seed. The sibling path `palette.{success,…}` stays REJECTED, so opening the axis widened nothing by accident. The declared radius was WIDENED (W-SOURCE) from 3 channels of one tone to 68, and again (COH-1, 2026-08-30) from 68 to 83: +8 bg/border and +7 alphas, once `deriveStatusTintFloor` made the four seeds reach them too. Each widening is a correction of the declaration, not a widening of the capability — no emitter, path or vocabulary moved, and an unauthored seed still emits none of the 83.',
     },
     {
       id: 'profiles.icon',

@@ -1061,7 +1061,10 @@ describe("compileBrandTheme propagates the moved PALETTE channels", () => {
     expect(cssVariables["--ds-color-bg-surface"]).toBe("#ffffff");
     expect(cssVariables["--ds-color-text-tertiary"]).toBe("#7f859b");
     expect(cssVariables["--ds-color-border"]).toBe("#d4e0ea");
-    expect(cssVariables["--ds-color-success-bg"]).toBe("#f0fdf4");
+    // COH-1 (2026-08-30): bithire retired its baked-green successBgColor
+    // literal (`#f0fdf4`); the channel now derives from bithire's own blue
+    // seed via `deriveStatusTintFloor`.
+    expect(cssVariables["--ds-color-success-bg"]).toBe("var(--ds-color-success-50)");
     expect(cssVariables["--ds-color-interactive-bg-hover"]).toBe("rgba(10, 102, 194, 0.06)");
   });
 
@@ -1081,29 +1084,35 @@ describe("compileBrandTheme propagates the moved PALETTE channels", () => {
     // resuelta — sigue siendo este literal.
     expect(preImagen("evnto", "--ds-color-border-primary", "default", cssVariables["--ds-color-border-primary"]))
       .toBe("rgba(0, 0, 0, 0.08)");
-    expect(cssVariables["--ds-color-success-bg"]).toBe("#f0fdf4");
+    // COH-1 (2026-08-30): evnto retired its `successBgColor` literal
+    // (`#f0fdf4`); the channel now derives from evnto's own green seed via
+    // `deriveStatusTintFloor` (sub-perceptual correction, `#F5FFF6`).
+    expect(cssVariables["--ds-color-success-bg"]).toBe("var(--ds-color-success-50)");
   });
 
-  it("evnto dark mode adds exactly the 7 signed reset pins", () => {
+  it("evnto dark mode adds exactly the 3 signed reset pins (COH-1: the four status bg pins withdrew)", () => {
+    // COH-1 (2026-08-30): evnto's light base retired its four `*BgColor`
+    // literals, so light's own `-bg` now resolves to the SAME
+    // `var(--ds-color-{tone}-50)` string dark already authored. A mode
+    // block's delta only restates a channel whose value DIFFERS from the
+    // base (`compileModeBlocks`: `if (baseVars[key] !== value)`), so the four
+    // status `-bg` pins that used to appear here (dark's literal vs. light's
+    // now-retired green literal) withdraw entirely — not a regression, the
+    // withdrawal IS the fix propagating into dark's own delta.
     const { modeBlocks } = compile("evnto", evntoBrandTheme);
     const dark = modeBlocks?.find((b) => b.mode === "dark");
     expect(dark).toBeDefined();
     expect(dark!.cssVariables["--ds-color-accent-hover"]).toBe("var(--ds-color-secondary-hover)");
     expect(dark!.cssVariables["--ds-color-bg-overlay"]).toBe("rgba(2, 6, 23, 0.88)");
     expect(dark!.cssVariables["--ds-color-text-tertiary"]).toBe("var(--ds-color-neutral-600)");
-    expect(dark!.cssVariables["--ds-color-success-bg"]).toBe("var(--ds-color-success-50)");
-    expect(dark!.cssVariables["--ds-color-warning-bg"]).toBe("var(--ds-color-warning-50)");
-    expect(dark!.cssVariables["--ds-color-error-bg"]).toBe("var(--ds-color-error-50)");
-    expect(dark!.cssVariables["--ds-color-info-bg"]).toBe("var(--ds-color-info-50)");
+    for (const tone of ["success", "warning", "error", "info"] as const) {
+      expect(dark!.cssVariables[`--ds-color-${tone}-bg`]).toBeUndefined();
+    }
 
     const newDarkPins = [
       "--ds-color-accent-hover",
       "--ds-color-bg-overlay",
       "--ds-color-text-tertiary",
-      "--ds-color-success-bg",
-      "--ds-color-warning-bg",
-      "--ds-color-error-bg",
-      "--ds-color-info-bg",
     ];
     for (const pin of newDarkPins) {
       expect(dark!.cssVariables[pin]).toBeDefined();
@@ -1120,16 +1129,27 @@ describe("compileBrandTheme full roster parity (channel=value hash)", () => {
     expect(hash).toBe("4c56c2cc2127928edc2eb328751cc85b8ad18479c85c8dedac528300069403dc");
   });
 
+  // COH-1 (2026-08-30): RE-SIGNED. Bithire retired its baked
+  // successBgColor/successBorderColor/warningBgColor/warningBorderColor/
+  // errorBgColor/errorBorderColor/infoBgColor/infoBorderColor literals (8 of
+  // this roster's 29 channels), which now derive from bithire's own seeds via
+  // `deriveStatusTintFloor` — a deliberate correction (the hue-wrong green
+  // well), not byte-equivalent drift, so the hash legitimately moves.
   it("B29 default (light) matches the signed effective-value hash", () => {
     const { hash, pairs } = compileRosterEffectiveHash(bithireBrandTheme, "bithire", PALETTE_BITHIRE_29, "default");
     expect(pairs).toHaveLength(29);
-    expect(hash).toBe("b566d5de5021bfbfa52edf27665ff8123f9447a74b7a985dc1f076eec53ce299");
+    expect(hash).toBe("f74918e2ec2631640b524b45370a277cc9f36772b68b4ca0f2b65e222bdc16f1");
   });
 
+  // COH-1 (2026-08-30): RE-SIGNED. Evnto retired its baked
+  // successBgColor/warningBgColor/errorBgColor/infoBgColor literals (4 of
+  // this roster's 25 channels — `-border` is not in this roster), which now
+  // derive from evnto's own seeds via `deriveStatusTintFloor` (a
+  // sub-perceptual correction, not byte-equivalent drift).
   it("E25 default (light) matches the signed effective-value hash", () => {
     const { hash, pairs } = compileRosterEffectiveHash(evntoBrandTheme, "evnto", PALETTE_EVNTO_25, "default");
     expect(pairs).toHaveLength(25);
-    expect(hash).toBe("4b95f40dd4b9b00733a1c0d383fd9eb47347f4e3166b18b0fcfe6ac90bf9211f");
+    expect(hash).toBe("a168e77f8f0ff356946b1277a7287961dc96813de1d0e4306269a9c335edb589");
   });
 
   it("R35 light mode effective map is complete and signed", () => {
