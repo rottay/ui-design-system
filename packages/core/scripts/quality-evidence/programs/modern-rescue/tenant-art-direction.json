@@ -8,7 +8,7 @@
   },
   "authority": {
     "workOrder": "WO-CRA-23",
-    "purpose": "Binding product-art-direction input for R1-R7; it does not create a second theming system or own program progress. R7 reference postures are non-product fixtures owned by customization-model.json and do not become tenant targets here.",
+    "purpose": "Historical record of the deferred art directions and current law of the two tenant fixtures; it does not create a second theming system or own program progress. The recorded directions are DEFERRED (see stageStatus): this file binds nothing in the current stage. R7 reference postures are non-product fixtures owned by customization-model.json and do not become tenant targets here.",
     "adjudicator": "Kimi K3 (DT)",
     "executor": "Claude after an explicitly authorized round",
     "creativeAdvisor": "none — the creative advisor seat was retired on 2026-08-21 and stays retired; Kimi K3 holds only the DT seat from 2026-08-23 (DT != advisor); KIMI-ANNOTATIONS is historical/dormant",
@@ -27,7 +27,7 @@
     "Texture, motif, gradient and motion never carry required meaning and honor reduced-transparency, reduced-motion, forced-colors and contrast floors.",
     "The round does not invest in dark mode; tenant identity must be complete in the canonical light product posture.",
     "The reference is a product grammar, not permission to copy logos, names, proprietary assets or exact protected trade dress.",
-    "The current BitHire and The Management palettes are migration inputs, not accepted target palettes; R1 replaces and sightedly readjudicates both through canonical authorities."
+    "The current BitHire and The Management palettes are migration inputs, not accepted target palettes; the law that R1 replaces and readjudicates them is RETIRED (owner amendment 2026-08-30): the fixtures keep their current values as controlled baselines until a later per-vertical customization phase."
   ],
   "targets": [
     {
@@ -286,7 +286,6 @@
     "r1MinimumObservableAxes": 8,
     "r1MinimumNonColorAxes": 6,
     "surfaceMinimumObservableAxes": 8,
-    "threeSecondGrayscaleRecognitionRequired": true,
     "sameTreeRequired": true,
     "requiredScenes": [
       "authentication-or-entry",
@@ -304,8 +303,8 @@
     "requiredLocales": ["en", "es", "ar"],
     "requiredDensityPostures": ["compact", "balanced", "expansive"],
     "acceptanceQuestions": [
-      "Can an observer identify the tenant in three seconds after captures are converted to grayscale?",
-      "Would each tenant still feel distinct if its primary hue were temporarily neutralized?",
+      "Does a controlled mutation of a public control produce an observable and predictable difference in both fixtures, by static BrandTheme and by DB TenantTheme with parity?",
+      "Do the two fixtures stay distinguishable by composition and structure across the required scenes and widths without any aesthetic-identity evaluation?",
       "Do type scale, density and content length change composition without overlap, clipping, character wrapping or unjustified holes?",
       "Does mobile preserve each identity through task ordering, chrome, rhythm and anatomy rather than only color?",
       "Does every difference resolve from the governed tenant/profile chain rather than an app or tenant selector?"

@@ -1653,12 +1653,12 @@ function collectHistoricalContractFailures(contracts) {
   if ((artDirection?.divergenceContract?.r1MinimumNonColorAxes ?? 0) < 6) {
     errors.push('R1 tenant art direction must require at least six non-color axes');
   }
-  if (artDirection?.targets?.some((target) => target.currentPaletteIsTarget !== false)) {
-    errors.push('both current tenant palettes must remain rejected as R1 targets');
-  }
-  if (artDirection?.targets?.some((target) => !target.paletteRebuildLaw?.includes('Replace'))) {
-    errors.push('both tenant targets must retain an explicit palette rebuild law');
-  }
+  /* Owner amendment 2026-08-30: the two assertions that forced the deferred art
+     direction through the back door ("both current tenant palettes must remain
+     rejected as R1 targets" + "both tenant targets must retain an explicit
+     palette rebuild law") were REMOVED: the verticals are engine test fixtures,
+     not art-direction destinations (rounds.json R1 + tenant-art-direction.json
+     stageStatus). The fixture divergence minimums stay enforced above. */
   if (artDirection?.kimiProposalBoundary?.allowedWrites !== 'new proposal files under the inbox only') {
     errors.push('Kimi proposal boundary must remain new-files-only');
   }
