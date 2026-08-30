@@ -1,0 +1,2 @@
+drill "png-tamper" (altera el sha256 de un PNG registrado; el veredicto debe fallar): comparacion limpia verde; con la perturbacion el comparador FALLO como debe
+  FAIL(inducido): alert|bithire|390 :: el PNG cambio pese a que ningun carrier de esta captura debia moverse

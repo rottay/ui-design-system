@@ -1,0 +1,2 @@
+drill "mover-becomes-frozen" (borra el delta del PRIMER carrier MOVER; el veredicto debe fallar): comparacion limpia verde; con la perturbacion el comparador FALLO como debe
+  FAIL(inducido): result|the-management|390 :: [result-success-well] se esperaba MOVER (tone=success) y ninguna propiedad pintada cambio. Canales movidos: 0. Un canal sin pintura NO cuenta como llegada.

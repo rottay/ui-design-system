@@ -198,51 +198,36 @@ const JUDGE_MODE_SELECTOR = '[data-testid="lab-judge-mode"]';
 // ---------------------------------------------------------------------------
 
 /**
- * `declaredOutputs.channels` del control (68 canales, manifest :24-94). Leerlo
+ * `declaredOutputs.channels` del control (83 canales tras COH-1). Leerlo
  * del disco en vez de transcribirlo evita que esta herramienta y el manifest
  * puedan divergir en silencio; el sha256 del manifest viaja en el receipt.
  */
 const CONTROL_MANIFEST_RELPATH = 'packages/core/manifest/controls/palette.status-seeds.json';
 
 /**
- * Canales que los skins SI leen y que el control NO declara. No son salidas del
- * dial: son literales del BrandTheme (`successBgColor`/`successBorderColor`,
- * brand-themes/bithire/index.ts:3456-3458) o derivaciones de foundation. Se
- * leen y se registran para que la propagacion parcial quede MEDIDA, no supuesta.
+ * Canales que los skins SI leen y que el control NO declara. Tras COH-1, los
+ * `-bg`/`-border`/alphas status SI son declarados (derivan del seed via
+ * `deriveStatusTintFloor`): quedan fuera solo los `-ink`, que derivan del canal
+ * por otra autoridad (`tinted-well-tone-ink`, capabilities/index.ts). Se leen y
+ * se registran para que esa derivacion paralela quede MEDIDA, no supuesta.
  */
 const UNDECLARED_CHANNELS_WATCHED = [
-  '--ds-color-success-bg',
-  '--ds-color-success-border',
   '--ds-color-success-ink',
-  '--ds-color-alpha-success-10',
-  '--ds-color-warning-bg',
-  '--ds-color-error-bg',
-  '--ds-color-info-bg',
+  '--ds-color-warning-ink',
+  '--ds-color-error-ink',
+  '--ds-color-info-ink',
 ];
 
 /**
- * Propagacion parcial PRE-DECLARADA. Nada de esto decide pass/fail: la ley MOVER
- * es ">=1 propiedad pintada se movio". Existe para que un fondo que no sigue al
- * seed sea una observacion con cita, no un "diff inesperado" que dispare el stop
- * condition.
+ * PRE-COH-1 existia propagacion parcial: badge-success y workbench-status-success
+ * leian `--ds-color-success-bg` como literal del BrandTheme fuera de
+ * declaredOutputs, y podian NO seguir al seed. COH-1 cerro ese hueco: los
+ * `-bg` ahora derivan del seed via el piso del compilador, asi que esos dos
+ * carriers DEBEN seguir al seed como cualquier otro. La lista queda vacia a
+ * proposito y la evidencia focal de COH-1 es la prueba (si vuelve a quedar un
+ * carrier pegado a un literal, se re-declara aqui con cita, nunca en silencio).
  */
-const DECLARED_PARTIAL_PROPAGATION = [
-  {
-    carrier: 'badge-success',
-    property: 'backgroundColor',
-    channel: '--ds-color-success-bg',
-    source: 'packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/badge.css:396',
-    why: 'literal del BrandTheme, fuera de declaredOutputs; el fondo soft puede NO seguir al seed',
-  },
-  {
-    carrier: 'workbench-status-success',
-    property: 'backgroundColor',
-    channel: '--ds-color-success-bg',
-    source:
-      'packages/core/src/foundation/tokens/css/presentation/components/skin/record-workbench.css:95',
-    why: 'mismo literal; border-color y color SI leen --ds-color-success y son los que deben moverse',
-  },
-];
+const DECLARED_PARTIAL_PROPAGATION = [];
 
 // ---------------------------------------------------------------------------
 // Propiedades observadas. Dos conjuntos DISJUNTOS, con roles opuestos.
@@ -2119,14 +2104,26 @@ function parseArgs(argv) {
   return args;
 }
 
-function selectCaptures({ selfTest, include }) {
+function selectCaptures({ selfTest, include, only }) {
   const extra = new Set((include ?? '').split(',').map((s) => s.trim()).filter(Boolean));
   for (const id of extra) {
     if (!CAPTURES.some((c) => c.id === id)) {
       throw new Error(`--include nombra una captura inexistente: "${id}"`);
     }
   }
-  const active = CAPTURES.filter((c) => c.enabled || extra.has(c.id));
+  /* `--only a,b,c` acota la corrida a un subconjunto focal declarado (evidencia
+     focal de un lote posterior, p.ej. COH-1). El receipt lo hace honesto:
+     `executedCaptureIds` vs `matrixCaptureIds` muestran la muestra exacta, y
+     una corrida focal NUNCA se compara como fase (el comparador exige el set
+     completo de filas entre receipts). */
+  const onlySet = new Set((only ?? '').split(',').map((s) => s.trim()).filter(Boolean));
+  for (const id of onlySet) {
+    if (!CAPTURES.some((c) => c.id === id)) {
+      throw new Error(`--only nombra una captura inexistente: "${id}"`);
+    }
+  }
+  let active = CAPTURES.filter((c) => c.enabled || extra.has(c.id));
+  if (onlySet.size > 0) active = active.filter((c) => onlySet.has(c.id));
   if (!selfTest) return active;
   return active.filter((c) => SELF_TEST_CAPTURE_IDS.includes(c.id));
 }
@@ -2165,7 +2162,7 @@ async function runCapture(args) {
      corrida ejecuta. La cobertura por tier se reporta sobre la matriz, no sobre
      la muestra, para que un --self-test no pueda inventar un hueco ni taparlo. */
   const matrixCaptures = selectCaptures({ selfTest: false, include: args.flags.include });
-  const captures = selectCaptures({ selfTest, include: args.flags.include });
+  const captures = selectCaptures({ selfTest, include: args.flags.include, only: args.flags.only });
   const grounds = groundFilter ? [GROUNDS[groundFilter]] : Object.values(GROUNDS);
 
   const plan = [];

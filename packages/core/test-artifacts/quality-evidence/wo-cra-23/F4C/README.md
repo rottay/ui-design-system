@@ -451,8 +451,11 @@ el comparador falla como debe). Sobre A→E los aplicables muerden tambien:
 `hold-becomes-mover`, `png-tamper` (que ahora SI prueba: la limpia pasa) y
 `count-drift`. `mover-becomes-frozen`/`geometry-leak` no tienen MOVER en una
 fase restore: terminan rojas por excepcion controlada, como declara la nota de
-drills sin objetivo. Logs: `compare-logs/{A-B,A-C,A-D,A-E}.log`,
-`drill-{…}.log` (A→B) y `drill-AE-{…}.log` (A→E).
+drills sin objetivo. Logs: `compare-logs/{A-B,A-C,A-D,A-E}.txt`,
+`drill-{…}.txt` (A→B) y `drill-AE-{…}.txt` (A→E). Los `.txt` son la copia
+trackeable: los `.log` caen bajo el gitignore global y nunca entraron al commit
+(defecto de durabilidad encontrado por Codex, corregido en la integracion
+COH-1).
 
 La fila `labels/the-management/1280` de la serie previa (flake del tooltip,
 incidente 5) quedo **resuelta por re-captura**: en esta serie el PNG es
