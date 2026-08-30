@@ -867,11 +867,24 @@ test('C-a3 byReason DROPS unresolved-expression at zero and freezes the other bu
 
 test('C-a4 the frozen counters do not move with this tranche', () => {
   const out = buildProducers();
-  assert.equal(out.stats.producerSites, 4873);
+  assert.equal(out.stats.producerSites, 4877);
   // F2A-1 (2026-08-26): re-pin con aritmética -- F' -1 (glass-blur, emisor unico) + F-2 +2 (overlay.background restaurado, no era deuda muerta) => 10311
   // C-02b (2026-08-27): +1 en producerSites/channelEmissions/distinctChannels = la seed nueva declarada --ds-textarea-clear-offset (el offset dej de vivir como fallback duplicado y gana su sitio de declaracion; la clearance deriva de la geometria del boton) => 4873 / 10312 / 4586
-  assert.equal(out.stats.channelEmissions, 10312);
-  assert.equal(out.stats.distinctChannels, 4586);
+  // cascade-producers COH-1 conservation remediation (2026-08-30): deriveStatusTintFloor
+  // (BRAND_THEME) landed with no enumerator -- its 4 template emissions (bg/border/alpha-10/
+  // alpha-20 over ON_TONE_ROLES) had no resolvable domain, so they fell through as ts-compilers
+  // missing-owner AND, independently, as a reach.unattributed residual, double-publishing into
+  // unknownProvenance and breaking the tsx-only conservation guard. Fixed at the root by
+  // registering ON_TONE_ROLES's file as a resolvable constant source, never by touching this
+  // artifact or this guard by hand. producerSites +4 (one claim per assignment site),
+  // channelEmissions +31 (16 raw expansions from the newly attributed sites, the remainder is
+  // producerSiteId rehashing from COH-1's own line-shift in brand-theme/index.ts -- same content,
+  // new coordinate hash, nets to zero), distinctChannels +1 (only --ds-color-alpha-info-20 is a
+  // genuinely new name; the `info` role is over-approximated the same way every other loop-bound
+  // enumerator in this file already is, ignoring the runtime's inner `role !== "info"` guard)
+  // => 4877 / 10343 / 4587
+  assert.equal(out.stats.channelEmissions, 10343);
+  assert.equal(out.stats.distinctChannels, 4587);
   assert.equal(out.stats.ownershipConflicts, 0);
 });
 
@@ -1028,11 +1041,24 @@ test('Z-10 ZERO and PRODUCER are disjoint, and PRODUCER is never drained', () =>
 
 test('Z-11 the frozen producer counters do not move with this tranche', () => {
   const out = buildProducers();
-  assert.equal(out.stats.producerSites, 4873);
+  assert.equal(out.stats.producerSites, 4877);
   // F2A-1 (2026-08-26): re-pin con aritmética -- F' -1 (glass-blur, emisor unico) + F-2 +2 (overlay.background restaurado, no era deuda muerta) => 10311
   // C-02b (2026-08-27): +1 en producerSites/channelEmissions/distinctChannels = la seed nueva declarada --ds-textarea-clear-offset (el offset dej de vivir como fallback duplicado y gana su sitio de declaracion; la clearance deriva de la geometria del boton) => 4873 / 10312 / 4586
-  assert.equal(out.stats.channelEmissions, 10312);
-  assert.equal(out.stats.distinctChannels, 4586);
+  // cascade-producers COH-1 conservation remediation (2026-08-30): deriveStatusTintFloor
+  // (BRAND_THEME) landed with no enumerator -- its 4 template emissions (bg/border/alpha-10/
+  // alpha-20 over ON_TONE_ROLES) had no resolvable domain, so they fell through as ts-compilers
+  // missing-owner AND, independently, as a reach.unattributed residual, double-publishing into
+  // unknownProvenance and breaking the tsx-only conservation guard. Fixed at the root by
+  // registering ON_TONE_ROLES's file as a resolvable constant source, never by touching this
+  // artifact or this guard by hand. producerSites +4 (one claim per assignment site),
+  // channelEmissions +31 (16 raw expansions from the newly attributed sites, the remainder is
+  // producerSiteId rehashing from COH-1's own line-shift in brand-theme/index.ts -- same content,
+  // new coordinate hash, nets to zero), distinctChannels +1 (only --ds-color-alpha-info-20 is a
+  // genuinely new name; the `info` role is over-approximated the same way every other loop-bound
+  // enumerator in this file already is, ignoring the runtime's inner `role !== "info"` guard)
+  // => 4877 / 10343 / 4587
+  assert.equal(out.stats.channelEmissions, 10343);
+  assert.equal(out.stats.distinctChannels, 4587);
   // 68 proven locally + the 1 that only resolves cross-file (T-TYPED-1118)
   assert.equal(out.stats.closedNonObject, 69);
 });
@@ -1420,11 +1446,24 @@ test('T-13 boundedReceiptOf returns null for a disposition it cannot vouch for',
 
 test('T-14 the frozen counters survive this tranche untouched', () => {
   const out = buildProducers();
-  assert.equal(out.stats.producerSites, 4873);
+  assert.equal(out.stats.producerSites, 4877);
   // F2A-1 (2026-08-26): re-pin con aritmética -- F' -1 (glass-blur, emisor unico) + F-2 +2 (overlay.background restaurado, no era deuda muerta) => 10311
   // C-02b (2026-08-27): +1 en producerSites/channelEmissions/distinctChannels = la seed nueva declarada --ds-textarea-clear-offset (el offset dej de vivir como fallback duplicado y gana su sitio de declaracion; la clearance deriva de la geometria del boton) => 4873 / 10312 / 4586
-  assert.equal(out.stats.channelEmissions, 10312);
-  assert.equal(out.stats.distinctChannels, 4586);
+  // cascade-producers COH-1 conservation remediation (2026-08-30): deriveStatusTintFloor
+  // (BRAND_THEME) landed with no enumerator -- its 4 template emissions (bg/border/alpha-10/
+  // alpha-20 over ON_TONE_ROLES) had no resolvable domain, so they fell through as ts-compilers
+  // missing-owner AND, independently, as a reach.unattributed residual, double-publishing into
+  // unknownProvenance and breaking the tsx-only conservation guard. Fixed at the root by
+  // registering ON_TONE_ROLES's file as a resolvable constant source, never by touching this
+  // artifact or this guard by hand. producerSites +4 (one claim per assignment site),
+  // channelEmissions +31 (16 raw expansions from the newly attributed sites, the remainder is
+  // producerSiteId rehashing from COH-1's own line-shift in brand-theme/index.ts -- same content,
+  // new coordinate hash, nets to zero), distinctChannels +1 (only --ds-color-alpha-info-20 is a
+  // genuinely new name; the `info` role is over-approximated the same way every other loop-bound
+  // enumerator in this file already is, ignoring the runtime's inner `role !== "info"` guard)
+  // => 4877 / 10343 / 4587
+  assert.equal(out.stats.channelEmissions, 10343);
+  assert.equal(out.stats.distinctChannels, 4587);
   // P0 (2026-08-28): +10 en emissionsWithCausalRoot = la raiz cascade nueva palette.status-seeds
   // declara 2 derivations (--ds-color-success-500 via deriveTenantColorRamps, --ds-color-on-success
   // via ON_TONE_ROLES) que respaldan 10 sitios de emision preexistentes (6 de -500 + 4 de on-success);
@@ -1757,11 +1796,24 @@ test('T-23 every frozen counter and closed cohort survives T-FINAL-352 untouched
   assert.equal(out.stats.closedNonObject, 69);
   assert.equal(out.stats.closedZeroGoverned, 627);
   // producer counters
-  assert.equal(out.stats.producerSites, 4873);
+  assert.equal(out.stats.producerSites, 4877);
   // F2A-1 (2026-08-26): re-pin con aritmética -- F' -1 (glass-blur, emisor unico) + F-2 +2 (overlay.background restaurado, no era deuda muerta) => 10311
   // C-02b (2026-08-27): +1 en producerSites/channelEmissions/distinctChannels = la seed nueva declarada --ds-textarea-clear-offset (el offset dej de vivir como fallback duplicado y gana su sitio de declaracion; la clearance deriva de la geometria del boton) => 4873 / 10312 / 4586
-  assert.equal(out.stats.channelEmissions, 10312);
-  assert.equal(out.stats.distinctChannels, 4586);
+  // cascade-producers COH-1 conservation remediation (2026-08-30): deriveStatusTintFloor
+  // (BRAND_THEME) landed with no enumerator -- its 4 template emissions (bg/border/alpha-10/
+  // alpha-20 over ON_TONE_ROLES) had no resolvable domain, so they fell through as ts-compilers
+  // missing-owner AND, independently, as a reach.unattributed residual, double-publishing into
+  // unknownProvenance and breaking the tsx-only conservation guard. Fixed at the root by
+  // registering ON_TONE_ROLES's file as a resolvable constant source, never by touching this
+  // artifact or this guard by hand. producerSites +4 (one claim per assignment site),
+  // channelEmissions +31 (16 raw expansions from the newly attributed sites, the remainder is
+  // producerSiteId rehashing from COH-1's own line-shift in brand-theme/index.ts -- same content,
+  // new coordinate hash, nets to zero), distinctChannels +1 (only --ds-color-alpha-info-20 is a
+  // genuinely new name; the `info` role is over-approximated the same way every other loop-bound
+  // enumerator in this file already is, ignoring the runtime's inner `role !== "info"` guard)
+  // => 4877 / 10343 / 4587
+  assert.equal(out.stats.channelEmissions, 10343);
+  assert.equal(out.stats.distinctChannels, 4587);
   // P0 (2026-08-28): +10 en emissionsWithCausalRoot = la raiz cascade nueva palette.status-seeds
   // declara 2 derivations (--ds-color-success-500 via deriveTenantColorRamps, --ds-color-on-success
   // via ON_TONE_ROLES) que respaldan 10 sitios de emision preexistentes (6 de -500 + 4 de on-success);
@@ -2015,11 +2067,24 @@ test('B-11 the composite and every other open cohort is untouched by this tranch
   assert.equal(out.stats.privateRelay, 728);
   assert.equal(out.stats.closedProducer, 66);
   assert.equal(out.stats.closedNonObject, 69);
-  assert.equal(out.stats.producerSites, 4873);
+  assert.equal(out.stats.producerSites, 4877);
   // F2A-1 (2026-08-26): re-pin con aritmética -- F' -1 (glass-blur, emisor unico) + F-2 +2 (overlay.background restaurado, no era deuda muerta) => 10311
   // C-02b (2026-08-27): +1 en producerSites/channelEmissions/distinctChannels = la seed nueva declarada --ds-textarea-clear-offset (el offset dej de vivir como fallback duplicado y gana su sitio de declaracion; la clearance deriva de la geometria del boton) => 4873 / 10312 / 4586
-  assert.equal(out.stats.channelEmissions, 10312);
-  assert.equal(out.stats.distinctChannels, 4586);
+  // cascade-producers COH-1 conservation remediation (2026-08-30): deriveStatusTintFloor
+  // (BRAND_THEME) landed with no enumerator -- its 4 template emissions (bg/border/alpha-10/
+  // alpha-20 over ON_TONE_ROLES) had no resolvable domain, so they fell through as ts-compilers
+  // missing-owner AND, independently, as a reach.unattributed residual, double-publishing into
+  // unknownProvenance and breaking the tsx-only conservation guard. Fixed at the root by
+  // registering ON_TONE_ROLES's file as a resolvable constant source, never by touching this
+  // artifact or this guard by hand. producerSites +4 (one claim per assignment site),
+  // channelEmissions +31 (16 raw expansions from the newly attributed sites, the remainder is
+  // producerSiteId rehashing from COH-1's own line-shift in brand-theme/index.ts -- same content,
+  // new coordinate hash, nets to zero), distinctChannels +1 (only --ds-color-alpha-info-20 is a
+  // genuinely new name; the `info` role is over-approximated the same way every other loop-bound
+  // enumerator in this file already is, ignoring the runtime's inner `role !== "info"` guard)
+  // => 4877 / 10343 / 4587
+  assert.equal(out.stats.channelEmissions, 10343);
+  assert.equal(out.stats.distinctChannels, 4587);
   // P0 (2026-08-28): +10 en emissionsWithCausalRoot = la raiz cascade nueva palette.status-seeds
   // declara 2 derivations (--ds-color-success-500 via deriveTenantColorRamps, --ds-color-on-success
   // via ON_TONE_ROLES) que respaldan 10 sitios de emision preexistentes (6 de -500 + 4 de on-success);
@@ -2370,11 +2435,24 @@ test('R-9 the 1114 previously classified rows are byte-equivalent', () => {
   assert.equal(out.computedDomainPending.length, 0);
   assert.equal(out.dynamicSinkPending.length, 0);
   assert.equal(out.callArgsPending.length, 0);
-  assert.equal(out.stats.producerSites, 4873);
+  assert.equal(out.stats.producerSites, 4877);
   // F2A-1 (2026-08-26): re-pin con aritmética -- F' -1 (glass-blur, emisor unico) + F-2 +2 (overlay.background restaurado, no era deuda muerta) => 10311
   // C-02b (2026-08-27): +1 en producerSites/channelEmissions/distinctChannels = la seed nueva declarada --ds-textarea-clear-offset (el offset dej de vivir como fallback duplicado y gana su sitio de declaracion; la clearance deriva de la geometria del boton) => 4873 / 10312 / 4586
-  assert.equal(out.stats.channelEmissions, 10312);
-  assert.equal(out.stats.distinctChannels, 4586);
+  // cascade-producers COH-1 conservation remediation (2026-08-30): deriveStatusTintFloor
+  // (BRAND_THEME) landed with no enumerator -- its 4 template emissions (bg/border/alpha-10/
+  // alpha-20 over ON_TONE_ROLES) had no resolvable domain, so they fell through as ts-compilers
+  // missing-owner AND, independently, as a reach.unattributed residual, double-publishing into
+  // unknownProvenance and breaking the tsx-only conservation guard. Fixed at the root by
+  // registering ON_TONE_ROLES's file as a resolvable constant source, never by touching this
+  // artifact or this guard by hand. producerSites +4 (one claim per assignment site),
+  // channelEmissions +31 (16 raw expansions from the newly attributed sites, the remainder is
+  // producerSiteId rehashing from COH-1's own line-shift in brand-theme/index.ts -- same content,
+  // new coordinate hash, nets to zero), distinctChannels +1 (only --ds-color-alpha-info-20 is a
+  // genuinely new name; the `info` role is over-approximated the same way every other loop-bound
+  // enumerator in this file already is, ignoring the runtime's inner `role !== "info"` guard)
+  // => 4877 / 10343 / 4587
+  assert.equal(out.stats.channelEmissions, 10343);
+  assert.equal(out.stats.distinctChannels, 4587);
   // P0 (2026-08-28): +10 en emissionsWithCausalRoot = la raiz cascade nueva palette.status-seeds
   // declara 2 derivations (--ds-color-success-500 via deriveTenantColorRamps, --ds-color-on-success
   // via ON_TONE_ROLES) que respaldan 10 sitios de emision preexistentes (6 de -500 + 4 de on-success);
@@ -2601,11 +2679,24 @@ test('D-10 the drain is exactly measured and openBlocking only went down', () =>
   assert.equal(out.branchConditionalAuthored.length, 0);
   assert.equal(out.dynamicSinkPending.length, 0);
   assert.equal(out.callArgsPending.length, 0);
-  assert.equal(out.stats.producerSites, 4873);
+  assert.equal(out.stats.producerSites, 4877);
   // F2A-1 (2026-08-26): re-pin con aritmética -- F' -1 (glass-blur, emisor unico) + F-2 +2 (overlay.background restaurado, no era deuda muerta) => 10311
   // C-02b (2026-08-27): +1 en producerSites/channelEmissions/distinctChannels = la seed nueva declarada --ds-textarea-clear-offset (el offset dej de vivir como fallback duplicado y gana su sitio de declaracion; la clearance deriva de la geometria del boton) => 4873 / 10312 / 4586
-  assert.equal(out.stats.channelEmissions, 10312);
-  assert.equal(out.stats.distinctChannels, 4586);
+  // cascade-producers COH-1 conservation remediation (2026-08-30): deriveStatusTintFloor
+  // (BRAND_THEME) landed with no enumerator -- its 4 template emissions (bg/border/alpha-10/
+  // alpha-20 over ON_TONE_ROLES) had no resolvable domain, so they fell through as ts-compilers
+  // missing-owner AND, independently, as a reach.unattributed residual, double-publishing into
+  // unknownProvenance and breaking the tsx-only conservation guard. Fixed at the root by
+  // registering ON_TONE_ROLES's file as a resolvable constant source, never by touching this
+  // artifact or this guard by hand. producerSites +4 (one claim per assignment site),
+  // channelEmissions +31 (16 raw expansions from the newly attributed sites, the remainder is
+  // producerSiteId rehashing from COH-1's own line-shift in brand-theme/index.ts -- same content,
+  // new coordinate hash, nets to zero), distinctChannels +1 (only --ds-color-alpha-info-20 is a
+  // genuinely new name; the `info` role is over-approximated the same way every other loop-bound
+  // enumerator in this file already is, ignoring the runtime's inner `role !== "info"` guard)
+  // => 4877 / 10343 / 4587
+  assert.equal(out.stats.channelEmissions, 10343);
+  assert.equal(out.stats.distinctChannels, 4587);
   // P0 (2026-08-28): +10 en emissionsWithCausalRoot = la raiz cascade nueva palette.status-seeds
   // declara 2 derivations (--ds-color-success-500 via deriveTenantColorRamps, --ds-color-on-success
   // via ON_TONE_ROLES) que respaldan 10 sitios de emision preexistentes (6 de -500 + 4 de on-success);
@@ -2775,11 +2866,24 @@ test('E-8 the invariants the correction must not disturb', () => {
   assert.equal(out.stats.publicBoundary, 534);
   assert.equal(out.stats.privateRelay, 728);
   assert.equal(out.stats.closedNonObject, 69);
-  assert.equal(out.stats.producerSites, 4873);
+  assert.equal(out.stats.producerSites, 4877);
   // F2A-1 (2026-08-26): re-pin con aritmética -- F' -1 (glass-blur, emisor unico) + F-2 +2 (overlay.background restaurado, no era deuda muerta) => 10311
   // C-02b (2026-08-27): +1 en producerSites/channelEmissions/distinctChannels = la seed nueva declarada --ds-textarea-clear-offset (el offset dej de vivir como fallback duplicado y gana su sitio de declaracion; la clearance deriva de la geometria del boton) => 4873 / 10312 / 4586
-  assert.equal(out.stats.channelEmissions, 10312);
-  assert.equal(out.stats.distinctChannels, 4586);
+  // cascade-producers COH-1 conservation remediation (2026-08-30): deriveStatusTintFloor
+  // (BRAND_THEME) landed with no enumerator -- its 4 template emissions (bg/border/alpha-10/
+  // alpha-20 over ON_TONE_ROLES) had no resolvable domain, so they fell through as ts-compilers
+  // missing-owner AND, independently, as a reach.unattributed residual, double-publishing into
+  // unknownProvenance and breaking the tsx-only conservation guard. Fixed at the root by
+  // registering ON_TONE_ROLES's file as a resolvable constant source, never by touching this
+  // artifact or this guard by hand. producerSites +4 (one claim per assignment site),
+  // channelEmissions +31 (16 raw expansions from the newly attributed sites, the remainder is
+  // producerSiteId rehashing from COH-1's own line-shift in brand-theme/index.ts -- same content,
+  // new coordinate hash, nets to zero), distinctChannels +1 (only --ds-color-alpha-info-20 is a
+  // genuinely new name; the `info` role is over-approximated the same way every other loop-bound
+  // enumerator in this file already is, ignoring the runtime's inner `role !== "info"` guard)
+  // => 4877 / 10343 / 4587
+  assert.equal(out.stats.channelEmissions, 10343);
+  assert.equal(out.stats.distinctChannels, 4587);
   // P0 (2026-08-28): +10 en emissionsWithCausalRoot = la raiz cascade nueva palette.status-seeds
   // declara 2 derivations (--ds-color-success-500 via deriveTenantColorRamps, --ds-color-on-success
   // via ON_TONE_ROLES) que respaldan 10 sitios de emision preexistentes (6 de -500 + 4 de on-success);
@@ -2890,11 +2994,24 @@ test('R-T8 the live delta is exactly 9 rows, and only two cohorts moved', () => 
   assert.equal(out.stats.publicBoundary, 534);
   assert.equal(out.stats.privateRelay, 728);
   assert.equal(universeTotal(out), 2024);
-  assert.equal(out.stats.producerSites, 4873);
+  assert.equal(out.stats.producerSites, 4877);
   // F2A-1 (2026-08-26): re-pin con aritmética -- F' -1 (glass-blur, emisor unico) + F-2 +2 (overlay.background restaurado, no era deuda muerta) => 10311
   // C-02b (2026-08-27): +1 en producerSites/channelEmissions/distinctChannels = la seed nueva declarada --ds-textarea-clear-offset (el offset dej de vivir como fallback duplicado y gana su sitio de declaracion; la clearance deriva de la geometria del boton) => 4873 / 10312 / 4586
-  assert.equal(out.stats.channelEmissions, 10312);
-  assert.equal(out.stats.distinctChannels, 4586);
+  // cascade-producers COH-1 conservation remediation (2026-08-30): deriveStatusTintFloor
+  // (BRAND_THEME) landed with no enumerator -- its 4 template emissions (bg/border/alpha-10/
+  // alpha-20 over ON_TONE_ROLES) had no resolvable domain, so they fell through as ts-compilers
+  // missing-owner AND, independently, as a reach.unattributed residual, double-publishing into
+  // unknownProvenance and breaking the tsx-only conservation guard. Fixed at the root by
+  // registering ON_TONE_ROLES's file as a resolvable constant source, never by touching this
+  // artifact or this guard by hand. producerSites +4 (one claim per assignment site),
+  // channelEmissions +31 (16 raw expansions from the newly attributed sites, the remainder is
+  // producerSiteId rehashing from COH-1's own line-shift in brand-theme/index.ts -- same content,
+  // new coordinate hash, nets to zero), distinctChannels +1 (only --ds-color-alpha-info-20 is a
+  // genuinely new name; the `info` role is over-approximated the same way every other loop-bound
+  // enumerator in this file already is, ignoring the runtime's inner `role !== "info"` guard)
+  // => 4877 / 10343 / 4587
+  assert.equal(out.stats.channelEmissions, 10343);
+  assert.equal(out.stats.distinctChannels, 4587);
   // P0 (2026-08-28): +10 en emissionsWithCausalRoot = la raiz cascade nueva palette.status-seeds
   // declara 2 derivations (--ds-color-success-500 via deriveTenantColorRamps, --ds-color-on-success
   // via ON_TONE_ROLES) que respaldan 10 sitios de emision preexistentes (6 de -500 + 4 de on-success);
@@ -3148,11 +3265,24 @@ test('S-8 the live tree closes exactly the 8 resolveTypeRoleStyle rows', () => {
   assert.equal(out.stats.publicBoundary, 534);
   assert.equal(out.stats.privateRelay, 728);
   assert.equal(universeTotal(out), 2024);
-  assert.equal(out.stats.producerSites, 4873);
+  assert.equal(out.stats.producerSites, 4877);
   // F2A-1 (2026-08-26): re-pin con aritmética -- F' -1 (glass-blur, emisor unico) + F-2 +2 (overlay.background restaurado, no era deuda muerta) => 10311
   // C-02b (2026-08-27): +1 en producerSites/channelEmissions/distinctChannels = la seed nueva declarada --ds-textarea-clear-offset (el offset dej de vivir como fallback duplicado y gana su sitio de declaracion; la clearance deriva de la geometria del boton) => 4873 / 10312 / 4586
-  assert.equal(out.stats.channelEmissions, 10312);
-  assert.equal(out.stats.distinctChannels, 4586);
+  // cascade-producers COH-1 conservation remediation (2026-08-30): deriveStatusTintFloor
+  // (BRAND_THEME) landed with no enumerator -- its 4 template emissions (bg/border/alpha-10/
+  // alpha-20 over ON_TONE_ROLES) had no resolvable domain, so they fell through as ts-compilers
+  // missing-owner AND, independently, as a reach.unattributed residual, double-publishing into
+  // unknownProvenance and breaking the tsx-only conservation guard. Fixed at the root by
+  // registering ON_TONE_ROLES's file as a resolvable constant source, never by touching this
+  // artifact or this guard by hand. producerSites +4 (one claim per assignment site),
+  // channelEmissions +31 (16 raw expansions from the newly attributed sites, the remainder is
+  // producerSiteId rehashing from COH-1's own line-shift in brand-theme/index.ts -- same content,
+  // new coordinate hash, nets to zero), distinctChannels +1 (only --ds-color-alpha-info-20 is a
+  // genuinely new name; the `info` role is over-approximated the same way every other loop-bound
+  // enumerator in this file already is, ignoring the runtime's inner `role !== "info"` guard)
+  // => 4877 / 10343 / 4587
+  assert.equal(out.stats.channelEmissions, 10343);
+  assert.equal(out.stats.distinctChannels, 4587);
   // P0 (2026-08-28): +10 en emissionsWithCausalRoot = la raiz cascade nueva palette.status-seeds
   // declara 2 derivations (--ds-color-success-500 via deriveTenantColorRamps, --ds-color-on-success
   // via ON_TONE_ROLES) que respaldan 10 sitios de emision preexistentes (6 de -500 + 4 de on-success);
@@ -3498,11 +3628,24 @@ test('SR-7 the live delta is EXACTLY 22 rows and nothing else moved', () => {
   assert.equal(out.dynamicSinkPending.length, 0);
   assert.equal(out.callArgsPending.length, 0);
   assert.equal(universeTotal(out), 2024);
-  assert.equal(out.stats.producerSites, 4873);
+  assert.equal(out.stats.producerSites, 4877);
   // F2A-1 (2026-08-26): re-pin con aritmética -- F' -1 (glass-blur, emisor unico) + F-2 +2 (overlay.background restaurado, no era deuda muerta) => 10311
   // C-02b (2026-08-27): +1 en producerSites/channelEmissions/distinctChannels = la seed nueva declarada --ds-textarea-clear-offset (el offset dej de vivir como fallback duplicado y gana su sitio de declaracion; la clearance deriva de la geometria del boton) => 4873 / 10312 / 4586
-  assert.equal(out.stats.channelEmissions, 10312);
-  assert.equal(out.stats.distinctChannels, 4586);
+  // cascade-producers COH-1 conservation remediation (2026-08-30): deriveStatusTintFloor
+  // (BRAND_THEME) landed with no enumerator -- its 4 template emissions (bg/border/alpha-10/
+  // alpha-20 over ON_TONE_ROLES) had no resolvable domain, so they fell through as ts-compilers
+  // missing-owner AND, independently, as a reach.unattributed residual, double-publishing into
+  // unknownProvenance and breaking the tsx-only conservation guard. Fixed at the root by
+  // registering ON_TONE_ROLES's file as a resolvable constant source, never by touching this
+  // artifact or this guard by hand. producerSites +4 (one claim per assignment site),
+  // channelEmissions +31 (16 raw expansions from the newly attributed sites, the remainder is
+  // producerSiteId rehashing from COH-1's own line-shift in brand-theme/index.ts -- same content,
+  // new coordinate hash, nets to zero), distinctChannels +1 (only --ds-color-alpha-info-20 is a
+  // genuinely new name; the `info` role is over-approximated the same way every other loop-bound
+  // enumerator in this file already is, ignoring the runtime's inner `role !== "info"` guard)
+  // => 4877 / 10343 / 4587
+  assert.equal(out.stats.channelEmissions, 10343);
+  assert.equal(out.stats.distinctChannels, 4587);
   // P0 (2026-08-28): +10 en emissionsWithCausalRoot = la raiz cascade nueva palette.status-seeds
   // declara 2 derivations (--ds-color-success-500 via deriveTenantColorRamps, --ds-color-on-success
   // via ON_TONE_ROLES) que respaldan 10 sitios de emision preexistentes (6 de -500 + 4 de on-success);
@@ -3801,10 +3944,12 @@ test('KS-7 the LIVE cohort is exactly 67 rows and lands where the re-derivation 
   assert.equal(out.callArgsPending.length, 0);
   assert.equal(universeTotal(out), 2024);
   // C-02b (2026-08-27): 4872 -> 4873 = la seed nueva --ds-textarea-clear-offset (ver C-a4)
-  assert.equal(out.stats.producerSites, 4873);
+  // cascade-producers COH-1 conservation remediation (2026-08-30): 4873 -> 4877 (ver C-a4)
+  assert.equal(out.stats.producerSites, 4877);
   // F2A-1 (2026-08-26): re-pin con aritmética -- F' -1 (glass-blur, emisor unico) + F-2 +2 (overlay.background restaurado, no era deuda muerta) => 10311
   // C-02b (2026-08-27): 10311 -> 10312 = la misma seed nueva (ver C-a4)
-  assert.equal(out.stats.channelEmissions, 10312);
+  // cascade-producers COH-1 conservation remediation (2026-08-30): 10312 -> 10343 (ver C-a4)
+  assert.equal(out.stats.channelEmissions, 10343);
   assert.equal(out.stats.ownershipConflicts, 0);
 });
 
@@ -4109,7 +4254,8 @@ test('CL-8 the live cohort is exactly 11 rows and lands where the re-derivation 
   assert.equal(out.computedDomainPending.length, 0);
   assert.equal(universeTotal(out), 2024);
   // C-02b (2026-08-27): 4872 -> 4873 = la seed nueva --ds-textarea-clear-offset (ver C-a4)
-  assert.equal(out.stats.producerSites, 4873);
+  // cascade-producers COH-1 conservation remediation (2026-08-30): 4873 -> 4877 (ver C-a4)
+  assert.equal(out.stats.producerSites, 4877);
   assert.equal(out.stats.ownershipConflicts, 0);
 });
 

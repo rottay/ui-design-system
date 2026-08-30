@@ -27,7 +27,7 @@
  *
  * NOT FROM `dist`. Every path below is committed source.
  */
-import { readFileSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 
 export const CHROME_VARIABLES = 'packages/core/src/infrastructure/compilers/kernel/foundation/css/chrome-variables/index.ts';
 export const APPEARANCE = 'packages/core/src/infrastructure/compilers/kernel/runtime/appearance/index.ts';
@@ -245,6 +245,10 @@ const CONSTANT_SOURCES = Object.freeze([
   BRAND_THEME,
   TENANT_THEME,
   'packages/core/src/foundation/kernel/color/oklch/ramp/index.ts',
+  // ON_TONE_ROLES: deriveStatusTintFloor (BRAND_THEME) iterates it but does not
+  // declare it -- the vocabulary lives beside the readable-ink contract it was
+  // authored for, not beside this second, later emitter.
+  'packages/core/src/infrastructure/compilers/kernel/foundation/css/color-math/readable-ink/index.ts',
 ]);
 
 /**
@@ -322,7 +326,15 @@ export function loopBindings(body, resolveConstant) {
  * variant, and it would drift silently in the direction that invents defects.
  */
 export function buildEnumerators(root) {
-  const sources = new Map(CONSTANT_SOURCES.map((path) => [path, read(root, path)]));
+  // A reduced root (a build fixture, say) legitimately omits a vocabulary file
+  // that a full checkout has -- that is a missing DOMAIN for whatever constant
+  // lived there, resolved (or not) the same way a domain from a present file
+  // that lacks the constant is: `resolveConstant` returns null and the caller
+  // stays unattributed. It is never a reason to crash the whole enumerator
+  // build, which every emitter's attribution depends on.
+  const sources = new Map(
+    CONSTANT_SOURCES.filter((path) => existsSync(`${root}/${path}`)).map((path) => [path, read(root, path)]),
+  );
   const chrome = sources.get(CHROME_VARIABLES);
 
   const resolveConstant = (name, field) => {
@@ -371,6 +383,7 @@ export function buildEnumerators(root) {
     [BRAND_THEME, 'semanticSurfaceRolesToCssVariables', 'semantic material roles'],
     [BRAND_THEME, 'setTypeRampVariables', 'the type ramp'],
     [BRAND_THEME, 'setSemanticTypographyVariables', 'semantic typography roles'],
+    [BRAND_THEME, 'deriveStatusTintFloor', 'status tint floor bg/border/alpha'],
     [CHROME_VARIABLES, 'chromeToVariables', 'button geometry sizes'],
   ];
 
