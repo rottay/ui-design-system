@@ -1,6 +1,11 @@
 {
   "schemaVersion": 1,
   "contractId": "wo-cra-23-tenant-art-direction",
+  "stageStatus": {
+    "asOf": "2026-08-30",
+    "value": "DEFERRED_AS_R1_TARGETS",
+    "ownerOrder": "The verticals are fixtures/test benches of the engine, not art-direction destinations in this stage (owner direction correction, 2026-08-30). The recorded directions (\"Professional Network Hiring OS\", \"Monochrome Executive Ledger\") remain as documentation of what the fixtures encode; the R1 acceptance obligation to implement them is retired from rounds.json. Per-vertical aesthetic customization is a later phase. Nothing in this field weakens the machine-checked structure of this contract; the two fixtures keep serving the same-tree cascade proof, by static BrandTheme and by DB TenantTheme with parity."
+  },
   "authority": {
     "workOrder": "WO-CRA-23",
     "purpose": "Binding product-art-direction input for R1-R7; it does not create a second theming system or own program progress. R7 reference postures are non-product fixtures owned by customization-model.json and do not become tenant targets here.",

@@ -449,6 +449,27 @@ never override evidence.
 - No destructive Git operation, broad staging or unrelated cleanup.
 - Files=0, stale source, wrong scenario, root fallback, unresolved sentinel,
   nondeterminism, overflow, incomplete binding or missing artifact is FAIL.
+- **Owner direction amendment (2026-08-30): the verticals are test fixtures of
+  the engine, not art-direction destinations.** BitHire and The Management
+  exist to prove that the public controls produce real, predictable and
+  consistent differences across the same tree, by static `BrandTheme` and by
+  DB `TenantThemeDocument` with parity between both paths. The per-vertical
+  aesthetic customization is a later phase; no tenant source may be edited to
+  beautify a vertical (only bounded fixture adjustments that serve a cascade
+  proof). The R1 acceptance obligation to implement the recorded directions is
+  retired; see `rounds.json` R1 and `tenant-art-direction.json.stageStatus`.
+- **Source-first budget.** Every cohort changes real source (primitives,
+  patterns, structures, skins, compiler): no lot may consist only of
+  documentation, manifests, scripts or evidence. At least 80% of the effort
+  goes to source and visible quality, at most 20% to harness, audit and
+  evidence. No new instrument is created unless a concrete blocker requires
+  it. The brandable-hardcode census is the implementation queue: each cohort
+  retires or adjudicates every brandable hardcode in its write-set, and the
+  census goes monotonically down per lot.
+- **Cohort report shape.** Each cohort closes with: (A) productive files
+  modified; (B) hardcodes retired/adjudicated; (C) controls whose cascade was
+  demonstrated; (D) instrumental work; (E) the next productive lot already
+  launched.
 
 Historical evidence may remain immutable. Historical human roadmaps, prompts,
 checkpoints and handoffs do not.

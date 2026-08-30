@@ -100,7 +100,10 @@
         "eliminate the dominant product defect in each canary",
         "prove no overlap clipping per-character wrap or accidental desktop compression",
         "prove each canary at 320 390 768 1440 and narrow containers",
-        "implement Professional Network Hiring OS for BitHire and Monochrome Executive Ledger for The Management from tenant-art-direction.json",
+        "use the BitHire and The Management verticals as controlled test fixtures that PROVE the public controls produce real, predictable and consistent differences across the same tree, by static BrandTheme and by DB TenantTheme with parity between both paths; the verticals are NOT art-direction destinations in this stage and per-vertical aesthetic customization is deferred to a later phase (owner amendment 2026-08-30)",
+        "drain the brandable hardcode census as an implementation queue distributed across cohorts (about 795 candidates measured in the Modern census): each cohort retires or adjudicates every brandable hardcode in its write-set, with monotonic census reduction per lot; PatternDataTable closes or adjudicates its 52 class-B candidates rather than documenting them",
+        "every cohort changes real source — primitives, patterns, structures, skins, compiler: no lot may consist only of documentation, manifests, scripts or evidence; at least 80% of the effort goes to source and visible quality and at most 20% to harness, audit and evidence; no new instrument is created unless a concrete blocker requires it",
+        "every cohort demonstrates the observable cascade when a public control changes, with static BrandTheme and DB TenantTheme parity, and adds functional and visual tests",
         "prove same-tree BitHire-TMM divergence across at least eight axes including at least six non-color axes",
         "prove three-second tenant recognition in grayscale and after temporary primary-hue neutralization",
         "extract reusable semantic group recipes instead of copying styles",
@@ -113,8 +116,9 @@
         "all canaries pass binary contracts",
         "each canary proposed craft score at least 95",
         "each critical dimension at least 4-of-5",
-        "art-direction contract passes all required scenes at 320 390 768 and 1440",
+        "the vertical fixtures prove the public-control cascade across all required scenes at 320 390 768 and 1440, by static BrandTheme and by DB TenantTheme with parity (owner amendment 2026-08-30: the per-vertical art-direction implementation obligation is retired from R1 acceptance)",
         "zero hard vetoes",
+        "the brandable hardcode census is monotonically lower at each cohort checkpoint than at the start of that cohort, with the cohort write-sets drained or adjudicated (owner amendment 2026-08-30)",
         "all R1 proposals adjudicated",
         "all three R1 cohort checkpoints have explicit DT GO receipts",
         "the DT accepts grammar before propagation"
@@ -246,7 +250,7 @@
               "packages/core/src/foundation/contracts/composition/tenants/themes/tenant-theme/fixtures/themanagement-db-row"
             ],
             "ownerLaneClass": "architecture-integrator",
-            "why": "R1 must implement Professional Network Hiring OS on the BitHire static BrandTheme and Monochrome Executive Ledger on The Management published document. Both tenant SOURCES are therefore write targets, and neither was covered by any domain — the gap that blocked Cohort 1.",
+            "why": "the two tenant SOURCES are controlled test fixtures of the engine: the cascade proof needs write access for bounded fixture adjustments (never per-vertical beautification — owner amendment 2026-08-30). Neither was covered by any domain — the gap that blocked Cohort 1.",
             "ownerAdjudication": "assigned to the architecture-integrator by explicit owner adjudication after the gate proved the path had no owner and no no-write rule. Recorded rather than resolved by silently widening a lane.",
             "note": "the BitHire BrandTheme is already covered by the shared-recipes-tokens-styles domain (foundation/tokens/**); only the TMM document fixture under foundation/contracts/** needed an owner."
           }
