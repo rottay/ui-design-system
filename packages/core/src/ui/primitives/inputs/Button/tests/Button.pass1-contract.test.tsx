@@ -29,13 +29,19 @@ describe('ModernButton Pass 1 contract', () => {
   });
 
   it('keeps the action name while pending without an English fallback string', () => {
+    // R1 unit 1, item 3 (F10/G8): a `pending` button with no explicit busy
+    // label override now keeps its OWN resting label VISIBLE next to the
+    // spinner (the width-stable busy row) instead of hiding it behind a
+    // visually-hidden accessible-label duplicate -- the accessible name
+    // still comes from the caller's own text, never an English fallback.
     const { container } = render(<ModernButton pending>Publicar cambios</ModernButton>);
 
     expect(screen.getByRole('button', { name: 'Publicar cambios' })).toBeDisabled();
     expect(container.querySelector('[data-part="spinner"]')).toHaveAttribute('aria-hidden', 'true');
-    expect(container.querySelector('[data-part="accessible-label"]')).toHaveTextContent(
+    expect(container.querySelector('[data-part="busy-content"] [data-part="label"]')).toHaveTextContent(
       'Publicar cambios'
     );
+    expect(container.querySelector('[data-part="accessible-label"]')).not.toBeInTheDocument();
   });
 
   it('renders href actions as native links and secures new-window navigation', () => {

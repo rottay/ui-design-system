@@ -207,34 +207,42 @@
   width: 100%;
 }
 
+/* One control ladder (G3, item 9): every step below falls back to the
+   MATCHING `--ds-button-{size}-*` step -- including radius, which used to
+   fall back to the SURFACE ramp (`--ds-radius-sm`) instead of Button's own
+   CONTROL ramp (`--ds-button-{size}-radius`), so density, type-scale and
+   shape moved Button and left Segmented behind (F5). BitHire's per-size
+   segmented tokens already derive from these same button steps (R1 unit 1);
+   this fallback chain makes the same ladder the DEFAULT for any tenant that
+   authors nothing here at all. */
 .rottay-segmented.rottay-segmented--modern[role='radiogroup'][data-size='small'] {
   --ds-segmented-current-height: var(--ds-segmented-sm-height, var(--ds-button-sm-height));
   --ds-segmented-current-padding-x: var(--ds-segmented-sm-padding-x, var(--ds-button-sm-padding-x));
   --ds-segmented-current-font-size: var(--ds-segmented-sm-font-size, var(--ds-button-sm-font-size));
-  --ds-segmented-current-line-height: var(--ds-segmented-sm-line-height, normal);
+  --ds-segmented-current-line-height: var(--ds-segmented-sm-line-height, var(--ds-button-sm-line-height));
   --ds-segmented-current-gap: var(--ds-segmented-sm-gap, var(--ds-button-sm-gap));
   --ds-segmented-current-icon-size: var(--ds-segmented-sm-icon-size, var(--ds-button-sm-icon-size));
-  --ds-segmented-current-radius: var(--ds-segmented-sm-radius, var(--ds-segmented-item-radius, var(--ds-radius-sm)));
+  --ds-segmented-current-radius: var(--ds-segmented-sm-radius, var(--ds-segmented-item-radius, var(--ds-button-sm-radius)));
 }
 
 .rottay-segmented.rottay-segmented--modern[role='radiogroup'][data-size='middle'] {
   --ds-segmented-current-height: var(--ds-segmented-md-height, var(--ds-button-md-height));
   --ds-segmented-current-padding-x: var(--ds-segmented-md-padding-x, var(--ds-button-md-padding-x));
   --ds-segmented-current-font-size: var(--ds-segmented-md-font-size, var(--ds-button-md-font-size));
-  --ds-segmented-current-line-height: var(--ds-segmented-md-line-height, normal);
+  --ds-segmented-current-line-height: var(--ds-segmented-md-line-height, var(--ds-button-md-line-height));
   --ds-segmented-current-gap: var(--ds-segmented-md-gap, var(--ds-button-md-gap));
   --ds-segmented-current-icon-size: var(--ds-segmented-md-icon-size, var(--ds-button-md-icon-size));
-  --ds-segmented-current-radius: var(--ds-segmented-md-radius, var(--ds-segmented-item-radius, var(--ds-radius-sm)));
+  --ds-segmented-current-radius: var(--ds-segmented-md-radius, var(--ds-segmented-item-radius, var(--ds-button-md-radius)));
 }
 
 .rottay-segmented.rottay-segmented--modern[role='radiogroup'][data-size='large'] {
   --ds-segmented-current-height: var(--ds-segmented-lg-height, var(--ds-button-lg-height));
   --ds-segmented-current-padding-x: var(--ds-segmented-lg-padding-x, var(--ds-button-lg-padding-x));
   --ds-segmented-current-font-size: var(--ds-segmented-lg-font-size, var(--ds-button-lg-font-size));
-  --ds-segmented-current-line-height: var(--ds-segmented-lg-line-height, normal);
+  --ds-segmented-current-line-height: var(--ds-segmented-lg-line-height, var(--ds-button-lg-line-height));
   --ds-segmented-current-gap: var(--ds-segmented-lg-gap, var(--ds-button-lg-gap));
   --ds-segmented-current-icon-size: var(--ds-segmented-lg-icon-size, var(--ds-button-lg-icon-size));
-  --ds-segmented-current-radius: var(--ds-segmented-lg-radius, var(--ds-segmented-item-radius, var(--ds-radius-sm)));
+  --ds-segmented-current-radius: var(--ds-segmented-lg-radius, var(--ds-segmented-item-radius, var(--ds-button-lg-radius)));
 }
 
 .rottay-segmented--modern[role='radiogroup'] [data-part='option'] {
@@ -265,8 +273,12 @@
     transform var(--ds-motion-fast) var(--ds-motion-ease-out);
 }
 
+/* Reserved for forced-colors (below): kept transparent at rest so it never
+   reads as a second visible frame around the track's own boundary (F6, one
+   dominant border per region, G4). Edge width/style ride the same grammar as
+   every other control edge instead of a crude 1px/solid literal. */
 .rottay-segmented--modern[role='radiogroup'] [data-part='option'][data-part='option'] {
-  border: 1px solid transparent;
+  border: var(--ds-edge-standard-width, 1px) var(--ds-edge-standard-style, solid) transparent;
 }
 
 .rottay-segmented--modern[role='radiogroup'][data-block='true'] [data-part='option'] {
@@ -303,7 +315,7 @@
 }
 
 @media (hover: hover) {
-  .rottay-segmented--modern[role='radiogroup'] [data-part='option'][data-selected='false']:hover {
+  .rottay-segmented--modern[role='radiogroup'] [data-part='option'][data-selected='false'][data-state~='hovered'] {
     /* `--ds-color-bg-hover` is a dark inset under both first-party themes
        (#18181c) — dark-on-dark with the hover ink. The hover surface mixes
        from the paired card chrome instead (measured: text-primary on
@@ -322,29 +334,22 @@
 }
 
 /* A held press settles the option back onto the track with a tactile dip. */
-.rottay-segmented--modern[role='radiogroup'] [data-part='option']:not([data-disabled='true']):active {
+.rottay-segmented--modern[role='radiogroup'] [data-part='option']:not([data-disabled='true'])[data-state~='pressed'] {
   transform: translateY(0) scale(var(--ds-state-press-scale));
 }
 
+/* Selected reads as GROUND + INK + WEIGHT only (F6, R1 unit 1, item 8): no
+   border-color and no shadow-borne keyline. The track is this control's ONE
+   frame owner; before this the selected option's own border went from
+   transparent to a real color (plus, on BitHire, a tinted ring shadow),
+   which put a SECOND emphasized boundary 3px inside the track's own edge.
+   The default ground fallback is a flat surface tone (the previous default
+   gradient was unreachable on both shipped grounds -- they always author
+   `--ds-segmented-item-bg-selected` -- and a gradient is not a color this
+   control's grammar needs, G9). */
 .rottay-segmented--modern[role='radiogroup'] [data-part='option'][data-selected='true'] {
-  background: var(
-    --ds-segmented-item-bg-selected,
-    linear-gradient(
-      155deg,
-      var(--ds-card-bg, var(--ds-color-bg-elevated)),
-      color-mix(in srgb, var(--ds-card-bg, var(--ds-color-bg-elevated)) 93%, var(--ds-color-primary) 7%)
-    )
-  );
+  background: var(--ds-segmented-item-bg-selected, var(--ds-card-bg, var(--ds-color-bg-elevated)));
   color: var(--ds-segmented-item-color-selected, var(--ds-color-text-primary));
-  border-color: var(
-    --ds-segmented-item-border-selected,
-    color-mix(in srgb, var(--ds-color-primary) 20%, var(--ds-color-border))
-  );
-  box-shadow: var(
-    --ds-segmented-item-shadow-selected,
-    inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) calc(82% * var(--ds-effect-intensity)), transparent),
-    var(--ds-shadow-xs)
-  );
   font-weight: var(--ds-segmented-item-font-weight-selected, var(--ds-font-weight-semibold));
   /* Selected reads as a QUIET TINT (product law), never a lifted pill: the
      tabs.css segmented-recipe precedent flattens the active transform
@@ -355,8 +360,13 @@
   transform: var(--ds-segmented-item-transform-selected, none);
 }
 
-.rottay-segmented--modern[role='radiogroup'] [data-part='option']:focus-visible {
-  box-shadow: var(--ds-segmented-focus-ring, var(--ds-focus-ring));
+/* One focus grammar (F12, item 10): the canonical double ring, the same one
+   Button uses -- the previous `--ds-segmented-focus-ring` low-alpha single
+   ring is the exact class W8 already retired from Button
+   (`Button.contrast-focus-ring.test.tsx`). No per-family focus channel
+   survives; both controls read `--ds-focus-ring` directly. */
+.rottay-segmented--modern[role='radiogroup'] [data-part='option'][data-state~='focus-visible'] {
+  box-shadow: var(--ds-focus-ring);
 }
 
 .rottay-segmented--modern[role='radiogroup'] [data-part='option'][data-disabled='true'] {
@@ -404,8 +414,8 @@
 
   /* The lifts/dips are motion too: without their transitions they would fire
      instantly on every hover/press, which is worse than a calm frame. */
-  .rottay-segmented--modern[role='radiogroup'] [data-part='option'][data-selected='false']:hover,
-  .rottay-segmented--modern[role='radiogroup'] [data-part='option']:not([data-disabled='true']):active {
+  .rottay-segmented--modern[role='radiogroup'] [data-part='option'][data-selected='false'][data-state~='hovered'],
+  .rottay-segmented--modern[role='radiogroup'] [data-part='option']:not([data-disabled='true'])[data-state~='pressed'] {
     transform: none;
   }
 }

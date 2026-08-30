@@ -36,15 +36,28 @@ describe('ModernButton advanced engine coverage', () => {
     const spinner = container.querySelector('[data-part="spinner"]');
     expect(spinner).toHaveAttribute('data-size', 'xl');
     expect(spinner).toHaveAttribute('aria-hidden', 'true');
+    // R1 unit 1, item 3 (F10/G8): `loading` with a resting label now takes
+    // the SAME width-stable render path as `pending` (previously it did not,
+    // and collapsed to a spinner-only footprint). The resting content is
+    // reserved (`data-layer="reserve"`, `aria-hidden="true"`) rather than
+    // marked `data-state="hidden"` -- that attribute belongs to the OTHER,
+    // non-width-stable path (icon-only busy), covered separately below.
     expect(screen.getByTestId('start-icon').closest('[data-part="content"]')).toHaveAttribute(
-      'data-state',
-      'hidden'
+      'data-layer',
+      'reserve'
+    );
+    expect(screen.getByTestId('start-icon').closest('[data-part="content"]')).toHaveAttribute(
+      'aria-hidden',
+      'true'
     );
     expect(screen.queryByTestId('prefix')).not.toBeInTheDocument();
     expect(screen.getByTestId('suffix').closest('[data-part="content"]')).toHaveAttribute(
-      'data-state',
-      'hidden'
+      'data-layer',
+      'reserve'
     );
+    // The button's own resting label stays visible next to the spinner
+    // (G8), since `loading` here has no explicit busy label override.
+    expect(container.querySelector('[data-part="busy-content"]')).toHaveTextContent('Save');
 
     fireEvent.click(loadingButton);
     expect(handleClick).not.toHaveBeenCalled();

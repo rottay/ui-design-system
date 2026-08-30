@@ -85,9 +85,14 @@
   /* The height is a FLOOR, not a ceiling: at 200% text zoom or a tall tenant
      type-scale the label grows the control instead of clipping against
      `overflow: clip`. Rest heights are unchanged — content never exceeds the
-     resolved height at 100%. */
-  min-block-size: calc(
-    var(--ds-button-resolved-height) * var(--ds-density-effective-scale)
+     resolved height at 100%. `--_ds-button-height-floor` (declared below,
+     mechanical floors block) additionally clamps the DENSITY side: density
+     multiplies the resolved height with no floor of its own, so a compact
+     posture on a tight tenant scale could push a control below the active
+     mode's mechanical minimum (measured: 36px x 0.9 = 32.4px, F8). */
+  min-block-size: max(
+    var(--_ds-button-height-floor, 36px),
+    calc(var(--ds-button-resolved-height) * var(--ds-density-effective-scale))
   );
   gap: calc(var(--ds-button-gap) * var(--ds-density-effective-scale));
   padding-block: 0;
@@ -282,6 +287,13 @@
   align-items: center;
   justify-items: center;
   inline-size: 100%;
+  /* `gap` is not an inherited property: without this, the frame's own
+     computed gap is the grid initial `normal` (0), and every reserve row's
+     `gap: inherit` (below) inherited that 0 instead of the root's real gap —
+     the spinner/label pair in the width-stable busy row rendered with zero
+     separation (F11). Explicitly inheriting from the root here restores one
+     real gap value for both the resting and busy rows. */
+  gap: inherit;
 }
 
 .rottay-button.rottay-button--modern [data-part='content'][data-layer='reserve'] {
@@ -309,8 +321,9 @@
 .rottay-button.rottay-button--modern[data-full-width='true'] {
   display: flex;
   inline-size: 100%;
-  min-block-size: calc(
-    var(--ds-button-resolved-height) * var(--ds-density-effective-scale)
+  min-block-size: max(
+    var(--_ds-button-height-floor, 36px),
+    calc(var(--ds-button-resolved-height) * var(--ds-density-effective-scale))
   );
   block-size: auto;
   padding-block: calc(
@@ -327,6 +340,36 @@
 .rottay-button.rottay-button--modern[data-full-width='true'] [data-part='label'] {
   overflow-wrap: anywhere;
   text-overflow: clip;
+}
+
+/* -------------------------------------------------------------------------
+   Mechanical height floor (F8, R1 unit 1).
+
+   Private provisional socket (namespaceLifecycle): `--_ds-button-height-floor`.
+     owner: primitive/inputs/button (WO-CRA-23 R1 unit 1)
+     producer: this block, keyed on the nearest [data-density] ancestor's
+       DISCRETE stamped posture, not the continuous effective scale, so the
+       floor stays stable regardless of how extreme --ds-density-scale gets
+     fallbackAuthority: 36px (the previous unfloored `md` rest height)
+     productiveConsumerFamilyIds: [primitive/inputs/button]
+     promotionCriteria: a second family reads the same floor with the same
+       semantics (mode-keyed mechanical minimum height)
+     retirementCriteria: a governed --ds-control-height-floor-* channel ships
+       and every private consumer migrates to it in one lot
+
+   The default (comfortable/no posture attribute) case is the `var(...,
+   36px)` fallback at each use site below, deliberately NOT a bare `:root`
+   producer rule here: an unconditioned `:root` selector always matches
+   `document.documentElement`, which breaks this family's own
+   container-vs-document reachability parity (Button.skin-reachability.test)
+   -- the same reason the two conditioned rules below are safe (they only
+   match when a real posture attribute is present, exactly like the existing
+   `:root[data-density='compact']` rule elsewhere in this file). */
+:root[data-density='compact'] {
+  --_ds-button-height-floor: 32px;
+}
+:root[data-density='spacious'] {
+  --_ds-button-height-floor: 44px;
 }
 
 /* -------------------------------------------------------------------------
@@ -433,6 +476,71 @@
 }
 .rottay-button.rottay-button--modern[data-shape='default'][data-radius='full'] {
   border-radius: var(--ds-radius-full);
+}
+
+/* -------------------------------------------------------------------------
+   Connected-group geometry (Button.Group, F7, R1 unit 1).
+
+   `Button.Group[connected]` used to reset the child's radius from OUTSIDE the
+   engine (`button-group.css`), at the exact same selector weight (0,3,0) as
+   this file's own base rule -- a tie the group lost by source order, so every
+   joined cluster rendered as separately-rounded pills 1px apart instead of one
+   fused control. Owning connected geometry here, keyed on the CHILD's own
+   `data-connected` / `data-group-position` attributes (stamped by
+   Button.Group's clone, restoring a contract the manifest's `variantAxes`
+   already declared), keeps the engine's own selector weight and wins outright.
+
+   `data-group-position` carries a SPACE-SEPARATED token list ('first',
+   'middle', 'last') rather than one exclusive value: a one-button connected
+   group is legitimately both, and a single string cannot hold both tokens.
+   The `~=` attribute selector matches token membership, exactly like a class
+   list, so a lone child correctly receives both exterior radii.
+   ------------------------------------------------------------------------- */
+.rottay-button.rottay-button--modern[data-connected='true'] {
+  border-radius: 0;
+}
+
+.rottay-button-group[data-orientation='horizontal']
+  > .rottay-button.rottay-button--modern[data-connected='true'][data-group-position~='first'] {
+  border-start-start-radius: var(--_ds-button-resolved-radius);
+  border-end-start-radius: var(--_ds-button-resolved-radius);
+}
+.rottay-button-group[data-orientation='horizontal']
+  > .rottay-button.rottay-button--modern[data-connected='true'][data-group-position~='last'] {
+  border-start-end-radius: var(--_ds-button-resolved-radius);
+  border-end-end-radius: var(--_ds-button-resolved-radius);
+}
+.rottay-button-group[data-orientation='vertical']
+  > .rottay-button.rottay-button--modern[data-connected='true'][data-group-position~='first'] {
+  border-start-start-radius: var(--_ds-button-resolved-radius);
+  border-start-end-radius: var(--_ds-button-resolved-radius);
+}
+.rottay-button-group[data-orientation='vertical']
+  > .rottay-button.rottay-button--modern[data-connected='true'][data-group-position~='last'] {
+  border-end-start-radius: var(--_ds-button-resolved-radius);
+  border-end-end-radius: var(--_ds-button-resolved-radius);
+}
+
+/* Governed seam: the shared 1px edge inside a joined quiet cluster reads the
+   EXISTING divider channel (no new token) instead of whichever border wins
+   the overlap. Solid variants keep their own border as the seam. */
+.rottay-button-group[data-orientation='horizontal']
+  > .rottay-button.rottay-button--modern[data-connected='true'][data-group-position]:is(
+    [data-variant='default'],
+    [data-variant='outline'],
+    [data-variant='dashed'],
+    [data-variant='ghost']
+  ):not([data-group-position~='first']):not([data-disabled='true']) {
+  border-inline-start-color: var(--ds-button-group-divider-color);
+}
+.rottay-button-group[data-orientation='vertical']
+  > .rottay-button.rottay-button--modern[data-connected='true'][data-group-position]:is(
+    [data-variant='default'],
+    [data-variant='outline'],
+    [data-variant='dashed'],
+    [data-variant='ghost']
+  ):not([data-group-position~='first']):not([data-disabled='true']) {
+  border-block-start-color: var(--ds-button-group-divider-color);
 }
 
 /* -------------------------------------------------------------------------
@@ -591,6 +699,32 @@
     [data-state~='pressed']
   ) {
   box-shadow: var(--ds-button-elevated-shadow, var(--ds-material-control-shadow));
+}
+
+/* Quiet-range rest presence (F2, G2). `ghost`/`text` painted fully transparent
+   at rest, so in a monochrome tenant they read as bare text between four
+   cased buttons rather than as controls. Same mechanism already proven for
+   the icon-only well below (currentColor wash, collapses under reduced
+   transparency): one non-tenant, non-hue-dependent signal that every rest
+   variant of this range shares. Kept at the SAME selector weight as the base
+   variant paint rule (0,3,0) and placed immediately after it, so hover,
+   pressed, selected and disabled — each one attribute more specific, or later
+   at an equal weight — still win exactly as before; only the untouched rest
+   case changes. Private provisional socket:
+     owner: primitive/inputs/button (WO-CRA-23 R1 unit 1)
+     producer: this rule
+     fallbackAuthority: color-mix(in srgb, currentColor 7%, transparent) — the
+       icon-only well's own rest value
+     productiveConsumerFamilyIds: [primitive/inputs/button]
+     promotionCriteria: a second quiet-range family (e.g. Segmented) needs the
+       identical currentColor-derived rest wash
+     retirementCriteria: a governed --ds-material-control-* quiet-rest role
+       ships and every private consumer migrates to it in one lot */
+.rottay-button.rottay-button--modern:is([data-variant='ghost'], [data-variant='text']) {
+  background-color: var(
+    --_ds-button-quiet-rest-wash,
+    color-mix(in srgb, currentColor 7%, transparent)
+  );
 }
 
 /* -------------------------------------------------------------------------
@@ -1065,6 +1199,11 @@
     )[data-icon-only='true'] {
     --_ds-button-icon-plate-bg: none;
   }
+
+  /* The quiet-range rest wash (F2, G2) is the same translucent stack. */
+  .rottay-button.rottay-button--modern:is([data-variant='ghost'], [data-variant='text']) {
+    --_ds-button-quiet-rest-wash: none;
+  }
 }
 
 @media (forced-colors: active) {
@@ -1124,13 +1263,5 @@
     color: CanvasText;
     border-color: CanvasText;
     box-shadow: none;
-  }
-}
-
-/* ---- C2b a11y floor: coarse pointers never get a sub-44px button, whatever
-       the density/profile dials say (mirrors the menu skin's idiom). ---- */
-@media (hover: none), (pointer: coarse) {
-  .rottay-btn.rottay-btn--modern[data-part='root'] {
-    min-block-size: var(--ds-touch-target-min, 44px);
   }
 }

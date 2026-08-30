@@ -65,6 +65,75 @@ import { SEGMENTED_DEFAULTS } from "../../contracts";
 import { useRovingFocus } from "@/ui/primitives/runtime/collection/roving-focus";
 import { revealSelectedOption } from "../../runtime/reveal";
 import { composeRefs } from "@/ui/primitives/foundation/compose-refs";
+import { partAttributes, useInteractionState } from "../../../../../../foundation/behavior";
+
+/**
+ * One option button, extracted so `useInteractionState` -- a hook -- is
+ * called once per OPTION INSTANCE rather than inside the parent's `.map()`
+ * callback, which the Rules of Hooks forbid for a data-driven, variable-length
+ * list. This is also the state-grammar unification of R1 unit 1 item 14: the
+ * hover/press/focus-visible triad is now decided by the same behavior-core
+ * utility Button uses and stamped as the same `data-state` token list, so the
+ * skin can read `[data-state~='hovered']` instead of relying on native
+ * `:hover`/`:active`/`:focus-visible` pseudo-classes -- one state grammar for
+ * both families in the group (G3/G7).
+ */
+interface SegmentedOptionButtonProps {
+  option: SegmentedOption;
+  isActive: boolean;
+  isDisabled: boolean;
+  itemRef: React.Ref<HTMLButtonElement>;
+  tabIndex: number;
+  onRovingKeyDown: (event: React.KeyboardEvent<HTMLButtonElement>) => void;
+  onRovingFocus: (event: React.FocusEvent<HTMLButtonElement>) => void;
+  onSelect: () => void;
+}
+
+function SegmentedOptionButton({
+  option,
+  isActive,
+  isDisabled,
+  itemRef,
+  tabIndex,
+  onRovingKeyDown,
+  onRovingFocus,
+  onSelect,
+}: SegmentedOptionButtonProps) {
+  const { state: interaction, handlers: interactionHandlers } = useInteractionState({
+    disabled: isDisabled,
+  });
+
+  return (
+    <button
+      key={String(option.value)}
+      ref={itemRef}
+      tabIndex={tabIndex}
+      onKeyDown={onRovingKeyDown}
+      onPointerEnter={interactionHandlers.onPointerEnter}
+      onPointerLeave={interactionHandlers.onPointerLeave}
+      onPointerDown={interactionHandlers.onPointerDown}
+      onPointerUp={interactionHandlers.onPointerUp}
+      onFocus={(event) => {
+        interactionHandlers.onFocus(event);
+        onRovingFocus(event);
+      }}
+      onBlur={interactionHandlers.onBlur}
+      type="button"
+      className={option.className || undefined}
+      onClick={onSelect}
+      disabled={isDisabled}
+      data-selected={isActive}
+      data-disabled={isDisabled || undefined}
+      role="radio"
+      aria-checked={isActive}
+      aria-label={option.ariaLabel}
+      {...partAttributes('option', interaction)}
+    >
+      {option.icon && <span data-part="icon">{option.icon}</span>}
+      <span data-part="label">{option.label}</span>
+    </button>
+  );
+}
 
 /**
  * Pre-paint on the client, inert on the server. The reveal must land BEFORE the
@@ -338,33 +407,24 @@ export const Segmented = React.forwardRef<HTMLDivElement, SegmentedProps>(
       >
         {normalizedOptions.map((opt) => {
           const isActive = currentValue === opt.value;
-          const isDisabled = disabled || opt.disabled;
+          const isDisabled = Boolean(disabled || opt.disabled);
           // Explicit attributes: the inline-paint ratchet fails closed on a
           // spread of an unresolvable call result; this bag is focus wiring
           // policed by the kernel's own zero-pinned counter.
           const itemProps = roving.getItemProps(String(opt.value));
 
           return (
-            <button
+            <SegmentedOptionButton
               key={String(opt.value)}
-              ref={itemProps.ref}
+              option={opt}
+              isActive={isActive}
+              isDisabled={isDisabled}
+              itemRef={itemProps.ref}
               tabIndex={itemProps.tabIndex}
-              onKeyDown={itemProps.onKeyDown}
-              onFocus={itemProps.onFocus}
-              type="button"
-              className={opt.className || undefined}
-              onClick={() => handleClick(opt.value)}
-              disabled={isDisabled}
-              data-part="option"
-              data-selected={isActive}
-              data-disabled={isDisabled || undefined}
-              role="radio"
-              aria-checked={isActive}
-              aria-label={opt.ariaLabel}
-            >
-              {opt.icon && <span data-part="icon">{opt.icon}</span>}
-              <span data-part="label">{opt.label}</span>
-            </button>
+              onRovingKeyDown={itemProps.onKeyDown}
+              onRovingFocus={itemProps.onFocus}
+              onSelect={() => handleClick(opt.value)}
+            />
           );
         })}
       </div>

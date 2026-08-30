@@ -28,15 +28,15 @@
     "parentByDesignFailures": []
   },
   "stats": {
-    "rows": 1610,
+    "rows": 1608,
     "byVia": {
       "unattributed": 729,
       "governed-owner-table": 495,
-      "declared-fallback": 344,
+      "declared-fallback": 342,
       "head-exact": 42
     },
     "byTier": {
-      "sin-tier": 912,
+      "sin-tier": 910,
       "control": 271,
       "base": 178,
       "raised": 96,
@@ -49,10 +49,10 @@
       "border": 211,
       "fg": 474,
       "sin-propiedad": 167,
-      "shadow": 122,
+      "shadow": 121,
       "radius": 40,
       "family": 6,
-      "ring": 22,
+      "ring": 21,
       "weight": 17,
       "gap": 32,
       "height": 45,
@@ -74,7 +74,7 @@
       "seed.error": 1,
       "seed.success": 1
     },
-    "withRoot": 881,
+    "withRoot": 879,
     "withoutRoot": 729,
     "sharedHeadsResolved": 9,
     "sharedHeadsUnresolved": 0,
@@ -85,7 +85,7 @@
     "rowsRefinedByStep": 65,
     "rowsParentByDesign": 39,
     "byStep": {
-      "sin-paso": 1506,
+      "sin-paso": 1504,
       "@parent": 39,
       "primary": 25,
       "muted": 9,
@@ -305,7 +305,7 @@
       }
     },
     "PALETTE": {
-      "channels": 47,
+      "channels": 42,
       "unattributed": 28,
       "properties": {
         "fg": 28
@@ -735,16 +735,6 @@
         "ring": 1
       }
     },
-    "SURFACES.surfaceRoles.card": {
-      "channels": 21,
-      "unattributed": 7,
-      "properties": {
-        "fg": 1,
-        "ring": 1,
-        "sin-propiedad": 1,
-        "shadow": 4
-      }
-    },
     "CHROME.controls.buttonGeometry.md": {
       "channels": 7,
       "unattributed": 6,
@@ -779,8 +769,17 @@
         "shadow": 4
       }
     },
+    "SURFACES.surfaceRoles.card": {
+      "channels": 20,
+      "unattributed": 6,
+      "properties": {
+        "ring": 1,
+        "sin-propiedad": 1,
+        "shadow": 4
+      }
+    },
     "SURFACES.surfaceRoles.control": {
-      "channels": 22,
+      "channels": 21,
       "unattributed": 6,
       "properties": {
         "fg": 2,
@@ -796,7 +795,7 @@
       }
     },
     "CHROME.controls.segmented": {
-      "channels": 17,
+      "channels": 15,
       "unattributed": 5,
       "properties": {
         "gap": 1,
@@ -1147,7 +1146,7 @@
       }
     },
     "SURFACES.surfaceRoles.inset": {
-      "channels": 7,
+      "channels": 6,
       "unattributed": 3,
       "properties": {
         "fg": 3
@@ -11364,8 +11363,6 @@
       "owners": [
         "OVERLAY.palette",
         "PALETTE",
-        "SURFACES.surfaceRoles.control",
-        "SURFACES.surfaceRoles.inset",
         "SURFACES.surfaceRoles.overlay",
         "THEME.appearance",
         "THEME.palette"
@@ -11373,8 +11370,6 @@
       "contributingSlots": [
         "bithire:OVERLAY.palette.primaryColor",
         "bithire:PALETTE.primaryColor",
-        "bithire:SURFACES.surfaceRoles.control.background",
-        "bithire:SURFACES.surfaceRoles.inset.background",
         "bithire:SURFACES.surfaceRoles.overlay.background",
         "evnto:OVERLAY.palette.primaryColor",
         "evnto:PALETTE.primaryColor",
@@ -11472,7 +11467,6 @@
       "owners": [
         "OVERLAY.palette",
         "PALETTE",
-        "SURFACES.surfaceRoles.card",
         "SURFACES.surfaceRoles.control",
         "SURFACES.surfaceRoles.inset",
         "SURFACES.surfaceRoles.overlay",
@@ -11482,7 +11476,6 @@
       "contributingSlots": [
         "bithire:OVERLAY.palette.primaryColor",
         "bithire:PALETTE.primaryColor",
-        "bithire:SURFACES.surfaceRoles.card.background",
         "bithire:SURFACES.surfaceRoles.control.background",
         "bithire:SURFACES.surfaceRoles.inset.background",
         "bithire:SURFACES.surfaceRoles.overlay.background",
@@ -14546,9 +14539,7 @@
       ],
       "contributingSlots": [
         "bithire:OVERLAY.palette.errorBgColor",
-        "bithire:THEME.palette.errorBgColor",
         "evnto:OVERLAY.palette.errorBgColor",
-        "evnto:THEME.palette.errorBgColor",
         "rottay:OVERLAY.palette.errorBgColor",
         "rottay:THEME.palette.errorBgColor"
       ],
@@ -14573,13 +14564,10 @@
       "state": null,
       "owners": [
         "OVERLAY.palette",
-        "PALETTE",
         "THEME.palette"
       ],
       "contributingSlots": [
         "bithire:OVERLAY.palette.errorBorderColor",
-        "bithire:THEME.palette.errorBorderColor",
-        "evnto:PALETTE.errorBorderColor",
         "rottay:OVERLAY.palette.errorBorderColor",
         "rottay:THEME.palette.errorBorderColor"
       ],
@@ -14950,14 +14938,11 @@
       "state": null,
       "owners": [
         "OVERLAY.palette",
-        "PALETTE",
         "THEME.palette"
       ],
       "contributingSlots": [
         "bithire:OVERLAY.palette.infoBgColor",
-        "bithire:THEME.palette.infoBgColor",
         "evnto:OVERLAY.palette.infoBgColor",
-        "evnto:PALETTE.infoBgColor",
         "rottay:OVERLAY.palette.infoBgColor",
         "rottay:THEME.palette.infoBgColor"
       ],
@@ -14982,13 +14967,10 @@
       "state": null,
       "owners": [
         "OVERLAY.palette",
-        "PALETTE",
         "THEME.palette"
       ],
       "contributingSlots": [
         "bithire:OVERLAY.palette.infoBorderColor",
-        "bithire:THEME.palette.infoBorderColor",
-        "evnto:PALETTE.infoBorderColor",
         "rottay:OVERLAY.palette.infoBorderColor",
         "rottay:THEME.palette.infoBorderColor"
       ],
@@ -16959,9 +16941,7 @@
       ],
       "contributingSlots": [
         "bithire:OVERLAY.palette.successBgColor",
-        "bithire:THEME.palette.successBgColor",
         "evnto:OVERLAY.palette.successBgColor",
-        "evnto:THEME.palette.successBgColor",
         "rottay:OVERLAY.palette.successBgColor",
         "rottay:THEME.palette.successBgColor"
       ],
@@ -16986,13 +16966,10 @@
       "state": null,
       "owners": [
         "OVERLAY.palette",
-        "PALETTE",
         "THEME.palette"
       ],
       "contributingSlots": [
         "bithire:OVERLAY.palette.successBorderColor",
-        "bithire:THEME.palette.successBorderColor",
-        "evnto:PALETTE.successBorderColor",
         "rottay:OVERLAY.palette.successBorderColor",
         "rottay:THEME.palette.successBorderColor"
       ],
@@ -17735,9 +17712,7 @@
       ],
       "contributingSlots": [
         "bithire:OVERLAY.palette.warningBgColor",
-        "bithire:THEME.palette.warningBgColor",
         "evnto:OVERLAY.palette.warningBgColor",
-        "evnto:THEME.palette.warningBgColor",
         "rottay:OVERLAY.palette.warningBgColor",
         "rottay:THEME.palette.warningBgColor"
       ],
@@ -17762,13 +17737,10 @@
       "state": null,
       "owners": [
         "OVERLAY.palette",
-        "PALETTE",
         "THEME.palette"
       ],
       "contributingSlots": [
         "bithire:OVERLAY.palette.warningBorderColor",
-        "bithire:THEME.palette.warningBorderColor",
-        "evnto:PALETTE.warningBorderColor",
         "rottay:OVERLAY.palette.warningBorderColor",
         "rottay:THEME.palette.warningBorderColor"
       ],
@@ -34975,31 +34947,6 @@
       "stepNote": "sin adjudicar: CHROME.controls.segmented|border|border"
     },
     {
-      "channel": "--ds-segmented-focus-ring",
-      "rootId": "state.delta.focus",
-      "via": "declared-fallback",
-      "evidence": {
-        "fallbackFrom": "--ds-focus-ring",
-        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/segmented.css:359",
-        "edgeClass": "leaf-fallback",
-        "guardPrimary": "--ds-segmented-focus-ring",
-        "coincidenceGuard": "no-value-match-used"
-      },
-      "tier": null,
-      "property": "ring",
-      "state": null,
-      "owners": [
-        "CHROME.controls.segmented"
-      ],
-      "contributingSlots": [
-        "bithire:CHROME.controls.segmented.focusRing"
-      ],
-      "rootExposure": "internal-head",
-      "rootHasDerivationLaw": true,
-      "step": null,
-      "stepNote": "la raiz no es un tier.<nivel>.<fg|border> refinable"
-    },
-    {
       "channel": "--ds-segmented-gap",
       "rootId": null,
       "via": null,
@@ -35265,31 +35212,6 @@
       "rootHasDerivationLaw": false,
       "step": null,
       "stepNote": "sin raiz que refinar"
-    },
-    {
-      "channel": "--ds-segmented-item-shadow-selected",
-      "rootId": "effect.intensity",
-      "via": "declared-fallback",
-      "evidence": {
-        "fallbackFrom": "--ds-effect-intensity",
-        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/segmented.css:343",
-        "edgeClass": "leaf-fallback",
-        "guardPrimary": "--ds-segmented-item-shadow-selected",
-        "coincidenceGuard": "no-value-match-used"
-      },
-      "tier": null,
-      "property": "shadow",
-      "state": "selected",
-      "owners": [
-        "CHROME.controls.segmented"
-      ],
-      "contributingSlots": [
-        "bithire:CHROME.controls.segmented.itemShadowSelected"
-      ],
-      "rootExposure": "tenant-dial",
-      "rootHasDerivationLaw": false,
-      "step": null,
-      "stepNote": "la raiz no es un tier.<nivel>.<fg|border> refinable"
     },
     {
       "channel": "--ds-segmented-lg-font-size",
@@ -48622,5 +48544,5 @@
       "stepNote": "sin raiz que refinar"
     }
   ],
-  "digest": "b219aa5263f1c57f5e9eaf065c383d71110685922d00050a80f16ae25e342581"
+  "digest": "94ec81753c2e3ab8a0b0ae02fa2419e80d74785ba04ab1deb1d9b2c6f75d9304"
 }

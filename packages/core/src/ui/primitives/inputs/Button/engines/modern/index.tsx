@@ -409,8 +409,27 @@ const ModernButton = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonPro
     </>
   );
 
-  const accessibleBusyLabel = resolvedBusyLabel == null ? children : null;
-  const content = widthStable ? (
+  // `loading` (no explicit `pending`) used to take a different render path
+  // than `pending`: no reserved frame, and no label at all unless the caller
+  // also passed `loadingText`. On a button that HAS a resting label, that
+  // path collapsed the footprint to spinner-only width and erased the label
+  // (F10) -- two opposite busy behaviors for the same family depending on
+  // which of the two overlapping busy props was used. The width-stable path
+  // is now the only path whenever there IS a label to preserve, regardless of
+  // which busy prop requested it; `resolveButtonBusyState` itself is
+  // untouched (its `widthStable` field still means "pending" specifically for
+  // every OTHER caller of that contract) -- this is a render-only decision.
+  const useWidthStablePath = widthStable || (busy && hasLabel);
+  // When busy did not supply its own label override, the width-stable path
+  // keeps the button's OWN resting label visible next to the spinner instead
+  // of showing nothing (G8's "conserva la etiqueta visible cuando existe").
+  const displayedBusyLabel = resolvedBusyLabel ?? (hasLabel ? renderedChildren : undefined);
+  // The hidden accessible-label duplicate is needed only when the resting
+  // label disappears from the accessibility tree with nothing replacing it
+  // visually (icon-only busy); once `displayedBusyLabel` shows the resting
+  // label itself, it already carries the accessible name.
+  const accessibleBusyLabel = resolvedBusyLabel == null && !hasLabel ? children : null;
+  const content = useWidthStablePath ? (
     <span data-part="content-frame">
       {/* The reserve sizes the frame, so it must reserve the WIDEST of the two
           states, not just the resting one. Reserving only the resting content
@@ -423,15 +442,15 @@ const ModernButton = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonPro
       <span data-part="content" data-layer="reserve" aria-hidden="true">
         {restingContentNode}
       </span>
-      {resolvedBusyLabel != null && (
+      {displayedBusyLabel != null && (
         <span data-part="content" data-layer="reserve" data-reserve="busy" aria-hidden="true">
           <LoadingSpinner size={size} />
-          <span data-part="label">{resolvedBusyLabel}</span>
+          <span data-part="label">{displayedBusyLabel}</span>
         </span>
       )}
       <span data-part="busy-content" aria-live="polite">
         <LoadingSpinner size={size} />
-        {resolvedBusyLabel != null && <span data-part="label">{resolvedBusyLabel}</span>}
+        {displayedBusyLabel != null && <span data-part="label">{displayedBusyLabel}</span>}
       </span>
       {accessibleBusyLabel != null && (
         <VisuallyHidden data-part="accessible-label">{accessibleBusyLabel}</VisuallyHidden>
@@ -442,7 +461,7 @@ const ModernButton = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonPro
       {busy && (
         <span data-part="busy-content" aria-live="polite">
           <LoadingSpinner size={size} />
-          {resolvedBusyLabel != null && <span data-part="label">{resolvedBusyLabel}</span>}
+          {displayedBusyLabel != null && <span data-part="label">{displayedBusyLabel}</span>}
         </span>
       )}
       <span data-part="content" data-state={busy ? 'hidden' : 'visible'} aria-hidden={busy || undefined}>

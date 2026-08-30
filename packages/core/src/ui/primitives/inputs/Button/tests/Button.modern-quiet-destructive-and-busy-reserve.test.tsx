@@ -62,12 +62,19 @@ describe('Modern Button width-stable busy reserve', () => {
     expect(busyReserve).toHaveAttribute('aria-hidden', 'true');
   });
 
-  it('reserves only the resting row when no busy label swaps in', () => {
+  it('falls back to the resting label when no busy label override is given (R1 unit 1, item 3/G8)', () => {
+    // Changed on purpose: a `pending` button used to go spinner-only when no
+    // `pendingLabel` was passed. G8 ("conserva la etiqueta visible cuando
+    // existe") keeps the resting label visible next to the spinner instead,
+    // so the busy row is now also reserved and populated with that label.
     const { container } = render(<ModernButton pending>Send</ModernButton>);
 
     expect(
       container.querySelectorAll('[data-part="content"][data-layer="reserve"]')
-    ).toHaveLength(1);
-    expect(container.querySelector('[data-reserve="busy"]')).toBeNull();
+    ).toHaveLength(2);
+    const busyReserve = container.querySelector('[data-reserve="busy"]');
+    expect(busyReserve).not.toBeNull();
+    expect(busyReserve).toHaveTextContent('Send');
+    expect(container.querySelector('[data-part="busy-content"]')).toHaveTextContent('Send');
   });
 });

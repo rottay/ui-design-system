@@ -6025,11 +6025,15 @@ const CHROME: BrandChrome = {
        * @governor deriva de: --ds-radius-md
        */
       radius: "var(--ds-radius-md, 10px)",
+      // R1 unit 1, item 10: 4px is the invariant the skin's own header comment
+      // requires (track padding must clear the full focus-ring extent --
+      // offset 2px + width 2px -- or the ring clips against the scrollport).
+      // 3px contradicted that written invariant.
       /**
        * @domicile seed
        * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
        */
-      padding: "3px",
+      padding: "4px",
       /**
        * @domicile seed
        * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
@@ -6083,12 +6087,13 @@ const CHROME: BrandChrome = {
        * @governor deriva de: --ds-radius-sm
        */
       itemRadius: "var(--ds-radius-sm, 7px)",
-      /**
-       * @domicile seed
-       * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
-       */
-      itemShadowSelected:
-        "var(--ds-material-control-shadow-selected, 0 1px 2px rgba(22,42,67,0.10), 0 0 0 1px rgba(58,111,176,0.08))",
+      // itemShadowSelected and focusRing are RETIRED (R1 unit 1, items 8/10):
+      // the modern skin no longer reads either channel -- the selected option
+      // carries exactly one border/emphasis treatment (the track's own frame
+      // owns the boundary), and focus paints the canonical double
+      // `--ds-focus-ring` instead of this low-alpha single ring, the same
+      // class Button already retired (W8). Leaving these fields would compile
+      // a permanently dead, still-branded custom property.
       /**
        * @domicile seed
        * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
@@ -6099,122 +6104,124 @@ const CHROME: BrandChrome = {
        * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
        */
       itemFontWeightSelected: 600,
-      /**
-       * @domicile seed
-       * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
-       */
-      focusRing:
-        "var(--ds-material-control-focus-ring, 0 0 0 3px rgba(58,111,176,0.18))",
+      // R1 unit 1, item 9 (G3 -- one control ladder). Segmented used to author
+      // its OWN size ramp in parallel with Button's (and, for radius, read
+      // the SURFACE ramp `--ds-radius-sm` instead of Button's CONTROL ramp),
+      // so density, type-scale and shape moved Button but never moved
+      // Segmented (F5) and the two controls parted ways in a joined action
+      // bar (F4). Every field below now derives from the matching
+      // `--ds-button-{size}-*` step, with the previous BitHire literal kept
+      // as the fallback so BitHire's own paint is unchanged.
       sm: {
         /**
-         * @domicile seed
-         * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+         * @domicile derived
+         * @governor deriva de: --ds-button-sm-height
          */
-        height: "28px",
-        /**
-         * @domicile seed
-         * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
-         */
-        paddingX: "9px",
-        /**
-         * @domicile seed
-         * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
-         */
-        fontSize: "11px",
-        /**
-         * @domicile seed
-         * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
-         */
-        lineHeight: "16px",
-        /**
-         * @domicile seed
-         * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
-         */
-        iconSize: "13px",
-        /**
-         * @domicile seed
-         * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
-         */
-        gap: "5px",
+        height: "var(--ds-button-sm-height, 28px)",
         /**
          * @domicile derived
-         * @governor deriva de: --ds-radius-sm
+         * @governor deriva de: --ds-button-sm-padding-x
          */
-        radius: "var(--ds-radius-sm, 6px)",
+        paddingX: "var(--ds-button-sm-padding-x, 9px)",
+        /**
+         * @domicile derived
+         * @governor deriva de: --ds-button-sm-font-size
+         */
+        fontSize: "var(--ds-button-sm-font-size, 11px)",
+        /**
+         * @domicile derived
+         * @governor deriva de: --ds-button-sm-line-height
+         */
+        lineHeight: "var(--ds-button-sm-line-height, 16px)",
+        /**
+         * @domicile derived
+         * @governor deriva de: --ds-button-sm-icon-size
+         */
+        iconSize: "var(--ds-button-sm-icon-size, 13px)",
+        /**
+         * @domicile derived
+         * @governor deriva de: --ds-button-sm-gap
+         */
+        gap: "var(--ds-button-sm-gap, 5px)",
+        /**
+         * @domicile derived
+         * @governor deriva de: --ds-button-sm-radius
+         */
+        radius: "var(--ds-button-sm-radius, 6px)",
       },
       md: {
         /**
-         * @domicile seed
-         * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+         * @domicile derived
+         * @governor deriva de: --ds-button-md-height
          */
-        height: "32px",
-        /**
-         * @domicile seed
-         * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
-         */
-        paddingX: "11px",
-        /**
-         * @domicile seed
-         * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
-         */
-        fontSize: "12px",
-        /**
-         * @domicile seed
-         * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
-         */
-        lineHeight: "18px",
-        /**
-         * @domicile seed
-         * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
-         */
-        iconSize: "14px",
-        /**
-         * @domicile seed
-         * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
-         */
-        gap: "6px",
+        height: "var(--ds-button-md-height, 32px)",
         /**
          * @domicile derived
-         * @governor deriva de: --ds-radius-sm
+         * @governor deriva de: --ds-button-md-padding-x
          */
-        radius: "var(--ds-radius-sm, 7px)",
+        paddingX: "var(--ds-button-md-padding-x, 11px)",
+        /**
+         * @domicile derived
+         * @governor deriva de: --ds-button-md-font-size
+         */
+        fontSize: "var(--ds-button-md-font-size, 12px)",
+        /**
+         * @domicile derived
+         * @governor deriva de: --ds-button-md-line-height
+         */
+        lineHeight: "var(--ds-button-md-line-height, 18px)",
+        /**
+         * @domicile derived
+         * @governor deriva de: --ds-button-md-icon-size
+         */
+        iconSize: "var(--ds-button-md-icon-size, 14px)",
+        /**
+         * @domicile derived
+         * @governor deriva de: --ds-button-md-gap
+         */
+        gap: "var(--ds-button-md-gap, 6px)",
+        /**
+         * @domicile derived
+         * @governor deriva de: --ds-button-md-radius
+         */
+        radius: "var(--ds-button-md-radius, 7px)",
       },
       lg: {
         /**
-         * @domicile seed
-         * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+         * @domicile derived
+         * @governor deriva de: --ds-button-lg-height
          */
-        height: "38px",
-        /**
-         * @domicile seed
-         * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
-         */
-        paddingX: "14px",
-        /**
-         * @domicile seed
-         * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
-         */
-        fontSize: "13px",
-        /**
-         * @domicile seed
-         * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
-         */
-        lineHeight: "20px",
-        /**
-         * @domicile seed
-         * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
-         */
-        iconSize: "16px",
-        /**
-         * @domicile seed
-         * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
-         */
-        gap: "7px",
+        height: "var(--ds-button-lg-height, 38px)",
         /**
          * @domicile derived
-         * @governor deriva de: --ds-radius-sm
+         * @governor deriva de: --ds-button-lg-padding-x
          */
-        radius: "var(--ds-radius-sm, 8px)",
+        paddingX: "var(--ds-button-lg-padding-x, 14px)",
+        /**
+         * @domicile derived
+         * @governor deriva de: --ds-button-lg-font-size
+         */
+        fontSize: "var(--ds-button-lg-font-size, 13px)",
+        /**
+         * @domicile derived
+         * @governor deriva de: --ds-button-lg-line-height
+         */
+        lineHeight: "var(--ds-button-lg-line-height, 20px)",
+        /**
+         * @domicile derived
+         * @governor deriva de: --ds-button-lg-icon-size
+         */
+        iconSize: "var(--ds-button-lg-icon-size, 16px)",
+        /**
+         * @domicile derived
+         * @governor deriva de: --ds-button-lg-gap
+         */
+        gap: "var(--ds-button-lg-gap, 7px)",
+        /**
+         * @domicile derived
+         * @governor deriva de: --ds-button-lg-radius
+         */
+        radius: "var(--ds-button-lg-radius, 8px)",
       },
     },
     buttonPrimary: {
@@ -6278,15 +6285,17 @@ const CHROME: BrandChrome = {
       bgActive:
         "color-mix(in srgb, var(--ds-color-primary) 18%, var(--ds-control-surface))",
       /**
-       * @domicile seed
-       * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+       * @domicile derived
+       * @governor deriva de: --ds-color-primary (R1 unit 1, F4.2: era literal
+       *   plano compilado en el artifact vertical, así que ningún tenant en
+       *   la vertical podía moverlo -- ver secondaryColor abajo)
        */
-      text: "#3A6FB0",
+      text: "var(--ds-color-primary, #3A6FB0)",
       /**
-       * @domicile seed
-       * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
+       * @domicile derived
+       * @governor deriva de: --ds-color-primary
        */
-      color: "#3A6FB0",
+      color: "var(--ds-color-primary, #3A6FB0)",
       /**
        * @domicile derived
        * @governor deriva de: --ds-control-brand-border
@@ -6558,12 +6567,33 @@ const CHROME: BrandChrome = {
      * @domicile seed
      * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
      */
+    // R1 unit 1, F4.2: bg/text/border were flat literals compiled into the
+    // vertical artifact (this same defect class as buttonSecondary above and
+    // the R1 Cohort 1 group below): unreachable by any tenant in the
+    // vertical. Reads the material-control-disabled role first, keeping
+    // BitHire's own values as the fallback so its paint is unchanged.
     disabled: {
       opacity: 0.45,
-      bg: "#F8FAFC",
-      text: "#AEBCC8",
-      border: "#E8EEF3",
-      borderColor: "#E8EEF3",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-material-control-background-disabled
+       */
+      bg: "var(--ds-material-control-background-disabled, #F8FAFC)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-text-muted
+       */
+      text: "var(--ds-color-text-muted, #AEBCC8)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-border-secondary
+       */
+      border: "var(--ds-color-border-secondary, #E8EEF3)",
+      /**
+       * @domicile derived
+       * @governor deriva de: --ds-color-border-secondary
+       */
+      borderColor: "var(--ds-color-border-secondary, #E8EEF3)",
     },
     // R1 Cohort 1 — same vertical-leak rebase as the segmented group and the
     // button/input radii. These were flat BitHire literals compiled into the

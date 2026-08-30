@@ -132,6 +132,69 @@ export function ControlScene() {
         <Button variant="primary" pending pendingLabel="Submitting">
           Submit
         </Button>
+        {/* No explicit busy label: the width-stable path (item 3, F10) must
+            keep "Save" visible next to the spinner instead of collapsing to
+            an icon-only footprint. */}
+        <Button variant="primary" loading data-testid="lab-loading-no-label">
+          Save
+        </Button>
+      </SpecimenRow>
+
+      {/* Quiet range at rest (F2): ghost/text must read as a control, not as
+          bare text, without any hover or focus. */}
+      <SpecimenRow axis="quiet range — rest presence, icon-only, quiet destructive">
+        <Button variant="ghost" data-testid="lab-ghost-rest">
+          Ghost
+        </Button>
+        <Button variant="text" data-testid="lab-text-rest">
+          Text
+        </Button>
+        <Button
+          variant="ghost"
+          icon={<span aria-hidden="true">i</span>}
+          aria-label="Info"
+          data-testid="lab-ghost-icon-only"
+        />
+        <Button variant="ghost" danger data-testid="lab-ghost-danger">
+          Remove
+        </Button>
+        <Button variant="link" data-testid="lab-link-rest">
+          View details
+        </Button>
+      </SpecimenRow>
+
+      {/* Selected / current posture (aria-pressed, aria-current): the skin
+          has a full block for this and, before this scene, zero evidence. */}
+      <SpecimenRow axis="selected — aria-pressed, aria-current, segmented">
+        <Button variant="outline" aria-pressed="true" data-testid="lab-button-selected">
+          Bold
+        </Button>
+        <Button variant="ghost" aria-current="true" data-testid="lab-button-current">
+          Overview
+        </Button>
+        <Segmented
+          defaultValue="week"
+          disabled={false}
+          options={[
+            { label: 'Day', value: 'day' },
+            { label: 'Week', value: 'week' },
+            { label: 'Closed', value: 'closed', disabled: true },
+          ]}
+        />
+      </SpecimenRow>
+
+      {/* Scale extremes (F8): xs is the smallest label the family ships, xl
+          the tallest control; both are absent from the "scale" row above. */}
+      <SpecimenRow axis="scale — extremes (xs, xl)">
+        <Button size="xs" variant="primary">
+          Extra small
+        </Button>
+        <Button size="xl" variant="primary">
+          Extra large
+        </Button>
+        <Button size="xs" variant="outline" block style={{ maxInlineSize: 220 }}>
+          Block xs
+        </Button>
       </SpecimenRow>
 
       {/* ---- 3. Composition vignette: the group doing real work ---- */}

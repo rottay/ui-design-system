@@ -174,7 +174,10 @@
   --ds-button-link-border: transparent;
   --ds-button-link-border-hover: var(--ds-button-link-border);
   --ds-button-link-border-active: var(--ds-button-link-border);
-  --ds-button-link-text-decoration: none;
+  /* The `link` range's only non-chromatic signal (F1): in a monochrome
+     tenant `link` and `ghost` share no color difference, so the rest state
+     needs its own mark instead of relying on hover to reveal the range. */
+  --ds-button-link-text-decoration: underline;
   --ds-button-link-text-decoration-hover: underline;
   --ds-button-link-underline-offset: 0.18em;
 
@@ -351,7 +354,13 @@
      TOUCH TARGETS
      Minimum touch target size for accessibility
      ======================================================================== */
-  --ds-button-touch-target-min: 2.75rem;  /* 44px - WCAG AAA minimum */
+  /* A bare rem floor is only 44px real pixels at a 16px root. This tree's
+     measured root is 15px (F8), where 2.75rem resolves to 41.25px -- under
+     the WCAG AAA floor with no failing test to catch it, because nothing
+     reads the computed pixel value. `max()` against an absolute 44px pins the
+     real floor regardless of root font-size; a 16px root is unaffected since
+     2.75rem already equals 44px there. */
+  --ds-button-touch-target-min: max(44px, 2.75rem);  /* 44px - WCAG AAA minimum, root-independent */
 
   /* ========================================================================
      BORDERS

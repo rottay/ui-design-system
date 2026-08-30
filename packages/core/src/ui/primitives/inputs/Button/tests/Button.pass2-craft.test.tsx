@@ -133,8 +133,14 @@ describe('ModernButton Pass 2 craft contract', () => {
       /border|background|box-shadow|color/i
     );
     expect(container.querySelectorAll('.rottay-button')).toHaveLength(3);
-    expect(compoundSkin).toContain('border-start-start-radius');
-    expect(compoundSkin).toContain('border-end-end-radius');
+    // R1 unit 1, item 7 (F7): connected-geometry radius rules moved from the
+    // compound wrapper into the modern engine's own skin, keyed on the
+    // child's `data-connected` / `data-group-position` -- the wrapper's
+    // former `border-radius: 0` reset TIED the engine's own base rule at
+    // equal specificity and lost it by source order, so no joined cluster
+    // was ever actually rounded (see button-group.css's own comment).
+    expect(modernSkin).toContain('border-start-start-radius');
+    expect(modernSkin).toContain('border-end-end-radius');
     expect(compoundSkin).toContain('overscroll-behavior-inline');
     expect(compoundSkin).not.toMatch(/6px|border-(left|right)/);
   });

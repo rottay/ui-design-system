@@ -115,14 +115,34 @@ export function ButtonGroup({
     ...style,
   } as CSSProperties;
 
-  // Clone children to pass down size/variant/shape if provided
+  // Clone children to pass down size/variant/shape if provided. A connected
+  // group also stamps `data-connected` and a `data-group-position` token list
+  // ('first', 'middle', 'last' — space-separated so a lone child can carry
+  // both exterior positions at once) on each child: the manifest already
+  // declares `data-connected` among Button's `variantAxes`, but nothing ever
+  // stamped it on the CHILD, so the engine's own connected-geometry rules
+  // (keyed on these attributes) never matched (F7).
+  const childCount = React.Children.count(children);
+  let childIndex = 0;
   const enhancedChildren = React.Children.map(children, (child) => {
     if (!React.isValidElement(child)) return child;
+
+    const index = childIndex++;
+    const positionTokens: string[] = [];
+    if (index === 0) positionTokens.push('first');
+    if (index === childCount - 1) positionTokens.push('last');
+    if (positionTokens.length === 0) positionTokens.push('middle');
 
     return React.cloneElement(child as React.ReactElement<any>, {
       size: size || (child as React.ReactElement<any>).props.size,
       variant: variant || (child as React.ReactElement<any>).props.variant,
       shape: connected ? 'default' : (shape || (child as React.ReactElement<any>).props.shape),
+      ...(connected
+        ? {
+            'data-connected': 'true',
+            'data-group-position': positionTokens.join(' '),
+          }
+        : null),
     });
   });
 

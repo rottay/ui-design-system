@@ -76,68 +76,24 @@
 
 .rottay-button-group[data-connected='true'] > .rottay-button {
   position: relative;
-  border-radius: 0;
 }
 
-/* Connected seams: inside a joined quiet cluster the shared 1px edge is a
-   GOVERNED divider, not whichever border happens to win the overlap. The
-   channel defaults to the quiet variant's own border (see the component
-   token chain), so an unauthored tenant renders exactly what the overlap
-   painted before — while ghost children, whose rest border is transparent,
-   gain the hairline that makes a joined toolbar read as one control. Solid
-   variants are excluded on purpose: their self-border IS the seam. */
-.rottay-button-group[data-connected='true'][data-orientation='horizontal']
-  > .rottay-button:is(
-    [data-variant='default'],
-    [data-variant='outline'],
-    [data-variant='dashed'],
-    [data-variant='ghost']
-  ):not(:first-child):not([data-disabled='true']) {
-  border-inline-start-color: var(--ds-button-group-divider-color);
-}
-
-.rottay-button-group[data-connected='true'][data-orientation='vertical']
-  > .rottay-button:is(
-    [data-variant='default'],
-    [data-variant='outline'],
-    [data-variant='dashed'],
-    [data-variant='ghost']
-  ):not(:first-child):not([data-disabled='true']) {
-  border-block-start-color: var(--ds-button-group-divider-color);
-}
-
+/* Connected geometry (interior/exterior radius unification, and the seam's
+   border color) moved to the modern engine's own skin
+   (`runtime/engines/modern/skin/button.css`), keyed on `data-connected` /
+   `data-group-position` stamped on the child by Button.Group's clone. It
+   must live at the engine's own selector weight to win: this file's former
+   `border-radius: 0` reset tied the engine's own (0,3,0) base rule and lost
+   it by source order, so every joined cluster rendered as separately-rounded
+   pills instead of one fused control (F7). Layout stays here. */
 .rottay-button-group[data-connected='true'][data-orientation='horizontal']
   > .rottay-button:not(:first-child) {
   margin-inline-start: calc(var(--ds-button-border-width) * -1);
 }
 
-.rottay-button-group[data-connected='true'][data-orientation='horizontal']
-  > .rottay-button:first-child {
-  border-start-start-radius: var(--_ds-button-resolved-radius);
-  border-end-start-radius: var(--_ds-button-resolved-radius);
-}
-
-.rottay-button-group[data-connected='true'][data-orientation='horizontal']
-  > .rottay-button:last-child {
-  border-start-end-radius: var(--_ds-button-resolved-radius);
-  border-end-end-radius: var(--_ds-button-resolved-radius);
-}
-
 .rottay-button-group[data-connected='true'][data-orientation='vertical']
   > .rottay-button:not(:first-child) {
   margin-block-start: calc(var(--ds-button-border-width) * -1);
-}
-
-.rottay-button-group[data-connected='true'][data-orientation='vertical']
-  > .rottay-button:first-child {
-  border-start-start-radius: var(--_ds-button-resolved-radius);
-  border-start-end-radius: var(--_ds-button-resolved-radius);
-}
-
-.rottay-button-group[data-connected='true'][data-orientation='vertical']
-  > .rottay-button:last-child {
-  border-end-start-radius: var(--_ds-button-resolved-radius);
-  border-end-end-radius: var(--_ds-button-resolved-radius);
 }
 
 .rottay-button-group[data-connected='true'] > .rottay-button:is(:hover, :focus-visible),
