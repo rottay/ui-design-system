@@ -199,6 +199,19 @@ var(--ds-color-neutral-700)    /* neutral scale */
 var(--ds-color-alpha-black-50) /* rgba(0, 0, 0, 0.5) */
 ```
 
+##### Status-tint floor (`--ds-color-{tone}-bg`, `-border`, `--ds-color-alpha-{tone}-{10,20}`)
+
+The `-bg`/`-border` pair and the `alpha-{tone}-10`/`alpha-{tone}-20` overlays for
+each semantic tone (`success`, `warning`, `error`, `info`) are compiler-derived,
+not hand-authored: `deriveStatusTintFloor` (`infrastructure/compilers/kernel/runtime/brand-theme/`)
+reads each vertical's/tenant's own `--ds-color-{tone}` seed and writes the
+channel as a `color-mix()`/`-50` formula, guarded so a tone with no seed emits
+none of its four channels. This runs as a **floor**, merged beneath any
+vertical-authored literal, so an authored `successBgColor` (etc.) still wins;
+only an unauthored channel now falls through to this derived value instead of
+`default.css`'s hardcoded fallback. `--ds-color-alpha-info-20` remains retired
+and is intentionally never emitted.
+
 #### Spacing (`css/foundation/base/spacing.css`)
 
 4px grid system with semantic names:
