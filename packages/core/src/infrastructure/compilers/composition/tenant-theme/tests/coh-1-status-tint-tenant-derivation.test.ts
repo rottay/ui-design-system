@@ -30,6 +30,23 @@
  * `compileBrandTheme`, with a hand-built `tenantAuthoredPaths`/`tenantPatch`
  * — the same escape hatch the compiler itself uses internally, bypassing
  * only the DB-document intake layer that has nothing to test yet.
+ *
+ * COH-1 D1/D2 REMEDIATION (Fable 5 audit, `coh-1-fable-audit.md`): the
+ * bithire-only coverage above could not distinguish a LIVE DB door from a
+ * DEAD one, because bithire retired its own baked status literals in this
+ * same lot -- both a working and an inert `applyTenantStatusSeedDerivations`
+ * produce the identical "-bg/-border/alpha carry no delta bytes" result on
+ * bithire. `compileTenantThemeConfig` passed `tenantPatch:
+ * tenantPostureFloors(envelope.patch)` -- a projection that never carries
+ * `palette`/`modes` -- so `toneSeedIsTenantAuthored` was `false` for every
+ * tenant on every vertical, and guard 1 never fired through the real door.
+ * The suite below exercises guard 1 THROUGH `compileTenantThemeConfig`
+ * itself (never `compileBrandTheme` directly) against ROTTAY, which still
+ * bakes `successBgColor`/`successBorderColor`/`alphaSuccess{10,20}` as
+ * concrete literals in both its base (dark) block and its light overlay --
+ * the exact "baseline still bakes a literal" case the guard-1 mechanism test
+ * above already proves the FORMULA handles, now proven through the DOOR a
+ * real tenant document actually enters.
  */
 import { describe, expect, it } from "vitest";
 
@@ -229,5 +246,134 @@ describe("COH-1 T2 — guard 3: a value that bakes no colour of its own is left 
     expect(artifact.cssVariables["--ds-color-success-border"]).toBe(
       "var(--ds-color-border-focus)"
     );
+  });
+});
+
+// ── D1/D2 remediation: guard 1 through the REAL DB door (rottay) ───────────
+
+/**
+ * rottay's own defaultMode is `dark` (`rottay/index.ts` `DEFAULT_MODE`), and
+ * it bakes `successColor`/`successBgColor`/`successBorderColor`/
+ * `alphaSuccess20` as concrete literals in its BASE (dark) palette, plus all
+ * five success fields (also `alphaSuccess10`) in its `light` mode overlay.
+ * That makes it the live "baseline still bakes a literal" fixture the guard
+ * needs — bithire and evnto both retired theirs in this same lot.
+ */
+const compileForRottay = (document: TenantThemeDocument) =>
+  compileTenantThemeConfig(
+    hydrateTenantThemeConfig(document, {
+      tenantId: "t_coh1_door",
+      slug: "coh1-door-tenant",
+      verticalKey: "rottay",
+      rowVersion: 1,
+    }),
+    { verticalEnvelope: getTenantThemeVerticalEnvelope("rottay")! }
+  );
+
+/** A v1 document that authors ONLY `palette.status.success`, at a chosen `backgroundMode`. */
+const successSeedOnly = (backgroundMode: "light" | "dark"): TenantThemeDocument => ({
+  schemaVersion: 1,
+  mode: "advanced",
+  visualFoundation: {
+    general: { palette: { backgroundMode, status: { success: "#7C3AED" } } },
+  },
+});
+
+describe("COH-1 D1/D2 — the DB door itself re-derives against rottay's own baked literals: BASE block", () => {
+  // backgroundMode "dark" == rottay's own defaultMode, so migrateV1 places
+  // the seed directly in the BASE `patch.palette` (never in `patch.modes`).
+  const { variables } = compileForRottay(successSeedOnly("dark"));
+
+  it("seed passthrough already works (sanity check, not the defect)", () => {
+    expect(variables["--ds-color-success"]).toBe("#7C3AED");
+  });
+
+  it("-bg re-derives from the vertical's own baked literal to the formula — this is what D1 fixes", () => {
+    // Before the fix: `toneSeedIsTenantAuthored.success` was always `false`
+    // on this door, `applyTenantStatusSeedDerivations` returned without
+    // touching a byte, and this channel stayed absent from the delta
+    // (rottay's baked `rgba(34, 197, 94, 0.10)` on both sides).
+    expect(variables["--ds-color-success-bg"]).toBe("var(--ds-color-success-50)");
+  });
+
+  it("-border re-derives from the vertical's own baked literal to the formula", () => {
+    expect(variables["--ds-color-success-border"]).toBe(
+      "color-mix(in srgb, var(--ds-color-success) 20%, transparent)"
+    );
+  });
+
+  it("alpha-success-20 re-derives from the vertical's own baked literal to the formula", () => {
+    expect(variables["--ds-color-alpha-success-20"]).toBe(
+      "color-mix(in srgb, var(--ds-color-success) 20%, transparent)"
+    );
+  });
+
+  it("warning/error/info are untouched: only the contested tone re-derives", () => {
+    for (const tone of ["warning", "error", "info"] as const) {
+      expect(variables[`--ds-color-${tone}-bg`]).toBeUndefined();
+      expect(variables[`--ds-color-${tone}-border`]).toBeUndefined();
+    }
+  });
+});
+
+describe("COH-1 D1/D2 — the DB door itself re-derives against rottay's own baked literals: MODE block", () => {
+  // backgroundMode "light" != rottay's defaultMode ("dark"), so migrateV1
+  // places the seed ONLY in `patch.modes.light.palette` — the base block
+  // never sees a tenant-authored seed at all. rottay's `light` overlay bakes
+  // ALL FIVE success fields (including alpha-10, which the base/dark block
+  // does not bake), so this scenario is the one that actually exercises the
+  // alpha-10 leg of the family.
+  const artifact = compileForRottay(successSeedOnly("light"));
+  const lightDelta = artifact.modeDeltas?.find((block) => block.mode === "light");
+
+  it("the base block carries no success channel: the tenant never authored the base seed", () => {
+    for (const suffix of ["", "-bg", "-border"] as const) {
+      expect(artifact.variables[`--ds-color-success${suffix}`]).toBeUndefined();
+    }
+  });
+
+  it("the light mode block exists and carries the seed passthrough", () => {
+    expect(lightDelta).toBeDefined();
+    expect(lightDelta!.variables["--ds-color-success"]).toBe("#7C3AED");
+  });
+
+  it("-bg/-border/alpha-10/alpha-20 all re-derive from rottay's own baked light-overlay literals", () => {
+    expect(lightDelta!.variables["--ds-color-success-bg"]).toBe(
+      "var(--ds-color-success-50)"
+    );
+    expect(lightDelta!.variables["--ds-color-success-border"]).toBe(
+      "color-mix(in srgb, var(--ds-color-success) 20%, transparent)"
+    );
+    expect(lightDelta!.variables["--ds-color-alpha-success-10"]).toBe(
+      "color-mix(in srgb, var(--ds-color-success) 10%, transparent)"
+    );
+    expect(lightDelta!.variables["--ds-color-alpha-success-20"]).toBe(
+      "color-mix(in srgb, var(--ds-color-success) 20%, transparent)"
+    );
+  });
+
+  it("warning/error/info are untouched in the mode block: only the contested tone re-derives", () => {
+    for (const tone of ["warning", "error", "info"] as const) {
+      expect(lightDelta!.variables[`--ds-color-${tone}-bg`]).toBeUndefined();
+      expect(lightDelta!.variables[`--ds-color-${tone}-border`]).toBeUndefined();
+    }
+  });
+});
+
+describe("COH-1 D1/D2 — a document silent on palette.status moves zero status bytes through the real door", () => {
+  it("a rottay document that authors nothing under palette.status leaves no status channel in base or mode deltas", () => {
+    const artifact = compileForRottay({
+      schemaVersion: 1,
+      mode: "advanced",
+      visualFoundation: { general: { typography: { fontFamilyBase: "Inter" } } },
+    });
+    for (const tone of ["success", "warning", "error", "info"] as const) {
+      expect(artifact.variables[`--ds-color-${tone}-bg`]).toBeUndefined();
+      expect(artifact.variables[`--ds-color-${tone}-border`]).toBeUndefined();
+      for (const block of artifact.modeDeltas ?? []) {
+        expect(block.variables[`--ds-color-${tone}-bg`]).toBeUndefined();
+        expect(block.variables[`--ds-color-${tone}-border`]).toBeUndefined();
+      }
+    }
   });
 });

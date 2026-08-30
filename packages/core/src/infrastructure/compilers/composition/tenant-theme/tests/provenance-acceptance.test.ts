@@ -53,6 +53,8 @@ import {
 import {
   PRIMARY_SEED_FIELD,
   SEED_SHADOWING_FIELDS,
+  STATUS_SEED_FIELDS,
+  STATUS_SEED_SHADOWING_FIELDS,
   compileTheme,
 } from "@/infrastructure/compilers/kernel/runtime/brand-theme";
 import { withExpressiveFieldDefaults } from "@/infrastructure/compilers/kernel/runtime/appearance";
@@ -976,14 +978,35 @@ describe("the digest tells the truth", () => {
 });
 
 describe("the consulted-provenance authority is closed", () => {
-  it("is exactly the union of the two sites' own tables", () => {
-    const union = new Set<string>([
+  /** Assembled once so the closure test and the mutant test share one truth. */
+  const THREE_SITE_UNION = (): Set<string> =>
+    new Set<string>([
       PRIMARY_SEED_FIELD,
       ...Object.values(SEED_SHADOWING_FIELDS).flat(),
       SIDEBAR_TONE_FIELD,
       ...Object.values(SIDEBAR_TONE_LEAF_FIELDS),
+      // COH-1 D3: the status-tint site's own table, the third union member.
+      ...STATUS_SEED_FIELDS,
+      ...Object.values(STATUS_SEED_SHADOWING_FIELDS).flat(),
     ]);
-    expect([...union].sort()).toEqual([...CONSULTED_PROVENANCE_FIELDS].sort());
+
+  it("is exactly the union of the three sites' own tables", () => {
+    expect([...THREE_SITE_UNION()].sort()).toEqual(
+      [...CONSULTED_PROVENANCE_FIELDS].sort()
+    );
+  });
+
+  it("mutant: dropping one entry from the union desyncs it from CONSULTED_PROVENANCE_FIELDS", () => {
+    // Proves the closure assertion above actually bites: a union missing a
+    // single status-seed field must NOT equal the closed vocabulary. Without
+    // this, a future edit that silently narrows either side could leave the
+    // test above green for the wrong reason (both sides shrinking together).
+    const mutatedUnion = [...THREE_SITE_UNION()].filter(
+      (field) => field !== "palette.successColor"
+    );
+    expect(mutatedUnion.sort()).not.toEqual(
+      [...CONSULTED_PROVENANCE_FIELDS].sort()
+    );
   });
 
   it("mP6: a profile default can never fill a consulted field", () => {
@@ -1028,15 +1051,18 @@ describe("the consulted-provenance authority is closed", () => {
     // keep passing after `CONSULTED_PROVENANCE_FIELDS` was emptied, after
     // `collectPatchAuthoredPaths` stopped collecting, or after the profile
     // vocabulary was renamed out from under it. So the same pipeline is run
-    // once more over an appearance deliberately contaminated with the two
-    // field families the lattice does consult, and the intersection is
-    // required to catch both.
+    // once more over an appearance deliberately contaminated with the THREE
+    // field families the lattice does consult (COH-1 D3 added the status
+    // seed as the third), and the intersection is required to catch all three.
     const contaminated = migrateV1(
       {
         schemaVersion: 1,
         mode: "advanced",
         visualFoundation: {
-          general: { ...filled, palette: { primary: "#0F766E" } },
+          general: {
+            ...filled,
+            palette: { primary: "#0F766E", status: { success: "#7C3AED" } },
+          },
           advanced: { chrome: { sidebar: { bg: "#101014", text: "#F4F4F5" } } },
         },
       } as unknown as TenantThemeDocument,
@@ -1045,6 +1071,14 @@ describe("the consulted-provenance authority is closed", () => {
     const contaminatedHits = [
       ...collectPatchAuthoredPaths(contaminated.patch),
     ].filter((path) => CONSULTED_PROVENANCE_FIELDS.has(path));
+    // `migrateV1`'s `paletteFields()` always constructs all four
+    // `{tone}Color` keys the moment `general.palette.status` is present at
+    // all (own-key presence, `undefined` value for the three untouched
+    // tones) -- `collectPatchAuthoredPaths` collects by key presence, not
+    // value, so the pre-existing over-approximation (the same one D1's fix
+    // deliberately reads AROUND via `deriveTenantStatusSeedAuthorship`'s
+    // `!== undefined` value check) surfaces all four here, not just the one
+    // tone this document actually authored.
     expect(
       contaminatedHits.sort(),
       "the fence cannot detect a consulted field at all"
@@ -1052,6 +1086,10 @@ describe("the consulted-provenance authority is closed", () => {
       "chrome.sidebar.bg",
       "chrome.sidebar.text",
       PRIMARY_SEED_FIELD,
+      "palette.successColor",
+      "palette.warningColor",
+      "palette.errorColor",
+      "palette.infoColor",
     ].sort());
   });
 });

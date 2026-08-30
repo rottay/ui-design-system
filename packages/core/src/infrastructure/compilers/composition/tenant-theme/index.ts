@@ -65,6 +65,10 @@ import {
   normalizeHexColor,
 } from "../../kernel/foundation/css/color-math";
 import {
+  ON_TONE_ROLES,
+  type OnToneRole,
+} from "../../kernel/foundation/css/color-math/readable-ink";
+import {
   TENANT_THEME_CONFIG_SCHEMA,
   type TenantThemeSchemaNode,
 } from "../../kernel/foundation/schemas/tenant-theme";
@@ -83,6 +87,7 @@ import {
 import {
   compileTheme,
   themeModeSelector,
+  type TenantStatusSeedAuthorship,
 } from "@/infrastructure/compilers/kernel/runtime/brand-theme";
 import { migrateV1 } from "./migrate-v1";
 
@@ -1858,6 +1863,49 @@ export function tenantPostureFloors(patch: ThemePatch): Partial<BrandTheme> {
   };
 }
 
+/**
+ * COH-1 D1 — the closed status-seed AUTHORSHIP channel this door hands to
+ * `compileTheme`, SIBLING of `tenantPostureFloors` and never a widening of
+ * it: `tenantPostureFloors` projects exactly six posture keypaths and
+ * excludes `palette`/`modes` BY DESIGN (its own docblock), so it can never
+ * carry status-seed authorship. Without a separate channel,
+ * `applyTenantStatusSeedDerivations` reads `tenantPatch.palette`, which is
+ * always `undefined` on this door -- every tone stays
+ * `toneSeedIsTenantAuthored=false` and a tenant that sets only
+ * `palette.status.success` never re-derives the `-bg`/`-border`/alpha family
+ * against a vertical baseline that still bakes those as literals (Fable 5
+ * audit, D1, `coh-1-fable-audit.md`).
+ *
+ * Reads the RAW `envelope.patch` (post-`migrateV1`, pre-`tenantPostureFloors`
+ * projection) and the actual VALUE, never `authoredPaths` Set membership:
+ * `migrateV1`'s `paletteFields()` always constructs all four `{tone}Color`
+ * keys on the patch object it returns (tenant-set or not), so Set membership
+ * alone cannot distinguish "the tenant wrote this" from "the builder always
+ * emits this key" -- the same trap `collectPatchAuthoredPaths` falls into
+ * for the primary family's own pre-existing, out-of-scope false positive
+ * (Fable 5 audit, B.1).
+ */
+function deriveTenantStatusSeedAuthorship(
+  patch: ThemePatch
+): TenantStatusSeedAuthorship {
+  const toneRecord = (
+    palette: ThemePatch["palette"]
+  ): Record<OnToneRole, boolean> =>
+    Object.fromEntries(
+      ON_TONE_ROLES.map((role) => [
+        role,
+        palette?.[`${role}Color`] !== undefined,
+      ])
+    ) as Record<OnToneRole, boolean>;
+  return {
+    base: toneRecord(patch.palette),
+    modes: {
+      light: toneRecord(patch.modes?.light?.palette),
+      dark: toneRecord(patch.modes?.dark?.palette),
+    },
+  };
+}
+
 export function compileTenantThemeConfig(
   input: unknown,
   options: CompileTenantThemeConfigOptions = {}
@@ -2071,6 +2119,12 @@ export function compileTenantThemeConfig(
            * line in place: only the two rottay elevation rows may move, and
            * every other row must read exactly as it did before. */
           tenantPatch: tenantFloors,
+          // COH-1 D1: the status-seed authorship SIBLING `tenantFloors` above
+          // cannot carry (see `deriveTenantStatusSeedAuthorship`'s docblock).
+          // Read from the same RAW `envelope.patch`, before this projection.
+          tenantStatusSeedAuthorship: deriveTenantStatusSeedAuthorship(
+            envelope.patch
+          ),
         }),
         tenantAuthoredPaths: authoredPaths,
       };

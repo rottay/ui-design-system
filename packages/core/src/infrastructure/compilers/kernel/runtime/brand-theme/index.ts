@@ -681,8 +681,21 @@ export function deriveExtendedPaletteFloor(
  * seed emits nothing for it. Without this guard the floor would fire off a
  * mode overlay that authors an unrelated ramp blind to mode (e.g. evnto's
  * dark `ramps.success` copying light's 50..800 verbatim) and PROPAGATE that
- * defect instead of curing it; that overlay simply never declares
- * `successColor`, so the guard already excludes it.
+ * defect instead of curing it.
+ *
+ * COH-1 D4a correction: the guard does NOT exclude evnto's dark overlay by
+ * the overlay never declaring `successColor`. `applyModeOverlay` MERGES the
+ * palette (`palette: mergeModeOverlay(bt.palette, overlay.palette)`), so a
+ * dark block's palette always carries the base seed even when the overlay
+ * itself is silent -- the floor DOES fire in dark, at the same seed, and
+ * emits the identical string it emits in light. What actually excludes the
+ * four `-bg` rows from dark's DELTA is downstream: `compileModeBlocks` only
+ * keeps a key whose value differs from the base block's (`if (baseVars[key]
+ * !== value)`), and dark's derived string is byte-identical to light's, so
+ * the row is deduplicated, not suppressed at the source. The blind-ramp
+ * defect this guard exists to stop (Opus F.1.2) is real and unchanged by
+ * this correction -- only the EXPLANATION of why dark's delta stays empty
+ * was wrong.
  *
  * Merged BEFORE `setExtendedPaletteVariables`, exactly like
  * `deriveExtendedPaletteFloor` above: derivation is the floor, an authored
@@ -1680,6 +1693,18 @@ export const STATUS_SEED_SHADOWING_FIELDS: Readonly<
   "--ds-color-alpha-info-10": ["palette.alphaInfo10"],
 };
 
+/**
+ * COH-1 D3 — the four status SEED fields, the sibling of `PRIMARY_SEED_FIELD`
+ * for the status-tint family. Derived from `ON_TONE_ROLES` rather than
+ * hand-listed so the closed vocabulary this feeds
+ * (`CONSULTED_PROVENANCE_FIELDS`, `iso/index.ts`) cannot silently drift from
+ * the roles `deriveStatusTintFloor`/`applyTenantStatusSeedDerivations`
+ * actually iterate.
+ */
+export const STATUS_SEED_FIELDS: readonly string[] = ON_TONE_ROLES.map(
+  (role) => `palette.${role}Color`
+);
+
 const CUSTOM_PROPERTY_NAME = /--[a-z0-9-]+/gi;
 const BAKED_COLOR = /#[0-9a-f]{3,8}\b|\b(?:rgba?|hsla?|oklch|oklab|lab|lch)\(/i;
 
@@ -1911,7 +1936,12 @@ function compileModeBlocks(
   // `applyTenantStatusSeedDerivations`'s docblock for why the merged `bt`
   // and `authoredPaths` alone cannot tell "the tenant wrote this seed" from
   // "the patch builder always emits this key".
-  tenantPatch?: Partial<BrandTheme>
+  tenantPatch?: Partial<BrandTheme>,
+  // COH-1 D1: the closed authorship channel. When present it is the SOLE
+  // source of `toneSeedIsTenantAuthored`; when absent (the static arm, this
+  // file's own synthetic fixtures) this falls back to reading `tenantPatch`
+  // directly, exactly as before this field existed.
+  tenantStatusSeedAuthorship?: TenantStatusSeedAuthorship
 ): CompiledBrandModeBlock[] {
   const modes = bt.modes;
   if (!modes) return [];
@@ -1969,10 +1999,14 @@ function compileModeBlocks(
             toneSeedIsTenantAuthored: Object.fromEntries(
               ON_TONE_ROLES.map((role) => [
                 role,
-                tenantPatch?.modes?.[mode]?.palette?.[`${role}Color`] !==
-                  undefined ||
-                  (overlay.palette?.[`${role}Color`] === undefined &&
-                    tenantPatch?.palette?.[`${role}Color`] !== undefined),
+                tenantStatusSeedAuthorship
+                  ? tenantStatusSeedAuthorship.modes[mode]?.[role] ||
+                    (overlay.palette?.[`${role}Color`] === undefined &&
+                      tenantStatusSeedAuthorship.base[role])
+                  : tenantPatch?.modes?.[mode]?.palette?.[`${role}Color`] !==
+                      undefined ||
+                    (overlay.palette?.[`${role}Color`] === undefined &&
+                      tenantPatch?.palette?.[`${role}Color`] !== undefined),
               ])
             ) as Record<OnToneRole, boolean>,
           }
@@ -2147,7 +2181,42 @@ type BrandCompilerProvenanceInput = BrandCompilerInput & {
    * `composition/tenant-theme:1900-1948`. ABSENT => IDENTITY.
    */
   tenantPatch?: Partial<BrandTheme>;
+  /**
+   * COH-1 D1 — status-seed AUTHORSHIP, a SIBLING of `tenantPatch`, never a
+   * widening of it. `tenantPatch` on the DB door is `tenantPostureFloors`'s
+   * projection of exactly six posture keypaths (typography/surfaces/motion);
+   * `palette` and `modes` are excluded from it BY DESIGN, so `tenantPatch`
+   * can never carry status-seed authorship on that door. This field is the
+   * explicit, closed, boolean-only channel that does: computed by the
+   * caller directly off the raw `ThemePatch` (`migrateV1`'s output), BEFORE
+   * any projection, reading the actual VALUE (`!== undefined`) rather than
+   * `authoredPaths` Set membership -- `migrate-v1`'s `paletteFields()`
+   * always constructs all four `{tone}Color` keys (tenant-set or not), so
+   * Set membership alone cannot tell authorship from construction.
+   *
+   * ABSENT => the base/mode-block sites fall back to reading
+   * `tenantPatch.palette` / `tenantPatch.modes` directly, exactly as before
+   * this field existed. That is what keeps the static resolution-probe arm
+   * and this file's own synthetic `compileBrandTheme` fixtures (guard-2/
+   * guard-3 in `coh-1-status-tint-tenant-derivation.test.ts`, which hand a
+   * full BrandTheme-shaped `tenantPatch` straight to this function)
+   * byte-for-byte unchanged.
+   */
+  tenantStatusSeedAuthorship?: TenantStatusSeedAuthorship;
 };
+
+/**
+ * COH-1 D1 — see `tenantStatusSeedAuthorship` above for why this exists as a
+ * sibling of `tenantPatch` rather than a widening of it.
+ */
+export interface TenantStatusSeedAuthorship {
+  /** Whether the BASE block's own patch carries this tone's seed. */
+  readonly base: Readonly<Record<OnToneRole, boolean>>;
+  /** Whether EACH mode overlay's own patch carries this tone's seed. */
+  readonly modes: Readonly<
+    Partial<Record<BrandThemeMode, Readonly<Record<OnToneRole, boolean>>>>
+  >;
+}
 
 /**
  * Deep-merges the tenant floor over the vertical baseline, mirroring
@@ -2216,6 +2285,7 @@ export const compileBrandTheme: CompileBrandTheme = (
     verticalTokenOverrides,
     tenantAuthoredPaths,
     tenantPatch,
+    tenantStatusSeedAuthorship,
   } = input;
 
   // Merge personality: vertical baseline -> brandTheme
@@ -2273,7 +2343,10 @@ export const compileBrandTheme: CompileBrandTheme = (
   // COH-1: the status-tint sibling. The base block has no overlay above it,
   // so seed authorship is just "did the raw tenant patch's own palette carry
   // this tone's seed" -- see the function's docblock for why that must read
-  // the raw patch value, not `authoredPaths` membership.
+  // the raw patch value, not `authoredPaths` membership. D1: prefer the
+  // closed `tenantStatusSeedAuthorship` channel; fall back to `tenantPatch`
+  // directly when it is absent (the static arm and this file's own
+  // synthetic fixtures never supply it).
   applyTenantStatusSeedDerivations(
     cssVariables,
     effectiveTheme.palette,
@@ -2285,7 +2358,9 @@ export const compileBrandTheme: CompileBrandTheme = (
           toneSeedIsTenantAuthored: Object.fromEntries(
             ON_TONE_ROLES.map((role) => [
               role,
-              tenantPatch?.palette?.[`${role}Color`] !== undefined,
+              tenantStatusSeedAuthorship
+                ? tenantStatusSeedAuthorship.base[role]
+                : tenantPatch?.palette?.[`${role}Color`] !== undefined,
             ])
           ) as Record<OnToneRole, boolean>,
         }
@@ -2331,7 +2406,8 @@ export const compileBrandTheme: CompileBrandTheme = (
     tenantAuthoredPaths,
     tenantPosture,
     tenantTypography,
-    tenantPatch
+    tenantPatch,
+    tenantStatusSeedAuthorship
   );
   for (const block of modeBlocks) {
     // A mode may restyle type; it may not drop the mandatory fallback while
@@ -2389,6 +2465,15 @@ export function compileTheme(
      * call site). Absent = not a tenant: bytes unchanged.
      */
     tenantPatch?: BrandCompilerProvenanceInput["tenantPatch"];
+    /**
+     * COH-1 D1: the closed status-seed authorship channel, SIBLING of
+     * `tenantPatch` -- see `TenantStatusSeedAuthorship`'s docblock. SOLE
+     * PROVIDER on the DB door: `compileTenantThemeConfig`, computed from the
+     * raw `ThemePatch` (`migrateV1`'s output) before `tenantPostureFloors`
+     * projects it away. Absent = not a tenant, or a caller that only needs
+     * the primary family: bytes unchanged.
+     */
+    tenantStatusSeedAuthorship?: BrandCompilerProvenanceInput["tenantStatusSeedAuthorship"];
   }
 ): CompiledBrand {
   const input: BrandCompilerProvenanceInput = {
@@ -2398,6 +2483,7 @@ export function compileTheme(
     verticalTokenOverrides: options?.verticalTokenOverrides,
     tenantAuthoredPaths: options?.tenantAuthoredPaths,
     tenantPatch: options?.tenantPatch,
+    tenantStatusSeedAuthorship: options?.tenantStatusSeedAuthorship,
   };
   return compileBrandTheme(input);
 }

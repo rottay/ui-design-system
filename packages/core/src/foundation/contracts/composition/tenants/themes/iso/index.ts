@@ -1091,17 +1091,26 @@ export function collectPatchAuthoredPaths(
  * The CLOSED vocabulary of Theme fields any provenance decision may consult.
  *
  * Provenance is deliberately not a general capability: it is read at exactly
- * two compiler sites (the primary-seed derivation and the sidebar tone/leaf
- * contest), and each of those consults a small, named table. This set is the
- * union of those two tables and is the single authority they are checked
- * against, so a third site cannot quietly start asking about a field nobody
- * agreed to make provenance-sensitive.
+ * THREE compiler sites (the primary-seed derivation, the sidebar tone/leaf
+ * contest, and the status-tint seed derivation), and each of those consults
+ * a small, named table. This set is the union of those three tables and is
+ * the single authority they are checked against, so a fourth site cannot
+ * quietly start asking about a field nobody agreed to make
+ * provenance-sensitive.
+ *
+ * COH-1 D3: the status-tint site (`applyTenantStatusSeedDerivations`,
+ * `brand-theme/index.ts`) was already reading fifteen fields via
+ * `isTenantAuthoredField` (its own `STATUS_SEED_SHADOWING_FIELDS` guard) when
+ * this set still only unioned the first two sites' tables -- a third site
+ * asking a question this vocabulary did not yet name. Closed here: this set
+ * now also carries the four status seeds and their fifteen shadowing leaves
+ * (Fable 5 audit, D3, `coh-1-fable-audit.md`).
  *
  * Membership is by BrandTheme-space path WITHOUT a mode prefix; a mode block
  * consults `modes.<mode>.<field>` as well through `isTenantAuthoredField`.
  *
  * Two properties are enforced executably rather than asserted in prose:
- * the two site tables must union to EXACTLY this set, and the paths a
+ * the three site tables must union to EXACTLY this set, and the paths a
  * profile fill materializes must not intersect it (the mP6 fence) -- because
  * a profile default that landed on a consulted field would be read as tenant
  * authorship and would silently promote a rank-0 producer to rank 4.
@@ -1129,6 +1138,30 @@ export const CONSULTED_PROVENANCE_FIELDS: ReadonlySet<string> = new Set([
   "chrome.sidebar.itemBgHover",
   "chrome.sidebar.itemBgActive",
   "chrome.sidebar.itemColorActive",
+  // -- status-tint seed derivation (COH-1, D3): four independent seeds, each
+  //    with its own shadowing leaves -- mirrors `STATUS_SEED_FIELDS` +
+  //    `STATUS_SEED_SHADOWING_FIELDS` in `brand-theme/index.ts`, duplicated
+  //    here as literals (not imported) because this module is `foundation`
+  //    and must not depend on `infrastructure/compilers`.
+  "palette.successColor",
+  "palette.warningColor",
+  "palette.errorColor",
+  "palette.infoColor",
+  "palette.successBgColor",
+  "palette.successBorderColor",
+  "palette.alphaSuccess10",
+  "palette.alphaSuccess20",
+  "palette.warningBgColor",
+  "palette.warningBorderColor",
+  "palette.alphaWarning10",
+  "palette.alphaWarning20",
+  "palette.errorBgColor",
+  "palette.errorBorderColor",
+  "palette.alphaError10",
+  "palette.alphaError20",
+  "palette.infoBgColor",
+  "palette.infoBorderColor",
+  "palette.alphaInfo10",
 ]);
 
 /**

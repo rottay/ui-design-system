@@ -176,6 +176,15 @@ necesaria en general: verificado con un clon sintético de bithire que re-hornea
 `palette.status.success` sí sobrescribe el literal horneado con la fórmula derivada
 (`coh-1-status-tint-tenant-derivation.test.ts`, bloque "guard 1 mechanism").
 
+**CORRECCIÓN (D1, ver sección H):** la frase anterior estaba verificada únicamente contra
+`compileBrandTheme` con un `tenantPatch`/`tenantAuthoredPaths` construidos a mano —
+**no** contra la puerta productiva real (`compileTenantThemeConfig`). La auditoría Fable 5
+(`coh-1-fable-audit.md`, D1) probó en vivo que por esa puerta `tenantPatch` era
+`tenantPostureFloors(envelope.patch)` — una proyección sin `palette`/`modes` — así que
+`toneSeedIsTenantAuthored` era `false` para todo tenant en todo bloque y la Parte 2 nunca
+se disparaba en producción. Remediado en la sección H; hoy sí está probado por la puerta
+real (rottay, que hornea literales en ambos bloques).
+
 ---
 
 ## D. Tests corridos y resultados
@@ -243,6 +252,26 @@ que success/warning son cero-delta byte (el seed dark de rottay coincide con el 
 foundation) y (c) que error/info difieren del default de foundation (corrección mínima
 intencional, no invento un color). **6/6 verde.**
 
+**Rojos preexistentes que quedan, enumerados (D4c — Fable 5 audit):** tras la corrección de
+D.4, `rottay-t1-mass-drain.test.ts` sigue con **11 rojos**, los 11 pre-existentes en HEAD
+(`e14213be8`) sin ningún cambio de COH-1, byte-idénticos en ambos árboles (confirmado con
+copia aislada de HEAD). El bloque "the common lowering emits every migrated channel" — no
+tocado por COH-1, familia distinta (chrome components, no status-tint) — falla en:
+
+1. `light --ds-tooltip-bg`
+2. `light --ds-textarea-border`
+3. `light --ds-textarea-color`
+4. `light --ds-textarea-count-color`
+5. `light --ds-popover-border`
+6. `light --ds-popover-title-border`
+7. `light --ds-list-text-color`
+8. `dark --ds-list-secondary-text-color`
+9. `light --ds-form-extra-color`
+10. `light --ds-form-help-color`
+11. `light --ds-divider-text-color`
+
+No se tocan en este lote (fuera de alcance: ninguno es un canal status-tint).
+
 ### D.5 Gates mecánicos
 
 - `pnpm -C packages/core build` — **OK**. Conteos de variables compiladas: rottay 1196,
@@ -269,15 +298,11 @@ byte-exacto antes de dropear), corriendo el mismo test, y restaurando mis cambio
    que `derivePrimarySemantics` derivaría — así que el delta nunca lo muestra (mismo
    principio que C.3, pero para la familia primaria). Confirmado rojo en HEAD sin tocar una
    línea.
-2. **`provenance-acceptance.test.ts` — "keeps the shipped first-party variable counts"
-   (evnto: 460 vs pin 468)** — pre-existente; una divergencia entre `compileBrandTheme`
-   directo (468) y `compileTheme(FIRST_PARTY_THEMES.evnto)` (460) que ya existía en HEAD, no
-   relacionada a status. No tocado (fuera del paquete acotado).
-3. **`tone-ink-authority.test.ts` — 2 filas (`bithire` warning-ink, `rottay` info-ink)** —
+2. **`tone-ink-authority.test.ts` — 2 filas (`bithire` warning-ink, `rottay` info-ink)** —
    pines de valor esperado que no coinciden con el bundle compilado, confirmado en HEAD
    **antes y después de un build limpio** (así que no es staleness de dist). No relacionado
    a status tints (ink de warning/info, no bg/border/alpha).
-4. **`f4c-canary-capture.mjs` no existe en este worktree.** El punto de rama de este
+3. **`f4c-canary-capture.mjs` no existe en este worktree.** El punto de rama de este
    worktree (`e14213be8`, "entry 25") es ANTERIOR al commit del repo principal que introdujo
    el harness F4C (`23426a0e1`, "F4C canary CERRADO", posterior en el log de main). Por
    tanto **`UNDECLARED_CHANNELS_WATCHED`/`DECLARED_PARTIAL_PROPAGATION`, que el encargo pide
@@ -285,7 +310,7 @@ byte-exacto antes de dropear), corriendo el mismo test, y restaurando mis cambio
    decisión mía: es que el artefacto que había que editar todavía no había llegado a esta
    rama cuando se cortó. Queda pendiente para cuando este trabajo se integre con (o se
    re-base sobre) el estado de main posterior a `23426a0e1`.
-5. **Evidence receipts F4B (`test-artifacts/quality-evidence/wo-cra-23/F4B/**/*.receipt.json`)
+4. **Evidence receipts F4B (`test-artifacts/quality-evidence/wo-cra-23/F4B/**/*.receipt.json`)
    ya estaban stale contra el árbol en HEAD**, antes de cualquier edición mía (confirmado
    restaurando el árbol completo y corriendo `manifest/generator/index.mjs --check`). Mis
    ediciones (capabilities/index.ts, bithire, evnto) mueven el digest de MÁS receipts
@@ -293,28 +318,138 @@ byte-exacto antes de dropear), corriendo el mismo test, y restaurando mis cambio
    condición "stale" en sí no la causo yo. No re-capturé evidencia F4B — es un proceso de
    captura por navegador, fuera del paquete acotado de COH-1 y de mi rol de implementador.
 
+**Corrección (D4b — Fable 5 audit):** una versión anterior de esta sección listaba un ítem
+adicional — `provenance-acceptance.test.ts` "keeps the shipped first-party variable counts"
+(evnto: 460 vs pin 468) — como pre-existente. La auditoría Fable 5 (`coh-1-fable-audit.md`,
+F.2) verificó que ese rojo **no existe** ni en HEAD puro ni en el worktree con el pin actual
+(475): ese test está y estuvo VERDE en ambos árboles. Era un rojo fantasma, probablemente de
+un estado intermedio del árbol durante la implementación, y queda retirado de esta lista
+(renumerada 1-4, antes 1-5).
+
 ## F. Desviaciones de la fórmula adjudicada
 
 **Ninguna en la fórmula misma.** Las únicas desviaciones son de ALCANCE, ambas por ausencia
 de un artefacto que el encargo asumía presente en este worktree:
 
 1. No se tocó `packages/showroom/scripts/f4c-canary-capture.mjs` (no existe en esta rama —
-   ver E.4).
-2. No se registró `applyTenantStatusSeedDerivations` en `CONSULTED_PROVENANCE_FIELDS`
-   (`foundation/contracts/composition/tenants/themes/iso/index.ts`). Es una decisión
-   deliberada, no un olvido: ese vocabulario cerrado está test-cerrado
-   (`provenance-acceptance.test.ts`, "the consulted-provenance authority is closed") como
-   *exactamente* la unión de las tablas de los DOS sitios existentes (primario, sidebar), y
-   el review de Opus — exhaustivo en su análisis de blast radius (sección D) — nunca lo
-   menciona como parte del write-set. Ensancharlo unilateralmente sería exceder el paquete
-   acotado. Documentado aquí como deuda nombrada: hoy no hay ningún campo real que pueda
-   rellenar `palette.{tone}Color` por accidente (verificado: ningún perfil expresivo toca
-   campos de paleta), así que no hay vulnerabilidad activa, solo una cobertura de fence más
-   angosta que la que tendría si un DT decide ensancharla en un lote propio.
+   ver E.3).
+2. ~~No se registró `applyTenantStatusSeedDerivations` en `CONSULTED_PROVENANCE_FIELDS`~~ —
+   **remediado, ver sección G (D3).** La auditoría Fable 5 (`coh-1-fable-audit.md`, G.2)
+   determinó que este NO era deuda aceptable: la ley escrita en `iso/index.ts` decía
+   textualmente "read at exactly two compiler sites ... a third site cannot quietly start
+   asking about a field nobody agreed to make provenance-sensitive", y
+   `applyTenantStatusSeedDerivations` ya era ese tercer sitio (consulta 15 campos vía
+   `isTenantAuthoredField`) sin figurar en el vocabulario cerrado — la ley había dejado de
+   ser cierta. Cerrado en el lote de remediación.
 
 ---
 
-## G. Commits
+## G. Remediación DEFECTS-4 (Fable 5 audit, `coh-1-fable-audit.md`)
+
+La auditoría independiente Fable 5 (2026-08-30, sobre `bcccaf9ca`) emitió veredicto
+**DEFECTS-4** y bloqueó ACCEPT en cuatro hallazgos. Remediados en este lote, encima de
+`30d24c0a8`:
+
+### G.1 D1 (P1) — la puerta DB real reparada
+
+**Diagnóstico confirmado:** `compileTenantThemeConfig` pasaba `tenantPatch:
+tenantPostureFloors(envelope.patch)` — una proyección que solo lleva
+`typography/surfaces/motion`, nunca `palette`/`modes` — así que
+`toneSeedIsTenantAuthored` era `false` para los cuatro tonos en todo bloque, y
+`applyTenantStatusSeedDerivations` retornaba sin tocar un byte por la puerta productiva. El
+mecanismo (sección A/B.1) estaba correcto; solo era inalcanzable por la vía real.
+
+**Forma de la corrección (decisión del owner, NO amplía `tenantPostureFloors`):**
+`tenantPatch` se mantiene como la proyección de posture floors, sin ensanchar su semántica.
+Se agregó un input HERMANO cerrado y explícito, `tenantStatusSeedAuthorship`
+(`TenantStatusSeedAuthorship`, exportado de `brand-theme/index.ts`), un record booleano
+`{ base: Record<OnToneRole, boolean>, modes: { light?, dark? } }`, derivado en
+`tenant-theme/index.ts` (`deriveTenantStatusSeedAuthorship`) directamente del
+`envelope.patch` CRUDO — después de `migrateV1`, antes de `tenantPostureFloors` — leyendo
+`palette.{success,warning,error,info}Color` (base) y
+`modes.{light,dark}.palette.{...}Color` (overlays), contando autoría solo cuando el valor es
+`!== undefined` (nunca por pertenencia al Set `authoredPaths`, que `paletteFields()` puebla
+siempre con las cuatro claves). En `compileBrandTheme`/`compileModeBlocks`, el cálculo de
+`toneSeedIsTenantAuthored` PREFIERE este canal cuando está presente y cae de vuelta a leer
+`tenantPatch` directamente cuando está ausente — lo que mantiene el brazo estático del
+resolution-probe y los fixtures sintéticos de guard-2/guard-3 (que construyen un
+`tenantPatch` de forma completa a mano) byte-a-byte sin cambios. No se tocó
+`applyTenantSeedDerivations` (familia primaria) ni sus dos call sites.
+
+### G.2 D2 (P1) — test afirmativo por la puerta DB productiva completa
+
+Nuevo bloque en `coh-1-status-tint-tenant-derivation.test.ts` (18 tests, todos vía
+`compileTenantThemeConfig`, nunca `compileBrandTheme` a mano): baseline **rottay**, que
+hornea literales `successBgColor`/`successBorderColor`/`alphaSuccess20` en su bloque base
+(dark) y las cinco (incluida `alphaSuccess10`) en su overlay `light`. Un documento que
+cambia solo `palette.status.success`:
+
+- **Bloque BASE** (`backgroundMode: "dark"`, el default de rottay): `-bg` pasa de
+  `rgba(34,197,94,0.10)` (baked) a `var(--ds-color-success-50)` (derivado); `-border` y
+  `alpha-success-20` re-derivan igual; warning/error/info no se mueven.
+- **Bloque MODE** (`backgroundMode: "light"`, el overlay de rottay): la semilla entra SOLO
+  en `modes.light.palette.successColor` (el base no la ve); `-bg`, `-border`,
+  `alpha-success-10` y `alpha-success-20` re-derivan los cinco desde los literales propios
+  del overlay; base y demás tonos no se mueven.
+- Un documento silente en `palette.status` no mueve ningún canal status, ni en el delta base
+  ni en ningún `modeDeltas`.
+
+Verificado que estos 8 asertos afirmativos van en ROJO contra el código pre-D1 (probado con
+una copia aislada del árbol) y en VERDE con la corrección — no es una prueba vacía.
+
+### G.3 D3 (P2) — el tercer sitio de provenance, cerrado
+
+`iso/index.ts` `CONSULTED_PROVENANCE_FIELDS` pasa de "exactamente dos sitios" a **tres**
+(docblock actualizado). Se agregaron los 4 seeds de estado
+(`palette.{success,warning,error,info}Color`) y los 15 campos de
+`STATUS_SEED_SHADOWING_FIELDS`, como literales duplicados (esta capa es `foundation` y no
+puede depender de `infrastructure/compilers`). Nuevo export `STATUS_SEED_FIELDS` en
+`brand-theme/index.ts` (derivado de `ON_TONE_ROLES`, nunca hand-listed). El cierre
+ejecutable en `provenance-acceptance.test.ts` ahora une TRES tablas (primaria + sidebar +
+status) y afirma la igualdad exacta con `CONSULTED_PROVENANCE_FIELDS`; se agregó un test
+mutante que quita una entrada de la unión y prueba que la comparación deja de cumplirse (la
+valla muerde). La valla mP6 se extendió: el documento "contaminado" ahora también autora
+`palette.status.success` y el test espera los 4 campos de estado que
+`collectPatchAuthoredPaths` sobre-aproxima (la misma trampa de presencia-de-clave que D1
+evita leyendo el valor crudo).
+
+### G.4 D4 (P3) — honestidad de la prosa
+
+- **D4a:** corregido el docblock del piso (`brand-theme/index.ts`, cerca de
+  `deriveStatusTintFloor`): el piso SÍ dispara sobre la paleta fusionada del overlay dark de
+  evnto (`applyModeOverlay` fusiona `palette`, así que el seed base siempre está presente);
+  el delta desaparece porque el valor efectivo es idéntico al de light (deduplicación de
+  `compileModeBlocks`), no porque el overlay "nunca declare `successColor`".
+- **D4b:** eliminado del reporte (sección E) el rojo fantasma "evnto 460 vs pin 468" — Fable
+  5 demostró que no existe ni en HEAD ni en el worktree.
+- **D4c:** enumerados en la sección D.4 los 11 rojos preexistentes de
+  `rottay-t1-mass-drain.test.ts`, no tocados.
+
+### G.5 Codex T3 — evnto -border cero-delta
+
+Nuevo bloque en `coh-1-status-tint-floor.test.ts`: los cuatro `--ds-color-{tone}-border` de
+evnto light, tras el retiro de los literales autorados, se afirman byte-idénticos a los
+literales que HEAD (`e14213be8`) tenía horneados (`git show
+e14213be8:...evnto/index.ts:1901,1906,1911,1916`), pinneados como referencia explícita.
+
+### G.6 Verificación
+
+`pnpm build` OK (contrato de proveedor regenerado: +1 export público `STATUS_SEED_FIELDS`);
+`tsc --noEmit` OK; `structure:check` 0 findings; `slot-inventory --check` OK (3613 filas,
+ledger 6/6); `manifest/generator --check` 117 receipts F4B stale (idéntico a HEAD, conteo
+verificado sin cambio); `lint:artifacts` OK; `contract:check` OK; `hooks-manifest --check`
+OK. Suite completa re-corrida: `coh-1-status-tint-floor` 37/37, `coh-1-status-tint-tenant-derivation`
+18/18, `provenance-acceptance` 24/25 (1 rojo, DEFERRED-7, pre-existente confirmado),
+`brand-authored-residue-retirement` verde, `modern-tenant-value-free` verde,
+`mass-c3-bithire-drain` verde, `rottay-t1-mass-drain` 539/550 (11 rojos pre-existentes,
+enumerados en D.4, idénticos byte-a-byte contra copia aislada de HEAD), `tone-ink-authority`
+2 rojos pre-existentes (idem). Badge (10 archivos) + `Heatmaps.correctness.test.tsx`:
+126/126 verde. Ningún rojo nuevo, ninguno reparado fuera del paquete de este lote.
+
+---
+
+## H. Commits
 
 Ver `git log` de esta rama para los commits de este lote (mensaje convencional, sin
-co-autor, sin push).
+co-autor, sin push). El lote de remediación DEFECTS-4 (esta sección G) viaja en commit(s)
+separados encima de `30d24c0a8`.

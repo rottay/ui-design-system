@@ -43,6 +43,7 @@ import {
   STATUS_SEED_SHADOWING_FIELDS,
 } from "../../../infrastructure/compilers/kernel/runtime/brand-theme";
 import { bithireBrandTheme } from "../ts/presentation/brand-themes/bithire";
+import { evntoBrandTheme } from "../ts/presentation/brand-themes/evnto";
 
 const TONES = ["success", "warning", "error", "info"] as const;
 type Tone = (typeof TONES)[number];
@@ -318,4 +319,38 @@ describe("COH-1 — ink/well contrast holds after the hue correction (T5)", () =
     const contrast = contrastRatio(ink, well50);
     expect(contrast).toBeGreaterThanOrEqual(4.5);
   });
+});
+
+// ── evnto -border cero-delta: byte-identical to pre-COH-1 HEAD (T3, Codex) ──
+
+/**
+ * evnto's light palette RETIRED all four `*BorderColor` literals in this lot
+ * (see `evnto/index.ts`, the comment above `linkHoverColor`), but each one
+ * authored EXACTLY the string `deriveStatusTintFloor` derives from the seed
+ * — a cero-delta byte retirement, not a correction (unlike the four
+ * `*BgColor` literals, which genuinely moved). The four values below are
+ * `evnto/index.ts` `successBorderColor`/`warningBorderColor`/
+ * `errorBorderColor`/`infoBorderColor` as they read at HEAD
+ * (`git show e14213be8:packages/core/src/foundation/tokens/ts/presentation/brand-themes/evnto/index.ts:1901,1906,1911,1916`),
+ * pinned literally so a future edit to either the retired baseline or the
+ * floor formula that quietly changed evnto's compiled `-border` bytes fails
+ * this test first.
+ */
+describe("COH-1 — evnto -border channels compile byte-identical to pre-COH-1 HEAD (T3)", () => {
+  const HEAD_EVNTO_BORDER: Readonly<Record<Tone, string>> = {
+    success: "color-mix(in srgb, var(--ds-color-success) 20%, transparent)",
+    warning: "color-mix(in srgb, var(--ds-color-warning) 20%, transparent)",
+    error: "color-mix(in srgb, var(--ds-color-error) 20%, transparent)",
+    info: "color-mix(in srgb, var(--ds-color-info) 20%, transparent)",
+  };
+
+  it.each(TONES)(
+    "evnto light -%s-border matches the retired HEAD literal byte-for-byte",
+    (tone) => {
+      const { cssVariables } = compile(evntoBrandTheme, "evnto");
+      expect(cssVariables[`--ds-color-${tone}-border`]).toBe(
+        HEAD_EVNTO_BORDER[tone]
+      );
+    }
+  );
 });
