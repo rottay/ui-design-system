@@ -28,7 +28,6 @@ import {
   buildThemePrepaintScript,
   compileTenantThemeConfig,
   emitTenantThemeArtifactForSsr,
-  getKnownTenantConfig,
   getTenantThemeVerticalEnvelope,
   hydrateTenantThemeConfig,
   resolveDocumentRootAttributes,
@@ -36,6 +35,7 @@ import {
 } from '@rottay/design-system/server';
 import tenantThemeCanaryFixtures from '@rottay/design-system/tenant-theme-canary-fixtures';
 
+import { ClientOnly } from './client-only';
 import { buildLabRootStampScript, judgeModeStyle, type JudgeMode } from './stamp';
 
 /** The two grounds the lab renders. Closed on purpose — this is not a selector. */
@@ -69,16 +69,16 @@ export type LabLocale = 'en' | 'es' | 'ar';
  * would create a competing visual layer, which the tenancy law forbids.
  */
 function bithireGround(judge: JudgeMode, locale: LabLocale) {
-  // The REGISTRY's own object, not a literal that copies its fields. Code-owned
-  // identity is proven by object identity, so a hand-authored twin carrying
-  // `brandTheme` is an ordinary tenant with uncompiled visual payload and the
-  // provider refuses it. Without an explicit tenantConfig at all the provider
-  // resolves the DEFAULT tenant ("rottay"), which is how the first attempt
-  // produced near-black BitHire buttons: the ground said bithire and the
-  // provider said rottay.
-  const tenantConfig = getKnownTenantConfig('bithire');
-  if (!tenantConfig) throw new Error('The bundled bithire tenant is missing from the registry');
-
+  // The provider receives the SLUG, never the registry object. The object
+  // cannot survive the path to the provider: it would cross the server→client
+  // flight boundary as a serialized copy, and even during SSR the two
+  // entrypoint bundles ('.' vs '/server') hold distinct module instances, so
+  // the identity check `CODE_OWNED_TENANT_CONFIGS.has(config)` — the mechanism
+  // that certifies code-owned identity — reports false for the genuine
+  // registry object and the reserved-identity guard throws. Resolving by slug
+  // routes through the provider's own first-party bypass
+  // (getFirstPartyIdentity → bundled registry) inside ONE module instance per
+  // runtime, which keeps the guard intact AND renders the code-owned config.
   return {
     rootAttributes: resolveDocumentRootAttributes({
       themeMode: 'light',
@@ -88,7 +88,11 @@ function bithireGround(judge: JudgeMode, locale: LabLocale) {
     }),
     emission: null as TenantThemeArtifactSsrEmission | null,
     declaration: undefined as VisualAuthorityDeclaration | undefined,
-    tenantConfig,
+    tenantConfig: undefined as TenantConfig | undefined,
+    tenantSlug: 'bithire' as const,
+    /* The slug path resolves asynchronously, so server and first client render
+       agree on the (empty) LoadingScreen. No gate needed. */
+    deferProviderToClient: false,
     judgeCss: judgeModeStyle(judge),
     locale,
   };
@@ -150,6 +154,17 @@ function themanagementGround(judge: JudgeMode, locale: LabLocale) {
       branding: { companyName: 'The Management' },
       appearance: artifact.normalizedAppearance,
     } as TenantConfig,
+    tenantSlug: undefined as string | undefined,
+    /* The DB ground declares `compiled-artifact` authority. On the server the
+       provider's receipt audit fails closed across the RSC/SSR module-instance
+       boundary (the receipt was minted in the RSC instance, the audit reads the
+       SSR instance's registry), so the server paints the empty LoadingScreen;
+       in the browser the mounted-DOM proof passes and the provider renders the
+       scene on its FIRST render. That asymmetry is a hydration mismatch, and
+       the regeneration it triggers transiently duplicates the artifact element
+       and gets it revoked. Deferring the provider past hydration makes server
+       and client agree; see ground/client-only.tsx. */
+    deferProviderToClient: true,
     judgeCss: judgeModeStyle(judge),
     locale,
   };
@@ -214,15 +229,26 @@ export function LabGround({ tenant, judge = 'none', locale = 'en', children }: L
       {ground.judgeCss ? (
         <style data-testid="lab-judge-mode" data-judge={judge} dangerouslySetInnerHTML={{ __html: ground.judgeCss }} />
       ) : null}
-      <DesignSystemProvider
-        forceEngine="modern"
-        forceTheme="light"
-        locale={ground.locale}
-        tenantConfig={ground.tenantConfig}
-        {...(ground.declaration ? { visualAuthority: ground.declaration } : {})}
-      >
-        {children}
-      </DesignSystemProvider>
+      {/*
+        * The provider subtree may be gated behind ClientOnly (DB ground): the
+        * stamp script and the artifact style above stay server-rendered either
+        * way, so the prepaint contract is unaffected.
+        */}
+      {(() => {
+        const provider = (
+          <DesignSystemProvider
+            forceEngine="modern"
+            forceTheme="light"
+            locale={ground.locale}
+            tenantSlug={ground.tenantSlug}
+            tenantConfig={ground.tenantConfig}
+            {...(ground.declaration ? { visualAuthority: ground.declaration } : {})}
+          >
+            {children}
+          </DesignSystemProvider>
+        );
+        return ground.deferProviderToClient ? <ClientOnly>{provider}</ClientOnly> : provider;
+      })()}
     </>
   );
 }
