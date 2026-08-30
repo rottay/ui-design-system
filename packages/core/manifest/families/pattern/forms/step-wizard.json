@@ -6953,6 +6953,7 @@
         "reviewedFrom": "anatomy",
         "bindings": [
           {
+            "root": "palette.status-seeds",
             "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/step-wizard.css",
             "channels": [
               "--ds-color-error"
@@ -6962,6 +6963,7 @@
             ]
           },
           {
+            "root": "palette.status-seeds",
             "producer": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/step-wizard.css",
             "channels": [
               "--ds-color-error-300",

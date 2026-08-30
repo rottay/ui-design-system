@@ -899,9 +899,177 @@ test("cross-contract control baselines stay consistent", () => {
     mutated((copy) => {
       copy.program.controlBaselines.expertExactAllowlist = 295;
     }),
-    "Expert exact allowlist must be 294",
-    "Expert allowlist growth without model must be rejected"
+    "program.json Expert exact allowlist must equal the live TENANT_THEME_OVERRIDE_TOKENS reach",
+    "Expert allowlist drift from the live source must be rejected"
   );
+  expectError(
+    mutated((copy) => {
+      copy.customization.expert.exactAllowlistBaseline = 291;
+    }),
+    "customization-model.json Expert exactAllowlistBaseline must equal the live TENANT_THEME_OVERRIDE_TOKENS reach",
+    "Expert allowlist drift in the model must be rejected"
+  );
+  // Anti-collusion: both contracts moved together to the same wrong count.
+  // JSON<->JSON agreement proves nothing; the live source still says otherwise.
+  expectError(
+    mutated((copy) => {
+      copy.program.controlBaselines.expertExactAllowlist = 291;
+      copy.customization.expert.exactAllowlistBaseline = 291;
+    }),
+    "must equal the live TENANT_THEME_OVERRIDE_TOKENS reach",
+    "colluded Expert counts in both contracts must be rejected"
+  );
+  expectError(
+    mutated((copy) => {
+      copy.program.controlBaselines.expertExactAllowlistDigest = "0".repeat(64);
+    }),
+    "program.json Expert allowlist digest must equal the live TENANT_THEME_OVERRIDE_TOKENS membership digest",
+    "Expert digest drift in program.json must be rejected"
+  );
+  expectError(
+    mutated((copy) => {
+      copy.customization.expert.exactAllowlistDigest = "0".repeat(64);
+    }),
+    "customization-model.json Expert allowlist digest must equal the live TENANT_THEME_OVERRIDE_TOKENS membership digest",
+    "Expert digest drift in the model must be rejected"
+  );
+});
+
+test("Expert source drift fails closed against the sandbox tenant-theme contract", () => {
+  // The sandboxed checker reads TENANT_THEME_OVERRIDE_TOKENS from the sandbox
+  // copy of the tenant-theme contract, so these mutants exercise the real
+  // source->gate path without touching the live file.
+  const sourcePath = join(
+    repoRoot,
+    "packages/core/src/foundation/contracts/composition/tenants/themes/tenant-theme/index.ts"
+  );
+  const original = readFileSync(sourcePath, "utf8");
+  const anchor = '"--ds-color-primary",';
+  assert.ok(original.includes(anchor), "the Expert allowlist anchor must exist in the sandbox copy");
+  const expectSourceFailure = (label) => {
+    const contracts = readModernRescueContracts();
+    const errors = validateModernRescueContracts(contracts, { includeManifestGate: false });
+    assert.ok(
+      errors.some((error) => error.includes("TENANT_THEME_OVERRIDE_TOKENS")),
+      `${label}: expected an Expert failure naming TENANT_THEME_OVERRIDE_TOKENS; got ${JSON.stringify(errors)}`
+    );
+  };
+  try {
+    // +1 source: the allowlist grows, the contracts still say the old count.
+    writeFileSync(sourcePath, original.replace(anchor, `${anchor}\n  "--ds-zzz-expert-mutant",`));
+    expectSourceFailure("growth mutant");
+    // Retired dark token reintroduced: same failure, by decision 25.
+    writeFileSync(sourcePath, original.replace(anchor, `${anchor}\n  "--ds-color-dark-primary",`));
+    expectSourceFailure("retired-token reintroduction");
+    // Count-preserving swap: the count check stays silent, the digest must fire.
+    const swapped = original.replace(anchor, '"--ds-zzz-expert-mutant",');
+    writeFileSync(sourcePath, swapped);
+    const contracts = readModernRescueContracts();
+    assert.equal(contracts.expertAllowlist.reach, baseline.expertAllowlist.reach, "the swap preserves the count");
+    const errors = validateModernRescueContracts(contracts, { includeManifestGate: false });
+    assert.ok(
+      errors.some((error) => error.includes("membership digest")),
+      `count-preserving swap: expected a digest failure; got ${JSON.stringify(errors)}`
+    );
+    assert.ok(
+      !errors.some((error) => error.includes("reach: the source declares")),
+      `count-preserving swap: the count check must stay silent; got ${JSON.stringify(errors)}`
+    );
+  } finally {
+    writeFileSync(sourcePath, original);
+  }
+});
+
+test("amendment 2026-08-28 fences fail closed", () => {
+  expectError(
+    mutated((copy) => { copy.program.verticalScope.bithire.role = "active-vertical"; }),
+    "verticalScope.bithire must be consumer-readiness-only",
+    "reopening BitHire as a work vertical must be rejected"
+  );
+  expectError(
+    mutated((copy) => { copy.program.verticalScope.appEvnto.disposition = "ACTIVE"; }),
+    "verticalScope must keep appPlatform and appEvnto DEFERRED",
+    "un-deferring an app must be rejected"
+  );
+  expectError(
+    mutated((copy) => { copy.program.f4cCanary.visibilityHours = 24; }),
+    "f4cCanary must pin visibilityHours 48",
+    "shrinking the canary window must be rejected"
+  );
+  expectError(
+    mutated((copy) => { copy.program.f4cCanary.stopCondition = ""; }),
+    "a non-empty stopCondition",
+    "erasing the canary stop condition must be rejected"
+  );
+  expectError(
+    mutated((copy) => { delete copy.customization.targetControlModel.activationBlocks; }),
+    "activationBlocks must keep control.size blocked",
+    "unblocking control.size without a verdict must be rejected"
+  );
+  expectError(
+    mutated((copy) => {
+      copy.rounds.rounds.find((r) => r.id === "R7").scope.standardControlsBaseline = 13;
+    }),
+    "rounds.json R7 scope standardControlsBaseline must equal",
+    "a typed R7 standard baseline drifting from the registry must be rejected"
+  );
+  expectError(
+    mutated((copy) => {
+      copy.rounds.rounds.find((r) => r.id === "R7").scope.expertExactAllowlistBaseline = 294;
+    }),
+    "rounds.json R7 scope expertExactAllowlistBaseline must equal the live TENANT_THEME_OVERRIDE_TOKENS reach",
+    "re-pinning 294 in the R7 scope must be rejected"
+  );
+  expectError(
+    mutated((copy) => {
+      copy.orchestration.doubleAccept.notAuthorizationFor =
+        copy.orchestration.doubleAccept.notAuthorizationFor.filter((action) => action !== "push");
+    }),
+    "must keep push outside every authorization",
+    "lifting the push prohibition must be rejected"
+  );
+});
+
+test("the standing-authorization fence fails closed in README and AGENTS.md", () => {
+  const readmePath = join(programRoot, "README.md");
+  const agentsPath = join(repoRoot, "AGENTS.md");
+  const originals = new Map([
+    [readmePath, readFileSync(readmePath, "utf8")],
+    [agentsPath, readFileSync(agentsPath, "utf8")],
+  ]);
+  const expectFenceFailure = (label) => {
+    const errors = validateModernRescueContracts(baseline, { includeManifestGate: false });
+    assert.ok(
+      errors.some((error) => error.includes("standing-authorization") || error.includes("push prohibition")),
+      `${label}: expected a standing-authorization fence failure; got ${JSON.stringify(errors)}`
+    );
+  };
+  const MARKERS = [
+    "standing authorization",
+    "write-set is explicit",
+    "Fable's audit is ACCEPT or fully remediated",
+    "applicable gates are green",
+    "git diff --check",
+    "no foreign files",
+    "Never push",
+  ];
+  try {
+    // Every condition, in each authority: erasing any one phrase must go red.
+    // Phrases wrap in prose, so the erase pattern folds whitespace the same
+    // way the guard does.
+    for (const [path, original] of originals) {
+      const folded = original.replace(/\s+/g, " ");
+      for (const marker of MARKERS) {
+        assert.ok(folded.includes(marker), `marker missing in ${path}: ${marker}`);
+        const pattern = new RegExp(marker.replace(/[.*+?^${}()|[\]\\]/g, "\\$&").replace(/ /g, "\\s+"));
+        writeFileSync(path, original.replace(pattern, "erased-by-drill"));
+        expectFenceFailure(`${path} without "${marker}"`);
+        writeFileSync(path, original);
+      }
+    }
+  } finally {
+    for (const [path, original] of originals) writeFileSync(path, original);
+  }
 });
 
 test("historical reference lab checks fail closed", () => {

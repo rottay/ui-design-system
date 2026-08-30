@@ -3004,7 +3004,7 @@
         "status": "MUST_REACH",
         "bindings": [
           {
-            "root": null,
+            "root": "palette.status-seeds",
             "socketPattern": null,
             "prop": "linea acumulativa via prop cumulativeColor, default var(--ds-color-info)",
             "tier": "standard",
@@ -3018,7 +3018,7 @@
             ]
           },
           {
-            "root": null,
+            "root": "palette.status-seeds",
             "socketPattern": null,
             "prop": "chart-scaffold error state (frame border-color + error state-label color) via var(--ds-color-error)",
             "tier": "standard",

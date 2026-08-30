@@ -215,6 +215,9 @@
   "targetControlModel": {
     "implementationState": "PROPOSED_NOT_IMPLEMENTED",
     "law": "These names are a target taxonomy only. They never count as operational coverage and may not coexist with an equivalent operational control. Each adoption is an atomic migration with predecessor retirement.",
+    "activationBlocks": {
+      "control.size": "Blocked until a written orthogonality verdict against density.mode resolves which axis owns component size; no activation, calibration or coverage claim before that verdict is recorded."
+    },
     "standard": [
       "brand.color-seeds",
       "shape.geometry",
@@ -294,9 +297,10 @@
     }
   },
   "expert": {
-    "exactAllowlistBaseline": 294,
+    "exactAllowlistBaseline": 290,
+    "exactAllowlistDigest": "4964f8eb4cd6bcca0c44ce19270b078e441dbbfde49eb5b78d9f01be2978f296",
     "maximumOverridesPerDocument": 200,
-    "presentation": "Searchable domain browser with preview, not 294 sliders.",
+    "presentation": "Searchable domain browser with preview, not 290 sliders.",
     "newEntryRequirements": [
       "productive-reader",
       "stable-owner-and-dom-part",
@@ -476,7 +480,8 @@
       "type-scale-moves-type-with-resilient-reflow",
       "radius-does-not-move-density",
       "effect-intensity-does-not-change-semantic-status-or-contrast",
-      "cross-product-density-rhythm-type-scale-remains-valid"
+      "cross-product-density-rhythm-type-scale-remains-valid",
+      "control-size-activation-requires-density-mode-orthogonality-verdict"
     ],
     "duplicateControlRule": "If consumer/property-group Jaccard similarity exceeds 0.80, derive or merge unless an owner records an independent semantic invariant."
   },

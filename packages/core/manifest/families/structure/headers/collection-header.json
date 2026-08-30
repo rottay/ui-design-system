@@ -11651,14 +11651,13 @@
             "carrier": "shared-channel"
           }
         ],
-        "uncoveredByDesign": {
+        "coverageNote": {
           "Brazo compartido status (barrido F2, sourceBindings propios de esta familia)": [
             "--ds-color-success"
           ]
         },
         "evidence": "collection-header.css:236-239 -- [data-part='meta-item'][data-tone='success'] border/background (color-mix) y color via var(--ds-color-success)",
-        "reviewedFrom": "anatomy",
-        "migratedToInternalChannels": true
+        "reviewedFrom": "anatomy"
       }
     },
     {

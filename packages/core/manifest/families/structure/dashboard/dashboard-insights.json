@@ -21582,7 +21582,7 @@
             "carrier": "shared-channel"
           }
         ],
-        "uncoveredByDesign": {
+        "coverageNote": {
           "Brazo compartido status (barrido F2, sourceBindings propios de esta familia)": [
             "--ds-color-success",
             "--ds-color-success-100",
@@ -21595,8 +21595,7 @@
           ]
         },
         "evidence": "metrics-cards.css:110-301, metrics-rows.css:104-200, metrics-chart.css:82-204, metrics-minimal.css:113-242 ([data-part='signal-card-badge']/[data-part='metric-card-trend'] tone via var(--ds-color-success|-warning|-error)); activity-cards.css:155-201, activity-compact.css:166-212, activity-ticker.css:214-343, activity-timeline.css:183-249 ([data-part='item-icon-box'|'item-dot'|'item-chevron'][data-type='success'|'info'|'warning'|'error']); dashboard-metrics-interactions.css:74-335 and dashboard-activity-interactions.css:91-149 (glow box-shadow fallback to var(--ds-color-success))",
-        "reviewedFrom": "anatomy",
-        "migratedToInternalChannels": true
+        "reviewedFrom": "anatomy"
       }
     },
     {

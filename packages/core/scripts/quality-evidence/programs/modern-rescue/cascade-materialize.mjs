@@ -246,7 +246,7 @@ function materialize(controlId) {
       "surfaces.elevation-posture":
         "enum con tabla ELEVATION_PRESET (appearance-posture:80-97); la cita el root autorado (pendiente)",
       "token-overrides":
-        "escape hatch adjudicado: escritura verbatim sobre allowlist cerrado (67 nombres); sin derivacion propia",
+        "escape hatch adjudicado: escritura verbatim sobre allowlist cerrado (290 nombres resueltos: 67 literales + spreads surface/typography); sin derivacion propia",
       "typography.families":
         "enum de familias tipograficas; efecto por tabla autorada (root pendiente)",
       "typography.pairing":

@@ -2924,7 +2924,7 @@
         "status": "MUST_REACH",
         "bindings": [
           {
-            "root": null,
+            "root": "palette.status-seeds",
             "socketPattern": null,
             "prop": "bandas de segmento del gauge via DEFAULT_SEGMENT_COLORS, default var(--ds-color-error)/var(--ds-color-warning)/var(--ds-color-success)",
             "tier": "standard",
@@ -2940,7 +2940,7 @@
             ]
           },
           {
-            "root": null,
+            "root": "palette.status-seeds",
             "socketPattern": null,
             "prop": "chart-scaffold error state (frame border-color + error state-label color) via var(--ds-color-error)",
             "tier": "standard",

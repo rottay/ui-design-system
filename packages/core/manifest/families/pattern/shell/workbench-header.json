@@ -3874,7 +3874,7 @@
             "carrier": "shared-channel"
           }
         ],
-        "uncoveredByDesign": {
+        "coverageNote": {
           "Canales --ds-color-* medidos en la anatomia (palette.status-seeds)": [
             "--ds-color-error",
             "--ds-color-error-600",
@@ -3883,8 +3883,7 @@
             "--ds-color-error-300"
           ]
         },
-        "reviewedFrom": "anatomy",
-        "migratedToInternalChannels": true
+        "reviewedFrom": "anatomy"
       }
     },
     {

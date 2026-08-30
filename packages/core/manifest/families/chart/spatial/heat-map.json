@@ -2994,7 +2994,7 @@
         "status": "MUST_REACH",
         "bindings": [
           {
-            "root": null,
+            "root": "palette.status-seeds",
             "socketPattern": null,
             "prop": "extremo bajo de la rampa via DEFAULT_HEATMAP_COLOR_RANGE[0], default var(--ds-color-info-bg)",
             "tier": "standard",
@@ -3008,7 +3008,7 @@
             ]
           },
           {
-            "root": null,
+            "root": "palette.status-seeds",
             "socketPattern": null,
             "prop": "chart-scaffold error state (frame border-color + error state-label color) via var(--ds-color-error)",
             "tier": "standard",

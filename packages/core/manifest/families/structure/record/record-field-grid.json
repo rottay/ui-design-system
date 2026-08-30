@@ -1591,14 +1591,13 @@
             "carrier": "shared-channel"
           }
         ],
-        "uncoveredByDesign": {
+        "coverageNote": {
           "Brazo compartido status (barrido F2, part propio 'field-grid')": [
             "--ds-color-error"
           ]
         },
         "evidence": "record.css:314-317 -- [data-part='field-grid'] > [data-part='field'][data-error='true'] background (color-mix) y box-shadow (color-mix), ambos via var(--ds-color-error); el selector cuelga del contenedor 'field-grid' propio de esta familia",
-        "reviewedFrom": "anatomy",
-        "migratedToInternalChannels": true
+        "reviewedFrom": "anatomy"
       }
     },
     {

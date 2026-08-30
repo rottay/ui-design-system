@@ -631,6 +631,7 @@
         "status": "MUST_REACH",
         "bindings": [
           {
+            "root": "palette.status-seeds",
             "carrier": "shared-channel",
             "ownedBy": "palette.status-seeds",
             "channels": [

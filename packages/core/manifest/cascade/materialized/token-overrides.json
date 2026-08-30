@@ -9,5 +9,5 @@
     "rulesFrom": "manifest/cascade/extracted/css-edges.json (cascade-extract.mjs)",
     "authoredRoot": "manifest/cascade/roots/token-overrides.json"
   },
-  "notMaterializable": "escape hatch adjudicado: escritura verbatim sobre allowlist cerrado (67 nombres); sin derivacion propia"
+  "notMaterializable": "escape hatch adjudicado: escritura verbatim sobre allowlist cerrado (290 nombres resueltos: 67 literales + spreads surface/typography); sin derivacion propia"
 }

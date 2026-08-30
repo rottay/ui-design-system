@@ -7623,14 +7623,13 @@
             "carrier": "shared-channel"
           }
         ],
-        "uncoveredByDesign": {
+        "coverageNote": {
           "Brazo compartido status (barrido F2, sourceBindings propios de esta familia)": [
             "--ds-color-warning"
           ]
         },
         "evidence": "edit-header.css:283-295 -- [data-part='dirty-chip'] background/border (color-mix), [data-part='dirty-dot'] background, [data-part='dirty-label'] color, todos via var(--ds-color-warning)",
-        "reviewedFrom": "anatomy",
-        "migratedToInternalChannels": true
+        "reviewedFrom": "anatomy"
       }
     },
     {

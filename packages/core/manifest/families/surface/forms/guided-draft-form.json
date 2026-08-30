@@ -2521,6 +2521,7 @@
         "status": "MUST_REACH",
         "bindings": [
           {
+            "root": "palette.status-seeds",
             "carrier": "shared-channel",
             "ownedBy": "palette.status-seeds",
             "channels": [
@@ -2533,7 +2534,7 @@
             "prop": "consumo directo skin (nivel 1): guided-draft-form.css error:102,207-208,241,305,332,348 warning:90,336,352 success:98 info:269,281"
           }
         ],
-        "uncoveredByDesign": {
+        "coverageNote": {
           "CONSUMO, no propio: --ds-color-info-bg en guided-draft-form.css:280 lo emite otro mapeo (brand-theme/index.ts:509-516), no este control": [
             "--ds-color-info-bg"
           ]

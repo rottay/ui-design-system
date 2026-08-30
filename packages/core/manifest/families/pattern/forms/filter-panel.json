@@ -5620,6 +5620,7 @@
         "reviewedFrom": "anatomy",
         "bindings": [
           {
+            "root": "palette.status-seeds",
             "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-panel.css",
             "channels": [
               "--ds-color-success",

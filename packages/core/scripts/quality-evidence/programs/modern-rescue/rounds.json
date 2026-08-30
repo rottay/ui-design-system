@@ -441,9 +441,9 @@
       ],
       "scope": {
         "families": 255,
-        "standardControlsBaseline": 13,
+        "standardControlsBaseline": 14,
         "proCapabilitiesBaseline": 7,
-        "expertExactAllowlistBaseline": 294,
+        "expertExactAllowlistBaseline": 290,
         "recipeGroups": {
           "current": 6,
           "target": 14

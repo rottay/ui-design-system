@@ -3354,6 +3354,7 @@
         "reviewedFrom": "anatomy",
         "bindings": [
           {
+            "root": "palette.status-seeds",
             "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card.css",
             "channels": [
               "--ds-color-success",

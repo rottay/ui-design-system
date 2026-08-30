@@ -15,6 +15,7 @@
  */
 
 import { existsSync, readFileSync, readdirSync } from 'node:fs';
+import { createHash } from 'node:crypto';
 import { join, dirname } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { loadProgramContracts } from '../../v2/contracts.mjs';
@@ -23,6 +24,7 @@ import { DOMAIN_KINDS, validateCascadeRoot, validateCascadeSet } from '../../../
 import { repoRoot as findRepoRoot } from '../../../lib/repo-root/index.mjs';
 import { validateInventory } from './cascade-consumability.mjs';
 import { parseRegistry as parseCapabilityRegistry } from '../../../tokens/customization-surface-census/index.mjs';
+import { overrideTokens } from '../../../../src/tooling/lane-control/runtime/tenant-reach/index.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -214,6 +216,70 @@ function standardTruth(contracts) {
   return ids;
 }
 
+// The Expert tier has the same derived-denominator law (decision 32) as
+// Standard: the exact allowlist is the set TENANT_THEME_OVERRIDE_TOKENS
+// resolves to in the live tenant-theme contract — literals PLUS the resolved
+// cross-product spreads, counted by the same reader the reach analysis uses —
+// never a number typed into the constitution. The historical pin (294) and
+// the raw literal count (67) are both wrong as denominators: the first
+// counted four retired dark tokens, the second ignores the spreads.
+const TENANT_THEME_CONTRACT_PATH =
+  'packages/core/src/foundation/contracts/composition/tenants/themes/tenant-theme/index.ts';
+
+/**
+ * Count + membership identity of an Expert name set. Count alone cannot see a
+ * count-preserving swap (a valid name replaced by a fake one at the same
+ * cardinality), so membership travels as the SHA-256 of the sorted names.
+ * Exported so the drills can prove the math distinguishes ±1 growth, a
+ * count-preserving swap and a retired-token reintroduction.
+ */
+export function expertAllowlistIdentity(names) {
+  const sorted = [...names].sort();
+  return {
+    count: sorted.length,
+    digest: createHash('sha256').update(JSON.stringify(sorted)).digest('hex'),
+  };
+}
+
+function readExpertAllowlistSnapshot() {
+  const unreadable = (reason) => ({
+    source: TENANT_THEME_CONTRACT_PATH,
+    readable: false,
+    reason,
+    reach: null,
+    digest: null,
+  });
+  if (!existsSync(join(repoRoot, TENANT_THEME_CONTRACT_PATH))) {
+    return unreadable('the file does not exist');
+  }
+  try {
+    const { names } = overrideTokens(repoRoot);
+    if (names.size === 0) {
+      return unreadable('the override allowlist resolved to zero names');
+    }
+    // Derived from source on every run: a link, not a pin.
+    const { count, digest } = expertAllowlistIdentity(names);
+    return { source: TENANT_THEME_CONTRACT_PATH, readable: true, reason: null, reach: count, digest };
+  } catch (error) {
+    return unreadable(error.message);
+  }
+}
+
+/**
+ * The live Expert truth — count and membership digest of the names
+ * TENANT_THEME_OVERRIDE_TOKENS resolves to — or `null` when the contract
+ * could not be read. `null` never means "assume the old number": every caller
+ * either blocks or skips a comparison that the contract-unreadable failure
+ * already reports.
+ */
+function expertTruth(contracts) {
+  const snapshot = contracts?.expertAllowlist;
+  if (snapshot?.readable !== true || typeof snapshot.reach !== 'number' || typeof snapshot.digest !== 'string') {
+    return null;
+  }
+  return { count: snapshot.reach, digest: snapshot.digest };
+}
+
 export function readModernRescueContracts({ root = PROGRAM_ROOT } = {}) {
   const contracts = loadProgramContracts({ root, fresh: true });
   const checkpointPath = join(root, 'checkpoint.intent.json');
@@ -223,6 +289,7 @@ export function readModernRescueContracts({ root = PROGRAM_ROOT } = {}) {
     contracts.checkpoint = null;
   }
   contracts.capabilityRegistry = readCapabilityRegistrySnapshot();
+  contracts.expertAllowlist = readExpertAllowlistSnapshot();
   return contracts;
 }
 
@@ -323,7 +390,7 @@ function collectTextualFailures(contracts) {
     'capability registry',
     '7 Pro',
     'PROPOSED_NOT_IMPLEMENTED',
-    '294-entry exact allowlist',
+    'TENANT_THEME_OVERRIDE_TOKENS',
     '--ds-*',
     '--_ds-*',
     'data-*',
@@ -393,8 +460,29 @@ function collectTextualFailures(contracts) {
     failures.push('README.md must not route work to Opus or Sonnet outside the governed implementer pool name');
   }
 
-  if (!readmeText.includes('No stage') && !readmeText.includes('No commit') && !readmeText.includes('no stage') && !readmeText.includes('no commit')) {
-    failures.push('README.md fences must require explicit owner order before commit');
+  // The standing authorization is its five conditions, not its heading: the
+  // markers are whole phrases so a bullet reduced to a bare sentence fails,
+  // and the same law binds both durable authorities (README and AGENTS.md).
+  const STANDING_AUTHORIZATION_MARKERS = [
+    'standing authorization',
+    'write-set is explicit',
+    "Fable's audit is ACCEPT or fully remediated",
+    'applicable gates are green',
+    'git diff --check',
+    'no foreign files',
+  ];
+  for (const [document, text] of [['README.md', readmeText], ['AGENTS.md', agentsText]]) {
+    // Prose wraps: match against the whitespace-folded text so a phrase
+    // survives its line breaks.
+    const folded = text.replace(/\s+/g, ' ');
+    if (!folded.includes('Never push')) {
+      failures.push(`${document} fences must carry the absolute push prohibition`);
+    }
+    for (const marker of STANDING_AUTHORIZATION_MARKERS) {
+      if (!folded.includes(marker)) {
+        failures.push(`${document} standing-authorization fence must name its condition: ${marker}`);
+      }
+    }
   }
   if (readmeText.includes('Local commits are allowed after an audited packet')) {
     failures.push('README.md must not allow local commits after an audited packet');
@@ -727,6 +815,14 @@ function collectContractFailures(contracts) {
         'Standard baseline is derived from it and must never fall back to a pinned number',
     );
   }
+  const expert = expertTruth(contracts);
+  if (expert === null) {
+    failures.push(
+      `tenant-theme override contract ${contracts?.expertAllowlist?.source ?? TENANT_THEME_CONTRACT_PATH} could not be ` +
+        `read as the Expert authority (${contracts?.expertAllowlist?.reason ?? 'no snapshot'}): the ` +
+        'Expert baseline is derived from it and must never fall back to a pinned number',
+    );
+  }
 
   // program.json identity and denominators
   if (program) {
@@ -749,11 +845,38 @@ function collectContractFailures(contracts) {
     if (program.controlBaselines?.proCapabilities !== 7) {
       failures.push('program.json pro capabilities must be 7');
     }
-    if (program.controlBaselines?.expertExactAllowlist !== 294) {
-      failures.push('program.json Expert exact allowlist must be 294');
+    if (expert !== null && program.controlBaselines?.expertExactAllowlist !== expert.count) {
+      failures.push(
+        'program.json Expert exact allowlist must equal the live TENANT_THEME_OVERRIDE_TOKENS reach: the source declares ' +
+          `${expert.count} names, program.json says ` +
+          `${JSON.stringify(program.controlBaselines?.expertExactAllowlist ?? null)}`,
+      );
+    }
+    if (expert !== null && program.controlBaselines?.expertExactAllowlistDigest !== expert.digest) {
+      failures.push(
+        'program.json Expert allowlist digest must equal the live TENANT_THEME_OVERRIDE_TOKENS membership digest: ' +
+          'a count-preserving swap keeps the number honest and the roster wrong, so membership travels as the ' +
+          'SHA-256 of the sorted name set, derived from source on every run',
+      );
     }
     if (program.controlBaselines?.expertMaximumOverridesPerDocument !== 200) {
       failures.push('program.json Expert maximumOverridesPerDocument must be 200');
+    }
+    // Amendment 2026-08-28 fences (owner decisions 22/23/31), machine-checked.
+    const scope = program.verticalScope;
+    if (scope?.bithire?.role !== 'consumer-readiness-only') {
+      failures.push('program.json verticalScope.bithire must be consumer-readiness-only');
+    }
+    for (const forbidden of ['migration', 'adoption', 'hardcode-drain', 'canary-over-current-ui']) {
+      if (!scope?.bithire?.forbiddenLots?.includes(forbidden)) {
+        failures.push(`program.json verticalScope.bithire.forbiddenLots must include ${forbidden}`);
+      }
+    }
+    if (scope?.appPlatform?.disposition !== 'DEFERRED' || scope?.appEvnto?.disposition !== 'DEFERRED') {
+      failures.push('program.json verticalScope must keep appPlatform and appEvnto DEFERRED');
+    }
+    if (program.f4cCanary?.visibilityHours !== 48 || typeof program.f4cCanary?.stopCondition !== 'string' || program.f4cCanary.stopCondition.trim().length === 0) {
+      failures.push('program.json f4cCanary must pin visibilityHours 48 and a non-empty stopCondition');
     }
   }
 
@@ -799,6 +922,12 @@ function collectContractFailures(contracts) {
     if (model.targetControlModel?.implementationState !== 'PROPOSED_NOT_IMPLEMENTED') {
       failures.push('customization-model.json targetControlModel must be PROPOSED_NOT_IMPLEMENTED');
     }
+    // Owner decision 26: control.size stays blocked until a written
+    // orthogonality verdict against density.mode exists.
+    const sizeBlock = model.targetControlModel?.activationBlocks?.['control.size'];
+    if (typeof sizeBlock !== 'string' || !sizeBlock.includes('density.mode')) {
+      failures.push('customization-model.json targetControlModel.activationBlocks must keep control.size blocked on a density.mode orthogonality verdict');
+    }
     if (standardIds) {
       if (model.standard?.current?.length !== standardIds.length) {
         failures.push(
@@ -822,8 +951,35 @@ function collectContractFailures(contracts) {
     if (model.pro?.capabilities?.length !== 7) {
       failures.push('customization-model.json pro.capabilities must contain exactly 7 capabilities');
     }
-    if (model.expert?.exactAllowlistBaseline !== 294) {
-      failures.push('customization-model.json Expert exactAllowlistBaseline must be 294');
+    if (expert !== null && model.expert?.exactAllowlistBaseline !== expert.count) {
+      failures.push(
+        'customization-model.json Expert exactAllowlistBaseline must equal the live TENANT_THEME_OVERRIDE_TOKENS reach: the source declares ' +
+          `${expert.count} names, customization-model.json says ` +
+          `${JSON.stringify(model.expert?.exactAllowlistBaseline ?? null)}`,
+      );
+    }
+    if (expert !== null && model.expert?.exactAllowlistDigest !== expert.digest) {
+      failures.push(
+        'customization-model.json Expert allowlist digest must equal the live TENANT_THEME_OVERRIDE_TOKENS membership digest: ' +
+          'a count-preserving swap keeps the number honest and the roster wrong, so membership travels as the ' +
+          'SHA-256 of the sorted name set, derived from source on every run',
+      );
+    }
+    // rounds.json R7 scope carries the same baselines as forward-looking
+    // contract: unchecked copies drift in silence (the 294 class). They are
+    // compared against the live authorities, never against another copy.
+    const r7Scope = contracts.rounds?.rounds?.find((round) => round.id === 'R7')?.scope;
+    if (r7Scope && standardIds && r7Scope.standardControlsBaseline !== standardIds.length) {
+      failures.push(
+        'rounds.json R7 scope standardControlsBaseline must equal the live capability registry: the registry declares ' +
+          `${standardIds.length} active Standard controls, rounds.json says ${JSON.stringify(r7Scope.standardControlsBaseline ?? null)}`,
+      );
+    }
+    if (r7Scope && expert !== null && r7Scope.expertExactAllowlistBaseline !== expert.count) {
+      failures.push(
+        'rounds.json R7 scope expertExactAllowlistBaseline must equal the live TENANT_THEME_OVERRIDE_TOKENS reach: the source declares ' +
+          `${expert.count} names, rounds.json says ${JSON.stringify(r7Scope.expertExactAllowlistBaseline ?? null)}`,
+      );
     }
     if (model.expert?.maximumOverridesPerDocument !== 200) {
       failures.push('customization-model.json Expert maximumOverridesPerDocument must be 200');
@@ -988,6 +1144,9 @@ function collectContractFailures(contracts) {
       if (!Array.isArray(da.notAuthorizationFor) || da.notAuthorizationFor.length === 0) {
         failures.push('doubleAccept.notAuthorizationFor must list actions it cannot authorize');
       }
+      if (Array.isArray(da.notAuthorizationFor) && !da.notAuthorizationFor.includes('push')) {
+        failures.push('doubleAccept.notAuthorizationFor must keep push outside every authorization');
+      }
       for (const auditor of RETAINED_AUDITORS) {
         if (!da.actors?.includes(auditor)) {
           failures.push(`doubleAccept actors must include ${auditor}`);
@@ -1017,6 +1176,9 @@ function collectContractFailures(contracts) {
     }
     if (program.controlBaselines?.expertExactAllowlist !== model.expert?.exactAllowlistBaseline) {
       failures.push('program.json Expert allowlist baseline must equal customization-model.json expert.exactAllowlistBaseline');
+    }
+    if (program.controlBaselines?.expertExactAllowlistDigest !== model.expert?.exactAllowlistDigest) {
+      failures.push('program.json Expert allowlist digest must equal customization-model.json expert.exactAllowlistDigest');
     }
     if (program.controlBaselines?.expertMaximumOverridesPerDocument !== model.expert?.maximumOverridesPerDocument) {
       failures.push('program.json Expert override maximum must equal customization-model.json expert.maximumOverridesPerDocument');
@@ -1406,8 +1568,12 @@ function collectHistoricalContractFailures(contracts) {
   if (customization?.pro?.capabilities?.length !== 7) {
     errors.push('customization Pro baseline must contain 7 capabilities');
   }
-  if (customization?.expert?.exactAllowlistBaseline !== 294) {
-    errors.push('customization Expert baseline must remain 294');
+  const historicalExpert = expertTruth(contracts);
+  if (historicalExpert !== null && customization?.expert?.exactAllowlistBaseline !== historicalExpert.count) {
+    errors.push('customization Expert baseline must equal the live TENANT_THEME_OVERRIDE_TOKENS reach');
+  }
+  if (historicalExpert !== null && customization?.expert?.exactAllowlistDigest !== historicalExpert.digest) {
+    errors.push('customization Expert digest must equal the live TENANT_THEME_OVERRIDE_TOKENS membership digest');
   }
   if (customization?.expert?.maximumOverridesPerDocument !== 200) {
     errors.push('Expert document maximum must remain 200');

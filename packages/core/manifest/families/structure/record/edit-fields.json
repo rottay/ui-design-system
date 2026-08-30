@@ -3947,15 +3947,14 @@
             "carrier": "shared-channel"
           }
         ],
-        "uncoveredByDesign": {
+        "coverageNote": {
           "Brazo compartido status (barrido F2, sourceBindings propios de esta familia)": [
             "--ds-color-error",
             "--ds-color-warning"
           ]
         },
         "evidence": "edit-fields.css:313,352,356,418 (error copy/icon/border) y :328 (warning) -- estados de validacion de campo",
-        "reviewedFrom": "anatomy",
-        "migratedToInternalChannels": true
+        "reviewedFrom": "anatomy"
       }
     },
     {

@@ -2804,13 +2804,12 @@
             "carrier": "shared-channel"
           }
         ],
-        "uncoveredByDesign": {
+        "coverageNote": {
           "Canales --ds-color-* medidos en la anatomia (palette.status-seeds)": [
             "--ds-color-error"
           ]
         },
-        "reviewedFrom": "anatomy",
-        "migratedToInternalChannels": true
+        "reviewedFrom": "anatomy"
       }
     },
     {

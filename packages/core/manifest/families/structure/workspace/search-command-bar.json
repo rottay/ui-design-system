@@ -5707,15 +5707,14 @@
             "carrier": "shared-channel"
           }
         ],
-        "uncoveredByDesign": {
+        "coverageNote": {
           "Brazo compartido status (barrido F2, sourceBindings propios de esta familia)": [
             "--ds-color-error",
             "--ds-color-warning"
           ]
         },
         "evidence": "search-command-bar.css:139-140 ([data-part='search-shell'][data-voice-status='error'] border), :278,368-370,423 (mas ocurrencias de error en el mismo mecanismo), :331-333 (--ds-button-ghost-* derivados de error), :367-378 ([data-part='voice-badge'][data-voice-status='error'|'needs-permission'] border/background/color), :387,413,514,522 (warning adicional) -- todos via var(--ds-color-error)/var(--ds-color-warning)",
-        "reviewedFrom": "anatomy",
-        "migratedToInternalChannels": true
+        "reviewedFrom": "anatomy"
       }
     },
     {

@@ -3319,14 +3319,13 @@
             "carrier": "shared-channel"
           }
         ],
-        "uncoveredByDesign": {
+        "coverageNote": {
           "Brazo compartido status (barrido F2, sourceBindings propios de esta familia)": [
             "--ds-color-error"
           ]
         },
         "evidence": "active-filters-bar.css:253-273 -- [data-part='chip'][data-state='invalid'] [data-part='chip-value'|'chip-label'|'icon'] color/text-decoration via var(--ds-color-error)",
-        "reviewedFrom": "anatomy",
-        "migratedToInternalChannels": true
+        "reviewedFrom": "anatomy"
       }
     },
     {

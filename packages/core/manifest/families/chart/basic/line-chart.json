@@ -3134,7 +3134,7 @@
         "status": "MUST_REACH",
         "bindings": [
           {
-            "root": null,
+            "root": "palette.status-seeds",
             "socketPattern": null,
             "prop": "chart-scaffold error state (frame border-color + error state-label color) via var(--ds-color-error)",
             "tier": "standard",
@@ -3149,7 +3149,7 @@
             ]
           }
         ],
-        "uncoveredByDesign": {
+        "coverageNote": {
           "Prueba negativa (sin socket status propio): grep var(--ds-color-{success|warning|danger|error|info}...) sobre packages/core/src/ui/patterns/visualization/charts/families/line-chart/index.tsx": [
             "0 coincidencias"
           ]

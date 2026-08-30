@@ -177,7 +177,9 @@ export function constArray(source, name) {
  *
  * So the same interpolation trap that hides `--ds-metric-card-bg` also hides
  * every name on the raw-dial allowlist. Reading the literal lines of this
- * array yields 71; resolving the spreads yields the real figure. Both spread
+ * array yields 67; resolving the spreads yields the real figure (67 literals
+ * + 160 surface + 63 typography = 290 at the time of writing — derived, never
+ * pinned here). Both spread
  * shapes are resolved here, and an unresolvable spread THROWS rather than
  * quietly shrinking the reach set — a smaller reach set means a larger
  * reported defect, so silence in this direction manufactures findings.

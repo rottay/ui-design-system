@@ -2463,14 +2463,13 @@
             "carrier": "shared-channel"
           }
         ],
-        "uncoveredByDesign": {
+        "coverageNote": {
           "Brazo compartido status (barrido F2, sourceBindings propios de esta familia)": [
             "--ds-color-error"
           ]
         },
         "evidence": "bottom-tab-bar.css:268 -- [data-part='badge'] background: var(--ds-color-error) (badge de notificacion sobre el tab)",
-        "reviewedFrom": "anatomy",
-        "migratedToInternalChannels": true
+        "reviewedFrom": "anatomy"
       }
     },
     {

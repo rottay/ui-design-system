@@ -2931,7 +2931,7 @@
         "status": "MUST_REACH",
         "bindings": [
           {
-            "root": null,
+            "root": "palette.status-seeds",
             "socketPattern": null,
             "prop": "bar fill segun tipo increase/decrease via props increaseColor/decreaseColor, default var(--ds-color-success)/var(--ds-color-error)",
             "tier": "standard",
@@ -2946,7 +2946,7 @@
             ]
           },
           {
-            "root": null,
+            "root": "palette.status-seeds",
             "socketPattern": null,
             "prop": "chart-scaffold error state (frame border-color + error state-label color) via var(--ds-color-error)",
             "tier": "standard",

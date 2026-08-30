@@ -1822,15 +1822,14 @@
             "carrier": "shared-channel"
           }
         ],
-        "uncoveredByDesign": {
+        "coverageNote": {
           "Brazo compartido status (barrido F2, sourceBindings propios de esta familia; mapeo canal-a-semilla, DT nota 2)": [
             "--ds-color-success-bg",
             "--ds-color-success-ink"
           ]
         },
         "evidence": "export-button.css:50-51 -- [data-part='toast'] background: var(--ds-color-success-bg); color: var(--ds-color-success-ink). --ds-color-success-bg/-ink no figuran literalmente en declaredOutputs.channels de palette.status-seeds (controls/palette.status-seeds.json:24-32, representativeOnly:true); ambos derivan de la semilla success (mapeo canal->semilla, no son la lista representativa del control) -- DT nota 2 del brief",
-        "reviewedFrom": "anatomy",
-        "migratedToInternalChannels": true
+        "reviewedFrom": "anatomy"
       }
     },
     {

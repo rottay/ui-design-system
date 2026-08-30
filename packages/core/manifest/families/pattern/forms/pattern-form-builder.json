@@ -7113,6 +7113,7 @@
         "reviewedFrom": "anatomy",
         "bindings": [
           {
+            "root": "palette.status-seeds",
             "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-builder.css",
             "channels": [
               "--ds-color-error"

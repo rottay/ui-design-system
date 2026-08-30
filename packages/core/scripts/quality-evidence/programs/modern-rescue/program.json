@@ -40,6 +40,23 @@
     "authorityLaw": "this lab decides DS grammar and tenant divergence; product applications are later integration consumers and cannot certify or reject DS craft",
     "modularizationOwner": "R0 must split the existing monolithic torture route behind scene-owned import boundaries without duplicating trees fixtures or data"
   },
+  "verticalScope": {
+    "law": "The DS and its reference lab are the only build and visual-certification target; deferred is a sequencing state, not a removal, and generic guarantees (fail-closed transport, exports contract) are preserved intact.",
+    "bithire": {
+      "role": "consumer-readiness-only",
+      "readiness": ["install-pin", "exports-imports", "build", "typecheck", "smoke"],
+      "forbiddenLots": ["migration", "adoption", "hardcode-drain", "canary-over-current-ui"],
+      "note": "BitHire will be fully rebuilt; no screen of its current UI is a destination or visual reference, and no BitHire semantics enter the DS."
+    },
+    "appPlatform": { "disposition": "DEFERRED" },
+    "appEvnto": { "disposition": "DEFERRED" }
+  },
+  "f4cCanary": {
+    "visibilityHours": 48,
+    "scope": "DS reference lab only; no cohort expansion before an accepted canary",
+    "stopCondition": "any unexpected diff in non-status channels or painted properties, any exact-restore failure, or any constitutional gate turning red rolls the canary back to HEAD state and opens a defect",
+    "authorityLaw": "the canary certifies the cascade effect in the lab; it is not programme closure and not a BitHire UI review"
+  },
   "inventoryAuthorities": {
     "controls": "packages/core/tokens/controls/README.md",
     "tokenCensus": "packages/core/scripts/tokens/customization-surface-census/customization-surface-report.json",
@@ -62,7 +79,8 @@
   "controlBaselines": {
     "standard": 14,
     "proCapabilities": 7,
-    "expertExactAllowlist": 294,
+    "expertExactAllowlist": 290,
+    "expertExactAllowlistDigest": "4964f8eb4cd6bcca0c44ce19270b078e441dbbfde49eb5b78d9f01be2978f296",
     "expertMaximumOverridesPerDocument": 200,
     "appPublicHooks": 93,
     "productivePrototypes": 0
@@ -92,6 +110,13 @@
     "new layer grammars stop after three calibration families and every cohort stops after at most twenty-five families for DT review",
     "each round stops before the next owner-authorized round",
     "local commits follow DT verification of the bounded packet",
-    "this program never pushes; publication requires an explicit owner-authorized release window"
+    "this program never pushes; publication requires an explicit owner-authorized release window",
+    "BitHire enters only as final consumer-readiness (install/pin, exports/imports, build, typecheck, smoke); no migration, adoption, hardcode-drain or canary lots over its current UI, and no BitHire semantics enter the DS",
+    "app-platform and app-evnto are DEFERRED: no migration lots open against them; deferred is a sequencing state, not a removal",
+    "dark mode carries no dedicated work in this stage; a lot touching shared surfaces must not degrade the authored dark baselines",
+    "governed channel precedence: explicit tenant value > authored vertical value > DS base; no compiler, gate or component branches on tenant or vertical name",
+    "instance overrides use the existing tiers (profileOverrides, RecipeProfileProvider, scoped attributes); no scope field is added to the tenant capability registry",
+    "accumulated local-ahead is owner policy, not a defect or a blocker; external local backup is recommended hygiene, never a gate",
+    "a cohort release gate (reliable instruments, accepted F4C canary, zero active brandable hardcodes in the adopted cohort, static+DB lab certification) authorizes early cohort exit; it is not programme closure"
   ]
 }

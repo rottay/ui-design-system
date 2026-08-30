@@ -1093,7 +1093,7 @@
             "carrier": "shared-channel"
           }
         ],
-        "uncoveredByDesign": {
+        "coverageNote": {
           "Brazo compartido status (barrido F2, part propio 'banner')": [
             "--ds-color-info",
             "--ds-color-info-bg",
@@ -1101,8 +1101,7 @@
           ]
         },
         "evidence": "surface-states.css:51-61 -- .ds-surface.ds-stale-banner[data-part='banner'] (SurfaceStaleBanner, part propio de esta familia): background/color/border via var(--ds-color-info) y --ds-color-info-bg/-border con fallback color-mix(--ds-color-info). NOTA: capability-anatomy comparte este mismo archivo pero sus propias partes (capability, capability-anatomy, capability-anatomy-label, capability-label, capability-list; surface-states.css:71-103) no leen ningun canal de status -- ver finding.",
-        "reviewedFrom": "anatomy",
-        "migratedToInternalChannels": true
+        "reviewedFrom": "anatomy"
       }
     },
     {

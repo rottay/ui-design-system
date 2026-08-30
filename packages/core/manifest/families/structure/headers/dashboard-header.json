@@ -6780,7 +6780,7 @@
             "carrier": "shared-channel"
           }
         ],
-        "uncoveredByDesign": {
+        "coverageNote": {
           "Brazo compartido status (barrido F2, sourceBindings propios de esta familia)": [
             "--ds-color-success",
             "--ds-color-warning",
@@ -6788,8 +6788,7 @@
           ]
         },
         "evidence": "dashboard-header.css:247-258 -- [data-part='status-dot'][data-state='live'|'connected'] color var(--ds-color-success); [data-state='syncing'|'warning'] var(--ds-color-warning); [data-state='offline'] var(--ds-color-error); repeated at :404-408",
-        "reviewedFrom": "anatomy",
-        "migratedToInternalChannels": true
+        "reviewedFrom": "anatomy"
       }
     },
     {

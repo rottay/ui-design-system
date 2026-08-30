@@ -3604,6 +3604,11 @@
      "at": "2026-08-29 18:59",
      "by": "kimi-k3-dt",
      "note": "LOTE P0 palette.status-seeds CERRADO: commit eebef22fb (572 rutas, docs/reauditoria-cloud excluido), Fable ACCEPT tras DEFECTS-6 remediado. Standard #14 operativo: 255 celdas adjudicadas (119 MUST_REACH + 136 MUST_NOT_REACH medidos por Fable), cascade root + root-catalog reconciliados, denominadores derivados del registry vivo, sonda -500 causal, 134 receipts F4B re-ejecutados (R6). Checkpoint canonico re-anclado a eebef22fb con cola T-1 Expert source-linked -> F4C visible. Deuda no bloqueante registrada en el checkpoint (foreign reds canonical-digest BLOCKED_OWNER, identidad DT stale en notes, productor one-off E-2, roundId sin gobierno, menores Fable)."
+    },
+    {
+     "at": "2026-08-29 21:11",
+     "by": "kimi-k3-dt",
+     "note": "Estado canon 2026-08-29 ~21:00 — T-1 constitucional COMPLETO en worktree (Expert 290 source-linked via tenant-reach#overrideTokens con digest de membresia sha256 + mutantes anti-colusion; fences enmienda 21-34: verticalScope, f4cCanary 48h+stopCondition, activationBlocks control.size<->density.mode, AGENTS.md/README alineados a standing authorization de commits locales del owner 2026-08-29, push nunca; Fable DEFECTS-6 todo remediado; suites 52/52 y 217/217 verdes pre-higiene). Higiene menores Fable aplicada por writer (35 root ids, 27 migratedToInternalChannels huerfanos, 41 uncoveredByDesign->coverageNote, 56 archivos families). PENDIENTE: bateria final sobre la union + Fable delta re-audit + commit combinado T-1+higiene (index.json es artefacto derivado de la union: split dejaria un commit rojo). F4C: harness packages/showroom/scripts/f4c-canary-capture.mjs verificado sobre fixtures sinteticos (5 pares + 5 drills); dev server :7001 arriba; BLOQUEO EN CURSO: ReservedTenantIdentityError 'bithire' en el ground static tras rebuild de dist — no es regresion P0 (P0 no toco ese source); diagnosticando si el lab debe pasar identidad first-party o si el guard cambio su dataset. Metodo owner: scouts/writers Claude (sonnet/opus), Fable auditor read-only, Codex consultor read-only; commits locales autorizados permanentes con gates verdes; NUNCA push."
     }
    ],
    "claimedBy": "claude-modern-rescue",

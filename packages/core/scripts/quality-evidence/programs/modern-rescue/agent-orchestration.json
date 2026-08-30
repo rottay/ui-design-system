@@ -1,11 +1,11 @@
 {
   "schemaVersion": 2,
   "principle": "Parallelize independent ownership, not the number twenty.",
+  "aggressiveParallelismGate": "Aggressive read-only parallelism with conflict-graph-governed writers opens only after the T-1 constitutional lot and the F4C canary close; before that, writers are limited to the adjudicated conflict graph of the active lot.",
   "doubleAccept": {
-    "law": "A closure audit ACCEPT from Fable 5 plus the DT (Kimi K3) per-lot verification is the sighted quality signal. The DT commits bounded packets locally under the owner's standing order (2026-08-20, carried into the 2026-08-21 and 2026-08-23 DT successions); push is always forbidden. This does not substitute owner decisions nor product-domain adjudications.",
+    "law": "A closure audit ACCEPT from Fable 5 plus the DT (Kimi K3) per-lot verification is the sighted quality signal. The DT commits bounded packets locally under the owner's standing order (2026-08-20, carried into the 2026-08-21 and 2026-08-23 DT successions; extended 2026-08-29 to a permanent authorization for local commits of roadmap lots with explicit write-set, Fable audit accepted or fully remediated, green gates and a clean diff free of foreign files); push is always forbidden. This does not substitute owner decisions nor product-domain adjudications.",
     "requiredFor": "requesting an explicit owner order for the sighted packet",
     "notAuthorizationFor": [
-      "local commit",
       "push",
       "release",
       "R7 execution",

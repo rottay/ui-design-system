@@ -77,9 +77,11 @@ prose reinterpretation:
   recorded the same way. The proposed 9 Standard + 7 Pro taxonomy is a design target
   with `implementationState: PROPOSED_NOT_IMPLEMENTED`; it never counts as
   coverage and may not coexist with an equivalent operational control. Expert
-  is a closed 294-entry exact allowlist with at most 200 overrides per document;
-  it is frozen during the drain unless the owner separately authorizes a bounded
-  addition.
+  is the closed exact allowlist that TENANT_THEME_OVERRIDE_TOKENS resolves to in
+  the live tenant-theme contract — literals plus resolved spreads; the count is
+  derived from that source by program-check.mjs, never typed here — with at most
+  200 overrides per document; it is frozen during the drain unless the owner
+  separately authorizes a bounded addition.
 - **Namespace lifecycle.** `--ds-*` is the public canon. `--_ds-*` is a governed
   private/provisional namespace used only below the tenant pipeline for
   component-private or family-prototype sockets; it requires an owner, producer,
@@ -247,13 +249,13 @@ not rerun an implementation loop for every earlier assertion.
 
 <!-- lane-control:program-state v1 — DO NOT EDIT BY HAND. Rewrite it with:
      node packages/core/src/tooling/lane-control/public/program-state/index.mjs --write --intent <intent.json>
-     head=eebef22fb written=2026-08-29T22:59:04.863Z intent=d707e9681a26cab1 render=7a9666c1d67480a4 -->
+     head=c58759043 written=2026-08-30T02:21:42.514Z intent=7d5db968498067f3 render=03d443379347bb45 -->
 
 *Everything in this section is intent. Anything derivable is derived by command, not typed here.*
 
-**Current wave:** F4 — gobierno del árbol vivo y evidencia causal. LOTE P0 palette.status-seeds CERRADO (Fable ACCEPT tras DEFECTS-6 remediado; lote ya commiteado localmente): Standard #14 operativo, celdas status adjudicadas una a una (MUST_REACH/MUST_NOT_REACH medidos por el auditor), cascade root y catálogo reconciliados, denominadores derivados del registry vivo, sonda causal no vacua y receipts F4B re-ejecutados por sus productores. Cola inmediata: T-1 — Expert pasa de pin histórico a source-linked contra la fuente viva tenant-reach, sin revivir los tokens dark retirados; después F4C — canary visual en el DS reference lab.
+**Current wave:** F4 — gobierno del árbol vivo y evidencia causal. LOTE P0 palette.status-seeds y T-1 constitucional CERRADOS: Standard #14 operativo; Expert source-linked contra la fuente viva tenant-reach (count + digest de membresía, mutantes de fuente en sandbox); fences de la enmienda owner 2026-08-28 incorporados con guardas ejecutables; higiene de celdas status-seeds aplicada (root ids, etiquetas stale, notas de cobertura). Cola inmediata: F4C — canary visual en el DS reference lab (harness verificado contra fixtures sintéticos con 5 drills fail-closed; bloqueo de identidad first-party del ground bithire resuelto pasando tenantSlug en vez del objeto registry; fases A-E en ejecución).
 
-**Blocked on:** Nada bloquea la cola T-1 → F4C. Diferidos con dueño (capa de contrato/validador, no de migración de pintura): channel-liveness (49 findings) y lane-control-drills (10/13) vuelven a blocking cuando existan sus enumeradores; la propagación mode-aware de la decisión 18 y el validador APCA cascade-aware son F5; la pregunta sighted del glass de bithire sobre backdrop oscuro es de F4C (evidencia A/B ya producida). Decisiones del owner pendientes, sin apuro: el valor del --ds-input-md-line-height de bithire (forma adjudicada: ratio sin unidad, dueño typography.scale; recomendación DT: preservar 1.5385 como ratio seed, identidad exacta) y la pregunta satélite de la capa base. El stash pre-programa sigue owner-gated. Deuda conocida no bloqueante del LOTE P0 (asentada en el roadmap): dos foreign reds de canonical-digest-identity cuyo re-anclaje recompila tenants productivos (BLOCKED_OWNER); la identidad DT stale en notes del registry; el productor one-off del caso compuesto E-2 esperando decisión de CLI; roundId sin gobierno contra rounds.json; y los menores Fable (bindings sin root id en chart, celdas con migratedToInternalChannels huérfano, MUST_REACH con uncoveredByDesign como portador de notas).
+**Blocked on:** Nada bloquea la cola T-1 → F4C. Diferidos con dueño (capa de contrato/validador, no de migración de pintura): channel-liveness (49 findings) y lane-control-drills (10/13) vuelven a blocking cuando existan sus enumeradores; la propagación mode-aware de la decisión 18 y el validador APCA cascade-aware son F5; la pregunta sighted del glass de bithire sobre backdrop oscuro es de F4C (evidencia A/B ya producida). Decisiones del owner pendientes, sin apuro: el valor del --ds-input-md-line-height de bithire (forma adjudicada: ratio sin unidad, dueño typography.scale; recomendación DT: preservar 1.5385 como ratio seed, identidad exacta) y la pregunta satélite de la capa base. El stash pre-programa sigue owner-gated. Deuda conocida no bloqueante del LOTE P0 (asentada en el roadmap): dos foreign reds de canonical-digest-identity cuyo re-anclaje recompila tenants productivos (BLOCKED_OWNER); la identidad DT stale en notes del registry; el productor one-off del caso compuesto E-2 esperando decisión de CLI; roundId sin gobierno contra rounds.json. Los tres menores Fable de celdas (bindings sin root id, migratedToInternalChannels huérfano, uncoveredByDesign como portador) quedaron RESUELTOS en el lote T-1. Glosas numéricas sin guarda (clase P3, ej. composición 67+160+63 en notas): deuda aceptada, el gate deriva el número de la fuente.
 
 Active packets:
 
@@ -413,10 +415,31 @@ never override evidence.
 
 - Modern Rescue executes R0–R6 only. R7 remains machine-documented with
   `enabled: false` until a future explicit owner authorization.
-- Never push.
-- **No stage, commit or merge** without an explicit owner order for that exact
-  change. An "audited packet" is not permission to commit; it is a prerequisite
-  for requesting the order.
+- Never push. Accumulated local-ahead is owner policy, not a defect or a
+  blocker; external local backup is recommended hygiene, never a gate.
+- **Local commits** run under the owner's standing authorization (2026-08-29):
+  the lot belongs to the roadmap, the write-set is explicit, Fable's audit is
+  ACCEPT or fully remediated, applicable gates are green, `git diff --check` is
+  clean and no foreign files (never `docs/reauditoria-cloud/`) enter the
+  staging. Anything outside those conditions still requires an explicit owner
+  order for that exact change.
+- BitHire enters only as final consumer-readiness (install/pin,
+  exports/imports, build, typecheck, smoke). No migration, adoption,
+  hardcode-drain or canary lots over its current UI; no BitHire semantics
+  enter the DS.
+- app-platform and app-evnto are DEFERRED: no migration lots open against
+  them; deferred is a sequencing state, not a removal.
+- Dark mode carries no dedicated work in this stage; a lot touching shared
+  surfaces must not degrade the authored dark baselines.
+- Governed channel precedence: explicit tenant value > authored vertical
+  value > DS base. No compiler, gate or component branches on tenant or
+  vertical name.
+- Instance overrides use the existing tiers (`profileOverrides`,
+  `RecipeProfileProvider`, scoped attributes); no `scope` field is added to
+  the tenant capability registry.
+- A cohort release gate (reliable instruments, accepted F4C canary, zero
+  active brandable hardcodes in the adopted cohort, static+DB lab
+  certification) authorizes early cohort exit; it is not programme closure.
 - Classic and Rustic are read-only.
 - No tenant selector, tenant-conditional component tree, second compiler,
   second icon supplier or application-private DS patch.

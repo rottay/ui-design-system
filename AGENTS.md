@@ -22,8 +22,12 @@ these files in order and obey the machine checks before editing.
 
 ## Hard fences
 
-- **No stage, commit or push** without an explicit owner order for that exact
-  change. `R7` is disabled.
+- **Never push.** Local commits run under the owner's standing authorization
+  (2026-08-29): the lot belongs to the roadmap, the write-set is explicit,
+  Fable's audit is ACCEPT or fully remediated, applicable gates are green,
+  `git diff --check` is clean and no foreign files enter the staging. Anything
+  outside those conditions still requires an explicit owner order for that
+  exact change. `R7` is disabled.
 - **No source edits** outside the bounded packet delegated by the owner/DT.
 - **No redefinition** of programme authority, denominator, namespace law or
   acceptance criteria in Markdown, comments, JSON or tests.
