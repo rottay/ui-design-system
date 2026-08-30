@@ -124827,6 +124827,13 @@ html[lang]:lang(ar) {
   --ds-color-accent-800: #292018;
   --ds-color-accent-900: #110C08;
   --ds-color-accent-hover: #5A4A3A;
+  --ds-color-alpha-error-10: color-mix(in srgb, var(--ds-color-error) 10%, transparent);
+  --ds-color-alpha-error-20: color-mix(in srgb, var(--ds-color-error) 20%, transparent);
+  --ds-color-alpha-info-10: color-mix(in srgb, var(--ds-color-info) 10%, transparent);
+  --ds-color-alpha-success-10: color-mix(in srgb, var(--ds-color-success) 10%, transparent);
+  --ds-color-alpha-success-20: color-mix(in srgb, var(--ds-color-success) 20%, transparent);
+  --ds-color-alpha-warning-10: color-mix(in srgb, var(--ds-color-warning) 10%, transparent);
+  --ds-color-alpha-warning-20: color-mix(in srgb, var(--ds-color-warning) 20%, transparent);
   --ds-color-background: #FFFFFF;
   --ds-color-bg: #FFFFFF;
   --ds-color-bg-elevated: #ffffff;
@@ -124852,7 +124859,7 @@ html[lang]:lang(ar) {
   --ds-color-error-700: #710005;
   --ds-color-error-800: #480002;
   --ds-color-error-900: #230001;
-  --ds-color-error-bg: #fef2f2;
+  --ds-color-error-bg: var(--ds-color-error-50);
   --ds-color-error-border: color-mix(in srgb, var(--ds-color-error) 20%, transparent);
   --ds-color-info: #475569;
   --ds-color-info-100: #D4DEED;
@@ -124865,7 +124872,7 @@ html[lang]:lang(ar) {
   --ds-color-info-700: #2F3A49;
   --ds-color-info-800: #1B232D;
   --ds-color-info-900: #0A0E13;
-  --ds-color-info-bg: #f8fafc;
+  --ds-color-info-bg: var(--ds-color-info-50);
   --ds-color-info-border: color-mix(in srgb, var(--ds-color-info) 20%, transparent);
   --ds-color-link: #171717;
   --ds-color-link-hover: #525252;
@@ -124922,7 +124929,7 @@ html[lang]:lang(ar) {
   --ds-color-success-700: #00461C;
   --ds-color-success-800: #002B0E;
   --ds-color-success-900: #001204;
-  --ds-color-success-bg: #f0fdf4;
+  --ds-color-success-bg: var(--ds-color-success-50);
   --ds-color-success-border: color-mix(in srgb, var(--ds-color-success) 20%, transparent);
   --ds-color-text-disabled: #b3b3b3;
   --ds-color-text-muted: #737373;
@@ -124942,7 +124949,7 @@ html[lang]:lang(ar) {
   --ds-color-warning-700: #533000;
   --ds-color-warning-800: #341C00;
   --ds-color-warning-900: #170A00;
-  --ds-color-warning-bg: #fefce8;
+  --ds-color-warning-bg: var(--ds-color-warning-50);
   --ds-color-warning-border: color-mix(in srgb, var(--ds-color-warning) 20%, transparent);
   --ds-control-brand-border: color-mix(in srgb, var(--ds-color-primary) 30%, var(--ds-color-border));
   --ds-control-brand-tint: color-mix(in srgb, var(--ds-color-primary) 10%, var(--ds-control-surface));
@@ -125255,9 +125262,7 @@ html[lang]:lang(ar) {
   --ds-color-border-focus: #A89880;
   --ds-color-border-secondary: #222018;
   --ds-color-error-900: #FFF2F0;
-  --ds-color-error-bg: var(--ds-color-error-50);
   --ds-color-info-900: #F0F6FE;
-  --ds-color-info-bg: var(--ds-color-info-50);
   --ds-color-link: var(--ds-color-primary);
   --ds-color-link-hover: var(--ds-color-primary-hover);
   --ds-color-link-visited: var(--ds-color-neutral-600);
@@ -125279,7 +125284,6 @@ html[lang]:lang(ar) {
   --ds-color-secondary-hover: #B8A890;
   --ds-color-secondary-rgb: 168, 152, 128;
   --ds-color-success-900: #DFFFE4;
-  --ds-color-success-bg: var(--ds-color-success-50);
   --ds-color-text-disabled: #484838;
   --ds-color-text-muted: #686858;
   --ds-color-text-on-primary: #131210;
@@ -125288,7 +125292,6 @@ html[lang]:lang(ar) {
   --ds-color-text-secondary: #A8A898;
   --ds-color-text-tertiary: var(--ds-color-neutral-600);
   --ds-color-warning-900: #FFF3E7;
-  --ds-color-warning-bg: var(--ds-color-warning-50);
   --ds-focus-ring-color: var(--ds-color-primary-400);
   --ds-input-bg: #131210;
   --ds-input-bg-disabled: #1C1A16;

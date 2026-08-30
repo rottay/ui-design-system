@@ -98,15 +98,16 @@ export type { TenantThemePreviewReportProps } from './runtime/tenant-theme-previ
 // vocabulary; a consumer may override them per surface.
 // ---------------------------------------------------------------------------
 
+// COH-1: the four `-bg` entries this scaffold used to hand-roll (a THIRD
+// formula, seed at 12%) retired. `deriveStatusTintFloor` now merges a real
+// `-bg` for any compiled theme that authors a status seed, so a scaffold
+// value here was always going to be redundant-or-divergent against it; the
+// four seeds alone are what a ground with no compiled theme still needs.
 const SEMANTIC_GROUND: Record<string, string> = {
   '--ds-color-success': '#16a34a',
-  '--ds-color-success-bg': 'rgba(22, 163, 74, 0.12)',
   '--ds-color-warning': '#d97706',
-  '--ds-color-warning-bg': 'rgba(217, 119, 6, 0.12)',
   '--ds-color-error': '#dc2626',
-  '--ds-color-error-bg': 'rgba(220, 38, 38, 0.12)',
   '--ds-color-info': '#2563eb',
-  '--ds-color-info-bg': 'rgba(37, 99, 235, 0.12)',
 };
 
 /**

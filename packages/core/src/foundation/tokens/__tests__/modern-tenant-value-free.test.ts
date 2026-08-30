@@ -235,14 +235,13 @@ const KNOWN_TENANT_LITERALS: readonly string[] = [
   // hover arm of the `#7a6a5a` pair already pinned below, which arrived without
   // it because only the resting value had been claimed.
   'foundation/tokens/css/foundation/themes/default.css :: #5a4a3a',
-  // RE-KEY (bd5723e7c). The tinted status GROUNDS, claimed by two verticals
-  // each (`palette.{success,error,warning}BgColor` on bithire and evnto). The
-  // status ramps they sit under are pinned further down; these are the surfaces
-  // those ramps are read against, so leaving them out would have pinned the ink
-  // and not the paper.
-  'foundation/tokens/css/foundation/themes/default.css :: #f0fdf4',
-  'foundation/tokens/css/foundation/themes/default.css :: #fef2f2',
-  'foundation/tokens/css/foundation/themes/default.css :: #fffbeb',
+  // DRAINED (COH-1, 2026-08-30). The tinted status GROUNDS entry that used to
+  // sit here (`#f0fdf4`/`#fef2f2`/`#fffbeb`, claimed by
+  // `palette.{success,error,warning}BgColor` on bithire and evnto) is gone:
+  // COH-1 retired those literal fields from both verticals in favor of
+  // `deriveStatusTintFloor` (`var(--ds-color-{tone}-50)`), so no BrandTheme
+  // claims these three hex values anywhere anymore and the "no stale entry"
+  // test below would fail if the pins stayed.
   // RE-KEY (bd5723e7c). Rottay's alpha-tinted equivalents of the same four
   // grounds, each claimed twice over — `palette.{success,warning,error,info}
   // BgColor` and again as `chrome.alert.*Bg` (info a third time as

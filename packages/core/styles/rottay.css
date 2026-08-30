@@ -125022,12 +125022,16 @@ html[lang]:lang(ar) {
   --ds-color-accent-hover: #C0C0C4;
   --ds-color-alpha-black-100: rgba(0, 0, 0, 0.20);
   --ds-color-alpha-black-50: rgba(0, 0, 0, 0.12);
+  --ds-color-alpha-error-10: color-mix(in srgb, var(--ds-color-error) 10%, transparent);
   --ds-color-alpha-error-20: rgba(239, 68, 68, 0.18);
+  --ds-color-alpha-info-10: color-mix(in srgb, var(--ds-color-info) 10%, transparent);
   --ds-color-alpha-primary-10: rgba(255, 255, 255, 0.08);
   --ds-color-alpha-primary-20: rgba(255, 255, 255, 0.14);
   --ds-color-alpha-secondary-10: rgba(160, 160, 165, 0.08);
   --ds-color-alpha-secondary-20: rgba(160, 160, 165, 0.14);
+  --ds-color-alpha-success-10: color-mix(in srgb, var(--ds-color-success) 10%, transparent);
   --ds-color-alpha-success-20: rgba(34, 197, 94, 0.18);
+  --ds-color-alpha-warning-10: color-mix(in srgb, var(--ds-color-warning) 10%, transparent);
   --ds-color-alpha-warning-20: rgba(245, 158, 11, 0.18);
   --ds-color-alpha-white-50: rgba(255, 255, 255, 0.04);
   --ds-color-background: #0C0C0E;

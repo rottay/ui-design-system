@@ -1857,22 +1857,21 @@ const PALETTE: BrandPalette = {
   textMutedColor: '#737373',
   textDisabledColor: '#b3b3b3',
   onPrimaryColor: '#ffffff',
+  // COH-1: the four `*BgColor` literals below (`#f0fdf4`, `#fefce8`,
+  // `#fef2f2`, `#f8fafc`) retired. Each was a generic tailwind-family literal
+  // in the seed's own hue family, not this vertical's own art direction --
+  // `deriveStatusTintFloor` now derives all four from the seeds below (e.g.
+  // success `#F5FFF6`), a sub-perceptual correction. `*BorderColor` already
+  // authored exactly the floor's own formula (see below) and stays retired
+  // alongside them.
   successColor: '#15803D',
-  successBgColor: '#f0fdf4',
   warningColor: '#A16207',
-  warningBgColor: '#fefce8',
   /**
    * @domicile seed
    * @governor dial: token-overrides
    */
   errorColor: '#B91C1C',
-  errorBgColor: '#fef2f2',
   infoColor: '#475569',
-  /**
-   * @domicile derived
-   * @governor deriva de: --ds-color-border (raiz canonica del par, K2)
-   */
-  infoBgColor: '#f8fafc',
 
   /**
    * @domicile derived
@@ -1894,26 +1893,10 @@ const PALETTE: BrandPalette = {
    */
   borderTertiaryColor:
     'color-mix(in srgb, var(--ds-color-border) 66.667%, transparent)',
-  /**
-   * @domicile derived
-   * @governor deriva de: --ds-color-border (raiz canonica del par, K2)
-   */
-  successBorderColor: 'color-mix(in srgb, var(--ds-color-success) 20%, transparent)',
-  /**
-   * @domicile derived
-   * @governor deriva de: --ds-color-border (raiz canonica del par, K2)
-   */
-  warningBorderColor: 'color-mix(in srgb, var(--ds-color-warning) 20%, transparent)',
-  /**
-   * @domicile derived
-   * @governor deriva de: --ds-color-border (raiz canonica del par, K2)
-   */
-  errorBorderColor: 'color-mix(in srgb, var(--ds-color-error) 20%, transparent)',
-  /**
-   * @domicile derived
-   * @governor deriva de: --ds-color-border (raiz canonica del par, K2)
-   */
-  infoBorderColor: 'color-mix(in srgb, var(--ds-color-info) 20%, transparent)',
+  // COH-1: the four `*BorderColor` literals above this comment (success/
+  // warning/error/info) retired -- each authored EXACTLY the string
+  // `deriveStatusTintFloor` now emits from the seed, so this is a cero-delta
+  // byte retirement, not a correction.
   linkHoverColor: '#525252',
   linkVisitedColor: '#737373',
   /**

@@ -475,9 +475,38 @@ describe("case C — no contested tenant authorship changes nothing", () => {
      * --ds-material-raised-foreground sigue removido: es el unico de los tres del
      * Lote F que si era duplicado sin ruta de override que proteger. */
     const counts: Record<Vertical, number> = {
-      rottay: 1192,
-      bithire: 1229,
-      evnto: 468,
+      // COH-1 (2026-08-30): 1192 -> 1196. `deriveStatusTintFloor` now
+      // explicitly emits `--ds-color-alpha-{success,warning,error,info}-10`
+      // in rottay's DARK block: rottay's light overlay authors all seven
+      // alpha channels, but its dark (default) body authors only the three
+      // `alphaSuccess20`/`alphaWarning20`/`alphaError20` fields, so these
+      // four `-10` channels used to fall through to `default.css`'s `:root`
+      // cascade default without ever appearing as an explicit compiled key.
+      // Two of the four resolve to the byte-identical rgba the cascade
+      // already gave (success/warning, whose dark seed matches the
+      // foundation literal); error/info additionally correct the resolved
+      // colour to rottay's own dark seed. Either way, the KEY is new, so the
+      // count moves regardless of which of the four also changed a byte.
+      rottay: 1196,
+      // COH-1 (2026-08-30): 1229 -> 1236. Bithire never authored ANY of the
+      // seven `--ds-color-alpha-{tone}-{10,20}` channels (info-20 excluded)
+      // in either mode, so they never appeared as explicit compiled keys;
+      // `deriveStatusTintFloor` now emits all seven in the LIGHT (base)
+      // block. Bithire's dark overlay authors its own seeds too, so its
+      // OWN floor value would be the identical channel-reference string --
+      // no new key there, hence +7 and not +14. The eight retired
+      // `*BgColor`/`*BorderColor` literals do not move this count: those
+      // channels were ALREADY explicit keys before (authored), and remain
+      // explicit keys now (derived) -- same eight keys, different producer.
+      bithire: 1236,
+      // COH-1 (2026-08-30): 468 -> 475. Same shape as bithire: evnto never
+      // authored any of the seven alpha channels in either mode, so
+      // `deriveStatusTintFloor` adds +7 new explicit keys to the base block.
+      // The four retired `*BgColor` and four retired `*BorderColor` light
+      // literals do not move this count (measured directly): each was
+      // already an explicit compiled key before retirement (authored) and
+      // remains one now (derived) -- same channel, different producer.
+      evnto: 475,
     };
     for (const vertical of VERTICALS) {
       expect(

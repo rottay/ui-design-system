@@ -91,6 +91,7 @@ import {
   ON_TONE_ROLES,
   deriveReadableInk,
   onToneChannel,
+  type OnToneRole,
 } from "../../foundation/css/color-math/readable-ink";
 import {
   springLinearEasing,
@@ -653,6 +654,58 @@ export function deriveExtendedPaletteFloor(
 }
 
 /**
+ * COH-1 — the FLOOR for the status-tint family: `--ds-color-{tone}-bg`,
+ * `--ds-color-{tone}-border` and `--ds-color-alpha-{tone}-{10,20}`, per tone.
+ *
+ * Each formula names the tone's OWN channel rather than resolving it, so the
+ * floor never needs the seed's literal value -- only its presence in the
+ * block being compiled. That is what lets one function serve the base block
+ * and every mode overlay alike: `brandThemeToCssVariables` re-enters per
+ * block with that block's own merged palette, so a dark overlay derives
+ * against its own dark seed rather than inheriting light's.
+ *
+ * ANCHOR IS THE SEED, NOT THE `-500` STEP. `color-mix(in srgb,
+ * var(--ds-color-{tone}) N%, transparent)` reads the channel the theme
+ * itself sets (`--ds-color-{tone}` = `bt.palette.{tone}Color`, set a few
+ * lines above in this same function), never a ramp step. The `-500` step is
+ * residue of a documented APCA re-level (`default.css`) and no longer
+ * coincides with the channel in three of four tones -- anchoring there would
+ * paint a brown border under an amber well in bithire's warning tone.
+ *
+ * `--ds-color-alpha-info-20` is never emitted: it is a RETIRED channel
+ * (`residual-adjudication.json`, `"decision": "RETIRE_PROPOSED", "executed":
+ * true`), and reviving it from this floor would resurrect a name the
+ * programme already closed.
+ *
+ * GUARDED PER TONE, per the ramp-anchor law: a tone whose block carries no
+ * seed emits nothing for it. Without this guard the floor would fire off a
+ * mode overlay that authors an unrelated ramp blind to mode (e.g. evnto's
+ * dark `ramps.success` copying light's 50..800 verbatim) and PROPAGATE that
+ * defect instead of curing it; that overlay simply never declares
+ * `successColor`, so the guard already excludes it.
+ *
+ * Merged BEFORE `setExtendedPaletteVariables`, exactly like
+ * `deriveExtendedPaletteFloor` above: derivation is the floor, an authored
+ * `successBgColor`/`alphaSuccess10`/etc. is the ceiling, per channel.
+ */
+export function deriveStatusTintFloor(
+  palette: BrandPalette
+): Record<string, string> {
+  const vars: Record<string, string> = {};
+  for (const role of ON_TONE_ROLES) {
+    if (!palette[`${role}Color`]) continue;
+    const channel = `--ds-color-${role}`;
+    vars[`${channel}-bg`] = `var(${channel}-50)`;
+    vars[`${channel}-border`] = `color-mix(in srgb, var(${channel}) 20%, transparent)`;
+    vars[`--ds-color-alpha-${role}-10`] = `color-mix(in srgb, var(${channel}) 10%, transparent)`;
+    if (role !== "info") {
+      vars[`--ds-color-alpha-${role}-20`] = `color-mix(in srgb, var(${channel}) 20%, transparent)`;
+    }
+  }
+  return vars;
+}
+
+/**
  * Drop own-enumerable keys whose value is `undefined` before a spread.
  *
  * The ISO bridge materializes COMPLETE containers, so a resolved `Theme` lowered
@@ -866,6 +919,10 @@ function brandThemeToCssVariables(
     // them from an NTSC luma threshold is gone, so there is no second emitter
     // to collide with and no reason to keep the floor exported-but-unwired.
     Object.assign(vars, deriveExtendedPaletteFloor(effectivePrimary));
+    // COH-1: the status-tint floor, guarded per tone by that tone's own seed
+    // (see `deriveStatusTintFloor`). Same precedence slot as the floor above:
+    // merged before the authored ceiling so a per-channel override still wins.
+    Object.assign(vars, deriveStatusTintFloor(bt.palette));
     setExtendedPaletteVariables(vars, bt.palette);
 
     // This mode's ground. A theme declares one ground in the plain channel;
@@ -1587,6 +1644,42 @@ export const SEED_SHADOWING_FIELDS: Readonly<
   "--ds-color-link-hover": ["palette.linkHoverColor"],
 };
 
+/**
+ * COH-1 — the SIBLING of `SEED_SHADOWING_FIELDS` for the status-tint family.
+ *
+ * Deliberately a separate table, not an extension of `SEED_SHADOWING_FIELDS`:
+ * that table is documented AND test-closed
+ * (`provenance-acceptance.test.ts`) as exactly the union of what
+ * `derivePrimarySemantics`/`deriveInteractionFloor` emit for ONE seed,
+ * `palette.primaryColor`. The fifteen channels below derive from FOUR
+ * different seeds (`palette.{success,warning,error,info}Color`), so folding
+ * them into the primary table would make that documentation false and widen
+ * the primary family's own closure fixture to absorb channels it does not
+ * own.
+ *
+ * The key set is exactly what `deriveStatusTintFloor` emits when every tone
+ * is seeded -- asserted executably, same pattern as the primary table.
+ */
+export const STATUS_SEED_SHADOWING_FIELDS: Readonly<
+  Record<string, readonly string[]>
+> = {
+  "--ds-color-success-bg": ["palette.successBgColor"],
+  "--ds-color-success-border": ["palette.successBorderColor"],
+  "--ds-color-alpha-success-10": ["palette.alphaSuccess10"],
+  "--ds-color-alpha-success-20": ["palette.alphaSuccess20"],
+  "--ds-color-warning-bg": ["palette.warningBgColor"],
+  "--ds-color-warning-border": ["palette.warningBorderColor"],
+  "--ds-color-alpha-warning-10": ["palette.alphaWarning10"],
+  "--ds-color-alpha-warning-20": ["palette.alphaWarning20"],
+  "--ds-color-error-bg": ["palette.errorBgColor"],
+  "--ds-color-error-border": ["palette.errorBorderColor"],
+  "--ds-color-alpha-error-10": ["palette.alphaError10"],
+  "--ds-color-alpha-error-20": ["palette.alphaError20"],
+  "--ds-color-info-bg": ["palette.infoBgColor"],
+  "--ds-color-info-border": ["palette.infoBorderColor"],
+  "--ds-color-alpha-info-10": ["palette.alphaInfo10"],
+};
+
 const CUSTOM_PROPERTY_NAME = /--[a-z0-9-]+/gi;
 const BAKED_COLOR = /#[0-9a-f]{3,8}\b|\b(?:rgba?|hsla?|oklch|oklab|lab|lch)\(/i;
 
@@ -1670,6 +1763,89 @@ function applyTenantSeedDerivations(
 }
 
 /**
+ * COH-1 — the SIBLING of `applyTenantSeedDerivations` for the four status
+ * tones: re-derive the bg/border/alpha family a TENANT's own status seed
+ * owns, over an assembled block.
+ *
+ * Same defect as the primary family, one tier down: a DB tenant that sets
+ * only `palette.status.success` (lowered to `palette.successColor` before
+ * this compiler runs -- `migrate-v1/index.ts`, the same door the seed
+ * passthrough already uses) must get a `-bg`/`-border`/alpha family derived
+ * from ITS seed, not left resolving to the vertical baseline's baked-in
+ * literal. `deriveStatusTintFloor` alone cannot fix this: it merges under
+ * `setExtendedPaletteVariables`, whose unconditional "write when present"
+ * then re-applies the MERGED theme's `successBgColor` -- which for a tenant
+ * on bithire is still bithire's own green, because a tenant's silence on a
+ * channel resolves to the baseline's leaf, not to "absent".
+ *
+ * Four independent seeds, so each tone is considered on its own rather than
+ * as one family. Same three guards as `applyTenantSeedDerivations`, per tone:
+ *
+ *  1. No provenance, or THIS tone's seed is not the tenant's own (checked the
+ *     same way the primary family checks `PRIMARY_SEED_FIELD`: the mode's own
+ *     restatement, or inheritance from the base when the overlay does not
+ *     restate it) -- the tone is skipped entirely.
+ *  2. A tenant leaf that names the channel directly
+ *     (`STATUS_SEED_SHADOWING_FIELDS`) is TENANT_LEAF and outranks the
+ *     tenant's own seed.
+ *  3. A value that bakes no colour of its own is left exactly as assembled.
+ */
+function applyTenantStatusSeedDerivations(
+  vars: Record<string, string>,
+  effectivePalette: BrandPalette | undefined,
+  provenance:
+    | {
+        authoredPaths: TenantAuthoredPaths;
+        /** "" for the base block, "modes.<mode>." for a mode overlay block. */
+        modePrefix: string;
+        /**
+         * Per tone: is the seed THIS block compiles from genuinely the
+         * tenant's own -- computed by the caller from the RAW tenant patch
+         * value, never from `authoredPaths` membership alone.
+         * `collectPatchAuthoredPaths` enumerates a keypath the moment it
+         * exists as an object key, even when its value is `undefined`
+         * (`migrate-v1`'s `paletteFields()` always constructs all four
+         * status-color keys on its returned object, tenant-set or not), so
+         * `authoredPaths.has("...palette.errorColor")` can be true for a
+         * tenant that never touched error at all. Measured: a document that
+         * only sets `backgroundMode` moves rottay's LIGHT overlay's own
+         * authored `alphaError10` literal, with no tenant seed in sight,
+         * unless this guard reads the real value instead of the Set.
+         */
+        toneSeedIsTenantAuthored: Readonly<Record<OnToneRole, boolean>>;
+      }
+    | undefined
+): void {
+  if (!provenance || !effectivePalette) return;
+  const { authoredPaths, modePrefix, toneSeedIsTenantAuthored } = provenance;
+  for (const role of ON_TONE_ROLES) {
+    if (!toneSeedIsTenantAuthored[role]) continue;
+    const channel = `--ds-color-${role}`;
+    const derived: Record<string, string> = {
+      [`${channel}-bg`]: `var(${channel}-50)`,
+      [`${channel}-border`]: `color-mix(in srgb, var(${channel}) 20%, transparent)`,
+      [`--ds-color-alpha-${role}-10`]: `color-mix(in srgb, var(${channel}) 10%, transparent)`,
+      ...(role === "info"
+        ? {}
+        : {
+            [`--ds-color-alpha-${role}-20`]: `color-mix(in srgb, var(${channel}) 20%, transparent)`,
+          }),
+    };
+    for (const [derivedChannel, derivedValue] of Object.entries(derived)) {
+      const currentRank = (
+        STATUS_SEED_SHADOWING_FIELDS[derivedChannel] ?? []
+      ).some((field) => isTenantAuthoredField(authoredPaths, field, modePrefix))
+        ? PRODUCER_RANK.tenantLeaf
+        : PRODUCER_RANK.baselineLeaf;
+      if (PRODUCER_RANK.tenantDerived <= currentRank) continue;
+      const current = vars[derivedChannel];
+      if (current !== undefined && !bakesItsOwnColor(current)) continue;
+      vars[derivedChannel] = derivedValue;
+    }
+  }
+}
+
+/**
  * Keep a tenant's base-authored sidebar leaf authoritative INSIDE a mode.
  *
  * A mode overlay is a statement about the other mode, not a statement about
@@ -1730,7 +1906,12 @@ function compileModeBlocks(
   // revert inside `data-mode="dark"`.
   tenantPosture?: AppearancePostureFields,
   // E-2: the overlay re-runs the whole lowering, so both halves travel together.
-  tenantTypography?: BrandTheme["typography"]
+  tenantTypography?: BrandTheme["typography"],
+  // COH-1: the RAW tenant patch, read-only here -- see
+  // `applyTenantStatusSeedDerivations`'s docblock for why the merged `bt`
+  // and `authoredPaths` alone cannot tell "the tenant wrote this seed" from
+  // "the patch builder always emits this key".
+  tenantPatch?: Partial<BrandTheme>
 ): CompiledBrandModeBlock[] {
   const modes = bt.modes;
   if (!modes) return [];
@@ -1772,6 +1953,28 @@ function compileModeBlocks(
               authoredPaths.has(`${modePrefix}${PRIMARY_SEED_FIELD}`) ||
               (overlay.palette?.primaryColor === undefined &&
                 authoredPaths.has(PRIMARY_SEED_FIELD)),
+          }
+    );
+    // COH-1: the status-tint sibling, same block, same authoredPaths. Seed
+    // authorship is computed from the RAW tenant patch value (never from
+    // `authoredPaths` membership alone -- see the function's docblock).
+    applyTenantStatusSeedDerivations(
+      modeVars,
+      merged.palette,
+      authoredPaths === undefined
+        ? undefined
+        : {
+            authoredPaths,
+            modePrefix,
+            toneSeedIsTenantAuthored: Object.fromEntries(
+              ON_TONE_ROLES.map((role) => [
+                role,
+                tenantPatch?.modes?.[mode]?.palette?.[`${role}Color`] !==
+                  undefined ||
+                  (overlay.palette?.[`${role}Color`] === undefined &&
+                    tenantPatch?.palette?.[`${role}Color`] !== undefined),
+              ])
+            ) as Record<OnToneRole, boolean>,
           }
     );
     keepTenantBaseSidebarLeaves(modeVars, baseVars, authoredPaths, modePrefix);
@@ -2067,6 +2270,26 @@ export const compileBrandTheme: CompileBrandTheme = (
           seedIsTenantAuthored: tenantAuthoredPaths.has(PRIMARY_SEED_FIELD),
         }
   );
+  // COH-1: the status-tint sibling. The base block has no overlay above it,
+  // so seed authorship is just "did the raw tenant patch's own palette carry
+  // this tone's seed" -- see the function's docblock for why that must read
+  // the raw patch value, not `authoredPaths` membership.
+  applyTenantStatusSeedDerivations(
+    cssVariables,
+    effectiveTheme.palette,
+    tenantAuthoredPaths === undefined
+      ? undefined
+      : {
+          authoredPaths: tenantAuthoredPaths,
+          modePrefix: "",
+          toneSeedIsTenantAuthored: Object.fromEntries(
+            ON_TONE_ROLES.map((role) => [
+              role,
+              tenantPatch?.palette?.[`${role}Color`] !== undefined,
+            ])
+          ) as Record<OnToneRole, boolean>,
+        }
+  );
 
   // DS-S001: governed recipe-profile selection. Fail-closed — an unknown id,
   // malformed id or foreign schema version compiles to engine defaults.
@@ -2107,7 +2330,8 @@ export const compileBrandTheme: CompileBrandTheme = (
     cssVariables,
     tenantAuthoredPaths,
     tenantPosture,
-    tenantTypography
+    tenantTypography,
+    tenantPatch
   );
   for (const block of modeBlocks) {
     // A mode may restyle type; it may not drop the mandatory fallback while

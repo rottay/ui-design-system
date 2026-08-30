@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "generatedBy": "node packages/core/manifest/generator/index.mjs --sync",
   "authorityLaw": "Controls own semantics, groups own recipe vocabularies, families own applicability edges, and this index owns generated rollups.",
-  "inputsDigest": "2dafa17a455d1e9abd2348427142f21c0ea1161810cc26f71783c650515749c9",
+  "inputsDigest": "d9881ae3503a633cf5ef29b85910047427bfdab580147c862b07b9d9d9b045ad",
   "denominators": {
     "canonicalFamilies": 255,
     "activeStandardControls": 14,
@@ -1862,107 +1862,107 @@
     {
       "controlId": "palette.seeds",
       "path": "manifest/controls/palette.seeds.json",
-      "digest": "0097be8da841822eeef6c68653c3aa5547293b423e67396b41a6fbd593580a86"
+      "digest": "6a774fa289d38e6519f1172271897613f1b41be9f041bf4380eb0079fb7e20c7"
     },
     {
       "controlId": "typography.pairing",
       "path": "manifest/controls/typography.pairing.json",
-      "digest": "ff4c84eb8608f240d0d3408c02c8a6b5130dbdbc4827f02537fe9389de62bda2"
+      "digest": "39806a858fce0a0fdbb3342a6c189730389cec4c19c271f9847d59690814655b"
     },
     {
       "controlId": "typography.families",
       "path": "manifest/controls/typography.families.json",
-      "digest": "7d4e0e6a7ef8385e34c350050c9c9c0a0d927fa21bf6d03640657090dcc880ca"
+      "digest": "14fe15256313734c44d06a8313903662b26e504d68d7644b862242247b3c6cf1"
     },
     {
       "controlId": "typography.scale",
       "path": "manifest/controls/typography.scale.json",
-      "digest": "9a3f49f8e756a50dc72bd3eaac45c7874073d2d5341f81271a1678480d4bc853"
+      "digest": "305f0bdc4b095a11cea0ee2592303cb5ce1e54e9c29c6624d870553e1acc06bc"
     },
     {
       "controlId": "shape.radius-scale",
       "path": "manifest/controls/shape.radius-scale.json",
-      "digest": "3ad069d4da126088c797ad17a8e171aaa7563a4331960e3cc511f2216dd4a188"
+      "digest": "214b380af373d03cb211fc8273e6103810cca2fc2e279d6b76a6a1998cb0f5dc"
     },
     {
       "controlId": "shape.button-style",
       "path": "manifest/controls/shape.button-style.json",
-      "digest": "1c9a7ebc4352e0f8f3697a3074088413cceac24d9f86867d3b830f2aa32e27ab"
+      "digest": "ae6c897aefe2f1fc40fade2aabb242e3ac8e7dcb5731f2c33fd943ef070a7713"
     },
     {
       "controlId": "density.mode",
       "path": "manifest/controls/density.mode.json",
-      "digest": "b266f7615277a745ffc0bc7d7871c399b1e7278dffbb1bdd048290e3ae711ac5"
+      "digest": "6140ed8d7def95232c03b5dd2f516c2a159447fb942e66c8185546e96474e686"
     },
     {
       "controlId": "spacing.rhythm",
       "path": "manifest/controls/spacing.rhythm.json",
-      "digest": "b8180e1df611e79a8b6c88791a775c0c4b8f12936167b1ff44e7c439cab568ea"
+      "digest": "1806704ae77b9d8c6ee1992c26224ed2a29f6d1b1a3f68f06180b16f32156b18"
     },
     {
       "controlId": "motion.dial",
       "path": "manifest/controls/motion.dial.json",
-      "digest": "488ade57ac29dfa1dd2ce48af213b666a5c52d4c684f0be09c77550c3753ecf0"
+      "digest": "66567889f96bdf24906ad60040525ad5921c957c1e29324814c722733526473d"
     },
     {
       "controlId": "surfaces.elevation-posture",
       "path": "manifest/controls/surfaces.elevation-posture.json",
-      "digest": "e8bf5b510c9ec300b59f1b1a1791e58c6076027b8bc499dd9adb089da88cbb0f"
+      "digest": "1be093d7101cef945c382299c56d4c381cf9191dfdccadbad901ac7fbd7db3f1"
     },
     {
       "controlId": "surfaces.effect-intensity",
       "path": "manifest/controls/surfaces.effect-intensity.json",
-      "digest": "5ddeb7f30337e6915764f83cc0ff40edd91e6accbfc995fbaf72c49eb599f296"
+      "digest": "2bb9ea515b0324bb4b79fc374916bd05f57873a09dabf68f6b93d41528e38ad2"
     },
     {
       "controlId": "navigation.sidebar-tone",
       "path": "manifest/controls/navigation.sidebar-tone.json",
-      "digest": "f9a3ef1aa8d7d5641fea1d5c86d99247f1e45172d58398668cee2c291b004351"
+      "digest": "90109952b549a48d583cf17e89d45b0f2a2ad4ed1f91715ac11249aa5a0c2cff"
     },
     {
       "controlId": "experience.profile",
       "path": "manifest/controls/experience.profile.json",
-      "digest": "4369a0ca3d437d5ec700a34f5d7639b4947444e7c462700c3c47f76119121efe"
+      "digest": "799446aa5627339924a2aef016d365e24a8c6eada23fb430e1036671ecf84ec7"
     },
     {
       "controlId": "chrome.families",
       "path": "manifest/controls/chrome.families.json",
-      "digest": "bac653825887ff5c0b57abebf3c901ad7f064abf0e2864d0fdc3b7a12df7bc14"
+      "digest": "d87a4c04f0e68a5390a3571f7150f93595ecf613e900a1976b1affe3056ce17b"
     },
     {
       "controlId": "chrome.anatomy",
       "path": "manifest/controls/chrome.anatomy.json",
-      "digest": "c10044e2bf8624af9bf81390018206ea5fdf895275e40f0bd1f0c32b3b78ed9c"
+      "digest": "af5dbd2fafa613ce9afe0ce79d0342a26abb01004b88549d45f88bced2218d8f"
     },
     {
       "controlId": "token-overrides",
       "path": "manifest/controls/token-overrides.json",
-      "digest": "b757b057d3a933a76d08e53e15553ca81c317d2ebb412294e5f95ec889721816"
+      "digest": "f2e1cad171709ebb2dd9128f5edc4aad5de56b6d27e4bf1fc0d5c7d8e61fc9db"
     },
     {
       "controlId": "recipe-profile",
       "path": "manifest/controls/recipe-profile.json",
-      "digest": "81d88c4489e6bf80ef29cac4a03b0dc0243975b1389559a7228233126a728b05"
+      "digest": "ebdf24c155f1bf675b7a6d267f26a4812f977c6fbf9b711e2c5f9943b09d57da"
     },
     {
       "controlId": "profiles.expressive",
       "path": "manifest/controls/profiles.expressive.json",
-      "digest": "769416dde46b44b5c1a1babc7589bd1ac8e243c27c4bb02048462c8e91d8c98d"
+      "digest": "ba7c2308ac97b90eee2ba19b08d2c53af1158c426be9ee74a2ead46ed4f1b25a"
     },
     {
       "controlId": "palette.status-seeds",
       "path": "manifest/controls/palette.status-seeds.json",
-      "digest": "d65edae430ab26984aebd588ef26a72ddaa6a59d8f6fe57440ead0d7c3c70f8b"
+      "digest": "0988adf459e519eba08d551c4d08ba334ea8b1cdca5476929253f2bb192596e6"
     },
     {
       "controlId": "profiles.icon",
       "path": "manifest/controls/profiles.icon.json",
-      "digest": "09c090f868a633a6dd24d224d6acb14fdd5e975deb0c61790ac2dcd90da8119a"
+      "digest": "20d5827898dec48403064ecb5669570bd57d193b554797149a89ec41b86622b6"
     },
     {
       "controlId": "responsive.posture",
       "path": "manifest/controls/responsive.posture.json",
-      "digest": "6ece237401e647c89647dfe89b4e64ef3b627a8653fc7bae7a321c6d452992aa"
+      "digest": "35c744827ea7c5638fea72946b77809a6a3e4c40f1e04c534dddcc13c94d6e51"
     }
   ],
   "groups": [
