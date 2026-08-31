@@ -2128,7 +2128,7 @@ alias en `package.json`.
 - `boundaries/app-root-writer-gate/index.mjs` (+ `index.test.mjs`) — CI; qué app puede escribir `--ds-*` en su propia raíz.
 - `structure/core-structure-audit/index.mjs` (+ `index.test.mjs`, `core-structure-audit.baseline.json`) — el ratchet decrease-only del árbol
   de `src/`; `structure:check`, `structure:report`, `lint:folders`.
-- `structure/lint-folder-index/index.mjs` (+ `index.test.mjs`) — naming + `folder/index` + propiedad; `lint:folders`.
+- `structure/folder-naming/index.mjs` (+ `index.test.mjs`) — naming + `folder/index` + propiedad; `lint:folders`.
 - `boundaries/pattern-surface-ownership-gate/index.mjs` (+ `index.test.mjs`, `.baseline.json`, `.allowlist.json`,
   `.README.md`) — CI; frontera patternvssurface.
 - `taxonomy/taxonomy-parity-gate/index.mjs` (+ `index.test.mjs`) — CI; paridad entre taxonomía declarada e inventario real.

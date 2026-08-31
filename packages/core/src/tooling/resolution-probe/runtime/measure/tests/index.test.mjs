@@ -12,7 +12,7 @@
  * read returned the mutation values -- while the custom property itself was
  * always current. A run built on that reports a live control as INERT, which is
  * the worst sentence this harness can pass. Evidence:
- * test-artifacts/quality-evidence/wo-cra-23/H3/isolation.MEASURED-NOT-RECEIPTED.json
+ * test-artifacts/quality-evidence/wo-cra-23/archive/unreceipted/typography-scale-static-db-residuals/isolation.MEASURED-NOT-RECEIPTED.json
  *
  * @module Tooling/ResolutionProbe/Runtime/Measure/Tests
  */
@@ -97,7 +97,7 @@ test('H-3a drill 4: the attempt budget is a ceiling, not a target', async () => 
 // H3C — the DB arm's write is DELIVERED to a document that has computed nothing
 //
 // What a browser then does with that document is measured, not drilled:
-// test-artifacts/quality-evidence/wo-cra-23/H3/residual-isolation.MEASURED-NOT-RECEIPTED.json
+// test-artifacts/quality-evidence/wo-cra-23/archive/unreceipted/typography-scale-static-db-residuals/residual-isolation.MEASURED-NOT-RECEIPTED.json
 // compares the three deliveries on one scene and one bundle, and the six
 // typography.scale scenarios show the divergence gone. A drill that launched
 // Chromium to re-ask that would be testing Chromium.

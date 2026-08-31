@@ -1,5 +1,5 @@
 /**
- * Self-test for structure/lint-folder-index/index.mjs — exact-path exception contract.
+ * Self-test for structure/folder-naming/index.mjs — exact-path exception contract.
  *
  * The gate carries two exception sets and both are *exact* `Set.has` lookups on
  * a fully qualified `category/.../folder` path:
@@ -44,10 +44,10 @@ const FIXTURE_BASE_DIRS = [
  * (paths relative to `src/ui`), run the gate, and return its parsed result.
  */
 function runGateOn(componentDirs) {
-  const root = mkdtempSync(join(tmpdir(), 'lint-folder-index-'));
+  const root = mkdtempSync(join(tmpdir(), 'folder-naming-'));
   try {
-    mkdirSync(join(root, 'scripts/structure/lint-folder-index'), { recursive: true });
-    copyFileSync(gate, join(root, 'scripts/structure/lint-folder-index/index.mjs'));
+    mkdirSync(join(root, 'scripts/structure/folder-naming'), { recursive: true });
+    copyFileSync(gate, join(root, 'scripts/structure/folder-naming/index.mjs'));
 
     for (const dir of FIXTURE_BASE_DIRS) {
       mkdirSync(join(root, dir), { recursive: true });
@@ -56,7 +56,7 @@ function runGateOn(componentDirs) {
       mkdirSync(join(root, 'src/ui', dir), { recursive: true });
     }
 
-    const proc = spawnSync(process.execPath, [join(root, 'scripts/structure/lint-folder-index/index.mjs')], {
+    const proc = spawnSync(process.execPath, [join(root, 'scripts/structure/folder-naming/index.mjs')], {
       encoding: 'utf8',
     });
 

@@ -2865,7 +2865,7 @@ verificada: mismos brazos moviendo el canal, y los dependientes calc
 recomputan para uno y no para el otro.
 
 **Fase (1) — la causa, medida (artifact durable
-`test-artifacts/quality-evidence/wo-cra-23/H3/isolation.MEASURED-NOT-RECEIPTED.json`):**
+`test-artifacts/quality-evidence/wo-cra-23/archive/unreceipted/typography-scale-static-db-residuals/isolation.MEASURED-NOT-RECEIPTED.json`):**
 las lecturas del brazo DB van **desfasadas exactamente UNA FASE** para las
 propiedades dependientes (la custom property siempre al día; los
 dependientes muestran la fase anterior). El flush existente + el settle
@@ -2893,7 +2893,7 @@ acotadas); restringida a la intersección, 0.
 
 **El residuo — 16 filas, NO staleness** (endureció la ley y no se movieron;
 artifact durable F1
-`H3/residual-divergence.MEASURED-NOT-RECEIPTED.json`): `card-modern-md/title`
+`archive/unreceipted/typography-scale-static-db-residuals/residual-divergence.MEASURED-NOT-RECEIPTED.json`): `card-modern-md/title`
 DB **12.3375px** (0.94×1) vs estático **11.5972px** (0.94²); cuatro
 `*-preset-gap/root` que DB no mueve. Opus correctamente NO lo atribuyó a
 ningún mecanismo sin poder mostrarlo (tercera disciplina consecutiva:

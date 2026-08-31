@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 /**
- * lint-folder-index.mjs — Naming, folder/index, and ownership enforcement
+ * Enforces naming, folder/index, and ownership rules.
  * for the DS component tree and key subsystem boundaries.
  *
  * Fails (exit 1) if any of the following violations are found:
@@ -18,8 +18,7 @@
  *    structures/, surfaces/). Compat shims are allowed if they are <= 5
  *    lines (one re-export + comment).
  *
- * Run: `node scripts/structure/lint-folder-index/index.mjs`
- * Hook into package.json: `"lint:folders": "node scripts/structure/lint-folder-index/index.mjs"`
+ * Run through the `lint:folders` package command.
  */
 
 import { readdirSync, statSync, readFileSync } from 'node:fs';
@@ -320,10 +319,10 @@ const SRC_ROOT = resolve(__dirname, '../../../src');
 
 // Report
 if (violations.length === 0) {
-  console.log('lint-folder-index: all checks passed.');
+  console.log('folder-naming: all checks passed.');
   process.exit(0);
 } else {
-  console.error(`lint-folder-index: ${violations.length} violation(s) found:\n`);
+  console.error(`folder-naming: ${violations.length} violation(s) found:\n`);
   for (const v of violations) {
     console.error(`  [${v.rule}] ${v.path}`);
     console.error(`    ${v.message}\n`);

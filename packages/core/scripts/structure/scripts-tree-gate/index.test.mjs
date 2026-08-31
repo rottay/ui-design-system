@@ -39,7 +39,7 @@ test('baseline integrity: every entry carries rule, path and a non-empty reason'
   }
 });
 
-for (const rule of ['R1', 'R2', 'R3', 'R4', 'R5', 'R6', 'M1']) {
+for (const rule of ['R1', 'R2', 'R3', 'R4', 'R5', 'R6', 'R7', 'M1']) {
   test(`drill ${rule}: an injected ${rule} violation is caught`, () => {
     const out = runGate([`--drill=${rule}`]);
     assert.equal(out.status, 0, out.stderr);
@@ -159,6 +159,13 @@ test('sandbox R6: an undeclared lib subfamily is detected on disk', (t) => {
   mkdirSync(join(root, 'lib', 'shadow', 'shadow-probe'), { recursive: true });
   writeFileSync(join(root, 'lib', 'shadow', 'shadow-probe', 'index.mjs'), '// probe\n');
   assert.ok(rules(collectFindings(root)).includes('R6-undeclared-lib-subfamily lib/shadow'));
+});
+
+test('sandbox R7: agent and work-order capability names are detected on disk', (t) => {
+  const root = buildSandbox(t);
+  mkdirSync(join(root, 'engine', 'cra-99-shadow'), { recursive: true });
+  writeFileSync(join(root, 'engine', 'cra-99-shadow', 'index.mjs'), '// probe\n');
+  assert.ok(rules(collectFindings(root)).includes('R7-opaque-capability-name engine/cra-99-shadow'));
 });
 
 test('sandbox R5-lib: a subfamily-prefix child inside lib/ is detected on disk (Fable H1)', (t) => {

@@ -369,10 +369,63 @@ removal condition. The existing scripts-tree gate evolves to enforce the target
 hierarchy instead of creating another structural gate. This mechanical lane
 runs in parallel and does not consume or block the product-source budget.
 
-The first batch already removes the two special files from the scripts root:
-Vitest configuration belongs to `ci/runner`, test ambient declarations belong
-to `ci/typecheck-tests-ratchet`, and the gate no longer exempts loose root files. Subsequent batches publish a
-KEEP/MOVE/MERGE/DELETE disposition for every capability before moving it.
+The first batch already removed the two special files from the scripts root:
+the Vitest configuration and ambient declarations now belong to
+`ci/script-tests`, and the gate no longer exempts loose root files. Subsequent
+batches apply the disposition below atomically.
+
+### Scripts migration map
+
+These are physical path changes, not documentation aliases. Existing package
+command names may remain temporarily as compatibility entrypoints; their target
+paths change in the same commit. A row closes only when imports, package scripts,
+CI, generated producer references and focal tests are green.
+
+| Disposition | Current path(s) | Target |
+|---|---|---|
+| MOVE | `structure/lint-folder-index` | `structure/folder-naming` |
+| MOVE | `structure/audit-vertical-compliance` | `boundaries/app-vertical-compliance` |
+| MOVE | `structure/core-structure-audit` | `structure/tree-integrity` |
+| MOVE | `structure/audit-integration` | `structure/engine-integration` |
+| MOVE | `boundaries/application-boundary-gate` | `boundaries/app-private-anatomy` |
+| MOVE | `boundaries/surface-presentation-boundary` | `boundaries/surfaces-access-contract` |
+| MOVE | `boundaries/migrate-public-entrypoints` | `codemods/public-entrypoint-imports` |
+| MOVE | `boundaries/app-surface-factory-drain` | `boundaries/app-screen-factory-inventory` |
+| MOVE | `ci/analyze-bundle` | `ci/bundle-analysis` |
+| MOVE | `ci/check-storybook-budget` | `packaging/storybook-budget` |
+| MOVE | `builders/build-font-packs` | `builders/font-packs` |
+| MOVE | `builders/write-build-stamp` | `builders/build-stamp` |
+| MOVE | `generators/generate-semantic-icons` | `generators/semantic-icons` |
+| MOVE | `generators/generate-surface-capability-census` | `generators/surface-capabilities` |
+| MOVE | `generators/generate-taxonomy` | `generators/taxonomy` |
+| MOVE | `evidence/cra-11-adaptive-contract-census` | `evidence/adaptive-contracts` |
+| MOVE | `evidence/cra-12-motion-governance` | `evidence/motion-governance` |
+| MOVE | `evidence/cra-15-runtime-hardening-gate` | `evidence/runtime-hardening` |
+| MOVE | `evidence/cra-17-integral-gate` | `evidence/packaging-integrity` |
+| MOVE | `evidence/gat-07-exact-proof` | `evidence/claim-exactness` |
+| MOVE | `evidence/gat-09-full-claim-integrity` | `evidence/public-claim-integrity` |
+| MOVE | `packaging/cra-14-public-barrel-gate` | `packaging/public-barrel` |
+| MOVE | `packaging/cra-17-license-gate` | `packaging/graphics-licenses` |
+| MOVE | `packaging/cra-17-public-declaration-gate` | `packaging/public-declarations` |
+| MOVE | `engine/freeze-gate` | `engine/change-freeze` |
+| MOVE | `engine/no-decorative-accent-rails` | `engine/decorative-accent-prohibition` |
+| MOVE | `engine/certified-data-css-producers` | `engine/embedded-css-producers` |
+| MOVE | `engine/inline-paint-recovery` | `engine/recovered-paint-identity` |
+| MOVE | `engine/skin-evidence-gate` | `taxonomy/family-skin-evidence` |
+| MOVE | `tokens/kimi-preservation-manifest` | `tokens/customization-preservation` |
+| MOVE | `tokens/kimi-worklist-gate` | `tokens/visual-worklist` |
+| MERGE | `ci/wiring-coverage-gate` + `ci/workflow-script-wiring-gate` | `ci/wiring` with `scripts` and `workflow` subchecks |
+| MERGE | `verticals/build-css` + `verticals/css-staleness-gate` | `builders/vertical-css` with `--write` and `--check` |
+| MERGE | `tokens/catalog` + `tokens/controls-catalog` + `tokens/customization-surface-census` | `tokens/customization-surface` with explicit projections |
+| MERGE | `engine/ck-e-migration-certification` + `engine/ck-e-noncharts-migration` | `engine/chart-skin-migration` |
+| MERGE | `engine/ck-h1-floor-identity` + `engine/ck-h1-inert-prestep` | `engine/tenant-preview-paint-floor` |
+| FOLD | single-consumer `lib/evidence/*`, `lib/taxonomy/owner-nesting` and `lib/paint/counter-presence-audit` | their only consuming capability; `lib` remains multi-consumer only |
+| RETIRE | `quality-evidence/programs/modern-rescue/cascade-materialize.mjs`, `cascade-backlog.mjs`, `cascade-consumability.mjs` and their non-consumable outputs | no replacement after unique facts and constitutional references are removed atomically |
+| RETIRE | empty `quality-evidence/programs/modern-rescue/KIMI-ANNOTATIONS` | no replacement after its dormant path pins are removed |
+
+The structure gate gains a decreasing violation set for opaque capability
+prefixes (`cra-`, `gat-`, `ck-`, `kimi-`, `f<digit>-`, `v<digit>-`, `phase-`).
+Each physical migration shrinks that set; a new opaque name is rejected.
 
 `packages/core/test-artifacts/quality-evidence/wo-cra-23` follows the same
 readability law. Opaque folders such as `COH-1`, `F4B`, `F4C`, `H3`, `R0` and
@@ -382,6 +435,29 @@ archive) and then by named control or journey. Because receipts and digests cite
 many current paths, signed evidence moves only after a complete reference map,
 atomic reanchoring and clean-clone verification; this safety rule cannot justify
 leaving the names opaque indefinitely.
+
+### Evidence migration map
+
+| Current path | Target |
+|---|---|
+| `COH-1` | `cascade-proofs/controls/palette-status-seeds/post-derivation-status-tints` |
+| `F4C` | `cascade-proofs/controls/palette-status-seeds/pre-derivation-five-phase-canary` |
+| `F4B/<control>` | `cascade-proofs/controls/<control>/computed-static-db` |
+| `H3` | `archive/unreceipted/typography-scale-static-db-residuals` |
+| `R0` | `checkpoints/truth-instrumentation-baseline/2026-08-05` |
+| `R1` | `checkpoints/reference-grammar/button-action-cluster/2026-08-05` |
+| `harness` | `harnesses/cascade-reachability` |
+| `reference-lab` | `archive/visual-regressions/reference-lab/legacy` |
+| `sighted` | `visual-regressions/journeys/oauth-transition/2026-08-11` |
+| `family-ledger.json` | `archive/ledgers/family-source-visitation/252-family-era.json` |
+| `ORPHANED-BORDER-EDIT.diff` | `archive/incidents/orphaned-border-edit/2026-08-11.diff` |
+| mixed `advisory` and `scouts` | split into `audits/<topic>/<date>` and `decisions/<topic>` by content |
+
+`catalog.json` indexes evidence by semantic id, kind, subject, freshness,
+source commit, seal, retention and consumers. Round and work-order ids survive
+as metadata, never as the only directory meaning. Unsigned archive material can
+move in parallel; signed checkpoints move only with their path resolver,
+receipts and seals updated and verified in a clean worktree.
 
 The consolidation has an initial concrete deletion list: remove the recursive
 test runner inside `program-check.test.mjs`; retire `cascade-materialize` and

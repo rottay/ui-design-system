@@ -1815,7 +1815,7 @@ test('H-2 drill 11 (profiles.expressive): the declared per-axis catalog is exact
 //
 // These assert the CONTRACT of the arm, not the browser. What a browser does
 // with a live mutation is measured in
-// test-artifacts/quality-evidence/wo-cra-23/H3/residual-isolation.MEASURED-NOT-RECEIPTED.json;
+// test-artifacts/quality-evidence/wo-cra-23/archive/unreceipted/typography-scale-static-db-residuals/residual-isolation.MEASURED-NOT-RECEIPTED.json;
 // what belongs in a drill is that the arm kept its position and its restore law
 // while changing only WHEN the write lands.
 // ---------------------------------------------------------------------------

@@ -6,7 +6,7 @@ This repo already has better-than-average audit scaffolding.
 
 Strong pieces:
 
-- `lint-folder-index.mjs`
+- `folder-naming/index.mjs`
 - `audit-integration.mjs`
 - `TAXONOMY.generated.md`
 - provider-level `appearance` runtime tests
@@ -17,7 +17,7 @@ The problem is not absence of scaffolding. It is synchronization drift.
 
 ### Structural hygiene
 
-- `ui-design-system/packages/core/scripts/structure/lint-folder-index/index.mjs`
+- `ui-design-system/packages/core/scripts/structure/folder-naming/index.mjs`
 
 ### Integration honesty checks
 

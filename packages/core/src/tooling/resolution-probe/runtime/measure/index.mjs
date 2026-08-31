@@ -646,7 +646,7 @@ export async function measureCausalScope({
        * Installing the write before first paint makes every element compute
        * once, exactly as the static arm gets for free by navigating per phase.
        * Isolation evidence, all three modes on one scene and one bundle:
-       * test-artifacts/quality-evidence/wo-cra-23/H3/residual-isolation.MEASURED-NOT-RECEIPTED.json
+       * test-artifacts/quality-evidence/wo-cra-23/archive/unreceipted/typography-scale-static-db-residuals/residual-isolation.MEASURED-NOT-RECEIPTED.json
        *
        * The SERVING MODEL IS UNTOUCHED: `mutateCss` for this arm returns the
        * baseline verbatim, so all three phases are served the same bytes. If a

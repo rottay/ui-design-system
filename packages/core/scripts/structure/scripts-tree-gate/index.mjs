@@ -27,6 +27,8 @@
  *       its family's name is a finding (grandfathered product names live in
  *       the baseline; Paso C shortens them).
  *   R6  The lib/ subfamily roster is exactly §2.9's.
+ *   R7  Capability names describe behavior. Agent, work-order, round and
+ *       phase prefixes are migration debt held in the decrease-only baseline.
  *   A1  quality-evidence/ is its own jurisdiction (v2/ + programs/) — the
  *       gate checks nothing inside it beyond its presence.
  *   M1  packages/core/manifest/ (graduated in F0.5, capability form in F1
@@ -63,6 +65,7 @@ const LIB_SUBFAMILIES = [
   'taxonomy', 'tokens', 'verticals',
 ];
 const FORBIDDEN_SEGMENTS = new Set(['_internal', 'internal', 'misc', 'shared', 'utils', 'hooks']);
+const OPAQUE_CAPABILITY_PREFIX = /^(?:cra-|gat-|ck-|kimi-|f\d+-|v\d+(?:-|$)|phase-)/i;
 
 export function collectFindings(scriptsRoot, { drill } = {}) {
   const findings = [];
@@ -83,6 +86,7 @@ export function collectFindings(scriptsRoot, { drill } = {}) {
 
   const walkCapability = (capPath, rel) => {
     const cap = capPath.split('/').pop();
+    if (OPAQUE_CAPABILITY_PREFIX.test(cap)) add('R7-opaque-capability-name', rel);
     const entries = readdirSync(capPath, { withFileTypes: true });
     const files = entries.filter((e) => !e.isDirectory()).map((e) => e.name);
     const hasIndex = files.includes('index.mjs');
@@ -165,6 +169,7 @@ export function collectFindings(scriptsRoot, { drill } = {}) {
   if (drill === 'R4') add('R4-forbidden-segment', 'ci/utils');
   if (drill === 'R5') add('R5-family-prefix-repeat', 'ci/ci-drill');
   if (drill === 'R6') add('R6-undeclared-lib-subfamily', 'lib/drill-sub');
+  if (drill === 'R7') add('R7-opaque-capability-name', 'engine/cra-drill');
   if (drill === 'M1') add('M1-loose-manifest-file', 'manifest/drill.mjs');
   if (drill === 'stale-baseline') { /* handled by caller mutating findings */ }
   return findings;
