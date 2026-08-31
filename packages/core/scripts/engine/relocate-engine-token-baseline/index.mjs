@@ -68,7 +68,7 @@ let candidate = result.baseline;
 let adoption = { adopted: [], refused: [] };
 if (adoptNewZero) {
   const current = JSON.parse(execFileSync(process.execPath, [
-    resolve(scriptDirectory, 'engine-token-audit.mjs'),
+    resolve(scriptDirectory, '../token-audit/index.mjs'),
     '--current-json',
     '--quiet',
   ], { cwd: packageRoot, encoding: 'utf8', maxBuffer: 32 * 1024 * 1024 }));

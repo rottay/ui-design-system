@@ -90,8 +90,6 @@ function buildSandbox(t) {
   t.after(() => rmSync(wrapper, { recursive: true, force: true }));
   const root = join(wrapper, 'scripts');
   mkdirSync(root, { recursive: true });
-  writeFileSync(join(root, 'vitest.scripts.config.ts'), '// toolchain\n');
-  writeFileSync(join(root, 'tests-typecheck-ambient.d.ts'), '// toolchain\n');
   for (const family of FAMILIES) {
     if (family === 'lib') {
       mkdirSync(join(root, 'lib', 'repo-root'), { recursive: true });

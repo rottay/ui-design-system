@@ -9,31 +9,37 @@
 2. General project rules below apply only where the programme contracts are
    silent.
 
-## Operating model (owner decree, 2026-08-19; DT succession updated 2026-08-23)
+## Operating model (owner decree; execution amended 2026-08-30)
 
 - **Kimi K3 is the DT/coordinator** (seat held by Kimi K3 from 2026-08-20,
   handed to Codex by owner order of 2026-08-21 on quota exhaustion of Kimi K3,
   and consummated back to Kimi K3 by explicit owner order of 2026-08-23 —
   `docs/prompt-dt-fresh-session-2026-08-23.md`). It decomposes work into
   bounded packets, makes every architecture/adjudication decision, and
-  verifies every packet with gates and diff review before any commit. It
-  implements personally only the critical pieces (seals, programme contracts,
-  delicate surgery).
-- **Codex is a low-frequency read-only technical consultant** from
-  2026-08-23: executive review at the close of long packet runs, phase closes
-  or hard-to-reverse architecture decisions. It holds no gate, no audit seat
-  and no write authority; its review advises the DT and never substitutes the
-  Fable 5 per-packet audit.
-- **Mechanical packets are delegated to Claude terminals via tmux**, with the
-  model tier chosen by risk: Sonnet for pure mechanical work, Opus for
-  mid-risk, Fable for the full independent audit at the close of each front.
-  DT sub-agents inherit the coordinator's model (no per-subagent model
-  selection exists), so cross-model delegation happens through tmux sessions,
-  each carrying a written brief and a mechanical acceptance check.
+  verifies every packet with gates and diff review before any commit. It may
+  implement shared integration, delicate surgery or a critical unblock under
+  an explicit write-set, but may never self-audit that code.
+- **Opus is the primary source writer.** Multiple Opus writers run in parallel
+  only on conflict-graph-proven disjoint worktrees. Shared compiler, contracts,
+  recipes, manifest and generated authorities remain singleton-owned.
+- **Sonnet is the scout and exact-mechanical lane.** It searches, maps
+  dependencies and hardcodes, prepares write-sets, regenerates with official
+  commands and performs closed substitutions. It does not decide APIs,
+  semantics, recipes, fallbacks, compiler behaviour or visual direction.
+- **Fable 5 is the primary independent auditor** on every integrated lot.
+- **Codex is the second independent auditor** at every product-slice or phase
+  close and for compiler, manifest, public-control or hard-to-reverse
+  architecture changes. Its review does not block disjoint preparation work.
+- Cross-model delegation uses real model terminals, each with a bounded brief,
+  exact ownership and mechanical acceptance checks. A K3 subagent may not be
+  relabelled Opus, Sonnet, Fable or Codex.
 - The coordinator decides whether a terminal stays open (context reuse) or
   closes when its packet completes.
 - One commit per lot, conventional format, **never push**. Version publishes
   are allowed.
+- Default to zero new source comments. A comment is at most two lines and only
+  explains non-obvious product behaviour, accessibility, a browser constraint
+  or a public API. Never narrate agents, rounds, migrations or programme history.
 
 ## Non-Negotiable: No Cross-Module Direct Queries
 

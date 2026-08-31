@@ -14,7 +14,7 @@
     "src/**/*.test.ts",
     "src/**/*.test.tsx",
     "src/tooling/declarations",
-    "scripts/tests-typecheck-ambient.d.ts"
+    "scripts/ci/script-tests/script-tests.ambient.d.ts"
   ],
   "exclude": ["node_modules", "dist"]
 }

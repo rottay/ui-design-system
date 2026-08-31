@@ -175,6 +175,11 @@ jobs:
           DOCS_ENGINEERING_ROOT: ${{ github.workspace }}/.gat07/docs-engineering
         run: pnpm --filter @rottay/design-system run gates:ci
 
+      # Script integration tests import public package subpaths from dist.
+      # Build first so they verify this checkout, never ambient runner state.
+      - name: Build + ParticleField quarantine gate
+        run: pnpm --filter @rottay/design-system run build
+
       - name: Audit machinery regression tests
         run: pnpm --filter @rottay/design-system run test:scripts
 
@@ -192,11 +197,6 @@ jobs:
         run: |
           pnpm dependency:honesty:test
           node scripts/boundaries/dependency-honesty/index.mjs static
-
-      # The package postbuild hook runs the WO-CRA-14 public-barrel/chunk gate
-      # against the exact dist artifacts produced immediately above it.
-      - name: Build + ParticleField quarantine gate
-        run: pnpm --filter @rottay/design-system run build
 
       - name: Packed artifact and non-consuming bundle honesty
         run: node scripts/boundaries/dependency-honesty/index.mjs pack

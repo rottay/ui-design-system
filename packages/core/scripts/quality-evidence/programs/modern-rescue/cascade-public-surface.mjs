@@ -14,7 +14,23 @@ import { repoRoot as findRepoRoot } from "../../../lib/repo-root/index.mjs";
 
 export const REPO_ABS = findRepoRoot(dirname(fileURLToPath(import.meta.url)));
 
-import { getSource } from "./cascade-cross-file-resolver.mjs";
+const sourceCache = new Map();
+
+export function getSource(relFile) {
+  if (sourceCache.has(relFile)) return sourceCache.get(relFile);
+  const abs = join(REPO_ABS, relFile);
+  let text;
+  try {
+    text = readFileSync(abs, "utf8");
+  } catch {
+    sourceCache.set(relFile, null);
+    return null;
+  }
+  const source = ts.createSourceFile(relFile, text, ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX);
+  const entry = { text, source };
+  sourceCache.set(relFile, entry);
+  return entry;
+}
 /**
  * v4 public-surface graph — READ-ONLY. Replaces v3's 2-barrel / 1-hop
  * `publicExportPath` (proven insufficient by the independent audit's

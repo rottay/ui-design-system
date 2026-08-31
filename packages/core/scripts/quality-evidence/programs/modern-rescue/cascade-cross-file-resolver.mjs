@@ -14,7 +14,12 @@ import { repoRoot as findRepoRoot } from "../../../lib/repo-root/index.mjs";
 
 export const REPO_ABS = findRepoRoot(dirname(fileURLToPath(import.meta.url)));
 
-import { candidateExportedNamesForFunction, isDeclarationPubliclyReachable } from "./cascade-public-surface.mjs";
+import {
+  candidateExportedNamesForFunction,
+  getSource,
+  isDeclarationPubliclyReachable,
+} from "./cascade-public-surface.mjs";
+export { getSource } from "./cascade-public-surface.mjs";
 /**
  * v5 shared source cache — READ-ONLY. Extracted so `resolver.mjs` and
  * `publicSurface.mjs` share the SAME parsed AST objects for the SAME file.
@@ -30,32 +35,6 @@ import { candidateExportedNamesForFunction, isDeclarationPubliclyReachable } fro
  */
 
 
-
-const sourceCache = new Map();
-export function getSource(relFile) {
-  if (sourceCache.has(relFile)) return sourceCache.get(relFile);
-  const abs = join(REPO_ABS, relFile);
-  let text;
-  try {
-    text = readFileSync(abs, "utf8");
-  } catch {
-    sourceCache.set(relFile, null);
-    return null;
-  }
-  const source = ts.createSourceFile(relFile, text, ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX);
-  const entry = { text, source };
-  sourceCache.set(relFile, entry);
-  return entry;
-}
-
-/** Test-only: seed a SYNTHETIC file (never touching disk / the repo) into the
- * shared cache under a fake `relFile` key, for isolated multi-file wrapper-
- * chain fixtures. */
-export function seedSyntheticSource(relFile, text, scriptKind = ts.ScriptKind.TSX) {
-  const source = ts.createSourceFile(relFile, text, ts.ScriptTarget.Latest, true, scriptKind);
-  sourceCache.set(relFile, { text, source });
-  return sourceCache.get(relFile);
-}
 
 /**
  * v4 resolver — READ-ONLY. Extends v3's composite Shape model with the

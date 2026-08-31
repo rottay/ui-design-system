@@ -86,6 +86,40 @@
           "record-detail-composition"
         ]
       },
+      "aggressiveExecution": {
+        "targetWindow": "one-week maximum-impact release target; no calendar target weakens acceptance",
+        "completedCalibration": "Button and Segmented establish the first source grammar and are not a reason to continue serially",
+        "parallelProductSlices": [
+          {
+            "id": "data-workflow",
+            "source": "PatternDataTable, ListToolbar, filters, SavedViews, Badge, Tag and mobile projection",
+            "visibleJourney": "dense data discovery, filtering, selection, status and responsive collapse"
+          },
+          {
+            "id": "shell-navigation",
+            "source": "AppShell, sidebar, bottom/mobile navigation, menus and overlays",
+            "visibleJourney": "application chrome, navigation hierarchy and overlay behavior across viewports"
+          },
+          {
+            "id": "forms-surfaces",
+            "source": "Input, Select, FormField, Card and related semantic surfaces",
+            "visibleJourney": "form entry, validation, grouping, focus and material hierarchy"
+          }
+        ],
+        "singletonCascadeLane": "One Opus or Kimi lane owns compiler, theme schema, shared roots, recipes, contracts, manifests and shared foundation tokens. It integrates requests from product slices; no second writer touches those authorities.",
+        "preparationLaw": "Sonnet scouts current and next slices in parallel. Multiple Opus writers implement disjoint source worktrees. Fable audits every integrated lot. Codex audits each integrated slice and any compiler, manifest, public-control or hard-to-reverse architecture change. Heavy build, server and browser work runs once per integrated batch.",
+        "toolingLaw": "Freeze new Modern Rescue scripts. The existing manifest generator is not yet source-derived: extend packages/core/manifest/generator/index.mjs itself so declared target edges, observed compiler/CSS edges and gaps are generated and productive sources enter freshness. Run it once per integrated batch. A non-blocking Sonnet lane audits all packages/core/scripts and migrates it in mechanical batches to domain/subdomain/capability/index: related behavior is grouped, opaque historical or agent names are retired, callers are updated with tests, duplicates and dead entrypoints are removed. It also rehomes test artifacts by purpose after complete reference/digest inventory. It starts with root exceptions, recursive tests, non-consumable materialize/backlog producers and duplicate CSS census after unique facts migrate; it may not design another platform or consume the product-source budget.",
+        "autonomy": "A correction inside the authorized scope is remediated immediately after source-grounded Fable/Codex review. Do not wait for the owner except for product/commercial scope, incompatible public API, destructive or external action, release, publish or push.",
+        "oneWeekOutput": [
+          "three complete cross-layer journeys with visible product improvement",
+          "theme structure parity across Rottay, BitHire and Evnto",
+          "every brandable hardcode in adopted write-sets retired or adjudicated",
+          "static and DB mutation plus exact restore on every adopted public control",
+          "premium responsive and accessible sighted evidence at 320, 390, 768 and 1440",
+          "a publish-ready DS candidate: package build, typecheck, public exports, deterministic generated output and install/smoke in BitHire without migrating its current UI"
+        ],
+        "productionReadiness": "The target is a publish-ready local DS candidate, not a production push. Kimi prepares the exact release diff and evidence; release, publish and push remain owner-gated. BitHire is only the final install, export, build, typecheck and smoke consumer because its screens will be rebuilt later."
+      },
       "priorityDimensions": [
         "adaptive-layout-density-rhythm",
         "responsive-mobile",
@@ -107,7 +141,10 @@
         "prove same-tree BitHire-TMM divergence across at least eight axes including at least six non-color axes",
         "prove that controlled mutations of public controls produce observable, predictable differences between the two fixtures, by static BrandTheme and by DB TenantTheme with parity; no aesthetic-identity evaluation of a vertical is part of this stage (owner amendment 2026-08-30)",
         "extract reusable semantic group recipes instead of copying styles",
-        "attack Button then PatternDataTable then AppShell as the first-failing grammar sequence before the remaining canaries",
+        "treat the closed Button and Segmented calibration as the grammar seed, then execute data-workflow, shell-navigation and forms-surfaces concurrently wherever the conflict graph proves disjoint ownership",
+        "make Rottay, BitHire and Evnto theme definitions structurally identical in keypaths, order and template comments; only sanctioned identity values and profile selections differ",
+        "confine hardcodes to theme identity seeds, font pairings, bounded profile or recipe selections and source-justified irreducible ratios; derive downstream paint, geometry, rhythm, typography, effects and states through shared roots and recipes",
+        "treat literal CSS fallbacks as emergency resilience only: normal baseline and mutation resolve through a producer, removal reaches the governed themed root and only an isolated missing-root drill reaches the literal",
         "close the twelve reproduced visual-craft incidents and every generalized hardVisualVeto rather than copying their current appearance"
       ],
       "exit": [
@@ -119,6 +156,9 @@
         "the vertical fixtures prove the public-control cascade across all required scenes at 320 390 768 and 1440, by static BrandTheme and by DB TenantTheme with parity (owner amendment 2026-08-30: the per-vertical art-direction implementation obligation is retired from R1 acceptance)",
         "zero hard vetoes",
         "the brandable hardcode census is monotonically lower at each cohort checkpoint than at the start of that cohort, with the cohort write-sets drained or adjudicated (owner amendment 2026-08-30)",
+        "the first aggressive release contains three cross-layer journeys and every adopted slice changes product source rather than only tooling, evidence or manifests",
+        "Rottay BitHire and Evnto expose the same governed theme shape and the public-control mutations visibly cascade across multiple UI layers",
+        "Fable accepts every integrated lot and Codex accepts each product-slice close plus every compiler manifest public-control or hard-to-reverse architecture change",
         "all R1 proposals adjudicated",
         "all three R1 cohort checkpoints have explicit DT GO receipts",
         "the DT accepts grammar before propagation"
@@ -196,13 +236,12 @@
             "why": "barrelOwnership classifies shared barrels to the architecture-integrator"
           },
           {
-            "domainId": "shared-recipes-tokens-styles",
+            "domainId": "shared-foundation-recipes-tokens",
             "globs": [
-              "packages/core/src/foundation/tokens/**",
-              "packages/core/src/ui/**/styles/**"
+              "packages/core/src/foundation/tokens/**"
             ],
             "ownerLaneClass": "architecture-integrator",
-            "why": "R1 objective extract reusable semantic group recipes instead of copying styles makes this expected write work"
+            "why": "Shared theme identities, semantic roots and reusable recipes are singleton authorities. Family-owned styles remain inside the exact family-source slice so disjoint product writers can change real CSS in parallel."
           },
           {
             "domainId": "manifests",
@@ -291,17 +330,13 @@
             "domainId": "compilers",
             "root": "packages/core/src/infrastructure/compilers",
             "allowedRoots": [
-              "packages/core/src/infrastructure/compilers/composition/tenant-theme/tests/fixtures/canonical-extraction-pre-change-digests.json",
-              "packages/core/src/infrastructure/compilers/composition/tenant-theme/tests/tenant-theme-compiler.test.ts",
-              "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/tests/brand-compiler.test.ts"
+              "packages/core/src/infrastructure/compilers"
             ],
             "ownerLaneClass": "architecture-integrator",
-            "scope": "ONLY the exact schema-drift and geometry sentinels inside these three files. NOT the inherited artifact digests, NOT assertion strength, NOT any other compiler source or test.",
-            "why": "Codex adjudication, 2026-08-05. The domain stays reserved for the reason originally given: the inherited worktree carries adjudicated prior-session compiler state that R1 must not disturb. Exactly three files are carved out because their pins are MECHANICAL CONSEQUENCES of writes in domains the architecture-integrator already owns. The recipe-profile registry lives in foundation/tokens/** and gained rottay/network-professional@1; the tenant-theme document schema PUBLISHES that registry as a closed enum, so both schema sentinels necessarily move. BitHire's expressive geometry moved sharp->rounded, so --ds-radius-scale necessarily moves 0.85 -> 1.25 in two brand-compiler pins. Leaving them red was unreachable against the owner instruction to return the Step 0 delta to the inherited failure baseline with no additional failures.",
-            "whyThisMechanism": "Expressed through noWriteExcept rather than by deleting the no-write domain. noWrite fires when ANY lane claims the domain and therefore cannot express 'these three files and nothing else'; noWriteExcept fires per writeSet entry that falls outside the allowed roots. Because the root covers every compiler path, coverage is identical and any OTHER write under packages/core/src/infrastructure/compilers still blocks. No change was made to the checker itself.",
-            "authorityOrder": "owner instruction -> DISC-01 raised as unresolved and NOT self-authorized -> Codex adjudication -> this executable amendment -> admission re-validation. The coordinator did not amend the contract to legalize its own write; it reported the conflict and the adjudicator resolved it.",
-            "verificationRequired": "schema digests recomputed with an independent hasher, mutation and drift drills proven still failing, registry id proven permanent. Receipt: packages/core/test-artifacts/quality-evidence/wo-cra-23/R1/receipts/cohort-1-schema-digest-proof.json",
-            "priorSealDigest": "8096df8c7ab671ed3e459c1d9a544a7582bb5af304a0102f03accdf5fd268f10"
+            "scope": "The architecture-integrator may edit exact compiler files named in the active packet when required to make the governed cascade and static/DB path real. Compiler ownership is singleton; product writers may never claim it.",
+            "why": "The previous three-test carve-out made source-level cascade repair impossible and forced product work to orbit the harness. R1 now explicitly requires real compiler and theme-lowering implementation under one owner, with Fable and Codex audit on the integrated candidate.",
+            "whyThisMechanism": "The entire compiler root is covered but only one admitted architecture-integrator packet may name exact files. Conflict graph, packet write-set, admission and dual audit provide the fence; widening the root does not authorize unbounded edits.",
+            "verificationRequired": "Static and DB equivalence, controlled mutation, negative control, exact restore, compiler focal tests, integrated build, Fable ACCEPT and Codex ACCEPT."
           }
         ]
       }

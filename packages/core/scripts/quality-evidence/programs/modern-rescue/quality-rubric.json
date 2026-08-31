@@ -13,7 +13,7 @@
     }
   },
   "eligibility": {
-    "formula": "binaryContractsPass && hardVetoCount===0 && craftScore>=layerThreshold && criticalDimensionsMin>=4 && resilience===1 && canonClosure===1 && evidenceFresh && codexSightedApproved",
+    "formula": "binaryContractsPass && hardVetoCount===0 && craftScore>=layerThreshold && criticalDimensionsMin>=4 && resilience===1 && canonClosure===1 && evidenceFresh && fableAuditAccepted && codexSightedApproved",
     "dimensionEvidenceLaw": "Every scored dimension requires one concrete observable selector, rule, behavior or sighted observation. Missing evidence scores zero until DT review.",
     "resilienceCaseFloor": "Declared cases must include every applicable case from stressMatrix for the family's critical dimensions; a lane may add cases but never remove the floor.",
     "testsAwardCraftPoints": false,
@@ -30,7 +30,7 @@
       "ASSESSED_NOT_ELEVATED",
       "BLOCKED_OWNER_DECISION"
     ],
-    "countingLaw": "No Claude status increments completed-family progress. Only the DT may turn a pending family into ACCEPTED after independent machine and sighted review.",
+    "countingLaw": "No writer status increments completed-family progress. Only the DT may turn a pending family into ACCEPTED after Fable lot audit, the governed Codex checkpoint audit and independent machine and sighted review.",
     "sourceChangeLaw": "ELEVATED requires a material productive source change that closes named observable defects. Tests, docs, comments, snapshots, stories, generated CSS/dist and token declarations without a causal live consumer cannot make a family ELEVATED.",
     "partialLaw": "A shallow or partial improvement remains ASSESSED_NOT_ELEVATED and stays in the current round. The coordinator may not move on merely because every file or family was visited.",
     "twoChangeLaw": "One or two source changes may close a family only when they close every named deficit and the unchanged applicable dimensions are independently evidenced at 4/5 or above; otherwise the family remains ASSESSED_NOT_ELEVATED.",

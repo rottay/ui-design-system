@@ -1013,11 +1013,9 @@ capability name finishes the sentence.
 
 ```text
 scripts/
-  vitest.scripts.config.ts  Toolchain exception (§1.2): vitest entry for the
-  tests-typecheck-ambient.d.ts  scripts suites + its ambient declaration. The
-                            only two loose files allowed at this root.
   ci/                  How CI runs: runner, gates manifest, workflow wiring,
-                       typecheck ratchet, budgets, bundle analysis
+                       script-test configuration, typecheck ratchet, budgets,
+                       bundle analysis
   structure/           Guardians of this tree's own law: folder-index,
                        structure audit, owner boundaries, vertical compliance
   boundaries/          The app/DS frontier and public API: app-ds boundary,

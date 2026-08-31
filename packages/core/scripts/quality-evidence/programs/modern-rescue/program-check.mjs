@@ -56,22 +56,24 @@ const FILES = {
 // it to Codex when Kimi K3 exhausted its quota (documented backup DT
 // activated), and the explicit owner order of 2026-08-23
 // (docs/prompt-dt-fresh-session-2026-08-23.md) consummated the succession
-// Codex -> Kimi K3, leaving Codex as a low-frequency read-only technical
-// consultant. The seat moved three times and was never vacated, so the
+// Codex -> Kimi K3. The seat moved three times and was never vacated, so the
 // coordinator is validated as an unbroken CHAIN, exactly like the implementer
 // -- a single pair of constants could not express three successions without
-// erasing history. Fable 5 remains the sole audit seat throughout: the DT
-// does not hold one (conflict of interest, not capacity removal).
-const LIVE_IMPLEMENTER = 'Claude implementer pool (Sonnet/Opus)';
+// erasing history. The 2026-08-30 execution amendment routes primary source
+// writing to Opus, exact mechanical/scout work to Sonnet, primary audit to
+// Fable and checkpoint/architecture audit to Codex. The DT never self-audits.
+const LIVE_IMPLEMENTER = 'Opus';
+const LIVE_MECHANICAL_ACTOR = 'Sonnet';
 const RETIRED_IMPLEMENTER = 'Kimi 2.7';
 const IMPLEMENTER_SUCCESSION_ORDER_DATE = '2026-08-17';
-const IMPLEMENTER_SUCCESSION_2_ORDER_DATE = '2026-08-20';
+const IMPLEMENTER_LATEST_SUCCESSION_ORDER_DATE = '2026-08-30';
 const LIVE_COORDINATOR = 'Kimi K3';
 const COORDINATOR_CHAIN_ORIGIN = 'Codex';
 const COORDINATOR_SUCCESSION_ORDER_DATE = '2026-08-20';
 const COORDINATOR_SUCCESSION_2_ORDER_DATE = '2026-08-21';
 const COORDINATOR_SUCCESSION_3_ORDER_DATE = '2026-08-23';
-const RETAINED_AUDITORS = Object.freeze(['Fable 5']);
+const HISTORICAL_AUDITORS = Object.freeze(['Fable 5']);
+const LIVE_AUDITORS = Object.freeze(['Fable 5', 'Codex']);
 
 // Fable P1 correction (2026-08-21), extended at the 2026-08-23 DT succession:
 // the creative advisor seat was retired on 2026-08-21 and stays retired.
@@ -85,17 +87,15 @@ const EXPECTED_CREATIVE_ADVISOR =
   'none — the creative advisor seat was retired on 2026-08-21 and stays retired; Kimi K3 holds only the DT seat from 2026-08-23 (DT != advisor); KIMI-ANNOTATIONS is historical/dormant';
 
 /**
- * The sole-auditor roster is EXACT, not a minimum. Requiring only inclusion
- * let a retired seat re-enter silently: `['Fable 5', 'Kimi K3']` satisfied
- * "must name Fable 5" while contradicting the handoff law that the retired DT
- * does not return as auditor. Order is canonical so the contract reads the
- * same everywhere.
+ * Audit rosters are exact, not minimums. Historical succession records retain
+ * the capacity that existed at the time; the live roster is Fable plus Codex.
+ * Kimi never appears because DT != independent auditor.
  */
-function isSoleAuditorRoster(actors) {
+function isExactAuditorRoster(actors, expected) {
   return (
     Array.isArray(actors) &&
-    actors.length === RETAINED_AUDITORS.length &&
-    actors.every((actor, index) => actor === RETAINED_AUDITORS[index])
+    actors.length === expected.length &&
+    actors.every((actor, index) => actor === expected[index])
   );
 }
 
@@ -115,17 +115,6 @@ const COORDINATOR_SUCCESSION_CHAIN = Object.freeze([
 // it, so it is admitted alongside the live pool name below -- never as a
 // routing target, only as the historical predecessor record requires.
 const RETIRED_IMPLEMENTER_2 = 'Cloud Opus implementer pool';
-
-/**
- * The programme still refuses Opus/Sonnet *routing*. The only admitted
- * mentions are the exact governed names of the live implementer pool and its
- * immediate predecessor (needed to narrate the succession chain), so strip
- * both before looking for an ungoverned model route.
- */
-function routesUngovernedModel(text) {
-  const stripped = text.split(LIVE_IMPLEMENTER).join('').split(RETIRED_IMPLEMENTER_2).join('');
-  return stripped.includes('Opus') || stripped.includes('Sonnet');
-}
 
 // Historical family census, derived from family-inventory.json after the 2026-08-12
 // adjudication. Every number below is a census of the inventory, never a hand-carried
@@ -424,40 +413,16 @@ function collectTextualFailures(contracts) {
   if (
     !readmeText.includes(LIVE_COORDINATOR) ||
     !readmeText.includes(LIVE_IMPLEMENTER) ||
-    !readmeText.includes('Fable 5')
+    !readmeText.includes(LIVE_MECHANICAL_ACTOR) ||
+    !readmeText.includes('Fable 5') ||
+    !readmeText.includes('Codex')
   ) {
-    failures.push(`README.md Roles must name ${LIVE_COORDINATOR}, ${LIVE_IMPLEMENTER} and Fable 5`);
-  }
-  if (!readmeText.includes(RETIRED_IMPLEMENTER) || !readmeText.includes(IMPLEMENTER_SUCCESSION_ORDER_DATE)) {
     failures.push(
-      `README.md Roles must record the ${RETIRED_IMPLEMENTER} implementer succession and its ${IMPLEMENTER_SUCCESSION_ORDER_DATE} owner order`,
+      `README.md Roles must name ${LIVE_COORDINATOR}, ${LIVE_IMPLEMENTER}, ${LIVE_MECHANICAL_ACTOR}, Fable 5 and Codex`,
     );
   }
-  if (!readmeText.includes(IMPLEMENTER_SUCCESSION_2_ORDER_DATE)) {
-    failures.push(
-      `README.md Roles must record the Cloud Opus implementer pool succession and its ${IMPLEMENTER_SUCCESSION_2_ORDER_DATE} owner order`,
-    );
-  }
-  // All three DT successions must stay narrated: the 2026-08-20 move to Kimi
-  // K3 and the 2026-08-21 move back to Codex are history that the 2026-08-23
-  // move to Kimi K3 must not erase.
-  if (!readmeText.includes('Kimi K3') || !readmeText.includes(COORDINATOR_SUCCESSION_ORDER_DATE)) {
-    failures.push(
-      `README.md Roles must record the Kimi K3 DT succession and its ${COORDINATOR_SUCCESSION_ORDER_DATE} owner order`,
-    );
-  }
-  if (!readmeText.includes(COORDINATOR_SUCCESSION_2_ORDER_DATE)) {
-    failures.push(
-      `README.md Roles must record the Codex DT succession and its ${COORDINATOR_SUCCESSION_2_ORDER_DATE} owner order`,
-    );
-  }
-  if (!readmeText.includes(COORDINATOR_SUCCESSION_3_ORDER_DATE)) {
-    failures.push(
-      `README.md Roles must record the ${LIVE_COORDINATOR} DT succession and its ${COORDINATOR_SUCCESSION_3_ORDER_DATE} owner order`,
-    );
-  }
-  if (routesUngovernedModel(readmeText)) {
-    failures.push('README.md must not route work to Opus or Sonnet outside the governed implementer pool name');
+  if (!readmeText.includes('Default to zero source comments')) {
+    failures.push('README.md Roles must codify the default-zero source-comment law');
   }
 
   // The standing authorization is its five conditions, not its heading: the
@@ -996,8 +961,8 @@ function collectContractFailures(contracts) {
     // origin/link/end alone: an origin/end-only law would accept
     // `Codex -> AnyActor -> Codex` and erase the Kimi K3 tenure while still
     // passing. The tenure is immutable history, so the actors, the dates and
-    // the record count are all exact, and each record must retain the exact
-    // sole-auditor roster.
+    // the record count are all exact, and each historical record retains the
+    // Fable capacity that existed at that date.
     const coordinatorSuccession = orchestration.coordinator?.succession;
     if (!Array.isArray(coordinatorSuccession) || coordinatorSuccession.length === 0) {
       failures.push('agent-orchestration.json coordinator must carry a succession record');
@@ -1026,9 +991,9 @@ function collectContractFailures(contracts) {
         if (typeof record.proof !== 'string' || record.proof.length === 0) {
           failures.push('every coordinator succession record must state a written succession proof');
         }
-        if (!isSoleAuditorRoster(record.retainedAuditCapacity)) {
+        if (!isExactAuditorRoster(record.retainedAuditCapacity, HISTORICAL_AUDITORS)) {
           failures.push(
-            `coordinator succession record ${index} must retain exactly the sole auditor roster ${JSON.stringify(RETAINED_AUDITORS)}`,
+            `coordinator succession record ${index} must retain exactly the sole auditor roster ${JSON.stringify(HISTORICAL_AUDITORS)}`,
           );
         }
       });
@@ -1048,14 +1013,17 @@ function collectContractFailures(contracts) {
         failures.push(`coordinator succession must end with ${LIVE_COORDINATOR}`);
       }
     }
-    const routingText = JSON.stringify(orchestration.modelRouting ?? {});
-    if (routesUngovernedModel(routingText)) {
-      failures.push(
-        'agent-orchestration.json modelRouting must not mention Opus or Sonnet outside the governed implementer pool name',
-      );
-    }
     if (orchestration.modelRouting?.implementer?.actor !== LIVE_IMPLEMENTER) {
-      failures.push(`agent-orchestration.json implementer must be the ${LIVE_IMPLEMENTER}`);
+      failures.push(`agent-orchestration.json primary source writer must be ${LIVE_IMPLEMENTER}`);
+    }
+    if (orchestration.modelRouting?.scoutAndMechanical?.actor !== LIVE_MECHANICAL_ACTOR) {
+      failures.push(`agent-orchestration.json scout and mechanical actor must be ${LIVE_MECHANICAL_ACTOR}`);
+    }
+    if (orchestration.coordinator?.mayAudit !== false) {
+      failures.push('agent-orchestration.json coordinator mayAudit must remain false');
+    }
+    if (typeof orchestration.coordinator?.mayWrite !== 'string' || orchestration.coordinator.mayWrite.length === 0) {
+      failures.push('agent-orchestration.json coordinator must codify its bounded write authority');
     }
     // The seat has moved twice (2026-08-17, 2026-08-20), so succession is a
     // chain, not a single record: each entry's predecessor must equal the
@@ -1085,9 +1053,9 @@ function collectContractFailures(contracts) {
           );
         }
       }
-      if (succession.length > 1 && latest.ownerOrderDate !== IMPLEMENTER_SUCCESSION_2_ORDER_DATE) {
+      if (succession.length > 1 && latest.ownerOrderDate !== IMPLEMENTER_LATEST_SUCCESSION_ORDER_DATE) {
         failures.push(
-          `implementer succession must cite the ${IMPLEMENTER_SUCCESSION_2_ORDER_DATE} owner order for its latest record`,
+          `implementer succession must cite the ${IMPLEMENTER_LATEST_SUCCESSION_ORDER_DATE} owner order for its latest record`,
         );
       }
       if (latest.successor !== LIVE_IMPLEMENTER) {
@@ -1099,23 +1067,21 @@ function collectContractFailures(contracts) {
         }
       }
       const retained = latest.retainedAuditCapacity ?? [];
-      for (const auditor of RETAINED_AUDITORS) {
+      for (const auditor of LIVE_AUDITORS) {
         if (!retained.includes(auditor)) {
           failures.push(`implementer succession must retain ${auditor} audit capacity`);
         }
       }
     }
     const advisory = orchestration.modelRouting?.advisoryReadOnly?.actors ?? [];
-    for (const auditor of RETAINED_AUDITORS) {
+    for (const auditor of LIVE_AUDITORS) {
       if (!advisory.includes(auditor)) {
         failures.push(`agent-orchestration.json must name ${auditor} as an advisor`);
       }
     }
-    // EXACT roster, not a minimum: a retired seat must not be able to re-enter
-    // the audit roster by simply being appended next to Fable 5.
-    if (!isSoleAuditorRoster(advisory)) {
+    if (!isExactAuditorRoster(advisory, LIVE_AUDITORS)) {
       failures.push(
-        `agent-orchestration.json advisoryReadOnly.actors must be exactly ${JSON.stringify(RETAINED_AUDITORS)}`,
+        `agent-orchestration.json advisoryReadOnly.actors must be exactly ${JSON.stringify(LIVE_AUDITORS)}`,
       );
     }
     // Decision 13: DT != auditor. The coordinator left the advisory/audit
@@ -1134,8 +1100,8 @@ function collectContractFailures(contracts) {
     if (mechanicalWriters?.maximum !== 1) {
       failures.push('agent-orchestration.json r7Execution.mechanicalWriters.maximum must remain 1');
     }
-    if (mechanicalWriters?.actor !== LIVE_IMPLEMENTER) {
-      failures.push(`agent-orchestration.json r7Execution mechanical writer must be the ${LIVE_IMPLEMENTER}`);
+    if (mechanicalWriters?.actor !== LIVE_MECHANICAL_ACTOR) {
+      failures.push(`agent-orchestration.json r7Execution mechanical writer must be ${LIVE_MECHANICAL_ACTOR}`);
     }
     if (!orchestration.doubleAccept) {
       failures.push('agent-orchestration.json must codify doubleAccept');
@@ -1147,14 +1113,14 @@ function collectContractFailures(contracts) {
       if (Array.isArray(da.notAuthorizationFor) && !da.notAuthorizationFor.includes('push')) {
         failures.push('doubleAccept.notAuthorizationFor must keep push outside every authorization');
       }
-      for (const auditor of RETAINED_AUDITORS) {
+      for (const auditor of LIVE_AUDITORS) {
         if (!da.actors?.includes(auditor)) {
           failures.push(`doubleAccept actors must include ${auditor}`);
         }
       }
-      if (!isSoleAuditorRoster(da.actors)) {
+      if (!isExactAuditorRoster(da.actors, LIVE_AUDITORS)) {
         failures.push(
-          `doubleAccept actors must be exactly ${JSON.stringify(RETAINED_AUDITORS)}`,
+          `doubleAccept actors must be exactly ${JSON.stringify(LIVE_AUDITORS)}`,
         );
       }
       if (da.coordinator !== LIVE_COORDINATOR) {
@@ -1273,8 +1239,14 @@ function collectHistoricalContractFailures(contracts) {
   if (checkpoint?.schemaVersion !== 1 || !checkpoint?.currentWave) {
     errors.push('checkpoint intent must be a versioned non-empty machine contract');
   }
-  if (!(checkpoint?.lanes ?? []).some((lane) => lane.id === 'authority')) {
-    errors.push('checkpoint intent must retain the authority reconciliation lane');
+  if (!(checkpoint?.lanes ?? []).some((lane) => lane.id === 'dt-integration')) {
+    errors.push('checkpoint intent must retain the DT integration lane');
+  }
+  if (!(checkpoint?.lanes ?? []).some((lane) => lane.id === 'parallel-product-source')) {
+    errors.push('checkpoint intent must retain the parallel product-source lane');
+  }
+  if (!(checkpoint?.lanes ?? []).some((lane) => lane.id === 'cascade-integration')) {
+    errors.push('checkpoint intent must retain the singleton cascade integration lane');
   }
   if (!(checkpoint?.refused ?? []).includes('R7 execution')) {
     errors.push('checkpoint intent must explicitly refuse R7 execution');
@@ -2109,6 +2081,7 @@ function collectHistoricalContractFailures(contracts) {
     'mechanicalFloorResults',
     'tenantPaletteAndGrammarResult',
     'cssOwnershipAndCausalityReceipts',
+    'fableDecision',
     'codexDecision',
     'nextWriteBoundary',
   ]) {

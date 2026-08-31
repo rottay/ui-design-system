@@ -1,19 +1,19 @@
 {
   "schemaVersion": 2,
-  "principle": "Parallelize independent ownership, not the number twenty.",
-  "aggressiveParallelismGate": "Aggressive read-only parallelism with conflict-graph-governed writers opens only after the T-1 constitutional lot and the F4C canary close; before that, writers are limited to the adjudicated conflict graph of the active lot.",
+  "principle": "Parallelize real product slices to the maximum safe independent set; agent count follows the conflict graph, never an arbitrary serial ritual.",
+  "aggressiveParallelismGate": "F4C and the T-1 calibration are closed. R1 therefore opens multiple conflict-graph-governed source writers now. Shared compiler, contracts, foundation tokens, manifests, barrels, i18n, generated artifacts, builds, servers and browsers remain singleton or serialized.",
   "doubleAccept": {
-    "law": "A closure audit ACCEPT from Fable 5 plus the DT (Kimi K3) per-lot verification is the sighted quality signal. The DT commits bounded packets locally under the owner's standing order (2026-08-20, carried into the 2026-08-21 and 2026-08-23 DT successions; extended 2026-08-29 to a permanent authorization for local commits of roadmap lots with explicit write-set, Fable audit accepted or fully remediated, green gates and a clean diff free of foreign files); push is always forbidden. This does not substitute owner decisions nor product-domain adjudications.",
-    "requiredFor": "requesting an explicit owner order for the sighted packet",
+    "law": "Fable 5 audits every integrated lot. Codex independently audits each product-slice or phase close and every compiler, manifest, public-control or hard-to-reverse architecture change. Kimi K3 performs final sighted verification. A bounded sub-lot may be committed locally after Fable ACCEPT, green gates and DT diff review while Codex reviews the integrated slice; the slice is not closed until Codex ACCEPT or every correction is remediated. Push is always forbidden.",
+    "requiredFor": "product-slice closure, phase closure, compiler or manifest changes, public-control changes and hard-to-reverse architecture decisions",
     "notAuthorizationFor": [
       "push",
       "release",
       "R7 execution",
       "owner decision"
     ],
-    "actors": ["Fable 5"],
+    "actors": ["Fable 5", "Codex"],
     "coordinator": "Kimi K3",
-    "implementationActor": "Claude implementer pool (Sonnet/Opus)"
+    "implementationActor": "Opus"
   },
   "coordinator": {
     "model": "Kimi K3",
@@ -50,11 +50,16 @@
       "reject shallow or undeclared changes",
       "coordinate one architecture and one quality integration pass",
       "emit one consolidated report",
-      "authorize any local commit or release window explicitly"
-    ]
+      "commit qualifying bounded lots locally without waiting for the owner",
+      "implement shared integration delicate surgery or a critical unblock under an explicit write-set",
+      "never self-audit Kimi-authored code",
+      "authorize a release window only with explicit owner authority"
+    ],
+    "mayWrite": "shared integration, delicate surgery or a critical unblock with exact ownership; Fable audit remains mandatory",
+    "mayAudit": false
   },
   "modelRouting": {
-    "law": "Roles are fixed for the Modern Rescue programme. Model names are not a reason to wait, duplicate work, substitute actors or weaken a fence.",
+    "law": "Roles are fixed for the Modern Rescue programme. Use real Opus, Sonnet, Fable and Codex sessions; a K3 child is never relabelled as another model. Model names are not a reason to wait, duplicate work or weaken a fence.",
     "programCoordinatorAndArchitectureControl": {
       "actor": "Kimi K3",
       "work": [
@@ -62,34 +67,36 @@
         "architecture and single-authority decisions",
         "cross-family composition review",
         "proposal adjudication and final diff rejection",
-        "explicit commit/release authorization"
+        "local commits under the standing authorization and owner-gated release authorization",
+        "shared integration or critical unblock implementation when that is fastest and safe"
       ]
     },
     "advisoryReadOnly": {
-      "actors": ["Fable 5"],
+      "actors": ["Fable 5", "Codex"],
       "work": [
-        "read-only architecture challenge",
+        "independent read-only architecture challenge",
         "behavioral and accessibility parity review",
         "visual coherence review",
-        "vacuous-evidence and canon-gap detection"
+        "vacuous-evidence and canon-gap detection",
+        "product impact, hardcode and overengineering review"
       ]
     },
-    "dtNotAuditorLaw": "Decision 13 (2026-08-20): the DT does not hold an audit seat. The rule binds whoever holds the seat: Kimi K3 left advisoryReadOnly the day it assumed the coordinator seat in 2026-08-20, Codex held no audit seat while it held the coordinator seat from 2026-08-21, and Kimi K3 holds no audit seat while it holds the coordinator seat again from 2026-08-23. In every case the exclusion is conflict of interest, not capacity removal; audit capacity is consolidated in Fable 5, which stays independent of the DT. Codex, as low-frequency read-only technical consultant from 2026-08-23, likewise holds no audit seat and no gate.",
-    "technicalConsultantReadOnly": {
+    "dtNotAuditorLaw": "The active DT does not hold an independent audit seat and never self-audits. Fable 5 is the primary lot auditor; Codex is the second checkpoint and architecture auditor. Both remain independent of Kimi K3.",
+    "codexCheckpointAudit": {
       "actors": ["Codex"],
       "work": [
-        "low-frequency executive read-only technical review at the close of a long packet run (typically every 3-4 accepted F4B packets), at a phase close, or before a hard-to-reverse architecture decision",
-        "compact consultation only: commit range, exact roadmap section, diffstat, gates run, Fable verdict and 1-3 concrete questions"
+        "every integrated product-slice and phase close",
+        "every compiler, manifest, public-control or hard-to-reverse architecture change",
+        "compact review of product impact, hardcodes, source-to-instrument ratio, architecture and evidence validity"
       ],
-      "law": "Codex advises the DT; it holds no gate, no audit seat and no write authority, and its review never substitutes the Fable 5 per-packet audit. Its unavailability never blocks work already covered by the roadmap and the Fable audit."
+      "law": "Codex is read-only and does not substitute Fable. Its pending review blocks only closure of the affected integrated slice; disjoint preparation and writing continue."
     },
     "implementer": {
-      "actor": "Claude implementer pool (Sonnet/Opus)",
+      "actor": "Opus",
       "work": [
-        "source implementation in delegated packets",
-        "contract, manifest, compiler and test edits within bounded ownership",
-        "structured evidence assembly",
-        "i18n parity and barrel synchronization"
+        "primary source implementation in disjoint product slices",
+        "components, skins, CSS, recipes, contracts, compiler and tests within bounded ownership",
+        "one singleton architecture integration lane where delegated"
       ],
       "succession": [
         {
@@ -107,10 +114,32 @@
           "proof": "The owner order of this session (2026-08-20) expands the live implementer seat from the Cloud Opus implementer pool to the Claude implementer pool (Sonnet/Opus), delegated through tmux terminals with the model tier chosen by risk. The seat is transferred, not removed: exactly one implementer authority exists before and after this succession.",
           "retainedAuditCapacity": ["Fable 5"],
           "capacityLaw": "This succession removes no audit capacity. Fable 5 keeps its full independent closure-audit seat. Kimi K3 left advisoryReadOnly the same day solely because it assumed the DT seat (decision 13: the DT is not the auditor), not because audit capacity was removed."
+        },
+        {
+          "predecessor": "Claude implementer pool (Sonnet/Opus)",
+          "successor": "Opus",
+          "ownerOrderDate": "2026-08-30",
+          "proof": "The owner order of 2026-08-30 assigns non-trivial source writing to Opus and separates Sonnet into scout and exact-mechanical work. This is routing clarity, not loss of implementation capacity.",
+          "retainedAuditCapacity": ["Fable 5", "Codex"],
+          "capacityLaw": "Fable remains primary lot auditor and Codex becomes the second checkpoint and architecture auditor; Kimi remains DT and final sighted authority."
         }
       ]
     },
-    "promotionLaw": "Escalate any authority conflict to the DT (Kimi K3); owner adjudication where the law requires the owner. No other model may invent architecture, authorize commits, or override the programme contracts.",
+    "scoutAndMechanical": {
+      "actor": "Sonnet",
+      "writes": "Only exact closed substitutions or official regeneration with no semantic, visual or architecture decision.",
+      "work": [
+        "read-only search, census, dependency and hardcode maps",
+        "prepare exact read-sets, write-sets and next-wave packets",
+        "official regeneration, diff accounting and specified repetitive substitutions"
+      ],
+      "forbidden": [
+        "public API, recipe, root or fallback decisions",
+        "compiler behaviour or architecture decisions",
+        "visual direction or expectation changes"
+      ]
+    },
+    "promotionLaw": "Escalate authority conflicts to Kimi K3, implementation complexity to Opus, and closure findings to Fable plus Codex at the governed cadence. Owner adjudication is reserved for product/commercial scope, incompatible public API, destructive or external actions, release, publish and push.",
     "reportingLaw": "Record the chosen route and reason once per cohort in structured fields; do not narrate model deliberation per family."
   },
   "graph": {
@@ -141,16 +170,14 @@
     },
     "family-writer": {
       "writes": true,
-      "mayEdit": "declared family-owned source only",
+      "mayEdit": "an exact disjoint product-slice write-set, including family-owned component source, tests and styles",
       "mayNotEdit": [
-        "tests",
         "shared-i18n",
         "contracts",
         "compilers",
         "manifests",
         "barrels",
         "generated-docs",
-        "styles",
         "dist",
         "roadmap",
         "audit-ledger"
@@ -164,7 +191,8 @@
         "static-db parity changes",
         "capability and recipe contracts",
         "shared barrels and manifests",
-        "Kimi preservation decisions"
+        "theme schema and shared identity-to-semantic derivation",
+        "cross-slice integration decisions"
       ]
     },
     "quality-integrator": {
@@ -285,22 +313,43 @@
   "efficiency": [
     "read assigned family and immediate composition dependencies, not the whole repository",
     "do not run full builds suites gates or browser matrices per writer",
-    "do not write narrative essays",
-    "write concise code comments only for non-obvious invariants decisions accessibility constraints algorithms or retirement conditions",
-    "never add comments that restate code narrate the migration praise quality or preserve agent reasoning",
+    "do not write narrative essays or token diaries; status is packet start, real blocker and close only",
+    "default to zero new source comments; when unavoidable use at most two lines for non-obvious product behavior accessibility browser constraints or public API",
+    "never put agent round family cohort migration receipt or programme history into source comments or test names",
     "return the structured family receipt rather than a prose progress diary",
     "reuse one source-bound census and one integrator summary instead of asking every lane to rediscover shared facts",
     "do not edit a family merely to create a diff",
     "return already-reference-grade only with concrete evidence",
-    "replace a failed agent with the same ownership instead of abandoning the round"
+    "replace a failed agent with the same ownership instead of abandoning the round",
+    "owner-facing close is at most ten product-language bullets: changed product, visible result, hardcodes retired, controls proved, risk and next productive slice"
   ],
+  "r1AggressiveExecution": {
+    "targetWindow": "one-week maximum-impact release target; schedule pressure never weakens acceptance",
+    "parallelSlices": [
+      "data-workflow: PatternDataTable, ListToolbar, filters, SavedViews, Badge, Tag and mobile projection",
+      "shell-navigation: AppShell, sidebar, mobile navigation, menus and overlays",
+      "forms-surfaces: Input, Select, FormField, Card and related semantic surfaces",
+      "cascade-integrator: compiler, three-theme schema, roots, recipes and static/DB parity"
+    ],
+    "writerTopology": "Multiple Opus writers on exact disjoint worktrees; multiple Sonnet scouts prepare current and next slices; one architecture integrator and one quality integrator; Fable and Codex audit the integrated candidate at their governed cadence.",
+    "serialized": [
+      "shared compiler/contracts/foundation tokens/manifest/barrels/i18n/generated artifacts",
+      "heavy build and test reconciliation",
+      "server and browser capture"
+    ],
+    "sourceBudget": "At least 80 percent product source and visible quality; at most 20 percent tooling, audit and evidence. No new instrument unless an existing instrument cannot measure a named blocker.",
+    "toolingMoratorium": "No new Modern Rescue script, gate, census, drill or evidence format during R1 unless the packet names a blocking claim that no existing command can measure and both Fable and Codex confirm the gap. Prefer deleting, merging or extending an existing capability.",
+    "manifestEntryPoint": "packages/core/manifest/generator/index.mjs must become the single real write/check/certify entrypoint. Current limitation is explicit: it syncs schema and authored cells but does not derive actual compiler/CSS dependencies or hash all productive sources. Extend this file, not the script count, to emit declared/observed/gap edges and bind certification to source plus computed evidence. Run it once per integrated batch; never hand-edit generated rollups.",
+    "toolingConsolidation": "A bounded Sonnet mechanical lane audits and consolidates all of packages/core/scripts without blocking product writers. The target is descriptive domain/subdomain/capability/index.mjs: capabilities with related behavior share a named subdomain, single-child or generic wrappers are forbidden, and the path explains the command without knowing an agent, work order, round or historical execution. Root exceptions are forbidden. Public package/CI callers receive tested path updates or a temporary compatibility shim; dead entrypoints, duplicate scanners and recursive suites are removed. First candidates are the recursive sub-suite runner in program-check.test, non-consumable cascade-materialize/backlog outputs, and duplicate CSS census after fanout-facts absorbs the unique cascade-extract fact. cascade-probe remains only if a release caller is named. Test artifacts follow the same semantic rule but signed evidence moves only with complete reference and digest reanchoring. No replacement platform or new structural gate: evolve scripts-tree-gate to enforce the target hierarchy as each migration batch lands.",
+    "autonomy": "Do not wait for the owner on reversible in-scope corrections. Kimi resolves source-grounded Fable/Codex disagreement and continues. Stop only for product/commercial scope, incompatible public API, destructive or external actions, release, publish or push."
+  },
   "r7Execution": {
     "enabled": false,
     "main": "Kimi K3 coordinator owning conflict graph architecture canon and integration",
-    "advisor": "Fable 5 read-only lane for architecture behavioral parity and visual coherence",
+    "advisor": "Fable 5 primary audit plus Codex checkpoint audit",
     "mechanicalWriters": {
       "maximum": 1,
-      "actor": "Claude implementer pool (Sonnet/Opus)",
+      "actor": "Sonnet",
       "allowedWork": [
         "disjoint family anatomy mappings",
         "control and recipe ledgers",

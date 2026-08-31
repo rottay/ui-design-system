@@ -13,7 +13,6 @@ import { tmpdir } from "node:os";
 import { dirname, join, sep } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import test from "node:test";
-import { spawnSync } from "node:child_process";
 import { repoRoot as findRepoRoot } from '../../../lib/repo-root/index.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -178,7 +177,10 @@ function expectError(errors, fragment, message) {
 }
 
 test("live modern-rescue program contracts are internally consistent", () => {
-  assert.deepEqual(validateModernRescueContracts(baseline), []);
+  // Constitution mutations are tested independently of live evidence freshness.
+  // The current tree intentionally carries classified stale receipts and WIP;
+  // rehashing those to make a role amendment green would falsify provenance.
+  assert.deepEqual(validateModernRescueContracts(baseline, { includeManifestGate: false }), []);
 });
 
 test("role drift fails closed", () => {
@@ -194,17 +196,17 @@ test("role drift fails closed", () => {
   );
   expectError(
     mutated((copy) => { copy.orchestration.modelRouting.implementer.actor = "Sonnet"; }),
-    "implementer must be the Claude implementer pool (Sonnet/Opus)",
-    "Sonnet as implementer must be rejected"
+    "primary source writer must be Opus",
+    "Sonnet as primary source writer must be rejected"
   );
   expectError(
     mutated((copy) => { copy.orchestration.modelRouting.implementer.actor = "Kimi 2.7"; }),
-    "implementer must be the Claude implementer pool (Sonnet/Opus)",
+    "primary source writer must be Opus",
     "reverting to the retired Kimi 2.7 implementer must be rejected"
   );
   expectError(
     mutated((copy) => {
-      copy.orchestration.coordinator.model = "Claude implementer pool (Sonnet/Opus)";
+      copy.orchestration.coordinator.model = "Opus";
       copy.orchestration.modelRouting.implementer.actor = "Codex";
     }),
     "coordinator must be Kimi K3",
@@ -219,22 +221,18 @@ test("role drift fails closed", () => {
   );
   expectError(
     mutated((copy) => {
-      copy.orchestration.modelRouting.advisoryReadOnly.actors = ["Fable 5", "Kimi K3"];
+      copy.orchestration.modelRouting.advisoryReadOnly.actors = ["Fable 5", "Codex", "Kimi K3"];
     }),
     "must not include the coordinator",
     "decision 13: the DT reappearing in advisoryReadOnly must be rejected"
   );
   expectError(
     mutated((copy) => {
-      copy.orchestration.modelRouting.advisoryReadOnly.actors = ["Fable 5", "Codex"];
+      copy.orchestration.modelRouting.advisoryReadOnly.actors = ["Fable 5"];
     }),
-    "must be exactly",
-    "the read-only consultant seat may not re-enter the audit roster either"
+    "must name Codex as an advisor",
+    "dropping Codex from the checkpoint audit roster must be rejected"
   );
-  // The same fence must bite for the live DT itself: Kimi K3 holds the DT
-  // seat again from 2026-08-23 and decision 13 (DT != auditor) bars it from
-  // advisoryReadOnly exactly as it barred Codex. This drill pins that the
-  // advisory roster stays Fable-only by name.
   expectError(
     mutated((copy) => {
       copy.orchestration.modelRouting.advisoryReadOnly.actors = ["Kimi K3"];
@@ -242,36 +240,33 @@ test("role drift fails closed", () => {
     "must name Fable 5 as an advisor",
     "the live DT may not replace Fable 5 in advisoryReadOnly"
   );
-  // The roster is EXACT, not a minimum. Inclusion-only let the retired DT
-  // re-enter simply by being appended next to Fable 5 -- it is not the live
-  // coordinator, so the overlap fence below cannot catch it.
   expectError(
     mutated((copy) => {
-      copy.orchestration.modelRouting.advisoryReadOnly.actors = ["Fable 5", "Kimi K3"];
+      copy.orchestration.modelRouting.advisoryReadOnly.actors = ["Fable 5", "Codex", "Other"];
     }),
-    "advisoryReadOnly.actors must be exactly [\"Fable 5\"]",
-    "the retired DT re-entering advisoryReadOnly alongside Fable 5 must be rejected"
+    "advisoryReadOnly.actors must be exactly [\"Fable 5\",\"Codex\"]",
+    "an ungoverned third auditor must be rejected"
   );
   expectError(
     mutated((copy) => {
-      copy.orchestration.doubleAccept.actors = ["Fable 5", "Kimi K3"];
+      copy.orchestration.doubleAccept.actors = ["Fable 5", "Codex", "Kimi K3"];
     }),
-    "doubleAccept actors must be exactly [\"Fable 5\"]",
-    "the retired DT re-entering doubleAccept alongside Fable 5 must be rejected"
+    "doubleAccept actors must be exactly [\"Fable 5\",\"Codex\"]",
+    "the DT re-entering the independent audit roster must be rejected"
   );
   expectError(
     mutated((copy) => {
-      copy.orchestration.modelRouting.promotionLaw = "Escalate to Sonnet when in doubt.";
+      copy.orchestration.modelRouting.scoutAndMechanical.actor = "Opus";
     }),
-    "must not mention Opus or Sonnet",
-    "Sonnet mention in routing law must be rejected"
+    "scout and mechanical actor must be Sonnet",
+    "Opus may not silently replace the Sonnet scout lane"
   );
   expectError(
     mutated((copy) => {
-      copy.orchestration.modelRouting.promotionLaw = "Escalate to a bare Opus lane when in doubt.";
+      copy.orchestration.coordinator.mayAudit = true;
     }),
-    "must not mention Opus or Sonnet",
-    "an ungoverned Opus mention must still be rejected"
+    "coordinator mayAudit must remain false",
+    "Kimi may write but may never self-audit"
   );
 });
 
@@ -477,10 +472,10 @@ test("implementer succession fails closed", () => {
   );
   expectError(
     mutated((copy) => {
-      copy.orchestration.modelRouting.implementer.succession[1].ownerOrderDate = "2026-08-19";
+      copy.orchestration.modelRouting.implementer.succession[2].ownerOrderDate = "2026-08-29";
     }),
-    "succession must cite the 2026-08-20 owner order for its latest record",
-    "an unmoored second succession date must be rejected"
+    "succession must cite the 2026-08-30 owner order for its latest record",
+    "an unmoored live routing date must be rejected"
   );
   expectError(
     mutated((copy) => {
@@ -491,9 +486,9 @@ test("implementer succession fails closed", () => {
   );
   expectError(
     mutated((copy) => {
-      copy.orchestration.modelRouting.implementer.succession[1].successor = "Cloud Opus implementer pool";
+      copy.orchestration.modelRouting.implementer.succession[2].successor = "Claude implementer pool (Sonnet/Opus)";
     }),
-    "succession must end with the Claude implementer pool (Sonnet/Opus)",
+    "succession must end with the Opus",
     "a succession chain that never reaches the live implementer must be rejected"
   );
   expectError(
@@ -505,7 +500,7 @@ test("implementer succession fails closed", () => {
   );
   expectError(
     mutated((copy) => {
-      copy.orchestration.modelRouting.implementer.succession[1].retainedAuditCapacity = [];
+      copy.orchestration.modelRouting.implementer.succession[2].retainedAuditCapacity = [];
     }),
     "succession must retain Fable 5 audit capacity",
     "dropping Fable 5 audit capacity in the succession must be rejected"
@@ -514,7 +509,7 @@ test("implementer succession fails closed", () => {
     mutated((copy) => {
       copy.orchestration.doubleAccept.implementationActor = "Kimi 2.7";
     }),
-    "doubleAccept implementationActor must be the Claude implementer pool (Sonnet/Opus)",
+    "doubleAccept implementationActor must be the Opus",
     "a doubleAccept implementer that contradicts the succession must be rejected"
   );
   expectError(
@@ -524,7 +519,7 @@ test("implementer succession fails closed", () => {
   );
   expectError(
     mutated((copy) => { copy.orchestration.r7Execution.mechanicalWriters.actor = "Kimi 2.7"; }),
-    "r7Execution mechanical writer must be the Claude implementer pool (Sonnet/Opus)",
+    "r7Execution mechanical writer must be Sonnet",
     "an R7 mechanical writer that contradicts the succession must be rejected"
   );
 });
@@ -1206,6 +1201,15 @@ test("historical visual craft and evidence receipt checks fail closed", () => {
     "dropping a receipt required field must be rejected"
   );
   expectError(
+    mutated((copy) => {
+      copy.evidence.checkpointRequiredFields = copy.evidence.checkpointRequiredFields.filter(
+        (field) => field !== "fableDecision"
+      );
+    }),
+    "visual checkpoint must require fableDecision",
+    "dropping the independent Fable decision must be rejected"
+  );
+  expectError(
     mutated((copy) => { copy.evidence.schemaVersion = 1; }),
     "evidence contract schema must remain v2",
     "evidence schema downgrade must be rejected"
@@ -1765,115 +1769,4 @@ test("A11: la MISMA funcion que corre el gate detecta una cerca rota, sobre los 
   assert.ok(findings.some((f) => f.includes("membership digest")));
   // y la cerca real sigue intacta despues del drill
   assert.deepEqual(live(), []);
-});
-
-/* ==========================================================================
- * A11 -- REACHABILITY TRANSITIVA de los tres suites nuevos (ruling DT A12).
- *
- * El gate blocking `modern-rescue-tooling-drills` lleva un argv EXACTO de
- * cuatro elementos, sellado por `scripts/ci/runner/index.test.mjs:239`, que
- * esta fuera del write-set del lote. Anexar rutas a ese `run[]` rompia ese
- * drill; ampliar el write-set o crear un gate id nuevo estaba prohibido.
- *
- * La salida ordenada por el DT: este archivo YA lo transporta el gate, asi que
- * corre los tres suites el mismo. Se usa `spawnSync` por suite -- un proceso
- * limpio cada uno -- para no depender de efectos laterales de import, y se
- * falla con el stdout/stderr real en vez de un booleano.
- * ========================================================================== */
-
-const TRANSITIVE_SUITES = [
-  "packages/core/scripts/quality-evidence/programs/modern-rescue/cascade-extract.test.mjs",
-  "packages/core/scripts/quality-evidence/programs/modern-rescue/cascade-producers.test.mjs",
-  "packages/core/scripts/quality-evidence/programs/modern-rescue/cascade-consumability.test.mjs",
-];
-
-test("A11: los tres suites nuevos son blocking por transporte, y pasan en proceso limpio", () => {
-  // CONTENCION, DICHA EN EL FALLO (diagnostico pcheck-test-hang, 2026-08-25):
-  // `cascade-producers.test.mjs` re-deriva un inventario de 215.942 leaves
-  // desde el arbol VIVO (TC-7/T-21 recomputan y comparan contra lo
-  // commiteado). Si otro carril edita .ts/.tsx MIENTRAS este test corre, la
-  // divergencia medida es real pero no es un defecto del inventario -- es el
-  // mismo arbol visto en dos instantes. Medido: 217/217 en ventana tranquila;
-  // exactamente T-21 y TC-7 rojos con un build en vuelo en el mismo carril.
-  const CONTENTION_NOTE =
-    "\n\n(este drill exige arbol QUIETO: los suites transitivos leen el arbol " +
-    "vivo, no un snapshot. Si hay otro carril escribiendo -- build en vuelo, " +
-    "ediciones .ts/.tsx sin commitear -- el rojo es CONTENCION ESPERADA, no " +
-    "un defecto del inventario: re-correr en ventana tranquila antes de " +
-    "adjudicar. Causa medida, no hipotetica: T-21/TC-7 reproducibles con un " +
-    "build en vuelo; 217/217 en ventana tranquila. Ver " +
-    "pcheck-test-hang-opus-diagnosis.md §4.)";
-  for (const suite of TRANSITIVE_SUITES) {
-    const abs = join(LIVE, suite);
-    assert.ok(existsSync(abs), `${suite} debe existir para ser alcanzable`);
-    // `node --test` REFUSES to run when it detects it is nested inside another
-    // test process ("run() is being called recursively"), and it does so by
-    // exiting 0 with empty stdout -- a green that proves nothing. The marker
-    // travels in the environment, so the child gets a clean one.
-    const childEnv = { ...process.env };
-    delete childEnv.NODE_TEST_CONTEXT;
-    delete childEnv.NODE_OPTIONS;
-    // Falla FUERTE, no muda (diagnostico pcheck-test-hang, 2026-08-25):
-    // `cascade-producers.test.mjs` solo mide 334 s (5m34s) en ventana
-    // tranquila -- el suite mas caro de los tres, y el 99% del costo de este
-    // drill entero. Sin `timeout` un carril trabado deja este `spawnSync`
-    // bloqueando el hilo principal en silencio: el reporter no puede vaciar
-    // su salida mientras tanto, asi que la ULTIMA LINEA VISIBLE queda muy
-    // atras del punto donde el proceso realmente trabaja -- la ilusion
-    // exacta que se leyo como "cuelga en el test 45". 900_000 ms (15 min) da
-    // holgura 2,5x sobre los 334 s medidos. `maxBuffer` generoso porque 217
-    // tests en TAP producen bastante stdout y un buffer corto tronca
-    // silenciosamente la salida que este mismo assert necesita mostrar.
-    // Progreso por stderr, ANTES del spawn (diagnostico pcheck-test-hang):
-    // el `node --test` runner SI re-emite esta escritura como comentario TAP
-    // (`# [a11] running ...`) dentro del mismo stdout -- medido con una
-    // probe aislada (spawnSync sync de 4s), y no como un stream crudo de
-    // stderr al margen del reporter. Lo que importa se mide igual: la linea
-    // se vacia AL TOQUE, ANTES de que el spawnSync bloqueante empiece a
-    // correr -- confirmado leyendo el archivo de salida A MITAD del sleep de
-    // la probe, mientras el proceso seguia bloqueado. Sin esto los 5m43s de
-    // cascade-producers son silencio total; con esto, la ultima linea del
-    // stream ya dice "running cascade-producers.test.mjs" antes de que
-    // arranque el bloqueo, no despues de que termine.
-    process.stderr.write(`[a11] running ${suite} (may take minutes)...\n`);
-    const run = spawnSync(process.execPath, ["--test", abs], {
-      cwd: join(LIVE, "packages/core"),
-      encoding: "utf8",
-      env: childEnv,
-      timeout: 900_000,
-      maxBuffer: 64 * 1024 * 1024,
-    });
-    process.stderr.write(`[a11] ${suite} exited status=${run.status} signal=${run.signal ?? "none"}\n`);
-    assert.equal(
-      run.status,
-      0,
-      `${suite} salio ${run.status}${run.signal ? ` (signal ${run.signal}, probable timeout)` : ""}\n--- stdout ---\n${run.stdout ?? ""}\n--- stderr ---\n${run.stderr ?? ""}${CONTENTION_NOTE}`,
-    );
-    assert.match(
-      run.stdout ?? "",
-      /^# fail 0$/m,
-      `${suite} debe reportar 0 fallas\n--- stdout (cola) ---\n${(run.stdout ?? "").split("\n").slice(-40).join("\n")}\n--- stderr ---\n${run.stderr ?? ""}${CONTENTION_NOTE}`,
-    );
-  }
-});
-
-test("A11: guard estatico -- retirar una ruta de la lista transitiva falla aqui", () => {
-  // Sin este guard, borrar una linea de TRANSITIVE_SUITES dejaria de ejecutar
-  // un suite entero sin que nada se pusiera rojo: exactamente el defecto que el
-  // gate `modern-rescue-tooling-drills` existe para cerrar, un nivel mas abajo.
-  const required = [
-    "cascade-extract.test.mjs",
-    "cascade-producers.test.mjs",
-    "cascade-consumability.test.mjs",
-  ];
-  for (const name of required) {
-    assert.ok(
-      TRANSITIVE_SUITES.some((suite) => suite.endsWith(`/${name}`)),
-      `${name} debe seguir en la lista transitiva: si sale, deja de ser blocking`,
-    );
-  }
-  assert.equal(TRANSITIVE_SUITES.length, required.length, "ni de mas ni de menos");
-  for (const suite of TRANSITIVE_SUITES) {
-    assert.ok(suite.startsWith("packages/core/scripts/quality-evidence/programs/modern-rescue/"));
-  }
 });

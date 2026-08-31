@@ -1,6 +1,6 @@
 {
  "$schema": "roadmap work-order state registry (single source of WO status; specs live in roadmap lane markdown files)",
- "updated": "2026-08-29",
+ "updated": "2026-08-30",
  "rules": {
   "done_requires": "status in-progress + all dependsOn done + non-empty --evidence + mustLandWith partner in-progress/done; support milestones never complete source IDs",
   "claim_requires": "all dependsOn done + DS-improvements phase claimState open",
@@ -3624,6 +3624,11 @@
      "at": "2026-08-30 16:55",
      "by": "kimi-k3-dt",
      "note": "COH-1 status-tint floor CERRADO e INTEGRADO (merge 334bace48 + commit de integración 785ccdf48): los tints status (-bg/-border/alpha) ahora derivan de los cuatro seeds status vía piso del compilador (deriveStatusTintFloor + applyTenantStatusSeedDerivations + tabla hermana STATUS_SEED_SHADOWING_FIELDS; SEED_SHADOWING_FIELDS intacto). Puerta DB reparada de verdad (input hermano tenantStatusSeedAuthorship del patch crudo; tenantPostureFloors intacta), con test afirmativo por la puerta real sobre rottay y mutantes que muerden (puerta muerta, entrada provenance quitada, formula 20->25%). Provenance cerrado a TRES sitios con unión exacta. BitHire light: retirados los 8 literales verdes legacy + chrome de input (#2F8B68 -> var(--ds-color-success)) — el delta visual intended: el canal --ds-color-success-bg medido sobre badge-success pasó de #f0fdf4 CONGELADO (F4C-B) a seguir al seed por ambas puertas (#E2FCE4 bajo mutación DB, #F7F6FF bajo mutación static). Evnto light: 4 borders retirados (cero-delta byte, pin T3) + 4 bgs (corrección mínima). Rottay y ambos dark intactos. Capabilities 68->83; manifest regenerado por generador; slot-inventory 3629->3613 con razón escrita; supplier-contract y hooks-manifest al día. Harness F4C: watch-list post-COH-1 (solo -ink), DECLARED_PARTIAL_PROPAGATION vacío, flag --only fail-closed para corridas focales. Durabilidad: compare-logs F4C persistidos como .txt trackeables (defecto Codex cerrado), historia F4C intacta. Tests: 55/55 nuevos; rojos pre-existentes idénticos a HEAD (14) clasificados, ninguno reparado fuera de alcance; gates del árbol integrado verdes salvo los 117 receipts F4B stale pre-existentes. Auditorías REALES por claude CLI con informes durables: Opus (fórmula ajustada), Fable DEFECTS-4 -> remediación Sonnet -> ACCEPT en rama -> ACCEPT focal post-integración. NUNCA push; docs/reauditoria-cloud/ excluido. Próximo lote: enmienda de dirección R1 (los verticales son fixtures de prueba del motor, no destinos de dirección artística) y luego el primer writer productivo Button -> PatternDataTable -> AppShell con drenaje de hardcodes."
+    },
+    {
+     "at": "2026-08-30 20:36",
+     "by": "owner",
+     "note": "Owner amendment: R1 now executes disjoint cross-layer product slices in parallel; Opus writes, Sonnet scouts/mechanical, Kimi integrates/commits, Fable audits each lot and Codex each slice/shared-authority close. Three-theme structural parity, downstream cascade, fallback resilience and product-source 80/20 are binding."
     }
    ],
    "claimedBy": "claude-modern-rescue",

@@ -13,8 +13,7 @@
  * make the gate pass").
  *
  * Rules:
- *   R1  scripts/ root holds only family dirs + the two declared toolchain
- *       files (vitest.scripts.config.ts, tests-typecheck-ambient.d.ts).
+ *   R1  scripts/ root holds only declared family directories.
  *   R2  A family dir holds only capability dirs. Declared doc exception: one
  *       README.md per family. Declared capability exception: lib/repo-root/
  *       is a capability sitting at subfamily depth (§2.9 names it).
@@ -54,7 +53,6 @@ const HERE = dirname(fileURLToPath(import.meta.url));
 const SCRIPTS_ROOT = dirname(dirname(HERE)); // structure/scripts-tree-gate/ -> scripts/
 const BASELINE_PATH = join(HERE, 'scripts-tree-gate.baseline.json');
 
-const TOOLCHAIN_FILES = new Set(['vitest.scripts.config.ts', 'tests-typecheck-ambient.d.ts']);
 const FAMILIES = [
   'boundaries', 'builders', 'ci', 'codemods', 'engine', 'evidence', 'generators',
   'i18n', 'lib', 'packaging', 'quality-evidence', 'structure', 'taxonomy',
@@ -74,7 +72,7 @@ export function collectFindings(scriptsRoot, { drill } = {}) {
   const rootDirs = new Set(rootEntries.filter((e) => e.isDirectory()).map((e) => e.name));
 
   for (const entry of rootEntries) {
-    if (!entry.isDirectory() && !TOOLCHAIN_FILES.has(entry.name)) add('R1-loose-root-file', entry.name);
+    if (!entry.isDirectory()) add('R1-loose-root-file', entry.name);
   }
   for (const dir of rootDirs) {
     if (!FAMILIES.includes(dir)) add('R5-undeclared-family', dir);

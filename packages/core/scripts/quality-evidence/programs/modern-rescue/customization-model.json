@@ -50,11 +50,12 @@
     "drainLaw": "A drain cohort may not move an extension declaration into --_ds-* merely to defer a decision. Each cohort migrates, derives or retires its declarations; provisional sockets are for evaluation with a written exit, not for parking extension debt."
   },
   "executionTraversal": {
-    "strategy": "control-calibration-then-family-once",
-    "designFirst": "Materialize every active Standard and Pro control against all 255 canonical family IDs before broad propagation. Every certifying cell is APPLICABLE, INVARIANT_WITH_REASON, NOT_APPLICABLE_WITH_REASON or UNKNOWN; UNKNOWN blocks family completion. Proposed controls live only in the target model and never create certifying cells or block R0-R6.",
-    "controlCalibration": "For each operational control, prove domain, stops, static and DB lowering, representative family computed deltas, negative controls and exact restore before treating propagation as mechanical.",
-    "familyClosure": "After the control matrix and harness are stable, visit each family once and close every applicable control, part, state, property group and stress case in one packet.",
-    "testCadence": "Run focal causal gates per control or family packet. Run the full suite only at reconciliation boundaries and classify every red result before changing source or expectations."
+    "strategy": "calibrate-controls-then-parallel-cross-layer-product-slices",
+    "designFirst": "The manifest is the generated edge and acceptance authority, not a manual prerequisite that delays product source. Calibrate an active control on representative source, then implement conflict-free cross-layer slices and project their proven edges into all 255 canonical family IDs. Every certifying cell is APPLICABLE, INVARIANT_WITH_REASON, NOT_APPLICABLE_WITH_REASON or UNKNOWN; UNKNOWN blocks that family's completion, not unrelated source work.",
+    "controlCalibration": "For each operational control, prove domain, stops, static and DB lowering, representative computed deltas, negative controls and exact restore before parallel propagation. Reuse the existing harness; do not build another census or script unless a named blocker is unmeasurable.",
+    "familyClosure": "Close product journeys and their primitives, patterns, structures, surfaces and skins together. The unit of scheduling is a disjoint cross-layer slice, not one primitive at a time and not one manual manifest cell at a time.",
+    "parallelism": "PatternDataTable/workflow, AppShell/navigation and forms/surfaces advance concurrently where exact read/write sets do not collide; compiler, contracts, shared roots/recipes, manifest, i18n, generated artifacts, builds and browser remain singleton or serialized.",
+    "testCadence": "Run focal causal gates per writer. Integrate once per batch, then run the heavy suite and browser matrix once, followed by Fable audit and the required Codex checkpoint audit. Classify every red result before changing source or expectations."
   },
   "resolutionOrder": [
     "accessibility-and-resilience-floors",
@@ -74,6 +75,45 @@
     "stable-dom-part",
     "observable-property"
   ],
+  "themeSymmetryAndCascade": {
+    "themes": ["rottay", "bithire", "evnto"],
+    "shapeLaw": "All three themes expose the same typed keypaths, ordering and template comments. They differ only in sanctioned identity values and profile selections. Prefer one shared typed template or factory so structural parity is impossible to drift by copy-paste.",
+    "allowedIdentityHardcodes": [
+      "palette and status seeds",
+      "font stacks and pairings",
+      "bounded profile or recipe selections",
+      "sanctioned ratios or irreducible identity exceptions with a source-bound reason"
+    ],
+    "forbiddenDownstreamHardcodes": [
+      "family-specific paint",
+      "derived ramps, tints and state colors",
+      "shadows, radii, spacing and control sizes",
+      "computed typography results",
+      "normal family or skin declarations that bypass the governed roots and recipes"
+    ],
+    "cascadeLaw": "A public Standard or Pro control lowers once into governed semantic roots and recipes, then reaches many relevant families, parts, states and property groups. A control that changes only an isolated leaf does not satisfy product impact even if its manifest cell is green.",
+    "fallbackOrder": [
+      "explicit family or instance override where the public contract allows it",
+      "governed semantic root or recipe",
+      "literal resilience floor"
+    ],
+    "fallbackLaw": "A literal fallback is emergency resilience, never the accepted normal paint path or a substitute for a missing producer. Baseline and controlled mutation must resolve through the themed producer; removal must fall back to the governed themed root; the literal floor is exercised only by an isolated deliberate missing-root drill.",
+    "transportAndInventoryLaw": "Equivalent static BrandTheme and DB TenantTheme inputs emit identical keypaths, channel inventory, order, CSS and digest. Rottay, BitHire and Evnto share the same channel shape; only sanctioned values differ.",
+    "acceptance": "For every adopted slice, retire or adjudicate every brandable hardcode in its exact write-set, prove a visible multi-layer mutation, a fixed negative control, static/DB parity and exact restore."
+  },
+  "manifestAutomation": {
+    "currentState": "The existing generator synchronizes registry, inventory, schema and authored family cells, then projects only cells whose authored disposition or verification state is above UNKNOWN. It does not currently derive actual dependency edges from compiler/CSS, hash all productive sources or prove that a declared targetBinding is live. Therefore it is not yet a cascade certificate.",
+    "targetEntryPoint": "packages/core/manifest/generator/index.mjs",
+    "requiredGeneratedViews": [
+      "declared target control-to-family-part-property-channel edges",
+      "observed compiler recipe CSS producer and consumer edges",
+      "missing declared edges and foreign observed edges",
+      "source freshness over registry inventory schema compiler themes recipes and CSS",
+      "computed mutation negative-control static-DB and restore evidence status"
+    ],
+    "commandLaw": "Extend the existing --write/--check/--certify entrypoint. Do not create another updater. --write refreshes projections, --check verifies byte and source freshness, and --certify requires zero unresolved applicable gaps plus governed computed evidence.",
+    "progressLaw": "A declared or generated edge is control, not completion. Only source-bound observed reach plus computed mutation and restore can advance certification."
+  },
   "transportEquality": {
     "law": "Static BrandTheme and DB TenantThemeDocument are transports only. Both resolve to the same complete nested Theme and enter exactly one compileTheme. Equivalent values produce identical keypaths, channel inventory, deterministic order, CSS and digest. ThemePatch exists only at ingestion and never reaches the compiler.",
     "inventory": "public-layer only: --ds-* emissions, root attributes, deterministic order, CSS and digest. Private --_ds-* sockets are downstream of lowering and must resolve identically per transport because they read the same derived channels.",
@@ -103,7 +143,7 @@
       "recipe-and-anatomy"
     ],
     "migrationLaw": "Published profile ids keep their meaning. A new art direction either composes existing axes without semantic mutation or adds a reviewed versioned registry entry through the same static and DB lowering path.",
-    "advisorLaw": "Fable 5 may advise read-only. Its narratives are ephemeral; only a DT-reproduced source finding enters this model or an owning canonical contract."
+    "advisorLaw": "Fable 5 audits every integrated lot and Codex independently audits product-slice/checkpoint closure plus compiler, manifest, public-control and hard-to-reverse architecture changes. Their narratives are ephemeral; only source-reproduced findings incorporated into an owning contract become authority. Kimi K3 remains final sighted authority and may not self-audit."
   },
   "r7Execution": {
     "enabled": false,

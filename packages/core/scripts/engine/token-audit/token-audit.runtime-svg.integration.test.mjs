@@ -10,6 +10,8 @@ import { packageRoot as findPackageRoot } from '../../lib/repo-root/index.mjs';
 
 const scriptsDir = dirname(fileURLToPath(import.meta.url));
 const packageRoot = findPackageRoot(scriptsDir);
+const runtimeSvgCensus = join(scriptsDir, '..', 'runtime-svg-paint-census', 'index.mjs');
+const tokenAudit = join(scriptsDir, 'index.mjs');
 const baseline = JSON.parse(readFileSync(join(scriptsDir, 'token-audit.baseline.json'), 'utf8'));
 const exemptions = JSON.parse(readFileSync(resolve(packageRoot, '../..', 'roadmap/skin-exemptions.json'), 'utf8'));
 
@@ -23,7 +25,7 @@ function countersFromOutput(output) {
 }
 
 test('engine audit wires full runtime/fleet censuses and rejects vanished keys', () => {
-  const censusRun = spawnSync(process.execPath, [join(scriptsDir, 'runtime-svg-paint-census.mjs'), '--json'], {
+  const censusRun = spawnSync(process.execPath, [runtimeSvgCensus, '--json'], {
     cwd: packageRoot,
     encoding: 'utf8',
     maxBuffer: 4 * 1024 * 1024,
@@ -43,32 +45,7 @@ test('engine audit wires full runtime/fleet censuses and rejects vanished keys',
   assert.equal(census.classifiedPaint, census.total);
   assert.equal(census.unclassified, 0);
 
-  const embeddedRun = spawnSync(process.execPath, [join(scriptsDir, 'embedded-css-paint-census.mjs'), '--json'], {
-    cwd: packageRoot,
-    encoding: 'utf8',
-    maxBuffer: 4 * 1024 * 1024,
-  });
-  assert.equal(
-    embeddedRun.status,
-    0,
-    `embedded CSS CLI failed\nstdout:\n${embeddedRun.stdout}\nstderr:\n${embeddedRun.stderr}`
-  );
-  const embedded = JSON.parse(embeddedRun.stdout);
-  assert.equal(Object.keys(embedded.files).length, runtimeFileCount);
-  /* Zero, and the zero is real: the package's last embedded-CSS producer was TableCheckboxStyles,
-     whose seven paint declarations are the 7 this line used to pin. It had no consumer, so it was
-     retired rather than migrated, and no `<style>` element in packages/core paints any more. The
-     file-count assert above is the anti-vacuity guard -- a zero from scanning nothing would fail
-     there first, because the embedded census must still cover every file the runtime census sees. */
-  assert.equal(embedded.total, 0);
-  assert.equal(embedded.classifiedPaint, 0);
-  assert.equal(embedded.unclassified, 0);
-  assert.equal(embedded.parseFailures, 0);
-  assert.equal(embedded.dynamicProperties, 0);
-  assert.equal(embedded.unknownSinks, 0);
-  assert.equal(Object.values(embedded.files).filter(({ count }) => count > 0).length, 0);
-
-  const run = spawnSync(process.execPath, [join(scriptsDir, 'engine-token-audit.mjs'), '--check'], {
+  const run = spawnSync(process.execPath, [tokenAudit, '--check'], {
     cwd: packageRoot,
     encoding: 'utf8',
     maxBuffer: 4 * 1024 * 1024,
@@ -163,7 +140,7 @@ test('engine audit wires full runtime/fleet censuses and rejects vanished keys',
      this line load-bearing: a re-added component `<style>` block would have to re-open a written
      exemption, and that re-opening now fails here instead of passing silently. */
   assert.equal(exemptions['SKIN-EXEMPT-EMBEDDED-CSS-CONTRACT'], undefined);
-  assert.ok(Object.keys(embedded.files).length >= embeddedPerFileKeys.length);
+  assert.ok(counters['embeddedCssPaint.filesScanned'] >= embeddedPerFileKeys.length);
   assert.deepEqual(collectMissingPrefixedCounters(counters, baseline, 'embeddedCssPaint.'), []);
   assert.equal(
     counters['embeddedCssPaint.total'],

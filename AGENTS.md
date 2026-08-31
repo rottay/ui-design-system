@@ -38,9 +38,10 @@ these files in order and obey the machine checks before editing.
 | Role | Actor |
 |---|---|
 | DT / coordinator | Kimi K3 |
-| Implementer | Claude implementer pool (Sonnet/Opus) |
-| Auditor | Fable 5 (independent, closure audits) |
-| Technical consultant (read-only, low frequency) | Codex |
+| Primary source writer | Opus |
+| Scout / exact mechanical work | Sonnet |
+| Primary auditor | Fable 5 |
+| Checkpoint and architecture auditor | Codex |
 
 DT succession: Codex → Kimi K3, by explicit owner order of 2026-08-20
 (decision 13 of the sequencing amendment); Kimi K3 → Codex, by explicit owner
@@ -48,30 +49,28 @@ order of 2026-08-21, which activated the documented backup DT
 (`docs/prompt-codex-continue.md`) after Kimi K3 exhausted its quota; Codex →
 Kimi K3, by explicit owner order of 2026-08-23
 (`docs/prompt-dt-fresh-session-2026-08-23.md`), which consummated the present
-succession and left Codex as a low-frequency read-only technical consultant.
+succession and left Codex outside the DT seat.
 Each seat was transferred, not removed; exactly one DT authority exists
 before, during and after every succession.
 
-Kimi K3 left the read-only audit seat on 2026-08-20, the day it assumed the DT
-seat — DT ≠ auditor (decision 13) is a conflict-of-interest fence, not a
-removal of audit capacity; the capacity is consolidated in Fable 5, which
-remains independent of the DT. The same fence bound Codex while it held the
-DT seat (2026-08-21 through 2026-08-23) and binds Kimi K3 again while it
-holds the DT seat from 2026-08-23: it does not re-enter as auditor or writer,
-and Codex, as read-only consultant, likewise holds no audit seat and no gate.
+Kimi K3 does not hold an independent audit seat while it is DT. It may write
+shared integration or unblock code under an explicit write-set, but may not
+self-audit it. Fable 5 audits each integrated lot. Codex independently audits
+each product-slice/checkpoint close and every compiler, manifest, public-control
+or hard-to-reverse architecture change; its review may run while disjoint work
+continues. Opus is the primary source writer. Sonnet performs source-bound
+scouting and exact mechanical work and may not make semantic or architecture
+decisions.
 Naming Kimi K3 as successor discharges the
 `kimi-capacity-removal-lacks-successor-or-death-proof` stop condition by a
 named successor rather than suppressing it. Fable 5 keeps its full independent
 audit capacity across all three successions.
 
-Implementer succession: Kimi 2.7 → Cloud Opus implementer pool, by explicit
-owner order of 2026-08-17; Cloud Opus implementer pool → Claude implementer
-pool (Sonnet/Opus), by explicit owner order of 2026-08-20. Each seat was
-transferred, not removed; exactly one implementer authority exists before,
-during and after both successions.
-
 No other model may claim programme authority, commit permission, or final
-sighted acceptance.
+sighted acceptance. Source comments default to zero and never narrate agents,
+rounds, migrations or programme history; a short comment is allowed only for a
+non-obvious product invariant, accessibility constraint, browser quirk or
+public API requirement.
 
 ## Verification command
 

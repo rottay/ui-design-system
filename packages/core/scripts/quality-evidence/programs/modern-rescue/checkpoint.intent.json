@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "currentWave": "F4 — gobierno del árbol vivo y evidencia causal. LOTE P0, T-1 constitucional, F4C y COH-1 CERRADOS: Standard #14 operativo; canary visual cerrado (CAUSAL PASS, STATIC/DB PATH y RESTORE CERTIFIED, AESTHETIC NOT_ACCEPTED); los tints status derivan de los cuatro seeds por ambas puertas con el verde legacy de BitHire retirado como delta visual intended (testigo medido: --ds-color-success-bg #f0fdf4 congelado → sigue al seed por DB y por static). Cola inmediata: ENMIENDA de dirección R1 — los verticales son fixtures/bancos de prueba del motor (comparación same-tree por ambas vías con paridad), NO destinos de dirección artística; R1 pasa a ser cambios REALES en primitivas/patterns/structures/skins/compilador con drenaje monotónico del censo de hardcodes (~795 candidatos en Modern; PatternDataTable cierra/adjudica sus 52 clase-B); orden Button → PatternDataTable → AppShell; presupuesto 80/20 source-vs-instrumental.",
-  "blockedOn": "Nada bloquea la enmienda R1 ni el primer writer productivo. Deuda declarada, ninguna bloqueante: 117 receipts F4B stale pre-existentes en HEAD; 14 rojos pre-existentes clasificados (case D DEFERRED-7, tone-ink ×2, rottay-t1 ×11); rampa -50 de rottay ciega al seed del tenant y falso positivo de autoría de la familia primaria (collectPatchAuthoredPaths sobre claves fantasma) — lotes hermanos; evnto dark pozos status blancos (rampa authored ciega al modo) — lote hermano; ssrReceipt inalcanzable en topología RSC→cliente (latente; app-bithire pineado no porta el contrato); tooltip forzado del lab display-labels no determinista entre lanzamientos (estabilización de escena pendiente); channel-liveness y lane-control-drills vuelven a blocking cuando existan sus enumeradores; propagación mode-aware de la decisión 18 y validador APCA cascade-aware son F5. Decisiones del owner pendientes, sin apuro: --ds-input-md-line-height de bithire (ratio sin unidad; recomendación DT: preservar 1.5385) y la pregunta satélite de la capa base. El stash pre-programa sigue owner-gated. NUNCA push; docs/reauditoria-cloud/ excluido siempre.",
+  "currentWave": "R1 agresivo de impacto real. Button y Segmented ya cerraron la primera gramática; no se continúa primitiva por primitiva. Kimi K3 integra y abre en paralelo data/workflow, shell/navigation y forms/surfaces con múltiples Opus sobre worktrees disjuntos, mientras Sonnet prepara mapas mecánicos y la siguiente ola. Un único integrador toca compiler, contratos, raíces, recipes, manifest y generados. Los temas Rottay, BitHire y Evnto deben tener la misma estructura y diferir sólo en su identidad; los valores downstream derivan en cascada. Fable audita cada lote y Codex cada cierre de slice o cambio de arquitectura. El objetivo inmediato es una entrega visible y premium, no más infraestructura sin producto.",
+  "blockedOn": "No hay bloqueo de producto ni decisión pendiente del owner para iniciar los slices. El WIP preservado de appearance-posture y sus tests debe reconciliarse primero como lote separado: acortar comentarios narrativos, comprobar el comportamiento, integrar sólo si Fable y Codex lo aceptan, y no mezclarlo con los nuevos slices. Deuda conocida que no autoriza espera ni otra plataforma de scripts: receipts históricos stale, rojos preexistentes clasificados y mejoras futuras de instrumentos ya declaradas. Nunca push; docs/reauditoria-cloud/ queda siempre fuera de staging.",
   "allowedLiterals": [
     {
       "value": 4,
@@ -19,28 +19,34 @@
   "laneTableCaption": "Active packets:",
   "lanes": [
     {
-      "id": "authority",
-      "work": "Keep one human entry point, machine contracts and honest derived status; retire competing prompts, roadmaps and checkpoints after their unique facts are migrated.",
+      "id": "dt-integration",
+      "work": "Kimi K3 congela la base, reconcilia el WIP preservado, calcula el grafo de conflictos, abre el máximo conjunto seguro, integra diffs y commitea lotes elegibles sin esperar al owner. Puede escribir integración compartida o un unblock delicado, nunca autoauditarlo.",
       "model": "kimi-k3-dt",
-      "modelReason": "This packet changes programme authority and deletion boundaries, so it requires source audit, dependency analysis and final local commit ownership — held by the Kimi K3 DT under the explicit owner order of 2026-08-23 (docs/prompt-dt-fresh-session-2026-08-23.md). History: Codex held the seat until the identity reconciliation (owner order 2026-08-20, roadmap §12 decision 13), Kimi K3 held it until 2026-08-21 (quota exhaustion; the documented backup DT Codex was activated), and Kimi K3 holds it again from 2026-08-23, with Codex remaining as a low-frequency read-only technical consultant. Fable 5 remains the sole independent read-only auditor, so DT != auditor holds with Kimi K3 in the seat. The 2026-08-27 succession (docs/prompt-dt-succession-2026-08-27.md) did not change hands between models: the same Kimi K3 seat moved from terminal 1 to terminal 2 on quota exhaustion, with exactly one DT authority before, during and after."
+      "modelReason": "Kimi owns scheduling, architecture, integration, local commits and final sighted verification. It does not occupy an independent audit seat."
     },
     {
-      "id": "control-calibration",
-      "work": "T-1 constitucional: Expert pasa de pin histórico a source-linked contra la fuente viva (tenant-reach overrideTokens), el bloqueo control.size↔density.mode queda asentado, y los fences de la enmienda owner 2026-08-28 se incorporan al árbol canónico (README del programa + program.json invariants), sin revivir los tokens dark retirados.",
-      "model": "strong-implementation",
-      "modelReason": "The packet spans schemas, both compiler paths, CSS ownership and browser evidence; it is bounded but not a mechanical substitution."
+      "id": "parallel-product-source",
+      "work": "Opus implementa en paralelo los slices data/workflow, shell/navigation y forms/surfaces. Cada slice modifica componentes, estilos y tests reales, drena o adjudica sus hardcodes, demuestra una mutación visible de controles públicos y conserva responsive, accesibilidad, paridad static/DB y restore.",
+      "model": "opus-writers",
+      "modelReason": "La escritura productiva, visual y semántica requiere el modelo fuerte; los worktrees y write-sets exactos evitan colisiones."
     },
     {
-      "id": "family-closure",
-      "work": "F4C visible: canary en el DS reference lab con familias representativas de primitive, pattern, structure y surface; cobertura static BrandTheme + DB TenantTheme; viewports móvil, tablet y escritorio; cambio intended, negative control y restore exacto; capturas comparables para el owner y observación con stop condition escrita. No se abren controles nuevos ni expansión arquitectónica antes de este slice visible.",
-      "model": "disjoint-family-writers",
-      "modelReason": "A family packet becomes mechanical only after applicability, stops, parts, invariants and evidence commands are closed by the calibration work."
+      "id": "scout-and-mechanical",
+      "work": "Sonnet busca hardcodes y dependencias, prepara read/write-sets y realiza sólo sustituciones cerradas o regeneración oficial. En paralelo audita y consolida TODO packages/core/scripts: comandos de comportamiento relacionado comparten subdominio, cada capability termina en folder/index, los nombres históricos opacos se reemplazan, las duplicaciones y entrypoints muertos se eliminan y package/CI conservan compatibilidad comprobada. También normaliza test-artifacts por propósito sin mover evidencia firmada hasta reanclar sus consumidores. No crea otra plataforma ni bloquea producto. No decide APIs, roots, recipes, fallbacks, compiler ni dirección visual.",
+      "model": "sonnet",
+      "modelReason": "El trabajo de búsqueda y transformación exacta se paraleliza barato sin delegar decisiones semánticas."
     },
     {
-      "id": "advisory-audit",
-      "work": "Independently try to refute control semantics, family applicability, evidence mechanisms and retirement proofs without editing the programme.",
-      "model": "fable",
-      "modelReason": "Fable is the independent auditor at each front's close (owner order 2026-08-20, decision 13: DT ≠ auditor). Advisory prose is never authority and only reproduced source findings enter the canonical tree."
+      "id": "cascade-integration",
+      "work": "Un único Opus o Kimi integra el schema común de los tres temas, compiler, raíces, recipes, contratos, manifest y generados. Los hardcodes quedan sólo en identidad; todo downstream deriva y los literales son pisos de emergencia.",
+      "model": "singleton-opus-or-kimi",
+      "modelReason": "Las autoridades compartidas no admiten writers paralelos aunque los slices de producto sí."
+    },
+    {
+      "id": "independent-audit",
+      "work": "Fable intenta refutar cada lote integrado. Codex intenta refutar cada cierre de slice y todo cambio de compiler, manifest, control público o arquitectura difícil de revertir. Las correcciones dentro de scope se remedian sin esperar al owner.",
+      "model": "fable-plus-codex",
+      "modelReason": "Dos revisiones independientes cubren calidad visual y causal, arquitectura, impacto real, hardcodes y sobreingeniería sin convertir a Kimi en su propio auditor."
     }
   ],
   "refusedCaption": "Refused",
@@ -50,16 +56,20 @@
     "a second product control for an existing concept",
     "family-private customization outside the manifest",
     "full-suite repair loops before failure classification",
-    "broad family propagation before static DB and restore calibration",
+    "manual completion of the entire manifest before product source",
+    "primitive-by-primitive serial execution after grammar calibration",
+    "a new script when an existing command can measure the claim",
+    "a tooling cleanup that blocks product-source slices",
     "R7 execution",
     "typed denominators where a derivation exists",
     "manual receipt rehashing instead of producer re-execution"
   ],
   "notes": [
-    "The operational traversal is two-axis: calibrate each public control on representative families, then close each canonical family once against the stabilized full applicability matrix.",
+    "The operational traversal calibrates public controls and then closes complete cross-layer product slices in parallel; the manifest is projected from source and evidence rather than filled manually before implementation.",
     "The full suite is a reconciliation signal. Packet gates are causal and focal; every red test is classified before source or expectation changes.",
     "Historical receipts remain immutable evidence. Historical Markdown is not an active authority.",
-    "Las suites de drills de tooling no son concurrencia-seguras entre sí (flaky medida bajo concurrencia en el postaudit del piloto F3, verde en limpio por duplicado): la batería corre en serie."
+    "Heavy builds, tooling drills, server and Chromium run serially once per integrated batch; source writers and read-only scouts remain parallel.",
+    "Default source-comment count is zero. Any necessary comment is short, product-facing and contains no agent, round, cohort, migration or receipt history."
   ],
   "derivedFacts": [
     "inventory.families",
