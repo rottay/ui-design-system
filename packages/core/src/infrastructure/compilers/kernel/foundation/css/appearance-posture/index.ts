@@ -156,9 +156,8 @@ export function appearancePostureToVariables(
     vars["--ds-radius-scale"] = String(clampedRadiusScale);
   }
   if (isDensityPreference(posture.density)) {
-    vars[DENSITY_MODE_FACTOR_VARIABLE] = String(
-      resolveDensityModeFactor(posture.density)
-    );
+    const f = resolveDensityModeFactor(posture.density);
+    if (f !== 1) vars[DENSITY_MODE_FACTOR_VARIABLE] = String(f);
   }
 
   const motion = posture.motion;

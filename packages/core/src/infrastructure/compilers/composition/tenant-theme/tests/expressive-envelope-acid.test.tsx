@@ -292,6 +292,24 @@ describe('C1b expressive envelope — two-system acid test', () => {
     // ratchet, not an excuse: it reds the day either axis starts diverging,
     // forcing the expectation back up to `true` instead of quietly absorbing
     // the improvement.
+    // `density` joined the frozen set after the F9 fix (WO-CRA-23 R1):
+    // `appearancePostureToVariables` no longer declares
+    // `--ds-density-mode-factor` for the identity posture (comfortable/
+    // normal), mirroring `foundation/base/density.css`, which never
+    // declares `:root[data-density='comfortable']` either — the compiled
+    // artifact selector outranks that rule, so writing `1` there would
+    // permanently clobber a live `data-density` change. `bithire-technical@1`
+    // authors `density: 'normal'` (the identity factor, by design — see the
+    // profile's own comment), so its compiled artifact now correctly omits
+    // the channel instead of emitting a spurious `1` that only "diverged"
+    // from Management's `1.15` by coincidence of two hardcoded values.
+    // `management-editorial@1` still authors `'spacious'` and still emits
+    // `1.15` — unchanged. A raw artifact-text diff can no longer see this
+    // axis; the real divergence now lives in the cascade (a live
+    // `data-density` attribute reaching `:root[data-density='spacious']` in
+    // foundation), which this test does not render/stamp and therefore does
+    // not measure — that evidence lives in the R1 Button/Segmented cohort's
+    // live F4C capture instead.
     expect(axes, JSON.stringify(axes)).toEqual({
       typography: false,
       geometry: true,
@@ -299,11 +317,11 @@ describe('C1b expressive envelope — two-system acid test', () => {
       materials: true,
       elevation: true,
       motifs: false,
-      density: true,
+      density: false,
       motion: true,
       icon: true,
     });
-    expect(divergentCount).toBeGreaterThanOrEqual(7);
+    expect(divergentCount).toBeGreaterThanOrEqual(6);
     expect(Object.keys(axes)).toHaveLength(9);
 
     // The two frozen channels, pinned explicitly so the defect is legible at

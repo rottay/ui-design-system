@@ -28,15 +28,15 @@
     "parentByDesignFailures": []
   },
   "stats": {
-    "rows": 1608,
+    "rows": 1607,
     "byVia": {
-      "unattributed": 729,
+      "unattributed": 728,
       "governed-owner-table": 495,
       "declared-fallback": 342,
       "head-exact": 42
     },
     "byTier": {
-      "sin-tier": 910,
+      "sin-tier": 909,
       "control": 271,
       "base": 178,
       "raised": 96,
@@ -48,7 +48,7 @@
       "bg": 321,
       "border": 211,
       "fg": 474,
-      "sin-propiedad": 167,
+      "sin-propiedad": 166,
       "shadow": 121,
       "radius": 40,
       "family": 6,
@@ -75,7 +75,7 @@
       "seed.success": 1
     },
     "withRoot": 879,
-    "withoutRoot": 729,
+    "withoutRoot": 728,
     "sharedHeadsResolved": 9,
     "sharedHeadsUnresolved": 0,
     "ownersCensused": 256,
@@ -85,7 +85,7 @@
     "rowsRefinedByStep": 65,
     "rowsParentByDesign": 39,
     "byStep": {
-      "sin-paso": 1504,
+      "sin-paso": 1503,
       "@parent": 39,
       "primary": 25,
       "muted": 9,
@@ -256,11 +256,11 @@
       }
     },
     "THEME.expressive": {
-      "channels": 54,
-      "unattributed": 47,
+      "channels": 53,
+      "unattributed": 46,
       "properties": {
         "radius": 27,
-        "sin-propiedad": 20
+        "sin-propiedad": 19
       }
     },
     "THEME.expressive.profiles": {
@@ -19880,31 +19880,6 @@
       "rootHasDerivationLaw": false,
       "step": null,
       "stepNote": "la raiz no es un tier.<nivel>.<fg|border> refinable"
-    },
-    {
-      "channel": "--ds-density-mode-factor",
-      "rootId": null,
-      "via": null,
-      "evidence": {
-        "whyNotV1": "el canal no es cabeza declarada de ninguna raiz",
-        "whyNotV2": "ningun fallback declarado lo guarda desde una cabeza",
-        "whyNotV3": "owners sin adjudicar: THEME.expressive",
-        "coincidenceGuard": "no-value-match-used"
-      },
-      "tier": null,
-      "property": null,
-      "state": null,
-      "owners": [
-        "THEME.expressive"
-      ],
-      "contributingSlots": [
-        "bithire:THEME.expressive.experienceProfile",
-        "bithire:THEME.expressive.schemaVersion"
-      ],
-      "rootExposure": null,
-      "rootHasDerivationLaw": false,
-      "step": null,
-      "stepNote": "sin raiz que refinar"
     },
     {
       "channel": "--ds-density-scale",
@@ -48544,5 +48519,5 @@
       "stepNote": "sin raiz que refinar"
     }
   ],
-  "digest": "94ec81753c2e3ab8a0b0ae02fa2419e80d74785ba04ab1deb1d9b2c6f75d9304"
+  "digest": "435b8df51bcd0be0d31e897097f1132ce4addede441a802a4adb861bcf792ec2"
 }

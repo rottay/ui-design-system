@@ -127196,7 +127196,6 @@ html[lang]:lang(ar) {
   --ds-control-surface: var(--ds-surface-card);
   --ds-control-surface-raised: color-mix(in srgb, var(--ds-surface-card) 86%, var(--ds-surface-panel));
   --ds-datepicker-panel-shadow: 0 12px 30px rgba(20, 40, 59, 0.1), 0 2px 8px rgba(20, 40, 59, 0.06);
-  --ds-density-mode-factor: 1;
   --ds-density-scale: 0.9;
   --ds-detail-continuous-boundary: color-mix(in srgb, var(--ds-color-text-primary) 7.5%, transparent);
   --ds-detail-continuous-surface: color-mix(in srgb, var(--ds-surface-card-bg, var(--ds-surface-card)) 94%, transparent);

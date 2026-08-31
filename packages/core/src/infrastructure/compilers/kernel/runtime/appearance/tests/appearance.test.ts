@@ -212,13 +212,24 @@ describe("appearanceGeneralToVariables", () => {
 
   it.each([
     ["compact", "0.85"],
-    ["normal", "1"],
     ["spacious", "1.15"],
   ] as const)(
     "density %s emits the canonical semantic factor",
     (density, factor) => {
       const vars = appearanceGeneralToVariables({ density });
       expect(vars["--ds-density-mode-factor"]).toBe(factor);
+      expect(vars["--ds-density-scale"]).toBeUndefined();
+    }
+  );
+
+  it(
+    "density normal (the identity factor) stays undeclared, mirroring " +
+      "foundation/base/density.css never declaring :root[data-density='comfortable'] " +
+      "(F9 fix, WO-CRA-23 R1): declaring 1 here would outrank that lower-" +
+      "specificity rule and make a live data-density change inert",
+    () => {
+      const vars = appearanceGeneralToVariables({ density: "normal" });
+      expect(vars["--ds-density-mode-factor"]).toBeUndefined();
       expect(vars["--ds-density-scale"]).toBeUndefined();
     }
   );
