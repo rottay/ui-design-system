@@ -2,6 +2,13 @@
   "name": "@rottay/showroom",
   "version": "0.1.1",
   "private": true,
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rottay/ui-design-system.git"
+  },
+  "homepage": "https://github.com/rottay/ui-design-system#readme",
+  "bugs": "https://github.com/rottay/ui-design-system/issues",
   "type": "module",
   "scripts": {
     "dev": "next dev --webpack --port 7001",

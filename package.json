@@ -2,6 +2,13 @@
   "name": "@rottay/design-system",
   "version": "2.19.36",
   "private": true,
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rottay/ui-design-system.git"
+  },
+  "homepage": "https://github.com/rottay/ui-design-system#readme",
+  "bugs": "https://github.com/rottay/ui-design-system/issues",
   "sideEffects": [
     "*.css"
   ],
