@@ -272,8 +272,11 @@ export const CI_GATES = Object.freeze([
   { id: 'literal-ownership', run: ['node', 'scripts/check/engine/tokens/literal-ownership/index.mjs'], blocking: true },
 
   // The published controls table is generated from current product contracts.
-  { id: 'controls-catalog-drill', run: ['node', '--test', 'scripts/generate/tokens/customization/controls/tests/index.test.mjs'], blocking: true },
-  { id: 'controls-catalog', run: ['node', 'scripts/generate/tokens/customization/controls/index.mjs', '--check'], blocking: true },
+  // Both its freshness check and its drill suite need `dist/` -- the drill
+  // suite imports `check()`/`build()` from the generator module, which loads
+  // the compiled tenant capability registry the same way the freshness check
+  // does -- so neither can run in this pre-build chain. Both run post-build
+  // in CI instead.
 
   // --- white-label channel + theme parity ---
   { id: 'theme-channel-parity', run: ['node', 'scripts/tokens/theme-channel-parity-gate/index.mjs', '--check', '--quiet'], blocking: true },

@@ -180,6 +180,17 @@ jobs:
       - name: Build + ParticleField quarantine gate
         run: pnpm --filter @rottay/design-system run build
 
+      # The published controls table is regenerated from the compiled tenant
+      # capability registry, so both its drill suite and its freshness check
+      # need `dist/` and cannot run in the pre-build `gates:ci` chain above.
+      # Runs here, immediately after Build, before any step that assumes
+      # fresh dist.
+      - name: Customization controls table freshness
+        working-directory: packages/core
+        run: |
+          node --test scripts/generate/tokens/customization/controls/tests/index.test.mjs
+          node scripts/generate/tokens/customization/controls/index.mjs --check
+
       - name: Audit machinery regression tests
         run: pnpm --filter @rottay/design-system run test:scripts
 
