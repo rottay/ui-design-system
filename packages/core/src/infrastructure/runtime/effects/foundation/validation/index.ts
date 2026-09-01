@@ -3,7 +3,7 @@ import {
   type EffectDefinition,
   type EffectId,
 } from '../../../../../foundation/contracts/runtime/effects';
-import { FIRST_PARTY_VERTICAL_SLUGS } from '../../../../../foundation/tokens/ts/presentation/brand-themes';
+import { FIRST_PARTY_VERTICAL_SLUGS } from '../../../../../foundation/contracts/kernel/verticals';
 
 const PURPOSES = new Set([
   'state',

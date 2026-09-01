@@ -1,0 +1,58 @@
+/* Grid instances provide private track parameters; this sheet owns viewport selection. */
+.rottay-grid[data-grid-columns~="xs"] {
+  grid-template-columns: var(--_ds-grid-columns-xs);
+}
+
+.rottay-grid[data-grid-rows~="xs"] {
+  grid-template-rows: var(--_ds-grid-rows-xs);
+}
+
+@media (min-width: 640px) {
+  .rottay-grid[data-grid-columns~="sm"] {
+    grid-template-columns: var(--_ds-grid-columns-sm);
+  }
+
+  .rottay-grid[data-grid-rows~="sm"] {
+    grid-template-rows: var(--_ds-grid-rows-sm);
+  }
+}
+
+@media (min-width: 768px) {
+  .rottay-grid[data-grid-columns~="md"] {
+    grid-template-columns: var(--_ds-grid-columns-md);
+  }
+
+  .rottay-grid[data-grid-rows~="md"] {
+    grid-template-rows: var(--_ds-grid-rows-md);
+  }
+}
+
+@media (min-width: 1024px) {
+  .rottay-grid[data-grid-columns~="lg"] {
+    grid-template-columns: var(--_ds-grid-columns-lg);
+  }
+
+  .rottay-grid[data-grid-rows~="lg"] {
+    grid-template-rows: var(--_ds-grid-rows-lg);
+  }
+}
+
+@media (min-width: 1280px) {
+  .rottay-grid[data-grid-columns~="xl"] {
+    grid-template-columns: var(--_ds-grid-columns-xl);
+  }
+
+  .rottay-grid[data-grid-rows~="xl"] {
+    grid-template-rows: var(--_ds-grid-rows-xl);
+  }
+}
+
+@media (min-width: 1536px) {
+  .rottay-grid[data-grid-columns~="2xl"] {
+    grid-template-columns: var(--_ds-grid-columns-2xl);
+  }
+
+  .rottay-grid[data-grid-rows~="2xl"] {
+    grid-template-rows: var(--_ds-grid-rows-2xl);
+  }
+}

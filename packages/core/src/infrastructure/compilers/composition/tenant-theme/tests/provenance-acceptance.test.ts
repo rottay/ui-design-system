@@ -122,14 +122,13 @@ const POPULATED_SIMPLE_DOCUMENT = {
 const SEED_FAMILY = Object.keys(SEED_SHADOWING_FIELDS);
 
 /**
- * The seven the bithire baseline authors as concrete leaves, which is why they
+ * The six the bithire baseline authors as concrete leaves, which is why they
  * were DEFERRED in `tenant-theme-artifact-stability` and why they now enter the
  * delta. Values are the compiler's own derivation from `#0F766E`, measured, not
  * chosen: the two `var()` chains resolve per mode by construction and the two
  * literals are `deriveInteractionFloor`'s seed and `shadeSeed`'s hover step.
  */
 const BITHIRE_SEED_DERIVED: Readonly<Record<string, string>> = {
-  "--ds-button-primary-bg": "var(--ds-color-primary)",
   "--ds-button-primary-bg-hover": "#00635C",
   "--ds-color-border-focus": "#0F766E",
   "--ds-color-link": "#0F766E",
@@ -140,7 +139,7 @@ const BITHIRE_SEED_DERIVED: Readonly<Record<string, string>> = {
 };
 
 /**
- * The three the seed does NOT move, and the reason is a value predicate rather
+ * The four the seed does NOT move, and the reason is a value predicate rather
  * than a rank: their derived value bakes no color of its own — two are `var()`
  * indirections that already point AT the channels the seed controls, and the
  * third resolves to the same ink under tenant and baseline alike. Re-deriving
@@ -148,6 +147,7 @@ const BITHIRE_SEED_DERIVED: Readonly<Record<string, string>> = {
  * inherits them. They stay in `POPULATED_WITHDRAWN` as benign rows.
  */
 const BITHIRE_SEED_INHERITED = [
+  "--ds-button-primary-bg",
   "--ds-button-primary-border",
   "--ds-button-primary-color",
   "--ds-color-primary-foreground",
@@ -200,7 +200,7 @@ describe("the lattice is five ranks and is ordered", () => {
 });
 
 describe("site A — a tenant seed re-derives the family it owns", () => {
-  it("case D: the bithire DEFERRED-7 enter the delta at the seed's own values", () => {
+  it("case D: baked BitHire leaves enter the delta at the tenant seed values", () => {
     const artifact = compileFor("bithire", POPULATED_SIMPLE_DOCUMENT);
 
     for (const [channel, value] of Object.entries(BITHIRE_SEED_DERIVED)) {
@@ -490,17 +490,9 @@ describe("case C — no contested tenant authorship changes nothing", () => {
       // colour to rottay's own dark seed. Either way, the KEY is new, so the
       // count moves regardless of which of the four also changed a byte.
       rottay: 1196,
-      // COH-1 (2026-08-30): 1229 -> 1236. Bithire never authored ANY of the
-      // seven `--ds-color-alpha-{tone}-{10,20}` channels (info-20 excluded)
-      // in either mode, so they never appeared as explicit compiled keys;
-      // `deriveStatusTintFloor` now emits all seven in the LIGHT (base)
-      // block. Bithire's dark overlay authors its own seeds too, so its
-      // OWN floor value would be the identical channel-reference string --
-      // no new key there, hence +7 and not +14. The eight retired
-      // `*BgColor`/`*BorderColor` literals do not move this count: those
-      // channels were ALREADY explicit keys before (authored), and remain
-      // explicit keys now (derived) -- same eight keys, different producer.
-      bithire: 1236,
+      // Status tint derivation adds seven keys; three unused emissions were
+      // subsequently retired from the compiler.
+      bithire: 1233,
       // COH-1 (2026-08-30): 468 -> 475. Same shape as bithire: evnto never
       // authored any of the seven alpha channels in either mode, so
       // `deriveStatusTintFloor` adds +7 new explicit keys to the base block.
@@ -869,7 +861,7 @@ describe("static and DB share one lowering", () => {
   });
 
   it("F4B-13: tenantPostureFloors unwraps motion the same way whether the patch arrives wrapped or bare", () => {
-    // STRUCTURAL fence, not behavioural (Fable preaudit, W-B): this asserts
+    // STRUCTURAL fence, not behavioural (independent audit preaudit, W-B): this asserts
     // the SHAPE of the projection, not that any vertical's baseline moves —
     // no first-party vertical authors a motion ladder that would out-rank
     // the tenant floor post-merge today, so there is no before/after flip to

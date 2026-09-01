@@ -1,3 +1,3 @@
 "use client";
 
-export { Stack } from "../../../../ui/primitives/layout/Stack";
+export { Stack } from "../../../../components/primitives/layout/stack";

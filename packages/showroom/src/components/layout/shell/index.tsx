@@ -13,8 +13,8 @@ import {
   useTokens,
 } from "@rottay/design-system";
 import { SearchIcon } from "@rottay/design-system/icons";
-import { RuntimeFingerprint } from "@/components/runtime/runtime-fingerprint";
-import { ShowroomLink as Link } from "@/components/showroom-link";
+import { RuntimeFingerprint } from "@/components/runtime/fingerprint";
+import { ShowroomLink as Link } from "@/components/navigation/link";
 import {
   useShowroom,
   useShowroomRuntime,
@@ -26,7 +26,7 @@ import {
   getSectionMeta,
   getRoutePresentation,
   type BreadcrumbItem,
-} from "../config";
+} from "../navigation/config";
 import { SearchOverlay } from "../search";
 import { navigation, type NavItem, type NavSection } from "@/data/navigation";
 

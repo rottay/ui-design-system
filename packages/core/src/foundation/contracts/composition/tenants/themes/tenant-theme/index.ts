@@ -282,6 +282,7 @@ export const TENANT_THEME_REFERENCE_TOKENS: readonly string[] = Object.freeze(
       "--ds-color-text-page",
       "--ds-color-text-muted",
       "--ds-color-text-disabled",
+      "--ds-color-border",
       "--ds-color-border-primary",
       "--ds-color-border-secondary",
       "--ds-radius-button",

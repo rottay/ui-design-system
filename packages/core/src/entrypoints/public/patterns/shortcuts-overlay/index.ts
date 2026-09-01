@@ -1,3 +1,3 @@
 "use client";
 
-export { PatternShortcutsOverlay } from "../../../../ui/patterns/navigation/shortcuts-overlay";
+export { PatternShortcutsOverlay } from "../../../../components/patterns/navigation/shortcuts-overlay";

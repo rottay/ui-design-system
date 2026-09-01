@@ -1,0 +1,7 @@
+{
+  "ceiling": 819,
+  "measuredTotalFiles": 1638,
+  "measuredBytes": 3051031,
+  "measuredAt": "2026-08-31",
+  "note": "Reviewed 807 -> 819 after 0fbecd310 expanded the governed corpus from 263 to 282 roles. All 819 modules belong to @phosphor-icons/react; tailwind-variants remains external and no other supplier is vendored."
+}

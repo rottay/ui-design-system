@@ -40,7 +40,7 @@
  *  and the SAME probe run against the pre-P1 bundles from git returned every
  *  one of those values byte-identically, which is the no-loss proof for the
  *  absorption itself. That run is recorded here rather than automated: browser
- *  truth belongs to the Codex visual pass, and this suite must stay runnable
+ *  truth belongs to the independent code audit visual pass, and this suite must stay runnable
  *  without a browser. Re-run it by hand if the mixes or the neutral ramp move.
  *
  *  Two traps that cost real time and are worth leaving written down. First, a
@@ -64,10 +64,10 @@ import {
   hasConsumer,
   loadBundle,
   resolveChannel,
-} from '@/tooling/quality/no-loss';
+} from '@checks/tokens/cascade/preservation';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
-const THEME_CSS = readFileSync(resolve(HERE, '../default.css'), 'utf8');
+const THEME_CSS = readFileSync(resolve(HERE, '../default/index.css'), 'utf8');
 
 /**
  * The pre-authority mixes, per vertical, exactly as callout.css resolved them

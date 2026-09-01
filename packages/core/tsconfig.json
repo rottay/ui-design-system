@@ -31,9 +31,9 @@
     "paths": {
       "@/*": ["./src/*"],
       "@types/*": ["./src/foundation/contracts/*"],
-      "@ui/*": ["./src/ui/*"]
+      "@ui/*": ["./src/components/*"]
     }
   },
   "include": ["src"],
-  "exclude": ["node_modules", "dist", "**/*.test.tsx", "**/*.test.ts", "**/*.stories.tsx", "**/EXAMPLES.tsx", "**/ADVANCED_EXAMPLES.tsx", "**/USAGE_EXAMPLE.tsx", "**/examples.tsx", "**/*.md", "**/__test_imports.ts", "src/testing/**/*", "src/tooling/testing/**/*", "**/fixtures/**"]
+  "exclude": ["node_modules", "dist", "**/*.test.tsx", "**/*.test.ts", "**/*.stories.tsx", "**/EXAMPLES.tsx", "**/ADVANCED_EXAMPLES.tsx", "**/USAGE_EXAMPLE.tsx", "**/examples.tsx", "**/*.md", "**/__test_imports.ts", "**/fixtures/**"]
 }

@@ -3,7 +3,7 @@ import { TortureFrame } from '@/components/torture-sections/frame';
 import { RecordFbStates } from '@/components/torture-sections/record';
 import { NavigationPatternsFbStates } from '@/components/torture-sections/navigation-patterns';
 import { CommunicationFbStates } from '@/components/torture-sections/communication';
-import { MiscH2FbStates } from '@/components/torture-sections/misc-h2';
+import { ApplicationSurfaceStates } from '@/components/torture-sections/application-surfaces';
 
 export default async function WorkflowScenePage({ searchParams }: TortureRouteProps) {
   const query = await searchParams;
@@ -15,7 +15,7 @@ export default async function WorkflowScenePage({ searchParams }: TortureRoutePr
         <RecordFbStates />
         <NavigationPatternsFbStates />
         <CommunicationFbStates />
-        <MiscH2FbStates />
+        <ApplicationSurfaceStates />
       </TortureFrame>
     </>
   );

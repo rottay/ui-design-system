@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "law": "Anclas de la COHORTE 0 del frente de normalizacion profunda. DECRECE-SOLO: un contador que SUBE es regresion o cobertura perdida y falla; uno que BAJA falla tambien, con la instruccion de bajar este archivo en el MISMO commit que movio el numero. Se edita A MANO, con revision del DT. JAMAS se re-ancla un hallazgo nuevo: si un contador sube porque aparecio un caso que antes no se detectaba, el arreglo es la fuente, no este archivo. CABLEADO (2026-08-28): este ancla la verifica `node scripts/check/tokens/cascade/slots/index.mjs --check`, contador por contador, en las DOS direcciones. Hasta hoy el archivo existia y no lo leia nadie -- solo un drill del normalization-contract-gate acoplaba unassignedRows -- y por eso rowsWithoutRootAttribution derivo 1707->1467 en silencio entre la cohorte 1 y P1. Un ledger sin verificador no es un ancla: es una nota.",
+  "producedBy": "Cohorte 0 (2026-08-27), medido por scripts/check/tokens/cascade/slots/index.mjs sobre artifacts/generated/manifest/cascade/slots/index.json. Ninguna cifra de este archivo se cita de prosa: todas salen de stats.* del inventario, que se recomputa en cada corrida.",
+  "unit": "fila del inventario = un SLOT autorado del objeto evaluado de un tema. NO es la unidad de anotacion de variant-parity ni la de canal del catalogo de cascada.",
+  "counters": {
+    "rows": {
+      "value": 3603,
+      "reason": "3613 -> 3603: se retiraron ocho hojas de estado de Rottay ahora derivadas desde las semillas y dos canales BitHire de Segmented sin lector productivo. No se agregaron hojas autoradas."
+    },
+    "unassignedRows": {
+      "value": 278,
+      "reason": "286 -> 278: las ocho hojas de estado retiradas de Rottay estaban sin domicilio; ahora su resultado se deriva desde las semillas."
+    },
+    "untaggedRows": {
+      "value": 25,
+      "reason": "Hojas autoradas que ningun docblock cubre. Una hoja sin domicilio es exactamente lo que la ley F4A prohibe ('cero keypaths sin domicilio'). Decrece-solo hasta cero."
+    },
+    "rowsWithoutRootAttribution": {
+      "value": 1433,
+      "reason": "1437 -> 1433: tres hojas de estado sin membresia se retiraron al pasar a derivacion; el radio de Segmented se reclasifico desde sin membresia a su fallback declarado."
+    },
+    "expressionsCarryingLiteral": {
+      "value": 71,
+      "reason": "calc()/clamp() que leen la cascada y ADEMAS llevan un literal adentro: colapso a medias. El caso testigo es calc(13px * var(--ds-type-scale)). Decrece-solo."
+    },
+    "literalPinsOnDeclaredHead": {
+      "value": 20,
+      "ofWhichOnDerivationDebtRoot": 11,
+      "reason": "Medido cruzando css-edges.json.literalPins (1919) contra roots[].channel. NO es todavia el detector de sombra de la ley 4(a): un literal SOBRE la cabeza declarada es, muchas veces, la casa legitima de la semilla. El detector completo -- un literal en capa INFERIOR que reexpresa una decision que la raiz ya carga -- necesita la membresia por canal que hoy no existe (rowsWithoutRootAttribution). Se ancla como observacion, y el lote del gate decide su forma. UNIDAD REFINADA (lote LEDGER-GATE, 2026-08-28, ratificacion DT): el conteo es contra las cabezas de raices NO REFINADAS — una raiz de paso (tier.<nivel>.<fg|border>.<paso>) es la MISMA decision indexada mas fino (ley 2A §3.1, adjudicada para root-exposure-gate, aplicada aca). Sin el filtro el contador daba 24 contra esta ancla de 20 sin que cambiara un solo pin del CSS: los 4 de diferencia (--ds-color-text-{secondary,tertiary,muted,disabled}) se volvieron cabeza cuando 2A creo las raices de paso. Un contador que sube porque el catalogo crece no mide deuda, mide catalogo. El productor lo recomputa de css-edges + root-catalog (countLiteralPinsOnDeclaredHead): no depende de copia manual."
+    }
+  },
+  "reading": "Sobre 3656 filas: 760 ya colapsadas (R1), 906 colapsables con raiz y ley citada (R2), 0 variantes por vocabulario cerrado (R3), 205 pro/expert (R4) y 1785 en cola de adjudicacion (R5). R2 paso de 26 a 906 contra un piso de aceptacion de 412 computado sin adjudicar nada; el crecimiento es la membresia persistida, no una regla mas floja -- las cinco reglas R1..R5 no cambiaron una linea. Las 1707 filas que siguen sin raiz atribuible son la deuda restante y tienen tres motivos medidos: 619 canales cuyo owner no esta adjudicado todavia, 185 cuya combinacion tier.propiedad NO EXISTE como raiz en el catalogo (shadow 78, padding 31, height/width/size/gap/ring/opacity/weight/radius/duration el resto) y 53 cuya hoja no decodifica una propiedad del vocabulario cerrado. ACTUALIZACION PALETA P1 (2026-08-28): el inventario hoy tiene 3629 filas y la deuda sin raiz atribuible es 1443 (ver la razon del contador: hubo deriva silenciosa 1707->1467 entre cohorte 1 y este lote porque ningun gate verificaba la cifra). Las cifras R1..R5 de arriba quedan fechadas a la cohorte 1."
+}

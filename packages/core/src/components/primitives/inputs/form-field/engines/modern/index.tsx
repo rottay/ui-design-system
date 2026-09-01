@@ -1,0 +1,159 @@
+'use client';
+
+import React from 'react';
+import type { FormFieldProps } from '../../contracts';
+import { FORMFIELD_DEFAULTS } from '../../contracts';
+import { StatusErrorIcon } from '@/graphics/icons/semantic/generated/roles/status-error';
+
+type BoundControlProps = {
+  id?: string;
+  disabled?: boolean;
+  required?: boolean;
+  'aria-describedby'?: string;
+  'aria-invalid'?: boolean | string;
+  'aria-required'?: boolean | 'false' | 'true';
+};
+
+/**
+ * A child receives the field binding unless it is a host element that cannot
+ * be a form control: component children accept `id`/`aria-*` by DS contract.
+ */
+function receivesFieldBinding(
+  child: React.ReactNode
+): child is React.ReactElement<BoundControlProps> {
+  if (!React.isValidElement<BoundControlProps>(child)) return false;
+  if (child.type === React.Fragment) return false;
+  return typeof child.type !== 'string' || ['input', 'textarea', 'select'].includes(child.type);
+}
+
+/** Modern, CSS-first form-field anatomy shared by every tenant skin. */
+export default function ModernFormField(props: FormFieldProps): React.ReactElement {
+  const {
+    label,
+    name,
+    required = FORMFIELD_DEFAULTS.required,
+    error,
+    help,
+    children,
+    layout = FORMFIELD_DEFAULTS.layout,
+    labelWidth = FORMFIELD_DEFAULTS.labelWidth,
+    size = FORMFIELD_DEFAULTS.size,
+    disabled = FORMFIELD_DEFAULTS.disabled,
+    reserveMessageSpace = FORMFIELD_DEFAULTS.reserveMessageSpace,
+    className = '',
+    style,
+    'data-testid': testId,
+  } = props;
+
+  const fieldId = `formfield-${name}`;
+  const errorId = `${fieldId}-error`;
+  const helpId = `${fieldId}-help`;
+  const describedBy = error ? errorId : help ? helpId : undefined;
+
+  // The label must point at the id the control actually renders, so a
+  // caller-supplied id wins and `fieldId` is only the fallback.
+  const boundChildren = React.Children.toArray(children).filter(receivesFieldBinding);
+  const controlId = boundChildren[0]?.props.id ?? fieldId;
+
+  // `fieldId` can only name ONE element, so a field holding several id-less
+  // controls (a range pair, a split code entry) needs a suffix after the first;
+  // the counter advances in the same document order the map below walks.
+  let boundIndex = 0;
+  const nextFallbackId = (): string => {
+    boundIndex += 1;
+    return boundIndex === 1 ? fieldId : `${fieldId}-${boundIndex}`;
+  };
+
+  const rootStyle = {
+    '--ds-form-field-label-width': labelWidth,
+    ...style,
+  } as React.CSSProperties;
+
+  // `true` reserves one line; a number reserves that many. `false`/absent
+  // keeps the pre-existing conditional mount (undefined below) so the
+  // region wrapper -- and its DOM -- only appears for callers who opt in.
+  const reserveMessageLines =
+    reserveMessageSpace === true
+      ? 1
+      : typeof reserveMessageSpace === 'number'
+        ? reserveMessageSpace
+        : undefined;
+
+  // The error/help swap is the SAME logic either way; only whether it is
+  // wrapped by the space-reserving region changes below.
+  const messageContent = (
+    <>
+      {error && (
+        <p id={errorId} data-part="error-message" role="alert">
+          {/* Error posture never travels by color alone: the governed
+              status.error glyph carries the semantics as shape, aligned
+              to the first text line by the skin. */}
+          <StatusErrorIcon decorative size={14} data-part="error-icon" />
+          <span data-part="error-text">{error}</span>
+        </p>
+      )}
+
+      {!error && help && (
+        <p id={helpId} data-part="help-text">
+          {help}
+        </p>
+      )}
+    </>
+  );
+
+  return (
+    <div
+      className={`ds-form-field ds-form-field--modern ${className}`.trim()}
+      data-part="root"
+      data-layout={layout}
+      data-size={size}
+      data-required={required ? 'true' : undefined}
+      data-has-help={help && !error ? 'true' : undefined}
+      data-disabled={disabled ? 'true' : undefined}
+      data-invalid={error ? 'true' : undefined}
+      style={rootStyle}
+      data-testid={testId}
+    >
+      <div data-part="layout">
+        <label htmlFor={controlId} data-part="label-wrap">
+          <span data-part="label">
+            {label}
+            {required && <span data-part="required-mark" aria-hidden="true">*</span>}
+          </span>
+        </label>
+
+        <div data-part="body">
+          <div data-part="control-slot">
+            {React.Children.map(children, (child) => {
+              if (!receivesFieldBinding(child)) return child;
+
+              const childDescription = child.props['aria-describedby'];
+              const mergedDescription = [childDescription, describedBy].filter(Boolean).join(' ') || undefined;
+
+              return React.cloneElement(child, {
+                id: child.props.id ?? nextFallbackId(),
+                disabled: disabled || child.props.disabled,
+                required: required || child.props.required,
+                'aria-describedby': mergedDescription,
+                'aria-invalid': error ? true : child.props['aria-invalid'] ?? false,
+                'aria-required': required ? true : child.props['aria-required'],
+              });
+            })}
+          </div>
+
+          {reserveMessageLines !== undefined ? (
+            <div
+              data-part="message-region"
+              data-reserve-message="true"
+              style={{ '--_ds-form-field-message-lines': reserveMessageLines } as React.CSSProperties}
+            >
+              {messageContent}
+            </div>
+          ) : (
+            messageContent
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}

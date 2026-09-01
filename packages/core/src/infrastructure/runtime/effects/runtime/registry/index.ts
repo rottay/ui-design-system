@@ -6,8 +6,8 @@ import {
   type NonEmptyReadonlyArray,
   type VerifiedEffectProvenance,
 } from '../../../../../foundation/contracts/runtime/effects';
+import { FIRST_PARTY_VERTICAL_SLUGS } from '../../../../../foundation/contracts/kernel/verticals';
 import { isEffectDefinition } from '../../foundation/validation';
-import { FIRST_PARTY_VERTICAL_SLUGS } from '../../../../../foundation/tokens/ts/presentation/brand-themes';
 
 const CANONICAL_EFFECT_AUDIT =
   'docs-engineering/engineering/audits/ds-improvements/12-data-visualization-spatial-and-expressive-system.md';
@@ -291,7 +291,7 @@ const DEFINITIONS = [
       bundleBudgetGzipBytes: 16_384,
       maxLayers: 1,
       maxContinuousLoops: 1,
-      evidence: 'packages/core/scripts/ci/analyze-bundle/index.mjs --effects',
+      evidence: 'packages/core/scripts/check/automation/bundle/index.mjs --effects',
     },
     pauseWhenOffscreen: true,
     pauseWhenPageHidden: true,

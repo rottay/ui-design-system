@@ -15,7 +15,7 @@ import {
   SHOWROOM_SURFACES,
   mixWithCanvas,
   mixWithSurface,
-} from '@/components/playground/surface-tokens';
+} from '@/components/playground/tokens/surfaces';
 import { structures } from '@/data/registry';
 import type { StructureGroup } from '@/data/registry';
 import { STRUCTURE_PREVIEWS } from './structure-preview-fixtures';

@@ -8,7 +8,7 @@ const HERE = path.dirname(fileURLToPath(import.meta.url));
 const SHOWROOM_ROOT = path.resolve(HERE, '../..');
 const REPO = path.resolve(SHOWROOM_ROOT, '../..');
 const PROBE = path.join(SHOWROOM_ROOT, 'src/app/probe/ds-reference/sections/monochrome');
-const UI = path.join(REPO, 'packages/core/src/ui');
+const UI = path.join(REPO, 'packages/core/src/components');
 const LAW = path.join(REPO, '../docs-engineering/engineering/design-system/commercial-surfaces/README.md');
 
 /** The roster is governed: the normative law's section 8 and the probe must name
@@ -32,20 +32,20 @@ const EXPECTED = [
   {
     family: 'AsciiFrame',
     slug: 'ascii-frame',
-    owner: 'primitives/layout/AsciiFrame/index.tsx',
-    chain: [['primitives/layout/index.ts', "export { AsciiFrame } from './AsciiFrame'"]],
+    owner: 'primitives/layout/ascii-frame/index.tsx',
+    chain: [['primitives/layout/index.ts', "export { AsciiFrame } from './ascii-frame'"]],
   },
   {
     family: 'CropMarks',
     slug: 'crop-marks',
-    owner: 'primitives/display/CropMarks/index.tsx',
-    chain: [['primitives/display/index.ts', "export { CropMarks } from './CropMarks'"]],
+    owner: 'primitives/display/crop-marks/index.tsx',
+    chain: [['primitives/display/index.ts', "export { CropMarks } from './crop-marks'"]],
   },
   {
     family: 'InvertSection',
     slug: 'invert-section',
-    owner: 'primitives/layout/InvertSection/index.tsx',
-    chain: [['primitives/layout/index.ts', "export { InvertSection } from './InvertSection'"]],
+    owner: 'primitives/layout/invert-section/index.tsx',
+    chain: [['primitives/layout/index.ts', "export { InvertSection } from './invert-section'"]],
   },
   {
     family: 'SectionFrame',
@@ -56,8 +56,8 @@ const EXPECTED = [
   {
     family: 'TextureBackdrop',
     slug: 'texture-backdrop',
-    owner: 'primitives/display/TextureBackdrop/index.tsx',
-    chain: [['primitives/display/index.ts', "export { TextureBackdrop } from './TextureBackdrop'"]],
+    owner: 'primitives/display/texture-backdrop/index.tsx',
+    chain: [['primitives/display/index.ts', "export { TextureBackdrop } from './texture-backdrop'"]],
   },
   {
     family: 'AsciiDiagram',
@@ -89,8 +89,8 @@ const EXPECTED = [
   {
     family: 'Typewriter',
     slug: 'typewriter',
-    owner: 'primitives/display/Typewriter/index.tsx',
-    chain: [['primitives/display/index.ts', "export { Typewriter } from './Typewriter'"]],
+    owner: 'primitives/display/typewriter/index.tsx',
+    chain: [['primitives/display/index.ts', "export { Typewriter } from './typewriter'"]],
   },
   {
     family: 'MonoStat',
@@ -211,7 +211,10 @@ test('every DS family reaches the package root through the ordinary tier barrels
     assert.ok(uiBarrel.includes(`export * from '${tier}'`), `ui barrel dropped ${tier}`);
   }
   const rootBarrel = readFileSync(path.join(REPO, 'packages/core/src/index.ts'), 'utf8');
-  assert.ok(rootBarrel.includes("export * from './ui'"), 'the package root no longer re-exports ./ui');
+  assert.ok(
+    rootBarrel.includes("export * from './components'"),
+    'the package root no longer re-exports ./components',
+  );
 });
 
 test('ProductWindow has not re-entered the design system', () => {
@@ -253,7 +256,7 @@ test('ProductWindow has not re-entered the design system', () => {
 
   const inventory = JSON.parse(
     readFileSync(
-      path.join(REPO, 'packages/core/scripts/quality-evidence/programs/modern-rescue/family-inventory.json'),
+      path.join(REPO, 'packages/core/scripts/check/modern-rescue/family-inventory/index.json'),
       'utf8',
     ),
   );

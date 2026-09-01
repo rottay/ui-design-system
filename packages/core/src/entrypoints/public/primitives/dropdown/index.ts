@@ -1,3 +1,3 @@
 "use client";
 
-export { Dropdown } from "../../../../ui/primitives/overlay/Dropdown";
+export { Dropdown } from "../../../../components/primitives/overlay/dropdown";

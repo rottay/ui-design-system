@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { ShowroomLink as Link } from "@/components/showroom-link";
+import { ShowroomLink as Link } from "@/components/navigation/link";
 import { useRouter } from "next/navigation";
 import { Box, Flex, Stack, Text } from "@/components/showroom-ui";
 import {
@@ -9,13 +9,13 @@ import {
   SearchIcon,
   SparklesIcon,
 } from "@rottay/design-system/icons";
-import { applyShowroomRuntimeQuery } from "@/components/showroom-runtime-query";
+import { applyShowroomRuntimeQuery } from "@/components/runtime/query";
 import { useShowroom } from "@/components/showroom-context";
 import {
   countSectionEntries,
   getRoutePresentation,
-} from "../config";
-import { POPULAR_PATHS, SEARCHABLE_RECORDS } from "../search-data";
+} from "../navigation/config";
+import { POPULAR_PATHS, SEARCHABLE_RECORDS } from "./data";
 
 const shellBorder =
   "var(--showroom-shell-border, var(--ds-color-border, #1c1f26))";

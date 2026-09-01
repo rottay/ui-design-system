@@ -1,3 +1,3 @@
 "use client";
 
-export { Slider } from "../../../../ui/primitives/inputs/Slider";
+export { Slider } from "../../../../components/primitives/inputs/slider";

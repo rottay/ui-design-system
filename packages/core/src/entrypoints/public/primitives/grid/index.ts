@@ -1,3 +1,3 @@
 "use client";
 
-export { Grid } from "../../../../ui/primitives/layout/Grid";
+export { Grid } from "../../../../components/primitives/layout/grid";

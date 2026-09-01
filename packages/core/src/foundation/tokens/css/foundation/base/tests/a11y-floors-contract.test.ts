@@ -19,14 +19,14 @@ function css(path: string): string {
 
 describe('touch-target floor (44px coarse pointer)', () => {
   it('declares the canonical channel and enforces it in every core control skin', () => {
-    expect(css('foundation/themes/default.css')).toContain(
+    expect(css('foundation/themes/default/index.css')).toContain(
       '--ds-touch-target-min: 44px'
     );
     for (const skin of [
-      'runtime/engines/modern/skin/button.css',
-      'runtime/engines/modern/skin/input.css',
-      'runtime/engines/modern/skin/select.css',
-      'runtime/engines/modern/skin/menu.css',
+      'runtime/engines/modern/skin/button/index.css',
+      'runtime/engines/modern/skin/input/index.css',
+      'runtime/engines/modern/skin/select/index.css',
+      'runtime/engines/modern/skin/menu/index.css',
     ]) {
       const content = css(skin);
       expect(content, skin).toMatch(/pointer:\s*coarse/);

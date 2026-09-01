@@ -3,7 +3,7 @@
  *
  * The 44px hit-area law is enforced in two places by design:
  *
- *   1. ONE shared unlayered rule in `facade/entrypoints/base.css`, which reaches
+ *   1. ONE shared unlayered rule in `facade/entrypoints/base/index.css`, which reaches
  *      every control that publishes a tag or ARIA role — no per-component edit;
  *   2. per-component floors on controls whose role sits on a small indicator
  *      (checkbox/radio/switch/slider) or inside virtualized geometry (option,
@@ -18,8 +18,8 @@ import { describe, expect, it } from 'vitest';
 
 const source = (path: string) => readFileSync(resolve(process.cwd(), path), 'utf8');
 
-const baseCss = source('src/foundation/tokens/css/facade/entrypoints/base.css');
-const defaultThemeCss = source('src/foundation/tokens/css/foundation/themes/default.css');
+const baseCss = source('src/foundation/tokens/css/facade/entrypoints/base/index.css');
+const defaultThemeCss = source('src/foundation/tokens/css/foundation/themes/default/index.css');
 
 const FLOOR_VARIABLE = '--ds-touch-target-min';
 

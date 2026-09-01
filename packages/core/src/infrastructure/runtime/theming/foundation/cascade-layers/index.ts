@@ -5,7 +5,7 @@
  *
  * @remarks
  * The order below is the single cascade contract of the design system. It is
- * declared in CSS at `foundation/tokens/css/facade/entrypoints/base.css` and
+ * declared in CSS at `foundation/tokens/css/facade/entrypoints/base/index.css` and
  * `.../styles.css`; this module restates it in TypeScript for the one emitter
  * that writes CSS at runtime (`SystemCssVariablesBridge`).
  *

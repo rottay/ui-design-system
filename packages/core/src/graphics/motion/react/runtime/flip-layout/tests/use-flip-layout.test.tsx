@@ -3,7 +3,7 @@ import { act, render } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { useFlipLayout } from '..';
-import { mockMatchMedia } from '@/tooling/testing/helpers/browser/match-media';
+import { mockMatchMedia } from '@tests/support/browser/match-media';
 
 /**
  * happy-dom does not implement the Web Animations API (`Element.animate`/

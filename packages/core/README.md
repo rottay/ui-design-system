@@ -47,7 +47,7 @@ It is intended exclusively for internal use across Rottay products (Evnto, BitHi
 
 `GITHUB_TOKEN` must have `read:packages` scope and belong to a user with access to the `rottay` organization.
 
-See [Getting Started](./GETTING_STARTED.md) for full setup instructions.
+See [Getting Started](./docs/guides/getting-started/index.md) for full setup instructions.
 
 ---
 
@@ -90,12 +90,13 @@ Component skins, interaction states and keyframes live in the stylesheet.
 
 | Document                                           | Description                                                                             |
 | -------------------------------------------------- | --------------------------------------------------------------------------------------- |
-| [Getting Started](./GETTING_STARTED.md)            | Installation, registry setup, first component, separate-repo usage                      |
-| [Architecture](./ARCHITECTURE.md)                  | System design, engine flow, token resolution, CSS layers                                |
-| [Structures](./docs/structures-tier.md)            | What structures is, decision guide, family catalog                                      |
-| [Taxonomy Reference](./docs/TAXONOMY.generated.md) | Auto-generated inventory of every tier and family (run `pnpm docs:taxonomy` to refresh) |
-| [Engine Splitting](./ENGINE_SPLITTING.md)          | Code-splitting strategy and bundle entry points                                         |
-| [Performance Budget](./PERFORMANCE_BUDGET.md)      | CI-enforced size limits and Web Vitals targets                                          |
+| [Getting Started](./docs/guides/getting-started/index.md)            | Installation, registry setup, first component, separate-repo usage                      |
+| [Architecture](../../docs/ARCHITECTURE.md)         | Canonical ownership, dependency and package architecture                                |
+| [Package docs](./docs/index.md)                    | Active operating guides, generated references and historical snapshots                  |
+| [Structures](./docs/architecture/ui-tiers/structures/index.md) | What structures is, decision guide, family catalog                         |
+| [Taxonomy Reference](./docs/generated/component-taxonomy/index.md) | Auto-generated inventory (run `pnpm docs:taxonomy` to refresh)        |
+| [Engine Splitting](./docs/architecture/engine-splitting/index.md)          | Code-splitting strategy and bundle entry points                                         |
+| [Performance Budget](./docs/quality/performance-budget/index.md)      | CI-enforced size limits and Web Vitals targets                                          |
 
 ## Subpath Exports
 
@@ -115,7 +116,7 @@ Component skins, interaction states and keyframes live in the stylesheet.
 | `@rottay/design-system/spatial`         | Optional React spatial lifecycle host            |
 | `@rottay/design-system/spatial/spec`    | Server-safe spatial policy and module contract   |
 | `@rottay/design-system/styles.css`      | Full CSS bundle (code-owned verticals/dev)       |
-| `@rottay/design-system/styles/platform` | CSS bundle for Platform app (rottay tenant)      |
+| `@rottay/design-system/styles/rottay`   | CSS bundle for the Rottay vertical               |
 | `@rottay/design-system/styles/bithire`  | CSS bundle for BitHire app                       |
 | `@rottay/design-system/styles/evnto`    | CSS bundle for Evnto app                         |
 

@@ -20,7 +20,7 @@
  * it. The TenantThemeDocument schema
  * (`infrastructure/compilers/kernel/foundation/schemas`) validates against
  * these ids, and `infrastructure` may never import from `ui` — production
- * infrastructure has zero `@/ui` imports today and this capability must not be
+ * infrastructure has zero `@/components` imports today and this capability must not be
  * the first. `foundation` is below both, so both reach it legally.
  *
  * DATA, NOT CSS: no channel is emitted for this axis. The selected id travels

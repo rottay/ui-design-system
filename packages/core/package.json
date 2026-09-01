@@ -7,7 +7,7 @@
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "bin": {
-    "rottay-ds-supplier-honesty": "consumer/ds-supplier-honesty.mjs"
+    "rottay-ds-supplier-honesty": "dist/entrypoints/suppliers/cli/index.js"
   },
   "sideEffects": [
     "*.css",
@@ -410,7 +410,7 @@
       "require": "./dist/entrypoints/public/surfaces/oauth-transition/index.cjs"
     },
     "./public-entrypoints-manifest": {
-      "default": "./public-entrypoints.manifest.json"
+      "default": "./contracts/package/entrypoints/index.json"
     },
     "./icons": {
       "types": "./dist/icons.d.ts",
@@ -428,9 +428,9 @@
       "require": "./dist/icons-preset-bithire.cjs"
     },
     "./icons/roles/*": {
-      "types": "./dist/graphics/icons/presentation/semantic/generated/roles/*.d.ts",
-      "import": "./dist/graphics/icons/presentation/semantic/generated/roles/*.js",
-      "require": "./dist/graphics/icons/presentation/semantic/generated/roles/*.cjs"
+      "types": "./dist/graphics/icons/semantic/generated/roles/*.d.ts",
+      "import": "./dist/graphics/icons/semantic/generated/roles/*.js",
+      "require": "./dist/graphics/icons/semantic/generated/roles/*.cjs"
     },
     "./icons/corpus": {
       "types": "./dist/icons-corpus.d.ts",
@@ -563,15 +563,15 @@
       "require": "./dist/eslint.cjs"
     },
     "./supplier-contract": {
-      "default": "./supplier-contract.json"
+      "default": "./contracts/runtime/suppliers/index.json"
     },
     "./hooks-manifest": {
-      "types": "./hooks-manifest.d.ts",
-      "default": "./hooks-manifest.json"
+      "types": "./contracts/css/hooks/index.d.ts",
+      "default": "./contracts/css/hooks/index.json"
     },
     "./supplier-honesty-cli": {
-      "import": "./consumer/ds-supplier-honesty.mjs",
-      "default": "./consumer/ds-supplier-honesty.mjs"
+      "import": "./dist/entrypoints/suppliers/cli/index.js",
+      "default": "./dist/entrypoints/suppliers/cli/index.js"
     },
     "./fonts/editorial-display.css": {
       "style": "./dist/fonts/editorial-display.css",
@@ -605,8 +605,8 @@
     },
     "./dist/*.css": "./dist/*.css",
     "./tenant-theme-canary-fixtures": {
-      "types": "./tenant-theme-canary-fixtures.d.ts",
-      "default": "./tenant-theme-canary-fixtures.json"
+      "types": "./contracts/themes/canaries/index.d.ts",
+      "default": "./contracts/themes/canaries/index.json"
     }
   },
   "files": [
@@ -619,109 +619,113 @@
     "dist/bithire.css",
     "dist/evnto.css",
     "dist/fonts/**",
-    "supplier-contract.json",
-    "hooks-manifest.json",
-    "hooks-manifest.d.ts",
-    "public-entrypoints.manifest.json",
-    "tenant-theme-canary-fixtures.json",
-    "tenant-theme-canary-fixtures.d.ts",
-    "consumer/ds-supplier-honesty.mjs",
+    "contracts/runtime/suppliers/index.json",
+    "contracts/css/hooks/index.json",
+    "contracts/css/hooks/index.d.ts",
+    "contracts/package/entrypoints/index.json",
+    "contracts/themes/canaries/index.json",
+    "contracts/themes/canaries/index.d.ts",
     "THIRD_PARTY_NOTICES.md",
-    "provenance/graphics/**",
+    "governance/graphics/**",
+    "!dist/entrypoints/suppliers/cli/index.cjs",
+    "!dist/entrypoints/suppliers/cli/index.d.ts",
     "!dist/**/*.d.ts.map",
     "README.md"
   ],
   "scripts": {
-    "dev": "node scripts/builders/dev/index.mjs",
-    "icons:generate": "node scripts/generators/generate-semantic-icons/index.mjs",
-    "icons:check": "node scripts/generators/generate-semantic-icons/index.mjs --check",
-    "prebuild": "pnpm run public-entrypoints:check && pnpm run cra17:licenses && pnpm run icons:check && pnpm run contract:check && pnpm run hooks:check && pnpm run tenant-theme-fixtures:check && pnpm run csssource:check",
-    "prepack": "pnpm run public-entrypoints:check && pnpm run distfresh:check && pnpm run exports:artifact:check && pnpm run cra15:gate && pnpm run cra17:licenses && pnpm run cra17:declarations",
+    "dev": "node scripts/build/dev/index.mjs",
+    "icons:generate": "node scripts/generate/semantic-icons/index.mjs",
+    "icons:check": "node scripts/generate/semantic-icons/index.mjs --check",
+    "prebuild": "pnpm run public-entrypoints:check && pnpm run graphics-licenses:check && pnpm run icons:check && pnpm run contract:check && pnpm run hooks:check && pnpm run tenant-theme-fixtures:check && pnpm run csssource:check",
+    "prepack": "pnpm run public-entrypoints:check && pnpm run distfresh:check && pnpm run exports:artifact:check && pnpm run runtime-hardening:structural && pnpm run graphics-licenses:check && pnpm run public-declarations:check",
     "build": "tsc && vite build && pnpm run build:modern-css && pnpm run build:vertical-css && pnpm run build:fonts && pnpm run build:stamp",
-    "postbuild": "pnpm run cra14:check && pnpm run exports:artifact:check",
-    "build:modern-css": "postcss src/foundation/tokens/css/runtime/engines/modern/compiled.css -o dist/modern-engine.css",
-    "build:stamp": "node scripts/builders/write-build-stamp/index.mjs",
-    "distfresh:check": "node scripts/packaging/dist-freshness-gate/index.mjs --check",
-    "engine-audit:check": "node scripts/engine/token-audit/index.mjs --check",
-    "engine-audit:relocate-paths": "node scripts/engine/relocate-engine-token-baseline/index.mjs",
-    "cra14:check": "node scripts/packaging/cra-14-public-barrel-gate/index.mjs",
-    "cra15:gate": "node scripts/evidence/cra-15-runtime-hardening-gate/index.mjs --check --structural",
-    "cra15:write": "node scripts/evidence/cra-15-runtime-hardening-gate/index.mjs --write",
-    "cra17:licenses": "node scripts/packaging/cra-17-license-gate/index.mjs",
-    "cra17:declarations": "node scripts/packaging/cra-17-public-declaration-gate/index.mjs",
-    "contract:check": "node scripts/packaging/generate-supplier-contract/index.mjs --check",
-    "contract:generate": "node scripts/packaging/generate-supplier-contract/index.mjs --write",
-    "hooks:check": "node scripts/boundaries/app-ds-hook-contract-gate/index.mjs --manifest-check",
-    "hooks:generate": "node scripts/boundaries/app-ds-hook-contract-gate/index.mjs --manifest-write",
-    "cra11:generate": "node scripts/evidence/cra-11-adaptive-contract-census/index.mjs",
-    "cra11:check": "node scripts/evidence/cra-11-adaptive-contract-census/index.mjs --check",
-    "cra11:gate": "node scripts/evidence/cra-11-adaptive-contract-census/index.mjs --check --require-clean",
-    "cra11:test": "node --test scripts/evidence/cra-11-adaptive-contract-census/index.test.mjs",
-    "gat07:check": "node scripts/evidence/gat-07-exact-proof/index.mjs --check-artifact",
-    "gat07:write": "node scripts/evidence/gat-07-exact-proof/index.mjs --write",
-    "gat09:structural": "node scripts/evidence/gat-09-full-claim-integrity/index.mjs --structural",
-    "gat09:gate": "node scripts/evidence/gat-09-full-claim-integrity/index.mjs",
-    "test:scripts": "node --test \"scripts/**/*.test.mjs\" \"manifest/**/*.test.mjs\" && node --test ../../scripts/provenance/effect-registry-audit/index.test.mjs && vitest run --config scripts/ci/script-tests/index.mjs",
+    "postbuild": "pnpm run public-barrel:check && pnpm run exports:artifact:check",
+    "build:modern-css": "postcss src/foundation/tokens/css/runtime/engines/modern/compiled/index.css -o dist/modern-engine.css",
+    "build:stamp": "node scripts/build/stamp/index.mjs",
+    "distfresh:check": "node scripts/package/artifacts/freshness/index.mjs --check",
+    "engine-audit:check": "node scripts/check/engine/tokens/audit/index.mjs --check",
+    "engine-audit:relocate-paths": "node scripts/maintain/engine/baseline-relocation/index.mjs",
+    "public-barrel:check": "node scripts/package/public-api/barrel/index.mjs",
+    "runtime-hardening:structural": "node scripts/evidence/cra-15-runtime-hardening-gate/index.mjs --check --structural",
+    "runtime-hardening:write": "node scripts/evidence/cra-15-runtime-hardening-gate/index.mjs --write",
+    "graphics-licenses:check": "node scripts/package/graphics/licenses/index.mjs",
+    "public-declarations:check": "node scripts/package/public-api/declarations/index.mjs",
+    "contract:check": "node scripts/package/contracts/supplier/index.mjs --check",
+    "contract:generate": "node scripts/package/contracts/supplier/index.mjs --write",
+    "hooks:check": "node scripts/check/boundaries/applications/hooks/index.mjs --manifest-check",
+    "hooks:generate": "node scripts/check/boundaries/applications/hooks/index.mjs --manifest-write",
+    "adaptive-contracts:generate": "node scripts/evidence/cra-11-adaptive-contract-census/index.mjs",
+    "adaptive-contracts:check": "node scripts/evidence/cra-11-adaptive-contract-census/index.mjs --check",
+    "adaptive-contracts:gate": "node scripts/evidence/cra-11-adaptive-contract-census/index.mjs --check --require-clean",
+    "adaptive-contracts:test": "node --test scripts/evidence/cra-11-adaptive-contract-census/index.test.mjs",
+    "claim-exactness:check": "node scripts/evidence/gat-07-exact-proof/index.mjs --check-artifact",
+    "claim-exactness:write": "node scripts/evidence/gat-07-exact-proof/index.mjs --write",
+    "claim-integrity:structural": "node scripts/evidence/gat-09-full-claim-integrity/index.mjs --structural",
+    "claim-integrity:gate": "node scripts/evidence/gat-09-full-claim-integrity/index.mjs",
+    "test:scripts": "node --test \"scripts/**/*.test.mjs\" && node --test ../../scripts/check/effects/index.test.mjs && vitest run --config scripts/check/automation/tests/scripts/index.mjs",
     "pretest": "pnpm run gates:ci",
-    "build:vertical-artifacts": "node scripts/verticals/build-vertical-artifacts/index.mjs",
-    "build:vertical-css": "node scripts/verticals/build-vertical-artifacts/index.mjs && node scripts/verticals/build-css/index.mjs",
+    "build:vertical-artifacts": "node scripts/build/verticals/bundle-build/index.mjs",
+    "build:vertical-css": "node scripts/build/verticals/bundle-build/index.mjs && node scripts/build/verticals/css-build/index.mjs",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build && node scripts/ci/check-storybook-budget/index.mjs",
+    "build-storybook": "storybook build -o artifacts/local/previews/storybook && node scripts/package/storybook-budget/index.mjs",
     "pretypecheck": "pnpm run icons:check",
     "typecheck": "tsc --noEmit",
-    "typecheck:tests": "node scripts/ci/typecheck-tests-ratchet/index.mjs --label core --project tsconfig.tests.json --baseline tsconfig.tests.baseline.json",
-    "csspaint:check": "node scripts/engine/css-layer-paint-gate/index.mjs",
-    "csssource:check": "node scripts/engine/css-source-integrity-gate/index.mjs",
-    "containerquery:check": "node scripts/engine/container-query-gate/index.mjs --check",
-    "containerquery:seed": "node scripts/engine/container-query-gate/index.mjs --seed",
+    "typecheck:tests": "node scripts/check/automation/tests/typecheck/index.mjs --label core --project tsconfig.tests.json --baseline scripts/check/automation/tests/typecheck/baseline/index.json",
+    "csspaint:check": "node scripts/check/engine/css/paint/layers/index.mjs",
+    "csssource:check": "node scripts/check/engine/css/source-integrity/index.mjs",
+    "containerquery:check": "node scripts/check/engine/css/container-queries/index.mjs --check",
+    "containerquery:seed": "node scripts/check/engine/css/container-queries/index.mjs --seed",
     "theme-parity:check": "node scripts/tokens/theme-channel-parity-gate/index.mjs --check",
-    "ds-prefix:check": "node scripts/tokens/ds-underscore-prefix-gate/index.mjs",
-    "exports:artifact:check": "node scripts/packaging/exports-artifact-gate/index.mjs",
-    "root-catalog:check": "node scripts/tokens/root-catalog-freshness-gate/index.mjs",
-    "root-exposure:check": "node scripts/tokens/root-exposure-gate/index.mjs",
-    "cascade-ratchet:check": "node scripts/engine/cascade-wiring-ratchet/index.mjs",
-    "daisy:generate": "node scripts/engine/daisy-painted-classes/index.mjs",
-    "surface-census:generate": "node scripts/generators/generate-surface-capability-census/index.mjs",
+    "ds-prefix:check": "node scripts/check/tokens/governance/private-prefix/index.mjs",
+    "exports:artifact:check": "node scripts/package/artifacts/exports/index.mjs",
+    "root-catalog:check": "node scripts/check/tokens/cascade/roots/catalog-freshness/index.mjs",
+    "root-exposure:check": "node scripts/check/tokens/cascade/roots/exposure/index.mjs",
+    "cascade:extract": "node scripts/quality-evidence/programs/modern-rescue/cascade-extract.mjs",
+    "cascade:producers": "node scripts/quality-evidence/programs/modern-rescue/cascade-producers.mjs",
+    "cascade:rewiring": "node scripts/quality-evidence/programs/modern-rescue/cascade-probe.mjs",
+    "cascade-ratchet:check": "node scripts/check/engine/cascade-wiring/index.mjs",
+    "daisy:generate": "node scripts/generate/framework-class-paint/index.mjs",
+    "surface-census:generate": "node scripts/generate/surface-capabilities/index.mjs",
     "quality-evidence:v2:inventory": "node scripts/quality-evidence/v2/cli.mjs inventory",
     "quality-evidence:v2:round": "node scripts/quality-evidence/v2/cli.mjs round-evidence",
     "quality-evidence:v2:seal": "node scripts/quality-evidence/v2/seal-round.mjs",
-    "packinv:check": "node scripts/packaging/pack-inventory-gate/index.mjs --check",
-    "packinv:write": "node scripts/packaging/pack-inventory-gate/index.mjs --write",
-    "iconembed:check": "node scripts/packaging/icon-embed-inventory-gate/index.mjs --check",
-    "iconembed:write": "node scripts/packaging/icon-embed-inventory-gate/index.mjs --write",
+    "packinv:check": "node scripts/package/artifacts/inventory/index.mjs --check",
+    "packinv:write": "node scripts/package/artifacts/inventory/index.mjs --write",
+    "iconembed:check": "node scripts/package/graphics/icons/index.mjs --check",
+    "iconembed:write": "node scripts/package/graphics/icons/index.mjs --write",
     "test": "vitest",
     "test:run": "vitest run",
     "test:unit": "vitest run --project unit",
     "test:ui": "vitest --ui",
     "test:coverage": "COVERAGE=1 vitest run --coverage",
     "test:ci": "COVERAGE=1 vitest run --coverage --reporter=verbose --reporter=json --outputFile.json=./test-results.json",
-    "analyze": "node scripts/ci/analyze-bundle/index.mjs",
-    "analyze:skip-build": "node scripts/ci/analyze-bundle/index.mjs --skip-build",
-    "analyze:components": "node scripts/ci/analyze-bundle/index.mjs --components",
-    "analyze:chart-access": "node scripts/ci/analyze-bundle/index.mjs --chart-access",
-    "analyze:chart-spec": "node scripts/ci/analyze-bundle/index.mjs --chart-spec",
-    "analyze:effects": "node scripts/ci/analyze-bundle/index.mjs --effects",
-    "analyze:asset-retention": "node scripts/ci/analyze-bundle/index.mjs --asset-retention",
-    "effects:provenance": "node ../../scripts/provenance/effect-registry-audit/index.mjs",
-    "lint": "pnpm run cra17:licenses && pnpm run effects:provenance && pnpm run lint:folders && pnpm run lint:integration && pnpm run lint:vertical && pnpm run lint:artifacts && node scripts/verticals/build-css/index.mjs --check",
-    "lint:artifacts": "node scripts/verticals/build-vertical-artifacts/index.mjs --check",
-    "lint:folders": "node scripts/structure/folder-naming/index.mjs && node --test scripts/structure/core-owner-boundaries/index.test.mjs && node scripts/structure/core-structure-audit/index.mjs --check && node scripts/structure/scripts-tree-gate/index.mjs",
-    "structure:check": "node --test scripts/structure/core-owner-boundaries/index.test.mjs && node scripts/structure/core-structure-audit/index.mjs --check",
-    "structure:report": "node scripts/structure/core-structure-audit/index.mjs --report",
-    "lint:integration": "node scripts/structure/audit-integration/index.mjs",
-    "lint:vertical": "node scripts/structure/audit-vertical-compliance/index.mjs",
-    "docs:taxonomy": "node scripts/generators/generate-taxonomy/index.mjs",
-    "build:fonts": "node scripts/builders/build-font-packs/index.mjs",
-    "cra15:gate:final": "node scripts/evidence/cra-15-runtime-hardening-gate/index.mjs --check",
-    "gates:ci": "node scripts/ci/runner/index.mjs",
-    "gates:ci:list": "node scripts/ci/runner/index.mjs --list",
-    "cra12:check": "node scripts/evidence/cra-12-motion-governance/index.mjs",
-    "tokens:catalog:write": "node scripts/tokens/catalog/index.mjs --write",
-    "tenant-theme-fixtures:generate": "node scripts/packaging/tenant-theme-canary-fixtures/index.mjs --write",
-    "tenant-theme-fixtures:check": "node scripts/packaging/tenant-theme-canary-fixtures/index.mjs --check",
-    "public-entrypoints:check": "node scripts/boundaries/public-entrypoint-boundary-gate/index.mjs",
-    "public-entrypoints:test": "node --test scripts/boundaries/public-entrypoint-boundary-gate/index.test.mjs scripts/boundaries/migrate-public-entrypoints/index.test.mjs",
-    "public-entrypoints:codemod": "node scripts/boundaries/migrate-public-entrypoints/index.mjs"
+    "analyze": "node scripts/check/automation/bundle/index.mjs",
+    "analyze:skip-build": "node scripts/check/automation/bundle/index.mjs --skip-build",
+    "analyze:components": "node scripts/check/automation/bundle/index.mjs --components",
+    "analyze:chart-access": "node scripts/check/automation/bundle/index.mjs --chart-access",
+    "analyze:chart-spec": "node scripts/check/automation/bundle/index.mjs --chart-spec",
+    "analyze:effects": "node scripts/check/automation/bundle/index.mjs --effects",
+    "analyze:asset-retention": "node scripts/check/automation/bundle/index.mjs --asset-retention",
+    "effects:provenance": "node ../../scripts/check/effects/index.mjs",
+    "lint": "pnpm run graphics-licenses:check && pnpm run effects:provenance && pnpm run lint:folders && pnpm run lint:integration && pnpm run lint:vertical && pnpm run lint:artifacts && node scripts/build/verticals/css-build/index.mjs --check",
+    "lint:artifacts": "node scripts/build/verticals/bundle-build/index.mjs --check",
+    "lint:folders": "node scripts/check/architecture/conventions/folder-naming/index.mjs && node --test scripts/check/architecture/audits/ownership/index.test.mjs && node scripts/check/architecture/audits/structure/index.mjs --check && node scripts/check/architecture/conventions/scripts-tree/index.mjs",
+    "structure:check": "node --test scripts/check/architecture/audits/ownership/index.test.mjs && node scripts/check/architecture/audits/structure/index.mjs --check",
+    "structure:report": "node scripts/check/architecture/audits/structure/index.mjs --report",
+    "lint:integration": "node scripts/check/architecture/audits/integration/index.mjs",
+    "lint:vertical": "node scripts/check/architecture/audits/verticals/index.mjs",
+    "docs:taxonomy": "node scripts/generate/taxonomy/index.mjs",
+    "build:fonts": "node scripts/build/font-packs/index.mjs",
+    "runtime-hardening:final": "node scripts/evidence/cra-15-runtime-hardening-gate/index.mjs --check",
+    "gates:ci": "node scripts/check/automation/runner/index.mjs",
+    "gates:ci:list": "node scripts/check/automation/runner/index.mjs --list",
+    "motion-contracts:check": "node scripts/evidence/cra-12-motion-governance/index.mjs",
+    "tokens:catalog:write": "node scripts/generate/tokens/customization/catalog/index.mjs --write",
+    "tenant-theme-fixtures:generate": "node scripts/package/contracts/tenant-theme-canaries/index.mjs --write",
+    "tenant-theme-fixtures:check": "node scripts/package/contracts/tenant-theme-canaries/index.mjs --check",
+    "public-entrypoints:check": "node scripts/check/boundaries/public-api/index.mjs",
+    "public-entrypoints:test": "node --test scripts/check/boundaries/public-api/index.test.mjs scripts/maintain/public-entrypoint-imports/index.test.mjs",
+    "public-entrypoints:codemod": "node scripts/maintain/public-entrypoint-imports/index.mjs"
   },
   "releaseSync": {
     "sourceEntrypoints": {
@@ -824,7 +828,8 @@
       "./effects": "entrypoints/graphics/effects/index.ts",
       "./spatial": "entrypoints/graphics/spatial/index.ts",
       "./spatial/spec": "entrypoints/graphics/spatial/spec/index.ts",
-      "./eslint": "entrypoints/eslint/index.ts"
+      "./eslint": "entrypoints/eslint/index.ts",
+      "./supplier-honesty-cli": "entrypoints/suppliers/cli/index.mjs"
     },
     "gateCommands": {
       "test:unit": [
@@ -837,7 +842,7 @@
             "--project",
             "unit",
             "src/foundation/kernel",
-            "src/tooling/testing",
+            "tests",
             "src/graphics/motion",
             "src/infrastructure/runtime",
             "src/foundation/tokens"
@@ -851,7 +856,7 @@
             "run",
             "--project",
             "unit",
-            "src/ui/patterns"
+            "src/components/patterns"
           ]
         },
         {
@@ -862,7 +867,7 @@
             "run",
             "--project",
             "unit",
-            "src/ui/primitives"
+            "src/components/primitives"
           ]
         },
         {
@@ -873,10 +878,10 @@
             "run",
             "--project",
             "unit",
-            "src/ui/surfaces/foundation",
-            "src/ui/surfaces/runtime",
-            "src/ui/surfaces/composition",
-            "src/ui/surfaces/tests"
+            "src/components/surfaces/foundation",
+            "src/components/surfaces/runtime",
+            "src/components/surfaces/composition",
+            "src/components/surfaces/tests"
           ]
         },
         {
@@ -887,7 +892,7 @@
             "run",
             "--project",
             "unit",
-            "src/ui/surfaces/presentation/pages/admin"
+            "src/components/surfaces/presentation/pages/admin"
           ]
         },
         {
@@ -898,7 +903,7 @@
             "run",
             "--project",
             "unit",
-            "src/ui/surfaces/presentation/pages/data"
+            "src/components/surfaces/presentation/pages/data"
           ]
         },
         {
@@ -909,7 +914,7 @@
             "run",
             "--project",
             "unit",
-            "src/ui/surfaces/presentation/pages/experience"
+            "src/components/surfaces/presentation/pages/experience"
           ]
         },
         {
@@ -920,7 +925,7 @@
             "run",
             "--project",
             "unit",
-            "src/ui/surfaces/presentation/pages/forms"
+            "src/components/surfaces/presentation/pages/forms"
           ]
         },
         {
@@ -931,7 +936,7 @@
             "run",
             "--project",
             "unit",
-            "src/ui/surfaces/presentation/pages/operations"
+            "src/components/surfaces/presentation/pages/operations"
           ]
         },
         {
@@ -942,7 +947,7 @@
             "run",
             "--project",
             "unit",
-            "src/ui/surfaces/presentation/pages/workspace"
+            "src/components/surfaces/presentation/pages/workspace"
           ]
         }
       ]

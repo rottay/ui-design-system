@@ -1,0 +1,22 @@
+/**
+ * Modern TreeView pattern skin (visualization skin ownership), deliberately unlayered.
+ *
+ * MERGE / RETIRE NOTE (p613 wave): since the Lote-2 composition the tree
+ * itself is the DS Tree primitive's modern engine — every node row, toggle,
+ * checkbox and drag handle is painted by the primitive's own `tree.css`, and
+ * the pattern chrome (search row, skeleton, empty frame) lives in the
+ * sibling `runtime/engines/modern/skin/tree-view.css`. The rules retired
+ * here targeted parts the composed engine no longer stamps
+ * (`.ds-tree-view-modern__node-row` / `__toggle` / `__checkbox` /
+ * `__drag-handle` / `__search-input`) — dead paint, no capability lost:
+ * selection tint, toggle chrome, checkbox accent and drag-handle ink are
+ * all owned by `tree.css` today, and the search field is the composed Input
+ * primitive. The duplicate skeleton bar rule (same border-radius/background
+ * as `tree-view.css`) retired with them. What remains is the one LIVE rule
+ * this file ever owned: the root elevation over the shared `panelCardStyle`
+ * surface. The import in `facade/entrypoints/base.css` stays wired.
+ */
+
+.ds-pattern-tree-view.ds-engine-modern[data-part='root'] {
+  box-shadow: var(--ds-elevation-1);
+}

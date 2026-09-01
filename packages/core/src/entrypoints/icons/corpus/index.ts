@@ -14,7 +14,7 @@ export {
   IDENTITY_ICON_NAMES,
   INTELLIGENCE_ICON_NAMES,
   OPERATIONS_ICON_NAMES,
-} from '../../../graphics/icons/foundation/semantic/corpus/generated';
+} from '../../../graphics/icons/semantic/generated/corpus';
 export type {
   BithireIconName,
   FoundationIconName,
@@ -25,4 +25,4 @@ export type {
   IdentityIconName,
   IntelligenceIconName,
   OperationsIconName,
-} from '../../../graphics/icons/foundation/semantic/corpus/generated';
+} from '../../../graphics/icons/semantic/generated/corpus';

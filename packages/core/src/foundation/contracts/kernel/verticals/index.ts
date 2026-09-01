@@ -45,11 +45,9 @@
  * roster would force every consumer of the mere TYPE to depend on the token
  * tree that carries the themes, palettes and font packs.
  *
- * Order here is alphabetical-by-accident and carries no meaning: a union is a
- * set. The CANONICAL ORDER — the one coverage arrays, bundle manifests and
- * artifact digests are keyed on — is the roster's
- * `FIRST_PARTY_VERTICAL_SLUGS`, which is the single ordered enumeration and
- * asserts exact agreement with this union in both directions.
+ * The tuple is also the canonical runtime order for coverage arrays, bundle
+ * manifests and artifact digests. Keeping it in this dependency-floor module
+ * lets runtimes consume identity without retaining authored theme objects.
  *
  * There is no `platform` member and no alias for one. `platform` was never a
  * fourth product; it was a second spelling of `rottay` that let the theme
@@ -57,7 +55,13 @@
  * other. An app still stamping `platform` is an external caller to cut over,
  * not a case for a compatibility member here.
  */
-export type FirstPartyVerticalId = 'rottay' | 'bithire' | 'evnto';
+export const FIRST_PARTY_VERTICAL_SLUGS = Object.freeze([
+  'rottay',
+  'bithire',
+  'evnto',
+] as const);
+
+export type FirstPartyVerticalId = (typeof FIRST_PARTY_VERTICAL_SLUGS)[number];
 
 /**
  * A code-owned vertical. Equal to `FirstPartyVerticalId` by construction —

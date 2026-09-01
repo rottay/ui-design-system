@@ -1,3 +1,3 @@
 "use client";
 
-export { PatternCommandPalette } from "../../../../ui/patterns/navigation/command-palette";
+export { PatternCommandPalette } from "../../../../components/patterns/navigation/command-palette";

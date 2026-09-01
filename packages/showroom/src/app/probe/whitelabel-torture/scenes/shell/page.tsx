@@ -5,7 +5,7 @@ import { HeadersFbStates } from '@/components/torture-sections/headers';
 import { HeadersPatternsFbStates } from '@/components/torture-sections/headers-patterns';
 import { NavigationPatternsFbStates } from '@/components/torture-sections/navigation-patterns';
 import { WorkspaceChromeFbStates } from '@/components/torture-sections/workspace-chrome';
-import { CkH1States } from '@/components/torture-sections/ck-h1';
+import { TenantBrandingStates } from '@/components/torture-sections/tenant-branding';
 
 export default async function ShellScenePage({ searchParams }: TortureRouteProps) {
   const query = await searchParams;
@@ -19,7 +19,7 @@ export default async function ShellScenePage({ searchParams }: TortureRouteProps
         <HeadersPatternsFbStates />
         <NavigationPatternsFbStates />
         <WorkspaceChromeFbStates />
-        <CkH1States />
+        <TenantBrandingStates />
       </TortureFrame>
     </>
   );

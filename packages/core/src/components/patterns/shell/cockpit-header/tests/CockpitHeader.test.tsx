@@ -1,0 +1,276 @@
+import React from 'react';
+import { beforeAll, describe, expect, it, vi } from 'vitest';
+import { fireEvent, screen } from '@testing-library/react';
+import { PatternCockpitHeader } from '../index';
+import { renderSurface } from '../../../../surfaces/foundation/common/test-utils';
+
+/**
+ * Pre-load the rustic engine modules used by the classic CockpitHeader engine
+ * so that the lazy `createEngineComponent` import resolves synchronously
+ * inside the test environment.
+ */
+beforeAll(async () => {
+  await Promise.all([
+    import('../../../../primitives/layout/box/engines/rustic'),
+    import('../../../../primitives/layout/flex/engines/rustic'),
+    import('../../../../primitives/display/typography/engines/rustic'),
+    import('../../../../primitives/display/tag/engines/rustic'),
+  ]);
+});
+
+describe('PatternCockpitHeader', () => {
+  it('renders title', async () => {
+    renderSurface(
+      <PatternCockpitHeader title="User Details" />,
+    );
+    expect(await screen.findByText('User Details')).toBeInTheDocument();
+  });
+
+  it('renders subtitle', async () => {
+    renderSurface(
+      <PatternCockpitHeader title="User Details" subtitle="View and edit user information" />,
+    );
+    expect(await screen.findByText('View and edit user information')).toBeInTheDocument();
+  });
+
+  it('renders breadcrumbs', async () => {
+    renderSurface(
+      <PatternCockpitHeader
+        title="User Details"
+        breadcrumbs={[
+          { label: 'Users', href: '/users' },
+          { label: 'John Doe' },
+        ]}
+      />,
+    );
+    expect(await screen.findByText('Users')).toBeInTheDocument();
+    expect(await screen.findByText('John Doe')).toBeInTheDocument();
+  });
+
+  it('renders status badges', async () => {
+    renderSurface(
+      <PatternCockpitHeader
+        title="User Details"
+        status={[
+          { label: 'Active', variant: 'success' },
+          { label: 'Admin', variant: 'info' },
+        ]}
+      />,
+    );
+    expect(await screen.findByText('Active')).toBeInTheDocument();
+    expect(await screen.findByText('Admin')).toBeInTheDocument();
+  });
+
+  it('renders action buttons passed as ReactNode', async () => {
+    const onEdit = vi.fn();
+    renderSurface(
+      <PatternCockpitHeader
+        title="User Details"
+        actions={<button onClick={onEdit}>Edit</button>}
+      />,
+    );
+    const editBtn = await screen.findByText('Edit');
+    fireEvent.click(editBtn);
+    expect(onEdit).toHaveBeenCalled();
+  });
+
+  it('calls onBack when back button is clicked', async () => {
+    const onBack = vi.fn();
+    renderSurface(
+      <PatternCockpitHeader title="User Details" onBack={onBack} />,
+    );
+    // The classic/rustic engine renders the back button as a Box (div) with
+    // an inline SVG. Find the clickable container by its role-less structure
+    // and fire the click on the SVG's parent element.
+    const title = await screen.findByText('User Details');
+    // The back button is a sibling element rendered before the title column.
+    // It contains an SVG arrow icon. We locate it via the SVG element.
+    const svg = title.closest('.ds-pattern-cockpit-header')?.querySelector('svg');
+    expect(svg).toBeTruthy();
+    const backButton = svg!.parentElement!;
+    fireEvent.click(backButton);
+    expect(onBack).toHaveBeenCalled();
+  });
+
+  it('renders title and subtitle together', async () => {
+    renderSurface(
+      <PatternCockpitHeader
+        title="Detail Page Title"
+        subtitle="Additional context below the title"
+      />,
+    );
+    expect(await screen.findByText('Detail Page Title')).toBeInTheDocument();
+    expect(await screen.findByText('Additional context below the title')).toBeInTheDocument();
+  });
+});
+
+describe('PatternCockpitHeader (modern engine)', () => {
+  it('renders premium context anatomy', async () => {
+    const { container } = renderSurface(
+      <PatternCockpitHeader
+        eyebrow="Active decision"
+        icon={<span data-testid="cockpit-icon">I</span>}
+        title="Modern Test"
+      />,
+      { engine: 'modern' },
+    );
+    expect(await screen.findByText('Active decision')).toBeInTheDocument();
+    expect(screen.getByTestId('cockpit-icon')).toBeInTheDocument();
+    expect(container.querySelector('[data-part="header-icon"]')).not.toBeNull();
+    expect(container.querySelector('[data-part="eyebrow"]')).not.toBeNull();
+  });
+
+  it('renders title with modern engine', async () => {
+    renderSurface(
+      <PatternCockpitHeader title="Modern Test" />,
+      { engine: 'modern' },
+    );
+    expect(await screen.findByText('Modern Test')).toBeInTheDocument();
+  });
+
+  it('renders subtitle', async () => {
+    renderSurface(
+      <PatternCockpitHeader title="Detail" subtitle="Extra context" />,
+      { engine: 'modern' },
+    );
+    expect(await screen.findByText('Extra context')).toBeInTheDocument();
+  });
+
+  it('renders breadcrumbs', async () => {
+    renderSurface(
+      <PatternCockpitHeader
+        title="Detail"
+        breadcrumbs={[
+          { label: 'Home', href: '/' },
+          { label: 'Current' },
+        ]}
+      />,
+      { engine: 'modern' },
+    );
+    expect(await screen.findByText('Home')).toBeInTheDocument();
+    expect(await screen.findByText('Current')).toBeInTheDocument();
+  });
+
+  it('renders status badges', async () => {
+    renderSurface(
+      <PatternCockpitHeader
+        title="Detail"
+        status={[
+          { label: 'Live', variant: 'success' },
+          { label: 'VIP', variant: 'info' },
+        ]}
+      />,
+      { engine: 'modern' },
+    );
+    expect(await screen.findByText('Live')).toBeInTheDocument();
+    expect(await screen.findByText('VIP')).toBeInTheDocument();
+  });
+
+  it('renders action buttons', async () => {
+    const onEdit = vi.fn();
+    renderSurface(
+      <PatternCockpitHeader
+        title="Detail"
+        actions={<button onClick={onEdit}>Save</button>}
+      />,
+      { engine: 'modern' },
+    );
+    const btn = await screen.findByText('Save');
+    fireEvent.click(btn);
+    expect(onEdit).toHaveBeenCalled();
+  });
+
+  it('calls onBack when back button is clicked', async () => {
+    const onBack = vi.fn();
+    renderSurface(
+      <PatternCockpitHeader title="Detail" onBack={onBack} />,
+      { engine: 'modern' },
+    );
+    const backBtn = await screen.findByLabelText('Go back');
+    fireEvent.click(backBtn);
+    expect(onBack).toHaveBeenCalled();
+  });
+
+  it('names the breadcrumb landmark with the i18n English floor', async () => {
+    renderSurface(
+      <PatternCockpitHeader
+        title="Detail"
+        breadcrumbs={[{ label: 'Home', href: '/' }, { label: 'Current' }]}
+      />,
+      { engine: 'modern' },
+    );
+    expect(await screen.findByRole('navigation', { name: 'Breadcrumb' })).toBeInTheDocument();
+  });
+
+  it('paints nothing inline on its own parts — the skin owns layout and paint', async () => {
+    const { container } = renderSurface(
+      <PatternCockpitHeader
+        eyebrow="Ops"
+        title="Detail"
+        subtitle="Context"
+        sticky
+        breadcrumbs={[{ label: 'Home', href: '/' }, { label: 'Current' }]}
+        status={[{ label: 'Live', variant: 'success' }]}
+        actions={<button>Save</button>}
+        onBack={() => {}}
+      />,
+      { engine: 'modern' },
+    );
+    await screen.findByText('Detail');
+
+    // Every data-part element the cockpit engine renders must carry zero
+    // inline style (consumer primitives like the back Button are another
+    // family's scope). The root keeps only the caller's `style` prop — not
+    // passed here.
+    for (const el of container.querySelectorAll('[data-part]')) {
+      const htmlEl = el as HTMLElement;
+      for (const prop of Array.from(htmlEl.style)) {
+        expect(
+          prop.startsWith('--'),
+          `${htmlEl.tagName}[data-part="${htmlEl.getAttribute('data-part')}"] carries inline "${prop}"`,
+        ).toBe(true);
+      }
+    }
+  });
+
+  it('stamps sticky state hooks without inline positioning', async () => {
+    const { container } = renderSurface(
+      <PatternCockpitHeader title="Detail" sticky />,
+      { engine: 'modern' },
+    );
+    await screen.findByText('Detail');
+
+    const root = container.querySelector('[data-part="root"]') as HTMLElement;
+    expect(root).toHaveAttribute('data-sticky', 'true');
+    expect(root).toHaveAttribute('data-compact', 'false');
+    expect(root.style.position).toBe('');
+    expect(root.style.padding).toBe('');
+  });
+
+  it('renders the loading skeleton with skin-owned geometry hooks', async () => {
+    const { container } = renderSurface(
+      <PatternCockpitHeader
+        title="Detail"
+        subtitle="Meta"
+        icon={<span />}
+        breadcrumbs={[{ label: 'Home' }]}
+        actions={<button type="button">Save</button>}
+        loading
+      />,
+      { engine: 'modern' },
+    );
+
+    const root = container.querySelector('[data-part="root"]') as HTMLElement;
+    expect(root).toHaveAttribute('data-loading', 'true');
+
+    const skeletons = container.querySelectorAll('[data-part="skeleton"]');
+    expect(skeletons.length).toBeGreaterThanOrEqual(5);
+    for (const el of skeletons) {
+      expect((el as HTMLElement).getAttribute('data-size')).toBeTruthy();
+      // Only the sanctioned custom-property data channel may be inline.
+      expect((el as HTMLElement).style.width).toBe('');
+      expect((el as HTMLElement).style.height).toBe('');
+      expect((el as HTMLElement).style.animation).toBe('');
+    }
+  });
+});

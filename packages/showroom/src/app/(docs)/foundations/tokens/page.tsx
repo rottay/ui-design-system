@@ -1,6 +1,6 @@
 'use client';
 
-import { ShowroomLink as Link } from '@/components/showroom-link';
+import { ShowroomLink as Link } from '@/components/navigation/link';
 import {
   DocsMetricTile,
   DocsPanel,
@@ -23,7 +23,7 @@ import {
 } from '@rottay/design-system/icons';
 import { CodeBlock } from '@/components/playground';
 import { FoundationTopRail } from '../foundation-top-rail';
-import { DocsCompactList, DocsSectionHeader } from '@/components/docs/editorial-chrome';
+import { DocsCompactList, DocsSectionHeader } from '@/components/docs/editorial';
 
 interface TokenCategory {
   title: string;

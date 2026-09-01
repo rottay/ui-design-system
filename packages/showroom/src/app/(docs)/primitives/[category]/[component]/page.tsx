@@ -1,5 +1,5 @@
 import type { CSSProperties, ReactNode } from 'react';
-import { ShowroomLink as Link } from '@/components/showroom-link';
+import { ShowroomLink as Link } from '@/components/navigation/link';
 import { Badge, Box, Flex, Stack, Text } from '@rottay/design-system';
 import {
   primitiveCategories,
@@ -16,7 +16,7 @@ import {
   SHOWROOM_SURFACES,
   mixWithCanvas,
   mixWithSurface,
-} from '@/components/playground/surface-tokens';
+} from '@/components/playground/tokens/surfaces';
 import { LivePreview } from './live-preview';
 
 const CATEGORY_GUIDANCE: Record<

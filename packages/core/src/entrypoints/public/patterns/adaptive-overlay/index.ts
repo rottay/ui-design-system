@@ -1,3 +1,3 @@
 "use client";
 
-export { AdaptiveOverlay } from "../../../../ui/patterns/feedback/adaptive-overlay";
+export { AdaptiveOverlay } from "../../../../components/patterns/feedback/adaptive-overlay";

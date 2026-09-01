@@ -49,7 +49,7 @@
  * could disagree with the artifact selector.
  *
  * Every cell is deterministic and URL-addressable; the Playwright matrix
- * asserts DOM parity and computed-style divergence, and Codex performs the
+ * asserts DOM parity and computed-style divergence, and sighted review performs the
  * sighted inspection. No fixture value here is product content.
  */
 

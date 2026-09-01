@@ -228,5 +228,7 @@ export {
  */
 export {
   provideServerIconExpressiveProfile,
+} from '../../infrastructure/runtime/foundation/icons/active-profile/runtime/provider';
+export {
   resolveActiveIconExpressiveProfile,
-} from '../../infrastructure/runtime/foundation/icons/active-profile';
+} from '../../infrastructure/runtime/foundation/icons/active-profile/runtime/resolution';

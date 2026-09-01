@@ -1,3 +1,3 @@
 "use client";
 
-export { Tag } from "../../../../ui/primitives/display/Tag";
+export { Tag } from "../../../../components/primitives/display/tag";

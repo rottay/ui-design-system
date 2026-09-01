@@ -1,6 +1,6 @@
 import { expect, test, type Page } from '@playwright/test';
 
-import { recordCra15Measurement } from './cra-15-evidence';
+import { recordCra15Measurement } from './runtime-hardening/measurements';
 
 // ---------------------------------------------------------------------------
 // CRA-15 mobile-device evidence (audit MOT-01, step 3).

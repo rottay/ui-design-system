@@ -36,20 +36,28 @@ src/
   foundation/       Contracts, kernels, presets, i18n and tokens
   infrastructure/   Compilers and browser/React runtime orchestration
   graphics/         Icons, marks, pictograms and motion
-  ui/               Primitives -> patterns -> structures -> surfaces
-  tooling/          ESLint, declarations, examples and test support
+  components/       Primitives -> patterns -> structures -> surfaces
   entrypoints/       Classified package-subpath boundaries
   index.ts           The only loose source-root file; package-root facade
 ```
 
-`entrypoints/` supports package boundaries; it is not a sixth architecture
-tier. Authored production units use `folder/index.ts(x)`, and related units
-gain an explicit family level instead of becoming loose peer files.
+These five directories are the complete physical source-root roster.
+`components/` owns the four UI tiers and `entrypoints/` owns package boundaries.
+Authored production units use `folder/index.ts(x)`, and related units gain an
+explicit family level instead of becoming loose peer files.
+
+`packages/core/scripts` has exactly six intent roots:
+`build/`, `check/`, `generate/`, `libraries/`, `maintain/`, and `package/`.
+Source-layout names are not valid script roots.
+
+The seven source-controlled package roots are `src/`, `scripts/`, `tests/`,
+`contracts/`, `governance/`, `artifacts/`, and `docs/`. `dist/` is disposable
+build output, not an authority root.
 
 ### Component Taxonomy (4 Tiers)
 
 ```
-src/ui/
+src/components/
   primitives/     Leaf components with engine switch
     display/        Avatar, Badge, Card, Table, Typography...
     inputs/         Button, Input, Select, DatePicker, Checkbox...
@@ -86,18 +94,18 @@ src/ui/
 ```
 
 The generated, on-disk inventory is
-[`packages/core/docs/TAXONOMY.generated.md`](packages/core/docs/TAXONOMY.generated.md).
+[`packages/core/docs/generated/component-taxonomy/index.md`](packages/core/docs/generated/component-taxonomy/index.md).
 
 For a folder-by-folder map of the whole repository -- what each directory does,
 which directories duplicate each other, and which are empty scaffolding -- see
-[`docs/MAPA-DEL-REPO.md`](docs/MAPA-DEL-REPO.md). The keep/delete decisions taken
+[`docs/history/inventories/repository-map/2026-08/index.md`](docs/history/inventories/repository-map/2026-08/index.md). The keep/delete decisions taken
 from that map -- what stays, what is removed, and which duplicate becomes the
 canonical owner -- are in
-[`docs/QUE-SE-QUEDA-Y-QUE-SE-BORRA.md`](docs/QUE-SE-QUEDA-Y-QUE-SE-BORRA.md). The
+[`docs/history/programs/architecture-refactor/2026-08/retention/index.md`](docs/history/programs/architecture-refactor/2026-08/retention/index.md). The
 independent claim-by-claim verification of that map is in
-[`docs/VERIFICACION-FABLE.md`](docs/VERIFICACION-FABLE.md), and a third
+[`docs/history/audits/architecture-refactor/2026-08/independent-verification/index.md`](docs/history/audits/architecture-refactor/2026-08/independent-verification/index.md), and a third
 independent audit -- which overturned several of those decisions -- is in
-[`docs/AUDITORIA-KIMI.md`](docs/AUDITORIA-KIMI.md). The architecture
+[`docs/history/audits/architecture-refactor/2026-08/coordination/index.md`](docs/history/audits/architecture-refactor/2026-08/coordination/index.md). The architecture
 reference is [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md).
 
 ### Branding Model
@@ -157,7 +165,7 @@ import { Icon } from "@rottay/design-system/icons";
 ### Chart System
 
 18 D3-backed chart families live under
-`ui/patterns/visualization/charts/families/`: Bar, Line, Area, Pie, Scatter,
+`components/patterns/visualization/charts/families/`: Bar, Line, Area, Pie, Scatter,
 Radar, Gauge, Histogram, Funnel, Waterfall, Sankey, Gantt, Sparkline,
 CalendarHeatMap, HeatMap, TreeMap, NetworkGraph and BulletChart. They are
 engine-agnostic, theme-aware and personality-driven.

@@ -3,8 +3,8 @@ import { TortureFrame } from '@/components/torture-sections/frame';
 import { RecordFbStates } from '@/components/torture-sections/record';
 import { DashboardWidgetsStates } from '@/components/torture-sections/dashboard';
 import { WorkspaceChromeFbStates } from '@/components/torture-sections/workspace-chrome';
-import { MiscH2FbStates } from '@/components/torture-sections/misc-h2';
-import { SurfacesLongTailFixture } from '@/components/surfaces-long-tail-fixture';
+import { ApplicationSurfaceStates } from '@/components/torture-sections/application-surfaces';
+import { SurfacesLongTailFixture } from '@/components/fixtures/surfaces/long-tail';
 
 export default async function SurfacesScenePage({ searchParams }: TortureRouteProps) {
   const query = await searchParams;
@@ -16,7 +16,7 @@ export default async function SurfacesScenePage({ searchParams }: TortureRoutePr
         <RecordFbStates />
         <DashboardWidgetsStates />
         <WorkspaceChromeFbStates />
-        <MiscH2FbStates />
+        <ApplicationSurfaceStates />
         <SurfacesLongTailFixture />
       </TortureFrame>
     </>

@@ -25,8 +25,11 @@ import { fileURLToPath } from 'node:url';
 const here = dirname(fileURLToPath(import.meta.url));
 const baselinePath = join(here, 'axe-baseline.json');
 const repoRoot = resolve(here, '../../../..');
-const reportDir = join(repoRoot, 'test-artifacts', 'gates', 'gat-04');
-const reportPath = join(reportDir, 'axe-report.json');
+const reportDir = join(
+  repoRoot,
+  'packages/core/artifacts/quality/audits/accessibility/runs/axe',
+);
+const reportPath = join(reportDir, 'index.json');
 
 const FLAGSHIP_SLUGS = ['button', 'input', 'select', 'card', 'badge', 'table', 'tabs', 'modal'] as const;
 const TENANTS = ['rottay', 'bithire'] as const;

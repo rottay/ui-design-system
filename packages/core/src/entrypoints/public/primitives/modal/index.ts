@@ -1,3 +1,3 @@
 "use client";
 
-export { Modal } from "../../../../ui/primitives/feedback/Modal";
+export { Modal } from "../../../../components/primitives/feedback/modal";

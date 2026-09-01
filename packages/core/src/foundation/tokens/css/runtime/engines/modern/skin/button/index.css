@@ -1,0 +1,1267 @@
+/**
+ * Modern Button skin.
+ *
+ * The React engine owns semantics, anatomy and interaction state. This file
+ * owns paint and geometry exclusively through public --ds-button-* channels.
+ * Product code can compose the primitive, but it never needs to restyle its
+ * internals for hover, press, focus, busy, touch, RTL or high contrast.
+ *
+ * THE ROOT ANCHOR IS `[data-variant]`, NOT `data-part`, AND THE DIFFERENCE IS
+ * REACHABILITY. P-79 makes the caller's part win on modern (asserted in
+ * `Button.passthrough-contract.test.tsx`; classic and rustic keep `trigger`, so
+ * only this file was exposed). The 7 root rules here were keyed on
+ * `[data-part='trigger']`, and 123 production call sites pass a part of their
+ * own — every one of them lost all 47 declarations: layout, geometry, the
+ * typography channels, `appearance`, `isolation`, `overflow`, the whole
+ * transition list, `forced-color-adjust`, and the print and forced-colors
+ * contracts.
+ *
+ * `data-variant` is written into `anatomyProps`, which the engine spreads AFTER
+ * the caller's props, so the caller cannot reach it; `effectiveVariant` is total
+ * (`variant || 'primary'` and three exhaustive branches), so it is never absent.
+ * `data-size` and `data-shape` share both properties. The class pair is written
+ * after the spread too — a caller's `className` is appended, never substituted.
+ * Anatomy parts stay selectable as DESCENDANTS of the root; those are the
+ * engine's, not the caller's.
+ *
+ * TWO SECOND-ORDER LOSSES the property count does not show, because the rules
+ * that suffer them stay alive and matching:
+ *   - `--ds-button-surface-highlight: none` at the reduced-transparency block
+ *     below was the ONLY suppressor of the `::before` overlay, whose base value
+ *     is a `:root` literal in `presentation/components/button.css`. Severed, the
+ *     suppressor never matched and `prefers-reduced-transparency: reduce` was
+ *     silently not honoured.
+ *   - the four `--ds-button-resolved-*` defaults are re-declared by the five
+ *     `[data-size='…']:not([data-size-responsive])` rules, so severance was
+ *     invisible EXCEPT under a responsive size, where those rules also drop out
+ *     and the reads in `[data-part='icon']`, `[data-full-width]` and
+ *     `[data-shape='circle']` were left with no declaration at all.
+ *
+ * SPECIFICITY IS UNCHANGED BY THAT SUBSTITUTION and deliberately so: (0,3,0) at
+ * six selectors and (0,3,1) at the `::before`, exactly as before. The pure-class
+ * form specified earlier drops all 7 by one weight unit, which is a cascade
+ * question jsdom cannot adjudicate and is why that repair was deferred; an
+ * attribute-for-attribute swap is inert in the cascade and needs no browser pass.
+ */
+
+/* -------------------------------------------------------------------------
+   Anatomy and geometry
+   ------------------------------------------------------------------------- */
+
+.rottay-button.rottay-button--modern[data-variant] {
+  /* Modern's material vocabulary, DECLARED in modern's own scope rather than
+     smuggled in through a fallback arm. The base owner declares the generic
+     `--ds-shadow-sm`; an engine with a richer vocabulary overrides it here, so
+     rustic keeps the generic scale by inheritance instead of by fallback. */
+  --ds-button-primary-shadow: var(--ds-material-control-shadow);
+  --ds-button-secondary-shadow: var(--ds-material-control-shadow);
+  --ds-button-default-shadow: var(--ds-material-control-shadow);
+
+  --ds-button-resolved-icon-size: var(--ds-button-md-icon-size);
+  /* The CONTROL step first, the surface ramp as fallback. R1 Cohort 1 had this
+     inverted for a reason that has since been removed: the family channel was
+     emitted as a flat literal at vertical scope, so it was unreachable by the
+     radius dial and putting it first pinned the control. The chrome compiler
+     now emits it as a dial product, so the family channel is both reachable
+     and the authored value — and the inversion had a cost, because it made the
+     control ramp dead source. A vertical pairs control radius with control
+     HEIGHT (BitHire: 7/8/9/10/11 against 26/32/36/40/46), deliberately tighter
+     than the surface ramp; reading --ds-radius-md here painted a 36px-tall
+     button with a card's corner. A tenant still reaches this through
+     --ds-radius-* wherever it authors no control geometry, because the base
+     layer resolves --ds-button-{size}-radius to that same ramp step. */
+  --_ds-button-resolved-radius: var(--ds-button-md-radius, var(--ds-radius-md));
+  --ds-button-resolved-height: var(--ds-button-md-height);
+  --ds-button-resolved-padding-y: var(--ds-button-md-padding-y);
+
+  position: relative;
+  isolation: isolate;
+  display: inline-flex;
+  box-sizing: border-box;
+  align-items: center;
+  justify-content: center;
+  min-inline-size: 0;
+  max-inline-size: 100%;
+  /* The height is a FLOOR, not a ceiling: at 200% text zoom or a tall tenant
+     type-scale the label grows the control instead of clipping against
+     `overflow: clip`. Rest heights are unchanged — content never exceeds the
+     resolved height at 100%. `--_ds-button-height-floor` (declared below,
+     mechanical floors block) additionally clamps the DENSITY side: density
+     multiplies the resolved height with no floor of its own, so a compact
+     posture on a tight tenant scale could push a control below the active
+     mode's mechanical minimum (measured: 36px x 0.9 = 32.4px, F8). */
+  min-block-size: max(
+    var(--_ds-button-height-floor, 36px),
+    calc(var(--ds-button-resolved-height) * var(--ds-density-effective-scale))
+  );
+  gap: calc(var(--ds-button-gap) * var(--ds-density-effective-scale));
+  padding-block: 0;
+  appearance: none;
+  overflow: clip;
+  cursor: pointer;
+  user-select: none;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+
+  font-family: var(--ds-button-font-family);
+  font-weight: var(--ds-button-font-weight);
+  line-height: 1;
+  letter-spacing: var(--ds-button-letter-spacing);
+  text-align: center;
+  text-decoration: none;
+  text-transform: var(--ds-button-text-transform);
+  white-space: nowrap;
+
+  border-width: var(--ds-button-border-width);
+  /* Border STYLE rides the same edge grammar as the width (see the component
+     token chain): solid everywhere except the inset-double profile, whose
+     3px double keyline is its identity. The dashed variant's own style rule
+     below still wins (equal specificity, later in the file). */
+  border-style: var(--ds-edge-standard-style, solid);
+  border-radius: var(--_ds-button-resolved-radius);
+  outline: none;
+
+  transition:
+    transform var(--ds-button-transition-duration) var(--ds-button-transition-timing),
+    background-color var(--ds-button-transition-duration) var(--ds-button-transition-timing),
+    background-position var(--ds-motion-reveal) var(--ds-button-transition-timing),
+    border-color var(--ds-button-transition-duration) var(--ds-button-transition-timing),
+    box-shadow var(--ds-button-transition-duration) var(--ds-button-transition-timing),
+    color var(--ds-button-transition-duration) var(--ds-button-transition-timing),
+    filter var(--ds-button-transition-duration) var(--ds-button-transition-timing),
+    opacity var(--ds-button-transition-duration) var(--ds-button-transition-timing);
+}
+
+/* A quiet optical highlight gives solid controls material depth without
+   inventing another app-owned gradient. It is a public token channel and is
+   deliberately absent from text, ghost and link controls. As the decoration
+   layer of the material stack it rides the governed `--ds-effect-intensity`
+   dial: at 0 the sheen disappears while base, border, state channels and the
+   focus ring keep the hierarchy intact. */
+.rottay-button.rottay-button--modern:is(
+    [data-variant='primary'],
+    [data-variant='secondary'],
+    [data-variant='default'],
+    [data-variant='outline'],
+    [data-variant='dashed'],
+    [data-variant='danger'],
+    [data-variant='success'],
+    [data-variant='warning'],
+    [data-variant='info'],
+    [data-variant='ai']
+  )::before {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  border-radius: inherit;
+  background: var(--ds-button-surface-highlight);
+  opacity: calc(
+    var(--ds-button-surface-highlight-opacity) * var(--ds-effect-intensity)
+  );
+  pointer-events: none;
+  content: '';
+  transition: opacity var(--ds-button-transition-duration)
+    var(--ds-button-transition-timing);
+}
+
+.rottay-button.rottay-button--modern [data-part='content'],
+.rottay-button.rottay-button--modern [data-part='busy-content'],
+.rottay-button.rottay-button--modern [data-part='content-frame'],
+.rottay-button.rottay-button--modern [data-part='icon'],
+.rottay-button.rottay-button--modern [data-part='prefix'],
+.rottay-button.rottay-button--modern [data-part='suffix'] {
+  display: inline-flex;
+  min-inline-size: 0;
+  align-items: center;
+  justify-content: center;
+}
+
+.rottay-button.rottay-button--modern [data-part='content'],
+.rottay-button.rottay-button--modern [data-part='busy-content'],
+.rottay-button.rottay-button--modern [data-part='content-frame'] {
+  position: relative;
+  z-index: 1;
+}
+
+.rottay-button.rottay-button--modern [data-part='content'],
+.rottay-button.rottay-button--modern [data-part='busy-content'] {
+  gap: inherit;
+  max-inline-size: 100%;
+}
+
+.rottay-button.rottay-button--modern [data-part='label'] {
+  min-inline-size: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  translate: 0 var(--ds-button-label-offset-y);
+  /* Counts and metrics inside an action label align on the tenant's numeric
+     role: BitHire's technical posture renders tabular lining figures, an
+     editorial profile its oldstyle set. The role channel is authored per
+     tenant; absent it, the foundation's own numeric floor applies. */
+  font-variant-numeric: var(--ds-type-numeric-font-variant-numeric, normal);
+}
+
+/* Icon well: three private protos let a personality put the glyph on a plate
+   (editorial square wells vs technical round wells) WITHOUT a new public
+   channel. At their defaults — transparent / 0 / 0 — the render is
+   byte-identical to today: box size = resolved icon size, svg fills it. When
+   an owner sets a padding, the part grows by 2×padding while the svg keeps
+   the resolved optical size, so the plate adds material around the glyph
+   instead of shrinking it. */
+.rottay-button.rottay-button--modern [data-part='icon'] {
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  inline-size: calc(
+    var(--ds-button-resolved-icon-size) + 2 * var(--_ds-button-icon-plate-padding, 0px)
+  );
+  block-size: calc(
+    var(--ds-button-resolved-icon-size) + 2 * var(--_ds-button-icon-plate-padding, 0px)
+  );
+  padding: var(--_ds-button-icon-plate-padding, 0px);
+  background: var(--_ds-button-icon-plate-bg, transparent);
+  border-radius: var(--_ds-button-icon-plate-radius, 0px);
+  transition: transform var(--ds-button-transition-duration)
+    var(--ds-button-transition-timing);
+}
+
+.rottay-button.rottay-button--modern [data-part='icon'] > svg {
+  inline-size: var(--ds-button-resolved-icon-size);
+  block-size: var(--ds-button-resolved-icon-size);
+}
+
+/* C1 — quiet icon-only rest well. A quiet icon button must read as a designed
+   control at rest, not as a bare glyph waiting for hover. The well keys on the
+   variant's own ink (currentColor), so a cold technical tenant and a warm
+   editorial one both get THEIR well from one rule — no new paint authority, no
+   tenant branch. It assigns the icon-plate protos at trigger scope for this
+   case only; an owner who sets those protos on the part itself still wins.
+   The wash deepens on hover for continuity, and collapses under reduced
+   transparency like the rest of the translucent stack. */
+.rottay-button.rottay-button--modern:is(
+    [data-variant='ghost'],
+    [data-variant='text'],
+    [data-variant='link']
+  )[data-icon-only='true']:not([data-disabled='true']) {
+  --_ds-button-icon-plate-bg: color-mix(in srgb, currentColor 7%, transparent);
+  --_ds-button-icon-plate-padding: 2px;
+  --_ds-button-icon-plate-radius: var(--ds-radius-sm);
+}
+
+@media (hover: hover) {
+  .rottay-button.rottay-button--modern:is(
+      [data-variant='ghost'],
+      [data-variant='text'],
+      [data-variant='link']
+    )[data-icon-only='true'][data-state~='hovered']:not([data-disabled='true']) {
+    --_ds-button-icon-plate-bg: color-mix(in srgb, currentColor 11%, transparent);
+  }
+}
+
+.rottay-button.rottay-button--modern [data-part='spinner'] {
+  flex: 0 0 var(--ds-button-resolved-icon-size);
+  inline-size: var(--ds-button-resolved-icon-size);
+  block-size: var(--ds-button-resolved-icon-size);
+  color: var(--ds-button-spinner-color);
+  animation: ds-button-spin var(--ds-button-spinner-duration) linear infinite;
+}
+
+.rottay-button.rottay-button--modern [data-part='spinner-track'],
+.rottay-button.rottay-button--modern [data-part='spinner-indicator'] {
+  stroke-width: var(--ds-button-spinner-stroke-width);
+}
+
+.rottay-button.rottay-button--modern [data-part='spinner-track'] {
+  opacity: var(--ds-button-spinner-track-opacity);
+}
+
+/* The frame is a ONE-CELL grid so every reserve row stacks in the same cell and
+   the frame takes the MAX of their widths rather than the sum. With the rows in
+   normal inline flow they would sit side by side and the frame would be twice as
+   wide as either state. */
+.rottay-button.rottay-button--modern [data-part='content-frame'] {
+  position: relative;
+  display: grid;
+  grid-template-areas: 'state';
+  align-items: center;
+  justify-items: center;
+  inline-size: 100%;
+  /* `gap` is not an inherited property: without this, the frame's own
+     computed gap is the grid initial `normal` (0), and every reserve row's
+     `gap: inherit` (below) inherited that 0 instead of the root's real gap —
+     the spinner/label pair in the width-stable busy row rendered with zero
+     separation (F11). Explicitly inheriting from the root here restores one
+     real gap value for both the resting and busy rows. */
+  gap: inherit;
+}
+
+.rottay-button.rottay-button--modern [data-part='content'][data-layer='reserve'] {
+  grid-area: state;
+  visibility: hidden;
+}
+
+.rottay-button.rottay-button--modern [data-part='content'][data-state='hidden'] {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.rottay-button.rottay-button--modern [data-part='content-frame'] > [data-part='busy-content'] {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+/* The busy accessible label renders through the canonical `VisuallyHidden`
+   primitive (`.ds-visually-hidden`, owned by
+   presentation/components/visually-hidden.css) — this family no longer keeps
+   a local clip rule for it. */
+
+.rottay-button.rottay-button--modern[data-full-width='true'] {
+  display: flex;
+  inline-size: 100%;
+  min-block-size: max(
+    var(--_ds-button-height-floor, 36px),
+    calc(var(--ds-button-resolved-height) * var(--ds-density-effective-scale))
+  );
+  block-size: auto;
+  padding-block: calc(
+    var(--ds-button-resolved-padding-y) * var(--ds-density-effective-scale)
+  );
+  white-space: normal;
+}
+
+.rottay-button.rottay-button--modern[data-full-width='true'] [data-part='content'],
+.rottay-button.rottay-button--modern[data-full-width='true'] [data-part='content-frame'] {
+  inline-size: 100%;
+}
+
+.rottay-button.rottay-button--modern[data-full-width='true'] [data-part='label'] {
+  overflow-wrap: anywhere;
+  text-overflow: clip;
+}
+
+/* -------------------------------------------------------------------------
+   Mechanical height floor (F8, R1 unit 1).
+
+   Private provisional socket (namespaceLifecycle): `--_ds-button-height-floor`.
+     owner: primitive/inputs/button (WO-CRA-23 R1 unit 1)
+     producer: this block, keyed on the nearest [data-density] ancestor's
+       DISCRETE stamped posture, not the continuous effective scale, so the
+       floor stays stable regardless of how extreme --ds-density-scale gets
+     fallbackAuthority: 36px (the previous unfloored `md` rest height)
+     productiveConsumerFamilyIds: [primitive/inputs/button]
+     promotionCriteria: a second family reads the same floor with the same
+       semantics (mode-keyed mechanical minimum height)
+     retirementCriteria: a governed --ds-control-height-floor-* channel ships
+       and every private consumer migrates to it in one lot
+
+   The default (comfortable/no posture attribute) case is the `var(...,
+   36px)` fallback at each use site below, deliberately NOT a bare `:root`
+   producer rule here: an unconditioned `:root` selector always matches
+   `document.documentElement`, which breaks this family's own
+   container-vs-document reachability parity (Button.skin-reachability.test)
+   -- the same reason the two conditioned rules below are safe (they only
+   match when a real posture attribute is present, exactly like the existing
+   `:root[data-density='compact']` rule elsewhere in this file). */
+:root[data-density='compact'] {
+  --_ds-button-height-floor: 32px;
+}
+:root[data-density='spacious'] {
+  --_ds-button-height-floor: 44px;
+}
+
+/* -------------------------------------------------------------------------
+   Size and shape
+   ------------------------------------------------------------------------- */
+
+.rottay-button.rottay-button--modern[data-size='xs']:not([data-size-responsive]) {
+  --ds-button-resolved-icon-size: var(--ds-button-xs-icon-size);
+  --_ds-button-resolved-radius: var(--ds-button-xs-radius, var(--ds-radius-sm));
+  --ds-button-resolved-height: var(--ds-button-xs-height);
+  --ds-button-resolved-padding-y: var(--ds-button-xs-padding-y);
+  padding-inline: calc(
+    var(--ds-button-xs-padding-x) * var(--ds-density-effective-scale)
+  );
+  gap: calc(var(--ds-button-xs-gap) * var(--ds-density-effective-scale));
+  font-size: var(--ds-button-xs-font-size);
+  line-height: var(--ds-button-xs-line-height);
+}
+
+.rottay-button.rottay-button--modern[data-size='sm']:not([data-size-responsive]) {
+  --ds-button-resolved-icon-size: var(--ds-button-sm-icon-size);
+  --_ds-button-resolved-radius: var(--ds-button-sm-radius, var(--ds-radius-sm));
+  --ds-button-resolved-height: var(--ds-button-sm-height);
+  --ds-button-resolved-padding-y: var(--ds-button-sm-padding-y);
+  padding-inline: calc(
+    var(--ds-button-sm-padding-x) * var(--ds-density-effective-scale)
+  );
+  gap: calc(var(--ds-button-sm-gap) * var(--ds-density-effective-scale));
+  font-size: var(--ds-button-sm-font-size);
+  line-height: var(--ds-button-sm-line-height);
+}
+
+.rottay-button.rottay-button--modern[data-size='md']:not([data-size-responsive]) {
+  --ds-button-resolved-icon-size: var(--ds-button-md-icon-size);
+  --_ds-button-resolved-radius: var(--ds-button-md-radius, var(--ds-radius-md));
+  --ds-button-resolved-height: var(--ds-button-md-height);
+  --ds-button-resolved-padding-y: var(--ds-button-md-padding-y);
+  padding-inline: calc(
+    var(--ds-button-md-padding-x) * var(--ds-density-effective-scale)
+  );
+  gap: calc(var(--ds-button-md-gap) * var(--ds-density-effective-scale));
+  font-size: var(--ds-button-md-font-size);
+  line-height: var(--ds-button-md-line-height);
+}
+
+.rottay-button.rottay-button--modern[data-size='lg']:not([data-size-responsive]) {
+  --ds-button-resolved-icon-size: var(--ds-button-lg-icon-size);
+  --_ds-button-resolved-radius: var(--ds-button-lg-radius, var(--ds-radius-lg));
+  --ds-button-resolved-height: var(--ds-button-lg-height);
+  --ds-button-resolved-padding-y: var(--ds-button-lg-padding-y);
+  padding-inline: calc(
+    var(--ds-button-lg-padding-x) * var(--ds-density-effective-scale)
+  );
+  gap: calc(var(--ds-button-lg-gap) * var(--ds-density-effective-scale));
+  font-size: var(--ds-button-lg-font-size);
+  line-height: var(--ds-button-lg-line-height);
+}
+
+.rottay-button.rottay-button--modern[data-size='xl']:not([data-size-responsive]) {
+  --ds-button-resolved-icon-size: var(--ds-button-xl-icon-size);
+  --_ds-button-resolved-radius: var(--ds-button-xl-radius, var(--ds-radius-xl));
+  --ds-button-resolved-height: var(--ds-button-xl-height);
+  --ds-button-resolved-padding-y: var(--ds-button-xl-padding-y);
+  padding-inline: calc(
+    var(--ds-button-xl-padding-x) * var(--ds-density-effective-scale)
+  );
+  gap: calc(var(--ds-button-xl-gap) * var(--ds-density-effective-scale));
+  font-size: var(--ds-button-xl-font-size);
+  line-height: var(--ds-button-xl-line-height);
+}
+
+.rottay-button.rottay-button--modern[data-shape='circle'],
+.rottay-button.rottay-button--modern[data-icon-only='true'] {
+  /* Never let a flex or grid parent stretch an icon plate: its silhouette is
+     the resolved square (or the tenant's shape), not the row's tallest
+     sibling. */
+  flex: 0 0 auto;
+  aspect-ratio: 1;
+  padding-inline: 0;
+}
+
+.rottay-button.rottay-button--modern[data-shape='circle'] {
+  inline-size: calc(
+    var(--ds-button-resolved-height) * var(--ds-density-effective-scale)
+  );
+  border-radius: var(--ds-radius-full);
+}
+
+.rottay-button.rottay-button--modern[data-shape='round'] {
+  border-radius: var(--ds-radius-full);
+}
+
+.rottay-button.rottay-button--modern[data-shape='default'][data-radius='none'] {
+  border-radius: 0;
+}
+.rottay-button.rottay-button--modern[data-shape='default'][data-radius='sm'] {
+  border-radius: var(--ds-radius-sm);
+}
+.rottay-button.rottay-button--modern[data-shape='default'][data-radius='md'] {
+  border-radius: var(--ds-radius-md);
+}
+.rottay-button.rottay-button--modern[data-shape='default'][data-radius='lg'] {
+  border-radius: var(--ds-radius-lg);
+}
+.rottay-button.rottay-button--modern[data-shape='default'][data-radius='full'] {
+  border-radius: var(--ds-radius-full);
+}
+
+/* -------------------------------------------------------------------------
+   Connected-group geometry (Button.Group, F7, R1 unit 1).
+
+   `Button.Group[connected]` used to reset the child's radius from OUTSIDE the
+   engine (`button-group.css`), at the exact same selector weight (0,3,0) as
+   this file's own base rule -- a tie the group lost by source order, so every
+   joined cluster rendered as separately-rounded pills 1px apart instead of one
+   fused control. Owning connected geometry here, keyed on the CHILD's own
+   `data-connected` / `data-group-position` attributes (stamped by
+   Button.Group's clone, restoring a contract the manifest's `variantAxes`
+   already declared), keeps the engine's own selector weight and wins outright.
+
+   `data-group-position` carries a SPACE-SEPARATED token list ('first',
+   'middle', 'last') rather than one exclusive value: a one-button connected
+   group is legitimately both, and a single string cannot hold both tokens.
+   The `~=` attribute selector matches token membership, exactly like a class
+   list, so a lone child correctly receives both exterior radii.
+   ------------------------------------------------------------------------- */
+.rottay-button.rottay-button--modern[data-connected='true'] {
+  border-radius: 0;
+}
+
+.rottay-button-group[data-orientation='horizontal']
+  > .rottay-button.rottay-button--modern[data-connected='true'][data-group-position~='first'] {
+  border-start-start-radius: var(--_ds-button-resolved-radius);
+  border-end-start-radius: var(--_ds-button-resolved-radius);
+}
+.rottay-button-group[data-orientation='horizontal']
+  > .rottay-button.rottay-button--modern[data-connected='true'][data-group-position~='last'] {
+  border-start-end-radius: var(--_ds-button-resolved-radius);
+  border-end-end-radius: var(--_ds-button-resolved-radius);
+}
+.rottay-button-group[data-orientation='vertical']
+  > .rottay-button.rottay-button--modern[data-connected='true'][data-group-position~='first'] {
+  border-start-start-radius: var(--_ds-button-resolved-radius);
+  border-start-end-radius: var(--_ds-button-resolved-radius);
+}
+.rottay-button-group[data-orientation='vertical']
+  > .rottay-button.rottay-button--modern[data-connected='true'][data-group-position~='last'] {
+  border-end-start-radius: var(--_ds-button-resolved-radius);
+  border-end-end-radius: var(--_ds-button-resolved-radius);
+}
+
+/* Governed seam: the shared 1px edge inside a joined quiet cluster reads the
+   EXISTING divider channel (no new token) instead of whichever border wins
+   the overlap. Solid variants keep their own border as the seam. */
+.rottay-button-group[data-orientation='horizontal']
+  > .rottay-button.rottay-button--modern[data-connected='true'][data-group-position]:is(
+    [data-variant='default'],
+    [data-variant='outline'],
+    [data-variant='dashed'],
+    [data-variant='ghost']
+  ):not([data-group-position~='first']):not([data-disabled='true']) {
+  border-inline-start-color: var(--ds-button-group-divider-color);
+}
+.rottay-button-group[data-orientation='vertical']
+  > .rottay-button.rottay-button--modern[data-connected='true'][data-group-position]:is(
+    [data-variant='default'],
+    [data-variant='outline'],
+    [data-variant='dashed'],
+    [data-variant='ghost']
+  ):not([data-group-position~='first']):not([data-disabled='true']) {
+  border-block-start-color: var(--ds-button-group-divider-color);
+}
+
+/* -------------------------------------------------------------------------
+   SEMANTIC GROUP: control. (R1 Cohort 1)
+
+   A Button is a CONTROL, and the design system already ships a governed
+   surface-role vocabulary for that group -- `--ds-material-control-*`, eighteen
+   channels covering ground, ink, edge, focus ring, depth, highlight and texture
+   across rest/hover/active/selected/disabled. All eighteen are in
+   TENANT_THEME_OVERRIDE_TOKENS, so a customer can author the whole matrix.
+
+   WHY THIS BLOCK EXISTS. Before it, this skin read only `--ds-button-*`, and
+   NOT ONE `--ds-button-*` token is tenant-writable: the allowlist contains zero
+   of them. The only tenant-reachable dimension of a button was therefore the
+   handful of `--ds-button-primary-*` values the compiler DERIVES from the
+   palette -- which is precisely why two tenants on one tree differed on colour
+   and on nothing else. The material, depth, edge weight and state posture a
+   customer can actually write reached this family not at all.
+
+   THE RULE. Depth, texture, highlight and focus ring are MATERIAL properties of
+   the control group and apply to every variant. Ground and ink are SEMANTIC and
+   stay variant-owned: a primary action must keep the brand action colour, not
+   the neutral control ground. Neutral variants take the role's ground and edge,
+   where the role genuinely is the authority.
+
+   ROLE FLOOR NOW REACHABLE (R1 Cohort 1). Each variant arm carries the role
+   channel as its fallback. While an engine-tier default existed the fallback
+   was dead, which is what the mechanism note below describes; the engine
+   defaults are deleted in the same change, and the out-of-round verticals were
+   pinned FIRST so their paint could not move. Probe: PRESERVED.
+
+   MECHANISM NOTE (measured, and the reason adoption is NOT a one-line fallback).
+   The role channels are declared on `:root` in `foundation/themes/default/index.css`,
+   so they are ALWAYS defined. `var(--ds-material-control-shadow, <family>)`
+   therefore never reaches its fallback: it resolves to the role default and
+   silently replaces the family value. `--ds-material-control-shadow` defaults to
+   `none`, while `--ds-button-primary-shadow` carries a real `0 1px 2px` value in
+   several themes. A naive chain would flatten every button in every theme while
+   reading like a refactor.
+
+   So adoption of the depth channel is a real decision about the resting posture
+   of the control group -- and it is pending sighted adjudication, not slipped in
+   behind a fallback that cannot fire. What lands below in this cohort is the
+   part that is unambiguous: the channels where the role default and the family
+   value already agree, or where the role is uncontestably the authority.
+   `popover.css` is the reference implementation for the chain shape.
+   ------------------------------------------------------------------------- */
+
+/* -------------------------------------------------------------------------
+   Variant paint. Each state has an explicit tenant-authored channel.
+   ------------------------------------------------------------------------- */
+
+.rottay-button.rottay-button--modern[data-variant='primary'] {
+  background-color: var(--ds-button-primary-bg);
+  color: var(--ds-button-primary-color);
+  border-color: var(--ds-button-primary-border);
+  box-shadow: var(--ds-button-primary-shadow, var(--ds-material-control-shadow));
+}
+
+.rottay-button.rottay-button--modern[data-variant='secondary'] {
+  background-color: var(--ds-button-secondary-bg);
+  color: var(--ds-button-secondary-color);
+  border-color: var(--ds-button-secondary-border);
+  box-shadow: var(--ds-button-secondary-shadow, var(--ds-material-control-shadow));
+}
+
+.rottay-button.rottay-button--modern:is([data-variant='default'], [data-variant='outline']) {
+  background-color: var(--ds-button-default-bg);
+  color: var(--ds-button-default-color);
+  border-color: var(--ds-button-default-border);
+  box-shadow: var(--ds-button-default-shadow, var(--ds-material-control-shadow));
+}
+
+.rottay-button.rottay-button--modern[data-variant='ghost'] {
+  background-color: var(--ds-button-ghost-bg);
+  color: var(--ds-button-ghost-color);
+  border-color: var(--ds-button-ghost-border);
+  box-shadow: var(--ds-button-ghost-shadow, var(--ds-material-control-shadow));
+}
+
+.rottay-button.rottay-button--modern[data-variant='text'] {
+  background-color: var(--ds-button-text-bg);
+  color: var(--ds-button-text-color);
+  border-color: var(--ds-button-text-border);
+  box-shadow: var(--ds-button-text-shadow, var(--ds-material-control-shadow));
+}
+
+.rottay-button.rottay-button--modern[data-variant='dashed'] {
+  background-color: var(--ds-button-dashed-bg);
+  color: var(--ds-button-dashed-color);
+  border-color: var(--ds-button-dashed-border);
+  border-style: var(--ds-button-dashed-border-style);
+  box-shadow: var(--ds-button-dashed-shadow, var(--ds-material-control-shadow));
+}
+
+.rottay-button.rottay-button--modern[data-variant='danger'] {
+  background-color: var(--ds-button-error-bg);
+  color: var(--ds-button-error-color);
+  border-color: var(--ds-button-error-border);
+  box-shadow: var(--ds-button-error-shadow, var(--ds-material-control-shadow));
+}
+
+.rottay-button.rottay-button--modern[data-variant='success'] {
+  background-color: var(--ds-button-success-bg);
+  color: var(--ds-button-success-color);
+  border-color: var(--ds-button-success-border);
+  box-shadow: var(--ds-button-success-shadow, var(--ds-material-control-shadow));
+}
+
+.rottay-button.rottay-button--modern[data-variant='warning'] {
+  background-color: var(--ds-button-warning-bg);
+  color: var(--ds-button-warning-color);
+  border-color: var(--ds-button-warning-border);
+  box-shadow: var(--ds-button-warning-shadow, var(--ds-material-control-shadow));
+}
+
+.rottay-button.rottay-button--modern[data-variant='info'] {
+  background-color: var(--ds-button-info-bg);
+  color: var(--ds-button-info-color);
+  border-color: var(--ds-button-info-border);
+  box-shadow: var(--ds-button-info-shadow, var(--ds-material-control-shadow));
+}
+
+.rottay-button.rottay-button--modern[data-variant='ai'] {
+  background-color: var(--ds-button-ai-bg);
+  background-image: var(--ds-button-ai-texture);
+  color: var(--ds-button-ai-color);
+  border-color: var(--ds-button-ai-border);
+  box-shadow: var(--ds-button-ai-shadow, var(--ds-material-control-shadow));
+}
+
+.rottay-button.rottay-button--modern[data-variant='link'] {
+  background-color: var(--ds-button-link-bg);
+  color: var(--ds-button-link-color);
+  border-color: var(--ds-button-link-border);
+  box-shadow: var(--ds-button-link-shadow, var(--ds-material-control-shadow));
+  text-decoration: var(--ds-button-link-text-decoration);
+  text-underline-offset: var(--ds-button-link-underline-offset);
+}
+
+.rottay-button.rottay-button--modern[data-gradient='true'] {
+  background-image: var(--ds-button-gradient);
+  background-position: 0% 50%;
+  background-size: 180% 180%;
+}
+
+.rottay-button.rottay-button--modern[data-bordered='true']:is(
+    [data-variant='ghost'],
+    [data-variant='text'],
+    [data-variant='link']
+  ) {
+  border-color: var(--ds-button-bordered-border);
+}
+
+.rottay-button.rottay-button--modern[data-shadow='true']:not([data-state~='hovered']):not(
+    [data-state~='pressed']
+  ) {
+  box-shadow: var(--ds-button-elevated-shadow, var(--ds-material-control-shadow));
+}
+
+/* Quiet-range rest presence (F2, G2). `ghost`/`text` painted fully transparent
+   at rest, so in a monochrome tenant they read as bare text between four
+   cased buttons rather than as controls. Same mechanism already proven for
+   the icon-only well below (currentColor wash, collapses under reduced
+   transparency): one non-tenant, non-hue-dependent signal that every rest
+   variant of this range shares. Kept at the SAME selector weight as the base
+   variant paint rule (0,3,0) and placed immediately after it, so hover,
+   pressed, selected and disabled — each one attribute more specific, or later
+   at an equal weight — still win exactly as before; only the untouched rest
+   case changes. Private provisional socket:
+     owner: primitive/inputs/button (WO-CRA-23 R1 unit 1)
+     producer: this rule
+     fallbackAuthority: color-mix(in srgb, currentColor 7%, transparent) — the
+       icon-only well's own rest value
+     productiveConsumerFamilyIds: [primitive/inputs/button]
+     promotionCriteria: a second quiet-range family (e.g. Segmented) needs the
+       identical currentColor-derived rest wash
+     retirementCriteria: a governed --ds-material-control-* quiet-rest role
+       ships and every private consumer migrates to it in one lot */
+.rottay-button.rottay-button--modern:is([data-variant='ghost'], [data-variant='text']) {
+  background-color: var(
+    --_ds-button-quiet-rest-wash,
+    color-mix(in srgb, currentColor 7%, transparent)
+  );
+}
+
+/* -------------------------------------------------------------------------
+   Interaction states
+
+   Hover paint exists only where the pointer can hover (`@media (hover:
+   hover)`). On touch the behavior core still stamps `hovered` during a tap;
+   the pressed posture below is the tactile equivalent and stays
+   pointer-agnostic. `data-state` can carry hovered+pressed together, so
+   every pressed rule keeps its place AFTER the hover block and wins the
+   cascade — the same order the ungated rules relied on.
+
+   Connected-group children never translate or scale on hover/press: a
+   geometric lift would open a discontinuity at the shared 1px edge, so
+   joined buttons answer with colour, filter and material wash only.
+   ------------------------------------------------------------------------- */
+
+@media (hover: hover) {
+  .rottay-button.rottay-button--modern[data-state~='hovered']:not([data-disabled='true']):not(
+      [data-loading='true']
+    ):not([data-pending='true']):not([data-variant='link']):not([data-variant='text']):not(
+      .rottay-button-group[data-connected='true'] > *
+    ) {
+    transform: var(--ds-button-hover-transform);
+    filter: var(--ds-button-hover-filter);
+  }
+
+  .rottay-button.rottay-button--modern[data-state~='hovered']::before {
+    opacity: calc(
+      var(--ds-button-surface-highlight-hover-opacity) * var(--ds-effect-intensity)
+    );
+  }
+
+  .rottay-button.rottay-button--modern[data-state~='hovered'] [data-part='icon'] {
+    transform: var(--ds-button-icon-hover-transform);
+  }
+
+  .rottay-button.rottay-button--modern[data-variant='primary'][data-state~='hovered'] {
+    background-color: var(--ds-button-primary-bg-hover);
+    color: var(--ds-button-primary-color-hover);
+    border-color: var(--ds-button-primary-border-hover);
+    box-shadow: var(--ds-button-primary-shadow-hover, var(--ds-material-control-shadow-hover));
+  }
+
+  .rottay-button.rottay-button--modern[data-variant='secondary'][data-state~='hovered'] {
+    background-color: var(--ds-button-secondary-bg-hover);
+    color: var(--ds-button-secondary-color-hover);
+    border-color: var(--ds-button-secondary-border-hover);
+    box-shadow: var(--ds-button-secondary-shadow-hover, var(--ds-material-control-shadow-hover));
+  }
+
+  .rottay-button.rottay-button--modern:is([data-variant='default'], [data-variant='outline'])[data-state~='hovered'] {
+    background-color: var(--ds-button-default-bg-hover);
+    color: var(--ds-button-default-color-hover);
+    border-color: var(--ds-button-default-border-hover);
+    box-shadow: var(--ds-button-default-shadow-hover, var(--ds-material-control-shadow-hover));
+  }
+
+  .rottay-button.rottay-button--modern[data-variant='ghost'][data-state~='hovered'] {
+    background-color: var(--ds-button-ghost-bg-hover);
+    color: var(--ds-button-ghost-color-hover);
+    border-color: var(--ds-button-ghost-border-hover);
+    box-shadow: var(--ds-button-ghost-shadow-hover, var(--ds-material-control-shadow-hover));
+  }
+
+  .rottay-button.rottay-button--modern[data-variant='text'][data-state~='hovered'] {
+    background-color: var(--ds-button-text-bg-hover);
+    color: var(--ds-button-text-color-hover);
+    border-color: var(--ds-button-text-border-hover);
+    box-shadow: var(--ds-button-text-shadow-hover, var(--ds-material-control-shadow-hover));
+  }
+
+  .rottay-button.rottay-button--modern[data-variant='dashed'][data-state~='hovered'] {
+    background-color: var(--ds-button-dashed-bg-hover);
+    color: var(--ds-button-dashed-color-hover);
+    border-color: var(--ds-button-dashed-border-hover);
+    box-shadow: var(--ds-button-dashed-shadow-hover, var(--ds-material-control-shadow-hover));
+  }
+
+  .rottay-button.rottay-button--modern[data-variant='danger'][data-state~='hovered'] {
+    background-color: var(--ds-button-error-bg-hover);
+    color: var(--ds-button-error-color-hover);
+    border-color: var(--ds-button-error-border-hover);
+    box-shadow: var(--ds-button-error-shadow-hover, var(--ds-material-control-shadow-hover));
+  }
+
+  .rottay-button.rottay-button--modern[data-variant='success'][data-state~='hovered'] {
+    background-color: var(--ds-button-success-bg-hover);
+    color: var(--ds-button-success-color-hover);
+    border-color: var(--ds-button-success-border-hover);
+    box-shadow: var(--ds-button-success-shadow-hover, var(--ds-material-control-shadow-hover));
+  }
+
+  .rottay-button.rottay-button--modern[data-variant='warning'][data-state~='hovered'] {
+    background-color: var(--ds-button-warning-bg-hover);
+    color: var(--ds-button-warning-color-hover);
+    border-color: var(--ds-button-warning-border-hover);
+    box-shadow: var(--ds-button-warning-shadow-hover, var(--ds-material-control-shadow-hover));
+  }
+
+  .rottay-button.rottay-button--modern[data-variant='info'][data-state~='hovered'] {
+    background-color: var(--ds-button-info-bg-hover);
+    color: var(--ds-button-info-color-hover);
+    border-color: var(--ds-button-info-border-hover);
+    box-shadow: var(--ds-button-info-shadow-hover, var(--ds-material-control-shadow-hover));
+  }
+
+  .rottay-button.rottay-button--modern[data-variant='ai'][data-state~='hovered'] {
+    background-color: var(--ds-button-ai-bg-hover);
+    color: var(--ds-button-ai-color-hover);
+    border-color: var(--ds-button-ai-border-hover);
+    box-shadow: var(--ds-button-ai-shadow-hover, var(--ds-material-control-shadow-hover));
+  }
+
+  .rottay-button.rottay-button--modern[data-variant='link'][data-state~='hovered'] {
+    background-color: var(--ds-button-link-bg-hover);
+    color: var(--ds-button-link-color-hover);
+    border-color: var(--ds-button-link-border-hover);
+    box-shadow: var(--ds-button-link-shadow-hover, var(--ds-material-control-shadow-hover));
+    text-decoration: var(--ds-button-link-text-decoration-hover);
+  }
+
+  .rottay-button.rottay-button--modern[data-gradient='true'][data-state~='hovered'] {
+    background-position: 100% 50%;
+  }
+
+  .rottay-button.rottay-button--modern[data-shadow='true'][data-state~='hovered'] {
+    box-shadow: var(--ds-button-elevated-shadow-hover, var(--ds-material-control-shadow-hover));
+  }
+}
+
+.rottay-button.rottay-button--modern[data-state~='pressed']:not(
+    .rottay-button-group[data-connected='true'] > *
+  ) {
+  transform: var(--ds-button-active-transform);
+  filter: var(--ds-button-active-filter);
+}
+
+.rottay-button.rottay-button--modern[data-state~='pressed']::before {
+  opacity: calc(
+    var(--ds-button-surface-highlight-active-opacity) * var(--ds-effect-intensity)
+  );
+}
+
+.rottay-button.rottay-button--modern[data-state~='pressed'] [data-part='icon'] {
+  transform: var(--ds-button-icon-active-transform);
+}
+
+.rottay-button.rottay-button--modern[data-variant='primary'][data-state~='pressed'] {
+  background-color: var(--ds-button-primary-bg-active);
+  color: var(--ds-button-primary-color-active);
+  border-color: var(--ds-button-primary-border-active);
+  box-shadow: var(--ds-button-primary-shadow-active, var(--ds-material-control-shadow-active));
+}
+
+.rottay-button.rottay-button--modern[data-variant='secondary'][data-state~='pressed'] {
+  background-color: var(--ds-button-secondary-bg-active);
+  color: var(--ds-button-secondary-color-active);
+  border-color: var(--ds-button-secondary-border-active);
+  box-shadow: var(--ds-button-secondary-shadow-active, var(--ds-material-control-shadow-active));
+}
+
+.rottay-button.rottay-button--modern:is([data-variant='default'], [data-variant='outline'])[data-state~='pressed'] {
+  background-color: var(--ds-button-default-bg-active);
+  color: var(--ds-button-default-color-active);
+  border-color: var(--ds-button-default-border-active);
+  box-shadow: var(--ds-button-default-shadow-active, var(--ds-material-control-shadow-active));
+}
+
+.rottay-button.rottay-button--modern[data-variant='ghost'][data-state~='pressed'] {
+  background-color: var(--ds-button-ghost-bg-active);
+  color: var(--ds-button-ghost-color-active);
+  border-color: var(--ds-button-ghost-border-active);
+  box-shadow: var(--ds-button-ghost-shadow-active, var(--ds-material-control-shadow-active));
+}
+
+.rottay-button.rottay-button--modern[data-variant='text'][data-state~='pressed'] {
+  background-color: var(--ds-button-text-bg-active);
+  color: var(--ds-button-text-color-active);
+  border-color: var(--ds-button-text-border-active);
+  box-shadow: var(--ds-button-text-shadow-active, var(--ds-material-control-shadow-active));
+}
+
+.rottay-button.rottay-button--modern[data-variant='dashed'][data-state~='pressed'] {
+  background-color: var(--ds-button-dashed-bg-active);
+  color: var(--ds-button-dashed-color-active);
+  border-color: var(--ds-button-dashed-border-active);
+  box-shadow: var(--ds-button-dashed-shadow-active, var(--ds-material-control-shadow-active));
+}
+
+.rottay-button.rottay-button--modern[data-variant='danger'][data-state~='pressed'] {
+  background-color: var(--ds-button-error-bg-active);
+  color: var(--ds-button-error-color-active);
+  border-color: var(--ds-button-error-border-active);
+  box-shadow: var(--ds-button-error-shadow-active, var(--ds-material-control-shadow-active));
+}
+
+.rottay-button.rottay-button--modern[data-variant='success'][data-state~='pressed'] {
+  background-color: var(--ds-button-success-bg-active);
+  color: var(--ds-button-success-color-active);
+  border-color: var(--ds-button-success-border-active);
+  box-shadow: var(--ds-button-success-shadow-active, var(--ds-material-control-shadow-active));
+}
+
+.rottay-button.rottay-button--modern[data-variant='warning'][data-state~='pressed'] {
+  background-color: var(--ds-button-warning-bg-active);
+  color: var(--ds-button-warning-color-active);
+  border-color: var(--ds-button-warning-border-active);
+  box-shadow: var(--ds-button-warning-shadow-active, var(--ds-material-control-shadow-active));
+}
+
+.rottay-button.rottay-button--modern[data-variant='info'][data-state~='pressed'] {
+  background-color: var(--ds-button-info-bg-active);
+  color: var(--ds-button-info-color-active);
+  border-color: var(--ds-button-info-border-active);
+  box-shadow: var(--ds-button-info-shadow-active, var(--ds-material-control-shadow-active));
+}
+
+.rottay-button.rottay-button--modern[data-variant='ai'][data-state~='pressed'] {
+  background-color: var(--ds-button-ai-bg-active);
+  color: var(--ds-button-ai-color-active);
+  border-color: var(--ds-button-ai-border-active);
+  box-shadow: var(--ds-button-ai-shadow-active, var(--ds-material-control-shadow-active));
+}
+
+.rottay-button.rottay-button--modern[data-variant='link'][data-state~='pressed'] {
+  background-color: var(--ds-button-link-bg-active);
+  color: var(--ds-button-link-color-active);
+  border-color: var(--ds-button-link-border-active);
+  box-shadow: var(--ds-button-link-shadow-active, var(--ds-material-control-shadow-active));
+}
+
+/* -------------------------------------------------------------------------
+   Quiet destructive tone (data-tone='danger')
+
+   The engine stamps `data-tone='danger'` when the caller asks for `danger`
+   on an explicitly QUIET variant (ghost, text, link, default, outline,
+   dashed): the consequence signal stays, the volume drops. A destructive
+   toolbar action reads as red ink and a red-tempered wash on interaction
+   instead of the solid error fill, which stays reserved for the primary
+   destructive commitment. Every value derives from the variant's governed
+   error channels (600/700/800 ramp steps already consumed by the solid
+   danger button) — no new paint authority, no color literals. The rules sit
+   after every variant block and carry one more attribute, so they win rest,
+   hover and pressed without touching the solid danger recipe. Disabled is
+   excluded explicitly: inert always dims to the disabled tokens.
+   ------------------------------------------------------------------------- */
+
+.rottay-button.rottay-button--modern:is(
+    [data-variant='ghost'],
+    [data-variant='text'],
+    [data-variant='link']
+  )[data-tone='danger']:not([data-disabled='true']) {
+  color: var(--ds-button-error-border);
+}
+
+.rottay-button.rottay-button--modern:is(
+    [data-variant='default'],
+    [data-variant='outline'],
+    [data-variant='dashed']
+  )[data-tone='danger']:not([data-disabled='true']) {
+  color: var(--ds-button-error-border);
+  border-color: var(--ds-button-error-border);
+}
+
+@media (hover: hover) {
+  .rottay-button.rottay-button--modern:is(
+      [data-variant='ghost'],
+      [data-variant='text'],
+      [data-variant='link'],
+      [data-variant='default'],
+      [data-variant='outline'],
+      [data-variant='dashed']
+    )[data-tone='danger'][data-state~='hovered']:not([data-disabled='true']) {
+    background-color: color-mix(in srgb, var(--ds-button-error-bg) 8%, transparent);
+    color: var(--ds-button-error-border-hover);
+  }
+
+  .rottay-button.rottay-button--modern:is(
+      [data-variant='default'],
+      [data-variant='outline'],
+      [data-variant='dashed']
+    )[data-tone='danger'][data-state~='hovered']:not([data-disabled='true']) {
+    border-color: var(--ds-button-error-border-hover);
+  }
+}
+
+.rottay-button.rottay-button--modern:is(
+    [data-variant='ghost'],
+    [data-variant='text'],
+    [data-variant='link'],
+    [data-variant='default'],
+    [data-variant='outline'],
+    [data-variant='dashed']
+  )[data-tone='danger'][data-state~='pressed']:not([data-disabled='true']) {
+  background-color: color-mix(in srgb, var(--ds-button-error-bg) 14%, transparent);
+  color: var(--ds-button-error-border-active);
+}
+
+.rottay-button.rottay-button--modern:is(
+    [data-variant='default'],
+    [data-variant='outline'],
+    [data-variant='dashed']
+  )[data-tone='danger'][data-state~='pressed']:not([data-disabled='true']) {
+  border-color: var(--ds-button-error-border-active);
+}
+
+/* -------------------------------------------------------------------------
+   Selected / current posture (toggle clusters and current actions)
+
+   Before this block an `aria-pressed` toggle or an `aria-current` action had
+   NO persistent paint: the only stateful feedback was the transient pressed
+   frame, so a selected filter or an active tool was indistinguishable at
+   rest. Quiet variants take the system's selected-well recipe — the same
+   tint-8 wash + brand-tempered border + brand ink the filter pills already
+   use, so a selected Button and a selected pill read as one grammar. Solid
+   variants keep their fill and take an inset keyline drawn in currentColor
+   (the on-fill ink), which survives every tenant fill without a per-variant
+   shadow list. Everything keys on semantic attributes (aria-pressed,
+   aria-current, data-state selected): same DOM, zero tenant knowledge, and
+   forced-colors maps it to the SelectedItem pair below.
+   ------------------------------------------------------------------------- */
+
+.rottay-button.rottay-button--modern:is(
+    [data-variant='default'],
+    [data-variant='outline'],
+    [data-variant='dashed'],
+    [data-variant='secondary'],
+    [data-variant='ghost']
+  ):is([aria-pressed='true'], [aria-current='true'], [data-state~='selected']):not(
+    [data-disabled='true']
+  ) {
+  background-color: var(
+    --_ds-button-selected-bg,
+    var(--ds-button-default-bg-active)
+  );
+  border-color: color-mix(in srgb, var(--ds-color-primary) 26%, var(--ds-button-default-border));
+  color: var(--ds-color-primary);
+}
+
+.rottay-button.rottay-button--modern:is(
+    [data-variant='text'],
+    [data-variant='link']
+  ):is([aria-pressed='true'], [aria-current='true'], [data-state~='selected']):not(
+    [data-disabled='true']
+  ) {
+  color: var(--ds-color-primary);
+}
+
+.rottay-button.rottay-button--modern:is(
+    [data-variant='primary'],
+    [data-variant='danger'],
+    [data-variant='success'],
+    [data-variant='warning'],
+    [data-variant='info'],
+    [data-variant='ai']
+  ):is([aria-pressed='true'], [aria-current='true'], [data-state~='selected']):not(
+    [data-disabled='true']
+  ) {
+  outline: var(--ds-button-border-width-focus) solid currentColor;
+  outline-offset: calc(
+    -1 * (var(--ds-button-border-width-focus) + var(--ds-button-border-width))
+  );
+}
+
+.rottay-button.rottay-button--modern[data-variant]:is(
+    [data-state~='focus-visible'],
+    :focus-visible
+  ) {
+  outline: var(--ds-button-border-width-focus) solid transparent;
+  outline-offset: var(--ds-button-focus-ring-offset);
+  box-shadow: var(--ds-button-focus-ring);
+}
+
+.rottay-button.rottay-button--modern[data-pulse='true']:not([data-disabled='true']):not(
+    [data-loading='true']
+  ):not([data-pending='true']) {
+  animation: ds-button-pulse-modern var(--ds-motion-attention)
+    var(--ds-motion-ease-in-out) var(--ds-button-attention-iteration-count);
+}
+
+@keyframes ds-button-pulse-modern {
+  0%,
+  100% {
+    box-shadow: var(--ds-button-pulse-shadow-start);
+  }
+
+  50% {
+    box-shadow: var(--ds-button-pulse-shadow-end);
+  }
+}
+
+/* feedback.press recipe owns the press timing policy, including reduced motion. */
+.rottay-button.rottay-button--modern[data-recipe='feedback.press'][data-recipe-state='animated'] {
+  --ds-button-transition-duration: var(--ds-recipe-enter);
+  --ds-button-transition-timing: var(--ds-recipe-curve);
+}
+.rottay-button.rottay-button--modern[data-recipe='feedback.press'][data-recipe-state='final'] {
+  transition: none;
+}
+
+/* -------------------------------------------------------------------------
+   Inert, touch and accessibility modes
+   ------------------------------------------------------------------------- */
+
+.rottay-button.rottay-button--modern[data-disabled='true'] {
+  cursor: var(--ds-button-disabled-cursor);
+  background: var(--ds-button-disabled-bg);
+  color: var(--ds-button-disabled-color);
+  border-color: var(--ds-button-disabled-border-color);
+  box-shadow: var(--ds-button-disabled-shadow, var(--ds-material-control-shadow));
+  opacity: var(--ds-button-disabled-opacity);
+  transform: none;
+  filter: none;
+}
+
+.rottay-button.rottay-button--modern[data-disabled='true']::before {
+  opacity: 0;
+}
+
+.rottay-button.rottay-button--modern:is([data-loading='true'], [data-pending='true']) {
+  cursor: var(--ds-button-loading-cursor);
+}
+
+/* Coarse-pointer floors. Hover paint needs no neutralisation here: it only
+   exists inside the `@media (hover: hover)` block above, and the pressed
+   posture is the tactile feedback on these devices. */
+@media (hover: none), (pointer: coarse) {
+  .rottay-button.rottay-button--modern[data-variant] {
+    min-block-size: var(--ds-button-touch-target-min);
+  }
+
+  /* Icon-only and circle buttons pin their inline size, so the 44px block
+     minimum alone would squash them into ovals on coarse pointers. */
+  .rottay-button.rottay-button--modern:is(
+      [data-icon-only='true'],
+      [data-shape='circle']
+    ) {
+    min-inline-size: var(--ds-button-touch-target-min);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rottay-button.rottay-button--modern[data-variant],
+  .rottay-button.rottay-button--modern [data-part='icon'] {
+    transition: none;
+  }
+
+  .rottay-button.rottay-button--modern[data-pulse='true'],
+  .rottay-button.rottay-button--modern [data-part='spinner'] {
+    animation: none;
+  }
+}
+
+/* Reduced transparency (tooltip.css idiom): the optical sheen is the only
+   translucent layer this control owns. Users who request reduced
+   transparency get the flat posture — the decoration channel resolves to
+   none and the hierarchy rides the opaque fill, the tenant's edge and the
+   state channels, which are solid already. State opacity rules on ::before
+   keep running harmlessly against an empty layer. */
+@media (prefers-reduced-transparency: reduce) {
+  .rottay-button.rottay-button--modern[data-variant] {
+    --ds-button-surface-highlight: none;
+  }
+
+  /* The quiet icon-only rest well is translucent too: it collapses with the
+     stack and the control reads by its variant channels. */
+  .rottay-button.rottay-button--modern:is(
+      [data-variant='ghost'],
+      [data-variant='text'],
+      [data-variant='link']
+    )[data-icon-only='true'] {
+    --_ds-button-icon-plate-bg: none;
+  }
+
+  /* The quiet-range rest wash (F2, G2) is the same translucent stack. */
+  .rottay-button.rottay-button--modern:is([data-variant='ghost'], [data-variant='text']) {
+    --_ds-button-quiet-rest-wash: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .rottay-button.rottay-button--modern[data-variant] {
+    forced-color-adjust: auto;
+    background: ButtonFace;
+    color: ButtonText;
+    border-color: ButtonText;
+    box-shadow: none;
+  }
+
+  .rottay-button.rottay-button--modern[data-variant]::before {
+    display: none;
+  }
+
+  .rottay-button.rottay-button--modern[data-variant]:is(
+      [data-state~='focus-visible'],
+      :focus-visible
+    ) {
+    outline: var(--ds-button-border-width-focus) solid Highlight;
+    outline-offset: var(--ds-button-focus-ring-offset);
+  }
+
+  .rottay-button.rottay-button--modern[data-disabled='true'] {
+    color: GrayText;
+    border-color: GrayText;
+  }
+
+  /* Selected/current survives the system palette: the toggle reads as a
+     selected item, not as a painted-over button. The inset keyline on solid
+     variants resolves to SelectedItemText through currentColor. */
+  .rottay-button.rottay-button--modern:is(
+      [aria-pressed='true'],
+      [aria-current='true'],
+      [data-state~='selected']
+    ) {
+    background: SelectedItem;
+    color: SelectedItemText;
+    border-color: SelectedItemText;
+  }
+
+  /* Quiet destructive keeps a non-color consequence signal when semantic
+     reds collapse: a heavier frame marks the action as destructive. The
+     border-box sizing keeps the control's outer geometry unchanged. */
+  .rottay-button.rottay-button--modern[data-tone='danger'] {
+    border-width: var(--ds-button-border-width-focus);
+  }
+
+  .rottay-button.rottay-button--modern [data-part='spinner'] {
+    color: ButtonText;
+  }
+}
+
+@media print {
+  .rottay-button.rottay-button--modern[data-variant] {
+    background: transparent;
+    color: CanvasText;
+    border-color: CanvasText;
+    box-shadow: none;
+  }
+}

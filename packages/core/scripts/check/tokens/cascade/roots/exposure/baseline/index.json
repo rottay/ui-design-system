@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "law": "La exposicion de cada raiz del catalogo de cascada, pineada como snapshot. gap es decrease-only: nunca crece, y cuando baja hay que achicar este archivo a proposito. EXCEPCION ESCRITA (cohorte 2A, 2026-08-27, adjudicacion DT §3.1): el vocabulario se mide sobre las raices NO REFINADAS. Una raiz-hija del eje paso (tier.<nivel>.<fg|border>.<paso>) hereda el exposure de su padre porque es la MISMA decision indexada mas fino, no una perilla faltante nueva; contarlas por separado inflaria el backlog sin que la deuda crezca -- la patologia de collapsesLegacy. Medido cuando la ley se escribio: refinar los dos padres gap (tier.page.border, tier.raised.border) habria llevado gap de 8 a 12 sin aparecer una sola perilla nueva. La excepcion es de CONTEO agregado: las tres leyes del gate se siguen evaluando sobre TODAS las raices, y una hija con exposure distinto del de su padre se sigue viendo. Los contadores no se re-anclan: con la ley siguen en 28/28/8.",
+  "producedOn": "F1.3",
+  "counts": {
+    "tenant-dial": 32,
+    "internal-head": 28,
+    "gap": 4
+  },
+  "reading": "De las 64 raices NO REFINADAS, 32 tienen control o dial declarado, 28 son cabezas internas correctas sin perilla y 4 son huecos de perilla. P0 (2026-08-28) abrio el dial publico Standard `palette.status-seeds` y las 4 raices ramp.seed.{error,info,success,warning} pasaron de gap a tenant-dial: gap BAJA 8->4, que es la direccion legal del trinquete. `ramp.seed.neutral` NO acompanio el movimiento y sigue gap: no tiene semilla en ninguna via, asi que un dial suyo seria una perilla que no mueve nada — su adjudicacion subio al owner. RECOMPUTADO de las filas en la cohorte 2A (2026-08-27). El catalogo tiene ademas 36 raices REFINADAS del eje paso, excluidas de este vocabulario por adjudicacion del DT: una hija hereda el exposure de su padre porque es la MISMA decision indexada mas fino, y contarlas por separado inflaria el backlog de perillas faltantes sin que la deuda crezca. Su cifra viva es su poblacion en artifacts/generated/manifest/cascade/membership/index.json; collapsesLegacy vale cero en ellas porque es censo fechado de 2026-08-18. El grueso de la pintura NO deberia ser perilla nunca: deberia ser cascada. Ese sigue siendo el hallazgo estructural.",
+  "refinedRootsExcluded": 36
+}

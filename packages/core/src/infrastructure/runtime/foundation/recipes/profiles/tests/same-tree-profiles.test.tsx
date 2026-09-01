@@ -8,10 +8,10 @@ import React from 'react';
 import { cleanup, render } from '@testing-library/react';
 import { afterEach, describe, expect, it } from 'vitest';
 
-import ModernButton from '@/ui/primitives/inputs/Button/engines/modern';
-import ModernCard from '@/ui/primitives/display/Card/engines/modern';
-import ModernTag from '@/ui/primitives/display/Tag/engines/modern';
-import ModernTabs from '@/ui/primitives/navigation/Tabs/engines/modern';
+import ModernButton from '@/components/primitives/inputs/button/engines/modern';
+import ModernCard from '@/components/primitives/display/card/engines/modern';
+import ModernTag from '@/components/primitives/display/tag/engines/modern';
+import ModernTabs from '@/components/primitives/navigation/tabs/engines/modern';
 import { RecipeProfileProvider } from '../index';
 
 afterEach(cleanup);

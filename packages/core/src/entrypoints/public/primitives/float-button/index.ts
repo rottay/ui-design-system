@@ -1,3 +1,3 @@
 "use client";
 
-export { FloatButton } from "../../../../ui/primitives/navigation/FloatButton";
+export { FloatButton } from "../../../../components/primitives/navigation/float-button";

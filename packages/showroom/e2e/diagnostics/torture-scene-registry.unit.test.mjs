@@ -88,8 +88,8 @@ test('each scene route statically imports exactly the sections its declared flag
     overlayfb: 'overlay-feedback',
     overlay: 'overlay',
     nav: 'nav',
-    display1: 'display-1',
-    display2: 'display-2',
+    mediaStates: 'media-states',
+    dataDisplayStates: 'data-display-states',
     layout: 'layout',
     forms: 'forms',
     record: 'record',
@@ -99,9 +99,9 @@ test('each scene route statically imports exactly the sections its declared flag
     dashboard: 'dashboard',
     communication: 'communication',
     workspace: 'workspace-chrome',
-    miscH2: 'misc-h2',
-    ckH1: 'ck-h1',
-    ckE: 'ck-e',
+    applicationSurfaces: 'application-surfaces',
+    tenantBranding: 'tenant-branding',
+    visualizations: 'visualizations',
   };
 
   for (const [sceneId, flags] of Object.entries(scenes)) {

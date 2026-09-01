@@ -1,3 +1,3 @@
 "use client";
 
-export { Spinner } from "../../../../ui/primitives/feedback/Spinner";
+export { Spinner } from "../../../../components/primitives/feedback/spinner";

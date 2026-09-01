@@ -1,4 +1,4 @@
-import { SurfacesLongTailFixture } from '@/components/surfaces-long-tail-fixture';
+import { SurfacesLongTailFixture } from '@/components/fixtures/surfaces/long-tail';
 import { TortureFirstPaint, type TortureRouteProps } from '@/components/torture-first-paint';
 import { readQueryValue } from '@/components/torture-tenant';
 import { TortureFrame } from '@/components/torture-sections/frame';
@@ -17,8 +17,8 @@ import { StatusFbStates } from '@/components/torture-sections/status-feedback';
 import { OverlayFbStates } from '@/components/torture-sections/overlay-feedback';
 import { OverlayStates } from '@/components/torture-sections/overlay';
 import { NavFbStates } from '@/components/torture-sections/nav';
-import { Display1States } from '@/components/torture-sections/display-1';
-import { Display2States } from '@/components/torture-sections/display-2';
+import { MediaStates } from '@/components/torture-sections/media-states';
+import { DataDisplayStates } from '@/components/torture-sections/data-display-states';
 import { LayoutStates } from '@/components/torture-sections/layout';
 import { FormsFbStates } from '@/components/torture-sections/forms';
 import { RecordFbStates } from '@/components/torture-sections/record';
@@ -28,9 +28,9 @@ import { NavigationPatternsFbStates } from '@/components/torture-sections/naviga
 import { DashboardWidgetsStates } from '@/components/torture-sections/dashboard';
 import { CommunicationFbStates } from '@/components/torture-sections/communication';
 import { WorkspaceChromeFbStates } from '@/components/torture-sections/workspace-chrome';
-import { MiscH2FbStates } from '@/components/torture-sections/misc-h2';
-import { CkH1States } from '@/components/torture-sections/ck-h1';
-import { CkEStates } from '@/components/torture-sections/ck-e';
+import { ApplicationSurfaceStates } from '@/components/torture-sections/application-surfaces';
+import { TenantBrandingStates } from '@/components/torture-sections/tenant-branding';
+import { VisualizationStates } from '@/components/torture-sections/visualizations';
 
 // ---------------------------------------------------------------------------
 // Whitelabel torture probe (WO-GAT-03 hostile-tenant whitelabel proof)
@@ -94,8 +94,8 @@ export default async function WhitelabelTorturePage({ searchParams }: TortureRou
         {active.has('overlayfb') && <OverlayFbStates />}
         {active.has('overlay') && <OverlayStates />}
         {active.has('nav') && <NavFbStates />}
-        {active.has('display1') && <Display1States />}
-        {active.has('display2') && <Display2States />}
+        {active.has('mediaStates') && <MediaStates />}
+        {active.has('dataDisplayStates') && <DataDisplayStates />}
         {active.has('layout') && <LayoutStates />}
         {active.has('forms') && <FormsFbStates />}
         {active.has('record') && <RecordFbStates />}
@@ -105,9 +105,9 @@ export default async function WhitelabelTorturePage({ searchParams }: TortureRou
         {active.has('dashboard') && <DashboardWidgetsStates />}
         {active.has('communication') && <CommunicationFbStates />}
         {active.has('workspace') && <WorkspaceChromeFbStates />}
-        {active.has('miscH2') && <MiscH2FbStates />}
-        {active.has('ckH1') && <CkH1States />}
-        {active.has('ckE') && <CkEStates />}
+        {active.has('applicationSurfaces') && <ApplicationSurfaceStates />}
+        {active.has('tenantBranding') && <TenantBrandingStates />}
+        {active.has('visualizations') && <VisualizationStates />}
         {active.has('longTail') && <SurfacesLongTailFixture />}
       </TortureFrame>
     </>

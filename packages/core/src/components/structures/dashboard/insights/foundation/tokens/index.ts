@@ -1,0 +1,83 @@
+export const METRIC_PANEL_BG = 'var(--ds-signal-card-bg, var(--ds-premium-card-bg, var(--ds-color-bg-secondary)))';
+export const METRIC_PANEL_BORDER = 'var(--ds-signal-card-border, var(--ds-premium-card-border, var(--ds-color-border-secondary)))';
+export const METRIC_PANEL_BORDER_HOVER = 'var(--ds-signal-card-border-hover, var(--ds-color-primary-200))';
+export const METRIC_PANEL_RADIUS = 'var(--ds-signal-card-radius, var(--ds-premium-card-radius, var(--ds-radius-lg, 12px)))';
+export const METRIC_PANEL_SHADOW = 'var(--ds-signal-card-shadow, var(--ds-premium-card-shadow, none))';
+export const METRIC_PANEL_SHADOW_HOVER = 'var(--ds-signal-card-shadow-hover, var(--ds-signal-card-shadow, none))';
+export const METRIC_PANEL_SECTION_BG = 'var(--ds-signal-card-section-bg, var(--ds-color-bg-primary))';
+export const METRIC_PANEL_SECTION_ALT_BG = 'var(--ds-signal-card-section-alt-bg, var(--ds-color-bg-secondary))';
+export const METRIC_PANEL_ACCENT = 'var(--ds-signal-card-accent, var(--ds-color-primary))';
+export const METRIC_PANEL_TITLE_COLOR = 'var(--ds-signal-card-title-color, var(--ds-color-text-primary))';
+export const METRIC_PANEL_BODY_COLOR = 'var(--ds-signal-card-body-color, var(--ds-color-text-muted))';
+export const METRIC_PANEL_ICON_BG = 'var(--ds-signal-card-icon-bg, var(--ds-metric-card-icon-bg, var(--ds-color-primary-100)))';
+export const METRIC_PANEL_ICON_BORDER = 'var(--ds-signal-card-icon-border, var(--ds-metric-card-icon-border, var(--ds-color-primary-200)))';
+export const METRIC_PANEL_BADGE_BG = 'var(--ds-signal-card-badge-bg, var(--ds-color-success-100))';
+export const METRIC_PANEL_BADGE_BORDER = 'var(--ds-signal-card-badge-border, var(--ds-color-success-200))';
+export const METRIC_PANEL_BADGE_COLOR = 'var(--ds-signal-card-badge-color, var(--ds-color-success))';
+
+export const METRIC_CARD_BG = 'var(--ds-metric-card-bg, var(--ds-compact-card-bg, var(--ds-premium-card-bg, var(--ds-color-bg-primary))))';
+export const METRIC_CARD_BORDER = 'var(--ds-metric-card-border, var(--ds-compact-card-border, var(--ds-premium-card-border, var(--ds-color-border-secondary))))';
+export const METRIC_CARD_BORDER_HOVER = 'var(--ds-metric-card-border-hover, var(--ds-signal-card-border-hover, var(--ds-color-primary-200)))';
+export const METRIC_CARD_RADIUS = 'var(--ds-metric-card-radius, var(--ds-compact-card-radius, var(--ds-radius-md, 8px)))';
+export const METRIC_CARD_PADDING = 'var(--ds-metric-card-padding, var(--ds-compact-card-padding, 10px))';
+export const METRIC_CARD_MIN_HEIGHT = 'var(--ds-metric-card-min-height, var(--ds-compact-card-min-height, 118px))';
+export const METRIC_CARD_SHADOW = 'var(--ds-metric-card-shadow, var(--ds-compact-card-shadow, none))';
+export const METRIC_CARD_SHADOW_HOVER = 'var(--ds-metric-card-shadow-hover, var(--ds-metric-card-shadow, var(--ds-signal-card-shadow-hover, none)))';
+export const METRIC_CARD_SHEEN = 'var(--ds-metric-card-sheen, var(--ds-shell-shimmer-faint, linear-gradient(90deg, transparent, color-mix(in srgb, var(--ds-color-text-primary) 8%, transparent), transparent)))';
+export const METRIC_CARD_ICON_BG = 'var(--ds-metric-card-icon-bg, var(--ds-signal-card-icon-bg, var(--ds-color-primary-100)))';
+export const METRIC_CARD_ICON_BORDER = 'var(--ds-metric-card-icon-border, var(--ds-signal-card-icon-border, var(--ds-color-primary-200)))';
+export const METRIC_CARD_ICON_COLOR = 'var(--ds-metric-card-icon-color, var(--ds-signal-card-accent, var(--ds-color-primary)))';
+export const METRIC_CARD_LABEL_COLOR = 'var(--ds-metric-card-label-color, var(--ds-color-text-muted))';
+export const METRIC_CARD_VALUE_COLOR = 'var(--ds-metric-card-value-color, var(--ds-color-text-primary))';
+export const METRIC_CARD_VALUE_HOVER_COLOR = 'var(--ds-metric-card-value-color-hover, var(--ds-signal-card-accent, var(--ds-color-primary)))';
+export const METRIC_CARD_NUMBER_MIN_WIDTH = 'var(--ds-metric-card-number-min-width, var(--ds-premium-card-number-min-width, 4ch))';
+export const METRIC_CARD_NUMBER_FONT_VARIANT = 'var(--ds-metric-card-number-font-variant, var(--ds-premium-card-number-font-variant, tabular-nums))';
+export const METRIC_CARD_TREND_COLOR = 'var(--ds-metric-card-trend-color, var(--ds-color-success))';
+export const METRIC_CARD_TREND_ERROR_COLOR = 'var(--ds-metric-card-trend-color-error, var(--ds-color-error))';
+export const METRIC_CARD_TREND_ERROR_BG = 'var(--ds-metric-card-trend-error-bg, color-mix(in srgb, var(--ds-metric-card-trend-color-error, var(--ds-color-error)) 12%, var(--ds-signal-card-section-bg, var(--ds-color-bg-primary))))';
+export const METRIC_CARD_TREND_ERROR_BORDER = 'var(--ds-metric-card-trend-error-border, color-mix(in srgb, var(--ds-metric-card-trend-color-error, var(--ds-color-error)) 24%, var(--ds-signal-card-border, var(--ds-color-border-secondary))))';
+export const METRIC_CARD_TREND_WARNING_COLOR = 'var(--ds-metric-card-trend-color-warning, var(--ds-color-warning))';
+export const METRIC_CARD_METER_TRACK = 'var(--ds-metric-card-meter-track, var(--ds-color-bg-tertiary))';
+export const METRIC_CARD_METER_TRACK_BORDER = 'var(--ds-metric-card-meter-track-border, transparent)';
+export const METRIC_CARD_METER_HEIGHT = 'var(--ds-metric-card-meter-height, 6px)';
+export const METRIC_CARD_METER_FILL = 'var(--ds-metric-card-meter-fill, linear-gradient(90deg, var(--ds-color-primary), var(--ds-color-success)))';
+export const METRIC_CARD_METER_FILL_SUCCESS = 'var(--ds-metric-card-meter-fill-success, var(--ds-metric-card-meter-fill, linear-gradient(90deg, var(--ds-color-primary), var(--ds-color-success))))';
+export const METRIC_CARD_METER_FILL_WARNING = 'var(--ds-metric-card-meter-fill-warning, linear-gradient(90deg, var(--ds-color-warning), var(--ds-color-error)))';
+export const METRIC_CARD_METER_FILL_ERROR = 'var(--ds-metric-card-meter-fill-error, linear-gradient(90deg, var(--ds-color-warning), var(--ds-color-error)))';
+export const METRIC_MONO_FONT = 'var(--ds-font-family-mono, monospace)';
+/**
+ * KPI figure voice (C-08/C1): the value rides the tenant's NUMERIC type role
+ * instead of a hardcoded mono face — BitHire renders its authored grotesk
+ * tabular, an editorial tenant its display face, the neutral default its base
+ * family (all three resolve `--ds-type-numeric-font-family` in shipped
+ * themes). The mono chain stays as the exact pre-C1 fallback for bundles
+ * where the numeric role is undeclared. Tabular alignment is orthogonal and
+ * stays on `--ds-metric-card-number-font-variant`.
+ */
+export const METRIC_VALUE_FONT =
+  'var(--ds-type-numeric-font-family, var(--ds-font-family-mono, monospace))';
+/**
+ * Eyebrow case grammar (overline → label channel, the C-03/C-12 chain): a
+ * technical profile keeps the uppercase render (the fallback is the exact
+ * pre-C1 literal), an editorial one renders its authored label case. Mono
+ * family and tracking stay family-local per the C-12 label recipe.
+ */
+export const METRIC_LABEL_TEXT_TRANSFORM =
+  'var(--ds-page-header-eyebrow-text-transform, var(--ds-typography-label-transform, uppercase))';
+
+/**
+ * Splits a display value like "18d" / "4.8%" into a countable number, its
+ * decimal precision and its suffix. The counter animates the number; the
+ * decimals are preserved (the parseInt + Math.floor path truncated decimal
+ * metrics permanently — "4.8" rendered as "4"). Rows/minimal keep their own
+ * verbatim local copies from the earlier pass; this shared copy serves cards
+ * and chart. Unification candidate for independent code audit (one helper, four call sites).
+ */
+export function parseMetricValue(value: string): { numericValue: number; decimals: number; suffix: string } {
+  const numericText = value.replace(/[^0-9.-]/g, '');
+  return {
+    numericValue: parseFloat(numericText) || 0,
+    decimals: (numericText.split('.')[1] ?? '').length,
+    suffix: value.replace(/[0-9.-]/g, ''),
+  };
+}

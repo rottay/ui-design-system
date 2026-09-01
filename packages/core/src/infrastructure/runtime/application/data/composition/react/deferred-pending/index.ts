@@ -31,7 +31,7 @@ import { useMotionPreference } from '@/infrastructure/runtime/motion';
 
 // Fallbacks used before the document is reachable (SSR, and any host that does
 // not load the DS token sheet). They must equal the token values in
-// foundation/tokens/css/foundation/themes/default.css.
+// foundation/tokens/css/foundation/themes/default/index.css.
 const FALLBACK_SPINNER_DELAY_MS = 150;
 const FALLBACK_SKELETON_AFTER_MS = 500;
 

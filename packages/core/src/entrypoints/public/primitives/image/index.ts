@@ -1,3 +1,3 @@
 "use client";
 
-export { Image } from "../../../../ui/primitives/display/Image";
+export { Image } from "../../../../components/primitives/display/image";

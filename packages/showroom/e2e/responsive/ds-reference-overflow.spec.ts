@@ -6,7 +6,7 @@ import { test, expect, type Page } from '@playwright/test';
 // WO-CRA-23 — responsive overflow gate for the DS reference lab.
 //
 // Closes the hard veto recorded at
-// `packages/core/test-artifacts/quality-evidence/wo-cra-23/R1/receipts/
+// `packages/core/artifacts/quality/programs/modern-rescue/checkpoints/reference-grammar/button-action-cluster/2026-08-05/receipts/
 //  cohort-1-canary-scores.json#currentOpenDefects`:
 //
 //   "RESPONSIVE OVERFLOW (hard veto): scrollWidth 332 vs 320 and 280 viewports,
@@ -51,8 +51,8 @@ import { test, expect, type Page } from '@playwright/test';
 //                   covered at their default case only (see COVERAGE GAP).
 //
 // COVERAGE GAP, reported as a number every run rather than hidden in prose:
-// `overlay-edge` (5), `r2-behavior` (90), `r2-closure` (17), `r2-closure-b` (4),
-// `r2-elevated` (19), `r2-product` (7) and `r3-evidence` (15) declare their case
+// `overlay-edge` (5), `component-behaviors` (90), `primitive-state-repairs` (17), `primitive-anatomy` (4),
+// `primitive-complex-states` (19), `primitive-interactions` (7) and `pattern-behaviors` (15) declare their case
 // lists inline and render one of them by default. A bare visit to those is a
 // real page, so this sweep measures that default and nothing else. The first
 // test prints a `PARTIAL <root>/<scene>: n of m cases measured` line for every

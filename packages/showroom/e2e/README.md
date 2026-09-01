@@ -27,7 +27,7 @@ defect are indistinguishable there.
 `overflow-baseline.json` carries two decrease-only lists — `overflowing` (one
 entry per capture cell whose document scrolls horizontally at 360px) and
 `touchTargets` (one per interactive part under 44x44 on a coarse pointer).
-`node packages/core/scripts/engine/token-audit/index.mjs --check` reads the length of
+`node packages/core/scripts/check/engine/tokens/audit/index.mjs --check` reads the length of
 `overflowing` as its `responsive.overflowCells` ratchet, so the count cannot
 grow even if this spec is skipped. Regenerate with
 `RESPONSIVE_UPDATE_BASELINE=1`, which rewrites the file to the intersection with
@@ -145,7 +145,7 @@ run test:whitelabel`, which rewrites the file to the INTERSECTION of the old
 baseline and the current run (fixed entries drop out, new ones can never be
 added).
 
-Screenshots land in `test-artifacts/gates/gat-03/` on every run. They are
+Screenshots land in `packages/core/artifacts/quality/captures/visual-regressions/whitelabel/` on every run. They are
 informational — a human looks at them to confirm the torture tenant is legibly
 themed and the RTL column mirrors without clipping. They are deliberately NOT
 pixel-diffed: a garish fixture is a probe target, not visual canon.

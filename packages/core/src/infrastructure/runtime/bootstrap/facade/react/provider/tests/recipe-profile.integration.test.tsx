@@ -15,7 +15,7 @@ import {
   TENANT_THEME_ARTIFACT_VERTICAL_ATTRIBUTE,
   resetVisualAuthorityDiagnostics,
 } from '@/infrastructure/runtime/theming';
-import ModernButton from '@/ui/primitives/inputs/Button/engines/modern';
+import ModernButton from '@/components/primitives/inputs/button/engines/modern';
 import { DesignSystemProvider } from '..';
 
 const ARTIFACT = compileTenantThemeConfig(

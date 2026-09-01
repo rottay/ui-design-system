@@ -1,6 +1,6 @@
 'use client';
 
-import { ShowroomLink as Link } from '@/components/showroom-link';
+import { ShowroomLink as Link } from '@/components/navigation/link';
 import {
   Badge,
   Box,

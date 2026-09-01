@@ -1,10 +1,10 @@
-import { ShowroomLink as Link } from '@/components/showroom-link';
+import { ShowroomLink as Link } from '@/components/navigation/link';
 import { Badge, Box, Card, Flex, Stack, Text } from '@rottay/design-system';
 import {
   SHOWROOM_SURFACES,
   mixWithCanvas,
   mixWithSurface,
-} from '@/components/playground/surface-tokens';
+} from '@/components/playground/tokens/surfaces';
 import {
   CodeBlock,
   PropTable,

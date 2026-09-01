@@ -1,0 +1,140 @@
+{
+  "schemaVersion": 1,
+  "observedAt": "2026-08-30",
+  "statuses": {
+    "generated-current": "Generated output whose producer and freshness checks pass on the current worktree.",
+    "historical-integrity": "Historical evidence whose artifact bytes remain intact but which does not certify the current source tree.",
+    "historical-stale": "Historical evidence with stale source bindings, paths or seals; it must not be used as current acceptance evidence.",
+    "archived": "Retained for traceability only; it is not part of the executable quality system.",
+    "incomplete": "Unreceipted or incomplete material retained only to avoid silent evidence loss."
+  },
+  "entries": [
+    {
+      "id": "generated-css-bundles",
+      "kind": "generated-output",
+      "subject": "compiled design-system CSS",
+      "path": "artifacts/generated/css",
+      "status": "generated-current",
+      "sourceCommit": null,
+      "seal": "producer-and-freshness-gates",
+      "retention": "replace on successful CSS build",
+      "consumers": [
+        "package build and distribution",
+        "manifest dependency analysis",
+        "quality gates"
+      ]
+    },
+    {
+      "id": "control-cascade-computed-static-db",
+      "kind": "cascade-proof-collection",
+      "subject": "Standard and Pro control propagation",
+      "path": "artifacts/quality/programs/modern-rescue/cascade-proofs/controls",
+      "status": "historical-stale",
+      "sourceCommit": null,
+      "seal": "117 receipts have stale source digests and legacy artifact paths",
+      "retention": "retain until each control is rerun or explicitly superseded",
+      "consumers": [
+        "tenant-customization manifest evidence bindings",
+        "Modern Rescue historical review"
+      ]
+    },
+    {
+      "id": "palette-status-seeds-pre-derivation-canary",
+      "kind": "cascade-proof",
+      "subject": "five-phase static and database propagation canary",
+      "path": "artifacts/quality/programs/modern-rescue/cascade-proofs/controls/palette-status-seeds/pre-derivation-five-phase-canary",
+      "status": "historical-integrity",
+      "sourceCommit": "23426a0e1",
+      "seal": "270 image hashes remain reproducible; manifest and harness source bindings are stale",
+      "retention": "retain as pre-derivation comparison evidence",
+      "consumers": [
+        "Modern Rescue historical review"
+      ]
+    },
+    {
+      "id": "palette-status-seeds-post-derivation-tints",
+      "kind": "cascade-proof",
+      "subject": "status tint derivation after compiler changes",
+      "path": "artifacts/quality/programs/modern-rescue/cascade-proofs/controls/palette-status-seeds/post-derivation-status-tints",
+      "status": "historical-stale",
+      "sourceCommit": null,
+      "seal": "artifact hashes are retained; source paths changed during the architecture refactor",
+      "retention": "retain until a current source-bound rerun supersedes it",
+      "consumers": [
+        "Modern Rescue historical review"
+      ]
+    },
+    {
+      "id": "truth-instrumentation-baseline-2026-08-05",
+      "kind": "checkpoint",
+      "subject": "quality instrumentation baseline",
+      "path": "artifacts/quality/programs/modern-rescue/checkpoints/truth-instrumentation-baseline/2026-08-05",
+      "status": "historical-stale",
+      "sourceCommit": null,
+      "seal": "historical SHA256SUMS; current path migration invalidates current-source acceptance",
+      "retention": "permanent historical checkpoint",
+      "consumers": [
+        "Modern Rescue round resolver"
+      ]
+    },
+    {
+      "id": "reference-grammar-button-action-cluster-2026-08-05",
+      "kind": "checkpoint",
+      "subject": "button and action reference grammar",
+      "path": "artifacts/quality/programs/modern-rescue/checkpoints/reference-grammar/button-action-cluster/2026-08-05",
+      "status": "historical-stale",
+      "sourceCommit": null,
+      "seal": "historical SHA256SUMS; the checkpoint records no final GO",
+      "retention": "permanent historical checkpoint",
+      "consumers": [
+        "Modern Rescue round resolver"
+      ]
+    },
+    {
+      "id": "cascade-reachability-instrumentation",
+      "kind": "archived-instrumentation",
+      "subject": "legacy cascade reachability census and fixtures",
+      "path": "artifacts/quality/programs/modern-rescue/archive/instrumentation/cascade-reachability",
+      "status": "archived",
+      "sourceCommit": null,
+      "seal": "none",
+      "retention": "retain while historical manifest bindings cite render-census line evidence",
+      "consumers": [
+        "historical primitive-family manifest bindings"
+      ]
+    },
+    {
+      "id": "tenant-stability-2026-08-03",
+      "kind": "visual-regression",
+      "subject": "tenant static and database stability captures",
+      "path": "artifacts/quality/visual-regressions/journeys/tenant-stability/2026-08-03",
+      "status": "historical-integrity",
+      "sourceCommit": null,
+      "seal": "four retained images without a current source-bound receipt",
+      "retention": "retain as visual history",
+      "consumers": []
+    },
+    {
+      "id": "modern-rescue-archive",
+      "kind": "archive",
+      "subject": "superseded, unreceipted and incident evidence",
+      "path": "artifacts/quality/programs/modern-rescue/archive",
+      "status": "archived",
+      "sourceCommit": null,
+      "seal": "mixed historical integrity",
+      "retention": "retain until an explicit evidence-retention decision",
+      "consumers": []
+    },
+    {
+      "id": "incomplete-quality-candidates",
+      "kind": "archive",
+      "subject": "incomplete comparison and capability candidates",
+      "path": "artifacts/quality/archive/incomplete",
+      "status": "incomplete",
+      "sourceCommit": null,
+      "seal": "none",
+      "retention": "delete only after explicit adjudication",
+      "consumers": []
+    }
+  ]
+}

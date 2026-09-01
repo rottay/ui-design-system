@@ -1,5 +1,5 @@
 /**
- * Self-contained Claude Design card template.
+ * Self-contained design-card template.
  *
  * Each card is a standalone HTML document that:
  *  - starts with a `@dsCard` marker so the Design System pane builds its index

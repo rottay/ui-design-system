@@ -66,7 +66,23 @@ export * from './kernel/tokens';
 export * from './kernel/tokens/extensions';
 
 // Vertical manifest types
-export * from './kernel/verticals';
+export type {
+  CopyMode,
+  DashboardMode,
+  DensityProfile,
+  FeatureRouteMeta,
+  FirstPartyVerticalId,
+  IconographyMode,
+  MotionProfile,
+  SettingsMode,
+  ShapeProfile,
+  ShellMode,
+  VerticalId,
+  VerticalKey,
+  VerticalManifest,
+  VerticalTone,
+  WorkspaceMode,
+} from './kernel/verticals';
 
 // Primitive props are intentionally not re-exported from here. The component
 // folder remains the canonical owner for those contracts.

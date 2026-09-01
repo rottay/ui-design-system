@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "authorityLaw": "foundation/themes/default.css owns foundation and tenant-neutral fallbacks; presentation/components/<family>.css owns family defaults. A root component channel may not be authored by both.",
+  "authorityLaw": "foundation/themes/default/index.css owns foundation and tenant-neutral fallbacks; presentation/components/<family>.css owns family defaults. A root component channel may not be authored by both.",
   "measurement": {
     "officialAuditSnapshot": {
       "shared": 350,
@@ -17,14 +17,14 @@
       "different": 0,
       "same": 0
     },
-    "cascadeProof": "For 339 rows, both shipped source entrypoints import rottay-tokens before the declared component owner, so the component value was already the effective winner. tree.css and empty.css were added to base.css with byte-identical values. Statistic was adjudicated to presentation/components/statistic.css and is now explicitly imported by both entrypoints."
+    "cascadeProof": "For 339 rows, both shipped source entrypoints import rottay-tokens before the declared component owner, so the component value was already the effective winner. tree.css and empty.css were added to base.css with byte-identical values. Statistic was adjudicated to presentation/components/statistic/index.css and is now explicitly imported by both entrypoints."
   },
   "disposition": "retired-dead-default-duplicate; component-token owner preserved, with one explicitly sighted-pending Statistic delta",
   "blockedVisualDecisions": [],
   "sightedPendingDeltas": [
     {
-      "ownerDecision": "presentation/components/statistic.css is canonical",
-      "probeOwner": "Codex",
+      "ownerDecision": "presentation/components/statistic/index.css is canonical",
+      "probeOwner": "independent code audit",
       "status": "SIGHTED_PENDING",
       "deltas": {
         "--ds-statistic-title-color": "#737373 -> var(--ds-color-text-secondary)",

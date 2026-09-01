@@ -1,3 +1,3 @@
 "use client";
 
-export { Checkbox } from "../../../../ui/primitives/inputs/Checkbox";
+export { Checkbox } from "../../../../components/primitives/inputs/checkbox";

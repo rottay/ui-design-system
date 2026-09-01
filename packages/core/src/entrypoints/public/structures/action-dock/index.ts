@@ -1,3 +1,3 @@
 "use client";
 
-export { ActionDock } from "../../../../ui/structures/workspace/action-dock";
+export { ActionDock } from "../../../../components/structures/workspace/action-dock";

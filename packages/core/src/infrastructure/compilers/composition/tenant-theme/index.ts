@@ -1825,7 +1825,7 @@ function isoLowering<T>(run: () => T, path: string): T {
  * HERE. The causal probe's own patch (built leaf-by-leaf by
  * `buildIngressInput` walking `motion.intensity`) never carries the wrapper
  * at all, so `patch.motion?.value ?? patch.motion` has to cover both shapes
- * with one expression. Preaudited (Fable, ACCEPT with binding correction
+ * with one expression. Preaudited (independent audit, ACCEPT with binding correction
  * W-B): the fence
  * this projection closes is STRUCTURAL, not behavioural -- no first-party
  * vertical today authors a motion "ladder" that would out-rank the tenant's
@@ -1873,7 +1873,7 @@ export function tenantPostureFloors(patch: ThemePatch): Partial<BrandTheme> {
  * always `undefined` on this door -- every tone stays
  * `toneSeedIsTenantAuthored=false` and a tenant that sets only
  * `palette.status.success` never re-derives the `-bg`/`-border`/alpha family
- * against a vertical baseline that still bakes those as literals (Fable 5
+ * against a vertical baseline that still bakes those as literals (independent audit 5
  * audit, D1, `coh-1-fable-audit.md`).
  *
  * Reads the RAW `envelope.patch` (post-`migrateV1`, pre-`tenantPostureFloors`
@@ -1883,7 +1883,7 @@ export function tenantPostureFloors(patch: ThemePatch): Partial<BrandTheme> {
  * alone cannot distinguish "the tenant wrote this" from "the builder always
  * emits this key" -- the same trap `collectPatchAuthoredPaths` falls into
  * for the primary family's own pre-existing, out-of-scope false positive
- * (Fable 5 audit, B.1).
+ * (independent audit 5 audit, B.1).
  */
 function deriveTenantStatusSeedAuthorship(
   patch: ThemePatch

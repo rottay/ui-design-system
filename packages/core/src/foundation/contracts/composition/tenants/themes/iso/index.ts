@@ -1104,7 +1104,7 @@ export function collectPatchAuthoredPaths(
  * this set still only unioned the first two sites' tables -- a third site
  * asking a question this vocabulary did not yet name. Closed here: this set
  * now also carries the four status seeds and their fifteen shadowing leaves
- * (Fable 5 audit, D3, `coh-1-fable-audit.md`).
+ * (independent audit 5 audit, D3, `coh-1-fable-audit.md`).
  *
  * Membership is by BrandTheme-space path WITHOUT a mode prefix; a mode block
  * consults `modes.<mode>.<field>` as well through `isTenantAuthoredField`.

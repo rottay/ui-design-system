@@ -1912,9 +1912,6 @@ export function chromeToVariables(
           segmented.itemColorSelected;
       if (segmented.itemRadius)
         vars["--ds-segmented-item-radius"] = segmented.itemRadius;
-      if (segmented.itemShadowSelected)
-        vars["--ds-segmented-item-shadow-selected"] =
-          segmented.itemShadowSelected;
       if (segmented.itemFontWeight != null)
         vars["--ds-segmented-item-font-weight"] = String(
           segmented.itemFontWeight
@@ -1923,8 +1920,6 @@ export function chromeToVariables(
         vars["--ds-segmented-item-font-weight-selected"] = String(
           segmented.itemFontWeightSelected
         );
-      if (segmented.focusRing)
-        vars["--ds-segmented-focus-ring"] = segmented.focusRing;
       setSegmentedSizeVars(vars, "sm", segmented.sm);
       setSegmentedSizeVars(vars, "md", segmented.md);
       setSegmentedSizeVars(vars, "lg", segmented.lg);

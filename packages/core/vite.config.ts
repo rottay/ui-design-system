@@ -7,7 +7,7 @@ import { resolve } from 'path';
 
 const isWatchMode = process.argv.includes('--watch');
 const publicEntrypointManifest = JSON.parse(
-  readFileSync(resolve(__dirname, 'public-entrypoints.manifest.json'), 'utf8'),
+  readFileSync(resolve(__dirname, 'contracts/package/entrypoints/index.json'), 'utf8'),
 ) as { entries: Record<string, { output: string; source: string }> };
 const publicEntries = Object.fromEntries(
   Object.values(publicEntrypointManifest.entries).map((entry) => [
@@ -42,7 +42,7 @@ export default defineConfig({
     alias: {
       '@': resolve(__dirname, 'src'),
       '@types': resolve(__dirname, 'src/foundation/contracts'),
-      '@ui': resolve(__dirname, 'src/ui'),
+      '@ui': resolve(__dirname, 'src/components'),
     },
   },
   build: {
@@ -77,6 +77,7 @@ export default defineConfig({
         spatial: resolve(__dirname, 'src/entrypoints/graphics/spatial/index.ts'),
         'spatial-spec': resolve(__dirname, 'src/entrypoints/graphics/spatial/spec/index.ts'),
         eslint: resolve(__dirname, 'src/entrypoints/eslint/index.ts'),
+        'entrypoints/suppliers/cli/index': resolve(__dirname, 'src/entrypoints/suppliers/cli/index.mjs'),
         // Only real package.json exports are listed as entries.
         // Component code is included via the root barrel and
         // preserveModules handles per-file output automatically.
@@ -94,14 +95,18 @@ export default defineConfig({
         'antd',
         '@ant-design/icons',
         '@thesvg/react',
+        'tailwind-variants',
         'motion',
         'dayjs',
+        'typescript',
+        /^node:/,
         // @rottay domain modules (provided by consuming app)
         /^@rottay\/.*/,
         // Externalize submodules for better tree-shaking
         /^antd\/.*/,
         /^@ant-design\/icons\/.*/,
         /^@thesvg\/react\/.*/,
+        /^tailwind-variants\/.*/,
         // Phosphor is intentionally NOT externalized. 2.1.10 advertises a
         // CommonJS condition that points at a `.js` file inside a
         // `type: module` package, which breaks packed CJS consumers; vendoring
@@ -112,10 +117,10 @@ export default defineConfig({
         // and nothing here re-derives it. Two systems import Phosphor SSR
         // modules directly and both grow independently of each other: the
         // generated semantic corpus (one file per role under
-        // src/graphics/icons/presentation/semantic/generated/roles, sized by
-        // src/graphics/icons/foundation/semantic/corpus/manifest.json) and the
+        // src/graphics/icons/semantic/generated/roles, sized by
+        // src/graphics/icons/semantic/sources/corpus/manifest.json) and the
         // historical vendor-named compatibility catalog
-        // (src/graphics/icons/presentation/catalog). Every entry above shares
+        // (src/graphics/icons/glyphs/presentation/catalog). Every entry above shares
         // one Rollup module graph with `preserveModules: true`, so any SSR
         // module reachable from ANY entry -- not just `icons`/`icons-full` --
         // is vendored into dist/node_modules once. That includes the root
@@ -126,9 +131,9 @@ export default defineConfig({
         // catalog, so the root entry is not supplier-free either.
         //
         // The actual post-build count is enforced, not narrated: run
-        // `node scripts/packaging/icon-embed-inventory-gate/index.mjs` after `vite build` to
+        // `node scripts/package/graphics/icons/index.mjs` after `vite build` to
         // measure what shipped, checked against the reviewed, decrease-only
-        // ceiling in scripts/icon-embed-inventory-gate.baseline.json.
+        // ceiling in scripts/baseline/index.json.
         /^d3-.*/,
         /^motion\/.*/,
         /^dayjs\/.*/,

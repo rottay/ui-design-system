@@ -29,7 +29,7 @@ import {
   tortureDarkBrandTheme,
   tortureLightBrandTheme,
   TORTURE_PROBE_VARS,
-} from '@/tooling/testing/fixtures/brand-themes/torture';
+} from '@tests/fixtures/brand-themes/torture';
 import {
   getKnownTenantSlugs,
   isBundledTenant,

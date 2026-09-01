@@ -1,6 +1,6 @@
 import { expect, test, type Page } from '@playwright/test';
 
-import { recordCra15Measurement } from './cra-15-evidence';
+import { recordCra15Measurement } from './runtime-hardening/measurements';
 
 const ACTIVE_RUNTIME = '[data-particle-field-runtime="active"]';
 const CANVAS = '[data-particle-field-canvas="true"]';

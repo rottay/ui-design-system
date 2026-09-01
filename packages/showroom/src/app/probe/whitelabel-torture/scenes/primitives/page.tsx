@@ -8,8 +8,8 @@ import { StatusFbStates } from '@/components/torture-sections/status-feedback';
 import { OverlayFbStates } from '@/components/torture-sections/overlay-feedback';
 import { OverlayStates } from '@/components/torture-sections/overlay';
 import { NavFbStates } from '@/components/torture-sections/nav';
-import { Display1States } from '@/components/torture-sections/display-1';
-import { Display2States } from '@/components/torture-sections/display-2';
+import { MediaStates } from '@/components/torture-sections/media-states';
+import { DataDisplayStates } from '@/components/torture-sections/data-display-states';
 import { LayoutStates } from '@/components/torture-sections/layout';
 
 export default async function PrimitivesScenePage({ searchParams }: TortureRouteProps) {
@@ -27,8 +27,8 @@ export default async function PrimitivesScenePage({ searchParams }: TortureRoute
         <OverlayFbStates />
         <OverlayStates />
         <NavFbStates />
-        <Display1States />
-        <Display2States />
+        <MediaStates />
+        <DataDisplayStates />
         <LayoutStates />
       </TortureFrame>
     </>

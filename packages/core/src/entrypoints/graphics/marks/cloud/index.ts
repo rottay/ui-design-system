@@ -1,17 +1,17 @@
 /** Focused public boundary for cloud-provider service marks only. */
-export { CloudServiceMark } from '../../../../graphics/brand-marks/presentation/cloud-service-mark';
+export { CloudServiceMark } from '../../../../graphics/marks/presentation/cloud-service-mark';
 export {
   CLOUD_PROVIDERS,
   CLOUD_SERVICES,
   isCloudProvider,
   isCloudService,
-} from '../../../../graphics/brand-marks/foundation/catalog';
+} from '../../../../graphics/marks/foundation/catalog';
 export {
   CLOUD_SERVICE_MARK_PROVENANCE,
   MARK_CATALOG_SOURCE,
   MARK_RENDERER_SOURCE,
   MARK_TRADEMARK_NOTICE,
-} from '../../../../graphics/brand-marks/runtime/provenance';
+} from '../../../../graphics/marks/runtime/provenance';
 export type {
   CloudProvider,
   CloudService,
@@ -21,7 +21,7 @@ export type {
   MarkSize,
   MarkSizeToken,
   MarkSourcePackage,
-} from '../../../../graphics/brand-marks/foundation/catalog';
+} from '../../../../graphics/marks/foundation/catalog';
 export {
   GRAPHIC_ASSET_CLASSES,
   GRAPHIC_ASSET_PROVIDERS,

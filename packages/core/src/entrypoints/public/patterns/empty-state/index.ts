@@ -1,3 +1,3 @@
 "use client";
 
-export { PatternEmptyState } from "../../../../ui/patterns/feedback/empty-state";
+export { PatternEmptyState } from "../../../../components/patterns/feedback/empty-state";

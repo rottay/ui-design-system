@@ -28,7 +28,7 @@ export type CollapseVariant = 'default' | 'bordered' | 'ghost';
  * Size preset controlling padding and font dimensions -- the legacy 'small' | 'middle' |
  * 'large' spelling this token generator keys its lookups by. The canonical, publicly-exported
  * Collapse size prop type is `CollapseSize` in
- * `components/primitives/layout/Collapse/Collapse.types.ts` (derived from the shared `Size`
+ * `components/primitives/layout/collapse/Collapse.types.ts` (derived from the shared `Size`
  * union); `toLegacySize()` resolves either spelling to this one before it reaches
  * `useCollapseTokens`.
  */
@@ -52,7 +52,7 @@ export interface CollapseTokenOptions {
  * Generates the CSS custom properties that drive the collapse runtime.
  *
  * These variables act as the small computed layer between generic props and the
- * large CSS token matrix defined in `foundation/tokens/css/presentation/components/collapse.css`.
+ * large CSS token matrix defined in `foundation/tokens/css/presentation/components/collapse/index.css`.
  */
 export function getCollapseTokens(options: CollapseTokenOptions = {}): CSSProperties {
   const {

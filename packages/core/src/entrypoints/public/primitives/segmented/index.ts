@@ -1,3 +1,3 @@
 "use client";
 
-export { Segmented } from "../../../../ui/primitives/navigation/Segmented";
+export { Segmented } from "../../../../components/primitives/navigation/segmented";

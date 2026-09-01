@@ -157,21 +157,21 @@ export type { ExpressiveEmphasisResult } from './infrastructure/runtime/foundati
 // ============================================
 // The solver is shared support under `ui/patterns/runtime/adaptive-layout`;
 // only the legacy-vocabulary adapter stays with the board.
-export { LEGACY_SIZE_SPANS } from './ui/patterns/runtime/adaptive-layout/foundation';
+export { LEGACY_SIZE_SPANS } from './components/patterns/runtime/adaptive-layout/foundation';
 export {
   placementsToGridStyles,
   resolveAdaptiveLayout,
   resolveContainerPosture,
-} from './ui/patterns/runtime/adaptive-layout/runtime';
+} from './components/patterns/runtime/adaptive-layout/runtime';
 export {
   normalizeLayoutRevision,
   resolveActiveResponsivePosture,
   useActiveResponsivePosture,
-} from './ui/patterns/runtime/adaptive-layout/presentation/react';
+} from './components/patterns/runtime/adaptive-layout/presentation/react';
 export {
   heightPxToRows,
   widgetItemsToAdaptiveInputs,
-} from './ui/patterns/data/widget-board/runtime/adaptive/policy';
+} from './components/patterns/data/widget-board/runtime/adaptive/policy';
 export type {
   AdaptiveContentMode,
   AdaptiveItemContract,
@@ -185,7 +185,7 @@ export type {
   ResizePolicy,
   ResolvedPlacement,
   ResponsivePostureProfile,
-} from './ui/patterns/runtime/adaptive-layout/foundation';
+} from './components/patterns/runtime/adaptive-layout/foundation';
 
 // ============================================
 // DENSITY (public scoped visual-density contract)
@@ -330,4 +330,4 @@ export * from './graphics/motion';
 // ============================================
 // COMPONENTS
 // ============================================
-export * from './ui';
+export * from './components';

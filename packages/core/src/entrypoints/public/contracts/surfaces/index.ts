@@ -1,8 +1,8 @@
-export type { AdaptiveConfig } from "../../../../ui/surfaces/foundation/contracts/adaptive";
+export type { AdaptiveConfig } from "../../../../components/surfaces/foundation/contracts/adaptive";
 export type {
   EntityAdapter,
   SurfaceCapabilityRegistration,
   SurfacePermissionRule,
   SurfacePermissionsConfig,
-} from "../../../../ui/surfaces/foundation/contracts";
-export type { CollectionWorkspaceProps } from "../../../../ui/surfaces/presentation/pages/workspace/collection-workspace";
+} from "../../../../components/surfaces/foundation/contracts";
+export type { CollectionWorkspaceProps } from "../../../../components/surfaces/presentation/pages/workspace/collection-workspace";

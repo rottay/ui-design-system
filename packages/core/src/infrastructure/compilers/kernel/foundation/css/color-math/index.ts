@@ -114,7 +114,7 @@ export function isDarkSurface(surfaceColor: string): boolean {
 // The `--ds-elevation-0..5` ladder and the two sRGB `buildRuntimeScale` /
 // `buildDarkRuntimeScale` ramps left with the runtime tenant-CSS generator
 // that was their only caller. The ladder is authored in
-// `foundation/tokens/css/foundation/themes/default.css`, which is where every
+// `foundation/tokens/css/foundation/themes/default/index.css`, which is where every
 // consumer reads it from; the ramps were replaced by the OKLCH derivation
 // (`foundation/kernel/color/oklch/ramp`) that both compilers share. Nothing
 // here re-derives either, because a second derivation is how the two stopped

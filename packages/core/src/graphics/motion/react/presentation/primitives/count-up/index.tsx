@@ -218,7 +218,7 @@ export const CountUp: React.FC<CountUpProps> = ({
       style={style}
       data-ds-motion-primitive="count-up"
     >
-      {/* ds-nums-tabular (CRA-01, foundation/base/typography.css) locks every
+      {/* ds-nums-tabular (CRA-01, foundation/base/typography/index.css) locks every
           digit to a fixed advance width so the ticking value never jitters
           column-to-column as digits change on each animation frame. */}
       <span ref={displayRef} className="ds-nums-tabular">

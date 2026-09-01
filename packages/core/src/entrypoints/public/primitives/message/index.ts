@@ -1,3 +1,3 @@
 "use client";
 
-export { message } from "../../../../ui/primitives/feedback/Message";
+export { message } from "../../../../components/primitives/feedback/message";

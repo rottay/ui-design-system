@@ -1,6 +1,6 @@
 'use client';
 
-import { ShowroomLink as Link } from '@/components/showroom-link';
+import { ShowroomLink as Link } from '@/components/navigation/link';
 import { ComponentPreview, EngineComparison } from '@/components/playground';
 import { useShowroomRuntime } from '@/components/showroom-context';
 import {

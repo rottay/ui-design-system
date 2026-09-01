@@ -5,9 +5,9 @@ import { hydrateRoot, type Root } from 'react-dom/client';
 import { renderToString } from 'react-dom/server';
 import { describe, expect, it, vi } from 'vitest';
 
-import { BrandMark } from '@/graphics/brand-marks/presentation/brand-mark';
-import { CloudServiceMark } from '@/graphics/brand-marks/presentation/cloud-service-mark';
-import { Icon } from '@/graphics/icons/presentation/semantic-icon';
+import { BrandMark } from '@/graphics/marks/presentation/brand-mark';
+import { CloudServiceMark } from '@/graphics/marks/presentation/cloud-service-mark';
+import { Icon } from '@/graphics/icons/semantic/presentation/icon';
 import { FeaturePictogram } from '@/graphics/pictograms/presentation/feature-pictogram';
 
 function FourFacadeFixture(): React.ReactElement {
@@ -77,10 +77,10 @@ describe('four-facade server boundary', () => {
 
   it('keeps every facade owner RSC-compatible and free of client-only APIs', () => {
     const ownerPaths = [
-      'src/graphics/icons/presentation/semantic-icon/index.tsx',
-      'src/graphics/icons/runtime/semantic/create-icon/index.tsx',
-      'src/graphics/brand-marks/presentation/brand-mark/index.tsx',
-      'src/graphics/brand-marks/presentation/cloud-service-mark/index.tsx',
+      'src/graphics/icons/semantic/presentation/icon/index.tsx',
+      'src/graphics/icons/semantic/runtime/create-icon/index.tsx',
+      'src/graphics/marks/presentation/brand-mark/index.tsx',
+      'src/graphics/marks/presentation/cloud-service-mark/index.tsx',
       'src/graphics/pictograms/presentation/feature-pictogram/index.tsx',
       'src/infrastructure/runtime/graphics/asset-governance/runtime/control/index.ts',
     ];

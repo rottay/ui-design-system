@@ -92,7 +92,7 @@ describe("FeaturePictogram", () => {
     const cssSource = readFileSync(
       resolve(
         process.cwd(),
-        "src/foundation/tokens/css/presentation/components/feature-pictogram.css",
+        "src/foundation/tokens/css/presentation/components/feature-pictogram/index.css",
       ),
       "utf8",
     );

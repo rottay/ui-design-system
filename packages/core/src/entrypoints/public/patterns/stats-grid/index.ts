@@ -1,3 +1,3 @@
 "use client";
 
-export { PatternStatsGrid } from "../../../../ui/patterns/data/stats-grid";
+export { PatternStatsGrid } from "../../../../components/patterns/data/stats-grid";

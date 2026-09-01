@@ -17,9 +17,9 @@ const CSS_ROOT = 'src/foundation/tokens/css';
 const read = (relative: string): string =>
   readFileSync(resolve(process.cwd(), relative), 'utf8');
 
-const layeredGuard = read(`${CSS_ROOT}/foundation/responsive/language-arabic.css`);
-const rootGuard = read(`${CSS_ROOT}/foundation/responsive/language-arabic-root.css`);
-const bithireBundle = read('styles/bithire.css');
+const layeredGuard = read(`${CSS_ROOT}/foundation/responsive/language-arabic/index.css`);
+const rootGuard = read(`${CSS_ROOT}/foundation/responsive/language-arabic-root/index.css`);
+const bithireBundle = read('artifacts/generated/css/verticals/bithire/index.css');
 
 /**
  * CSS with comments removed. Both helpers below must read CODE, not prose --

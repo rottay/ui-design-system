@@ -1,0 +1,227 @@
+/**
+ * Cell-renderer island skin (long-tail skin ownership).
+ * Each renderer is its own engine-agnostic scope. Bounded variants and score
+ * bands are selected through anatomy attributes. The only open values remain
+ * inline as --ds-cell-renderers-* hatches.
+ */
+
+.ds-pattern-cell-renderers[data-part='avatar-name'] > [data-part='avatar'] {
+  border-radius: var(--ds-radius-full, 9999px);
+  background: var(--ds-avatar-default-bg, var(--ds-color-neutral-200));
+  color: var(--ds-avatar-default-color, var(--ds-color-text-secondary));
+}
+
+.ds-pattern-cell-renderers [data-part='name'] {
+  color: var(--ds-color-text-primary);
+}
+
+.ds-pattern-cell-renderers [data-part='subtitle'] {
+  color: var(--ds-color-text-muted);
+}
+
+.ds-pattern-cell-renderers[data-part='status-badge'][data-part='status-badge'],
+.ds-pattern-cell-renderers[data-part='simple-badge'][data-part='simple-badge'] {
+  border-radius: var(--ds-radius-sm, 6px);
+}
+
+.ds-pattern-cell-renderers[data-part='status-badge'][data-part='status-badge'][data-variant='primary'],
+.ds-pattern-cell-renderers[data-part='simple-badge'][data-part='simple-badge'][data-variant='primary'] {
+  background: var(--ds-color-alpha-primary-10, rgba(59,130,246,0.1));
+  color: var(--ds-color-primary);
+  border: 1px solid var(--ds-color-alpha-primary-20, rgba(59,130,246,0.2));
+}
+
+.ds-pattern-cell-renderers[data-part='status-badge'][data-part='status-badge'][data-variant='secondary'],
+.ds-pattern-cell-renderers[data-part='simple-badge'][data-part='simple-badge'][data-variant='secondary'] {
+  background: var(--ds-color-alpha-black-100, rgba(0,0,0,0.06));
+  color: var(--ds-color-text-secondary);
+  border: 1px solid transparent;
+}
+
+.ds-pattern-cell-renderers[data-part='status-badge'][data-part='status-badge'][data-variant='success'],
+.ds-pattern-cell-renderers[data-part='simple-badge'][data-part='simple-badge'][data-variant='success'] {
+  background: var(--ds-color-success-bg, rgba(34,197,94,0.1));
+  color: var(--ds-color-success);
+  border: 1px solid var(--ds-color-success-border, rgba(34,197,94,0.2));
+}
+
+.ds-pattern-cell-renderers[data-part='status-badge'][data-part='status-badge'][data-variant='warning'],
+.ds-pattern-cell-renderers[data-part='simple-badge'][data-part='simple-badge'][data-variant='warning'] {
+  background: var(--ds-color-warning-bg, rgba(245,158,11,0.1));
+  color: var(--ds-color-warning);
+  border: 1px solid var(--ds-color-warning-border, rgba(245,158,11,0.2));
+}
+
+.ds-pattern-cell-renderers[data-part='status-badge'][data-part='status-badge'][data-variant='error'],
+.ds-pattern-cell-renderers[data-part='simple-badge'][data-part='simple-badge'][data-variant='error'] {
+  background: var(--ds-color-error-bg, rgba(239,68,68,0.1));
+  color: var(--ds-color-error);
+  border: 1px solid var(--ds-color-error-border, rgba(239,68,68,0.2));
+}
+
+.ds-pattern-cell-renderers[data-part='status-badge'][data-part='status-badge'][data-variant='info'],
+.ds-pattern-cell-renderers[data-part='simple-badge'][data-part='simple-badge'][data-variant='info'] {
+  background: var(--ds-color-info-bg, rgba(59,130,246,0.1));
+  color: var(--ds-color-info);
+  border: 1px solid var(--ds-color-info-border, rgba(59,130,246,0.2));
+}
+
+.ds-pattern-cell-renderers[data-part='mono'] {
+  color: var(--ds-cell-renderers-mono-color);
+}
+
+/* F3 (piloto): el tamaño de fuente del mono vivia inline en el renderer aunque el
+   MISMO objeto ya estampaba `data-size` -- la decision estaba escrita dos veces, y
+   una de las dos en un plano que el skin no puede alcanzar. Se reubica aca sobre el
+   atributo que ya existia; el componente no cambio de contrato ni gano stamps.
+
+   SIN FALLBACK, y la razon corrige lo que este comentario decia antes. La version
+   previa defendia un `, 13px` como "el mismo fallback relocalizado, no una decision
+   de hoja". Medido, eso era falso: las seeds de los tres canales que respalda son
+   0.75rem/0.875rem/1rem (12/14/16px), asi que 13px no reproduce NINGUNA -- era un
+   literal defensivo independiente, hand-picked, contradiciendo a las tres seeds que
+   decia representar.
+   Se retira, y el skin lee el canal bare como hace el resto del corpus: esos canales
+   se leen bare en el orden de ~450-500 ocurrencias contra menos de 10 con ese
+   fallback. Lo que sostiene el argumento es la RAZON (~50:1), no una cifra: el conteo
+   exacto depende del criterio (por ocurrencia o unico, incluyendo o no los `-base`,
+   con o sin los artefactos compilados) y tres mediciones independientes dieron tres
+   numeros distintos. Una cifra pineada sin su metodo no es recomputable, asi que no
+   se pinea.
+   El fallback era ademas inalcanzable: cada uno de los tres canales tiene UNA sola
+   declaracion y las tres viven en la capa foundation (themes/default.css:615-616,
+   base/typography.css:65), que es dependencia dura de este layer -- si faltara, la
+   regla `mono-color` de arriba, tambien bare, ya estaria rota. Cero-delta computado: el canal siempre
+   resuelve, asi que lo unico que cae es texto muerto. */
+.ds-pattern-cell-renderers[data-part='mono'][data-size='xs'] {
+  font-size: var(--ds-font-size-xs);
+}
+
+.ds-pattern-cell-renderers[data-part='mono'][data-size='sm'] {
+  font-size: var(--ds-font-size-sm);
+}
+
+.ds-pattern-cell-renderers[data-part='mono'][data-size='md'] {
+  font-size: var(--ds-font-size-md);
+}
+
+/* The `--` placeholder is the absence of data, not a value: it reads in the
+   disabled ink, same convention as the date renderer's empty stamp. */
+.ds-pattern-cell-renderers[data-part='mono'][data-empty='true'] {
+  color: var(--ds-color-text-disabled);
+}
+
+.ds-pattern-cell-renderers .ds-cell-renderers__icon[data-part='icon'] {
+  color: var(--ds-color-text-muted);
+}
+
+.ds-pattern-cell-renderers[data-part='icon-text'][data-empty='false'] > [data-part='value'],
+.ds-pattern-cell-renderers[data-part='count-with-icon'] > [data-part='value'] {
+  color: var(--ds-color-text-primary);
+}
+
+/* The count is a pure figure: tabular numerals keep it aligned row-to-row. */
+.ds-pattern-cell-renderers[data-part='count-with-icon'] > [data-part='value'] {
+  font-variant-numeric: tabular-nums;
+}
+
+.ds-pattern-cell-renderers[data-part='icon-text'][data-empty='true'] > [data-part='value'] {
+  color: var(--ds-color-text-muted);
+}
+
+.ds-pattern-cell-renderers[data-part='date'][data-empty='true'] {
+  color: var(--ds-color-text-disabled);
+}
+
+.ds-pattern-cell-renderers[data-part='date'][data-empty='false'] {
+  color: var(--ds-color-text-muted);
+}
+
+.ds-pattern-cell-renderers[data-part='tags'] > [data-part='tag'] {
+  border-radius: var(--ds-radius-sm, 6px);
+  background: var(--ds-color-alpha-black-100, rgba(0,0,0,0.06));
+  color: var(--ds-color-text-secondary);
+}
+
+.ds-pattern-cell-renderers[data-part='tags'] > [data-part='overflow'] {
+  color: var(--ds-color-text-muted);
+}
+
+.ds-pattern-cell-renderers[data-part='score'] > [data-part='score-track'] {
+  border-radius: var(--ds-cell-renderers-score-radius);
+  background: var(--ds-color-border, rgba(0,0,0,0.1));
+}
+
+.ds-pattern-cell-renderers[data-part='score'] [data-part='score-bar'] {
+  border-radius: var(--ds-cell-renderers-score-radius);
+  transition: width var(--ds-motion-normal)
+    var(--ds-motion-ease-move, ease-out);
+}
+
+.ds-pattern-cell-renderers[data-part='score'] [data-part='score-bar'][data-band='low'] {
+  background: var(--ds-color-error);
+}
+
+.ds-pattern-cell-renderers[data-part='score'] [data-part='score-bar'][data-band='mid'] {
+  background: var(--ds-color-warning);
+}
+
+.ds-pattern-cell-renderers[data-part='score'] [data-part='score-bar'][data-band='high'] {
+  background: var(--ds-color-success);
+}
+
+.ds-pattern-cell-renderers[data-part='score'] > [data-part='score-value'][data-band='low'] {
+  color: var(--ds-color-error);
+}
+
+/* Score figures read as data: tabular numerals keep the value column aligned
+   row-to-row and stop width jitter while the bar animates. */
+.ds-pattern-cell-renderers[data-part='score'] > [data-part='score-value'] {
+  font-variant-numeric: tabular-nums;
+  text-align: end;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ds-pattern-cell-renderers[data-part='score'] [data-part='score-bar'] {
+    transition: none;
+  }
+}
+
+.ds-pattern-cell-renderers[data-part='score'] > [data-part='score-value'][data-band='mid'] {
+  color: var(--ds-color-warning);
+}
+
+.ds-pattern-cell-renderers[data-part='score'] > [data-part='score-value'][data-band='high'] {
+  color: var(--ds-color-success);
+}
+
+/* Forced colors: the band palette and track fill are stripped, so the meter
+   re-expresses as a system-color frame + Highlight bar (outline, not border:
+   zero geometry shift and exempt from the border floor). role='meter' already
+   carries min/max/now to AT. */
+@media (forced-colors: active) {
+  .ds-pattern-cell-renderers[data-part='score'] > [data-part='score-track'] {
+    outline: 1px solid CanvasText;
+    background: Canvas;
+  }
+
+  .ds-pattern-cell-renderers[data-part='score'] [data-part='score-bar'] {
+    background: Highlight;
+  }
+
+  .ds-pattern-cell-renderers[data-part='score'] > [data-part='score-value'] {
+    color: CanvasText;
+  }
+}
+
+.ds-pattern-cell-renderers[data-part='boolean'][data-value='true'] {
+  color: var(--ds-color-success);
+}
+
+.ds-pattern-cell-renderers[data-part='boolean'][data-value='false'] {
+  color: var(--ds-color-text-muted);
+}
+
+.ds-pattern-cell-renderers[data-part='truncated'] {
+  color: var(--ds-color-text-primary);
+}

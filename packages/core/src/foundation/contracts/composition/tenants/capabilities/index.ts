@@ -106,7 +106,7 @@ export const TENANT_CAPABILITY_REGISTRY = Object.freeze([
       tier: 'standard',
       status: 'active',
       evidence: {
-        consumer: 'src/foundation/tokens/css/runtime/engines/modern/skin/button.css',
+        consumer: 'src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css',
         symbol: 'var(--ds-button-primary-bg',
       },
       scope: 'tenant',
@@ -131,7 +131,7 @@ export const TENANT_CAPABILITY_REGISTRY = Object.freeze([
       tier: 'internal',
       status: 'active',
       evidence: {
-        consumer: 'src/foundation/tokens/css/foundation/themes/default.css',
+        consumer: 'src/foundation/tokens/css/foundation/themes/default/index.css',
         symbol: 'data-theme=\'dark\'',
       },
       scope: 'tenant',
@@ -153,7 +153,7 @@ export const TENANT_CAPABILITY_REGISTRY = Object.freeze([
       tier: 'standard',
       status: 'active',
       evidence: {
-        consumer: 'src/foundation/tokens/css/runtime/engines/modern/skin/typography.css',
+        consumer: 'src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css',
         symbol: 'var(--ds-font-family',
       },
       scope: 'tenant',
@@ -188,7 +188,7 @@ export const TENANT_CAPABILITY_REGISTRY = Object.freeze([
       tier: 'standard',
       status: 'active',
       evidence: {
-        consumer: 'src/foundation/tokens/css/foundation/themes/default.css',
+        consumer: 'src/foundation/tokens/css/foundation/themes/default/index.css',
         symbol: '--ds-font-family-mono',
       },
       scope: 'tenant',
@@ -221,7 +221,7 @@ export const TENANT_CAPABILITY_REGISTRY = Object.freeze([
       tier: 'standard',
       status: 'active',
       evidence: {
-        consumer: 'src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts',
+        consumer: 'src/components/patterns/runtime/adaptive-layout/presentation/react/index.ts',
         symbol: '--ds-type-scale',
       },
       scope: 'tenant',
@@ -251,7 +251,7 @@ export const TENANT_CAPABILITY_REGISTRY = Object.freeze([
       tier: 'standard',
       status: 'active',
       evidence: {
-        consumer: 'src/foundation/tokens/css/runtime/engines/modern/skin/card.css',
+        consumer: 'src/foundation/tokens/css/runtime/engines/modern/skin/card/index.css',
         symbol: 'var(--ds-radius',
       },
       scope: 'tenant',
@@ -266,7 +266,7 @@ export const TENANT_CAPABILITY_REGISTRY = Object.freeze([
       // that base as `calc(authored / scale)` precisely so the foundation's
       // `calc(base * scale)` reproduces the authored value — it CANCELS this control
       // rather than carrying it. Measured at every stop on all three verticals:
-      // test-artifacts/quality-evidence/wo-cra-23/F4B/shape-radius-scale/.
+      // artifacts/quality/programs/modern-rescue/cascade-proofs/controls/shape-radius-scale/computed-static-db/.
       brandThemePath: 'surfaces.radiusScale',
       derivedChannels: ['--ds-radius-scale', '--ds-radius-md'],
       compat: 'additive, unset-to-rollback',
@@ -277,7 +277,7 @@ export const TENANT_CAPABILITY_REGISTRY = Object.freeze([
       tier: 'standard',
       status: 'active',
       evidence: {
-        consumer: 'src/foundation/tokens/css/runtime/engines/modern/skin/button.css',
+        consumer: 'src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css',
         symbol: 'var(--ds-button-md-radius',
       },
       scope: 'tenant',
@@ -311,7 +311,7 @@ export const TENANT_CAPABILITY_REGISTRY = Object.freeze([
       tier: 'standard',
       status: 'active',
       evidence: {
-        consumer: 'src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts',
+        consumer: 'src/components/patterns/runtime/adaptive-layout/presentation/react/index.ts',
         symbol: 'useDensity',
       },
       scope: 'tenant',
@@ -344,7 +344,7 @@ export const TENANT_CAPABILITY_REGISTRY = Object.freeze([
       status: 'active',
       evidence: {
         consumer:
-          'src/foundation/tokens/css/presentation/components/skin/layout-primitives.css',
+          'src/foundation/tokens/css/presentation/components/skin/layout-primitives/index.css',
         symbol: 'var(--ds-rhythm-effective-scale',
       },
       scope: 'tenant',
@@ -370,13 +370,13 @@ export const TENANT_CAPABILITY_REGISTRY = Object.freeze([
       // F4B-13 fix: the prior witness (button.css, symbol 'var(--ds-motion')
       // was imprecise -- button.css reads only DERIVED motion channels
       // (--ds-motion-reveal/-attention/-ease-in-out, all defined two hops
-      // downstream in foundation/animations/transitions.css), never either
+      // downstream in foundation/animations/transitions/index.css), never either
       // declared channel directly. alert.css consumes --ds-motion-intensity
       // directly (skin/alert.css:16-17) and is the file OTHER skin files'
       // own comments cite as the reference idiom (menu.css:46: "(alert.css
       // idiom)").
       evidence: {
-        consumer: 'src/foundation/tokens/css/runtime/engines/modern/skin/alert.css',
+        consumer: 'src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css',
         symbol: 'var(--ds-motion-intensity',
       },
       scope: 'tenant',
@@ -420,7 +420,7 @@ export const TENANT_CAPABILITY_REGISTRY = Object.freeze([
       tier: 'standard',
       status: 'active',
       evidence: {
-        consumer: 'src/foundation/tokens/css/runtime/engines/modern/skin/card.css',
+        consumer: 'src/foundation/tokens/css/runtime/engines/modern/skin/card/index.css',
         symbol: 'var(--ds-elevation',
       },
       scope: 'tenant',
@@ -451,7 +451,7 @@ export const TENANT_CAPABILITY_REGISTRY = Object.freeze([
       tier: 'standard',
       status: 'active',
       evidence: {
-        consumer: 'src/foundation/tokens/css/runtime/engines/modern/skin/overlay-modal.css',
+        consumer: 'src/foundation/tokens/css/runtime/engines/modern/skin/overlay-modal/index.css',
         symbol: 'var(--ds-glass',
       },
       scope: 'tenant',
@@ -471,7 +471,7 @@ export const TENANT_CAPABILITY_REGISTRY = Object.freeze([
       tier: 'standard',
       status: 'active',
       evidence: {
-        consumer: 'src/foundation/tokens/css/runtime/engines/modern/skin/menu.css',
+        consumer: 'src/foundation/tokens/css/runtime/engines/modern/skin/menu/index.css',
         symbol: 'var(--ds-sidebar',
       },
       scope: 'tenant',
@@ -553,7 +553,7 @@ export const TENANT_CAPABILITY_REGISTRY = Object.freeze([
       tier: 'pro',
       status: 'active',
       evidence: {
-        consumer: 'src/foundation/tokens/css/runtime/engines/modern/skin/table.css',
+        consumer: 'src/foundation/tokens/css/runtime/engines/modern/skin/table/index.css',
         symbol: 'var(--ds-table-header',
       },
       scope: 'tenant',
@@ -579,7 +579,7 @@ export const TENANT_CAPABILITY_REGISTRY = Object.freeze([
          * its 31 `--ds-page-shell` hits made the pointer look supported while proving nothing
          * about this capability. card.css carries the real thing.
          */
-        consumer: 'src/foundation/tokens/css/runtime/engines/modern/skin/card.css',
+        consumer: 'src/foundation/tokens/css/runtime/engines/modern/skin/card/index.css',
         symbol: "[data-anatomy-card='framed']",
       },
       scope: 'tenant',
@@ -631,44 +631,8 @@ export const TENANT_CAPABILITY_REGISTRY = Object.freeze([
       documentPath:
         'visualFoundation.advanced.tokenOverrides.{--ds-color-error,--ds-color-bg-overlay}',
       brandThemePath: 'tokenOverrides',
-      /* C5 — TWO SEMANTICS, TWO FIELDS. This entry previously carried a
-       * comment claiming `derivedChannels`' "ONLY consumer is
-       * manifest/generator/index.mjs:278, nothing else in src reads it". That
-       * sentence was materially FALSE, and the way it was false is the lesson:
-       * it scoped its own claim to `src/` and the other consumers live in
-       * `scripts/`. Membership in a surface is adjudicated by sweeping the REAL
-       * surface, never the scope the claim declares of itself.
-       *
-       * The real consumers of `derivedChannels`, by repo-wide grep:
-       *   - manifest/generator/index.mjs:278            (-> declaredOutputs.channels)
-       *   - scripts/tokens/controls-catalog/index.mjs   :147,149,155,179,253,262,272
-       *   - scripts/tokens/catalog/index.mjs            :878,940,941,942,943,948,1146,1299
-       *       (criterion: CODE READS. A raw grep of that file also hits
-       *        :566,761,959,975,979 -- the name inside markdown template
-       *        literals, i.e. GENERATED PROSE, not reads. Disclosed so this
-       *        census reconciles against the grep instead of contradicting it.)
-       *   - the customization-surface census, and scripts/tokens/root-exposure-gate:78
-       *   - scripts/quality-evidence/programs/modern-rescue/cascade-materialize.mjs:175
-       * Narrowing this field to 2 therefore did not narrow "the harness's view";
-       * it made three blocking catalogue gates disagree with the tree.
-       *
-       * So the two questions are split. `derivedChannels` states the IMPACT
-       * RADIUS and is restored to 3: this control really does move
-       * `--ds-surface-card` -- measured in F4B-17, authoring it cascades to 8
-       * channels including 10 chart-category series. An impact map that omitted
-       * it would under-declare the radius of the one control whose entire point
-       * IS its radius.
-       *
-       * `calibrationChannels` states K, "and nothing wider": the 2 channels this
-       * control's 2 stops actually write, which is what
-       * `directControlFixtureIds` may hold a stop to. `--ds-surface-card` stays
-       * OUT of it for the reason F4B-17 measured -- an 8-channel cascade is too
-       * broad for a single-entry causal attribution -- not because the control
-       * fails to move it.
-       *
-       * The PUBLIC domain is untouched either way: a tenant authors any of the
-       * 290 `TENANT_THEME_OVERRIDE_TOKENS` through the same door
-       * (`valueType: 'token-map'` + the document schema). */
+      // Impact radius includes every channel this control changes; calibration
+      // stays limited to the two channels that its fixture writes directly.
       derivedChannels: ['--ds-color-error', '--ds-surface-card', '--ds-color-bg-overlay'],
       calibrationChannels: ['--ds-color-error', '--ds-color-bg-overlay'],
       compat:
@@ -728,28 +692,8 @@ export const TENANT_CAPABILITY_REGISTRY = Object.freeze([
       version: 1,
       tier: 'pro',
       status: 'active',
-      // F4B-16 ruling (DT): the future schema decision F4B-13 registered
-      // (motion.dial's own bounds comment, above) -- a genuine per-member
-      // enumValues shape -- stays out of this packet's write-set (it would
-      // touch ingressValueForStop/manifest/rules, the instrument). `enumValues`
-      // below is the DEDUPLICATED FLAT UNION of all 6 axes' vocabularies (28
-      // of 30 raw values -- 'flat' and 'soft-depth' each appear in BOTH
-      // material and elevation, measured). This is what MAKES domain.kind
-      // resolve to 'closed-enum' at all (manifest/generator/index.mjs:186,
-      // `entry.enumValues?.length ? 'closed-enum' : ...`) rather than the
-      // unrecognised bare 'enum', which `ingressValueForStop` cannot lower
-      // (DOMAIN_KIND_NOT_LOWERED). The union check is ROLE-BLIND by
-      // construction (`enumValues.includes(stop.id)`, runtime/ingress/index.mjs:925,
-      // never checks WHICH axis a value belongs to) -- a stop declaring
-      // `role: 'geometry', value: 'flat'` would pass this check even though
-      // 'flat' is not a valid geometry value. This is NOT the real gate: the
-      // real, role-aware fail-closed check is `sanitizeExpressiveOverrides`
-      // itself (expressive-profiles/index.ts:396-421), which drops a value
-      // that isn't in ITS OWN axis's vocabulary silently, at the compiler.
-      // Every stop this control declares is crafted against its OWN axis's
-      // real vocabulary (calibration.catalog, per member) -- never against
-      // the union -- and the H-2 false-witness drill (runtime/ingress/tests)
-      // proves the union's blindness cannot silently pass as a measurement.
+      // The flat union classifies the public control as a closed enum. The
+      // compiler still validates each value against its own expressive axis.
       evidence: {
         consumer: 'src/infrastructure/runtime/bootstrap/facade/react/provider/index.tsx',
         symbol: 'sanitizeExpressiveOverrides',
@@ -950,7 +894,7 @@ export const TENANT_CAPABILITY_REGISTRY = Object.freeze([
         '--ds-color-info-bg',
         '--ds-color-info-border',
         // 6. alpha wells per tone (7, not 8: `--ds-color-alpha-info-20` is a
-        //    RETIRED channel -- `residual-adjudication.json`, "executed":
+        //    RETIRED channel -- `governance/tokens/decisions/writers/unused/system/index.json`, "executed":
         //    true -- and is never re-emitted from the floor)
         '--ds-color-alpha-success-10',
         '--ds-color-alpha-success-20',
@@ -969,7 +913,7 @@ export const TENANT_CAPABILITY_REGISTRY = Object.freeze([
       tier: 'pro',
       status: 'active',
       evidence: {
-        consumer: 'src/graphics/icons/runtime/semantic/create-icon/index.tsx',
+        consumer: 'src/graphics/icons/semantic/runtime/create-icon/index.tsx',
         symbol: 'useActiveIconExpressiveProfile',
       },
       scope: 'tenant',
@@ -993,7 +937,7 @@ export const TENANT_CAPABILITY_REGISTRY = Object.freeze([
       status: 'active',
       evidence: {
         consumer:
-          'src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts',
+          'src/components/patterns/runtime/adaptive-layout/presentation/react/index.ts',
         symbol: 'resolveActiveResponsivePosture',
       },
       scope: 'tenant',

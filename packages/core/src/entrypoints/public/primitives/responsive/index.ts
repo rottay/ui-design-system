@@ -1,3 +1,3 @@
 "use client";
 
-export { Show } from "../../../../ui/primitives/layout/responsive/show";
+export { Show } from "../../../../components/primitives/layout/responsive/show";

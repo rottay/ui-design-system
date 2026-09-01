@@ -5,7 +5,7 @@ import {
   SHOWROOM_SURFACES,
   mixWithCanvas,
   mixWithSurface,
-} from '@/components/playground/surface-tokens';
+} from '@/components/playground/tokens/surfaces';
 import { patterns } from '@/data/registry';
 import type { PatternGroup } from '@/data/registry';
 import {

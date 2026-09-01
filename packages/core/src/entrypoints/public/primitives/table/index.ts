@@ -1,3 +1,3 @@
 "use client";
 
-export { Table } from "../../../../ui/primitives/display/Table";
+export { Table } from "../../../../components/primitives/display/table";

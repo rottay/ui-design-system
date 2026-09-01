@@ -242,31 +242,25 @@ describe('deriveExtendedPaletteFloor · authored-over-derived precedence, live t
   });
 });
 
-describe('the floor reaches real first-party output: bithire/evnto author three of the four by hand; the fourth is still derived', () => {
-  it('bithire and evnto author borderFocusColor, linkColor and linkHoverColor in their default (light) palette, but not primaryForegroundColor', () => {
-    for (const theme of [bithireBrandTheme, evntoBrandTheme]) {
-      const palette = theme.palette!;
-      expect({ theme: theme.id, primaryForegroundColor: palette.primaryForegroundColor }).toEqual({
-        theme: theme.id,
-        primaryForegroundColor: undefined,
-      });
-      expect(palette.borderFocusColor, theme.id).toBeTruthy();
-      expect(palette.linkColor, theme.id).toBeTruthy();
-      expect(palette.linkHoverColor, theme.id).toBeTruthy();
-    }
-  });
+describe('the extended palette floor reaches real first-party output', () => {
+  it('keeps authored channels and derives only the missing channels', () => {
+    const channels = {
+      '--ds-color-primary-foreground': 'primaryForegroundColor',
+      '--ds-color-border-focus': 'borderFocusColor',
+      '--ds-color-link': 'linkColor',
+      '--ds-color-link-hover': 'linkHoverColor',
+    } as const;
 
-  it('compileBrandTheme ships the three authored channels verbatim and fills the fourth from the derived floor', () => {
     for (const theme of [bithireBrandTheme, evntoBrandTheme]) {
       const palette = theme.palette!;
       const compiled = compileBrandTheme({ brandTheme: theme, tenantSlug: theme.id }).cssVariables;
-      expect(compiled['--ds-color-border-focus'], theme.id).toBe(palette.borderFocusColor);
-      expect(compiled['--ds-color-link'], theme.id).toBe(palette.linkColor);
-      expect(compiled['--ds-color-link-hover'], theme.id).toBe(palette.linkHoverColor);
-      // Nothing authors primaryForegroundColor for these two, so the channel
-      // still ships -- as the derived floor, not as an absence.
       const derivedFloor = deriveExtendedPaletteFloor(palette.primaryColor);
-      expect(compiled['--ds-color-primary-foreground'], theme.id).toBe(derivedFloor['--ds-color-primary-foreground']);
+
+      for (const [channel, field] of Object.entries(channels)) {
+        expect(compiled[channel], `${theme.id}:${channel}`).toBe(
+          palette[field as keyof typeof palette] ?? derivedFloor[channel]
+        );
+      }
     }
   });
 });

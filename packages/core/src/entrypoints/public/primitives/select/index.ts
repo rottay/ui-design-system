@@ -1,3 +1,3 @@
 "use client";
 
-export { Select } from "../../../../ui/primitives/inputs/Select";
+export { Select } from "../../../../components/primitives/inputs/select";

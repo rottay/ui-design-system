@@ -1,3 +1,3 @@
 "use client";
 
-export { Input } from "../../../../ui/primitives/inputs/Input";
+export { Input } from "../../../../components/primitives/inputs/input";

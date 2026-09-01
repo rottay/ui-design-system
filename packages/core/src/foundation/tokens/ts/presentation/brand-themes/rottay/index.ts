@@ -3538,26 +3538,15 @@ const PALETTE: BrandPalette = {
    */
   linkHoverColor: 'var(--ds-color-primary)',
   linkVisitedColor: '#A0A0A5',
-  // Semantic: serious and muted. Dark-surface error/info sit at the 400 ramp
-  // step so they clear APCA |Lc| 45 on the page ground while preserving the
-  // automatic --ds-color-on-error / --ds-color-on-info emission. Light mode
-  // keeps the 600-step authority (#DC2626 / #2563EB) via modes.light.palette.
+  // Error and info use the 400 step to preserve contrast on the dark ground.
   successColor: '#22C55E',
-  successBgColor: 'rgba(34, 197, 94, 0.10)',
-  successBorderColor: 'rgba(34, 197, 94, 0.22)',
   warningColor: '#F59E0B',
-  warningBgColor: 'rgba(245, 158, 11, 0.10)',
-  warningBorderColor: 'rgba(245, 158, 11, 0.22)',
   /**
    * @domicile seed
    * @governor dial: token-overrides
-   */
+  */
   errorColor: '#F87171',
-  errorBgColor: 'rgba(239, 68, 68, 0.10)',
-  errorBorderColor: 'rgba(239, 68, 68, 0.22)',
   infoColor: '#60A5FA',
-  infoBgColor: 'rgba(59, 130, 246, 0.10)',
-  infoBorderColor: 'rgba(59, 130, 246, 0.22)',
   interactiveBgHoverColor: 'rgba(255, 255, 255, 0.04)',
   interactiveBgActiveColor: '#2A2A2F',
   interactiveBgMutedColor: '#1A1A1E',
@@ -3854,19 +3843,19 @@ const CHARTS: FirstPartyBrandTheme['charts'] = {
   animateOnMount: true,
   /**
    * @domicile seed
-   * @governor seed de personalidad de charts: el compilador la copia a chartPersonality y los renderers la consumen como argumento (gantt/bullet/gauge en ui/patterns/visualization/charts/runtime/chart-engine); no baja a canal (control null en mapa-familia-canales F4A-3a); ningun ingress de manifest/controls/*.json cubre charts.* (medido 0 de 20); gobernanza de control = celda de la cohorte chart en F9
+   * @governor unassigned: renderer input; no CSS channel
    */
   mountDuration: 800,
   /**
    * @domicile seed
-   * @governor seed de personalidad de charts: el compilador la copia a chartPersonality y los renderers la consumen como argumento (gantt/bullet/gauge en ui/patterns/visualization/charts/runtime/chart-engine); no baja a canal (control null en mapa-familia-canales F4A-3a); ningun ingress de manifest/controls/*.json cubre charts.* (medido 0 de 20); gobernanza de control = celda de la cohorte chart en F9
+   * @governor unassigned: renderer input; no CSS channel
    */
   lineStyle: 'smooth',
   showDots: false,
   useGradientFill: true,
   /**
    * @domicile seed
-   * @governor seed de personalidad de charts: el compilador la copia a chartPersonality y los renderers la consumen como argumento (gantt/bullet/gauge en ui/patterns/visualization/charts/runtime/chart-engine); no baja a canal (control null en mapa-familia-canales F4A-3a); ningun ingress de manifest/controls/*.json cubre charts.* (medido 0 de 20); gobernanza de control = celda de la cohorte chart en F9
+   * @governor unassigned: renderer input; no CSS channel
    */
   tooltipStyle: 'minimal',
 };
@@ -4215,32 +4204,32 @@ const CHROME: BrandChrome = {
   accent: {
     /**
      * @domicile seed
-     * @governor seed de forma de accent: el compilador lo copia a PersonalityTokens.accent (compilers/kernel/runtime/brand-theme) y se consume como argumento de render (tenant-preview modern lo estampa inline); no baja a canal via chromeToVariables (medido 0 emisiones); ingresa por el control pro chrome.families (ingress chrome.*, manifest/controls/chrome.families.json); celda familia x control en F9
+     * @governor chrome.families: renderer input; no CSS channel
      */
     barPosition: 'top',
     /**
      * @domicile seed
-     * @governor seed de forma de accent: el compilador lo copia a PersonalityTokens.accent (compilers/kernel/runtime/brand-theme) y se consume como argumento de render (tenant-preview modern lo estampa inline); no baja a canal via chromeToVariables (medido 0 emisiones); ingresa por el control pro chrome.families (ingress chrome.*, manifest/controls/chrome.families.json); celda familia x control en F9
+     * @governor chrome.families: renderer input; no CSS channel
      */
     barThickness: 2,
     /**
      * @domicile seed
-     * @governor seed de forma de accent: el compilador lo copia a PersonalityTokens.accent (compilers/kernel/runtime/brand-theme) y se consume como argumento de render (tenant-preview modern lo estampa inline); no baja a canal via chromeToVariables (medido 0 emisiones); ingresa por el control pro chrome.families (ingress chrome.*, manifest/controls/chrome.families.json); celda familia x control en F9
+     * @governor chrome.families: renderer input; no CSS channel
      */
     barStyle: 'gradient',
     /**
      * @domicile seed
-     * @governor seed de forma de accent: el compilador lo copia a PersonalityTokens.accent (compilers/kernel/runtime/brand-theme) y se consume como argumento de render (tenant-preview modern lo estampa inline); no baja a canal via chromeToVariables (medido 0 emisiones); ingresa por el control pro chrome.families (ingress chrome.*, manifest/controls/chrome.families.json); celda familia x control en F9
+     * @governor chrome.families: renderer input; no CSS channel
      */
     iconContainerShape: 'rounded',
     /**
      * @domicile seed
-     * @governor seed de forma de accent: el compilador lo copia a PersonalityTokens.accent (compilers/kernel/runtime/brand-theme) y se consume como argumento de render (tenant-preview modern lo estampa inline); no baja a canal via chromeToVariables (medido 0 emisiones); ingresa por el control pro chrome.families (ingress chrome.*, manifest/controls/chrome.families.json); celda familia x control en F9
+     * @governor chrome.families: renderer input; no CSS channel
      */
     badgeShape: 'rounded',
     /**
      * @domicile seed
-     * @governor seed de forma de accent: el compilador lo copia a PersonalityTokens.accent (compilers/kernel/runtime/brand-theme) y se consume como argumento de render (tenant-preview modern lo estampa inline); no baja a canal via chromeToVariables (medido 0 emisiones); ingresa por el control pro chrome.families (ingress chrome.*, manifest/controls/chrome.families.json); celda familia x control en F9
+     * @governor chrome.families: renderer input; no CSS channel
      */
     dividerStyle: 'solid',
   },
@@ -7095,11 +7084,6 @@ const CHROME: BrandChrome = {
      * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
      */
     /**
-     * @placeholder CHROME.controls.segmented.focusRing
-     * @domicile unassigned
-     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
-     */
-    /**
      * @placeholder CHROME.controls.segmented.gap
      * @domicile unassigned
      * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
@@ -7121,11 +7105,6 @@ const CHROME: BrandChrome = {
      */
     /**
      * @placeholder CHROME.controls.segmented.itemRadius
-     * @domicile unassigned
-     * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
-     */
-    /**
-     * @placeholder CHROME.controls.segmented.itemShadowSelected
      * @domicile unassigned
      * @governor none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)
      */

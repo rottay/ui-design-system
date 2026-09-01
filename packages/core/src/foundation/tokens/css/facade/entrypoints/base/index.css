@@ -1,0 +1,816 @@
+/**
+ * Rottay Design System - Tenant-free base CSS
+ *
+ * Contains everything from index.css except compiled tenant paint.
+ * Used by build-vertical-css.mjs to create per-vertical dist bundles
+ * that include only one tenant's CSS.
+ *
+ * The canonical named-layer order is declared below. Compiled tenant paint is
+ * intentionally unlayered and omitted here; each vertical bundle appends one
+ * authoritative tenant artifact after this tenant-free base.
+ *
+ * @version 1.0.0
+ */
+
+/*
+ * Cross-framework cascade contract.
+ *
+ * Consumer Tailwind owns the top-level `theme`, `base`, `components`, and
+ * `utilities` layers. The Modern engine's bundled Tailwind artifact is
+ * separately nested under `rottay-framework`: it is a DS implementation
+ * dependency, not consumer chrome. First-party tokens and skins therefore win
+ * over the bundled framework by layer ownership, while product components and
+ * utilities remain intentionally above the bounded DS skins.
+ */
+@layer theme, base, rottay-framework, rottay-reset, rottay-tokens, rottay-motion, rottay-components, rottay-engines, rottay-personality, rottay-responsive, components, utilities;
+
+/* Layer 0: antd reset */
+@import "antd/dist/reset.css" layer(rottay-reset);
+
+/* Layer 1: DS foundation + default theme */
+@import "../../../foundation/base/index.css" layer(rottay-tokens);
+@import "../../../foundation/themes/default/index.css" layer(rottay-tokens);
+/* Perceptually-even grayscale ramp + ink/paper surface anchors. Distinct from the
+   hue-tinted `--ds-color-neutral-*` UI scale; see foundation/monochrome/index.css. */
+@import "../../../foundation/monochrome/index.css" layer(rottay-tokens);
+@import "../../../foundation/animations/index.css" layer(rottay-motion);
+
+/* Layer 2: Component tokens */
+@import "../../../presentation/components/avatar/index.css" layer(rottay-components);
+@import "../../../presentation/components/visually-hidden/index.css"
+  layer(rottay-components);
+@import "../../../presentation/components/icon-frame/index.css"
+  layer(rottay-components);
+@import "../../../presentation/components/arc/index.css" layer(rottay-components);
+@import "../../../presentation/components/meter/index.css" layer(rottay-components);
+@import "../../../presentation/components/badge/index.css" layer(rottay-components);
+@import "../../../presentation/components/semantic-surface/index.css"
+  layer(rottay-components);
+@import "../../../presentation/components/button/index.css" layer(rottay-components);
+@import "../../../presentation/components/input/index.css" layer(rottay-components);
+@import "../../../presentation/components/card/index.css" layer(rottay-components);
+@import "../../../presentation/components/modal/index.css" layer(rottay-components);
+@import "../../../presentation/components/checkbox/index.css" layer(rottay-components);
+@import "../../../presentation/components/radio/index.css" layer(rottay-components);
+@import "../../../presentation/components/select/index.css" layer(rottay-components);
+@import "../../../presentation/components/tag/index.css" layer(rottay-components);
+@import "../../../presentation/components/toggle/index.css" layer(rottay-components);
+@import "../../../presentation/components/icon/index.css" layer(rottay-components);
+@import "../../../presentation/components/semantic-icon/index.css"
+  layer(rottay-components);
+@import "../../../presentation/components/mark/index.css" layer(rottay-components);
+@import "../../../presentation/components/feature-pictogram/index.css"
+  layer(rottay-components);
+@import "../../../presentation/components/spinner/index.css" layer(rottay-components);
+@import "../../../presentation/components/rate/index.css" layer(rottay-components);
+@import "../../../presentation/components/space/index.css" layer(rottay-components);
+@import "../../../presentation/components/timeline/index.css" layer(rottay-components);
+@import "../../../presentation/components/qrcode/index.css" layer(rottay-components);
+@import "../../../presentation/components/list/index.css" layer(rottay-components);
+@import "../../../presentation/components/tree/index.css" layer(rottay-components);
+@import "../../../presentation/components/empty/index.css" layer(rottay-components);
+@import "../../../presentation/components/statistic/index.css"
+  layer(rottay-components);
+@import "../../../presentation/components/patterns/index.css" layer(rottay-components);
+@import "../../../presentation/components/skin/decision-comparison/index.css"
+  layer(rottay-components);
+@import "../../../presentation/components/skin/decision-panorama/index.css"
+  layer(rottay-components);
+@import "../../../presentation/components/skin/feature-workspace-frame/index.css"
+  layer(rottay-components);
+@import "../../../presentation/components/skin/record-facts/index.css"
+  layer(rottay-components);
+@import "../../../presentation/components/skin/widget-board/index.css"
+  layer(rottay-components);
+@import "../../../runtime/bridges/collapse/index.css" layer(rottay-components);
+
+/* Layer 3: Engine themes */
+@import "../../../runtime/engines/index.css" layer(rottay-engines);
+
+/* Typed custom-property registrations are document-wide rather than paint. */
+@import "../../../foundation/base/properties/index.css";
+
+/* Scalar Flex/Stack projection shared by every engine. */
+@import "../../../presentation/components/skin/layout-primitives/index.css"
+  layer(rottay-components);
+
+/* Engine skins stay bounded inside the DS engine layer. */
+@import "../../../runtime/engines/modern/skin/button/index.css" layer(rottay-engines);
+@import "../../../runtime/engines/rustic/skin/button/index.css" layer(rottay-engines);
+@import "../../../runtime/engines/modern/skin/card/index.css" layer(rottay-engines);
+@import "../../../runtime/engines/rustic/skin/card/index.css" layer(rottay-engines);
+@import "../../../runtime/engines/modern/skin/input/index.css" layer(rottay-engines);
+@import "../../../runtime/engines/rustic/skin/input/index.css" layer(rottay-engines);
+@import "../../../runtime/engines/modern/skin/badge/index.css" layer(rottay-engines);
+@import "../../../runtime/engines/rustic/skin/badge/index.css" layer(rottay-engines);
+@import "../../../runtime/engines/modern/skin/table/index.css" layer(rottay-engines);
+@import "../../../runtime/engines/rustic/skin/table/index.css" layer(rottay-engines);
+@import "../../../presentation/components/skin/field-filters-panel/index.css"
+  layer(rottay-components);
+@import "../../../runtime/engines/modern/skin/filter-panel/index.css"
+  layer(rottay-engines);
+@import "../../../runtime/engines/rustic/skin/filter-panel/index.css"
+  layer(rottay-engines);
+@import "../../../presentation/components/skin/selection-preview-rail/index.css"
+  layer(rottay-components);
+@import "../../../runtime/engines/modern/skin/detail-panel/index.css"
+  layer(rottay-engines);
+@import "../../../runtime/engines/rustic/skin/detail-panel/index.css"
+  layer(rottay-engines);
+@import "../../../runtime/engines/modern/skin/data-table/index.css" layer(rottay-engines);
+@import "../../../runtime/engines/rustic/skin/data-table/index.css" layer(rottay-engines);
+@import "../../../presentation/components/skin/data-table-actions/index.css"
+  layer(rottay-components);
+@import "../../../presentation/components/skin/data-table-mobile/index.css"
+  layer(rottay-components);
+@import "../../../presentation/components/skin/data-table-interactions/index.css"
+  layer(rottay-components);
+@import "../../../runtime/engines/modern/skin/form-field/index.css" layer(rottay-engines);
+@import "../../../runtime/engines/rustic/skin/form-field/index.css" layer(rottay-engines);
+@import "../../../runtime/engines/modern/skin/textarea/index.css" layer(rottay-engines);
+@import "../../../runtime/engines/rustic/skin/textarea/index.css" layer(rottay-engines);
+@import "../../../runtime/engines/modern/skin/tag-input/index.css" layer(rottay-engines);
+@import "../../../runtime/engines/rustic/skin/tag-input/index.css" layer(rottay-engines);
+@import "../../../runtime/engines/modern/skin/input-number/index.css"
+  layer(rottay-engines);
+@import "../../../runtime/engines/rustic/skin/input-number/index.css"
+  layer(rottay-engines);
+@import "../../../runtime/engines/modern/skin/password-input/index.css"
+  layer(rottay-engines);
+@import "../../../runtime/engines/rustic/skin/password-input/index.css"
+  layer(rottay-engines);
+@import "../../../runtime/engines/modern/skin/switch/index.css" layer(rottay-engines);
+@import "../../../runtime/engines/rustic/skin/switch/index.css" layer(rottay-engines);
+@import "../../../runtime/engines/modern/skin/toggle/index.css" layer(rottay-engines);
+@import "../../../runtime/engines/rustic/skin/toggle/index.css" layer(rottay-engines);
+@import "../../../runtime/engines/modern/skin/radio/index.css" layer(rottay-engines);
+@import "../../../runtime/engines/rustic/skin/radio/index.css" layer(rottay-engines);
+@import "../../../runtime/engines/modern/skin/checkbox/index.css" layer(rottay-engines);
+@import "../../../runtime/engines/rustic/skin/checkbox/index.css" layer(rottay-engines);
+@import "../../../runtime/engines/modern/skin/slider/index.css" layer(rottay-engines);
+@import "../../../runtime/engines/rustic/skin/slider/index.css" layer(rottay-engines);
+@import "../../../runtime/engines/modern/skin/otp-input/index.css" layer(rottay-engines);
+@import "../../../runtime/engines/rustic/skin/otp-input/index.css" layer(rottay-engines);
+@import "../../../runtime/engines/modern/skin/form/index.css" layer(rottay-engines);
+@import "../../../runtime/engines/rustic/skin/form/index.css" layer(rottay-engines);
+@import "../../../runtime/engines/modern/skin/input-residual/index.css"
+  layer(rottay-engines);
+@import "../../../runtime/engines/rustic/skin/input-residual/index.css"
+  layer(rottay-engines);
+@import "../../../presentation/components/skin/radio-group/index.css"
+  layer(rottay-components);
+@import "../../../presentation/components/skin/checkbox-group/index.css"
+  layer(rottay-components);
+@import "../../../presentation/components/skin/button-icon/index.css"
+  layer(rottay-components);
+@import "../../../presentation/components/skin/button-group/index.css"
+  layer(rottay-components);
+@import "../../../presentation/components/skin/voice-input-button/index.css"
+  layer(rottay-components);
+@import "../../../presentation/components/skin/code-block/index.css"
+  layer(rottay-components);
+@import "../../../presentation/components/skin/markdown-view/index.css"
+  layer(rottay-components);
+@import "../../../presentation/components/skin/input-compounds/index.css"
+  layer(rottay-components);
+@import "../../../runtime/engines/modern/skin/upload/index.css" layer(rottay-engines);
+@import "../../../runtime/engines/rustic/skin/upload/index.css" layer(rottay-engines);
+@import "../../../runtime/engines/modern/skin/transfer/index.css" layer(rottay-engines);
+@import "../../../runtime/engines/rustic/skin/transfer/index.css" layer(rottay-engines);
+@import "../../../runtime/engines/modern/skin/color-picker/index.css"
+  layer(rottay-engines);
+@import "../../../runtime/engines/rustic/skin/color-picker/index.css"
+  layer(rottay-engines);
+@import "../../../runtime/engines/modern/skin/time-picker/index.css"
+  layer(rottay-engines);
+@import "../../../runtime/engines/rustic/skin/time-picker/index.css"
+  layer(rottay-engines);
+@import "../../../runtime/engines/modern/skin/date-picker/index.css"
+  layer(rottay-engines);
+@import "../../../runtime/engines/rustic/skin/date-picker/index.css"
+  layer(rottay-engines);
+/* Dropdown family (WO-SKIN-02 checkpoint B). */
+@import "../../../runtime/engines/modern/skin/autocomplete/index.css"
+  layer(rottay-engines);
+@import "../../../runtime/engines/rustic/skin/autocomplete/index.css"
+  layer(rottay-engines);
+@import "../../../runtime/engines/modern/skin/mentions/index.css" layer(rottay-engines);
+@import "../../../runtime/engines/rustic/skin/mentions/index.css" layer(rottay-engines);
+@import "../../../runtime/engines/modern/skin/select/index.css" layer(rottay-engines);
+@import "../../../runtime/engines/rustic/skin/select/index.css" layer(rottay-engines);
+@import "../../../presentation/components/skin/select-compounds/index.css"
+  layer(rottay-components);
+@import "../../../presentation/components/skin/form-placeholders/index.css"
+  layer(rottay-components);
+@import "../../../runtime/engines/modern/skin/tree-select/index.css"
+  layer(rottay-engines);
+@import "../../../runtime/engines/rustic/skin/tree-select/index.css"
+  layer(rottay-engines);
+@import "../../../runtime/engines/modern/skin/cascader/index.css" layer(rottay-engines);
+@import "../../../runtime/engines/rustic/skin/cascader/index.css" layer(rottay-engines);
+/* Status family (WO-SKIN-03 checkpoint S). */
+@import "../../../runtime/engines/modern/skin/alert/index.css" layer(rottay-engines);
+@import "../../../runtime/engines/rustic/skin/alert/index.css" layer(rottay-engines);
+@import "../../../runtime/engines/modern/skin/progress/index.css" layer(rottay-engines);
+@import "../../../runtime/engines/rustic/skin/progress/index.css" layer(rottay-engines);
+@import "../../../presentation/components/skin/progress-compounds/index.css"
+  layer(rottay-components);
+@import "../../../runtime/engines/modern/skin/spinner/index.css" layer(rottay-engines);
+@import "../../../runtime/engines/rustic/skin/spinner/index.css" layer(rottay-engines);
+@import "../../../runtime/engines/modern/skin/rate/index.css" layer(rottay-engines);
+@import "../../../runtime/engines/rustic/skin/rate/index.css" layer(rottay-engines);
+@import "../../../runtime/engines/modern/skin/skeleton/index.css" layer(rottay-engines);
+@import "../../../runtime/engines/rustic/skin/skeleton/index.css" layer(rottay-engines);
+@import "../../../presentation/components/skin/skeleton-compounds/index.css"
+  layer(rottay-components);
+/* Overlay family (WO-SKIN-03 checkpoint O). */
+@import "../../../runtime/engines/rustic/skin/modal/index.css" layer(rottay-engines);
+@import "../../../presentation/components/skin/modal-compounds/index.css"
+  layer(rottay-components);
+@import "../../../runtime/engines/modern/skin/drawer/index.css" layer(rottay-engines);
+@import "../../../runtime/engines/rustic/skin/drawer/index.css" layer(rottay-engines);
+@import "../../../presentation/components/skin/drawer-compounds/index.css"
+  layer(rottay-components);
+@import "../../../runtime/engines/modern/skin/toast/index.css" layer(rottay-engines);
+@import "../../../runtime/engines/rustic/skin/toast/index.css" layer(rottay-engines);
+@import "../../../presentation/components/skin/toast-compounds/index.css"
+  layer(rottay-components);
+@import "../../../presentation/components/skin/toast-animation-keyframes/index.css"
+  layer(rottay-components);
+@import "../../../runtime/engines/modern/skin/message/index.css" layer(rottay-engines);
+@import "../../../runtime/engines/rustic/skin/message/index.css" layer(rottay-engines);
+@import "../../../runtime/engines/modern/skin/notification/index.css"
+  layer(rottay-engines);
+@import "../../../runtime/engines/rustic/skin/notification/index.css"
+  layer(rottay-engines);
+@import "../../../runtime/engines/modern/skin/result/index.css" layer(rottay-engines);
+@import "../../../runtime/engines/rustic/skin/result/index.css" layer(rottay-engines);
+
+/* WO-SKIN-04: the overlay + navigation families paint from layered skins. */
+@import "../../../runtime/engines/modern/skin/affix/index.css" layer(rottay-engines);
+@import "../../../runtime/engines/rustic/skin/affix/index.css" layer(rottay-engines);
+@import "../../../runtime/engines/modern/skin/alert-dialog/index.css"
+  layer(rottay-engines);
+@import "../../../runtime/engines/rustic/skin/alert-dialog/index.css"
+  layer(rottay-engines);
+@import "../../../runtime/engines/modern/skin/anchor/index.css" layer(rottay-engines);
+@import "../../../runtime/engines/rustic/skin/anchor/index.css" layer(rottay-engines);
+@import "../../../runtime/engines/modern/skin/back-top/index.css" layer(rottay-engines);
+@import "../../../runtime/engines/rustic/skin/back-top/index.css" layer(rottay-engines);
+@import "../../../runtime/engines/modern/skin/breadcrumb/index.css" layer(rottay-engines);
+@import "../../../runtime/engines/rustic/skin/breadcrumb/index.css" layer(rottay-engines);
+@import "../../../runtime/engines/modern/skin/confirm-dialog/index.css"
+  layer(rottay-engines);
+@import "../../../runtime/engines/rustic/skin/confirm-dialog/index.css"
+  layer(rottay-engines);
+@import "../../../runtime/engines/modern/skin/context-menu/index.css"
+  layer(rottay-engines);
+@import "../../../runtime/engines/rustic/skin/context-menu/index.css"
+  layer(rottay-engines);
+@import "../../../runtime/engines/modern/skin/dropdown/index.css" layer(rottay-engines);
+@import "../../../runtime/engines/rustic/skin/dropdown/index.css" layer(rottay-engines);
+@import "../../../runtime/engines/modern/skin/float-button/index.css"
+  layer(rottay-engines);
+@import "../../../runtime/engines/rustic/skin/float-button/index.css"
+  layer(rottay-engines);
+@import "../../../runtime/engines/modern/skin/hover-card/index.css" layer(rottay-engines);
+@import "../../../runtime/engines/rustic/skin/hover-card/index.css" layer(rottay-engines);
+@import "../../../runtime/engines/modern/skin/link/index.css" layer(rottay-engines);
+@import "../../../runtime/engines/rustic/skin/link/index.css" layer(rottay-engines);
+@import "../../../runtime/engines/modern/skin/menu/index.css" layer(rottay-engines);
+@import "../../../runtime/engines/rustic/skin/menu/index.css" layer(rottay-engines);
+@import "../../../runtime/engines/modern/skin/overlay-modal/index.css"
+  layer(rottay-engines);
+@import "../../../runtime/engines/modern/skin/pagination/index.css" layer(rottay-engines);
+@import "../../../runtime/engines/rustic/skin/pagination/index.css" layer(rottay-engines);
+@import "../../../runtime/engines/modern/skin/popconfirm/index.css" layer(rottay-engines);
+@import "../../../runtime/engines/rustic/skin/popconfirm/index.css" layer(rottay-engines);
+@import "../../../runtime/engines/modern/skin/popover/index.css" layer(rottay-engines);
+@import "../../../runtime/engines/rustic/skin/popover/index.css" layer(rottay-engines);
+@import "../../../runtime/engines/modern/skin/scroll-area/index.css"
+  layer(rottay-engines);
+@import "../../../runtime/engines/modern/skin/segmented/index.css" layer(rottay-engines);
+@import "../../../runtime/engines/rustic/skin/segmented/index.css" layer(rottay-engines);
+@import "../../../runtime/engines/modern/skin/sheet/index.css" layer(rottay-engines);
+@import "../../../runtime/engines/rustic/skin/sheet/index.css" layer(rottay-engines);
+@import "../../../runtime/engines/modern/skin/stepper/index.css" layer(rottay-engines);
+@import "../../../runtime/engines/rustic/skin/stepper/index.css" layer(rottay-engines);
+@import "../../../runtime/engines/modern/skin/steps/index.css" layer(rottay-engines);
+@import "../../../runtime/engines/rustic/skin/steps/index.css" layer(rottay-engines);
+@import "../../../runtime/engines/modern/skin/tabs/index.css" layer(rottay-engines);
+@import "../../../runtime/engines/rustic/skin/tabs/index.css" layer(rottay-engines);
+@import "../../../runtime/engines/modern/skin/tour/index.css" layer(rottay-engines);
+@import "../../../runtime/engines/rustic/skin/tour/index.css" layer(rottay-engines);
+@import "../../../runtime/engines/modern/skin/watermark/index.css" layer(rottay-engines);
+@import "../../../runtime/engines/rustic/skin/watermark/index.css" layer(rottay-engines);
+@import "../../../presentation/components/skin/action-dock/index.css"
+  layer(rottay-components);
+@import "../../../presentation/components/skin/adaptive-overlay/index.css"
+  layer(rottay-components);
+@import "../../../presentation/components/skin/bottom-tab-bar/index.css"
+  layer(rottay-components);
+@import "../../../presentation/components/skin/breadcrumb-compounds/index.css"
+  layer(rottay-components);
+@import "../../../presentation/components/skin/menu-compounds/index.css"
+  layer(rottay-components);
+@import "../../../presentation/components/skin/navigation-static/index.css"
+  layer(rottay-components);
+@import "../../../presentation/components/skin/mobile-header/index.css"
+  layer(rottay-components);
+@import "../../../presentation/components/skin/app-shell/index.css"
+  layer(rottay-components);
+@import "../../../presentation/components/skin/overlay-modal-compounds/index.css"
+  layer(rottay-components);
+@import "../../../presentation/components/skin/stepper-compounds/index.css"
+  layer(rottay-components);
+
+/* WO-SKIN-05: the display + layout families paint from layered skins. */
+@import "../../../runtime/engines/modern/skin/avatar/index.css" layer(rottay-engines);
+@import "../../../runtime/engines/rustic/skin/avatar/index.css" layer(rottay-engines);
+@import "../../../runtime/engines/modern/skin/calendar/index.css" layer(rottay-engines);
+@import "../../../runtime/engines/rustic/skin/calendar/index.css" layer(rottay-engines);
+@import "../../../runtime/engines/modern/skin/callout/index.css" layer(rottay-engines);
+@import "../../../runtime/engines/rustic/skin/callout/index.css" layer(rottay-engines);
+@import "../../../runtime/engines/modern/skin/carousel/index.css" layer(rottay-engines);
+@import "../../../runtime/engines/rustic/skin/carousel/index.css" layer(rottay-engines);
+@import "../../../runtime/engines/modern/skin/collapse/index.css" layer(rottay-engines);
+@import "../../../runtime/engines/rustic/skin/collapse/index.css" layer(rottay-engines);
+@import "../../../runtime/engines/modern/skin/descriptions/index.css"
+  layer(rottay-engines);
+@import "../../../runtime/engines/rustic/skin/descriptions/index.css"
+  layer(rottay-engines);
+@import "../../../runtime/engines/modern/skin/divider/index.css" layer(rottay-engines);
+@import "../../../runtime/engines/rustic/skin/divider/index.css" layer(rottay-engines);
+@import "../../../runtime/engines/modern/skin/empty/index.css" layer(rottay-engines);
+@import "../../../runtime/engines/rustic/skin/empty/index.css" layer(rottay-engines);
+@import "../../../runtime/engines/modern/skin/image/index.css" layer(rottay-engines);
+@import "../../../runtime/engines/rustic/skin/image/index.css" layer(rottay-engines);
+@import "../../../runtime/engines/modern/skin/kbd/index.css" layer(rottay-engines);
+@import "../../../runtime/engines/rustic/skin/kbd/index.css" layer(rottay-engines);
+@import "../../../runtime/engines/modern/skin/layout/index.css" layer(rottay-engines);
+@import "../../../runtime/engines/rustic/skin/layout/index.css" layer(rottay-engines);
+@import "../../../runtime/engines/modern/skin/list/index.css" layer(rottay-engines);
+@import "../../../runtime/engines/rustic/skin/list/index.css" layer(rottay-engines);
+@import "../../../runtime/engines/modern/skin/qrcode/index.css" layer(rottay-engines);
+@import "../../../runtime/engines/rustic/skin/qrcode/index.css" layer(rottay-engines);
+@import "../../../runtime/engines/modern/skin/splitter/index.css" layer(rottay-engines);
+@import "../../../runtime/engines/rustic/skin/splitter/index.css" layer(rottay-engines);
+@import "../../../runtime/engines/modern/skin/statistic/index.css" layer(rottay-engines);
+@import "../../../runtime/engines/rustic/skin/statistic/index.css" layer(rottay-engines);
+@import "../../../runtime/engines/modern/skin/tag/index.css" layer(rottay-engines);
+@import "../../../runtime/engines/rustic/skin/tag/index.css" layer(rottay-engines);
+@import "../../../runtime/engines/modern/skin/timeline/index.css" layer(rottay-engines);
+@import "../../../runtime/engines/rustic/skin/timeline/index.css" layer(rottay-engines);
+@import "../../../runtime/engines/modern/skin/tooltip/index.css" layer(rottay-engines);
+@import "../../../runtime/engines/rustic/skin/tooltip/index.css" layer(rottay-engines);
+@import "../../../runtime/engines/modern/skin/tree/index.css" layer(rottay-engines);
+@import "../../../runtime/engines/rustic/skin/tree/index.css" layer(rottay-engines);
+@import "../../../presentation/components/skin/primitive-motion/index.css"
+  layer(rottay-components);
+@import "../../../presentation/components/skin/scroll-area/index.css"
+  layer(rottay-components);
+@import "../../../runtime/engines/modern/skin/typography/index.css" layer(rottay-engines);
+@import "../../../runtime/engines/rustic/skin/typography/index.css" layer(rottay-engines);
+@import "../../../runtime/engines/modern/skin/approval-workflow/index.css"
+  layer(rottay-engines);
+@import "../../../runtime/engines/modern/skin/approval-inbox/index.css"
+  layer(rottay-engines);
+@import "../../../runtime/engines/modern/skin/moderation-gallery/index.css"
+  layer(rottay-engines);
+@import "../../../runtime/engines/modern/skin/operational-ledger/index.css"
+  layer(rottay-engines);
+@import "../../../runtime/engines/modern/skin/shift-matrix/index.css"
+  layer(rottay-engines);
+@import "../../../runtime/engines/rustic/skin/approval-workflow/index.css"
+  layer(rottay-engines);
+@import "../../../runtime/engines/modern/skin/filter-builder/index.css"
+  layer(rottay-engines);
+@import "../../../runtime/engines/rustic/skin/filter-builder/index.css"
+  layer(rottay-engines);
+@import "../../../runtime/engines/modern/skin/form-builder/index.css"
+  layer(rottay-engines);
+@import "../../../runtime/engines/rustic/skin/form-builder/index.css"
+  layer(rottay-engines);
+@import "../../../runtime/engines/modern/skin/invoice-template/index.css"
+  layer(rottay-engines);
+@import "../../../runtime/engines/rustic/skin/invoice-template/index.css"
+  layer(rottay-engines);
+@import "../../../runtime/engines/modern/skin/step-wizard/index.css"
+  layer(rottay-engines);
+@import "../../../runtime/engines/modern/skin/cockpit-header/index.css"
+  layer(rottay-engines);
+@import "../../../runtime/engines/modern/skin/page-shell/index.css" layer(rottay-engines);
+@import "../../../runtime/engines/modern/skin/workbench-header/index.css"
+  layer(rottay-engines);
+@import "../../../runtime/engines/modern/skin/command-palette/index.css"
+  layer(rottay-engines);
+@import "../../../runtime/engines/modern/skin/environment-toggle/index.css"
+  layer(rottay-engines);
+@import "../../../runtime/engines/modern/skin/workspace-switcher/index.css"
+  layer(rottay-engines);
+@import "../../../runtime/engines/modern/skin/shortcuts-overlay/index.css"
+  layer(rottay-engines);
+@import "../../../runtime/engines/modern/skin/locale-switcher/index.css"
+  layer(rottay-engines);
+@import "../../../runtime/engines/modern/skin/comment-thread/index.css"
+  layer(rottay-engines);
+@import "../../../runtime/engines/modern/skin/notification-center/index.css"
+  layer(rottay-engines);
+@import "../../../runtime/engines/modern/skin/activity-log/index.css"
+  layer(rottay-engines);
+@import "../../../runtime/engines/modern/skin/live-feed/index.css" layer(rottay-engines);
+@import "../../../runtime/engines/rustic/skin/step-wizard/index.css"
+  layer(rottay-engines);
+@import "../../../runtime/engines/rustic/skin/page-shell/index.css" layer(rottay-engines);
+@import "../../../runtime/engines/rustic/skin/command-palette/index.css"
+  layer(rottay-engines);
+@import "../../../runtime/engines/rustic/skin/environment-toggle/index.css"
+  layer(rottay-engines);
+@import "../../../runtime/engines/rustic/skin/workspace-switcher/index.css"
+  layer(rottay-engines);
+@import "../../../runtime/engines/rustic/skin/shortcuts-overlay/index.css"
+  layer(rottay-engines);
+@import "../../../runtime/engines/rustic/skin/locale-switcher/index.css"
+  layer(rottay-engines);
+@import "../../../runtime/engines/rustic/skin/comment-thread/index.css"
+  layer(rottay-engines);
+@import "../../../runtime/engines/rustic/skin/notification-center/index.css"
+  layer(rottay-engines);
+@import "../../../runtime/engines/rustic/skin/activity-log/index.css"
+  layer(rottay-engines);
+@import "../../../runtime/engines/rustic/skin/live-feed/index.css" layer(rottay-engines);
+@import "../../../presentation/components/skin/avatar-compounds/index.css"
+  layer(rottay-components);
+@import "../../../presentation/components/skin/card-compounds/index.css"
+  layer(rottay-components);
+@import "../../../presentation/components/skin/carousel-compounds/index.css"
+  layer(rottay-components);
+@import "../../../presentation/components/skin/image-compounds/index.css"
+  layer(rottay-components);
+@import "../../../presentation/components/skin/statistic-compounds/index.css"
+  layer(rottay-components);
+@import "../../../presentation/components/skin/tooltip-compounds/index.css"
+  layer(rottay-components);
+@import "../../../presentation/components/skin/detail-form-surface/index.css"
+  layer(rottay-components);
+@import "../../../presentation/components/skin/edit-fields/index.css"
+  layer(rottay-components);
+@import "../../../presentation/components/skin/form-sections/index.css"
+  layer(rottay-components);
+@import "../../../presentation/components/skin/form-surface/index.css"
+  layer(rottay-components);
+@import "../../../presentation/components/skin/guided-draft-form/index.css"
+  layer(rottay-components);
+@import "../../../presentation/components/skin/record/index.css" layer(rottay-components);
+@import "../../../presentation/components/skin/wizard-surface/index.css"
+  layer(rottay-components);
+@import "../../../presentation/components/skin/detail-header/index.css"
+  layer(rottay-components);
+@import "../../../presentation/components/skin/header-hero-shared/index.css"
+  layer(rottay-components);
+@import "../../../presentation/components/skin/edit-header/index.css"
+  layer(rottay-components);
+@import "../../../presentation/components/skin/form-header/index.css"
+  layer(rottay-components);
+@import "../../../presentation/components/skin/collection-header/index.css"
+  layer(rottay-components);
+@import "../../../presentation/components/skin/dashboard-header/index.css"
+  layer(rottay-components);
+@import "../../../presentation/components/skin/activity-ticker/index.css"
+  layer(rottay-components);
+@import "../../../presentation/components/skin/activity-timeline/index.css"
+  layer(rottay-components);
+@import "../../../presentation/components/skin/activity-compact/index.css"
+  layer(rottay-components);
+@import "../../../presentation/components/skin/activity-cards/index.css"
+  layer(rottay-components);
+@import "../../../presentation/components/skin/dashboard-activity-interactions/index.css"
+  layer(rottay-components);
+@import "../../../presentation/components/skin/metrics-minimal/index.css"
+  layer(rottay-components);
+@import "../../../presentation/components/skin/metrics-cards/index.css"
+  layer(rottay-components);
+@import "../../../presentation/components/skin/metrics-chart/index.css"
+  layer(rottay-components);
+@import "../../../presentation/components/skin/metrics-rows/index.css"
+  layer(rottay-components);
+@import "../../../presentation/components/skin/dashboard-metrics-interactions/index.css"
+  layer(rottay-components);
+@import "../../../presentation/components/skin/stats-header/index.css"
+  layer(rottay-components);
+@import "../../../presentation/components/skin/stats-header-keyframes/index.css"
+  layer(rottay-components);
+@import "../../../presentation/components/skin/data-terminal-card/index.css"
+  layer(rottay-components);
+@import "../../../presentation/components/skin/data-terminal-card-keyframes/index.css"
+  layer(rottay-components);
+@import "../../../presentation/components/skin/assistant/index.css"
+  layer(rottay-components);
+@import "../../../presentation/components/skin/presence/index.css"
+  layer(rottay-components);
+
+/* workspace-chrome anatomy: workspace chrome paints from layered skins. */
+@import "../../../runtime/engines/modern/skin/list-toolbar/index.css"
+  layer(rottay-engines);
+@import "../../../runtime/engines/modern/skin/saved-views/index.css"
+  layer(rottay-engines);
+@import "../../../runtime/engines/modern/skin/widget-board/index.css"
+  layer(rottay-engines);
+@import "../../../runtime/engines/modern/skin/tree-view/index.css" layer(rottay-engines);
+@import "../../../runtime/engines/rustic/skin/saved-views/index.css"
+  layer(rottay-engines);
+@import "../../../presentation/components/skin/active-filters-bar/index.css"
+  layer(rottay-components);
+@import "../../../presentation/components/skin/column-menu/index.css"
+  layer(rottay-components);
+@import "../../../presentation/components/skin/export-button/index.css"
+  layer(rottay-components);
+@import "../../../presentation/components/skin/saved-views-menu/index.css"
+  layer(rottay-components);
+@import "../../../presentation/components/skin/scope-switcher/index.css"
+  layer(rottay-components);
+@import "../../../presentation/components/skin/search-command-bar/index.css"
+  layer(rottay-components);
+@import "../../../presentation/components/skin/status-filter-pills/index.css"
+  layer(rottay-components);
+@import "../../../presentation/components/skin/table-toolbar/index.css"
+  layer(rottay-components);
+@import "../../../presentation/components/skin/view-mode-switcher/index.css"
+  layer(rottay-components);
+@import "../../../presentation/components/skin/virtual-list/index.css"
+  layer(rottay-components);
+
+/* cross-capability anatomy: misc patterns paint from layered skins. */
+@import "../../../runtime/engines/modern/skin/file-manager/index.css"
+  layer(rottay-engines);
+@import "../../../runtime/engines/rustic/skin/file-manager/index.css"
+  layer(rottay-engines);
+@import "../../../runtime/engines/modern/skin/user-profile-card/index.css"
+  layer(rottay-engines);
+@import "../../../runtime/engines/rustic/skin/user-profile-card/index.css"
+  layer(rottay-engines);
+@import "../../../runtime/engines/modern/skin/pricing-table/index.css"
+  layer(rottay-engines);
+@import "../../../runtime/engines/rustic/skin/pricing-table/index.css"
+  layer(rottay-engines);
+@import "../../../runtime/engines/modern/skin/empty-state/index.css"
+  layer(rottay-engines);
+@import "../../../runtime/engines/rustic/skin/empty-state/index.css"
+  layer(rottay-engines);
+@import "../../../presentation/components/skin/token-inspector/index.css"
+  layer(rottay-components);
+
+/* long-tail skin ownership: surfaces long-tail paint from layered skins. */
+@import "../../../runtime/engines/modern/skin/stats-grid/index.css" layer(rottay-engines);
+@import "../../../runtime/engines/rustic/skin/stats-grid/index.css" layer(rottay-engines);
+@import "../../../runtime/engines/modern/skin/record-facts/index.css"
+  layer(rottay-engines);
+@import "../../../runtime/engines/modern/skin/column-settings/index.css"
+  layer(rottay-engines);
+@import "../../../presentation/components/skin/surface-accent-bar/index.css"
+  layer(rottay-components);
+@import "../../../presentation/components/skin/surface-section-card/index.css"
+  layer(rottay-components);
+@import "../../../presentation/components/skin/surface-states/index.css"
+  layer(rottay-components);
+@import "../../../presentation/components/skin/bulk-select-toggle/index.css"
+  layer(rottay-components);
+@import "../../../presentation/components/skin/cell-renderers/index.css"
+  layer(rottay-components);
+@import "../../../presentation/components/skin/gallery-view/index.css"
+  layer(rottay-components);
+@import "../../../presentation/components/skin/grid-view/index.css"
+  layer(rottay-components);
+@import "../../../presentation/components/skin/collection-shell/index.css"
+  layer(rottay-components);
+@import "../../../presentation/components/skin/collection-workspace/index.css"
+  layer(rottay-components);
+@import "../../../presentation/components/skin/collection-workspace-render-dispatch/index.css"
+  layer(rottay-components);
+@import "../../../presentation/components/skin/command-center/index.css"
+  layer(rottay-components);
+@import "../../../presentation/components/skin/decision-inbox/index.css"
+  layer(rottay-components);
+@import "../../../presentation/components/skin/layout-header/index.css"
+  layer(rottay-components);
+@import "../../../presentation/components/skin/layout-sidebar/index.css"
+  layer(rottay-components);
+@import "../../../presentation/components/skin/record-workbench/index.css"
+  layer(rottay-components);
+@import "../../../presentation/components/skin/audit/index.css" layer(rottay-components);
+@import "../../../presentation/components/skin/billing/index.css"
+  layer(rottay-components);
+@import "../../../presentation/components/skin/file-browser/index.css"
+  layer(rottay-components);
+@import "../../../presentation/components/skin/import-export/index.css"
+  layer(rottay-components);
+@import "../../../presentation/components/skin/integration/index.css"
+  layer(rottay-components);
+@import "../../../presentation/components/skin/profile/index.css"
+  layer(rottay-components);
+@import "../../../presentation/components/skin/settings/index.css"
+  layer(rottay-components);
+@import "../../../presentation/components/skin/team/index.css" layer(rottay-components);
+@import "../../../presentation/components/skin/compare/index.css"
+  layer(rottay-components);
+@import "../../../presentation/components/skin/dashboard/index.css"
+  layer(rottay-components);
+@import "../../../presentation/components/skin/detail/index.css" layer(rottay-components);
+@import "../../../presentation/components/skin/list/index.css" layer(rottay-components);
+@import "../../../presentation/components/skin/report/index.css" layer(rottay-components);
+@import "../../../presentation/components/skin/search/index.css" layer(rottay-components);
+@import "../../../presentation/components/skin/visualization/index.css"
+  layer(rottay-components);
+@import "../../../presentation/components/skin/auth-surface/index.css"
+  layer(rottay-components);
+@import "../../../presentation/components/skin/chat-surface/index.css"
+  layer(rottay-components);
+@import "../../../presentation/components/skin/alert-compounds/index.css"
+  layer(rottay-components);
+@import "../../../presentation/components/skin/tag-compounds/index.css"
+  layer(rottay-components);
+@import "../../../presentation/components/skin/empty-state-surface/index.css"
+  layer(rottay-components);
+@import "../../../presentation/components/skin/kanban-surface/index.css"
+  layer(rottay-components);
+@import "../../../presentation/components/skin/scheduler-surface/index.css"
+  layer(rottay-components);
+@import "../../../presentation/components/skin/editor-surface/index.css"
+  layer(rottay-components);
+@import "../../../presentation/components/skin/marketing-surface/index.css"
+  layer(rottay-components);
+@import "../../../presentation/components/skin/media-surface/index.css"
+  layer(rottay-components);
+@import "../../../presentation/components/skin/notification-surface/index.css"
+  layer(rottay-components);
+@import "../../../presentation/components/skin/pricing-surface/index.css"
+  layer(rottay-components);
+@import "../../../presentation/components/skin/activity-surface/index.css"
+  layer(rottay-components);
+@import "../../../presentation/components/skin/operational-surface/index.css"
+  layer(rottay-components);
+
+/* Hidden-channel recovery: byte-exact component CSS, deliberately unlayered. */
+@import "../../../presentation/components/skin/oauth-transition/index.css"
+  layer(rottay-components);
+@import "../../../presentation/components/skin/loading-overlay/index.css"
+  layer(rottay-components);
+
+/* customization skin ownership: tenant and branding previews paint from layered skins. */
+@import "../../../runtime/engines/modern/skin/tenant-preview/index.css"
+  layer(rottay-engines);
+@import "../../../runtime/engines/rustic/skin/tenant-preview/index.css"
+  layer(rottay-engines);
+@import "../../../presentation/components/skin/branding-preview-sandbox/index.css"
+  layer(rottay-components);
+@import "../../../presentation/components/skin/brand-studio/index.css"
+  layer(rottay-components);
+@import "../../../presentation/components/skin/visual-excellence-preview/index.css"
+  layer(rottay-components);
+
+/* visualization skin ownership: chart and visualization paint from layered skins. */
+@import "../../../presentation/components/skin/chart-foundation/index.css"
+  layer(rottay-components);
+@import "../../../presentation/components/skin/chart-area/index.css"
+  layer(rottay-components);
+@import "../../../presentation/components/skin/chart-bar/index.css"
+  layer(rottay-components);
+@import "../../../presentation/components/skin/chart-bullet/index.css"
+  layer(rottay-components);
+@import "../../../presentation/components/skin/chart-calendar-heatmap/index.css"
+  layer(rottay-components);
+@import "../../../presentation/components/skin/chart-gantt/index.css"
+  layer(rottay-components);
+@import "../../../presentation/components/skin/chart-heatmap/index.css"
+  layer(rottay-components);
+@import "../../../presentation/components/skin/chart-line/index.css"
+  layer(rottay-components);
+@import "../../../presentation/components/skin/chart-pie/index.css"
+  layer(rottay-components);
+@import "../../../presentation/components/skin/chart-radar/index.css"
+  layer(rottay-components);
+@import "../../../presentation/components/skin/chart-treemap/index.css"
+  layer(rottay-components);
+@import "../../../presentation/components/skin/chart-waterfall/index.css"
+  layer(rottay-components);
+@import "../../../presentation/components/skin/chart-c/index.css"
+  layer(rottay-components);
+
+/* Monochrome owners (ex-"commercial kit"). Reclassified by role, not by where they
+   are sold: primitives, patterns and a structure that paint through the grayscale
+   ramp above. They were previously concatenated into a private `dist/commercial.css`
+   by a directory-scanning build step; they now ship through this entrypoint like
+   every other DS skin. */
+@import "../../../presentation/components/skin/ascii-frame/index.css"
+  layer(rottay-components);
+@import "../../../presentation/components/skin/invert-section/index.css"
+  layer(rottay-components);
+@import "../../../presentation/components/skin/crop-marks/index.css"
+  layer(rottay-components);
+@import "../../../presentation/components/skin/texture-backdrop/index.css"
+  layer(rottay-components);
+@import "../../../presentation/components/skin/typewriter/index.css"
+  layer(rottay-components);
+@import "../../../presentation/components/skin/section-frame/index.css"
+  layer(rottay-components);
+@import "../../../presentation/components/skin/ascii-diagram/index.css"
+  layer(rottay-components);
+@import "../../../presentation/components/skin/terminal-block/index.css"
+  layer(rottay-components);
+@import "../../../presentation/components/skin/mono-stat/index.css"
+  layer(rottay-components);
+@import "../../../presentation/components/skin/tree-view-connector/index.css"
+  layer(rottay-components);
+@import "../../../runtime/engines/modern/skin/pattern-calendar-view/index.css"
+  layer(rottay-engines);
+@import "../../../runtime/engines/modern/skin/pattern-kanban-board/index.css"
+  layer(rottay-engines);
+@import "../../../runtime/engines/modern/skin/pattern-map-view/index.css"
+  layer(rottay-engines);
+@import "../../../runtime/engines/modern/skin/pattern-timeline/index.css"
+  layer(rottay-engines);
+@import "../../../runtime/engines/modern/skin/pattern-tree-view/index.css"
+  layer(rottay-engines);
+@import "../../../runtime/engines/rustic/skin/pattern-calendar-view/index.css"
+  layer(rottay-engines);
+@import "../../../runtime/engines/rustic/skin/pattern-kanban-board/index.css"
+  layer(rottay-engines);
+@import "../../../runtime/engines/rustic/skin/pattern-map-view/index.css"
+  layer(rottay-engines);
+@import "../../../runtime/engines/rustic/skin/pattern-timeline/index.css"
+  layer(rottay-engines);
+@import "../../../runtime/engines/rustic/skin/pattern-tree-view/index.css"
+  layer(rottay-engines);
+
+/* Tenant overrides: added per-vertical, and UNLAYERED by law
+   (cascade-layers: TENANT_PAINT_IS_UNLAYERED). */
+
+/* Personality overrides -- subordinate to tenant paint; completes only the
+   channels a compiled artifact does not cover. */
+@import "../../../runtime/personality/index.css" layer(rottay-personality);
+
+/* Layer 6: Responsive overrides */
+@import "../../../foundation/responsive/index.css" layer(rottay-responsive);
+
+/* Arabic tracking floor at ROOT scope, deliberately UNLAYERED: the tenant
+   artifact is unlayered too, so a layered guard can never reach it. See
+   foundation/responsive/language-arabic-root.css. */
+@import "../../../foundation/responsive/language-arabic-root/index.css";
+
+/* Accessibility: touch targets (unlayered)
+ *
+ * This is the ONE shared coarse-pointer floor. It stays unlayered on purpose:
+ * a layered rule would sit in `rottay-tokens`, below `rottay-engines`, and any
+ * skin declaring its own `min-block-size` would silently defeat it.
+ *
+ * The selector list is tag-based plus ARIA-role-based. Roles are the only hook
+ * that generalizes: DS controls are div/button compositions with per-render
+ * hashed classes, but they all publish a role, so `[role="combobox"]` reaches
+ * every Select/Autocomplete trigger without one per-component edit.
+ *
+ * Deliberately EXCLUDED, because a visual-size floor on them would redesign the
+ * control rather than enlarge its hit area — they own a per-component floor on
+ * their root row instead (see the Checkbox modern skin):
+ *   [role="checkbox"] / [role="radio"] / [role="switch"] — the role sits on the
+ *     small indicator, so 44px would inflate the glyph, not the row;
+ *   [role="slider"] — the role sits on the thumb, and a 44px thumb distorts the
+ *     track;
+ *   [role="option"] / [role="row"] — virtualized lists compute offsets from a
+ *     configured row height, which a CSS floor would desynchronize.
+ *
+ * The floor value must stay a PHYSICAL pixel length. The DS root font-size is
+ * fluid and resolves to 15px at narrow widths, so a rem-based floor erodes to
+ * 41.25px exactly where it matters (measured; see Checkbox.coarse-floor.test).
+ */
+@media (pointer: coarse) {
+  button,
+  [role="button"],
+  a,
+  [data-ds-interactive="true"],
+  input[type="checkbox"],
+  input[type="radio"],
+  select,
+  [role="combobox"],
+  [role="tab"],
+  [role="menuitem"],
+  [role="menuitemcheckbox"],
+  [role="menuitemradio"],
+  summary,
+  .ant-btn,
+  .ant-select-selector,
+  .ant-tabs-tab,
+  .ant-pagination-item,
+  .ant-tag {
+    min-height: var(--ds-touch-target-min);
+    min-width: var(--ds-touch-target-min);
+  }
+
+  .ant-tabs-tab {
+    padding: 12px 16px !important;
+  }
+
+  .ant-tag {
+    padding: 8px 12px !important;
+    font-size: 14px !important;
+  }
+}

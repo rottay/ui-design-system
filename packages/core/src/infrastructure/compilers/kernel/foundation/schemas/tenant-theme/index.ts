@@ -443,8 +443,6 @@ const segmented = object({
     "itemColorHover",
     "itemColorSelected",
     "itemRadius",
-    "itemShadowSelected",
-    "focusRing",
   ]),
   itemFontWeight: FONT_WEIGHT,
   itemFontWeightSelected: FONT_WEIGHT,

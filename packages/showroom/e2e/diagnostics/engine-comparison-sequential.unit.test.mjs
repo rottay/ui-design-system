@@ -314,7 +314,7 @@ test('callsite roster is exactly 5 files, count 1 each, zero tenantSlug', () => 
 });
 
 test('shell wiring: DocsRuntimeInner passes engine={engine} to DocsProviderShell', () => {
-  const sf = parse(readFileSync(join(root, 'src/components/layout/docs-runtime-shell.tsx'), 'utf8'), 'docs-runtime-shell.tsx');
+  const sf = parse(readFileSync(join(root, 'src/components/layout/docs/runtime/index.tsx'), 'utf8'), 'layout/docs/runtime/index.tsx');
   const tags = jsxTags(sf, 'DocsProviderShell');
   assert.equal(tags.length, 1, 'expected exactly 1 DocsProviderShell in the runtime shell');
   const attr = attrNamed(tags[0], 'engine');
@@ -325,7 +325,7 @@ test('shell wiring: DocsRuntimeInner passes engine={engine} to DocsProviderShell
 });
 
 test('shell wiring: DocsProviderShell passes forceEngine={engine} to the provider', () => {
-  const sf = parse(readFileSync(join(root, 'src/components/layout/docs-provider-shell.tsx'), 'utf8'), 'docs-provider-shell.tsx');
+  const sf = parse(readFileSync(join(root, 'src/components/layout/docs/provider/index.tsx'), 'utf8'), 'layout/docs/provider/index.tsx');
   const tags = jsxTags(sf, 'DesignSystemProvider');
   assert.equal(tags.length, 1, 'expected exactly 1 DesignSystemProvider in DocsProviderShell');
   const attr = attrNamed(tags[0], 'forceEngine');

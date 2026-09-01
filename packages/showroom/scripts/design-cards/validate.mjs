@@ -1,5 +1,5 @@
 /**
- * Anti-drift guard for the Claude Design card pipeline.
+ * Anti-drift guard for the design-card pipeline.
  *
  * Reads the generator's report.json and fails when a registry-listed component
  * lost its fixture (unless explicitly allowlisted) or when any harvest failed.

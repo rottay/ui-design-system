@@ -1,0 +1,206 @@
+/**
+ * DataTable interaction and motion stylesheet (skin ownership migration embedded-CSS recovery).
+ *
+ * The selectors and declarations below are a verbatim extraction of the two
+ * per-instance `<style>` producers that used to render inside the modern table.
+ * They deliberately keep their original specificity and source order. The
+ * zero-weight `:where(.ds-pattern-data-table)` root contains their formerly
+ * mount-local reach without changing selector weight. Frame bodies remain
+ * exact. The former generic `ds-shimmer` name is the sole keyframe rename:
+ * `ds-data-table-shimmer` prevents a live same-name/different-body collision
+ * with ShimmerText's global producer.
+ */
+
+@media (hover: hover) {
+  .ds-engine-modern:where(.ds-pattern-data-table)
+    .ds-resize-handle:hover
+    .ds-resize-handle__bar {
+    width: var(--ds-table-resize-bar-width-active, 0.1875rem);
+    height: var(--ds-table-resize-bar-height-active, 74%);
+    background: var(--ds-table-resize-bg-hover, var(--ds-color-primary));
+    box-shadow: 0 0 0 3px
+      color-mix(in srgb, var(--ds-color-primary) 9%, transparent);
+  }
+}
+
+.ds-engine-modern:where(.ds-pattern-data-table)
+  .ds-resize-handle:focus-visible
+  .ds-resize-handle__bar {
+  width: var(--ds-table-resize-bar-width-active, 0.1875rem);
+  height: var(--ds-table-resize-bar-height-active, 74%);
+  background: var(--ds-table-resize-bg-hover, var(--ds-color-primary));
+  box-shadow: 0 0 0 3px
+    color-mix(in srgb, var(--ds-color-primary) 9%, transparent);
+}
+
+.ds-engine-modern:where(.ds-pattern-data-table)
+  .ds-resize-handle:focus-visible {
+  outline: 2px solid var(--ds-color-primary);
+  outline-offset: -2px;
+  border-radius: var(--ds-table-control-radius, var(--ds-radius-md, 0.5rem));
+}
+
+@media (hover: hover) {
+  .ds-engine-modern:where(.ds-pattern-data-table) th[data-col-key]:hover {
+    background-color: var(
+      --ds-table-header-bg-hover,
+      color-mix(in srgb, var(--ds-color-text-primary) 5%, transparent)
+    );
+  }
+}
+
+.ds-engine-modern:where(.ds-pattern-data-table)
+  th[data-col-key][data-sortable="true"]:focus-visible {
+  outline: 2px solid var(--ds-color-primary);
+  outline-offset: -2px;
+  border-radius: var(--ds-table-control-radius, var(--ds-radius-md, 0.5rem));
+}
+
+.ds-engine-modern:where(.ds-pattern-data-table)
+  tr[data-row-index]:focus-visible {
+  outline: none;
+  background-color: var(
+    --ds-table-row-bg-selected,
+    color-mix(in srgb, var(--ds-color-primary) 6%, transparent)
+  );
+}
+/* The ring itself paints per cell: a box-shadow on the <tr> does not render
+   under border-collapse (same td rule the modern skin and the primitive
+   table.css selection keyline follow). */
+.ds-engine-modern:where(.ds-pattern-data-table)
+  tr[data-row-index]:focus-visible
+  > td {
+  box-shadow: inset 0 0 0 1px
+    color-mix(in srgb, var(--ds-color-primary) 48%, transparent);
+}
+
+.ds-engine-modern:where(.ds-pattern-data-table) td[data-editable="true"] {
+  cursor: text;
+  transition: background-color var(--ds-motion-feedback, var(--ds-motion-fast))
+      var(--ds-motion-ease-move, ease),
+    box-shadow var(--ds-motion-feedback, var(--ds-motion-fast))
+      var(--ds-motion-ease-move, ease),
+    transform var(--ds-motion-feedback, var(--ds-motion-fast))
+      var(--ds-motion-ease-move, ease);
+}
+
+@media (hover: hover) {
+  .ds-engine-modern:where(.ds-pattern-data-table) td[data-editable="true"]:hover {
+    background: color-mix(in srgb, var(--ds-color-primary) 4%, transparent);
+    box-shadow: inset 0 0 0 1px
+      color-mix(in srgb, var(--ds-color-primary) 16%, transparent);
+  }
+}
+
+.ds-engine-modern:where(.ds-pattern-data-table) td[data-editing="true"] {
+  overflow: visible;
+  padding: 4px 6px;
+  background: color-mix(
+    in srgb,
+    var(--ds-color-primary) 7%,
+    var(--ds-surface-card)
+  );
+  box-shadow: inset 0 0 0 1px
+      color-mix(in srgb, var(--ds-color-primary) 30%, transparent),
+    0 8px 18px color-mix(in srgb, var(--ds-color-primary) 8%, transparent);
+  animation: ds-inline-edit-enter
+    var(--ds-motion-reveal, var(--ds-motion-normal))
+    var(--ds-motion-ease-enter, var(--ds-motion-ease-out));
+}
+
+@keyframes ds-inline-edit-enter {
+  from {
+    transform: scale(0.985);
+    opacity: 0.78;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.ds-engine-modern:where(.ds-pattern-data-table)
+  td[data-cell-dirty="true"]::before {
+  content: "";
+  position: absolute;
+  inset-block-start: 5px;
+  inset-inline-end: 5px;
+  width: 6px;
+  height: 6px;
+  border: 1px solid var(--ds-surface-card, var(--ds-color-bg-elevated));
+  border-radius: 999px;
+  background: var(--ds-color-warning);
+  box-shadow: 0 0 0 2px
+    color-mix(in srgb, var(--ds-color-warning) 16%, transparent);
+  pointer-events: none;
+}
+
+@keyframes ds-data-table-shimmer {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.35;
+  }
+}
+
+@keyframes ds-data-table-skeleton-scan {
+  from {
+    background-position: 100% 50%;
+  }
+  to {
+    background-position: -100% 50%;
+  }
+}
+
+@keyframes ds-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes ds-bulk-slide-down {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ds-engine-modern:where(.ds-pattern-data-table) td[data-editable="true"],
+  .ds-engine-modern:where(.ds-pattern-data-table) td[data-editing="true"],
+  .ds-engine-modern:where(.ds-pattern-data-table) .ds-skeleton-row,
+  .ds-engine-modern:where(.ds-pattern-data-table)
+    [data-part="skeleton-header-col"],
+  .ds-engine-modern:where(.ds-pattern-data-table)
+    [data-part="skeleton-cell"] {
+    animation: none;
+    transition: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .ds-engine-modern:where(.ds-pattern-data-table)
+    .ds-resize-handle:hover
+    .ds-resize-handle__bar,
+  .ds-engine-modern:where(.ds-pattern-data-table)
+    .ds-resize-handle:focus-visible
+    .ds-resize-handle__bar {
+    background: Highlight;
+    box-shadow: none;
+  }
+
+  .ds-engine-modern:where(.ds-pattern-data-table)
+    th[data-col-key][data-sortable="true"]:focus-visible,
+  .ds-engine-modern:where(.ds-pattern-data-table)
+    tr[data-row-index]:focus-visible {
+    outline: 2px solid Highlight;
+    outline-offset: -2px;
+    box-shadow: none;
+  }
+}

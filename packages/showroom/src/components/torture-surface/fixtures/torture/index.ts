@@ -3,7 +3,7 @@
  * -----------------------------------
  * Showroom-owned copy of the hostile-tenant whitelabel proof fixtures.
  *
- * Source: packages/core/src/tooling/testing/fixtures/brand-themes/torture/index.ts
+ * Source: packages/core/tests/fixtures/brand-themes/torture/index.ts
  * Reason: commit 5d2157a8 drained these fixtures from the @rottay/design-system
  *         public barrel — tenant-named proof fixtures are not public DS API.
  *         The showroom is their sole consumer, so it now owns the copy.

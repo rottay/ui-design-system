@@ -1,7 +1,7 @@
 /**
  * `data-density` writer ratchet.
  *
- * `foundation/base/density.css` gives the attribute real force: any non-root
+ * `foundation/base/density/index.css` gives the attribute real force: any non-root
  * `[data-density]` element re-projects `--ds-density-local-factor`, so every
  * element that stamps it creates a genuine geometry boundary. The runtime owner
  * (`DensityScope` / `RootDensityProvider` / `densityScopeAttributes`) stamps the
@@ -54,7 +54,7 @@ const WRITERS: Readonly<
     reason:
       'Portaled tooltip surfaces re-stamp the anchor posture (`density ?? portalScope["data-density"]`).',
   },
-  'ui/primitives/overlay/Popover/engines/modern/index.tsx': {
+  'ui/primitives/overlay/popover/engines/modern/index.tsx': {
     sites: 4,
     kind: 're-stamp',
     owner: 'engine:modern',

@@ -1,25 +1,6 @@
 /**
- * @fileoverview First-party brand theme sources AND the roster that is the
- * single authority over first-party identity.
- *
- * Each `<slug>/index.ts` exports one `FirstPartyBrandTheme` capturing the
- * canonical visual identity for one Rottay product. These are the SOURCE —
- * tenant CSS is a GENERATED artifact compiled from them.
- *
- * WHY THE ROSTER LIVES HERE. Before this file owned it, the same three
- * identities were restated in at least four places: the `VerticalId` union in
- * contracts, `VERTICAL_REGISTRY` in presets (which additionally carried its own
- * `suggestedPalette`, a second colour authority), the probe's `VERTICALS`
- * scope table, and the artifact/style build scripts. They disagreed — most
- * visibly, the theme folder was `platform/` while its artifact was `rottay/`,
- * an inversion the probe harness had to carry both keys to survive. A vertical's
- * slug, its registry key and its `BrandTheme.id` are ONE fact; restating a fact
- * is how it drifts. Everything derivable is derived here, and infrastructure
- * and scripts import DOWN from this file. Nothing in `foundation/` may import
- * back up from `infrastructure/`, so there is no reverse dependency and no
- * room for a third registry.
- *
- * @module Foundation/Tokens/Presentation/BrandThemes
+ * First-party authored themes and the full theme roster derived from the
+ * lightweight vertical identity contract.
  */
 
 import type { FirstPartyBrandTheme } from "@/foundation/contracts/composition/tenants/themes";
@@ -27,7 +8,10 @@ import {
   brandThemeToTheme,
   type Theme,
 } from "@/foundation/contracts/composition/tenants/themes/iso";
-import type { FirstPartyVerticalId } from "@/foundation/contracts/kernel/verticals";
+import {
+  FIRST_PARTY_VERTICAL_SLUGS,
+  type FirstPartyVerticalId,
+} from "@/foundation/contracts/kernel/verticals";
 import type { ProductProfileKey } from "@/foundation/contracts/kernel/product-profile-identity";
 import type { FontPackId } from "@/foundation/tokens/css/foundation/typography/font-packs/manifest";
 
@@ -38,6 +22,7 @@ import { evntoBrandTheme } from "./evnto";
 export { rottayBrandTheme } from "./rottay";
 export { bithireBrandTheme } from "./bithire";
 export { evntoBrandTheme } from "./evnto";
+export { FIRST_PARTY_VERTICAL_SLUGS } from "@/foundation/contracts/kernel/verticals";
 
 export interface FirstPartyIdentity {
   readonly slug: FirstPartyVerticalId;
@@ -45,32 +30,31 @@ export interface FirstPartyIdentity {
   readonly name: string;
 }
 
-export const FIRST_PARTY_IDENTITIES = Object.freeze([
-  Object.freeze({ slug: "rottay", verticalKey: "rottay", name: "Rottay" }),
-  Object.freeze({ slug: "bithire", verticalKey: "bithire", name: "BitHire" }),
-  Object.freeze({ slug: "evnto", verticalKey: "evnto", name: "Evnto" }),
-] as const satisfies readonly FirstPartyIdentity[]);
+const FIRST_PARTY_IDENTITY_NAMES = Object.freeze({
+  rottay: "Rottay",
+  bithire: "BitHire",
+  evnto: "Evnto",
+} satisfies Record<FirstPartyVerticalId, string>);
 
-/**
- * Projects a roster tuple onto its slugs POSITIONALLY, so the result stays a
- * tuple of literals rather than collapsing to `FirstPartyVerticalId[]`.
- *
- * `.map()` erases both facts TypeScript needs downstream: arity (consumers such
- * as the effect registry's `supportedVerticals` are typed
- * `NonEmptyReadonlyArray`, which a plain array cannot satisfy) and element
- * literals (`MissingFromRoster` below computes
- * `Exclude<FirstPartyVerticalId, (typeof FIRST_PARTY_VERTICAL_SLUGS)[number]>`,
- * which against a widened `FirstPartyVerticalId[]` is `never` for ANY roster —
- * the guard would pass while the roster was missing a vertical, which is the
- * one thing it exists to catch).
- */
-type SlugsOf<T extends readonly FirstPartyIdentity[]> = {
-  readonly [K in keyof T]: T[K]["slug"];
+type FirstPartyIdentitiesOf<T extends readonly FirstPartyVerticalId[]> = {
+  readonly [K in keyof T]: T[K] extends FirstPartyVerticalId
+    ? Readonly<{
+        slug: T[K];
+        verticalKey: T[K];
+        name: (typeof FIRST_PARTY_IDENTITY_NAMES)[T[K]];
+      }>
+    : T[K];
 };
 
-export const FIRST_PARTY_VERTICAL_SLUGS = Object.freeze(
-  FIRST_PARTY_IDENTITIES.map((identity) => identity.slug),
-) as SlugsOf<typeof FIRST_PARTY_IDENTITIES>;
+export const FIRST_PARTY_IDENTITIES = Object.freeze(
+  FIRST_PARTY_VERTICAL_SLUGS.map((slug) =>
+    Object.freeze({
+      slug,
+      verticalKey: slug,
+      name: FIRST_PARTY_IDENTITY_NAMES[slug],
+    }),
+  ),
+) as FirstPartyIdentitiesOf<typeof FIRST_PARTY_VERTICAL_SLUGS>;
 
 export const RESERVED_FIRST_PARTY_NAMES = Object.freeze(
   FIRST_PARTY_IDENTITIES.map((identity) => identity.name),
@@ -240,30 +224,6 @@ export function assertTenantIdentityAllowed(
 }
 
 /**
- * Compile-time proof that this ordered list and the contract union
- * `FirstPartyVerticalId` describe the SAME set, in both directions.
- *
- * One direction alone is a false green. `satisfies readonly
- * FirstPartyVerticalId[]` only proves no EXTRA slug was added; a slug deleted
- * here would still satisfy it, and the roster would ship two verticals while
- * the type promised three. `MissingFromRoster` closes the other direction: it
- * resolves to `never` exactly when every union member appears above, and the
- * annotation below stops compiling the moment one does not.
- *
- * This is the seam where a runtime list and a compile-time union are forced to
- * agree, so "the type says rottay but the roster forgot it" is a build error
- * rather than a silently short artifact manifest.
- */
-type MissingFromRoster = Exclude<
-  FirstPartyVerticalId,
-  (typeof FIRST_PARTY_VERTICAL_SLUGS)[number]
->;
-const _ROSTER_COVERS_EVERY_CONTRACT_ID: MissingFromRoster extends never
-  ? true
-  : never = true;
-void _ROSTER_COVERS_EVERY_CONTRACT_ID;
-
-/**
  * Everything about one first-party vertical that is DERIVED from its slug.
  *
  * Every path-shaped field is a function of `slug` alone. They are spelled out
@@ -363,10 +323,7 @@ function entry(
   });
 }
 
-/**
- * The roster. Ordered, frozen, and the only place these three identities are
- * enumerated inside `foundation/`.
- */
+/** Full-theme roster in canonical slug order. */
 export const FIRST_PARTY_VERTICAL_ROSTER: readonly FirstPartyVerticalEntry[] =
   Object.freeze([
     entry(rottayBrandTheme, {

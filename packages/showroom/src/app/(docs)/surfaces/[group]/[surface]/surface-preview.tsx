@@ -5,7 +5,7 @@ import {
   SHOWROOM_SURFACES,
   mixWithCanvas,
   mixWithSurface,
-} from '@/components/playground/surface-tokens';
+} from '@/components/playground/tokens/surfaces';
 import { surfaces } from '@/data/registry';
 import type { SurfaceGroup } from '@/data/registry';
 import { renderSurfacePreview } from './surfaces-preview-fixtures';

@@ -1,3 +1,3 @@
 "use client";
 
-export { PresenceBar } from "../../../../ui/patterns/communication/presence";
+export { PresenceBar } from "../../../../components/patterns/communication/presence";

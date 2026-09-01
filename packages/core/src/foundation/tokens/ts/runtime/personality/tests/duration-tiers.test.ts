@@ -22,7 +22,7 @@ import { resolvePartialPersonalityCssVariables } from '../index';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const TRANSITIONS = readFileSync(
-  join(here, '../../../../css/foundation/animations/transitions.css'),
+  join(here, '../../../../css/foundation/animations/transitions/index.css'),
   'utf-8'
 );
 

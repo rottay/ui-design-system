@@ -153,10 +153,8 @@ import {
   sanitizeExpressiveOverrides,
 } from '@/foundation/tokens/ts/presentation/expressive-profiles';
 import { expandExpressiveProfiles } from '@/foundation/tokens/ts/presentation/expressive-profiles/expansion';
-import {
-  IconExpressiveProfileContext,
-  resolveActiveIconExpressiveProfile,
-} from '@/infrastructure/runtime/foundation/icons/active-profile';
+import { IconExpressiveProfileContext } from '@/infrastructure/runtime/foundation/icons/active-profile/foundation/read';
+import { resolveActiveIconExpressiveProfile } from '@/infrastructure/runtime/foundation/icons/active-profile/runtime/resolution';
 
 export interface DesignSystemProviderProps {
   children: ReactNode;

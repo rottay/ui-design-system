@@ -21,9 +21,9 @@
    Engine themes map --ds-* tokens to library-specific classes. */
 
 /* Engine-specific themes */
-@import './classic/theme.css';
-@import './modern/framework-token-projection.css';
-@import './modern/theme.css';
-@import './modern/framework-bridge.css';
-@import './modern/interpolate-size.css';
-@import './rustic/theme.css';
+@import './classic/theme/index.css';
+@import './modern/framework-token-projection/index.css';
+@import './modern/theme/index.css';
+@import './modern/framework-bridge/index.css';
+@import './modern/interpolate-size/index.css';
+@import './rustic/theme/index.css';

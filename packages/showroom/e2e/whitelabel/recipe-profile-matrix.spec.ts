@@ -7,7 +7,7 @@
  * sharp@1` and whose CSS is bundled, versus a published customer document
  * selecting `rottay/editorial-round@1`, compiled and mounted as a verified
  * artifact. This spec proves the machine-checkable half of the exit contract;
- * Codex performs the sighted inspection using the manifest in the wave handoff.
+ * Sighted review uses the manifest in the wave handoff.
  *
  * Only the editorial side states expected colours literally: those bytes are
  * authored by the specimen's own document. The technical side's canvas is

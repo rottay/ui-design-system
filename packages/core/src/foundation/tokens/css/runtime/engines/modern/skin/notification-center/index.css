@@ -1,0 +1,365 @@
+/**
+ * Modern NotificationCenter skin (communication-pattern anatomy unit F1; Lote-2 composition uplift).
+ *
+ * DELIBERATELY UNLAYERED (P-76): every `rottay-*` layer sorts before Tailwind's
+ * `base` layer, so a layered rule cannot paint these elements at all.
+ *
+ * SCOPE ROOT: the root `<div>` carries `ds-pattern-notification-center
+ * ds-engine-modern` + `data-part='root'`; every painted element is a descendant
+ * with its own `data-part`.
+ *
+ * COMPOSITION LAW (Lote 2): the pattern COMPOSES public DS primitives —
+ * Button (trigger, header actions, row action, per-item mark-read,
+ * dismiss), Badge (unread count), Empty (empty state), Spinner (loading)
+ * and ScrollArea (list viewport) — which own their own chrome, states and
+ * skins. This stylesheet paints only what the PATTERN owns: panel chrome +
+ * geometry, header/list/row layout, the per-type icon accents, the unread
+ * treatments, and the quiet-until-hover reveal of the row actions. The
+ * former button resets and badge fill are retired (duplication).
+ *
+ * SPECIFICITY (P-48): a rule that paints a border COLOR reaches (0,4,0) via
+ * the two root classes + the root's own `data-part` + the target's
+ * `data-part` in the descendant chain — never by REPEATING an identical
+ * attribute (the 4th-tanda law bans `[data-part='x'][data-part='x']`).
+ *
+ * POSITION: the panel hangs off the reading-END edge (`inset-inline-end: 0`
+ * — the retired physical `right: 0` mirrored nothing under RTL).
+ */
+
+/* ---- root: geometry drained from the engine's inline styles (the panel
+        anchors here); the loading branch's flex frame below outranks the
+        inline-block default at (0,4,0) vs (0,3,0). ---- */
+.ds-pattern-notification-center.ds-engine-modern[data-part='root'] {
+  position: relative;
+  display: inline-block;
+}
+
+/* ---- loading root: centered Spinner frame (Spinner owns ring + cadence) ---- */
+.ds-pattern-notification-center.ds-engine-modern[data-part='root'][data-loading='true'] {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-block: var(--ds-spacing-4);
+}
+
+/* ---- trigger: 40x40 icon-button geometry drained from the engine's former
+        inline style (values verbatim -- the public test contract renders
+        exactly this); the composed Button keeps its chrome/states, the
+        pattern owns only this local frame. Coarse pointers lift it to the
+        canonical touch floor in the media query at the end of the file. ---- */
+.ds-pattern-notification-center.ds-engine-modern [data-part='trigger'] {
+  block-size: 40px;
+  inline-size: 40px;
+  padding: 0;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ---- trigger icon wrapper: geometry drained from the engine's inline
+        styles (the badge's positioning context) ---- */
+.ds-pattern-notification-center.ds-engine-modern [data-part='trigger-icon'] {
+  position: relative;
+  display: inline-flex;
+}
+
+/* ---- trigger badge: position only (the composed Badge owns its paint) ---- */
+.ds-pattern-notification-center.ds-engine-modern [data-part='badge'] {
+  position: absolute;
+  inset-block-start: -0.25rem;
+  inset-inline-end: -0.25rem;
+}
+
+/* ---- dropdown panel: overlay material (fill + dark lift + elevation) ---- */
+.ds-pattern-notification-center.ds-engine-modern [data-part='panel'] {
+  position: absolute;
+  inset-block-start: 100%;
+  inset-inline-end: 0;
+  z-index: var(--ds-z-dropdown);
+  inline-size: var(--ds-notification-center-panel-width, 22.5rem);
+  max-inline-size: calc(100vw - var(--ds-spacing-4) - var(--ds-spacing-4));
+  margin-block-start: var(--ds-spacing-2);
+  padding: var(--ds-spacing-3);
+  container: ds-notification-panel / inline-size;
+  /* The lift overlay is its own layer directly above the fill (popover.css
+     idiom): inert until a dark surface raises --ds-elevation-lift-strength.
+     Level 3 matches the --ds-elevation-3 shadow this surface declares. */
+  background-color: var(--ds-surface-card);
+  background-image: linear-gradient(var(--ds-elevation-surface-3), var(--ds-elevation-surface-3));
+  border-radius: var(--ds-radius-lg);
+  box-shadow: var(--ds-elevation-3);
+}
+.ds-pattern-notification-center.ds-engine-modern [data-part='panel']:has(> [data-part='header']) {
+  border: 1px solid var(--ds-color-border-subtle);
+}
+
+/* ---- placement flip: `data-placement='start'` outranks the base anchor rule
+   at equal class weight ---- */
+.ds-pattern-notification-center.ds-engine-modern
+  [data-part='panel'][data-placement='start'] {
+  inset-inline-start: 0;
+  inset-inline-end: auto;
+}
+
+/* ---- header: title row + bottom rule (was the `border-b` utility) ---- */
+.ds-pattern-notification-center.ds-engine-modern [data-part='header'] {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ds-spacing-2);
+  padding-block: var(--ds-spacing-3);
+  padding-inline: var(--ds-spacing-4);
+}
+.ds-pattern-notification-center.ds-engine-modern[data-part='root'] [data-part='header'] {
+  border-block-end: 1px solid var(--ds-color-border);
+}
+.ds-pattern-notification-center.ds-engine-modern [data-part='title'] {
+  color: var(--ds-color-text-primary);
+  font-family: var(--ds-font-family-base);
+  font-size: var(--ds-font-size-sm);
+  font-weight: var(--ds-font-weight-semibold);
+}
+.ds-pattern-notification-center.ds-engine-modern [data-part='header-actions'] {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-spacing-2);
+}
+
+/* ---- scrollable list: the composed ScrollArea primitive owns the viewport,
+        the scrollbar chrome and the measured max-height (channeled through
+        its own runtime channel); the pattern keeps only the rows reset. ---- */
+.ds-pattern-notification-center.ds-engine-modern [data-part='rows'] {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* ---- day-group section label: editorial hierarchy -- a quiet eyebrow over
+        each bucket (Today / Earlier), never a colored rail. The rhythm keeps
+        the label glued to ITS rows, separated from the previous bucket. ---- */
+.ds-pattern-notification-center.ds-engine-modern [data-part='group-label'] {
+  padding-block-start: var(--ds-spacing-2);
+  padding-block-end: var(--ds-spacing-1, 0.25rem);
+  padding-inline: var(--ds-spacing-3);
+  color: var(--ds-color-text-muted);
+  font-size: var(--ds-font-size-2xs, 0.6875rem);
+  font-weight: var(--ds-font-weight-semibold);
+  letter-spacing: var(--ds-letter-spacing-wider);
+  text-transform: uppercase;
+}
+.ds-pattern-notification-center.ds-engine-modern [data-part='group'] + [data-part='group'] [data-part='group-label'] {
+  padding-block-start: var(--ds-spacing-3);
+}
+
+/* ---- overflow note: the capped remainder in the muted metadata voice; it
+   closes the list, so it reads centred rather than as a group head ---- */
+.ds-pattern-notification-center.ds-engine-modern [data-part='overflow-note'] {
+  padding-block: var(--ds-spacing-2);
+  padding-inline: var(--ds-spacing-3);
+  border-block-start: 1px solid var(--ds-color-border-subtle);
+  color: var(--ds-color-text-muted);
+  font-size: var(--ds-font-size-2xs, 0.6875rem);
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+}
+
+/* ---- empty state: the composed Empty primitive owns visual + copy paint ---- */
+.ds-pattern-notification-center.ds-engine-modern [data-part='empty'] {
+  display: flex;
+  justify-content: center;
+  padding-block: var(--ds-spacing-12, 3rem);
+}
+
+/* ---- row: layout + bottom rule (was flex/p-3/border-b utilities) + the
+        unread tint (preserved verbatim, communication-pattern anatomy §0) ---- */
+.ds-pattern-notification-center.ds-engine-modern [data-part='row'] {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--ds-spacing-3);
+  padding: var(--ds-spacing-3);
+  cursor: pointer;
+}
+.ds-pattern-notification-center.ds-engine-modern[data-part='root'] [data-part='row'] {
+  border-block-end: 1px solid var(--ds-color-border);
+}
+.ds-pattern-notification-center.ds-engine-modern [data-part='row'][data-unread='true'] {
+  background: color-mix(in srgb, var(--ds-color-primary) 10%, transparent);
+}
+/* Rows are pointer action surfaces: hover feedback only where hovering is a
+   real input mode (hover law). Unread stays readable through the title
+   weight + the dot shape, so the hover wash may cover the tint. */
+@media (hover: hover) {
+  .ds-pattern-notification-center.ds-engine-modern [data-part='row']:hover {
+    background: var(--ds-surface-highlight);
+  }
+}
+
+/* ---- type icon accent -- 4-way semantic map keyed on data-type ---- */
+.ds-pattern-notification-center.ds-engine-modern [data-part='icon'] {
+  display: inline-flex;
+  flex-shrink: 0;
+  margin-block-start: var(--ds-spacing-1, 0.25rem);
+}
+.ds-pattern-notification-center.ds-engine-modern [data-part='icon'][data-type='info'] {
+  color: var(--ds-color-info);
+}
+.ds-pattern-notification-center.ds-engine-modern [data-part='icon'][data-type='success'] {
+  color: var(--ds-color-success);
+}
+.ds-pattern-notification-center.ds-engine-modern [data-part='icon'][data-type='warning'] {
+  color: var(--ds-color-warning);
+}
+.ds-pattern-notification-center.ds-engine-modern [data-part='icon'][data-type='error'] {
+  color: var(--ds-color-error);
+}
+
+/* ---- row content ---- */
+.ds-pattern-notification-center.ds-engine-modern [data-part='row-body'] {
+  flex: 1 1 auto;
+  min-inline-size: 0;
+}
+.ds-pattern-notification-center.ds-engine-modern [data-part='row-heading'] {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-spacing-2);
+}
+.ds-pattern-notification-center.ds-engine-modern [data-part='row-title'] {
+  font-size: var(--ds-font-size-sm);
+}
+.ds-pattern-notification-center.ds-engine-modern [data-part='row-title'][data-unread='true'] {
+  font-weight: var(--ds-font-weight-semibold);
+}
+.ds-pattern-notification-center.ds-engine-modern [data-part='row-message'] {
+  margin-block-start: var(--ds-spacing-1, 0.25rem);
+  color: var(--ds-color-text-secondary);
+  font-size: var(--ds-font-size-xs, 0.75rem);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.ds-pattern-notification-center.ds-engine-modern [data-part='row-footer'] {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ds-spacing-2);
+  margin-block-start: var(--ds-spacing-1, 0.25rem);
+}
+/* Timestamps scan as a column: tabular figures (tabular-nums is a font
+   feature keyword, not a paint literal). */
+.ds-pattern-notification-center.ds-engine-modern [data-part='row-timestamp'] {
+  color: var(--ds-color-text-muted);
+  font-size: var(--ds-font-size-xs, 0.75rem);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---- unread title dot (geometry moved off retired width/height utilities) ---- */
+.ds-pattern-notification-center.ds-engine-modern [data-part='unread-dot'] {
+  flex-shrink: 0;
+  inline-size: 0.375rem;
+  block-size: 0.375rem;
+  border-radius: 50%;
+  background: var(--ds-color-primary);
+}
+
+/* ---- mark-read + dismiss: quiet until hover/focus (the composed Buttons
+        keep their chrome and focus rings; the pattern owns only the reveal).
+        The reveal fires EARLY on row hover/focus-within (saved-views
+        precedent): keyboard users see the actions before reaching them. ---- */
+.ds-pattern-notification-center.ds-engine-modern [data-part='mark-read'],
+.ds-pattern-notification-center.ds-engine-modern [data-part='dismiss'] {
+  opacity: 0.3;
+  transition: opacity var(--ds-motion-fast) var(--ds-motion-ease-out);
+}
+.ds-pattern-notification-center.ds-engine-modern [data-part='row']:focus-within [data-part='mark-read'],
+.ds-pattern-notification-center.ds-engine-modern [data-part='row']:focus-within [data-part='dismiss'],
+.ds-pattern-notification-center.ds-engine-modern [data-part='mark-read']:focus-visible,
+.ds-pattern-notification-center.ds-engine-modern [data-part='dismiss']:focus-visible {
+  opacity: 1;
+}
+@media (hover: hover) {
+  .ds-pattern-notification-center.ds-engine-modern [data-part='row']:hover [data-part='mark-read'],
+  .ds-pattern-notification-center.ds-engine-modern [data-part='row']:hover [data-part='dismiss'],
+  .ds-pattern-notification-center.ds-engine-modern [data-part='mark-read']:hover,
+  .ds-pattern-notification-center.ds-engine-modern [data-part='dismiss']:hover {
+    opacity: 1;
+  }
+}
+
+/* ---- narrow panels: the composition defines the cut — compact rows ---- */
+@container ds-notification-panel (max-width: 20rem) {
+  .ds-pattern-notification-center.ds-engine-modern [data-part='row'] {
+    gap: var(--ds-spacing-2);
+    padding: var(--ds-spacing-2);
+  }
+}
+
+/* ---- coarse pointers: the pattern's action chrome reaches the physical
+        44px floor via block-size only (the composed Buttons keep density) ---- */
+@media (pointer: coarse) {
+  .ds-pattern-notification-center.ds-engine-modern [data-part='mark-all-read'],
+  .ds-pattern-notification-center.ds-engine-modern [data-part='clear-all'],
+  .ds-pattern-notification-center.ds-engine-modern [data-part='action'],
+  .ds-pattern-notification-center.ds-engine-modern [data-part='mark-read'],
+  .ds-pattern-notification-center.ds-engine-modern [data-part='dismiss'] {
+    min-block-size: var(--ds-notification-center-touch-target, 2.75rem);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ds-pattern-notification-center.ds-engine-modern [data-part='mark-read'],
+  .ds-pattern-notification-center.ds-engine-modern [data-part='dismiss'] {
+    transition: none;
+  }
+}
+
+/* forced-colors: tints, shadows and per-type icon colours are forced away.
+   The panel re-frames in system colors; the UNREAD dot re-asserts as a
+   visible system mark (its background would otherwise be stripped) so
+   read/unread stays distinguishable by weight + shape, never by colour;
+   hairlines degrade to ButtonText. Per-type icon colour loss is decorative
+   only -- the governed icon shape carries the type. Composed primitives
+   (Button, Badge, Empty, Spinner, ScrollArea) own their own forced-colors
+   contracts. */
+@media (forced-colors: active) {
+  .ds-pattern-notification-center.ds-engine-modern [data-part='panel'],
+  .ds-pattern-notification-center.ds-engine-modern [data-part='panel']:has(> [data-part='header']) {
+    border: 1px solid ButtonText;
+    background: Canvas;
+    box-shadow: none;
+  }
+  .ds-pattern-notification-center.ds-engine-modern[data-part='root'] [data-part='header'],
+  .ds-pattern-notification-center.ds-engine-modern[data-part='root'] [data-part='row'] {
+    border-block-end-color: ButtonText;
+  }
+  .ds-pattern-notification-center.ds-engine-modern [data-part='row'][data-unread='true'] {
+    background: Canvas;
+  }
+  .ds-pattern-notification-center.ds-engine-modern [data-part='unread-dot'] {
+    background: ButtonText;
+  }
+  .ds-pattern-notification-center.ds-engine-modern [data-part='icon'] {
+    color: CanvasText;
+  }
+  /* Quiet actions must never stay dim in forced colours. */
+  .ds-pattern-notification-center.ds-engine-modern [data-part='mark-read'],
+  .ds-pattern-notification-center.ds-engine-modern [data-part='dismiss'] {
+    opacity: 1;
+  }
+}
+
+/* C2c a11y floor (census-derived): coarse-pointer tap targets never render
+   below the canonical --ds-touch-target-min channel; fine pointers keep the
+   authored size untouched. The trigger is authored 40x40, so it joins the
+   floor on both axes (its paint stays the quiet ghost icon button). */
+@media (hover: none), (pointer: coarse) {
+  .ds-pattern-notification-center.ds-engine-modern [data-part='dismiss'],
+  .ds-pattern-notification-center.ds-engine-modern [data-part='mark-read'],
+  .ds-pattern-notification-center.ds-engine-modern [data-part='trigger'] {
+    min-block-size: var(--ds-touch-target-min, 44px);
+  }
+  .ds-pattern-notification-center.ds-engine-modern [data-part='trigger'] {
+    min-inline-size: var(--ds-touch-target-min, 44px);
+  }
+}

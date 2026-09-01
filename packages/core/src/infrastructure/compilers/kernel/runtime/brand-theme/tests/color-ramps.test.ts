@@ -268,7 +268,7 @@ describe('compile-time ramp gate (what is actually wired into build-vertical-art
     // Rottay authors these four step-900s by hand against its dark canvas, and
     // they do not clear the threshold. They ship today — the values moved from
     // the artifact extension into palette.ramps without changing — so they are
-    // recorded in scripts/build-vertical-artifacts.apca-baseline.json rather
+    // recorded in scripts/contrast-baseline/index.json rather
     // than repainted inside an architecture wave. Anything BEYOND this list is
     // a regression and fails here and in the build gate.
     expect(rampFarExtremeFailures(rottayBrandTheme.palette as BrandPalette, '#0C0C0E', 'dark')).toEqual([

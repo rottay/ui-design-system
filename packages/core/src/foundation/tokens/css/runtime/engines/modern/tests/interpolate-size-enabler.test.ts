@@ -14,7 +14,7 @@ import { describe, expect, it } from "vitest";
 
 const CSS_PATH = resolve(
   process.cwd(),
-  "src/foundation/tokens/css/runtime/engines/modern/interpolate-size.css"
+  "src/foundation/tokens/css/runtime/engines/modern/interpolate-size/index.css"
 );
 const ENGINE_INDEX_PATH = resolve(
   process.cwd(),
@@ -44,6 +44,6 @@ describe("modern engine theme: interpolate-size enabler", () => {
 
   it("ships through the engine cascade (imported by runtime/engines/index.css)", () => {
     const engineIndex = readFileSync(ENGINE_INDEX_PATH, "utf8");
-    expect(engineIndex).toContain("./modern/interpolate-size.css");
+    expect(engineIndex).toContain("./modern/interpolate-size/index.css");
   });
 });

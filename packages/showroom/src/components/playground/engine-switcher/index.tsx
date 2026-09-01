@@ -1,7 +1,7 @@
 'use client';
 
 import { Box, Flex, Stack, Text, useTokens } from '@rottay/design-system';
-import { SHOWROOM_SURFACES } from '../surface-tokens';
+import { SHOWROOM_SURFACES } from '../tokens/surfaces';
 
 export interface EngineSwitcherProps {
   value: 'classic' | 'modern' | 'rustic';

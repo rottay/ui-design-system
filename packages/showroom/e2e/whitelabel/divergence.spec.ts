@@ -10,12 +10,12 @@ import {
   DIVERGENCE_SOBER_DOCUMENT,
   DIVERGENCE_SOBER_EXPECTED_ANATOMY,
   DIVERGENCE_SOBER_IDENTITY,
-} from '../../../core/src/tooling/testing/fixtures/brand-themes/divergence-sober';
+} from '../../../core/tests/fixtures/brand-themes/divergence-sober';
 import {
   DIVERGENCE_EDITORIAL_DOCUMENT,
   DIVERGENCE_EDITORIAL_EXPECTED_ANATOMY,
   DIVERGENCE_EDITORIAL_IDENTITY,
-} from '../../../core/src/tooling/testing/fixtures/brand-themes/divergence-editorial';
+} from '../../../core/tests/fixtures/brand-themes/divergence-editorial';
 
 // ---------------------------------------------------------------------------
 // W4 divergence demo — the wave exit certification (design w4-whitelabel
@@ -40,7 +40,7 @@ import {
 //   6. dual-scheme proof — the editorial artifact's light-dark() emission
 //      actually flips the painted ground between light and dark loads.
 //
-// Screenshots land in test-artifacts/gates/w4-divergence/ on every run. The
+// Screenshots land in packages/core/artifacts/quality/captures/visual-regressions/divergence/ on every run. The
 // cross-tenant ratios are measured on viewport-sized captures decoded in the
 // browser (canvas ImageData); a channel delta > 12/255 marks a pixel
 // different, absorbing antialiasing noise without hiding real divergence.
@@ -104,7 +104,8 @@ function repoRoot(): string {
   return dir;
 }
 
-const artifactDir = (): string => join(repoRoot(), 'test-artifacts', 'gates', 'w4-divergence');
+const artifactDir = (): string =>
+  join(repoRoot(), 'packages/core/artifacts/quality/captures/visual-regressions/divergence');
 const buildIdPath = (): string => join(repoRoot(), 'packages', 'showroom', '.next', 'BUILD_ID');
 
 function readBuildId(): string {

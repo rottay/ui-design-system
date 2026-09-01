@@ -28,14 +28,13 @@ import { useEffect, useState, type ReactNode } from 'react';
  * admission that actually runs is the STRONG half of the invariant (unique
  * element + digest attribute + byte-exact textContent).
  *
- * PROGRAMME DEBT (revisión arquitectónica ejecutada por subagente Kimi K3,
- * 2026-08-30, cierre F4C — ver scouts/f4c-model-honesty-and-prior-reviews.md):
+ * PROGRAMME DEBT (independent architectural review, 2026-08-30
+ * five-phase causal-canary review):
  * the `ssrReceipt` contract is unreachable in the canonical RSC→client
  * topology — the only viable envelope is minting inside the client layer in
- * one module instance. Noted in the F4C README; the pinned product
+ * one module instance. Noted in the historical canary record; the pinned product
  * (app-bithire) does not carry this contract yet, so the exposure is latent,
- * not live. Ratificado en la auditoría Fable real de cierre
- * (scouts/f4c-fable-close.md, adjudicación (a)).
+ * not live. Ratified by the independent close review.
  */
 export function ClientOnly({ children }: { children: ReactNode }) {
   const [mounted, setMounted] = useState(false);

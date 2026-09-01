@@ -17,7 +17,7 @@ import type { TenantConfig } from '@/foundation/contracts/composition/tenants';
 import type { ExpressiveIconProfile } from '@/foundation/tokens/ts/presentation/expressive-profiles';
 import { bithireBrandTheme } from '@/foundation/tokens/ts/presentation/brand-themes/bithire';
 import { DesignSystemProvider } from '@/infrastructure/runtime/bootstrap/facade/react/provider';
-import { NavigationSettingsIcon } from '@/graphics/icons/presentation/semantic/generated/roles/navigation-settings';
+import { NavigationSettingsIcon } from '@/graphics/icons/semantic/generated/roles/navigation-settings';
 import {
   IconExpressiveProfileContext,
   provideServerIconExpressiveProfile,
@@ -192,7 +192,7 @@ describe('server seam — RSC contract and its harness limit', () => {
    * The per-request isolation of the REAL react-server cache is React's
    * documented contract, exercised end-to-end by the showroom RSC
    * prerender and app-bithire's layout integration (both build-verified);
-   * the two-concurrent-requests browser proof is delegated to Codex.
+   * the two-concurrent-requests browser proof is delegated to independent code audit.
    */
   it('fail-open: providing outside a provider tree changes nothing — baseline weights exactly', () => {
     provideServerIconExpressiveProfile('duotone');
@@ -235,7 +235,7 @@ describe('server seam — RSC contract and its harness limit', () => {
     const source = readFileSync(
       resolvePath(
         process.cwd(),
-        'src/infrastructure/runtime/foundation/icons/active-profile/index.ts'
+        'src/infrastructure/runtime/foundation/icons/active-profile/foundation/read/index.ts'
       ),
       'utf8'
     );

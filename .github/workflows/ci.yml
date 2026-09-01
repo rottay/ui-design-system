@@ -52,7 +52,7 @@ jobs:
           CORE="false"
           SHOWROOM="false"
 
-          if echo "$CHANGED" | grep -qE '^(packages/core/|scripts/boundaries/dependency-honesty/index(\.test)?\.mjs$|scripts/provenance/effect-registry-audit/index(\.test)?\.mjs$|packages/showroom/e2e/responsive/overflow-baseline\.json$|roadmap/(skin-exemptions|skin-census)\.json$|\.github/workflows/ci\.yml$)'; then
+          if echo "$CHANGED" | grep -qE '^(packages/core/|scripts/check/dependencies/index(\.test)?\.mjs$|scripts/check/effects/index(\.test)?\.mjs$|packages/showroom/e2e/responsive/overflow-baseline\.json$|roadmap/(skin-exemptions|skin-census)\.json$|\.github/workflows/ci\.yml$)'; then
             CORE="true"
           fi
 
@@ -134,7 +134,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: rottay/app-bithire
-          # Pinned by Codex at R1 close; bump deliberately, never to `main`.
+          # Pinned for reproducible builds; bump deliberately, never to `main`.
           # A floating ref would let the corpus change under the baseline and
           # turn this gate into a source of unexplained failures.
           # R1 acceptance corpus. Update deliberately after a reviewed
@@ -162,7 +162,7 @@ jobs:
       # CI runs `test:ci`, and npm fires `pre<name>` only for the EXACT script
       # `test` -- so the `pretest` chain never executed here and sixteen gates
       # that looked enforced were not. `gates:ci` is the single inventory
-      # (scripts/ci/gates-manifest/index.mjs), consumed by both `pretest` and this
+      # (scripts/check/automation/gates/manifest/index.mjs), consumed by both `pretest` and this
       # step, so the two cannot drift apart again. It fails fast, prints a
       # per-gate summary, and refuses to run a gate that is declared
       # non-blocking without a recorded owner and reason.
@@ -188,18 +188,13 @@ jobs:
           pnpm effects:provenance
           pnpm effects:provenance:test
 
-      - name: WO-GAT-07 exact proof and artifact freshness
-        run: pnpm --filter @rottay/design-system run gat07:check
-        env:
-          DOCS_ENGINEERING_ROOT: ${{ github.workspace }}/.gat07/docs-engineering
-
       - name: Dependency graph and identity honesty
         run: |
           pnpm dependency:honesty:test
-          node scripts/boundaries/dependency-honesty/index.mjs static
+          node scripts/check/dependencies/index.mjs static
 
       - name: Packed artifact and non-consuming bundle honesty
-        run: node scripts/boundaries/dependency-honesty/index.mjs pack
+        run: node scripts/check/dependencies/index.mjs pack
 
       # Prepack precondition proven in-band: the build immediately above must have
       # written dist/build-stamp.json, and it must match the current source. This
@@ -237,7 +232,7 @@ jobs:
       - name: Coverage summary
         if: always()
         run: |
-          COVERAGE_FILE="packages/core/coverage/coverage-summary.json"
+          COVERAGE_FILE="packages/core/artifacts/generated/reports/coverage/coverage-summary.json"
           if [ -f "$COVERAGE_FILE" ]; then
             LINES=$(node -e "const c=require('./$COVERAGE_FILE');console.log(c.total.lines.pct)")
             BRANCHES=$(node -e "const c=require('./$COVERAGE_FILE');console.log(c.total.branches.pct)")
@@ -376,7 +371,8 @@ jobs:
         with:
           name: a11y-report
           path: |
-            test-artifacts/gates/gat-04
+            packages/core/artifacts/quality/audits/accessibility/runs
+            packages/core/artifacts/quality/audits/engine/tokens/contrast
             packages/showroom/test-results
           if-no-files-found: ignore
           retention-days: 14
@@ -441,8 +437,7 @@ jobs:
         with:
           name: visual-report
           path: |
-            test-artifacts/gates/gat-01
-            test-artifacts/gates/gat-03
+            packages/core/artifacts/quality/captures/visual-regressions
             packages/showroom/test-results
             packages/showroom/playwright-report
           if-no-files-found: ignore
@@ -502,7 +497,7 @@ jobs:
         run: pnpm --filter @rottay/design-system run lint:vertical
 
       - name: CRA-11 adaptive/factory census staleness
-        run: pnpm run cra11:check
+        run: pnpm run adaptive-contracts:check
 
 
       - name: Roadmap ledger consistency

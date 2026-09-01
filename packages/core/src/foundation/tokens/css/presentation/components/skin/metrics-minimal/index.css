@@ -1,0 +1,335 @@
+/**
+ * MetricsMinimal skin — engine-agnostic, DELIBERATELY UNLAYERED (P-47).
+ * Home: foundation/tokens/css/presentation/components/skin/metrics-minimal.css — single DOM tree under
+ * every engine. Scope root carries the single class `ds-metrics-minimal`,
+ * repeated to buy the "two root classes" budget.
+ *
+ * SHARED VOCABULARY: the values below are the `metrics/tokens.ts` constants,
+ * transcribed verbatim — the one genuinely shared token module in dashboard anatomy. The
+ * four metrics variants each get their own skin file but reference the SAME
+ * `var(--ds-metric-card-*, …)` / `var(--ds-signal-card-*, …)` fallback chains,
+ * so the vocabulary stays shared through the custom-property names, not through
+ * a merged selector (each file has a distinct scope class).
+ *
+ * SPECIFICITY (P-48): border-COLOR reaches (0,4,0) over the tenant floor (0,3,1)
+ * — including the meter-track's `transparent` border, which the floor would
+ * otherwise recolour; non-border paint wins at (0,3,0); `Text` colour buys
+ * (0,5,0) to beat the typography skin. Icon (`metric-icon`/`trend-icon`/
+ * `metric-chevron`/`panel-icon`) colour is a real `data-part` on each svg, so it
+ * is painted directly (currentColor).
+ *
+ * STATE: `metric.positive` is the row's `data-positive`; the 3-tone icon colour,
+ * the 2-tone trend/change colour and the quantitative meter fill all key on it.
+ * The hovers are hover-capable-only (`@media (hover: hover)`) and their
+ * cadences ride `--ds-motion-fast` channels, drained from the engine's former
+ * inline `transition` literals; the row-shell hover (background/border/
+ * shadow/translate) lives in the interactions skin
+ * (`dashboard-metrics-interactions.css`, `:where()` zero-weight).
+ *
+ * GEOMETRY DRAIN (premium wave): the engine's static inline geometry (panel
+ * frame, header rule, icon wells, live badge/dot, meter track/fill frame,
+ * scroll region) moved here; the panel block size rides a private seam whose
+ * fallback is the shipped 415px measure byte-exact, reading no rhythm channel —
+ * rhythm owns the room around content, never a panel's capacity.
+ * The fill WIDTH stays inline as runtime data and now anchors to the logical
+ * inline-start (the former physical `left: 0` was LTR-only); the chevron
+ * mirrors under RTL. This file also adds the reduced-motion and
+ * forced-colors contracts for its own parts.
+ *
+ * ENGINE REACH (measured 2026-08-11 by rendering all three engines, not by
+ * reading source; an earlier companion claim about `Text` dropping a `var()`
+ * `fontSize` was an artefact of the test DOM and is withdrawn — this one is
+ * about ATTRIBUTES and stands): `Text` forwards a caller's `data-part` under MODERN only —
+ * classic and rustic stamp their own — so every `Text`-borne part rule here
+ * (`title`, `live-label`, `metric-label`, `metric-value`, `metric-change`, `subtitle`)
+ * is live under modern and inert under the other two. The rules are correct
+ * as written and become universal when the primitive is repaired; the
+ * SPECIFICITY notes above describe the modern case. Box-borne parts (`root`,
+ * `header`, the icon wells, the meter, the rows/cards) reach every engine,
+ * which is why the well repair is universal and the caption repair is not.
+ */
+
+/* panel chrome -------------------------------------------------------------- */
+
+/* Root layout drained from the engine (the former inline height/padding/flex
+   frame). The panel block size rides the shared dashboard socket so embedded
+   contexts (beside-chat strips) can retune it; the 415px fallback is the
+   shipped dashboard measure, preserved byte-exact. */
+.ds-metrics-minimal.ds-metrics-minimal[data-part='root'] {
+  display: flex;
+  flex-direction: column;
+  /* The panel is its own responsive frame — every cut in this file is keyed on
+     the PANEL's inline size, never the viewport. */
+  container: ds-metrics-minimal / inline-size;
+  block-size: var(--_ds-dashboard-panel-block-size, 415px);
+  /* Panel frame rides the tenant density plane (metrics-cards idiom). */
+  padding: calc(16px * var(--ds-density-effective-scale, 1));
+  position: relative;
+  overflow: hidden;
+  background: var(--ds-signal-card-bg, var(--ds-premium-card-bg, var(--ds-color-bg-secondary)));
+  border-radius: var(--ds-signal-card-radius, var(--ds-premium-card-radius, var(--ds-radius-lg, 12px)));
+  box-shadow: var(--ds-signal-card-shadow, var(--ds-premium-card-shadow, none));
+}
+.ds-metrics-minimal.ds-metrics-minimal[data-part='root'][data-part='root'] {
+  border: 1px solid var(--ds-signal-card-border, var(--ds-premium-card-border, var(--ds-color-border-secondary)));
+}
+.ds-metrics-minimal.ds-metrics-minimal [data-part='header'] {
+  /* Header geometry drained from the engine; the rung scales with density. */
+  padding-block-end: var(--ds-spacing-3, 12px);
+  margin-block-end: var(--ds-spacing-3, 12px);
+  position: relative;
+}
+.ds-metrics-minimal.ds-metrics-minimal [data-part='header'][data-part='header'] {
+  border-bottom: 1px solid var(--ds-signal-card-border, var(--ds-premium-card-border, var(--ds-color-border-secondary)));
+}
+.ds-metrics-minimal.ds-metrics-minimal [data-part='panel-icon-box'] {
+  /* 32px icon well drained from the engine. `flex-shrink: 0` is the well's
+     SHAPE: it sits in a flex cluster beside the title/subtitle stack, and
+     without it a narrow panel squeezes the square into an oval that still
+     carries its border and glyph. The row well below already pins it; this
+     one did not. */
+  flex-shrink: 0;
+  inline-size: 32px;
+  block-size: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--ds-signal-card-icon-bg, var(--ds-metric-card-icon-bg, var(--ds-color-primary-100)));
+}
+.ds-metrics-minimal.ds-metrics-minimal [data-part='panel-icon-box'][data-part='panel-icon-box'] {
+  border: 1px solid var(--ds-signal-card-icon-border, var(--ds-metric-card-icon-border, var(--ds-color-primary-200)));
+}
+.ds-metrics-minimal.ds-metrics-minimal [data-part='panel-icon'] {
+  color: var(--ds-metric-card-icon-color, var(--ds-signal-card-accent, var(--ds-color-primary)));
+}
+.ds-metrics-minimal.ds-metrics-minimal [data-part='title'][data-part='title'][data-part='title'] {
+  color: var(--ds-signal-card-title-color, var(--ds-color-text-primary));
+}
+.ds-metrics-minimal.ds-metrics-minimal [data-part='subtitle'][data-part='subtitle'][data-part='subtitle'] {
+  color: var(--ds-signal-card-body-color, var(--ds-color-text-muted));
+}
+.ds-metrics-minimal.ds-metrics-minimal [data-part='live-badge'] {
+  padding: 6px 12px;
+  background: var(--ds-signal-card-badge-bg, var(--ds-color-success-100));
+}
+.ds-metrics-minimal.ds-metrics-minimal [data-part='live-badge'][data-part='live-badge'] {
+  border: 1px solid var(--ds-signal-card-badge-border, var(--ds-color-success-200));
+}
+.ds-metrics-minimal.ds-metrics-minimal [data-part='live-dot'] {
+  inline-size: 8px;
+  block-size: 8px;
+  border-radius: 50%;
+  background: var(--ds-signal-card-badge-color, var(--ds-color-success));
+}
+.ds-metrics-minimal.ds-metrics-minimal [data-part='live-label'][data-part='live-label'][data-part='live-label'] {
+  color: var(--ds-signal-card-badge-color, var(--ds-color-success));
+}
+
+/* per-row shell ------------------------------------------------------------- */
+
+.ds-metrics-minimal.ds-metrics-minimal [data-part='metric-row'] {
+  background: var(--ds-metric-card-bg, var(--ds-compact-card-bg, var(--ds-premium-card-bg, var(--ds-color-bg-primary))));
+  border-radius: var(--ds-metric-card-radius, var(--ds-compact-card-radius, var(--ds-radius-md, 8px)));
+  box-shadow: var(--ds-metric-card-shadow, var(--ds-compact-card-shadow, none));
+}
+.ds-metrics-minimal.ds-metrics-minimal [data-part='metric-row'][data-part='metric-row'] {
+  border: 1px solid var(--ds-metric-card-border, var(--ds-compact-card-border, var(--ds-premium-card-border, var(--ds-color-border-secondary))));
+}
+
+/* row icon box — static bg/border, 3-tone icon colour, hover scale. The 48px
+   well and the transform cadence are drained from the engine's inline styles;
+   hover law: hover-capable-only, reduced-motion quiet. ---------- */
+
+.ds-metrics-minimal.ds-metrics-minimal [data-part='metric-icon-box'] {
+  inline-size: 48px;
+  block-size: 48px;
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  background: var(--ds-metric-card-icon-bg, var(--ds-signal-card-icon-bg, var(--ds-color-primary-100)));
+  transform: scale(1);
+  transition: transform var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out);
+}
+@media (hover: hover) {
+  .ds-metrics-minimal.ds-metrics-minimal [data-part='metric-row']:hover [data-part='metric-icon-box'] {
+    transform: scale(1.05);
+  }
+}
+.ds-metrics-minimal.ds-metrics-minimal [data-part='metric-icon-box'][data-part='metric-icon-box'] {
+  border: 1px solid var(--ds-metric-card-icon-border, var(--ds-signal-card-icon-border, var(--ds-color-primary-200)));
+}
+.ds-metrics-minimal.ds-metrics-minimal [data-part='metric-row'][data-positive='true'] [data-part='metric-icon'] {
+  color: var(--ds-metric-card-trend-color, var(--ds-color-success));
+}
+.ds-metrics-minimal.ds-metrics-minimal [data-part='metric-row'][data-positive='false'] [data-part='metric-icon'] {
+  color: var(--ds-metric-card-trend-color-warning, var(--ds-color-warning));
+}
+
+/* label + trend + change — 2-tone trend colour ------------------------------ */
+
+.ds-metrics-minimal.ds-metrics-minimal [data-part='metric-label'][data-part='metric-label'][data-part='metric-label'] {
+  color: var(--ds-metric-card-label-color, var(--ds-color-text-muted));
+}
+/* The CAPTION yields; the FIGURE never does. The label and the tabular figure
+   share one `justify-content: space-between` line inside a row that clips, so
+   the label truncates with an ellipsis rather than pushing the datum past the
+   clip edge.
+   ENGINE REACH: this rule keys on a part carried by a composed `Text`, and
+   only MODERN forwards a caller's `data-part` (classic and rustic stamp their
+   own) — measured by rendering. So the truncation is live under modern and
+   inert, never harmful, under the other two; it becomes universal the day the
+   primitive honours a caller part. */
+.ds-metrics-minimal.ds-metrics-minimal [data-part='metric-label'] {
+  min-inline-size: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.ds-metrics-minimal.ds-metrics-minimal [data-part='metric-row'][data-positive='true'] [data-part='trend-icon'] {
+  color: var(--ds-metric-card-trend-color, var(--ds-color-success));
+}
+.ds-metrics-minimal.ds-metrics-minimal [data-part='metric-row'][data-positive='false'] [data-part='trend-icon'] {
+  color: var(--ds-metric-card-trend-color-error, var(--ds-color-error));
+}
+.ds-metrics-minimal.ds-metrics-minimal [data-part='metric-row'][data-positive='true'] [data-part='metric-change'][data-part='metric-change'][data-part='metric-change'] {
+  color: var(--ds-metric-card-trend-color, var(--ds-color-success));
+}
+.ds-metrics-minimal.ds-metrics-minimal [data-part='metric-row'][data-positive='false'] [data-part='metric-change'][data-part='metric-change'][data-part='metric-change'] {
+  color: var(--ds-metric-card-trend-color-error, var(--ds-color-error));
+}
+
+/* big value — rest colour, hover swaps to the accent (the colour fade is
+   drained from the engine's inline transition) ------------------------ */
+
+.ds-metrics-minimal.ds-metrics-minimal [data-part='metric-value'][data-part='metric-value'][data-part='metric-value'] {
+  color: var(--ds-metric-card-value-color, var(--ds-color-text-primary));
+  transition: color var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out);
+}
+@media (hover: hover) {
+  .ds-metrics-minimal.ds-metrics-minimal [data-part='metric-row']:hover [data-part='metric-value'][data-part='metric-value'][data-part='metric-value'] {
+    color: var(--ds-metric-card-value-color-hover, var(--ds-signal-card-accent, var(--ds-color-primary)));
+  }
+}
+
+/* meter track + fill (track geometry + the fill's frame drained from the
+   engine; the fill WIDTH stays inline as runtime data) ------------------- */
+
+.ds-metrics-minimal.ds-metrics-minimal [data-part='meter-track'] {
+  block-size: var(--ds-metric-card-meter-height, 6px);
+  position: relative;
+  overflow: hidden;
+  background: var(--ds-metric-card-meter-track, var(--ds-color-bg-tertiary));
+  border-radius: 999px;
+}
+.ds-metrics-minimal.ds-metrics-minimal [data-part='meter-track'][data-part='meter-track'] {
+  border: 1px solid var(--ds-metric-card-meter-track-border, transparent);
+}
+.ds-metrics-minimal.ds-metrics-minimal [data-part='meter-fill'] {
+  position: absolute;
+  inset-block-start: 0;
+  /* Logical anchor: the meter grows from the inline start in both writing
+     directions (the engine's former physical `left: 0` was LTR-only). */
+  inset-inline-start: 0;
+  block-size: 100%;
+  border-radius: 999px;
+  transition: background var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out);
+}
+.ds-metrics-minimal.ds-metrics-minimal [data-part='metric-row'][data-positive='true'] [data-part='meter-fill'] {
+  background: var(--ds-metric-card-meter-fill-success, var(--ds-metric-card-meter-fill, linear-gradient(90deg, var(--ds-color-primary), var(--ds-color-success))));
+}
+.ds-metrics-minimal.ds-metrics-minimal [data-part='metric-row'][data-positive='false'] [data-part='meter-fill'] {
+  background: var(--ds-metric-card-meter-fill-error, linear-gradient(90deg, var(--ds-color-warning), var(--ds-color-error)));
+}
+
+/* chevron — static colour, hover slide-in (drained from the engine's inline
+   transition). Directional: it mirrors under RTL, slide included. ---------- */
+
+.ds-metrics-minimal.ds-metrics-minimal [data-part='metric-chevron'] {
+  color: var(--ds-metric-card-icon-color, var(--ds-signal-card-accent, var(--ds-color-primary)));
+  opacity: 0;
+  transform: translateX(-8px);
+  transition:
+    opacity var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
+    transform var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out);
+}
+@media (hover: hover) {
+  .ds-metrics-minimal.ds-metrics-minimal [data-part='metric-row']:hover [data-part='metric-chevron'] {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+[dir='rtl'] .ds-metrics-minimal.ds-metrics-minimal [data-part='metric-chevron'] {
+  transform: translateX(8px) scaleX(-1);
+}
+@media (hover: hover) {
+  [dir='rtl'] .ds-metrics-minimal.ds-metrics-minimal [data-part='metric-row']:hover [data-part='metric-chevron'] {
+    transform: scaleX(-1);
+  }
+}
+
+/* scroll region — geometry drained from the engine ---------------------------- */
+
+.ds-metrics-minimal.ds-metrics-minimal [data-part='scroll-area'] {
+  flex: 1;
+  min-block-size: 0;
+  overflow-y: auto;
+}
+
+/* narrow posture — SIMPLIFIED, not compressed. Below 20rem of panel measure
+   the row keeps every element it has (well, label, trend, figure, meter,
+   chevron) and spends the measure differently: the well drops a rung and the
+   header stops competing for one line, dropping the LIVE badge under the
+   title. The chevron stays: it is the row's only affordance cue.
+   The figure steps through `--_ds-metric-value-size` — see the twin note in
+   `metrics-rows.css` for why no unit test can read the result back. */
+@container ds-metrics-minimal (inline-size < 20rem) {
+  .ds-metrics-minimal.ds-metrics-minimal[data-part='root'] {
+    --_ds-metric-value-size: 22px;
+  }
+  .ds-metrics-minimal.ds-metrics-minimal [data-part='header'] {
+    flex-wrap: wrap;
+    row-gap: var(--ds-spacing-2, 8px);
+  }
+  .ds-metrics-minimal.ds-metrics-minimal [data-part='metric-icon-box'] {
+    inline-size: 36px;
+    block-size: 36px;
+  }
+}
+
+/* reduced motion: every hover cadence and fade goes quiet; the slide-in and
+   live-glow loops are silenced in the interactions skin. */
+@media (prefers-reduced-motion: reduce) {
+  .ds-metrics-minimal.ds-metrics-minimal [data-part='metric-icon-box'],
+  .ds-metrics-minimal.ds-metrics-minimal [data-part='metric-value'],
+  .ds-metrics-minimal.ds-metrics-minimal [data-part='meter-fill'],
+  .ds-metrics-minimal.ds-metrics-minimal [data-part='metric-chevron'] {
+    transition: none;
+  }
+}
+
+/* forced-colors: panel, rows, wells and badge keep system frames; the meter
+   reads by WIDTH on a system track (never by hue); trend direction survives
+   through the trend icon shape and the signed change text. */
+@media (forced-colors: active) {
+  .ds-metrics-minimal.ds-metrics-minimal[data-part='root'][data-part='root'],
+  .ds-metrics-minimal.ds-metrics-minimal [data-part='metric-row'][data-part='metric-row'],
+  .ds-metrics-minimal.ds-metrics-minimal [data-part='panel-icon-box'][data-part='panel-icon-box'],
+  .ds-metrics-minimal.ds-metrics-minimal [data-part='metric-icon-box'][data-part='metric-icon-box'],
+  .ds-metrics-minimal.ds-metrics-minimal [data-part='live-badge'][data-part='live-badge'],
+  .ds-metrics-minimal.ds-metrics-minimal [data-part='header'][data-part='header'] {
+    border-color: ButtonText;
+    background: Canvas;
+    box-shadow: none;
+  }
+  .ds-metrics-minimal.ds-metrics-minimal [data-part='live-dot'] {
+    background: ButtonText;
+  }
+  .ds-metrics-minimal.ds-metrics-minimal [data-part='meter-track'][data-part='meter-track'] {
+    background: Canvas;
+    border: 1px solid ButtonText;
+  }
+  .ds-metrics-minimal.ds-metrics-minimal [data-part='metric-row'][data-positive] [data-part='meter-fill'] {
+    background: Highlight;
+  }
+}

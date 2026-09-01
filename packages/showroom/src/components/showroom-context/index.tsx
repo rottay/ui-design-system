@@ -19,7 +19,7 @@ import {
   readShowroomRuntimeOverride,
   type RuntimeQueryEngine,
   type RuntimeQueryTenant,
-} from '@/components/showroom-runtime-query';
+} from '@/components/runtime/query';
 
 export type ShowroomEngine = RuntimeQueryEngine;
 export type ShowroomTenant = RuntimeQueryTenant;

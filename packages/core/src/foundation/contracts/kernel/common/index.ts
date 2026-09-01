@@ -38,7 +38,7 @@ export type SizeType = 'small' | 'middle' | 'large' | 'default';
  * release without importing `SizeType` itself (which is restricted to `engines/classic/`).
  * Every exported `*Props` size-typed field across the design system must stay assignable to
  * `Size | LegacySizeAlias` -- this is the axis-law ratchet enforced by
- * `scripts/boundaries/size-axis-law-gate/index.mjs`. A follow-up release deletes this alias from the six
+ * `scripts/check/boundaries/components/sizing/index.mjs`. A follow-up release deletes this alias from the six
  * contracts' `*Size` unions (recorded in the roadmap, not silently).
  */
 export type LegacySizeAlias = SizeType;

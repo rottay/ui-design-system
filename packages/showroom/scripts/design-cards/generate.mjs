@@ -2,8 +2,8 @@
  * Design-cards generator.
  *
  * Boots the showroom Next server, reads the registry-driven card manifest, and
- * harvests one chrome-free preview per component into a self-contained Claude
- * Design card under packages/showroom/build/design-cards/.
+ * harvests one chrome-free preview per component into a self-contained design
+ * card under packages/showroom/build/design-cards/.
  *
  * The output directory is the localDir handed to DesignSync.finalize_plan.
  *

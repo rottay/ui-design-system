@@ -11,11 +11,11 @@ import { test, expect, type Page } from "@playwright/test";
  * impossible rather than merely unlikely.
  *
  * MECHANICAL ONLY. Every assertion here is a declared divergence or an identity
- * fact read from the DOM. Whether the two sides look premium is Codex's call
+ * fact read from the DOM. Whether the two sides look premium is a sighted-review call
  * with eyes on the page; nothing in this file may be read as that judgement.
  */
 
-const ROUTE = "/probe/wl-canary";
+const ROUTE = "/probe/whitelabel-canary";
 
 type Source = "bithire-static" | "themanagement-db";
 

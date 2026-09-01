@@ -23,7 +23,7 @@ import { cleanup, render } from '@testing-library/react';
 import { afterEach, describe, expect, it } from 'vitest';
 
 import { compileBrandTheme } from '@/infrastructure/compilers/kernel/runtime/brand-theme';
-import ModernButton from '@/ui/primitives/inputs/Button/engines/modern';
+import ModernButton from '@/components/primitives/inputs/button/engines/modern';
 import { RecipeProfileProvider } from '..';
 
 const RECIPE_PROFILE_VARIABLE = '--ds-recipe-profile';

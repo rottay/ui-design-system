@@ -1,16 +1,16 @@
 import type { CSSProperties } from 'react';
 import type { Metadata } from 'next';
-import { ShowroomLink as Link } from '@/components/showroom-link';
+import { ShowroomLink as Link } from '@/components/navigation/link';
 import { charts } from '@/data/registry/charts';
 import { icons } from '@/data/registry/icons';
 import { patterns } from '@/data/registry/patterns';
 import { primitives } from '@/data/registry/primitives';
 import { structures } from '@/data/registry/structures';
 import { surfaces } from '@/data/registry/surfaces';
-import { EngineSignaturesSection } from '@/components/landing/engine-signatures-section';
-import { MarketingHero } from '@/components/landing/marketing-hero';
-import ValueProofSection from '@/components/landing/value-proof-section';
-import { BrandShiftSection } from '@/components/landing/brand-shift-section';
+import { EngineSignaturesSection } from '@/components/landing/sections/engine-signatures';
+import { MarketingHero } from '@/components/landing/sections/hero';
+import ValueProofSection from '@/components/landing/sections/value-proof';
+import { BrandShiftSection } from '@/components/landing/sections/brand-shift';
 import { ArrowRightIcon } from '@rottay/design-system/icons';
 import { ActionOpenExternalIcon } from '@rottay/design-system/icons/foundation';
 

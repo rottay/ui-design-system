@@ -4,8 +4,8 @@
 
 1. If you are working on the Modern Rescue programme (WO-CRA-23), read
    `AGENTS.md` first, then the canonical authorities it lists. No section in
-   this file overrides `packages/core/scripts/quality-evidence/programs/modern-rescue/README.md`,
-   `program.json`, `customization-model.json` or `agent-orchestration.json`.
+   this file overrides `packages/core/scripts/check/modern-rescue/README.md`,
+   `program/index.json`, `customization-model/index.json` or `orchestration/index.json`.
 2. General project rules below apply only where the programme contracts are
    silent.
 
@@ -14,7 +14,7 @@
 - **Kimi K3 is the DT/coordinator** (seat held by Kimi K3 from 2026-08-20,
   handed to Codex by owner order of 2026-08-21 on quota exhaustion of Kimi K3,
   and consummated back to Kimi K3 by explicit owner order of 2026-08-23 —
-  `docs/prompt-dt-fresh-session-2026-08-23.md`). It decomposes work into
+  `docs/history/prompts/architecture-refactor/2026-08/design-lead-session/index.md`). It decomposes work into
   bounded packets, makes every architecture/adjudication decision, and
   verifies every packet with gates and diff review before any commit. It may
   implement shared integration, delicate surgery or a critical unblock under
@@ -54,17 +54,17 @@ Apps, verticals, and modules must never query tables owned by another module/sch
   the normative definition of what this repository must be: doctrine, the full
   target tree with every owner's purpose and relations, and the delta against
   the current tree. Read it before moving, renaming or deleting anything.
-- **Diagnostic & plan**: [`docs/DIAGNOSTICO-Y-PLAN-2026-08-19.md`](docs/DIAGNOSTICO-Y-PLAN-2026-08-19.md)
+- **Diagnostic & plan**: [`docs/history/programs/architecture-refactor/2026-08/diagnosis/index.md`](docs/history/programs/architecture-refactor/2026-08/diagnosis/index.md)
   — the verified diagnosis, the ordered work fronts, and the master removal
   list derived from the target architecture.
-- **Repo map**: [`docs/MAPA-DEL-REPO.md`](docs/MAPA-DEL-REPO.md) — what every
+- **Repo map**: [`docs/history/inventories/repository-map/2026-08/index.md`](docs/history/inventories/repository-map/2026-08/index.md) — what every
   folder in this repository does, where something is written twice, and which
   folders are empty scaffolding. Independently verified claim by claim.
-- **Third-reader audit**: [`docs/AUDITORIA-KIMI.md`](docs/AUDITORIA-KIMI.md) —
+- **Third-reader audit**: [`docs/history/audits/architecture-refactor/2026-08/coordination/index.md`](docs/history/audits/architecture-refactor/2026-08/coordination/index.md) —
   an independent audit that overturned four proposed removals (`Sheet`,
   `Popover`, `Statistic`, `Tree` all have in-DS production consumers) and
   re-blocked LOTE 9. Read it before executing any removal lot.
-- **Keep/delete decisions**: [`docs/QUE-SE-QUEDA-Y-QUE-SE-BORRA.md`](docs/QUE-SE-QUEDA-Y-QUE-SE-BORRA.md)
+- **Keep/delete decisions**: [`docs/history/programs/architecture-refactor/2026-08/retention/index.md`](docs/history/programs/architecture-refactor/2026-08/retention/index.md)
   — which duplicate is canonical, which owners are removed, and which owners
   only look dead. Read it before proposing that anything is redundant.
 
@@ -111,7 +111,7 @@ Update the hub `README.md` inventory counts when component totals change.
   - **rustic** — Vanilla CSS fallback
   - **custom** — White-label component packs registered at runtime; not a fourth physical
     implementation copied into every component owner
-- Components in `packages/core/src/ui/`
+- Components in `packages/core/src/components/`
 - Engine-backed components may have `engines/{classic,modern,rustic}/index.tsx`
   siblings selected at runtime via `createEngineComponent()` and the active
   engine context; do not create fake forwarding engines when one is absent
@@ -120,16 +120,24 @@ Update the hub `README.md` inventory counts when component totals change.
 
 ## Core source-tree hierarchy (NON-NEGOTIABLE)
 
+`packages/core/` has seven source-controlled authority roots: `src/`,
+`scripts/`, `tests/`, `contracts/`, `governance/`, `artifacts/`, and `docs/`.
+`dist/` is disposable build output, not an authority root.
+
 `packages/core/src` is an ownership and dependency tree, not a flat file
 catalog. Its physical hierarchy must make architectural importance and
 dependency direction visible.
 
 The five canonical physical roots are `foundation/`, `infrastructure/`,
-`graphics/`, `ui/`, and `tooling/`. `entrypoints/` is a classified
-package-boundary support root, not a sixth architectural tier. Every public
-subpath boundary lives below it as `folder/index.ts`; `src/index.ts` is the only
-file allowed directly at the source root. A top-level `composition/` owner is
+`graphics/`, `components/`, and `entrypoints/`. `components/` owns the four UI
+tiers; `entrypoints/` owns classified package boundaries. Every public subpath
+boundary lives below it as `folder/index.ts`; `src/index.ts` is the only file
+allowed directly at the source root. A top-level `composition/` owner is
 forbidden.
+
+`packages/core/scripts/` has exactly six intent roots: `build/`, `check/`,
+`generate/`, `libraries/`, `maintain/`, and `package/`. Source-layout names are
+not valid script roots.
 
 The local dependency order is
 `foundation|kernel|contracts|policy|quality|spec|validation` → `runtime` →
@@ -184,7 +192,7 @@ This package is the **single source of truth** for reusable, domain-agnostic UI 
 
 ## Component taxonomy (4 physical tiers, 5 manifest layers)
 
-The design system has 4 single-word tiers under `packages/core/src/ui/`:
+The design system has 4 single-word tiers under `packages/core/src/components/`:
 
 ### primitives/
 Engine-switched leaf components (Button, Input, Card, Modal, Tabs, etc).
@@ -241,7 +249,7 @@ has exactly five logical layer values:
 
 `chart` is a dedicated inventory/review cohort because chart behavior and
 evidence are specialized; its production owner still lives physically below
-`ui/patterns/visualization/charts/`. No sixth family layer may be introduced.
+`components/patterns/visualization/charts/`. No sixth family layer may be introduced.
 
 - `commercial` is a marketing adjective, not an architectural role. It may
   never be a manifest layer, family kind, or duplicated path such as
@@ -268,12 +276,12 @@ evidence are specialized; its production owner still lives physically below
   source-bound, owner-reviewed and applied atomically to inventory, manifests,
   reverse projections, gates and evidence. Never preserve a bogus row merely
   to keep the denominator unchanged. The denominator is an output, not an
-  input: it is derived from `family-inventory.json` only after the reverse
+  input: it is derived from `family-inventory/index.json` only after the reverse
   public projection reports zero unowned components, and it is stated in
-  exactly one place, `program.json` -> `denominators.visibleFamilies`. This
+  exactly one place, `program/index.json` -> `denominators.visibleFamilies`. This
   rule previously quoted a literal count, which made the rule against pinning
   a number depend on a pinned number; if you need today's value, read it from
-  `program.json` rather than from prose.
+  `program/index.json` rather than from prose.
 
 Before the Modern Rescue point-zero freeze, recursively audit every folder and
 subfolder below `packages/core/src` and the Showroom registries. The audit is a
@@ -288,16 +296,16 @@ blocking architecture gate and must prove:
    agree exactly; and
 6. a planted forbidden layer/duplicate/unowned folder makes the gate fail.
 
-The debt this paragraph used to name -- the 11 owners under
-`ui/patterns/commercial/` and the four components inventoried as
+The debt this paragraph used to name -- the 11 owners formerly grouped as
+`components/patterns/commercial/` and the four components inventoried as
 `surface-composition` -- is settled: neither directory exists any more
 (`find packages/core/src -type d -name "*commercial*"` and `-name
 "*surface-composition*"` both return nothing, verified 2026-08-18).
 
 The current known debt is enumerated instead in
-[`docs/MAPA-DEL-REPO.md`](docs/MAPA-DEL-REPO.md) (what every folder does, where
+[`docs/history/inventories/repository-map/2026-08/index.md`](docs/history/inventories/repository-map/2026-08/index.md) (what every folder does, where
 something is written twice, which folders are empty scaffolding) and adjudicated
-in [`docs/QUE-SE-QUEDA-Y-QUE-SE-BORRA.md`](docs/QUE-SE-QUEDA-Y-QUE-SE-BORRA.md)
+in [`docs/history/programs/architecture-refactor/2026-08/retention/index.md`](docs/history/programs/architecture-refactor/2026-08/retention/index.md)
 (eleven removal lots, nine unifications with a proposed canonical owner, and the
 list of owners that only look dead). Read both before proposing that any folder
 is redundant; the second one records eight components that a liveness-only reading
@@ -322,8 +330,8 @@ wrongly marked as orphans.
 
 > **Authority remit:** the Modern Rescue programme owns the operational control
 > model, namespace lifecycle and acceptance law. For WO-CRA-23 read
-> `packages/core/scripts/quality-evidence/programs/modern-rescue/README.md`,
-> `customization-model.json`, `program.json` and `agent-orchestration.json`.
+> `packages/core/scripts/check/modern-rescue/README.md`,
+> `customization-model/index.json`, `program/index.json` and `orchestration/index.json`.
 > This section only restates project-wide invariants.
 
 The canonical visual source of truth is the total nested **Theme** under
@@ -387,7 +395,7 @@ glyph, role mapping, weight family, or motion recipe.
 
 ### Adding new icons
 Add a governed role to
-`packages/core/src/graphics/icons/foundation/semantic/corpus/manifest.json`, map it in the pinned
+`packages/core/src/graphics/icons/semantic/sources/corpus/manifest.json`, map it in the pinned
 adapter manifest, and run `pnpm -C packages/core icons:generate`. Extend the
 corpus tests and update provenance when the supplier/version changes. Do not
 add a new vendor-shaped alias for product use.
@@ -395,7 +403,7 @@ add a new vendor-shaped alias for product use.
 Brand and cloud-provider identity is a separate asset class. Product code uses
 `BrandMark` or `CloudServiceMark` from `@rottay/design-system/marks`; the
 pinpoint `@thesvg/react` imports stay inside
-`packages/core/src/graphics/brand-marks/runtime/adapters/`. Never use a
+`packages/core/src/graphics/marks/runtime/adapters/`. Never use a
 brand mark for an action/navigation concept, never load a remote mark at
 runtime, and never pass supplier types through the public API. A tenant may
 provide its own approved company logo through the tenant-brand contract, but
@@ -476,7 +484,7 @@ references. The single declared-but-never-applied field belongs to
 `SidebarSurfaceVisualConfig`.
 
 - `useSurfaceState` hook (8 lifecycle states, `renderState` helper)
-- Feedback components: `SurfaceLoadingSkeleton`, `SurfaceEmptyState`, `SurfaceErrorState`, `SurfaceStaleBanner`, `SurfaceOfflineBanner`, `SurfaceErrorBoundary` -- one family, `structure/feedback/surface-lifecycle`, owned by `packages/core/src/ui/structures/feedback/surface-lifecycle`. The duplicate `SurfaceLoadingState` / `SurfaceEmptyStateCard` / `SurfaceErrorStateCard` trio was retired on 2026-08-12 with no alias and no compatibility subpath (owner ruling: clean break). `SurfaceCapabilityAnatomy` is a separate family, `structure/feedback/capability-anatomy`, not a lifecycle state.
+- Feedback components: `SurfaceLoadingSkeleton`, `SurfaceEmptyState`, `SurfaceErrorState`, `SurfaceStaleBanner`, `SurfaceOfflineBanner`, `SurfaceErrorBoundary` -- one family, `structure/feedback/surface-lifecycle`, owned by `packages/core/src/components/structures/feedback/surface-lifecycle`. The duplicate `SurfaceLoadingState` / `SurfaceEmptyStateCard` / `SurfaceErrorStateCard` trio was retired on 2026-08-12 with no alias and no compatibility subpath (owner ruling: clean break). `SurfaceCapabilityAnatomy` is a separate family, `structure/feedback/capability-anatomy`, not a lifecycle state.
 - The generated GAT07 contract above certifies the exact declaration and
   applied-consumer census for the active surface-override family.
 - Enhanced permissions: `isRowAllowed`, `cascadeRules`, `resolveFieldAccess`
@@ -611,5 +619,5 @@ to the **Quiet Premium** target. Two artifacts govern this:
   gate, and a ready-to-paste delegation prompt. State lives in `roadmap/registry.json`; check status with `pnpm roadmap:status`
   and validate registry/lane agreement with `pnpm roadmap:check`. Read `roadmap/README.md` (start order,
   handoff protocol, bootstrap prompt, sighted-check law) before picking work. The lane's mechanical gate
-  is `scripts/engine/token-audit/index.mjs` (created by WO-ENG-01). Statuses change ONLY via
-  `scripts/roadmap/status/index.mjs`; never hand-edit `registry.json` or `STATUS.md`.
+  is `scripts/check/engine/tokens/audit/index.mjs` (created by WO-ENG-01). Statuses change ONLY via
+  `scripts/maintain/roadmap/status/index.mjs`; never hand-edit `registry.json` or `STATUS.md`.

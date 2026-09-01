@@ -1,32 +1,23 @@
 /**
  * @fileoverview Icon exports - Rottay Design System
- * @description Public compatibility barrel. The supplier-independent semantic
- * Icon facade and generated named packs are the default product API; the
- * historical named catalog remains available during its one-minor migration.
+ * @description Public icon barrel. The supplier-independent semantic Icon
+ * facade, generated named packs, and named glyph catalog share this API.
  */
 
-// One-minor named-icon compatibility factory
-export { createIcon } from './runtime/factory';
+export { createIcon } from './glyphs/runtime/factory';
 export type {
   DSIconComponent,
   DSIconProps,
   DSIconSourceComponent,
   IconSize,
-} from './runtime/factory';
+} from './glyphs/runtime/factory';
 
-// Compatibility catalog (historical names; do not use for new roles)
-export * from './presentation/catalog';
+export * from './glyphs/presentation/catalog';
 
-// Types
-export type { SvgIconProps, IconComponent } from './foundation/contracts';
-export { ICON_SIZE_MAP } from './foundation/contracts';
+export type { SvgIconProps, IconComponent } from './glyphs/foundation/contracts';
+export { ICON_SIZE_MAP } from './glyphs/foundation/contracts';
 
-// Token references
-export { ICON_SIZE_TOKENS } from './foundation';
-export type { IconSizeToken } from './foundation';
+export { ICON_SIZE_TOKENS } from './glyphs/foundation';
+export type { IconSizeToken } from './glyphs/foundation';
 
-// Legacy hand-rolled component (backward compatibility)
-// Kept for existing consumers. New code should use semantic Icon
-// roles or a focused generated pack from @rottay/design-system/icons/*.
-export { AlertIcon } from './presentation/legacy';
-export { BaseIcon } from './foundation/contracts/base';
+export { BaseIcon } from './glyphs/foundation/contracts/base';

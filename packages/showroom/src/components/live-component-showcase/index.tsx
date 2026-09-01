@@ -10,12 +10,12 @@ import {
   Stack,
   Text,
 } from '@rottay/design-system';
-import { RuntimeFingerprint } from '@/components/runtime/runtime-fingerprint';
+import { RuntimeFingerprint } from '@/components/runtime/fingerprint';
 import {
   SHOWROOM_SURFACES,
   mixWithCanvas,
   mixWithSurface,
-} from '@/components/playground/surface-tokens';
+} from '@/components/playground/tokens/surfaces';
 
 export interface LiveComponentShowcaseProps {
   mode?: 'compact' | 'full';

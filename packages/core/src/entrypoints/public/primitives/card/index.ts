@@ -1,3 +1,3 @@
 "use client";
 
-export { Card } from "../../../../ui/primitives/display/Card";
+export { Card } from "../../../../components/primitives/display/card";

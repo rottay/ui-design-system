@@ -41,7 +41,7 @@
  * atom.
  *
  * `/foundations` was source-censused for this role. It is a server component
- * whose entire transitive import closure is `showroom-link` (rewrites hrefs,
+ * whose entire transitive import closure is the showroom navigation link (rewrites hrefs,
  * touches no root), `showroom-ui` (inline-style wrappers, no effects), its own
  * `foundation-top-rail` (no DS runtime import at all) and icon glyphs. Zero
  * `DesignSystemProvider`, zero TenantProvider/ThemeProvider/EngineProvider,

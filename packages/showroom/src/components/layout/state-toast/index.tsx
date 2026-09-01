@@ -8,7 +8,7 @@ import {
   ENGINE_OPTIONS,
   getPreviewOption,
   THEME_OPTIONS,
-} from "../runtime-options";
+} from "../runtime/options";
 
 const shellBorder =
   "var(--showroom-shell-border, var(--ds-color-border, #1c1f26))";

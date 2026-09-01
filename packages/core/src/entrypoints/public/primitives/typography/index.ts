@@ -1,5 +1,5 @@
 "use client";
 
-export { Heading } from "../../../../ui/primitives/display/Typography/compound/Heading";
-export { Link } from "../../../../ui/primitives/display/Typography/compound/Link";
-export { Text } from "../../../../ui/primitives/display/Typography/compound/Text";
+export { Heading } from "../../../../components/primitives/display/typography/compound/heading";
+export { Link } from "../../../../components/primitives/display/typography/compound/link";
+export { Text } from "../../../../components/primitives/display/typography/compound/text";

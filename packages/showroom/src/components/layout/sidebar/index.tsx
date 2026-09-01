@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { ShowroomLink as Link } from "@/components/showroom-link";
+import { ShowroomLink as Link } from "@/components/navigation/link";
 import { usePathname } from "next/navigation";
 import { Box, Flex, Text } from "@/components/showroom-ui";
 import {
@@ -23,13 +23,13 @@ import {
   getSectionMeta,
   getSectionOverviewPath,
   isPathActive,
-} from "../config";
+} from "../navigation/config";
 import {
   DOC_COUNTS,
   ENGINE_OPTIONS,
   getPreviewOption,
   THEME_OPTIONS,
-} from "../runtime-options";
+} from "../runtime/options";
 
 const shellBorder =
   "var(--showroom-shell-border, var(--ds-color-border, #1c1f26))";

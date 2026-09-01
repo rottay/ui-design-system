@@ -1,6 +1,6 @@
 /**
  * Density runtime (DS-A006) — the ONE public scoped contract for visual
- * density. The CSS cascade in `foundation/base/density.css` remains the value
+ * density. The CSS cascade in `foundation/base/density/index.css` remains the value
  * authority (`--ds-density-effective-scale` clamp math); this runtime only
  * (a) stamps a scoped `data-density` posture boundary and (b) exposes that
  * same posture to JS consumers.
@@ -9,7 +9,7 @@
  * vocabulary stays in application state; this contract governs coordinated
  * geometry (heights, padding, gap, type scale) only. The 44px coarse-pointer
  * touch floor is deliberately outside this scale and never shrinks with it: it
- * is enforced by the shared unlayered rule in `facade/entrypoints/base.css`
+ * is enforced by the shared unlayered rule in `facade/entrypoints/base/index.css`
  * plus per-component `min-*-size` floors where the role sits on an indicator.
  */
 'use client';
@@ -107,7 +107,7 @@ export interface RootDensityProviderProps {
  * Tenant-root density mount: publishes the semantic posture to JS consumers
  * and stamps it on the document element beside the tenant attributes.
  *
- * The root attribute is not a second multiplier. `foundation/base/density.css`
+ * The root attribute is not a second multiplier. `foundation/base/density/index.css`
  * routes it to `--ds-density-mode-factor`, the same semantic channel the
  * Appearance and BrandTheme compilers write, and applies the separate local
  * factor only to non-root boundaries. Two writers of one channel resolve by

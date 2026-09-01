@@ -1,0 +1,452 @@
+/**
+ * Modern KanbanBoard pattern skin (visualization skin ownership; PT34 rebuild),
+ * deliberately unlayered (P-47).
+ *
+ * COMPOSITION LAW (PT34): Button (add item, variant dashed), Badge (WIP
+ * count, neutral/danger tone by limit state), Spinner (loading status) and
+ * Empty (empty board) own their own chrome and skins. The retired pieces: the
+ * hand-rolled native add button + raw plus SVG, the `--tw-ring-color` hack
+ * that painted a Tailwind ring utility (the drop ring is a REAL rule now),
+ * the pillBadgeSmStyle WIP span, and every drained Tailwind layout utility.
+ * The repeated `[data-part='card'][data-part='card']` /
+ * `[data-part='add-item'][data-part='add-item']` selectors are gone — border
+ * paint reaches (0,4,0) through the root's own `data-part` in the chain
+ * (4th-tanda law).
+ *
+ * STATE ACCENT AS DATA: `column.color` is consumer config riding the quoted
+ * `--ds-kanban-column-accent` channel — applied as a HORIZONTAL strip on the
+ * header's block-start edge (side rails / vertical accents are forbidden).
+ *
+ * KEYBOARD MOVE: cards are tab stops (`role="listitem"` in `role="list"`),
+ * so they carry a `:focus-visible` ring; the engine announces every keyboard
+ * move through the visually-hidden `move-announcer` live region (the
+ * VISUALLY-HIDDEN PATTERN below is shared with the loading status wrapper).
+ *
+ * DROP GEOMETRY: the drop target never reads by tone alone — beyond the
+ * column ring, the exact insertion point is a SHAPE: a primary insertion
+ * bar on the block-start edge of the card the item lands before
+ * (`data-drop-before`), or an inset bar on the column body's block-end edge
+ * when the drop appends (`data-drop-at-end`). Forced colors re-express both
+ * as Highlight.
+ *
+ * SCROLL AFFORDANCE: the engine stamps the board's overflow posture
+ * (`data-scrollable-start` / `data-scrollable-end`); the clipped edges fade
+ * via `mask-image` — an intentional "more columns this way" cue. Masks are
+ * physical gradients, so each direction has a `:dir(rtl)` mirror (mask
+ * compositing keeps the two edges independent; keyboard focus scrolls the
+ * focused card out of the fade zone on its own).
+ *
+ * LOADING SKELETON: the loading state is a ghost board with the real
+ * footprint (skeleton columns, header bars and card bars pulsing on the
+ * canonical `ds-foundation-pulse` keyframes through the
+ * `--ds-motion-attention` channel; staggered heights keep the rhythm
+ * honest). The composed Spinner stays mounted visually-hidden as the
+ * polite status announcer (public test pin). Reduced motion and forced
+ * colors quiet the pulse; forced colors re-key the bars to GrayText.
+ *
+ * MOTION: card chrome transitions ride `--ds-motion-*` channels; drag moves
+ * animate through the engine's FLIP hook (coordinated, never teleport); the
+ * drop ring fades on the same fast channel.
+ *
+ * TOKEN OWNERSHIP: insertion-bar thickness and edge-fade distance are private
+ * to this board grammar; neither defines a cross-family tenant axis.
+ */
+
+/* ---- root: named container (snap cuts resolve against it) ---- */
+.ds-pattern-kanban-board.ds-engine-modern[data-part='root'] {
+  container: ds-kanban / inline-size;
+  min-inline-size: 0;
+}
+
+/* ---- VISUALLY-HIDDEN PATTERN: the loading status (Spinner pin) and the
+        keyboard-move announcer stay in the accessibility tree, clipped out
+        of view ---- */
+.ds-pattern-kanban-board.ds-engine-modern [data-part='loading-status'],
+.ds-pattern-kanban-board.ds-engine-modern [data-part='move-announcer'] {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* ---- loading skeleton: ghost board with the real footprint (the root
+        keeps its historical 300px presence) ---- */
+.ds-pattern-kanban-board.ds-engine-modern[data-part='root'][data-loading='true'] {
+  min-block-size: 300px;
+}
+.ds-pattern-kanban-board.ds-engine-modern[data-part='root'][data-loading='true']
+  > [data-part='board'][data-skeleton='true'] {
+  display: flex;
+  gap: var(--ds-kanban-column-gap, 16px);
+  overflow: hidden;
+}
+.ds-pattern-kanban-board.ds-engine-modern [data-part='skeleton-column'] {
+  display: flex;
+  flex: 1 1 0;
+  flex-direction: column;
+  gap: var(--ds-spacing-2);
+  min-inline-size: var(--ds-kanban-column-min-width, 280px);
+}
+.ds-pattern-kanban-board.ds-engine-modern [data-part='skeleton-header'],
+.ds-pattern-kanban-board.ds-engine-modern [data-part='skeleton-card'] {
+  border-radius: var(--ds-radius-lg);
+  background: var(--ds-surface-panel);
+  animation: ds-foundation-pulse
+    var(--ds-motion-attention, 960ms)
+    var(--ds-motion-ease-in-out, ease-in-out) infinite;
+}
+.ds-pattern-kanban-board.ds-engine-modern [data-part='skeleton-header'] {
+  block-size: 2.5rem;
+  border-radius: var(--ds-radius-xl);
+  background: var(--ds-surface-inset);
+}
+.ds-pattern-kanban-board.ds-engine-modern [data-part='skeleton-card'] {
+  block-size: 4.5rem;
+}
+/* Staggered bar heights keep the footprint rhythm honest (not a barcode). */
+.ds-pattern-kanban-board.ds-engine-modern [data-part='skeleton-card']:nth-child(3n + 1) {
+  block-size: 3.5rem;
+}
+.ds-pattern-kanban-board.ds-engine-modern [data-part='skeleton-card']:nth-child(3n) {
+  block-size: 5.5rem;
+}
+
+/* ---- toolbar slot (was mb-4) ---- */
+.ds-pattern-kanban-board.ds-engine-modern [data-part='toolbar'] {
+  margin-block-end: var(--ds-spacing-4);
+}
+
+/* ---- board: horizontal scroll strip; the consumer's gap rides the channel ---- */
+.ds-pattern-kanban-board.ds-engine-modern [data-part='board'] {
+  display: flex;
+  gap: var(--ds-kanban-column-gap, 16px);
+  padding-block-end: var(--ds-spacing-2);
+  overflow-x: auto;
+}
+
+/* ---- scroll affordance: clipped edges fade (physical gradients, so each
+        direction carries a :dir(rtl) mirror) ---- */
+.ds-pattern-kanban-board.ds-engine-modern [data-part='board'][data-scrollable-start='true'] {
+  mask-image: linear-gradient(to right, transparent, black var(--_ds-kanban-edge-fade, 2rem));
+}
+.ds-pattern-kanban-board.ds-engine-modern [data-part='board'][data-scrollable-end='true'] {
+  mask-image: linear-gradient(to left, transparent, black var(--_ds-kanban-edge-fade, 2rem));
+}
+.ds-pattern-kanban-board.ds-engine-modern [data-part='board'][data-scrollable-start='true'][data-scrollable-end='true'] {
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    black var(--_ds-kanban-edge-fade, 2rem),
+    black calc(100% - var(--_ds-kanban-edge-fade, 2rem)),
+    transparent
+  );
+}
+:dir(rtl) .ds-pattern-kanban-board.ds-engine-modern [data-part='board'][data-scrollable-start='true'] {
+  mask-image: linear-gradient(to left, transparent, black var(--_ds-kanban-edge-fade, 2rem));
+}
+:dir(rtl) .ds-pattern-kanban-board.ds-engine-modern [data-part='board'][data-scrollable-end='true'] {
+  mask-image: linear-gradient(to right, transparent, black var(--_ds-kanban-edge-fade, 2rem));
+}
+:dir(rtl) .ds-pattern-kanban-board.ds-engine-modern [data-part='board'][data-scrollable-start='true'][data-scrollable-end='true'] {
+  mask-image: linear-gradient(
+    to left,
+    transparent,
+    black var(--_ds-kanban-edge-fade, 2rem),
+    black calc(100% - var(--_ds-kanban-edge-fade, 2rem)),
+    transparent
+  );
+}
+
+/* ---- column (was flex flex-col flex-1 / w-12 + inline minWidth) ---- */
+.ds-pattern-kanban-board.ds-engine-modern [data-part='column'] {
+  display: flex;
+  flex: 1 1 0;
+  flex-direction: column;
+  min-inline-size: var(--ds-kanban-column-min-width, 280px);
+}
+.ds-pattern-kanban-board.ds-engine-modern [data-part='column'][data-collapsed='true'] {
+  flex: 0 0 auto;
+  inline-size: 48px;
+  min-inline-size: 48px;
+}
+
+/* ---- column header (was rounded-xl px-4 py-3 mb-2 + inline borderTop) ---- */
+.ds-pattern-kanban-board.ds-engine-modern[data-part='root']
+  > [data-part='board']
+  > [data-part='column']
+  > [data-part='column-header'] {
+  margin-block-end: var(--ds-spacing-2);
+  padding-block: var(--ds-spacing-3);
+  padding-inline: var(--ds-spacing-4);
+  border-block-start: 3px solid var(--ds-kanban-column-accent, transparent);
+  border-radius: var(--ds-radius-xl);
+  background: var(--ds-surface-inset);
+}
+.ds-pattern-kanban-board.ds-engine-modern [data-part='column-header-content'],
+.ds-pattern-kanban-board.ds-engine-modern [data-part='column-title-row'] {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ds-spacing-2);
+  min-inline-size: 0;
+}
+.ds-pattern-kanban-board.ds-engine-modern [data-part='column-title-row'] {
+  justify-content: flex-start;
+}
+.ds-pattern-kanban-board.ds-engine-modern [data-part='column-title'] {
+  overflow: hidden;
+  font-size: var(--ds-font-size-sm, 0.875rem);
+  font-weight: var(--ds-font-weight-semibold, 600);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+/* Count scans tabular down the header row (the composed Badge owns chrome). */
+.ds-pattern-kanban-board.ds-engine-modern [data-part='wip-badge'] {
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---- column body (was flex-1 rounded-xl p-2 min-h-[100px]) + the drop ring
+        (a real rule -- the retired --tw-ring-color hack painted a utility) ---- */
+.ds-pattern-kanban-board.ds-engine-modern[data-part='root']
+  > [data-part='board']
+  > [data-part='column']
+  > [data-part='column-body'] {
+  flex: 1 1 auto;
+  min-block-size: 100px;
+  padding: var(--ds-spacing-2);
+  border-radius: var(--ds-radius-xl);
+  transition:
+    background-color var(--ds-motion-fast) var(--ds-motion-ease-out),
+    box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out);
+}
+.ds-pattern-kanban-board.ds-engine-modern[data-part='root']
+  > [data-part='board']
+  > [data-part='column']
+  > [data-part='column-body'][data-dropping='false'] {
+  background: var(--ds-surface-card);
+}
+.ds-pattern-kanban-board.ds-engine-modern[data-part='root']
+  > [data-part='board']
+  > [data-part='column']
+  > [data-part='column-body'][data-dropping='true'] {
+  background: color-mix(in srgb, var(--ds-color-primary) 10%, transparent);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--ds-color-primary) 30%, transparent);
+}
+/* Drop at the column's append point: the ring PLUS an inset insertion bar
+   on the block-end edge (shape, never tone alone). */
+.ds-pattern-kanban-board.ds-engine-modern[data-part='root']
+  > [data-part='board']
+  > [data-part='column']
+  > [data-part='column-body'][data-dropping='true'][data-drop-at-end='true'] {
+  box-shadow:
+    0 0 0 2px color-mix(in srgb, var(--ds-color-primary) 30%, transparent),
+    inset 0 calc(-1 * var(--_ds-kanban-insert-bar, 3px)) 0 0 var(--ds-color-primary);
+}
+
+/* ---- empty column slot (was flex items-center justify-center p-6) ---- */
+.ds-pattern-kanban-board.ds-engine-modern[data-part='root']
+  > [data-part='board']
+  > [data-part='column']
+  > [data-part='column-body']
+  > [data-part='empty-column'] {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--ds-spacing-6, 1.5rem);
+  color: var(--ds-color-text-secondary);
+}
+
+/* ---- empty board frame (the composed Empty owns its paint) ---- */
+.ds-pattern-kanban-board.ds-engine-modern [data-part='empty-board'] {
+  display: flex;
+  justify-content: center;
+  padding-block: var(--ds-spacing-12, 3rem);
+}
+
+/* ---- card list (was flex flex-col gap-2) + channeled vertical scroll ---- */
+.ds-pattern-kanban-board.ds-engine-modern [data-part='card-list'] {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-spacing-2);
+  max-block-size: var(--ds-kanban-column-max-height, none);
+  overflow-y: auto;
+}
+
+/* ---- card: chrome drained from utilities; the ghost source dims while
+        dragged; hover only where hovering is real (house hover law); a real
+        tab stop, so :focus-visible carries the ring ---- */
+.ds-pattern-kanban-board.ds-engine-modern[data-part='root']
+  > [data-part='board']
+  > [data-part='column']
+  > [data-part='column-body']
+  > [data-part='card-list']
+  > [data-part='card'] {
+  border: 1px solid var(--ds-color-border);
+  border-radius: var(--ds-radius-lg);
+  background: var(--ds-surface-card);
+  box-shadow: var(--ds-elevation-1);
+  transition:
+    box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out),
+    opacity var(--ds-motion-fast) var(--ds-motion-ease-out);
+}
+.ds-pattern-kanban-board.ds-engine-modern [data-part='card'][data-clickable='true'] {
+  cursor: pointer;
+}
+.ds-pattern-kanban-board.ds-engine-modern [data-part='card'][data-clickable='false'] {
+  cursor: grab;
+}
+.ds-pattern-kanban-board.ds-engine-modern [data-part='card'][data-dragging='true'] {
+  opacity: 0.4;
+}
+.ds-pattern-kanban-board.ds-engine-modern[data-part='root']
+  > [data-part='board']
+  > [data-part='column']
+  > [data-part='column-body']
+  > [data-part='card-list']
+  > [data-part='card']:focus-visible {
+  outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color, var(--ds-color-primary));
+  outline-offset: var(--ds-focus-ring-offset, 2px);
+}
+@media (hover: hover) {
+  .ds-pattern-kanban-board.ds-engine-modern [data-part='card']:hover {
+    box-shadow: var(--ds-elevation-2);
+  }
+}
+/* Insertion geometry: a primary bar on the block-start edge of the card the
+   drop lands before (declared after the hover elevation so the bar survives
+   the pointer resting on the target card). */
+.ds-pattern-kanban-board.ds-engine-modern[data-part='root']
+  > [data-part='board']
+  > [data-part='column']
+  > [data-part='column-body']
+  > [data-part='card-list']
+  > [data-part='card'][data-drop-before='true'],
+.ds-pattern-kanban-board.ds-engine-modern[data-part='root']
+  > [data-part='board']
+  > [data-part='column']
+  > [data-part='column-body']
+  > [data-part='card-list']
+  > [data-part='card'][data-drop-before='true']:hover {
+  box-shadow:
+    var(--ds-elevation-1),
+    0 calc(-1 * var(--_ds-kanban-insert-bar, 3px)) 0 0 var(--ds-color-primary);
+}
+.ds-pattern-kanban-board.ds-engine-modern [data-part='card']:active {
+  cursor: grabbing;
+}
+.ds-pattern-kanban-board.ds-engine-modern [data-part='card-content'] {
+  padding: var(--ds-spacing-3);
+}
+
+/* ---- add item: the composed dashed Button stretches to the column ---- */
+.ds-pattern-kanban-board.ds-engine-modern [data-part='add-item'] {
+  inline-size: 100%;
+  margin-block-start: var(--ds-spacing-2);
+}
+
+/* ---- narrow compositions: columns snap into place instead of straddling
+        cuts; each column keeps a readable near-full measure ---- */
+@container ds-kanban (inline-size < 40rem) {
+  .ds-pattern-kanban-board.ds-engine-modern [data-part='board'] {
+    scroll-snap-type: x mandatory;
+  }
+  .ds-pattern-kanban-board.ds-engine-modern [data-part='column'] {
+    min-inline-size: 85%;
+    scroll-snap-align: start;
+  }
+}
+
+/* ---- coarse pointers: the add-item button reaches the 44px floor ---- */
+@media (hover: none), (pointer: coarse) {
+  .ds-pattern-kanban-board.ds-engine-modern [data-part='add-item'] {
+    min-block-size: var(--ds-kanban-touch-target, 2.75rem);
+  }
+}
+
+/* ---- reduced motion: the skeleton pulse goes quiet (the footprint still
+        reads as a board at rest) ---- */
+@media (prefers-reduced-motion: reduce) {
+  .ds-pattern-kanban-board.ds-engine-modern [data-part='skeleton-header'],
+  .ds-pattern-kanban-board.ds-engine-modern [data-part='skeleton-card'] {
+    animation: none;
+  }
+}
+
+/* forced-colors: shadows, tints and the header state accent are forced away.
+   Cards keep a system frame; the DROP TARGET re-asserts as a Highlight
+   outline and the INSERTION BARS as solid Highlight edges (the affordance
+   is shape, never colour alone); the dragged ghost keeps its opacity
+   (opacity survives forced colours); the header accent strip degrades to a
+   neutral ButtonText hairline -- column identity reads through the title
+   text; the skeleton bars re-key to GrayText with the pulse stopped.
+   Composed primitives (Button, Badge, Empty, Spinner) own their own
+   forced-colors contracts. */
+@media (forced-colors: active) {
+  .ds-pattern-kanban-board.ds-engine-modern[data-part='root']
+    > [data-part='board']
+    > [data-part='column']
+    > [data-part='column-header'] {
+    border-block-start-color: ButtonText;
+    background: Canvas;
+  }
+  .ds-pattern-kanban-board.ds-engine-modern[data-part='root']
+    > [data-part='board']
+    > [data-part='column']
+    > [data-part='column-body'] {
+    background: Canvas;
+  }
+  .ds-pattern-kanban-board.ds-engine-modern[data-part='root']
+    > [data-part='board']
+    > [data-part='column']
+    > [data-part='column-body'][data-dropping='true'] {
+    outline: 2px solid Highlight;
+    outline-offset: -2px;
+    background: Canvas;
+    box-shadow: none;
+  }
+  .ds-pattern-kanban-board.ds-engine-modern[data-part='root']
+    > [data-part='board']
+    > [data-part='column']
+    > [data-part='column-body'][data-dropping='true'][data-drop-at-end='true'] {
+    box-shadow: inset 0 -3px 0 0 Highlight;
+  }
+  .ds-pattern-kanban-board.ds-engine-modern[data-part='root']
+    > [data-part='board']
+    > [data-part='column']
+    > [data-part='column-body']
+    > [data-part='card-list']
+    > [data-part='card'] {
+    border-color: ButtonText;
+    background: Canvas;
+    box-shadow: none;
+  }
+  .ds-pattern-kanban-board.ds-engine-modern[data-part='root']
+    > [data-part='board']
+    > [data-part='column']
+    > [data-part='column-body']
+    > [data-part='card-list']
+    > [data-part='card'][data-drop-before='true'],
+  .ds-pattern-kanban-board.ds-engine-modern[data-part='root']
+    > [data-part='board']
+    > [data-part='column']
+    > [data-part='column-body']
+    > [data-part='card-list']
+    > [data-part='card'][data-drop-before='true']:hover {
+    box-shadow: 0 -3px 0 0 Highlight;
+  }
+  .ds-pattern-kanban-board.ds-engine-modern[data-part='root']
+    > [data-part='board']
+    > [data-part='column']
+    > [data-part='column-body']
+    > [data-part='card-list']
+    > [data-part='card']:focus-visible {
+    outline-color: Highlight;
+  }
+  .ds-pattern-kanban-board.ds-engine-modern [data-part='skeleton-header'],
+  .ds-pattern-kanban-board.ds-engine-modern [data-part='skeleton-card'] {
+    animation: none;
+    background: GrayText;
+  }
+}

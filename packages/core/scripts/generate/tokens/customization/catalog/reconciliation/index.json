@@ -1,0 +1,93 @@
+{
+  "schemaVersion": 1,
+  "generatedBy": "scripts/generate/tokens/customization/catalog/index.mjs --write",
+  "basedOnReportDigest": "fee0874ae48ba522692cf3684369adfa352538f87ff13016f093aea60c481663",
+  "normative": {
+    "writers": 4668,
+    "deadWriters": 274,
+    "definition": "writer names and productive reads are derived by the customization surface census"
+  },
+  "familyAdjudication": [
+    {
+      "family": "--ds-tall-card-*",
+      "disposition": "RECONNECT_OR_PROMOTE",
+      "count": 43
+    },
+    {
+      "family": "--ds-workspace-card-*",
+      "disposition": "RECONNECT_OR_PROMOTE",
+      "count": 19
+    },
+    {
+      "family": "--ds-compact-card-*",
+      "disposition": "COMPONENT_PRIVATE",
+      "count": 37
+    },
+    {
+      "family": "--ds-collection-card-*",
+      "disposition": "COMPONENT_PRIVATE",
+      "count": 24
+    },
+    {
+      "family": "--ds-signal-card-*",
+      "disposition": "COMPONENT_PRIVATE",
+      "count": 34
+    },
+    {
+      "family": "--ds-metric-card-*",
+      "disposition": "COMPONENT_PRIVATE",
+      "count": 9
+    },
+    {
+      "family": "--ds-listing-grid-*",
+      "disposition": "COMPONENT_PRIVATE",
+      "count": 7
+    },
+    {
+      "family": "--ds-premium-card-*",
+      "disposition": "COMPONENT_PRIVATE",
+      "count": 3
+    },
+    {
+      "family": "--ds-input-*",
+      "disposition": "COMPONENT_PRIVATE",
+      "count": 5
+    },
+    {
+      "family": "--ds-button-*",
+      "disposition": "COMPONENT_PRIVATE",
+      "count": 1
+    },
+    {
+      "family": "--ds-color-dark-*",
+      "disposition": "DERIVE",
+      "count": 0
+    },
+    {
+      "family": "--ds-commercial-*",
+      "disposition": "KEEP_INTERNAL",
+      "count": 0
+    },
+    {
+      "family": "--ds-action-dock-reserved-*",
+      "disposition": "FRONTIER",
+      "count": 2
+    },
+    {
+      "family": "--ds-bottom-tab-bar-reserved-*",
+      "disposition": "FRONTIER",
+      "count": 1
+    },
+    {
+      "family": "legacy-component-mirror",
+      "disposition": "MIGRATE_USEFUL_THEN_RETIRE_MIRROR",
+      "count": 0
+    },
+    {
+      "family": "remainder",
+      "disposition": "KEEP_INTERNAL",
+      "count": 89
+    }
+  ],
+  "preservationManifest": "../preservation/manifest/index.json"
+}

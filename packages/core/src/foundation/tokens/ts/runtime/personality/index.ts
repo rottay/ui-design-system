@@ -337,7 +337,7 @@ export function resolvePublishedPersonalityCssVariables(
           ? 'cubic-bezier(0.34, 1.56, 0.64, 1)'
           : 'cubic-bezier(0.22, 1, 0.36, 1)'
         : undefined,
-    // Foundation default lives in foundation/tokens/css/foundation/animations/transitions.css
+    // Foundation default lives in foundation/tokens/css/foundation/animations/transitions/index.css
     // (--ds-duration-fast|normal|slow); falling back to that chain's own
     // underlying primitives here, instead of a re-declared literal, keeps the
     // foundation file the single numeric source when transitions is absent.
@@ -407,7 +407,7 @@ export function resolvePersonalityCssVariables(tokens: DesignTokens): CssVariabl
  * `SystemCssVariablesBridge` must not write these names directly: doing so
  * would turn a product/vertical axis into a second paint authority beside the
  * static or DB tenant artifact. The bridge publishes the corresponding
- * namespaced value and `foundation/tokens/css/runtime/personality.css` is the
+ * namespaced value and `foundation/tokens/css/runtime/personality/index.css` is the
  * single projection that maps it back to the canonical component channel.
  *
  * This explicit table is intentionally closed. Adding a new canonical output

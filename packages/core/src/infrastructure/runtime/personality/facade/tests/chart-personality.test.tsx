@@ -4,7 +4,7 @@ import { describe, expect, it } from 'vitest';
 
 import type { TenantConfig } from '../../../../../foundation/contracts';
 import { bithireBrandTheme } from '../../../../../foundation/tokens/ts/presentation/brand-themes';
-import { themanagementmiamiBrandTheme } from '../../../../../tooling/testing/fixtures/brand-themes/themanagementmiami';
+import { themanagementmiamiBrandTheme } from '@tests/fixtures/brand-themes/themanagementmiami';
 import { ProductProfileProvider, getProductProfile } from '../../../product-profiles';
 import { TenantProvider } from '../../../tenant';
 import { getVerticalPreset } from '../../../verticals';

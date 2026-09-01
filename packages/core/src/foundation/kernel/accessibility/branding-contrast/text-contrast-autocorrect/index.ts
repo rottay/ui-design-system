@@ -103,7 +103,7 @@ export const TEXT_CONTRAST_PAIRINGS: readonly TextContrastPairing[] = [
   })),
   {
     // The semantic on-primary ink (solid buttons, chips, selected cells).
-    // Codex K2/K3 verdict: a DB tenant published a 3.57:1 on-primary pair
+    // independent code audit K2/K3 verdict: a DB tenant published a 3.57:1 on-primary pair
     // that nothing caught. The derived/authored ink must be snapped to the
     // floor like any other text channel — no tenant publishes below it.
     token: '--ds-color-text-on-primary',

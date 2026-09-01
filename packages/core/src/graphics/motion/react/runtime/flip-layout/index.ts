@@ -7,7 +7,7 @@
  * position/size changes across a re-render -- list reorder, kanban card
  * moves, a sliding tab indicator. Transform-only (translate + scale), driven
  * by the Web Animations API so it never touches a layout property (the
- * compositor-only law `scripts/engine/token-audit/index.mjs` enforces).
+ * compositor-only law `scripts/check/engine/tokens/audit/index.mjs` enforces).
  *
  * Usage: call `measure()` synchronously, in the event handler, BEFORE the
  * state update that will move/reorder/resize the registered elements. On

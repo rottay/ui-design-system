@@ -8,15 +8,15 @@
  * Only this focused package subpath can reach the governed icon adapter.
  */
 export * from '../../graphics/icons';
-export { Icon } from '../../graphics/icons/presentation/semantic-icon';
+export { Icon } from '../../graphics/icons/semantic/presentation/icon';
 export {
   ICON_CORPUS,
   ICON_NAMES,
   isIconName,
-} from '../../graphics/icons/foundation/contracts/registry';
-export { ICON_PROVENANCE } from '../../graphics/icons/foundation/contracts/provenance';
-export type { IconCorpusEntry, IconName } from '../../graphics/icons/foundation/contracts/registry';
-export type { IconProps } from '../../graphics/icons/foundation/contracts/registry/semantic';
+} from '../../graphics/icons/semantic/foundation/registry';
+export { ICON_PROVENANCE } from '../../graphics/icons/semantic/foundation/provenance';
+export type { IconCorpusEntry, IconName } from '../../graphics/icons/semantic/foundation/registry';
+export type { IconProps } from '../../graphics/icons/semantic/foundation/contracts';
 export type {
   IconMirroring,
   IconProvenance,
@@ -24,4 +24,4 @@ export type {
   IconState,
   IconTone,
   SemanticIconSize,
-} from '../../graphics/icons/foundation/contracts';
+} from '../../graphics/icons/glyphs/foundation/contracts';

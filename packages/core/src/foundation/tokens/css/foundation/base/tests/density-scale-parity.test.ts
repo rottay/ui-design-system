@@ -25,9 +25,9 @@ import {
 
 const source = (path: string) => readFileSync(resolve(process.cwd(), path), 'utf8');
 
-const densityCss = source('src/foundation/tokens/css/foundation/base/density.css');
-const spacingCss = source('src/foundation/tokens/css/foundation/base/spacing.css');
-const defaultThemeCss = source('src/foundation/tokens/css/foundation/themes/default.css');
+const densityCss = source('src/foundation/tokens/css/foundation/base/density/index.css');
+const spacingCss = source('src/foundation/tokens/css/foundation/base/spacing/index.css');
+const defaultThemeCss = source('src/foundation/tokens/css/foundation/themes/default/index.css');
 const useTokensSource = source(
   'src/infrastructure/runtime/theming/composition/react/tokens/index.ts',
 );
@@ -105,8 +105,8 @@ function declarers(channel: string): string[] {
  * `:root`. Anything else is a second emitter.
  */
 const EFFECTIVE_SCALE_DECLARERS = [
-  'foundation/base/density.css',
-  'foundation/themes/default.css',
+  'foundation/base/density/index.css',
+  'foundation/themes/default/index.css',
 ];
 
 const cssFactors = parseCssFactors(densityCss);

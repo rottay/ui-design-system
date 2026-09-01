@@ -1,6 +1,6 @@
 "use client";
 
-import { ShowroomLink as Link } from "@/components/showroom-link";
+import { ShowroomLink as Link } from "@/components/navigation/link";
 import { usePathname } from "next/navigation";
 import { Box, Flex, Text } from "@/components/showroom-ui";
 import {
@@ -9,13 +9,13 @@ import {
   SearchIcon,
 } from "@rottay/design-system/icons";
 import { useShowroomRuntime } from "@/components/showroom-context";
-import { getRoutePresentation } from "../config";
+import { getRoutePresentation } from "../navigation/config";
 import {
   DOC_COUNTS,
   ENGINE_OPTIONS,
   getPreviewOption,
   THEME_OPTIONS,
-} from "../runtime-options";
+} from "../runtime/options";
 
 const shellBorder =
   "var(--showroom-shell-border, var(--ds-color-border, #1c1f26))";

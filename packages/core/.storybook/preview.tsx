@@ -6,13 +6,13 @@ import React from "react";
 
 // Exercise the same public source facade used by symlinked consumers. Importing
 // token fragments here hid missing skins and made Storybook diverge from apps.
-import "../src/foundation/tokens/css/facade/entrypoints/styles.css";
+import "../src/foundation/tokens/css/facade/entrypoints/styles/index.css";
 import "../src/foundation/tokens/css/foundation/typography/font-packs/humanist-text/index.css";
 import "../src/foundation/tokens/css/foundation/typography/font-packs/grotesk-display/index.css";
 import "../src/foundation/tokens/css/foundation/typography/font-packs/plex-mono/index.css";
 
 // Storybook preview styles
-import "./preview-styles.css";
+import "./styles/index.css";
 
 const preview: Preview = {
   globalTypes: {

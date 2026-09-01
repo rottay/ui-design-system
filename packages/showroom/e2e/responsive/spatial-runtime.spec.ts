@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test';
 
-import { recordCra15Measurement } from './cra-15-evidence';
+import { recordCra15Measurement } from './runtime-hardening/measurements';
 
 const LIVE = '[data-spatial-mode^="live-"]';
 const CANVAS = '[data-spatial-experience-canvas]';

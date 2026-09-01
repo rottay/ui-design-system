@@ -1,3 +1,3 @@
 "use client";
 
-export { PatternDataTable } from "../../../../ui/patterns/data/data-table/presentation/table";
+export { PatternDataTable } from "../../../../components/patterns/data/data-table/presentation/table";

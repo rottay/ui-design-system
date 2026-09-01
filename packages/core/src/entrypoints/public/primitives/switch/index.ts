@@ -1,3 +1,3 @@
 "use client";
 
-export { Switch } from "../../../../ui/primitives/inputs/Switch";
+export { Switch } from "../../../../components/primitives/inputs/switch";

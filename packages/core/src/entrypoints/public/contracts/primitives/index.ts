@@ -1,9 +1,9 @@
 export type {
   AvatarShape,
   AvatarSize,
-} from "../../../../ui/primitives/display/Avatar/contracts";
-export type { BadgeVariant } from "../../../../ui/primitives/display/Badge/contracts";
-export type { ColumnType } from "../../../../ui/primitives/display/Table/contracts";
-export type { TagProps } from "../../../../ui/primitives/display/Tag/contracts";
-export type { TooltipPlacement } from "../../../../ui/primitives/display/Tooltip/contracts";
-export type { ButtonVariant } from "../../../../ui/primitives/inputs/Button/contracts";
+} from "../../../../components/primitives/display/avatar/contracts";
+export type { BadgeVariant } from "../../../../components/primitives/display/badge/contracts";
+export type { ColumnType } from "../../../../components/primitives/display/table/contracts";
+export type { TagProps } from "../../../../components/primitives/display/tag/contracts";
+export type { TooltipPlacement } from "../../../../components/primitives/display/tooltip/contracts";
+export type { ButtonVariant } from "../../../../components/primitives/inputs/button/contracts";

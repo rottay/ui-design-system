@@ -1,0 +1,528 @@
+'use client';
+
+/**
+ * @fileoverview Tour Modern Engine - Rottay Design System
+ * @description Modern (token-driven) implementation of the Tour component.
+ * Self-contained `rottay-tour--modern` tree painted by the unlayered skin
+ * `tour.css`; no DaisyUI or utility-framework classes.
+ *
+ * @remarks
+ * The Modern engine provides:
+ * - A self-contained `rottay-tour--modern` tree: no DaisyUI classes and no
+ *   utility-framework classes (K4-A drained the last Tailwind utilities and
+ *   static inline chrome into the unlayered skin `tour.css`)
+ * - Portal rendering via the shared `runtime/overlay/portal` substrate
+ * - Box-shadow spotlight technique
+ *
+ * Implementation details:
+ * - getTargetElement resolves selectors, refs, and functions
+ * - The step surface is positioned by the shared overlay runtime
+ *   (`runtime/overlay/positioning`), pinned to its measured branch
+ * - The spotlight cutout is measured by `Tour/runtime/spotlight-rect`
+ * - Spotlight uses box-shadow: 0 0 0 9999px for mask effect
+ * - Step indicators/actions are skin-owned, keyed on data-part; close/prev/next
+ *   copy uses the common locale (`close`/`previous`/`next`), `Finish` resolves
+ *   through the same channel (`common.finish`, landed in the en/es/ar/fr
+ *   catalogs) and the step counter through `common.tour.step_progress` -- both
+ *   keep the English `tOr` floor for catalogs without the keys
+ *
+ * @example Using Modern Engine
+ * ```tsx
+ * import { Tour, Button } from '@rottay/design-system';
+ *
+ * const steps = [
+ *   { target: '#feature', title: 'New Feature', description: 'Try it!' },
+ *   { target: '.settings', title: 'Settings', description: 'Configure' },
+ * ];
+ *
+ * <Tour
+ *   engine="modern"
+ *   steps={steps}
+ *   open={isOpen}
+ *   type="primary"
+ *   onClose={() => setIsOpen(false)}
+ * />
+ * ```
+ *
+ * @see {@link Tour} - The main engine-aware component
+ * @module Tour/Engines/Modern
+ * @category Overlay
+ * @package @rottay/design-system
+ */
+import React, { useState, useEffect, useCallback, useId, useRef } from 'react';
+import type { TourProps, TourStepProps } from '../../contracts';
+import { TOUR_DEFAULTS } from '../../contracts';
+import {
+  OverlayPortalBoundary,
+  useOverlayPosition,
+} from '../../../../runtime/overlay/positioning';
+import { Portal } from '../../../../runtime/overlay/portal';
+import {
+  usePortalScope,
+  type PortalScopeSnapshot,
+} from '../../../../runtime/overlay/portal-scope';
+import { useTourSpotlightRect } from '../../runtime/spotlight-rect';
+import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
+import { ActionCloseIcon } from '@/graphics/icons/semantic/generated/roles/action-close';
+
+/** Breathing room the spotlight cutout keeps around the target element. */
+const SPOTLIGHT_PADDING = 8;
+/** Gap between the spotlight's padded edge and the step surface. */
+const SURFACE_GAP = 8;
+
+/**
+ * Resolves target element from various input formats.
+ *
+ * @param target - CSS selector, ref, or getter function
+ * @returns The resolved HTMLElement or null
+ * @internal
+ */
+const getTargetElement = (target: TourStepProps['target']): HTMLElement | null => {
+  if (!target) return null;
+  if (typeof target === 'string') return document.querySelector(target);
+  if (typeof target === 'function') return target();
+  if ('current' in target) return target.current;
+  return null;
+};
+
+interface ModernTourChromeProps {
+  forwardedRef: React.ForwardedRef<HTMLDivElement>;
+  className?: string;
+  style?: React.CSSProperties;
+  zIndex: number;
+  mask: TourProps['mask'];
+  type: TourProps['type'];
+  step: TourStepProps | undefined;
+  steps: TourStepProps[];
+  currentStep: number;
+  targetEl: HTMLElement | null;
+  portalScope: PortalScopeSnapshot;
+  onClose?: () => void;
+  onPrev: () => void;
+  onNext: () => void;
+}
+
+/**
+ * The portaled tour chrome. Rendered inside OverlayPortalBoundary, so its
+ * useOverlayPosition call always resolves the measured (js) branch.
+ */
+const ModernTourChrome = ({
+  forwardedRef,
+  className,
+  style,
+  zIndex,
+  mask,
+  type,
+  step,
+  steps,
+  currentStep,
+  targetEl,
+  portalScope,
+  onClose,
+  onPrev,
+  onNext,
+}: ModernTourChromeProps): React.ReactElement => {
+  // Standalone-render safe: Tour can mount before an app's I18nProvider, so
+  // the optional hook keeps the documented English fallbacks below.
+  const translation = useOptionalTranslation('common');
+  const spotlightRect = useTourSpotlightRect(targetEl, SPOTLIGHT_PADDING);
+  const [surfaceEl, setSurfaceEl] = useState<HTMLDivElement | null>(null);
+
+  // APG dialog labelling + programmatic focus. The tour is a NON-modal
+  // dialog (the page behind stays interactive when mask=false): the surface
+  // carries role="dialog" with the step's title/description as name and
+  // description, and DOM focus moves to it on open and on every step change
+  // so keyboard users land on the active step immediately.
+  const dialogIds = useId();
+  const titleId = step?.title ? `${dialogIds}-title` : undefined;
+  const descriptionId = step?.description ? `${dialogIds}-description` : undefined;
+  const progressId = `${dialogIds}-progress`;
+  // A title-less step must still name its dialog: without this the surface
+  // resolved to an unnamed `dialog` node (aria-labelledby pointed at nothing).
+  const fallbackDialogLabel = translation?.tOr('tour.label', 'Guided tour') ?? 'Guided tour';
+  const stepProgressLabel =
+    translation?.tOr('tour.step_progress', `Step ${currentStep + 1} of ${steps.length}`, {
+      current: currentStep + 1,
+      total: steps.length,
+    }) ?? `Step ${currentStep + 1} of ${steps.length}`;
+
+  useEffect(() => {
+    surfaceEl?.focus();
+  }, [surfaceEl, currentStep]);
+
+  // Keyboard contract: Escape closes (parity with the mask click), and the
+  // horizontal arrows walk the steps when the focus is inside the surface
+  // (forward = next along the reading direction; mirrored under RTL).
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        e.stopPropagation();
+        onClose?.();
+      }
+    };
+    document.addEventListener('keydown', handler);
+    return () => document.removeEventListener('keydown', handler);
+  }, [onClose]);
+
+  const handleSurfaceKeyDown = (e: React.KeyboardEvent) => {
+    // Step content is arbitrary consumer markup. Taking the horizontal arrows
+    // unconditionally meant a text field, textarea, select or slider inside a
+    // step lost caret movement and value adjustment to tour navigation -- the
+    // user could not move the cursor one character left without jumping steps.
+    const origin = e.target as HTMLElement | null;
+    if (origin && origin !== e.currentTarget) {
+      const tag = origin.tagName;
+      if (
+        tag === 'INPUT' ||
+        tag === 'TEXTAREA' ||
+        tag === 'SELECT' ||
+        origin.isContentEditable
+      ) {
+        return;
+      }
+    }
+    const rtl = portalScope.direction === 'rtl';
+    const forwardKey = rtl ? 'ArrowLeft' : 'ArrowRight';
+    const backwardKey = rtl ? 'ArrowRight' : 'ArrowLeft';
+    if (e.key === forwardKey) {
+      e.preventDefault();
+      // Advances the step; on the last step this is Finish (onNext's own contract).
+      onNext();
+    } else if (e.key === backwardKey && currentStep > 0) {
+      e.preventDefault();
+      onPrev();
+    }
+  };
+
+  // The active target must be visible before the spotlight and surface are
+  // measured around it. Reduced motion jumps instead of animating.
+  useEffect(() => {
+    if (!targetEl) return;
+    const prefersReducedMotion =
+      typeof window !== 'undefined' &&
+      typeof window.matchMedia === 'function' &&
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    targetEl.scrollIntoView({
+      block: 'center',
+      behavior: prefersReducedMotion ? 'instant' : 'smooth',
+    });
+  }, [targetEl]);
+
+  // The `placement` prop is inert in this engine (the classic engine honors
+  // it): the surface is fixed to bottom-center, the shipped behavior. The
+  // offset clears the spotlight's padded edge (cutout padding + gap).
+  const { strategy, style: positionStyle } = useOverlayPosition({
+    anchor: targetEl,
+    overlay: targetEl ? surfaceEl : null,
+    placement: 'bottom',
+    offset: SPOTLIGHT_PADDING + SURFACE_GAP,
+  });
+
+  const maskStyle = typeof mask === 'object' ? mask.style : {};
+  // Written as a statement, not a ternary: `mask.color : <default>` reads as an
+  // object key `color:` to the inline-paint lexer and counts as a phantom site.
+  let maskColor: string | undefined = 'var(--ds-color-alpha-black-50)';
+  if (typeof mask === 'object') {
+    maskColor = mask.color;
+  }
+
+  return (
+    <div
+      ref={forwardedRef}
+      data-part="root"
+      className={`rottay-tour--modern ${className || ''}`}
+      // Re-enter the tenant/locale scope the portal escaped (read from the
+      // target or the in-tree scope marker; empty outside a DS provider). The
+      // snapshot comes from the shared `runtime/overlay/portal-scope` reader,
+      // so the inline `--ds-*` overrides a white-labelled shell set on the
+      // lineage now cross the boundary too -- the private reader this replaced
+      // carried only the attributes.
+      {...portalScope.scope}
+      dir={portalScope.direction}
+      lang={portalScope.language}
+      // The mask colour is consumer-supplied and templated into the spotlight's
+      // box-shadow, which also carries runtime geometry; the skin reads this
+      // custom property (not a paint key) for both surfaces. Left unset when the
+      // caller passes a `mask` object with no `color`, exactly as before: the
+      // dependent declarations then drop, painting no scrim and no cutout.
+      // The contract's root `style` spreads FIRST (rustic sibling idiom): the
+      // tenant-scope snapshot and the runtime z-index/mask channel keep
+      // precedence over caller paint.
+      style={{ ...style, ...portalScope.variables, zIndex, ['--ds-tour-mask-color' as any]: maskColor }}
+    >
+      {/* Mask. Fixed full-viewport positioning is skin-owned; only the
+          consumer's mask.style spread stays inline (public API). */}
+      {mask && (
+        <div
+          data-part="backdrop"
+          style={{
+            ...maskStyle,
+          }}
+          onClick={onClose}
+        />
+      )}
+
+      {/* Spotlight: a huge box-shadow creates the "cutout" mask effect around the target.
+          The 9999px spread covers the entire viewport while the element itself stays transparent.
+          The scrim IS the mask: with mask={false} nothing may veil the page
+          (classic/antd parity), so the whole cutout is gated on `mask` -- a
+          plain boolean used to ship a 50%-black veil over the app anyway.
+          Geometry is measured viewport geometry (getBoundingClientRect) and stays inline;
+          fixed positioning/radius/pointer-events are skin-owned. */}
+      {mask && spotlightRect && (
+        <div
+          data-part="spotlight"
+          style={{
+            top: spotlightRect.top,
+            left: spotlightRect.left,
+            width: spotlightRect.width,
+            height: spotlightRect.height,
+            zIndex: zIndex + 1,
+          }}
+        />
+      )}
+
+      {/* Step popover: placed by the shared overlay runtime when a target
+          exists (bottom-centered, flip + clamp), centered in the viewport
+          otherwise (the skin's translate centres it -- direction-neutral).
+          The runtime's positioning keys spread last so they win. Chrome
+          (padding/max-inline-size) is skin-owned. */}
+      <div
+        ref={setSurfaceEl}
+        data-part="surface"
+        data-open="true"
+        data-type={type}
+        data-anchored={targetEl ? 'true' : 'false'}
+        data-ds-position-strategy={strategy}
+        role="dialog"
+        aria-modal="false"
+        aria-labelledby={titleId}
+        aria-label={titleId ? undefined : fallbackDialogLabel}
+        /* "Step 2 of 5" is the one thing that tells a non-sighted user where
+           they are in the tour, and it was reachable only by tabbing onto the
+           indicator graphic -- which is not a tab stop. Chaining it into the
+           description means focus landing on the surface (on open and on every
+           step change) announces the position with the step's own copy. */
+        aria-describedby={[descriptionId, progressId].filter(Boolean).join(' ')}
+        tabIndex={-1}
+        onKeyDown={handleSurfaceKeyDown}
+        style={{
+          zIndex: zIndex + 2,
+          ...(targetEl
+            ? positionStyle
+            : { position: 'fixed' as const, top: '50%', left: '50%' }),
+        }}
+      >
+        {/* Close button: geometry is skin-owned (logical inset-inline-end so
+            it mirrors to the far corner under RTL); the glyph is the governed
+            ActionCloseIcon (Modal/Toast/Notification pattern), decorative --
+            the button carries the accessible name. */}
+        <button
+          type="button"
+          data-part="close-button"
+          onClick={onClose}
+          /* `t` echoes the key back when the catalog lacks it, so a host app
+             shipping a partial `common` namespace labelled this button the
+             literal string "close". `tOr` is the floor the rest of the file
+             already uses. Same for the two nav actions below. */
+          aria-label={translation?.tOr('close', 'Close') ?? 'Close'}
+        >
+          <ActionCloseIcon decorative size={16} />
+        </button>
+
+        {/* Content */}
+        {step?.cover && <div data-part="cover">{step.cover}</div>}
+        {/* Gated: an unconditional heading published an EMPTY `h3` to the
+            accessibility tree for every title-less step. */}
+        {step?.title && <h3 id={titleId} data-part="title">{step.title}</h3>}
+        {step?.description && (
+          <p id={descriptionId} data-part="description">{step.description}</p>
+        )}
+
+        {/* Footer */}
+        <div data-part="footer">
+          {/* Indicators: a single accessible image with the step counter as
+              its name (dots are decorative; numbers are not localized) */}
+          {/* A describedby target contributes its text, not its aria-label, so
+              the counter has to exist as real text to be announced at all. */}
+          <span id={progressId} data-part="progress-text" className="ds-visually-hidden">
+            {stepProgressLabel}
+          </span>
+          <div data-part="indicators" role="img" aria-label={stepProgressLabel}>
+            {steps.map((_, index) => (
+              <div
+                key={index}
+                data-part="indicator"
+                data-current={index === currentStep ? 'true' : 'false'}
+                aria-hidden="true"
+              />
+            ))}
+          </div>
+
+          {/* Buttons. `Finish` resolves through the common channel
+              (`common.finish`, landed in the en/es/ar/fr catalogs) with the
+              English `tOr` floor kept for catalogs without the key; the floor
+              keeps the shipped label byte-identical. */}
+          <div data-part="actions">
+            {currentStep > 0 && (
+              <button
+                type="button"
+                data-part="action"
+                data-action="prev"
+                onClick={onPrev}
+              >
+                {translation?.tOr('previous', 'Previous') ?? 'Previous'}
+              </button>
+            )}
+            <button
+              type="button"
+              data-part="action"
+              data-action="next"
+              onClick={onNext}
+            >
+              {currentStep === steps.length - 1 ? (translation?.tOr('finish', 'Finish') ?? 'Finish') : (translation?.tOr('next', 'Next') ?? 'Next')}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+/**
+ * Modern engine implementation of Tour on a self-contained, skin-owned tree.
+ *
+ * Features:
+ * - Skin-owned chrome (surface, close button, indicators, nav actions)
+ * - No utility-framework classes (drained in K4-A)
+ * - Portal rendering for proper z-index stacking
+ * - Spotlight effect with box-shadow technique
+ *
+ * @component
+ * @example
+ * ```tsx
+ * <Tour steps={steps} open={isOpen} engine="modern" />
+ * ```
+ *
+ * @param props - Tour configuration props
+ * @param ref - Forwarded ref to the container div
+ * @returns Guided tour on the modern Rottay-native skin
+ */
+export const Tour = React.forwardRef<HTMLDivElement, TourProps>(
+  (props: TourProps, ref) => {
+    const {
+      steps,
+      current: controlledCurrent,
+      open,
+      onChange,
+      onClose,
+      onFinish,
+      type = TOUR_DEFAULTS.type,
+      mask = TOUR_DEFAULTS.mask,
+      zIndex = TOUR_DEFAULTS.zIndex,
+      className,
+      style,
+    } = props;
+
+    // Controlled/uncontrolled step index -- external current takes precedence
+    const [internalCurrent, setInternalCurrent] = useState(0);
+    // The live target element of the active step: the shared overlay runtime
+    // and the spotlight measurement both position against it.
+    const [targetEl, setTargetEl] = useState<HTMLElement | null>(null);
+    // In-tree marker the tenant/locale scope is read from when the step has
+    // no target element (the chrome portals to body, outside the provider).
+    const [scopeMarkerEl, setScopeMarkerEl] = useState<HTMLSpanElement | null>(null);
+    // Shared substrate reader. The anchor switches per step (the next target
+    // may live under a different scope owner), and the hook re-resolves on
+    // every anchor change, so no step-keyed effect is needed here.
+    const portalScope = usePortalScope(targetEl ?? scopeMarkerEl);
+
+    const currentStep = controlledCurrent ?? internalCurrent;
+    const step = steps[currentStep];
+
+    // Focus restore: the element that had focus when the tour opened gets it
+    // back when it closes (Escape, mask click, Finish or the close button).
+    const previousFocusRef = useRef<HTMLElement | null>(null);
+    useEffect(() => {
+      if (open) {
+        previousFocusRef.current = document.activeElement as HTMLElement | null;
+        return;
+      }
+      previousFocusRef.current?.focus?.();
+      previousFocusRef.current = null;
+    }, [open]);
+
+    const handleChange = useCallback((newCurrent: number) => {
+      setInternalCurrent(newCurrent);
+      onChange?.(newCurrent);
+    }, [onChange]);
+
+    // On the last step, "Next" becomes "Finish" and triggers both callbacks
+    const handleNext = () => {
+      if (currentStep < steps.length - 1) {
+        handleChange(currentStep + 1);
+      } else {
+        onFinish?.();
+        onClose?.();
+      }
+    };
+
+    const handlePrev = () => {
+      if (currentStep > 0) {
+        handleChange(currentStep - 1);
+      }
+    };
+
+    // Resolve the target element for the active step; released on close so a
+    // detached node cannot be retained across sessions.
+    useEffect(() => {
+      if (open && step) {
+        setTargetEl(getTargetElement(step.target));
+        return;
+      }
+      setTargetEl(null);
+    }, [open, step, currentStep]);
+
+    // Return an empty placeholder when closed to preserve ref stability
+    if (!open || typeof document === 'undefined') return <div ref={ref} className={className} style={style} />;
+
+    // Tour is js-branch-only by construction: the chrome is ONE open chain of
+    // three stacked parts (backdrop scrim, spotlight cutout, step surface)
+    // that must stack in a single rendering world. Promoting only the surface
+    // to the top layer would split that chain across the top-layer and
+    // portal/z-index worlds, and the anchor branch would stamp `anchor-name`
+    // inline on app-owned target elements Tour does not render. The boundary
+    // pins every useOverlayPosition call in this portaled subtree -- the
+    // surface's, and any overlay a consumer nests inside step content -- to
+    // the measured branch.
+    return (
+      <>
+        <span ref={setScopeMarkerEl} data-part="scope-marker" hidden aria-hidden="true" />
+        <Portal>
+          <OverlayPortalBoundary>
+            <ModernTourChrome
+              forwardedRef={ref}
+              className={className}
+              style={style}
+              zIndex={zIndex!}
+              mask={mask}
+              type={type}
+              step={step}
+              steps={steps}
+              currentStep={currentStep}
+              targetEl={targetEl}
+              portalScope={portalScope}
+              onClose={onClose}
+              onPrev={handlePrev}
+              onNext={handleNext}
+            />
+          </OverlayPortalBoundary>
+        </Portal>
+      </>
+    );
+  }
+);
+
+Tour.displayName = 'Tour.Modern';
+
+export default Tour;

@@ -1,3 +1,3 @@
 "use client";
 
-export { DatePicker } from "../../../../ui/primitives/inputs/DatePicker";
+export { DatePicker } from "../../../../components/primitives/inputs/date-picker";

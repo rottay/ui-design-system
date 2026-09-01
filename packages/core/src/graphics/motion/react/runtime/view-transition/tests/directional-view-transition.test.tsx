@@ -14,7 +14,7 @@ import {
   useDirectionalViewTransition,
 } from '..';
 import { useReducedMotion } from '../../foundation/reduced-motion';
-import { mockMatchMedia } from '@/tooling/testing/helpers/browser/match-media';
+import { mockMatchMedia } from '@tests/support/browser/match-media';
 
 /** `document` widened so tests can install/remove the optional API method. */
 // Omit the DOM lib's own non-optional declaration so the stub can be assigned

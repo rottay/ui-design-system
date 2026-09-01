@@ -1,7 +1,7 @@
 /**
  * W4 divergence-demo fixture documents — SHOWROOM COPY.
  *
- * SOURCE OF TRUTH: packages/core/src/tooling/testing/
+ * SOURCE OF TRUTH: packages/core/tests/
  * fixtures/brand-themes/{divergence-sober,divergence-editorial}/index.ts.
  * Core fixtures are excluded from the published tarball (pack-inventory gate
  * forbids fixtures/ paths), so the showroom cannot import them through the

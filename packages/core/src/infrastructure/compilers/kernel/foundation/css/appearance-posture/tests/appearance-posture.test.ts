@@ -3,7 +3,7 @@
  * `appearancePostureToVariables` must never declare `--ds-density-mode-factor`
  * for the identity posture (comfortable/normal), because the compiled
  * artifact selector outranks `:root[data-density]` in
- * `foundation/base/density.css` and a declared `1` would permanently clobber
+ * `foundation/base/density/index.css` and a declared `1` would permanently clobber
  * that lower-specificity authority. A non-identity posture (compact/spacious)
  * is a real tenant choice and must still win, static or DB.
  */

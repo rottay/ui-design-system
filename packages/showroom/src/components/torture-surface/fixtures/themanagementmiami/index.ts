@@ -5,7 +5,7 @@
  * fixture.
  *
  * Canonical source:
- * packages/core/src/tooling/testing/fixtures/brand-themes/themanagementmiami/index.ts
+ * packages/core/tests/fixtures/brand-themes/themanagementmiami/index.ts
  *
  * This file exists because tenant-named proof fixtures are intentionally absent
  * from the public @rottay/design-system barrel. Apart from this provenance block

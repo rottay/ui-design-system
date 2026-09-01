@@ -1,6 +1,6 @@
-import { ShowroomLink as Link } from "@/components/showroom-link";
+import { ShowroomLink as Link } from "@/components/navigation/link";
 import { Badge, Box, Card, Flex, Stack, Text } from "@/components/showroom-ui";
-import { SHOWROOM_SURFACES } from "@/components/playground/surface-tokens";
+import { SHOWROOM_SURFACES } from "@/components/playground/tokens/surfaces";
 import {
   patternGroups,
   patterns,

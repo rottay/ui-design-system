@@ -3,7 +3,7 @@ import { act, render, screen, waitFor } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { usePresence } from '..';
-import { mockMatchMedia } from '@/tooling/testing/helpers/browser/match-media';
+import { mockMatchMedia } from '@tests/support/browser/match-media';
 
 afterEach(() => {
   vi.useRealTimers();

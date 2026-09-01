@@ -1,3 +1,3 @@
 "use client";
 
-export { Tooltip } from "../../../../ui/primitives/display/Tooltip";
+export { Tooltip } from "../../../../components/primitives/display/tooltip";

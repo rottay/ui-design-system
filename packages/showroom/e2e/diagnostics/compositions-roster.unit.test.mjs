@@ -8,7 +8,7 @@ const HERE = path.dirname(fileURLToPath(import.meta.url));
 const SHOWROOM_ROOT = path.resolve(HERE, '../..');
 const REPO = path.resolve(SHOWROOM_ROOT, '../..');
 const PROBE = path.join(SHOWROOM_ROOT, 'src/app/probe/ds-reference/sections/compositions');
-const UI = path.join(REPO, 'packages/core/src/ui');
+const UI = path.join(REPO, 'packages/core/src/components');
 const DOC = path.join(REPO, '../docs-engineering/engineering/design-system/components/surfaces/layout/README.md');
 
 /** The roster is governed: docs headings, the owners, and the probe must agree
@@ -127,7 +127,7 @@ test('the partition check rejects an unowned or doubly-owned slug', () => {
  *  to content width, so the stacked rule must state its own cross-axis value. */
 test('the stacked sidebar rule resets the cross-axis alignment it inherits', () => {
   const skin = readFileSync(
-    path.join(REPO, 'packages/core/src/foundation/tokens/css/presentation/components/skin/layout-sidebar.css'),
+    path.join(REPO, 'packages/core/src/foundation/tokens/css/presentation/components/skin/layout-sidebar/index.css'),
     'utf8',
   );
   const gridRule = skin.slice(skin.indexOf(".ds-surface.ds-sidebar[data-part='root'] {"));

@@ -1,3 +1,3 @@
 "use client";
 
-export { Skeleton } from "../../../../ui/primitives/feedback/Skeleton";
+export { Skeleton } from "../../../../components/primitives/feedback/skeleton";

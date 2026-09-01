@@ -66,7 +66,7 @@ import { test, expect, type Page } from '@playwright/test';
 // be added. (When the file does not exist at all it is bootstrapped from the
 // current run — that is the one-time implementation measurement.)
 //
-// Screenshots land in test-artifacts/gates/gat-03/ on every run. They are
+// Screenshots land in packages/core/artifacts/quality/captures/visual-regressions/whitelabel/ on every run. They are
 // informational: a human confirms the torture tenant is legibly themed and the
 // RTL column mirrors without clipping. They are NOT pixel-diffed — a garish
 // fixture is a probe target, not visual canon.
@@ -196,7 +196,8 @@ function repoRoot(): string {
 }
 
 const baselinePath = (): string => join(test.info().project.testDir, 'whitelabel', 'torture-baseline.json');
-const artifactDir = (): string => join(repoRoot(), 'test-artifacts', 'gates', 'gat-03');
+const artifactDir = (): string =>
+  join(repoRoot(), 'packages/core/artifacts/quality/captures/visual-regressions/whitelabel');
 
 // --- browser-side reader ----------------------------------------------------
 

@@ -1857,13 +1857,6 @@ const PALETTE: BrandPalette = {
   textMutedColor: '#737373',
   textDisabledColor: '#b3b3b3',
   onPrimaryColor: '#ffffff',
-  // COH-1: the four `*BgColor` literals below (`#f0fdf4`, `#fefce8`,
-  // `#fef2f2`, `#f8fafc`) retired. Each was a generic tailwind-family literal
-  // in the seed's own hue family, not this vertical's own art direction --
-  // `deriveStatusTintFloor` now derives all four from the seeds below (e.g.
-  // success `#F5FFF6`), a sub-perceptual correction. `*BorderColor` already
-  // authored exactly the floor's own formula (see below) and stays retired
-  // alongside them.
   successColor: '#15803D',
   warningColor: '#A16207',
   /**
@@ -1893,10 +1886,6 @@ const PALETTE: BrandPalette = {
    */
   borderTertiaryColor:
     'color-mix(in srgb, var(--ds-color-border) 66.667%, transparent)',
-  // COH-1: the four `*BorderColor` literals above this comment (success/
-  // warning/error/info) retired -- each authored EXACTLY the string
-  // `deriveStatusTintFloor` now emits from the seed, so this is a cero-delta
-  // byte retirement, not a correction.
   linkHoverColor: '#525252',
   linkVisitedColor: '#737373',
   /**
@@ -2309,19 +2298,19 @@ const CHARTS: FirstPartyBrandTheme['charts'] = {
   animateOnMount: true,
   /**
    * @domicile seed
-   * @governor seed de personalidad de charts: el compilador la copia a chartPersonality y los renderers la consumen como argumento (gantt/bullet/gauge en ui/patterns/visualization/charts/runtime/chart-engine); no baja a canal (control null en mapa-familia-canales F4A-3a); ningun ingress de manifest/controls/*.json cubre charts.* (medido 0 de 20); gobernanza de control = celda de la cohorte chart en F9
+   * @governor unassigned: renderer input; no CSS channel
    */
   mountDuration: 1200,
   /**
    * @domicile seed
-   * @governor seed de personalidad de charts: el compilador la copia a chartPersonality y los renderers la consumen como argumento (gantt/bullet/gauge en ui/patterns/visualization/charts/runtime/chart-engine); no baja a canal (control null en mapa-familia-canales F4A-3a); ningun ingress de manifest/controls/*.json cubre charts.* (medido 0 de 20); gobernanza de control = celda de la cohorte chart en F9
+   * @governor unassigned: renderer input; no CSS channel
    */
   lineStyle: 'smooth',
   showDots: true,
   useGradientFill: true,
   /**
    * @domicile seed
-   * @governor seed de personalidad de charts: el compilador la copia a chartPersonality y los renderers la consumen como argumento (gantt/bullet/gauge en ui/patterns/visualization/charts/runtime/chart-engine); no baja a canal (control null en mapa-familia-canales F4A-3a); ningun ingress de manifest/controls/*.json cubre charts.* (medido 0 de 20); gobernanza de control = celda de la cohorte chart en F9
+   * @governor unassigned: renderer input; no CSS channel
    */
   tooltipStyle: 'detailed',
 };
@@ -2399,32 +2388,32 @@ const CHROME: BrandChrome = {
   accent: {
     /**
      * @domicile seed
-     * @governor seed de forma de accent: el compilador lo copia a PersonalityTokens.accent (compilers/kernel/runtime/brand-theme) y se consume como argumento de render (tenant-preview modern lo estampa inline); no baja a canal via chromeToVariables (medido 0 emisiones); ingresa por el control pro chrome.families (ingress chrome.*, manifest/controls/chrome.families.json); celda familia x control en F9
+     * @governor chrome.families: renderer input; no CSS channel
      */
     barPosition: 'top',
     /**
      * @domicile seed
-     * @governor seed de forma de accent: el compilador lo copia a PersonalityTokens.accent (compilers/kernel/runtime/brand-theme) y se consume como argumento de render (tenant-preview modern lo estampa inline); no baja a canal via chromeToVariables (medido 0 emisiones); ingresa por el control pro chrome.families (ingress chrome.*, manifest/controls/chrome.families.json); celda familia x control en F9
+     * @governor chrome.families: renderer input; no CSS channel
      */
     barThickness: 4,
     /**
      * @domicile seed
-     * @governor seed de forma de accent: el compilador lo copia a PersonalityTokens.accent (compilers/kernel/runtime/brand-theme) y se consume como argumento de render (tenant-preview modern lo estampa inline); no baja a canal via chromeToVariables (medido 0 emisiones); ingresa por el control pro chrome.families (ingress chrome.*, manifest/controls/chrome.families.json); celda familia x control en F9
+     * @governor chrome.families: renderer input; no CSS channel
      */
     barStyle: 'animated',
     /**
      * @domicile seed
-     * @governor seed de forma de accent: el compilador lo copia a PersonalityTokens.accent (compilers/kernel/runtime/brand-theme) y se consume como argumento de render (tenant-preview modern lo estampa inline); no baja a canal via chromeToVariables (medido 0 emisiones); ingresa por el control pro chrome.families (ingress chrome.*, manifest/controls/chrome.families.json); celda familia x control en F9
+     * @governor chrome.families: renderer input; no CSS channel
      */
     iconContainerShape: 'circle',
     /**
      * @domicile seed
-     * @governor seed de forma de accent: el compilador lo copia a PersonalityTokens.accent (compilers/kernel/runtime/brand-theme) y se consume como argumento de render (tenant-preview modern lo estampa inline); no baja a canal via chromeToVariables (medido 0 emisiones); ingresa por el control pro chrome.families (ingress chrome.*, manifest/controls/chrome.families.json); celda familia x control en F9
+     * @governor chrome.families: renderer input; no CSS channel
      */
     badgeShape: 'pill',
     /**
      * @domicile seed
-     * @governor seed de forma de accent: el compilador lo copia a PersonalityTokens.accent (compilers/kernel/runtime/brand-theme) y se consume como argumento de render (tenant-preview modern lo estampa inline); no baja a canal via chromeToVariables (medido 0 emisiones); ingresa por el control pro chrome.families (ingress chrome.*, manifest/controls/chrome.families.json); celda familia x control en F9
+     * @governor chrome.families: renderer input; no CSS channel
      */
     dividerStyle: 'dashed',
   },

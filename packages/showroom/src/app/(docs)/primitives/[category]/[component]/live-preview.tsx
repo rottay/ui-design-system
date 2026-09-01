@@ -118,13 +118,13 @@ import {
   useNotification,
   useToast,
 } from '@rottay/design-system';
-import { RuntimeFingerprint } from '@/components/runtime/runtime-fingerprint';
+import { RuntimeFingerprint } from '@/components/runtime/fingerprint';
 import { StateGallery, getFlagshipSpec } from '@/components/state-gallery';
 import {
   SHOWROOM_SURFACES,
   mixWithCanvas,
   mixWithSurface,
-} from '@/components/playground/surface-tokens';
+} from '@/components/playground/tokens/surfaces';
 import { primitives } from '@/data/registry';
 import type {
   PrimitiveCategory,

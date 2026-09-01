@@ -1,9 +1,9 @@
 "use client";
 
-export { Toast } from "../../../../ui/primitives/feedback/Toast";
-export { ToastContainer } from "../../../../ui/primitives/feedback/Toast/compound/Container";
-export { ToastProvider } from "../../../../ui/primitives/feedback/Toast/runtime/state/provider";
+export { Toast } from "../../../../components/primitives/feedback/toast";
+export { ToastContainer } from "../../../../components/primitives/feedback/toast/compound/container";
+export { ToastProvider } from "../../../../components/primitives/feedback/toast/runtime/state/provider";
 export {
   toast,
   useToast,
-} from "../../../../ui/primitives/feedback/Toast/runtime/state/provider/use-toast";
+} from "../../../../components/primitives/feedback/toast/runtime/state/provider/use-toast";

@@ -21,7 +21,10 @@ import { fileURLToPath } from 'node:url';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const repoRoot = resolve(here, '../../../..');
-const evidenceDir = join(repoRoot, 'test-artifacts', 'gates', 'gat-04');
+const evidenceDir = join(
+  repoRoot,
+  'packages/core/artifacts/quality/audits/accessibility/runs/focus',
+);
 
 const FLAGSHIP_SLUGS = ['button', 'input', 'select', 'card', 'badge', 'table', 'tabs', 'modal'] as const;
 const TENANTS = [

@@ -12,7 +12,7 @@
  * single fact with a single source.
  *
  * The shape is load-bearing and mechanically enforced by
- * `scripts/taxonomy/chart-facade-parity/index.test.mjs`: exactly one non-type-only
+ * `scripts/check/taxonomy/chart-facade-parity/index.test.mjs`: exactly one non-type-only
  * `ExportDeclaration`, exactly this module specifier, exactly the eighteen
  * canonical chart component names, no aliases, no type-only elements, no
  * `export *`, no exported local declarations. Types are deliberately absent —
@@ -38,4 +38,4 @@ export {
   Sparkline,
   TreeMap,
   WaterfallChart,
-} from "../../../../ui/patterns/visualization/charts/families";
+} from "../../../../components/patterns/visualization/charts/families";

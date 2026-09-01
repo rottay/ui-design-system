@@ -334,7 +334,7 @@ describe('TENANT-COLOR PROPAGATION · the reach a palette-only tenant has', () =
     // set rather than an emptiness.
     const seeded = { ...DB_SEED, background: '#F4F8FB' };
     const primaryReach = reachFrom(
-      dbVariables({ ...seeded, primary: NEW_PRIMARY }),
+      { ...BASE, ...dbVariables({ ...seeded, primary: NEW_PRIMARY }) },
       movedBetween(
         dbVariables(seeded),
         dbVariables({ ...seeded, primary: NEW_PRIMARY })
@@ -346,10 +346,13 @@ describe('TENANT-COLOR PROPAGATION · the reach a palette-only tenant has', () =
     );
     expect(primaryReach.filter(FAMILIES['button primary chrome'])).toEqual([
       '--ds-button-primary-bg',
+      '--ds-button-primary-bg-active',
       '--ds-button-primary-bg-hover',
+      '--ds-button-primary-border',
     ]);
     expect(primaryReach.filter(FAMILIES.inputs)).toEqual([
       '--ds-input-border-focus',
+      '--ds-input-caret-color',
       '--ds-input-shadow-focus',
     ]);
     // The background seed is a separate authority and gains nothing here: cards

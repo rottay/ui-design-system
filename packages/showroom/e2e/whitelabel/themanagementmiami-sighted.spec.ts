@@ -37,7 +37,8 @@ function repoRoot(): string {
   return dir;
 }
 
-const artifactDir = (): string => join(repoRoot(), 'test-artifacts', 'gates', 'gat-03');
+const artifactDir = (): string =>
+  join(repoRoot(), 'packages/core/artifacts/quality/captures/visual-regressions/whitelabel');
 
 /**
  * DOM is ground truth over any screenshot, matching torture.spec.ts's

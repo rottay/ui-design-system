@@ -30,12 +30,12 @@ import { describe, expect, it } from 'vitest';
 
 import type { Tone } from '..';
 import { TONE_TO_VARIANT } from '..';
-import { TONE_TO_BADGE_VARIANT } from '@/ui/primitives/display/Badge/contracts';
-import { TONE_TO_TAG_VARIANT } from '@/ui/primitives/display/Tag/contracts';
-import { TONE_TO_AVATAR_VARIANT } from '@/ui/primitives/display/Avatar/contracts';
-import { TONE_TO_CALLOUT_VARIANT } from '@/ui/primitives/display/Callout/contracts';
-import { TONE_TO_ALERT_TYPE } from '@/ui/primitives/feedback/Alert/contracts';
-import { TONE_TO_PROGRESS_STATUS } from '@/ui/primitives/feedback/Progress/contracts';
+import { TONE_TO_BADGE_VARIANT } from '@/components/primitives/display/badge/contracts';
+import { TONE_TO_TAG_VARIANT } from '@/components/primitives/display/tag/contracts';
+import { TONE_TO_AVATAR_VARIANT } from '@/components/primitives/display/avatar/contracts';
+import { TONE_TO_CALLOUT_VARIANT } from '@/components/primitives/display/callout/contracts';
+import { TONE_TO_ALERT_TYPE } from '@/components/primitives/feedback/alert/contracts';
+import { TONE_TO_PROGRESS_STATUS } from '@/components/primitives/feedback/progress/contracts';
 
 const ALL_TONES: readonly Tone[] = ['neutral', 'primary', 'success', 'warning', 'danger', 'info'];
 

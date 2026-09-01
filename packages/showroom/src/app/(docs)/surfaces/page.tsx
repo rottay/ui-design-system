@@ -1,9 +1,9 @@
 'use client';
 
-import { ShowroomLink as Link } from '@/components/showroom-link';
+import { ShowroomLink as Link } from '@/components/navigation/link';
 import { Box, Card, Badge, Flex, Stack, Text } from '@rottay/design-system';
 import { useTokens } from '@rottay/design-system';
-import { formatShowroomLabel } from '@/components/layout/config';
+import { formatShowroomLabel } from '@/components/layout/navigation/config';
 import {
   surfaceGroups,
   surfaces,

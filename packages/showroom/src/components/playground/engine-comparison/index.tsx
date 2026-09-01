@@ -9,7 +9,7 @@ import {
 import {
   SHOWROOM_SURFACES,
   mixWithSurface,
-} from '../surface-tokens';
+} from '../tokens/surfaces';
 
 export interface EngineComparisonProps {
   children: ReactNode;

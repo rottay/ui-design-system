@@ -13,8 +13,8 @@
  *   2. With the axis present, every step scales by the axis value at the one
  *      definition site (the whole point of the ramp wrap).
  *
- * The winning cascade is honoured: foundation/base/typography.css is imported
- * first in the rottay-tokens layer and foundation/themes/default.css last, so
+ * The winning cascade is honoured: foundation/base/typography/index.css is imported
+ * first in the rottay-tokens layer and foundation/themes/default/index.css last, so
  * default.css wins for the steps it redefines (xs..6xl, all radii) and
  * typography.css provides the steps only it defines (md, 7xl..9xl). The merge
  * order below (typography first, default second) reproduces that.
@@ -25,11 +25,11 @@ import { describe, expect, it } from "vitest";
 
 const DEFAULT_CSS = resolve(
   process.cwd(),
-  "src/foundation/tokens/css/foundation/themes/default.css"
+  "src/foundation/tokens/css/foundation/themes/default/index.css"
 );
 const TYPOGRAPHY_CSS = resolve(
   process.cwd(),
-  "src/foundation/tokens/css/foundation/base/typography.css"
+  "src/foundation/tokens/css/foundation/base/typography/index.css"
 );
 const DARK_SELECTOR = ":root[data-theme='dark']";
 

@@ -23,7 +23,7 @@ import { compileBrandTheme } from '../index';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const MENU_SKIN = readFileSync(
-  join(here, '../../../../../../foundation/tokens/css/runtime/engines/modern/skin/menu.css'),
+  join(here, '../../../../../../foundation/tokens/css/runtime/engines/modern/skin/menu/index.css'),
   'utf-8'
 );
 

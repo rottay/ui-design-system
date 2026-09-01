@@ -1,3 +1,3 @@
 "use client";
 
-export { RecordFacts } from "../../../../ui/patterns/data/record-facts";
+export { RecordFacts } from "../../../../components/patterns/data/record-facts";

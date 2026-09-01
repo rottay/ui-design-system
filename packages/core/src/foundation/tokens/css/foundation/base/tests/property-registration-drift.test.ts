@@ -1,5 +1,5 @@
 /**
- * Drift gate for the @property registrations in foundation/base/properties.css.
+ * Drift gate for the @property registrations in foundation/base/properties/index.css.
  *
  * A registered custom property that is unset resolves to its declared
  * initial-value (NOT to a var() fallback), so an initial-value that disagrees
@@ -10,14 +10,14 @@
  * registrations outside this canonical owner; a green allowlist cannot hide a
  * document-global registration inside a component skin.
  *
- * Shipped-default sources parsed here: foundation/themes/default.css and
- * foundation/animations/transitions.css (the two named default files), plus
- * foundation/animations/premium.css, which is where the effect-intensity dial's
+ * Shipped-default sources parsed here: foundation/themes/default/index.css and
+ * foundation/animations/transitions/index.css (the two named default files), plus
+ * foundation/animations/premium/index.css, which is where the effect-intensity dial's
  * at-rest default lives. A literal default is compared byte-for-byte against the
  * registered initial-value; a var()-chain default (color-primary) is accounted
  * for by existence only, because an @property initial-value cannot hold a var().
  *
- * A fourth source, presentation/components/skin/widget-board.css, is parsed for
+ * A fourth source, presentation/components/skin/widget-board/index.css, is parsed for
  * the widget-board spatial family. Those channels have no at-rest declaration at
  * all: the registration itself supplies their at-rest value, so they are
  * accounted for against their consumption site instead of a shipped literal.
@@ -32,7 +32,7 @@ import { describe, expect, it } from "vitest";
 const fromRoot = (rel: string) => resolve(process.cwd(), rel);
 const CSS_ROOT = fromRoot("src/foundation/tokens/css");
 const PROPERTIES_PATH = fromRoot(
-  "src/foundation/tokens/css/foundation/base/properties.css",
+  "src/foundation/tokens/css/foundation/base/properties/index.css",
 );
 
 const PROPERTIES_CSS = readFileSync(
@@ -40,20 +40,20 @@ const PROPERTIES_CSS = readFileSync(
   "utf8",
 );
 const DEFAULT_CSS = readFileSync(
-  fromRoot("src/foundation/tokens/css/foundation/themes/default.css"),
+  fromRoot("src/foundation/tokens/css/foundation/themes/default/index.css"),
   "utf8",
 );
 const TRANSITIONS_CSS = readFileSync(
-  fromRoot("src/foundation/tokens/css/foundation/animations/transitions.css"),
+  fromRoot("src/foundation/tokens/css/foundation/animations/transitions/index.css"),
   "utf8",
 );
 const PREMIUM_CSS = readFileSync(
-  fromRoot("src/foundation/tokens/css/foundation/animations/premium.css"),
+  fromRoot("src/foundation/tokens/css/foundation/animations/premium/index.css"),
   "utf8",
 );
 const WIDGET_BOARD_CSS = readFileSync(
   fromRoot(
-    "src/foundation/tokens/css/presentation/components/skin/widget-board.css",
+    "src/foundation/tokens/css/presentation/components/skin/widget-board/index.css",
   ),
   "utf8",
 );

@@ -1,7 +1,7 @@
 'use client';
 
 import { Fragment } from 'react';
-import { ShowroomLink as Link } from '@/components/showroom-link';
+import { ShowroomLink as Link } from '@/components/navigation/link';
 import {
   Badge,
   Box,

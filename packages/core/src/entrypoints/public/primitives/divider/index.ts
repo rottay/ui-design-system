@@ -1,3 +1,3 @@
 "use client";
 
-export { Divider } from "../../../../ui/primitives/layout/Divider";
+export { Divider } from "../../../../components/primitives/layout/divider";

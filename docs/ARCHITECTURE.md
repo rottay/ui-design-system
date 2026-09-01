@@ -17,7 +17,7 @@ How to read it:
   (18 chart families, 282 icon roles). Prose counts rot; mechanical counts do
   not.
 - Component counts per tier and family names are generated in
-  [`packages/core/docs/TAXONOMY.generated.md`](../packages/core/docs/TAXONOMY.generated.md);
+  [`packages/core/docs/generated/component-taxonomy/index.md`](../packages/core/docs/generated/component-taxonomy/index.md);
   the operative work queue lives in [`roadmap/`](../roadmap/). Historical
   audits are snapshots preserved under [`docs/history/`](history/) and are not
   current source-path references.
@@ -35,21 +35,21 @@ src/
   foundation/       Contracts, kernels, presets, i18n and tokens
   infrastructure/   Compilers and browser/React runtime orchestration
   graphics/         Icons, brand marks, pictograms and motion
-  ui/               Primitives -> patterns -> structures -> surfaces
-  tooling/          ESLint, testing, declarations and program machinery
+  components/       Primitives -> patterns -> structures -> surfaces
   entrypoints/      Classified package-subpath boundaries
   index.ts          Package-root facade; the only loose source-root file
 ```
 
-The first five directories are the canonical architectural roots.
-`entrypoints/` is package-boundary support, not a sixth tier. Each subpath is a
-`folder/index.ts` owner that forwards to canonical implementation code.
+These five directories are the complete physical source-root roster.
+`components/` owns the four UI tiers; `entrypoints/` owns package boundaries.
+Each subpath is a `folder/index.ts` owner that forwards to canonical
+implementation code.
 
 At the macro level, dependencies flow toward the product edge:
 
 ```text
 foundation -> infrastructure/compilers -> infrastructure/runtime
-foundation + infrastructure + graphics -> ui
+foundation + infrastructure + graphics -> components
 primitives -> patterns -> structures -> surfaces -> consuming app
 ```
 
@@ -118,7 +118,7 @@ make the gate pass.
 
 ### 1.3 UI composition stack
 
-The four `ui/` tiers have one dependency direction:
+The four `components/` tiers have one dependency direction:
 
 1. `primitives/` — engine-switched leaf components.
 2. `patterns/` — reusable task compositions; engine-backed only when rendering
@@ -219,13 +219,13 @@ resolver remains a compatibility and development config chain; it is not the
 productive visual-authority chain.
 
 The full contract and failure rules live in
-[`packages/core/docs/TENANT_MODEL.md`](../packages/core/docs/TENANT_MODEL.md).
+[`packages/core/docs/architecture/tenant-authority/index.md`](../packages/core/docs/architecture/tenant-authority/index.md).
 
 ### 1.6 The visual cascade
 
 The visual system has **few named cascade roots with a closed vocabulary of
 named variants**, governed by the Modern Rescue manifest
-(`manifest/controls/`, `manifest/cascade/`). Component channels never hardcode
+(`governance/manifest/controls/`, `governance/manifest/cascade/`). Component channels never hardcode
 decisions and never dangle: every component-level channel resolves through the
 chained-fallback pattern
 
@@ -283,7 +283,7 @@ boundary enforces it.
 
 Brand and cloud-provider identity uses the separate `marks` API: a closed
 catalog rendered through `@thesvg/react`, confined to
-`graphics/brand-marks/runtime/adapters/`. Pictograms are a distinct asset
+`graphics/marks/runtime/adapters/`. Pictograms are a distinct asset
 class: a fixed corpus of explanatory artwork with domain-agnostic names.
 Tenants may provide an approved company logo, but cannot replace functional
 glyph semantics or select an arbitrary supplier.
@@ -334,14 +334,16 @@ honest or the build fails — never pointed at files the build does not produce.
 
 ### 1.10 Governance
 
-- `packages/core/scripts/` holds the mechanical governance: gates, censuses,
-  generators and evidence. Every gate is wired or it does not exist; the
+- `packages/core/scripts/` has exactly six action-first roots: `build/`,
+  `check/`, `generate/`, `maintain/`, `package/` and `libraries/`. These are
+  the only destination roots; source-layer names do not define script
+  ownership. Every gate is wired or it does not exist; the
   legitimate wiring channels are `ci-gates.manifest.mjs`, the npm lifecycle
   hooks (`prebuild`/`postbuild`/`prepack`) and `.github/workflows/ci.yml`, and
   the wiring gate counts all three. Every test is reachable by a runner glob
   or it does not exist.
 - `roadmap/registry.json` is the operative backlog with mechanical state;
-  statuses change only via `scripts/roadmap/status/index.mjs`.
+  statuses change only via `scripts/maintain/roadmap/status/index.mjs`.
 - Codemods are single-use and declare their expiry; a codemod whose target path
   no longer exists is deleted on sight.
 - A document that describes something that no longer exists is corrected the
@@ -350,7 +352,7 @@ honest or the build fails — never pointed at files the build does not produce.
 ### 1.11 Target law not yet materialized
 
 Everything below is decided direction with the build-out tracked in
-[`docs/ROADMAP-DE-REMEDIACION.md`](ROADMAP-DE-REMEDIACION.md) while it remains
+[`docs/history/programs/architecture-refactor/2026-08/remediation/index.md`](/docs/history/programs/architecture-refactor/2026-08/remediation/index.md) while it remains
 operative:
 
 - Cascade roots exist as real variables in the `modern` base layer and orphan
@@ -363,11 +365,10 @@ operative:
 - The explicit root-barrel API list (§1.9) replaces `export *` aggregation.
 - The `--ds_` experimentation-space gate (§1.6) — **materialized in F0
   (`ds-underscore-prefix-gate`, blocking)**.
-- The `scripts/` tree enforces its own §2.9 law mechanically: declared family
-  roster, no loose authored files at any root (the two toolchain files
-  excepted), sidecars carry the owner's full basename, no generic ownership
-  segments — **materialized in F0.5 Paso D (`scripts-tree-gate`, blocking,
-  decrease-only baseline)**.
+- The `scripts/` tree enforces its own §2.9 law mechanically: the six intent
+  roots, no loose authored files, folder/index capabilities, behavioral names
+  and no generic ownership segments. The gate and its decrease-only transition
+  baseline are materialized, and the physical action-first migration is complete.
 
 ---
 
@@ -389,12 +390,14 @@ names say what they contain. Nothing else.
 ui-design-system/
   packages/            The two workspace packages: core (the DS) and showroom
   scripts/             Repo-root machinery that is alive and wired:
-    roadmap/status/             Only legal way to change a WO state
-    roadmap/commercial-status/  Frozen copy for the isolated commercial lane
-    boundaries/dependency-honesty/   CI gate: apps resolve declared DS paths
-    provenance/effect-registry-audit/  CI gate: effect provenance registry
-  roadmap/             Canonical backlog (6 lanes + registry.json + STATUS.md)
-  roadmap-commercial/  Isolated commercial program, frozen by owner decision
+    check/
+      dependencies/             CI gate: apps resolve declared DS paths
+      effects/                  CI gate: effect provenance registry
+    maintain/roadmap/
+      status/                   Only legal way to change a WO state
+      commercial-status/        Frozen copy for the isolated commercial lane
+  roadmap/             Canonical backlog and isolated programs
+    commercial/        Commercial program, frozen by owner decision
   docs/                This document, the execution roadmap, history/
   .github/workflows/   The single CI pipeline
   .changeset/          Versioning machinery
@@ -402,45 +405,71 @@ ui-design-system/
   CLAUDE.md  AGENTS.md  README.md  LICENSE
 ```
 
-Everything else that once lived at root is gone or moved: historical `.md`
-files to `docs/history/` (they are evidence, not authority), dead codemods and
-audit leftovers removed, `coverage*/` and stray tarballs deleted,
-`test-artifacts/` unified into the package tree (§3), `.claude/` local config
-untracked.
+Historical `.md` files moved to `docs/history/`, dead codemods and audit
+leftovers were removed, and `coverage*/` plus stray tarballs were deleted.
+The repository-level `test-artifacts/` remains declared migration debt because
+legacy gates still write there; no new producer may target it, and §3 owns its
+move into the package artifact catalog. `.claude/` is untracked local config.
 
 ### 2.2 `packages/core/` — the package
 
 ```text
 packages/core/
-  src/                 The design system itself (§2.3–§2.8)
+  src/                 The design system itself (§2.3–§2.7)
   scripts/             Mechanical governance of the DS (§2.9)
-  manifest/            THE customization constitution: the 20 tenant dials
-                       (controls/), the 63 cascade roots (cascade/), recipe
-                       groups, family inventory cells, schema and index —
-                       graduated out of the program directory (§3); kept fresh
-                       by blocking gates, never hand-edited outside its generator
-  contracts/           Published data contracts, one file per contract:
-                       supplier-contract, hooks-manifest,
-                       public-entrypoints.manifest, tenant-theme-canary-fixtures
-  styles/              Generated committed CSS artifacts (not published;
-                       exports point at dist/): index, rottay, bithire, evnto,
-                       modern
-  docs/                Package docs: TENANT_MODEL.md (tenant authority law),
-                       TAXONOMY.generated.md (generated inventory),
-                       GETTING_STARTED, ENGINE_SPLITTING, PERFORMANCE_BUDGET,
-                       reference/ (API), runtime/ (engine mechanics annexes),
-                       history/ (closed audit snapshots)
-  tokens/controls/     Generated customization-controls catalog (do not hand-edit)
-  provenance/          Third-party sources and licenses (effects, graphics)
-  consumer/            ds-supplier-honesty gate, distributed to apps byte-exact
-  test-artifacts/      The single versioned evidence tree for gates
+  tests/               Cross-owner architecture, integration and system suites
+  governance/          Authored policy that is not runtime code:
+    manifest/          Controls, cascade rules, families, recipes and schema
+    effects/           Effect sources, licenses and adoption boundaries
+    graphics/          Graphic sources, licenses and supplier allowlists
+    tokens/            Decisions about token ownership and prototypes
+  contracts/           Published, package-bound data contracts:
+    css/hooks/          Public CSS hooks and their typed declaration
+    package/entrypoints/  Public package subpaths and source-size ceilings
+    runtime/suppliers/ Supplier reachability by public entrypoint
+    themes/canaries/   Generated tenant-theme compiler specimens
+  artifacts/           Generated or historical outputs, never runtime source:
+    generated/css/     All-vertical, engine and per-vertical CSS bundles
+    generated/manifest/  Cascade analysis and source/compiled theme parity
+    quality/           Catalogued proofs, checkpoints, visual history and archive
+  docs/                Package documentation hub (index.md):
+    architecture/      Tenant authority and runtime/UI mechanics annexes
+    guides/            Installation and consumer workflows
+    quality/           Active quality contracts and budgets
+    reference/         API and capability references
+    generated/         Generator-owned inventories and control catalogs
+    history/           Closed audit snapshots and superseded programs
   dist/                Build output; every exports target must exist here
   README.md  CHANGELOG.md  THIRD_PARTY_NOTICES.md  package.json  configs
 ```
 
-The program-scoped worklists (`KIMI-*` manifests) live with their program
-under `scripts/quality-evidence/programs/modern-rescue/`; the live census
-outputs live at their producing capability under `scripts/tokens/`.
+Agent, checkpoint and migration names are orchestration metadata, never live
+folder names. Active census code lives with its producing capability under
+`scripts/`; generated results and evidence live under `artifacts/`.
+`governance/` contains authored policy plus the generated manifest entrypoint.
+
+The seven source-controlled package roots have different lifecycles:
+
+| Root | Owns | Lifecycle |
+|---|---|---|
+| `src/` | Runtime, components and public-entrypoint source | Authored; compiled into disposable `dist/` output. |
+| `scripts/` | Builders, generators, audits and blocking gates | Authored; may write only the contract, artifact or generated-doc path declared by that capability. |
+| `tests/` | Architecture, fixtures, support, setup, integration and system suites | Authored; cross-owner tests live here instead of creating a support root under `src/`. |
+| `contracts/` | Machine-readable package contracts consumed outside their producer | Producer-owned and published where `package.json#files` declares them; generated contracts are never hand-edited, and anchored contracts change only through their gate. |
+| `governance/` | Human decisions, closed vocabularies, licenses and ownership policy | Authored, except for the governed manifest roll-up described below. |
+| `artifacts/` | Current generated projections and retained quality evidence | Regenerated under `generated/`; append-only or archived under the quality program that owns the evidence. |
+| `docs/` | Active guides/references, generated documentation and historical snapshots | Active prose is maintained; `generated/` is producer-owned; `history/` is preserved rather than rewritten. |
+
+`dist/` is not an eighth authority. It is disposable build output and must be
+reproducible from the seven roots plus the package toolchain configuration.
+
+`governance/manifest/` is the one intentional hybrid. Its `controls/`,
+`families/`, `recipes/`, `schema/` and `cascade/` authorities are authored;
+`index.json` is their generated roll-up and must agree with them. Large computed
+views do not live beside that authority. They live under
+`artifacts/generated/manifest/cascade/` (`coverage`, `edges`, `fanout`,
+`membership`, `producers`, `purity`, `slots`, `values`) and
+`artifacts/generated/manifest/themes/parity/` (`source`, `compiled`).
 
 ### 2.3 `src/foundation/` — vocabulary without upward dependencies
 
@@ -449,7 +478,7 @@ foundation/
   behavior/            Headless component behavior, decided once, read off the DOM
     kernel/anatomy/              The data-part/data-state contract
     runtime/interaction-state/   Single hover/press/focus-ring hook by modality
-                                 (-> consumed by engine skins across ui/)
+                                 (-> consumed by engine skins across components/)
   contracts/           Supplier-neutral type contracts; no rendered code
     kernel/common/               Shared prop mixins and base types
     kernel/engine-identity/      Canonical EngineName union
@@ -643,15 +672,18 @@ implementation; UI owners consume it downward, never the reverse.
 
 ```text
 graphics/
-  icons/               Supplier-independent semantic icon system
-    foundation/        Tokens, contracts, registry/policy, governed corpus
-                       (pinned phosphor-2.1.10 adapter + editable manifest),
-                       generator
-    presentation/
-      catalog/         Hand-curated category catalog
-      semantic-icon/   The stable Icon facade component
-      semantic/generated/  282 generated roles, packs, presets, facade map
-  brand-marks/         Closed third-party brand/cloud mark catalog
+  icons/               Public icon barrel
+    glyphs/            Generic glyph contracts, factory and named catalog
+      foundation/      Shared size tokens and supplier-free SVG contracts
+      runtime/factory/ Glyph factory and supplier adapter
+      presentation/catalog/  Hand-curated category catalog
+    semantic/
+      foundation/      Contracts, registry, policy and provenance
+      sources/         Pinned adapter, editable corpus and preset manifests
+      runtime/         Generated-role factory
+      presentation/    Stable Icon facade component
+      generated/       282 roles, packs, presets, corpus and facade map
+  marks/               Closed third-party brand/cloud mark catalog
                        (-> rendered only through runtime/adapters/thesvg-react)
   pictograms/          Fixed corpus of 8 explanatory artworks, domain-agnostic
                        names, registered provenance
@@ -662,19 +694,19 @@ graphics/
                          scroll-progress, view-transition, ...
 ```
 
-Relations that matter: `icons/` is the only place a supplier package is
-imported; everything else consumes semantic roles. `brand-marks/` and
+Relations that matter: `icons/` is the only place an icon supplier package is
+imported; everything else consumes semantic roles. `marks/` and
 `pictograms/` are closed corpora — admission is a governance act, not a code
 shortcut. `motion/` is the only graphics owner re-exported by the package
 root. `CountUp` (component) is the canonical counting display;
 `useSmoothCounter` is its hook form for composed cases.
 
-### 2.6 `src/ui/`
+### 2.6 `src/components/`
 
 Support owners per tier (`foundation/`, `runtime/`, `facade/`, `tests/`) follow
 §1.3 and are listed only where their content is not obvious.
 
-#### `ui/primitives/` — engine-switched leaves
+#### `components/primitives/` — engine-switched leaves
 
 ```text
 display/
@@ -767,7 +799,7 @@ facade/                Declared cross-category composition surface (one primitiv
                        never imports another category directly)
 ```
 
-#### `ui/patterns/` — reusable task compositions
+#### `components/patterns/` — reusable task compositions
 
 ```text
 data/
@@ -852,7 +884,7 @@ runtime/               Tier support: THE adaptive placement engine
                        createRecipeVariant, virtualization primitives
 ```
 
-#### `ui/structures/` — page chrome (tier 2.5)
+#### `components/structures/` — page chrome (tier 2.5)
 
 ```text
 dashboard/
@@ -922,7 +954,7 @@ Shell decision tree (which frame for what):
    `WorkspaceShell` (mounted by `CollectionWorkspaceSurface`).
 4. Pieces, not frames: `surface-chrome`, `bottom-tab-bar`, `header-surface`.
 
-#### `ui/surfaces/` — declarative page recipes
+#### `components/surfaces/` — declarative page recipes
 
 ```text
 foundation/
@@ -980,76 +1012,42 @@ entrypoints/
   server/              ./server: resolveRequestTenant, Edge Config, font manifest
   icons/               ./icons* focused entries (facade, corpus, roles, presets)
   graphics/            ./marks*, ./pictograms, ./motion, ./effects, ./spatial*
-  charts/              ./charts* entries -> ui/patterns/visualization/charts
-  eslint/              ./eslint thin re-export of tooling/eslint
+  charts/              ./charts* entries -> components/patterns/visualization/charts
+  eslint/              ./eslint implementation: contracts, plugin and six rules
 ```
 
-Entrypoints only forward; implementation lives at its canonical owner.
+Entrypoints normally forward to a canonical owner. `eslint/` is the deliberate
+Node-only exception: the public boundary owns its implementation directly.
 
-### 2.8 `src/tooling/`
+### 2.8 Classified support outside the source roots
 
-```text
-tooling/
-  eslint/              The six-rule governance plugin (no-raw-html,
-                       no-hardcoded-colors, no-db-in-components,
-                       no-direct-lucide, no-motion-literals,
-                       no-size-type-outside-classic)
-  testing/             Internal test helpers, a11y checkers, tenant/brand
-                       fixtures, integration and public-API contract suites
-  declarations/css/    Ambient declarations for side-effect CSS imports
-  quality/             Shipped-bundle proof harnesses (no-loss var() resolver,
-                       touch-target authority)
-  lane-control/        Modern Rescue coordinator machinery (manual program tool)
-  resolution-probe/    Headless-Chromium probe of computed CSS (manual program
-                       tool)
-```
+Support code has no additional root below `src/`. Ambient stylesheet
+declarations live in `src/foundation/contracts/ambient/stylesheets/`; ESLint
+implementation lives in `src/entrypoints/eslint/`; fixtures, helpers, setup and
+cross-owner suites live in `packages/core/tests/`; executable audits, probes and
+program machinery live below the appropriate `packages/core/scripts/` intent
+root.
 
 ### 2.9 `packages/core/scripts/` — mechanical governance
 
 One family, one purpose; every gate wired or deleted; every test reachable.
-Every script is a `<family>/<capability>/index.mjs` owner with its tests and
-baselines inside its own folder (§1.2). The family name says the domain; the
-capability name finishes the sentence.
+Every script is an `<intent>/<subdomain?>/<capability>/index.mjs` owner with its
+tests and baselines inside its own folder (§1.2). The root says what the
+command does; the remaining path says to what and how.
 
 ```text
 scripts/
-  ci/                  How CI runs: runner, gates manifest, workflow wiring,
-                       script-test configuration, typecheck ratchet, budgets,
-                       bundle analysis
-  structure/           Guardians of this tree's own law: folder-index,
-                       structure audit, owner boundaries, vertical compliance
-  boundaries/          The app/DS frontier and public API: app-ds boundary,
-                       hook contract, root writer, public entrypoints,
-                       portal substrate, pattern/surface ownership, size-axis
-  tokens/              The --ds-* surface: catalogs, channel parity/consumers/
-                       liveness, customization census, adjudications
-  i18n/                Locale key parity
-  engine/              The modern engine: token audit (ratchets), engine freeze,
-                       skins, paint counters, anatomy variants, container
-                       queries, bundle framework
-  verticals/           The vertical CSS pipeline end to end: artifacts, CSS
-                       build, staleness, single author
-  builders/            font-packs, build stamp, dev orchestrator
-  packaging/           What gets published: pack inventory, icon embeds,
-                       licenses, public declarations, public barrel,
-                       dist freshness, supplier contract, canary fixtures
-  evidence/            GAT/CRA certification: exact proof, claim integrity,
-                       adaptive census, motion governance, runtime hardening
-  taxonomy/            Tier/layer parity and projections
-  generators/          semantic icons, taxonomy, capability census
-  codemods/            App-side migrations, run by hand in consumers
-  lib/                 Shared measurement, one metric once, in subfamilies:
-                       paint/, engine/, taxonomy/, evidence/, hooks/, tokens/,
-                       build/, verticals/ (first-party rosters), source/
-                       (text preparation, e.g. comment stripping) — plus
-                       repo-root/ (the single ascending root-finder every path
-                       resolution uses)
-  quality-evidence/
-    v2/                The active evidence generation
-    programs/modern-rescue/  The WO-CRA-23 program: contracts, cascade chain,
-                             probe, program-check (its manifest graduated to
-                             packages/core/manifest/, §2.2)
+  build/               Compile and assemble runnable or distributable output
+  check/               Verify architecture, behavior, contracts and evidence
+  generate/            Project canonical source into generated authorities
+  libraries/           Multi-consumer facts and primitives shared by commands
+  maintain/            Apply bounded repository upkeep and codemods
+  package/             Prove and assemble the published package boundary
 ```
+
+These six roots are exhaustive. Source-layout names are not alternative script
+destinations. The active Modern Rescue program lives at
+`check/modern-rescue/`.
 
 ### 2.10 `packages/showroom/`
 
@@ -1070,8 +1068,8 @@ showroom/
 ## 3. Delta with the current tree
 
 Everything listed here is debt between today's disk and §2. Each item is
-adjudicated in [`docs/QUE-SE-QUEDA-Y-QUE-SE-BORRA.md`](QUE-SE-QUEDA-Y-QUE-SE-BORRA.md)
-and sequenced in [`docs/ROADMAP-DE-REMEDIACION.md`](ROADMAP-DE-REMEDIACION.md);
+adjudicated in [`docs/history/programs/architecture-refactor/2026-08/retention/index.md`](/docs/history/programs/architecture-refactor/2026-08/retention/index.md)
+and sequenced in [`docs/history/programs/architecture-refactor/2026-08/remediation/index.md`](/docs/history/programs/architecture-refactor/2026-08/remediation/index.md);
 the columns below state the target, not the method.
 
 **Retires — repo level:** the 17 February codemods in root `scripts/` (their
@@ -1095,30 +1093,26 @@ typography-scale compat goes with it);
 `runtime/presentation-profiles/`, `runtime/graphics/continuous-runtime-governor/`,
 `theming/foundation/color/` empty shells and the
 `engines/foundation/contracts/binding/` reserved module; the
-`foundation/tokens/__tests__/` directory (the only `__tests__` in `src/`;
+`foundation/tokens/tests/` directory (the only `__tests__` in `src/`;
 its 33 contract files move to a `tests/` owner per §1.2);
 `theming/composition/react/provider/theme/` (single provider);
 `tenant/runtime/resolution/{subdomain,domain}/` (absorbed by `request/`);
 `compilers/kernel/runtime/appearance/` — **in this order**: its functions move
 into the single lowering first, the preview consolidates into
 `tenant-preview`, then the folder goes;
-`tokens/css/runtime/bridges/collapse-paint.css` (a completed tombstone) and
-`tokens/css/presentation/components/patterns-paint.css` (its paint has no
+the retired duplicate Collapse paint bridge, and
+`tokens/css/presentation/components/patterns-paint/index.css` (its paint has no
 owner — it is assigned or drained first, then the file goes).
 `contracts/kernel/tokens/extensions/` **stays**: it is wired into the public
 engine contract (`ComponentExtensions`) and the Card engines destructure it.
 
-**Retires — graphics/entrypoints:** `icons/presentation/legacy/` — the 13
-non-re-exported icons go now (catalog covers them); `AlertIcon`/`LoaderIcon`
-go only after their two live consumers migrate to the semantic facade
-(`app-platform` readiness screen, `Tag` rustic engine); the empty
-`icons/runtime/adapters/` shell; the 8 empty
+**Retires — entrypoints:** the 8 empty
 `entrypoints/public/**/{contracts,runtime}` directories; the 77 granular
 per-tier subpaths with zero importers across the three apps (two of them —
 `./runtime/root-attributes`, `./runtime/visual-authority` — have one showroom
 importer each: migrate those pages first).
 
-**Retires — ui/:** `Toggle` (into `Switch`); `Stepper` (covered by `Steps`);
+**Retires — components/:** `Toggle` (into `Switch`); `Stepper` (covered by `Steps`);
 `HoverCard` (covered by `Popover`/`Tooltip`); `Message` (into `Toast`);
 `Callout` (into `Alert` — clean absorption; the two Callout mentions in
 Alert's contracts are docstrings only); `Space` (into `Stack`); `ConfirmDialog` (into
@@ -1183,6 +1177,7 @@ pnpm --filter @rottay/design-system docs:taxonomy
 Historical audits remain snapshots. Reconcile their findings in current
 roadmaps or canonical docs; do not rewrite the evidence as if it had always
 described the latest tree. This document is the only architecture authority
-for this repository; `packages/core/ARCHITECTURE.md` folds into it (its
-runtime-mechanics annexes move to `packages/core/docs/`) so that architecture
-is written in exactly one place.
+for this repository. The former `packages/core/ARCHITECTURE.md` has been folded
+into this authority; its operational engine, cascade, component, and surface
+mechanics now live below
+[`packages/core/docs/architecture/`](../packages/core/docs/architecture/index.md).

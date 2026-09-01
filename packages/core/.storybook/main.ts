@@ -15,6 +15,7 @@ const config: StorybookConfig = {
   "viteFinal": async (config) => {
     return {
       ...config,
+      plugins: config.plugins?.filter((plugin) => plugin?.name !== 'vite:dts'),
       esbuild: {
         ...config.esbuild,
         loader: 'tsx',
@@ -23,7 +24,7 @@ const config: StorybookConfig = {
       build: {
         ...config.build,
         // Vite/Rollup warning threshold. Real enforcement is handled by
-        // scripts/ci/check-storybook-budget/index.mjs (runs post-build, fails CI).
+        // scripts/package/storybook-budget/index.mjs (runs post-build, fails CI).
         // This limit keeps the build log free of noise from expected vendor
         // chunks while the post-build script enforces hard limits.
         chunkSizeWarningLimit: 1500,

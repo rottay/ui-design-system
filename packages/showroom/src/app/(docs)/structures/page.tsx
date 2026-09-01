@@ -1,4 +1,4 @@
-import { ShowroomLink as Link } from '@/components/showroom-link';
+import { ShowroomLink as Link } from '@/components/navigation/link';
 import { Badge, Box, Card, Flex, Stack, Text } from '@/components/showroom-ui';
 import {
   structureGroups,

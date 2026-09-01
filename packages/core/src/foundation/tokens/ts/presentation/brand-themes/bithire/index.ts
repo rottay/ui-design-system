@@ -3174,7 +3174,7 @@ const RECIPES: BrandRecipeSelection = { schemaVersion: 1, profile: "rottay/netwo
  * edges, flat material, keyline lift, no motif — so every authored field
  * above keeps winning and the expansion only adds the profile channels
  * (edge roles at their 1px floors, explicit 'none' textures, the
- * provenance marker). Review note for Codex: authored labelStyle
+ * provenance marker). Review note for independent code audit: authored labelStyle
  * "sentence" and the authored table header chrome deliberately shield
  * this theme from the technical posture's uppercase defaults.
  */
@@ -3453,12 +3453,6 @@ const PALETTE: BrandPalette = {
   linkColor: "#3a6fb0",
   linkHoverColor: "#2c5587",
   linkVisitedColor: "#6b3fa0",
-  // COH-1: successBgColor/successBorderColor (and their warning/error/info
-  // siblings below) retired. They baked a green well/border (`#f0fdf4`,
-  // `rgba(5, 118, 66, 0.25)`) unrelated to this vertical's own blue success
-  // seed -- `deriveStatusTintFloor` now derives all eight bg/border channels
-  // from the four seeds below, the same way the dark overlay's own literals
-  // already are hue-consistent with them.
   successColor: "#327CA8",
   warningColor: "#D6A04E",
   /**
@@ -3994,7 +3988,7 @@ const SURFACES: BrandSurfaces = {
     // Con la remocion la capa base gana y bithire pinta 6.96px (12 * 0.58), que
     // es exactamente lo que su propio effectIntensity significa -- aceptado por el
     // owner. background y border siguen congelados por la misma via y quedan
-    // inventariados como deuda en scripts/tokens/dial-authority-gate.
+    // inventariados como deuda en scripts/check/tokens/customization/authority.
     background: "rgba(255, 255, 255, calc(0.84 * var(--ds-effect-intensity)))",
     border: "rgba(196, 210, 222, calc(0.86 * var(--ds-effect-intensity)))",
   },
@@ -4095,26 +4089,26 @@ const CHARTS: FirstPartyBrandTheme['charts'] = {
   animateOnMount: true,
   /**
    * @domicile seed
-   * @governor seed de personalidad de charts: el compilador la copia a chartPersonality y los renderers la consumen como argumento (gantt/bullet/gauge en ui/patterns/visualization/charts/runtime/chart-engine); no baja a canal (control null en mapa-familia-canales F4A-3a); ningun ingress de manifest/controls/*.json cubre charts.* (medido 0 de 20); gobernanza de control = celda de la cohorte chart en F9
+   * @governor unassigned: renderer input; no CSS channel
    */
   mountDuration: 400,
   /**
    * @domicile seed
-   * @governor seed de personalidad de charts: el compilador la copia a chartPersonality y los renderers la consumen como argumento (gantt/bullet/gauge en ui/patterns/visualization/charts/runtime/chart-engine); no baja a canal (control null en mapa-familia-canales F4A-3a); ningun ingress de manifest/controls/*.json cubre charts.* (medido 0 de 20); gobernanza de control = celda de la cohorte chart en F9
+   * @governor unassigned: renderer input; no CSS channel
    */
   lineStyle: "smooth",
   showDots: false,
   useGradientFill: true,
   /**
    * @domicile seed
-   * @governor seed de personalidad de charts: el compilador la copia a chartPersonality y los renderers la consumen como argumento (gantt/bullet/gauge en ui/patterns/visualization/charts/runtime/chart-engine); no baja a canal (control null en mapa-familia-canales F4A-3a); ningun ingress de manifest/controls/*.json cubre charts.* (medido 0 de 20); gobernanza de control = celda de la cohorte chart en F9
+   * @governor unassigned: renderer input; no CSS channel
    */
   tooltipStyle: "detailed",
   // The monochrome family keeps dense recruiting charts legible; semantic
   // highlights still use success/warning/error at the call site.
   /**
    * @domicile seed
-   * @governor seed de personalidad de charts: el compilador la copia a chartPersonality y los renderers la consumen como argumento (gantt/bullet/gauge en ui/patterns/visualization/charts/runtime/chart-engine); no baja a canal (control null en mapa-familia-canales F4A-3a); ningun ingress de manifest/controls/*.json cubre charts.* (medido 0 de 20); gobernanza de control = celda de la cohorte chart en F9
+   * @governor unassigned: renderer input; no CSS channel
    */
   colorScheme: "monochrome",
 };
@@ -4182,32 +4176,32 @@ const CHROME: BrandChrome = {
   accent: {
     /**
      * @domicile seed
-     * @governor seed de forma de accent: el compilador lo copia a PersonalityTokens.accent (compilers/kernel/runtime/brand-theme) y se consume como argumento de render (tenant-preview modern lo estampa inline); no baja a canal via chromeToVariables (medido 0 emisiones); ingresa por el control pro chrome.families (ingress chrome.*, manifest/controls/chrome.families.json); celda familia x control en F9
+     * @governor chrome.families: renderer input; no CSS channel
      */
     barPosition: "none",
     /**
      * @domicile seed
-     * @governor seed de forma de accent: el compilador lo copia a PersonalityTokens.accent (compilers/kernel/runtime/brand-theme) y se consume como argumento de render (tenant-preview modern lo estampa inline); no baja a canal via chromeToVariables (medido 0 emisiones); ingresa por el control pro chrome.families (ingress chrome.*, manifest/controls/chrome.families.json); celda familia x control en F9
+     * @governor chrome.families: renderer input; no CSS channel
      */
     barThickness: 0,
     /**
      * @domicile seed
-     * @governor seed de forma de accent: el compilador lo copia a PersonalityTokens.accent (compilers/kernel/runtime/brand-theme) y se consume como argumento de render (tenant-preview modern lo estampa inline); no baja a canal via chromeToVariables (medido 0 emisiones); ingresa por el control pro chrome.families (ingress chrome.*, manifest/controls/chrome.families.json); celda familia x control en F9
+     * @governor chrome.families: renderer input; no CSS channel
      */
     barStyle: "solid",
     /**
      * @domicile seed
-     * @governor seed de forma de accent: el compilador lo copia a PersonalityTokens.accent (compilers/kernel/runtime/brand-theme) y se consume como argumento de render (tenant-preview modern lo estampa inline); no baja a canal via chromeToVariables (medido 0 emisiones); ingresa por el control pro chrome.families (ingress chrome.*, manifest/controls/chrome.families.json); celda familia x control en F9
+     * @governor chrome.families: renderer input; no CSS channel
      */
     iconContainerShape: "circle",
     /**
      * @domicile seed
-     * @governor seed de forma de accent: el compilador lo copia a PersonalityTokens.accent (compilers/kernel/runtime/brand-theme) y se consume como argumento de render (tenant-preview modern lo estampa inline); no baja a canal via chromeToVariables (medido 0 emisiones); ingresa por el control pro chrome.families (ingress chrome.*, manifest/controls/chrome.families.json); celda familia x control en F9
+     * @governor chrome.families: renderer input; no CSS channel
      */
     badgeShape: "pill",
     /**
      * @domicile seed
-     * @governor seed de forma de accent: el compilador lo copia a PersonalityTokens.accent (compilers/kernel/runtime/brand-theme) y se consume como argumento de render (tenant-preview modern lo estampa inline); no baja a canal via chromeToVariables (medido 0 emisiones); ingresa por el control pro chrome.families (ingress chrome.*, manifest/controls/chrome.families.json); celda familia x control en F9
+     * @governor chrome.families: renderer input; no CSS channel
      */
     dividerStyle: "solid",
   },
@@ -6087,13 +6081,6 @@ const CHROME: BrandChrome = {
        * @governor deriva de: --ds-radius-sm
        */
       itemRadius: "var(--ds-radius-sm, 7px)",
-      // itemShadowSelected and focusRing are RETIRED (R1 unit 1, items 8/10):
-      // the modern skin no longer reads either channel -- the selected option
-      // carries exactly one border/emphasis treatment (the track's own frame
-      // owns the boundary), and focus paints the canonical double
-      // `--ds-focus-ring` instead of this low-alpha single ring, the same
-      // class Button already retired (W8). Leaving these fields would compile
-      // a permanently dead, still-branded custom property.
       /**
        * @domicile seed
        * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
@@ -6286,9 +6273,7 @@ const CHROME: BrandChrome = {
         "color-mix(in srgb, var(--ds-color-primary) 18%, var(--ds-control-surface))",
       /**
        * @domicile derived
-       * @governor deriva de: --ds-color-primary (R1 unit 1, F4.2: era literal
-       *   plano compilado en el artifact vertical, así que ningún tenant en
-       *   la vertical podía moverlo -- ver secondaryColor abajo)
+       * @governor deriva de: --ds-color-primary
        */
       text: "var(--ds-color-primary, #3A6FB0)",
       /**
@@ -6772,15 +6757,6 @@ const CHROME: BrandChrome = {
        * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
        */
       count: { color: "#71869A", colorWarning: "#B56D13", colorError: "#B83A4B" },
-      /**
-       * @domicile seed
-       * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
-       */
-      // COH-1: `#2F8B68` was a second baked green, unrelated to this
-      // vertical's blue success seed and inconsistent with the dark overlay
-      // of this same control (`successBg: color-mix(in srgb,
-      // var(--ds-color-success) 4%, var(--ds-surface-card))`). Now derives
-      // from the seed for parity across modes.
       /**
        * @domicile derived
        * @governor deriva de: --ds-color-success

@@ -6,9 +6,9 @@
  * and z-index aliases that sit on top of the canonical theme palettes.
  */
 
-@import './spacing.css';
-@import './density.css';
-@import './typography.css';
-@import './shadows.css';
-@import './borders.css';
-@import './z-index.css';
+@import './spacing/index.css';
+@import './density/index.css';
+@import './typography/index.css';
+@import './shadows/index.css';
+@import './borders/index.css';
+@import './z-index/index.css';

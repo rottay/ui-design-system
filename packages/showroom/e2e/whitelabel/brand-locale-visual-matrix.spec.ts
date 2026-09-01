@@ -9,7 +9,7 @@ import {
   type Page,
 } from "@playwright/test";
 
-import { themanagementmiamiBrandTheme as canonicalManagementTheme } from "../../../core/src/tooling/testing/fixtures/brand-themes/themanagementmiami";
+import { themanagementmiamiBrandTheme as canonicalManagementTheme } from "../../../core/tests/fixtures/brand-themes/themanagementmiami";
 import { SHOWROOM_TENANT_ARTIFACT_TESTID } from "../../src/components/showroom-tenant";
 import { themanagementmiamiBrandTheme as showroomManagementTheme } from "../../src/components/torture-surface/fixtures";
 
@@ -59,7 +59,7 @@ const SAME_CELL_STABILITY_CEILING = 0.0005;
 const MOBILE_TOUCH_TARGET_FLOOR = 44;
 
 const DIST_FRESHNESS_GATE = fileURLToPath(
-  new URL("../../../core/scripts/packaging/dist-freshness-gate/index.mjs", import.meta.url)
+  new URL("../../../core/scripts/package/artifacts/freshness/index.mjs", import.meta.url)
 );
 
 const EXPECTED_COPY: Record<Fixture, Record<Locale, string>> = {

@@ -1,3 +1,3 @@
 "use client";
 
-export { DashboardHeader } from "../../../../ui/structures/headers/dashboard";
+export { DashboardHeader } from "../../../../components/structures/headers/dashboard";

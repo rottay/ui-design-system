@@ -1,3 +1,3 @@
 "use client";
 
-export { Breadcrumb } from "../../../../ui/primitives/navigation/Breadcrumb";
+export { Breadcrumb } from "../../../../components/primitives/navigation/breadcrumb";

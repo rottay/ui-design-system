@@ -2,7 +2,7 @@
  * `surfaces.effect-intensity` — WHERE THE TWO INGRESS DOORS ARE NOT SYMMETRIC,
  * measured rather than assumed.
  *
- * `manifest/controls/surfaces.effect-intensity.json` declares three normalized
+ * `governance/manifest/controls/surfaces/effect-intensity/index.json` declares three normalized
  * stops — `mate` (0), `sobrio` (0.6), `estandar` (1) — and annotates the third
  * as VERTICAL-AUTHORSHIP BY CONSTRUCTION: the per-vertical tenant envelope is
  * `{0, 0.65}` for rottay and bithire and `{0, 0.75}` for evnto, enforced by

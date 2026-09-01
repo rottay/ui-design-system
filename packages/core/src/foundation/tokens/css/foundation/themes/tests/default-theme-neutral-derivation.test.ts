@@ -11,7 +11,7 @@ import { describe, expect, it } from "vitest";
 
 const CSS_PATH = resolve(
   process.cwd(),
-  "src/foundation/tokens/css/foundation/themes/default.css"
+  "src/foundation/tokens/css/foundation/themes/default/index.css"
 );
 
 const DARK_SELECTOR = ":root[data-theme='dark']";

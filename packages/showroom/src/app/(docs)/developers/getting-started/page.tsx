@@ -1,6 +1,6 @@
 'use client';
 
-import { ShowroomLink as Link } from '@/components/showroom-link';
+import { ShowroomLink as Link } from '@/components/navigation/link';
 import {
   Badge,
   Box,
@@ -14,7 +14,7 @@ import { useTokens } from '@rottay/design-system';
 import { ArrowLeftIcon } from '@rottay/design-system/icons';
 import { CodeBlock } from '@/components/playground';
 import { useShowroom } from '@/components/showroom-context';
-import { DocsCompactList, DocsSectionHeader } from '@/components/docs/editorial-chrome';
+import { DocsCompactList, DocsSectionHeader } from '@/components/docs/editorial';
 
 interface Step {
   number: string;

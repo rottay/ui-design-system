@@ -19,11 +19,11 @@ import { describe, expect, it } from 'vitest';
 import { compileBrandTheme } from '../index';
 import { appearanceToVariables } from '../../appearance';
 import { bithireBrandTheme } from '@/foundation/tokens/ts/presentation/brand-themes';
-import { themanagementmiamiBrandTheme } from '@/tooling/testing/fixtures/brand-themes/themanagementmiami';
+import { themanagementmiamiBrandTheme } from '@tests/fixtures/brand-themes/themanagementmiami';
 import { resolveEngine } from '@/infrastructure/runtime/engines/runtime/resolution';
 import { getVerticalPreset } from '@/foundation/presets/verticals';
 import type { TenantAppearance, TenantConfig } from '@/foundation/contracts';
-import { brandThemeToTenantAppearance } from '@/ui/patterns/customization/brand-studio/runtime/file-export';
+import { brandThemeToTenantAppearance } from '@/components/patterns/customization/brand-studio/runtime/file-export';
 
 const bithire = compileBrandTheme({ brandTheme: bithireBrandTheme, tenantSlug: 'bithire' });
 const themanagement = compileBrandTheme({ brandTheme: themanagementmiamiBrandTheme, tenantSlug: 'themanagementmiami' });
@@ -207,7 +207,7 @@ describe('and converge on the identity of the product they both are', () => {
 
   it('a tenant cannot move the vertical it belongs to', () => {
     // `vertical`, `engine` and `productProfile` are static-first by law
-    // (CLAUDE.md). Neither BrandTheme carries any of them, and the compiler has
+    // (docs/ARCHITECTURE.md). Neither BrandTheme carries any of them, and the compiler has
     // nowhere to put them: that is the guarantee, and this asserts the shape of
     // it rather than trusting the prose.
     for (const theme of [bithireBrandTheme, themanagementmiamiBrandTheme]) {

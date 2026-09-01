@@ -1,3 +1,3 @@
 "use client";
 
-export { Toggle } from "../../../../ui/primitives/inputs/Toggle";
+export { Toggle } from "../../../../components/primitives/inputs/toggle";

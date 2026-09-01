@@ -1,14 +1,14 @@
 'use client';
 
 import { Box, Flex, Stack, Text } from '@rottay/design-system';
-import { FLAGSHIP_SPECS, type FlagshipSpec } from './flagship-specs';
-import { RESPONSIVE_SPECS } from './responsive-specs';
+import { FLAGSHIP_SPECS, type FlagshipSpec } from './specs/flagships';
+import { RESPONSIVE_SPECS } from './specs/responsive';
 
-export type { FlagshipSpec, StateGroup, StateCell } from './flagship-specs';
-export { FLAGSHIP_SPECS } from './flagship-specs';
-export { RESPONSIVE_SPECS } from './responsive-specs';
-export { TenantPaletteSurface, surfaceLabelFor } from './tenant-axis';
-export type { SurfaceTenant } from './tenant-axis';
+export type { FlagshipSpec, StateGroup, StateCell } from './specs/flagships';
+export { FLAGSHIP_SPECS } from './specs/flagships';
+export { RESPONSIVE_SPECS } from './specs/responsive';
+export { TenantPaletteSurface, surfaceLabelFor } from './tenants';
+export type { SurfaceTenant } from './tenants';
 
 /** Slugs that have an authored variant + state gallery (the ENG-02 flagship set). */
 export const FLAGSHIP_SLUGS: string[] = FLAGSHIP_SPECS.map((spec) => spec.slug);

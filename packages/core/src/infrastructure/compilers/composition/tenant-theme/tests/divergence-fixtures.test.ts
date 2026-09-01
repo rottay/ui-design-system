@@ -3,12 +3,12 @@ import {
   DIVERGENCE_EDITORIAL_DOCUMENT,
   DIVERGENCE_EDITORIAL_EXPECTED_ANATOMY,
   DIVERGENCE_EDITORIAL_IDENTITY,
-} from "@/tooling/testing/fixtures/brand-themes/divergence-editorial";
+} from "@tests/fixtures/brand-themes/divergence-editorial";
 import {
   DIVERGENCE_SOBER_DOCUMENT,
   DIVERGENCE_SOBER_EXPECTED_ANATOMY,
   DIVERGENCE_SOBER_IDENTITY,
-} from "@/tooling/testing/fixtures/brand-themes/divergence-sober";
+} from "@tests/fixtures/brand-themes/divergence-sober";
 import {
   compileTenantThemeConfig,
   getTenantThemeVerticalEnvelope,

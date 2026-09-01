@@ -8,6 +8,7 @@
  * tenant artifact they correct.
  */
 
-@import './avatar.css';
-@import './button.css';
-@import './language-arabic.css';
+@import "./avatar/index.css";
+@import "./button/index.css";
+@import "./grid/index.css";
+@import "./language-arabic/index.css";

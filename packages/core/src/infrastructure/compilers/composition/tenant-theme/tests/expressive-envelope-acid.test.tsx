@@ -20,7 +20,7 @@ import { afterEach, describe, expect, it } from 'vitest';
 
 import type { TenantConfig } from '@/foundation/contracts/composition/tenants';
 import { bithireBrandTheme } from '@/foundation/tokens/ts/presentation/brand-themes/bithire';
-import { NavigationSettingsIcon } from '@/graphics/icons/presentation/semantic/generated/roles/navigation-settings';
+import { NavigationSettingsIcon } from '@/graphics/icons/semantic/generated/roles/navigation-settings';
 import { compileBrandTheme } from '@/infrastructure/compilers/kernel/runtime/brand-theme';
 import { DesignSystemProvider } from '@/infrastructure/runtime/bootstrap/facade/react/provider';
 import type { BrandTheme } from '@/foundation/contracts/composition/tenants/themes';
@@ -295,7 +295,7 @@ describe('C1b expressive envelope — two-system acid test', () => {
     // `density` joined the frozen set after the F9 fix (WO-CRA-23 R1):
     // `appearancePostureToVariables` no longer declares
     // `--ds-density-mode-factor` for the identity posture (comfortable/
-    // normal), mirroring `foundation/base/density.css`, which never
+    // normal), mirroring `foundation/base/density/index.css`, which never
     // declares `:root[data-density='comfortable']` either — the compiled
     // artifact selector outranks that rule, so writing `1` there would
     // permanently clobber a live `data-density` change. `bithire-technical@1`

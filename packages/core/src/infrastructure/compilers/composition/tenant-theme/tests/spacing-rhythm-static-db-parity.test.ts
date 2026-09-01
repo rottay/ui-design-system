@@ -5,7 +5,7 @@
  * by BOTH the static `BrandTheme` path and the DB `TenantTheme` path, be
  * normalized by ONE authority into governed semantic channels, and restore the
  * exact baseline when removed (README, product promise points 1, 2 and 5).
- * `manifest/controls/spacing.rhythm.json` records the three stops
+ * `governance/manifest/controls/spacing/rhythm/index.json` records the three stops
  * (tight=0.85, normal=1, airy=1.2), the 0.8-1.25 envelope, and the two ingress
  * paths (`surfaces.rhythm` / `appearance.general.rhythm`) — and its
  * `calibration.openContractQuestions` says explicitly that invalid-input

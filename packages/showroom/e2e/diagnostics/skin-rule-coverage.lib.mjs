@@ -68,8 +68,20 @@ export function collectRules() {
     if (!existsSync(dir)) {
       throw new Error(`skin-rule-coverage: skin root missing: ${dir} (engine ${engine}). Fix SKIN_DIRS after a relocation instead of scanning nothing.`);
     }
-    for (const f of readdirSync(dir).filter((n) => n.endsWith('.css'))) {
-      const css = readFileSync(join(dir, f), 'utf8');
+    const files = [];
+    const visit = (current) => {
+      for (const entry of readdirSync(current, { withFileTypes: true })) {
+        const target = join(current, entry.name);
+        if (entry.isDirectory()) visit(target);
+        else if (entry.isFile() && entry.name === 'index.css') files.push(target);
+      }
+    };
+    visit(dir);
+    if (files.length === 0) {
+      throw new Error(`skin-rule-coverage: skin root has no folder/index stylesheets: ${dir} (engine ${engine})`);
+    }
+    for (const file of files) {
+      const css = readFileSync(file, 'utf8');
       let root;
       try {
         root = postcss.parse(css);
@@ -83,7 +95,7 @@ export function collectRules() {
           const probe = toProbe(sel);
           if (!probe) continue;
           const skeleton = toSkeleton(probe);
-          if (skeleton) out.push({ engine, file: f, selector: sel, probe, skeleton });
+          if (skeleton) out.push({ engine, file: file.slice(dir.length + 1), selector: sel, probe, skeleton });
         }
       });
     }

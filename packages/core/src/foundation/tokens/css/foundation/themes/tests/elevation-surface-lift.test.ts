@@ -21,16 +21,16 @@ import { describe, expect, it } from "vitest";
 const fromRoot = (rel: string) => readFileSync(resolve(process.cwd(), rel), "utf8");
 
 const DEFAULT_CSS = fromRoot(
-  "src/foundation/tokens/css/foundation/themes/default.css",
+  "src/foundation/tokens/css/foundation/themes/default/index.css",
 );
 const CARD_CSS = fromRoot(
-  "src/foundation/tokens/css/runtime/engines/modern/skin/card.css",
+  "src/foundation/tokens/css/runtime/engines/modern/skin/card/index.css",
 );
 const MODAL_CSS = fromRoot(
-  "src/foundation/tokens/css/runtime/engines/modern/skin/overlay-modal.css",
+  "src/foundation/tokens/css/runtime/engines/modern/skin/overlay-modal/index.css",
 );
 const POPOVER_CSS = fromRoot(
-  "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css",
+  "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
 );
 
 const DARK_SELECTOR = ":root[data-theme='dark']";

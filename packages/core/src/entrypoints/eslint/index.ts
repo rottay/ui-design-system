@@ -6,10 +6,10 @@
  *
  * This module is Node-only (no React, no "use client").
  */
-export { rules, plugin, configs } from '../../tooling/eslint';
+export { rules, plugin, configs } from './plugin';
 export type {
   Rule,
   RuleMeta,
   RuleContext,
   ReportDescriptor,
-} from '../../tooling/eslint';
+} from './contracts';

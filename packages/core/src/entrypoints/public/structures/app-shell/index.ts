@@ -1,3 +1,3 @@
 "use client";
 
-export { AppShell } from "../../../../ui/structures/shell/app-shell";
+export { AppShell } from "../../../../components/structures/shell/app-shell";

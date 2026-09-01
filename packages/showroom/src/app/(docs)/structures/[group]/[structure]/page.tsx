@@ -1,4 +1,4 @@
-import { ShowroomLink as Link } from '@/components/showroom-link';
+import { ShowroomLink as Link } from '@/components/navigation/link';
 import { Badge, Box, Card, Flex, Stack, Text } from '@rottay/design-system';
 import {
   structures,
@@ -11,8 +11,8 @@ import {
   SHOWROOM_SURFACES,
   mixWithCanvas,
   mixWithSurface,
-} from '@/components/playground/surface-tokens';
-import { formatShowroomLabel } from '@/components/layout/config';
+} from '@/components/playground/tokens/surfaces';
+import { formatShowroomLabel } from '@/components/layout/navigation/config';
 import { StructurePreview } from './structure-preview';
 
 const HERO_OVERLAY =

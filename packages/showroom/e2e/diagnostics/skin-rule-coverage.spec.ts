@@ -43,7 +43,7 @@ const HERE = dirname(fileURLToPath(import.meta.url));
 // and duly "found" select, date-picker, toast and the table's sort indicators
 // to be dead. They were simply never rendered.
 const TORTURE_SECTIONS = [
-  'datatable', 'detailpanel', 'display1', 'display2', 'dropdowns', 'fieldfilters',
+  'datatable', 'detailpanel', 'mediaStates', 'dataDisplayStates', 'dropdowns', 'fieldfilters',
   'fields', 'filterpanel', 'forms', 'interactive', 'layout', 'nav', 'overlay',
   'overlayfb', 'pickers', 'rail', 'record', 'rtl', 'statusfb', 'tablestates',
 ];

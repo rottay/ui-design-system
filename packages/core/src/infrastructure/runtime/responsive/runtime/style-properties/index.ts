@@ -10,6 +10,7 @@ import {
 import {
   RESPONSIVE_ALIAS_MAP,
   type ResponsiveValue,
+  type ResponsiveValueKey,
 } from '@/foundation/contracts/kernel/responsive/values';
 
 /** Detects a breakpoint-keyed responsive value object. */
@@ -32,12 +33,12 @@ export function isResponsiveValue<T>(value: unknown): value is Exclude<Responsiv
 /** A CSS property and its breakpoint-aware source value. */
 export interface ResponsivePropEntry<T = string> {
   cssProperty: string;
-  value: Exclude<ResponsiveValue<T>, T>;
+  value: Partial<Record<ResponsiveValueKey, T>>;
   resolve?: (value: T) => string;
 }
 
 function normalizeResponsiveValue<T>(
-  value: Exclude<ResponsiveValue<T>, T>,
+  value: Partial<Record<ResponsiveValueKey, T>>,
 ): Partial<Record<ResponsiveBreakpointKey, T>> {
   const normalized: Partial<Record<ResponsiveBreakpointKey, T>> = {};
 
@@ -54,9 +55,9 @@ function normalizeResponsiveValue<T>(
 }
 
 /** Generates mobile-first, element-scoped CSS for responsive prop entries. */
-export function generateResponsiveCSS(
+export function generateResponsiveCSS<T = string>(
   elementId: string,
-  entries: ResponsivePropEntry<any>[],
+  entries: ResponsivePropEntry<T>[],
 ): { css: string; attrs: Record<string, string> } {
   if (entries.length === 0) {
     return { css: '', attrs: {} };

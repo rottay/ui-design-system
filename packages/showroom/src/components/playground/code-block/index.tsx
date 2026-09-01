@@ -6,7 +6,7 @@ import {
   SHOWROOM_SURFACES,
   mixWithCanvas,
   mixWithSurface,
-} from '../surface-tokens';
+} from '../tokens/surfaces';
 
 export interface CodeBlockProps {
   code: string;

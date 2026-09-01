@@ -1,0 +1,372 @@
+/**
+ * MetricsCards skin — engine-agnostic, DELIBERATELY UNLAYERED (P-47).
+ * Home: foundation/tokens/css/presentation/components/skin/metrics-cards.css — single DOM tree under
+ * every engine. Scope root carries the single class `ds-metrics-cards`, repeated
+ * to buy the "two root classes" budget. Values are the shared `metrics/tokens.ts`
+ * constants, transcribed verbatim (see metrics-minimal.css header).
+ *
+ * SPECIFICITY (P-48): border-COLOR reaches (0,4,0) over the tenant floor (0,3,1)
+ * (incl. the meter-track `transparent` border); non-border paint (0,3,0); `Text`
+ * colour (0,5,0). Icons carry their own `data-part`.
+ *
+ * STATE: `data-positive`. Cards is strict 2-tone (success/error) — no WARNING —
+ * and adds a change-badge whose background AND border switch on trend. There is
+ * no React hover state here; the card's own `<style>` `:hover` (border-color,
+ * box-shadow, and `.metric-value-v3` colour) stays suppressed by the (0,3,0)/
+ * (0,4,0)/(0,5,0) rest rules exactly as the former inline paint suppressed it.
+ *
+ * PREMIUM SOCKETS (2026-08-02 worklist, KIMI rows 53-68): every slot rides the
+ * sanctioned `var(--ds-metric-card-<slot>, <what it paints today>)` mechanic —
+ * zero-delta by construction while the channel stays unauthored (undeclared in
+ * every shipped bundle), live the moment a brand authors it. Anatomy the slots
+ * demanded and the card did not have: `data-part='body'` (the content stack —
+ * hosts `--ds-metric-card-gap`) and `data-part='footer'` (the change + meter
+ * region — hosts footer-*; its rhythm reproduces the previous stack gap +
+ * 4px meter margin byte-exactly). Motif layers (`grid-*`, `overlay`) ride the
+ * shell's ::before/::after so the DOM stays untouched; unset they paint
+ * transparent/none. `footer-border` is an OUTLINE (no layout geometry) so the
+ * unset state stays byte-identical; `body-color` falls back to `inherit`.
+ * `action-*` stays unlit: the KPI anatomy has no action element and minting an
+ * empty one is dishonest — BLOCKED(owner: independent code audit) in the roadmap.
+ *
+ * ENGINE REACH (measured 2026-08-11 by rendering all three engines, not by
+ * reading source; an earlier companion claim about `Text` dropping a `var()`
+ * `fontSize` was an artefact of the test DOM and is withdrawn — this one is
+ * about ATTRIBUTES and stands): `Text` forwards a caller's `data-part` under MODERN only —
+ * classic and rustic stamp their own — so every `Text`-borne part rule here
+ * (`title`, `live-label`, `metric-label`, `metric-value`, `metric-change`)
+ * is live under modern and inert under the other two. The rules are correct
+ * as written and become universal when the primitive is repaired; the
+ * SPECIFICITY notes above describe the modern case. Box-borne parts (`root`,
+ * `header`, the icon wells, the meter, the rows/cards) reach every engine,
+ * which is why the well repair is universal and the caption repair is not.
+ */
+
+/* panel chrome -------------------------------------------------------------- */
+
+/* Root frame drained from the engine (premium wave): the former inline
+   height/padding/flex frame. The panel block size rides a private dashboard
+   seam whose fallback is the shipped 415px measure byte-exact, reading no
+   rhythm channel — rhythm owns the room around content, never a panel's
+   capacity; the runtime
+   density channels stay inline on the root (the density suite pins them). */
+.ds-metrics-cards.ds-metrics-cards[data-part='root'] {
+  display: flex;
+  flex-direction: column;
+  /* The panel is its own responsive frame — every cut in this file is keyed on
+     the PANEL's inline size, never the viewport. The card grid was already
+     intrinsic (`auto-fit` over a private track floor); the container is what
+     lets the panel CHROME answer its own measure too. */
+  container: ds-metrics-cards / inline-size;
+  block-size: var(--_ds-dashboard-panel-block-size, 415px);
+  /* Panel frame rides the tenant density plane (Button-skin idiom); the
+     density suite pins its own channels inline on this same root. */
+  padding: calc(16px * var(--ds-density-effective-scale, 1));
+  position: relative;
+  overflow: hidden;
+  background: var(--ds-signal-card-bg, var(--ds-premium-card-bg, var(--ds-color-bg-secondary)));
+  border-radius: var(--ds-signal-card-radius, var(--ds-premium-card-radius, var(--ds-radius-lg, 12px)));
+  box-shadow: var(--ds-signal-card-shadow, var(--ds-premium-card-shadow, none));
+}
+.ds-metrics-cards.ds-metrics-cards[data-part='root'][data-part='root'] {
+  border: 1px solid var(--ds-signal-card-border, var(--ds-premium-card-border, var(--ds-color-border-secondary)));
+}
+.ds-metrics-cards.ds-metrics-cards [data-part='header'] {
+  /* Header geometry drained from the engine; the spacing rung scales with
+     the tenant density ramp. */
+  padding-block-end: var(--ds-spacing-3, 12px);
+  margin-block-end: var(--ds-spacing-3, 12px);
+  position: relative;
+}
+.ds-metrics-cards.ds-metrics-cards [data-part='header'][data-part='header'] {
+  border-bottom: 1px solid var(--ds-signal-card-border, var(--ds-premium-card-border, var(--ds-color-border-secondary)));
+}
+.ds-metrics-cards.ds-metrics-cards [data-part='panel-icon-box'] {
+  /* 32px icon well drained from the engine. `flex-shrink: 0` is the well's
+     SHAPE: it sits in a flex cluster beside the title, and without it a
+     narrow panel squeezes the square into an oval that still carries its
+     border and glyph — degraded rather than absent, which is why it survived
+     review. */
+  flex-shrink: 0;
+  inline-size: 32px;
+  block-size: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--ds-signal-card-icon-bg, var(--ds-metric-card-icon-bg, var(--ds-color-primary-100)));
+}
+.ds-metrics-cards.ds-metrics-cards [data-part='panel-icon-box'][data-part='panel-icon-box'] {
+  border: 1px solid var(--ds-signal-card-icon-border, var(--ds-metric-card-icon-border, var(--ds-color-primary-200)));
+}
+.ds-metrics-cards.ds-metrics-cards [data-part='panel-icon'] {
+  color: var(--ds-metric-card-icon-color, var(--ds-signal-card-accent, var(--ds-color-primary)));
+}
+.ds-metrics-cards.ds-metrics-cards [data-part='title'][data-part='title'][data-part='title'] {
+  color: var(--ds-signal-card-title-color, var(--ds-color-text-primary));
+}
+.ds-metrics-cards.ds-metrics-cards [data-part='live-badge'] {
+  /* Badge padding drained from the engine. */
+  padding: 6px 12px;
+  background: var(--ds-signal-card-badge-bg, var(--ds-color-success-100));
+}
+.ds-metrics-cards.ds-metrics-cards [data-part='live-badge'][data-part='live-badge'] {
+  border: 1px solid var(--ds-signal-card-badge-border, var(--ds-color-success-200));
+}
+.ds-metrics-cards.ds-metrics-cards [data-part='live-dot'] {
+  /* Dot geometry drained from the engine. */
+  inline-size: 8px;
+  block-size: 8px;
+  border-radius: 50%;
+  background: var(--ds-signal-card-badge-color, var(--ds-color-success));
+}
+.ds-metrics-cards.ds-metrics-cards [data-part='live-label'][data-part='live-label'][data-part='live-label'] {
+  color: var(--ds-signal-card-badge-color, var(--ds-color-success));
+}
+
+/* per-card shell ------------------------------------------------------------ */
+
+/* Cross-card value alignment (K-7): the eyebrow zone reserves exactly TWO
+   lines in every card — labels render fully up to two lines, and the value
+   row lands at the same optical height across a row of cards whether a
+   card's eyebrow uses one line or two. */
+.ds-metrics-cards.ds-metrics-cards [data-part='metric-label'] {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  min-block-size: calc(2 * 1.35em);
+  overflow: hidden;
+}
+
+.ds-metrics-cards.ds-metrics-cards [data-part='metric-card'] {
+  background: var(--ds-metric-card-glass-bg, var(--ds-metric-card-bg, var(--ds-compact-card-bg, var(--ds-premium-card-bg, var(--ds-color-bg-primary)))));
+  border-radius: var(--ds-metric-card-radius, var(--ds-compact-card-radius, var(--ds-radius-md, 8px)));
+  box-shadow: var(--ds-metric-card-shadow, var(--ds-compact-card-shadow, none));
+  color: var(--ds-metric-card-body-color, inherit);
+}
+.ds-metrics-cards.ds-metrics-cards [data-part='metric-card'][data-part='metric-card'] {
+  border: 1px solid var(--ds-metric-card-border, var(--ds-compact-card-border, var(--ds-premium-card-border, var(--ds-color-border-secondary))));
+}
+
+/* grid motif layer (shell ::before; invisible while grid-line/grid-bg unset).
+   C-08/C1: the socket now bridges to the tenant's authored surface grid
+   (`--ds-surface-card-grid-bg`) before falling back to the transparent
+   pre-C1 render — a technical vertical's blueprint texture lights the motif
+   it already authors, while a tenant that never authored a surface grid
+   renders byte-identical to before. Content stays above the layer: the body
+   stack below is positioned, and ::before precedes it in tree order. */
+
+.ds-metrics-cards.ds-metrics-cards [data-part='metric-card']::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background-image: var(
+    --ds-metric-card-grid-bg,
+    var(
+      --ds-surface-card-grid-bg,
+      linear-gradient(var(--ds-metric-card-grid-line, transparent) 1px, transparent 1px),
+      linear-gradient(90deg, var(--ds-metric-card-grid-line, transparent) 1px, transparent 1px)
+    )
+  );
+  background-size: var(--ds-metric-card-grid-size, var(--ds-surface-card-grid-size, 22px))
+    var(--ds-metric-card-grid-size, var(--ds-surface-card-grid-size, 22px));
+}
+
+/* overlay wash layer (shell ::after, above content; invisible while unset) */
+
+.ds-metrics-cards.ds-metrics-cards [data-part='metric-card']::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background: var(--ds-metric-card-overlay, none);
+}
+
+/* body stack — hosts the internal rhythm socket ----------------------------- */
+
+.ds-metrics-cards.ds-metrics-cards [data-part='body'][data-part='body'] {
+  position: relative;
+  gap: var(--ds-metric-card-gap, var(--ds-spacing-2, 0.5rem));
+}
+
+/* footer region (change badge + meter) — zero-geometry outline border.
+   C-08/C1: the badge aligns to the inline-start edge of the KPI composition
+   (the engine's body stack is start-aligned); the meter keeps the full
+   inline measure. */
+
+.ds-metrics-cards.ds-metrics-cards [data-part='footer'] {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  align-self: stretch;
+  gap: var(--ds-spacing-2, 0.5rem);
+  background: var(--ds-metric-card-footer-bg, transparent);
+  color: var(--ds-metric-card-footer-color, inherit);
+}
+.ds-metrics-cards.ds-metrics-cards [data-part='footer'][data-part='footer'] {
+  outline: 1px solid var(--ds-metric-card-footer-border, transparent);
+}
+
+/* card icon box — 2px border, static colour; the 32px well is drained from
+   the engine --------------------------------- */
+
+.ds-metrics-cards.ds-metrics-cards [data-part='metric-icon-box'] {
+  inline-size: 32px;
+  block-size: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--ds-metric-card-icon-bg, var(--ds-signal-card-icon-bg, var(--ds-color-primary-100)));
+}
+.ds-metrics-cards.ds-metrics-cards [data-part='metric-icon-box'][data-part='metric-icon-box'] {
+  border: 2px solid var(--ds-metric-card-icon-border, var(--ds-signal-card-icon-border, var(--ds-color-primary-200)));
+}
+.ds-metrics-cards.ds-metrics-cards [data-part='metric-icon'] {
+  color: var(--ds-metric-card-icon-color, var(--ds-signal-card-accent, var(--ds-color-primary)));
+}
+
+/* value + label ------------------------------------------------------------- */
+
+.ds-metrics-cards.ds-metrics-cards [data-part='metric-value'][data-part='metric-value'][data-part='metric-value'] {
+  color: var(--ds-metric-card-value-color, var(--ds-color-text-primary));
+}
+.ds-metrics-cards.ds-metrics-cards [data-part='metric-label'][data-part='metric-label'][data-part='metric-label'] {
+  color: var(--ds-metric-card-label-color, var(--ds-color-text-muted));
+}
+
+/* change badge — background AND border switch on trend (status-* tier wins) - */
+
+.ds-metrics-cards.ds-metrics-cards [data-part='metric-card'][data-positive='true'] [data-part='change-badge'] {
+  background: var(--ds-metric-card-status-bg, var(--ds-signal-card-badge-bg, var(--ds-color-success-100)));
+}
+.ds-metrics-cards.ds-metrics-cards [data-part='metric-card'][data-positive='false'] [data-part='change-badge'] {
+  background: var(--ds-metric-card-status-bg, var(--ds-metric-card-trend-error-bg, color-mix(in srgb, var(--ds-metric-card-trend-color-error, var(--ds-color-error)) 12%, var(--ds-signal-card-section-bg, var(--ds-color-bg-primary)))));
+}
+.ds-metrics-cards.ds-metrics-cards [data-part='metric-card'][data-positive='true'] [data-part='change-badge'][data-part='change-badge'] {
+  border: 1px solid var(--ds-metric-card-status-border, var(--ds-signal-card-badge-border, var(--ds-color-success-200)));
+}
+.ds-metrics-cards.ds-metrics-cards [data-part='metric-card'][data-positive='false'] [data-part='change-badge'][data-part='change-badge'] {
+  border: 1px solid var(--ds-metric-card-status-border, var(--ds-metric-card-trend-error-border, color-mix(in srgb, var(--ds-metric-card-trend-color-error, var(--ds-color-error)) 24%, var(--ds-signal-card-border, var(--ds-color-border-secondary)))));
+}
+
+.ds-metrics-cards.ds-metrics-cards [data-part='change-badge'] {
+  padding: var(--ds-spacing-1, 4px) var(--ds-spacing-2, 8px);
+}
+
+/* trend icon + change text — 2-tone ---------------------------------------- */
+
+.ds-metrics-cards.ds-metrics-cards [data-part='metric-card'][data-positive='true'] [data-part='trend-icon'] {
+  color: var(--ds-metric-card-status-color, var(--ds-metric-card-trend-color, var(--ds-color-success)));
+}
+.ds-metrics-cards.ds-metrics-cards [data-part='metric-card'][data-positive='false'] [data-part='trend-icon'] {
+  color: var(--ds-metric-card-status-color, var(--ds-metric-card-trend-color-error, var(--ds-color-error)));
+}
+.ds-metrics-cards.ds-metrics-cards [data-part='trend-icon'] {
+  inline-size: 10px;
+  block-size: 10px;
+}
+.ds-metrics-cards.ds-metrics-cards [data-part='metric-card'][data-positive='true'] [data-part='metric-change'][data-part='metric-change'][data-part='metric-change'] {
+  color: var(--ds-metric-card-status-color, var(--ds-metric-card-trend-color, var(--ds-color-success)));
+}
+.ds-metrics-cards.ds-metrics-cards [data-part='metric-card'][data-positive='false'] [data-part='metric-change'][data-part='metric-change'][data-part='metric-change'] {
+  color: var(--ds-metric-card-status-color, var(--ds-metric-card-trend-color-error, var(--ds-color-error)));
+}
+.ds-metrics-cards.ds-metrics-cards [data-part='metric-change'][data-part='metric-change'][data-part='metric-change'] {
+  font-family: var(--ds-font-family-mono, monospace);
+}
+
+/* meter track + fill -------------------------------------------------------- */
+
+.ds-metrics-cards.ds-metrics-cards [data-part='meter-track'] {
+  inline-size: 100%;
+  block-size: var(--ds-metric-card-meter-height, 6px);
+  margin-block-start: var(--ds-spacing-1, 4px);
+  overflow: hidden;
+  background: var(--ds-metric-card-meter-track, var(--ds-color-bg-tertiary));
+  border-radius: 999px;
+}
+.ds-metrics-cards.ds-metrics-cards [data-part='meter-track'][data-part='meter-track'] {
+  border: 1px solid var(--ds-metric-card-meter-track-border, transparent);
+}
+.ds-metrics-cards.ds-metrics-cards [data-part='meter-fill'] {
+  block-size: 100%;
+  border-radius: 999px;
+}
+.ds-metrics-cards.ds-metrics-cards [data-part='metric-card'][data-positive='true'] [data-part='meter-fill'] {
+  background: var(--ds-metric-card-meter-fill-success, var(--ds-metric-card-meter-fill, linear-gradient(90deg, var(--ds-color-primary), var(--ds-color-success))));
+}
+.ds-metrics-cards.ds-metrics-cards [data-part='metric-card'][data-positive='false'] [data-part='meter-fill'] {
+  background: var(--ds-metric-card-meter-fill-error, linear-gradient(90deg, var(--ds-color-warning), var(--ds-color-error)));
+}
+
+/* scroll region — geometry drained from the engine ---------------------------- */
+
+.ds-metrics-cards.ds-metrics-cards [data-part='scroll-area'] {
+  flex: 1;
+  min-block-size: 0;
+  overflow-y: auto;
+}
+
+.ds-metrics-cards.ds-metrics-cards [data-part='cards-grid'] {
+  position: relative;
+}
+
+/* narrow posture — SIMPLIFIED, not compressed. The CARD GRID needs no cut: it
+   is already intrinsic (`auto-fit` over `--_ds-metric-card-track-min`), so it
+   reflows 3→2→1 on its own. What could not answer its own measure is the
+   panel CHROME: the header stops competing for one line and the LIVE badge
+   falls under the title. The two-line eyebrow clamp is deliberate (K-7
+   cross-card value alignment) and stays.
+   The figure steps through `--_ds-metric-value-size`, the channel this leaf
+   already read inline before the lane. No unit test can observe it:
+   happy-dom drops an inline length containing a comma-space inside a
+   function, which is a property of the TEST DOM and not of the browser or of
+   `Text` — an earlier note here claimed the channel had never painted, and
+   that claim was an instrument artefact, now withdrawn. */
+@container ds-metrics-cards (inline-size < 20rem) {
+  .ds-metrics-cards.ds-metrics-cards[data-part='root'] {
+    --_ds-metric-value-size: 22px;
+  }
+  .ds-metrics-cards.ds-metrics-cards [data-part='header'] {
+    flex-wrap: wrap;
+    row-gap: var(--ds-spacing-2, 8px);
+  }
+}
+
+/* forced-colors: the panel, cards, wells and badge keep system frames; the
+   meter reads by WIDTH on a system track (never by hue); trend direction
+   survives through the trend icon shape and the signed change text. */
+@media (forced-colors: active) {
+  .ds-metrics-cards.ds-metrics-cards[data-part='root'][data-part='root'],
+  .ds-metrics-cards.ds-metrics-cards [data-part='metric-card'][data-part='metric-card'],
+  .ds-metrics-cards.ds-metrics-cards [data-part='panel-icon-box'][data-part='panel-icon-box'],
+  .ds-metrics-cards.ds-metrics-cards [data-part='metric-icon-box'][data-part='metric-icon-box'],
+  .ds-metrics-cards.ds-metrics-cards [data-part='live-badge'][data-part='live-badge'],
+  .ds-metrics-cards.ds-metrics-cards [data-part='change-badge'][data-part='change-badge'],
+  .ds-metrics-cards.ds-metrics-cards [data-part='header'][data-part='header'] {
+    border-color: ButtonText;
+    background: Canvas;
+    box-shadow: none;
+  }
+  /* §13.1 motif/overlay layers and the zero-geometry footer outline go quiet
+     so the forced palette stays authoritative. */
+  .ds-metrics-cards.ds-metrics-cards [data-part='metric-card']::before,
+  .ds-metrics-cards.ds-metrics-cards [data-part='metric-card']::after {
+    content: none;
+  }
+  .ds-metrics-cards.ds-metrics-cards [data-part='footer'][data-part='footer'] {
+    outline-color: ButtonText;
+  }
+  .ds-metrics-cards.ds-metrics-cards [data-part='live-dot'] {
+    background: ButtonText;
+  }
+  .ds-metrics-cards.ds-metrics-cards [data-part='meter-track'][data-part='meter-track'] {
+    background: Canvas;
+    border: 1px solid ButtonText;
+  }
+  .ds-metrics-cards.ds-metrics-cards [data-part='metric-card'][data-positive] [data-part='meter-fill'] {
+    background: Highlight;
+  }
+}

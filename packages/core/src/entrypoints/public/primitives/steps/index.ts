@@ -1,3 +1,3 @@
 "use client";
 
-export { Steps } from "../../../../ui/primitives/navigation/Steps";
+export { Steps } from "../../../../components/primitives/navigation/steps";

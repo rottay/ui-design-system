@@ -31,7 +31,7 @@ import { describe, it, expect } from "vitest";
 import { compileBrandTheme } from "../index";
 import type { CompiledBrand } from "@/foundation/contracts/composition/tenants/themes";
 import { bithireBrandTheme } from "@/foundation/tokens/ts/presentation/brand-themes";
-import { themanagementmiamiBrandTheme } from "@/tooling/testing/fixtures/brand-themes/themanagementmiami";
+import { themanagementmiamiBrandTheme } from "@tests/fixtures/brand-themes/themanagementmiami";
 import {
   isBundledTenant,
   isKnownTenant,

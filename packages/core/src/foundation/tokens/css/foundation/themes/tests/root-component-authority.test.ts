@@ -1,7 +1,7 @@
 /**
  * Root custom-property authority contract.
  *
- * `foundation/themes/default.css` owns foundation channels and tenant-neutral
+ * `foundation/themes/default/index.css` owns foundation channels and tenant-neutral
  * fallbacks. A component family owns its root defaults in exactly one
  * `presentation/components/<family>.css` file. Re-authoring the same public
  * channel in both layers makes cascade order, rather than the contract, the
@@ -16,15 +16,15 @@ import { basename, resolve } from "node:path";
 import { describe, expect, it } from "vitest";
 
 const CSS_ROOT = resolve(process.cwd(), "src/foundation/tokens/css");
-const DEFAULT_PATH = resolve(CSS_ROOT, "foundation/themes/default.css");
+const DEFAULT_PATH = resolve(CSS_ROOT, "foundation/themes/default/index.css");
 const COMPONENTS_DIR = resolve(CSS_ROOT, "presentation/components");
 const LEDGER_PATH = resolve(
   CSS_ROOT,
   "foundation/themes/tests/root-component-authority-ledger.json",
 );
 const ENTRYPOINTS = [
-  resolve(CSS_ROOT, "facade/entrypoints/base.css"),
-  resolve(CSS_ROOT, "facade/entrypoints/styles.css"),
+  resolve(CSS_ROOT, "facade/entrypoints/base/index.css"),
+  resolve(CSS_ROOT, "facade/entrypoints/styles/index.css"),
 ] as const;
 
 const FOUNDATION_CHANNEL = /^--ds-(?:color|spacing|radius|shadow|font|motion|z-index)-/;
@@ -171,7 +171,7 @@ describe("root component-token authority", () => {
     for (const entrypoint of ENTRYPOINTS) {
       const source = read(entrypoint);
       const defaultIndex = source.indexOf(
-        '@import "../../foundation/themes/default.css"',
+        '@import "../../foundation/themes/default/index.css"',
       );
       expect(defaultIndex, basename(entrypoint)).toBeGreaterThan(-1);
 

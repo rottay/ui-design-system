@@ -98,6 +98,10 @@ const POPULATED_WITHDRAWN: readonly RetiredChannel[] = [
     because: "benign: a `normal` mode rests at the baseline's own factor of 1",
   },
   {
+    token: "--ds-button-primary-bg",
+    because: "benign: a `var(--ds-color-primary)` indirection, not a color",
+  },
+  {
     token: "--ds-button-primary-border",
     because: "benign: a `var(--ds-button-primary-bg)` indirection, not a color",
   },
@@ -108,17 +112,18 @@ const POPULATED_WITHDRAWN: readonly RetiredChannel[] = [
 ];
 
 /**
- * The other side of that closure: the seven channels the tenant's own
+ * The other side of that closure: the six channels the tenant's own
  * `palette.primary` (`#0F766E`) now re-derives, pinned at the exact value each
  * one carries. They are ADDITIONS — absent from the frozen pre-change fixture,
  * because before T2A the baseline's blue displaced every one of them — so the
  * declaration is two-sided by construction: absent from the fixture, present in
  * the artifact at these values.
  *
- * Three of the ten channels the seed owns stay in `POPULATED_WITHDRAWN` above,
+ * Four of the ten channels the seed owns stay in `POPULATED_WITHDRAWN` above,
  * and correctly so. Re-derivation only produces a delta member when the derived
  * value BAKES A COLOUR OF ITS OWN; `--ds-button-primary-border`,
- * `--ds-button-primary-color` and `--ds-color-primary-foreground` resolve
+ * `--ds-button-primary-bg`, `--ds-button-primary-color` and
+ * `--ds-color-primary-foreground` resolve
  * through an indirection that already points at a channel the seed controls, so
  * they are byte-identical to the baseline's and the subtraction removes them.
  * Splitting the family this way is what makes a future regression legible: a
@@ -126,7 +131,6 @@ const POPULATED_WITHDRAWN: readonly RetiredChannel[] = [
  * literals where an indirection belongs moves a token across the boundary.
  */
 const POPULATED_SEED_DERIVED: Readonly<Record<string, string>> = {
-  "--ds-button-primary-bg": "var(--ds-color-primary)",
   "--ds-button-primary-bg-hover": "#00635C",
   "--ds-color-border-focus": "#0F766E",
   "--ds-color-link": "#0F766E",
@@ -541,10 +545,9 @@ describe("tenant theme artifact byte-identity against pre-W4 fixtures", () => {
     });
     expect(additions.filter((token) => CHART_SERIES_TOKEN.test(token))).toHaveLength(10);
     expect([...additions].sort()).toEqual([
-      // The seed-derived seven. Their VALUES are pinned by
-      // `POPULATED_SEED_DERIVED`; what this list adds is exactness — no eighth
+      // The seed-derived six. Their VALUES are pinned by
+      // `POPULATED_SEED_DERIVED`; what this list adds is exactness — no seventh
       // channel may join the family without being declared there first.
-      "--ds-button-primary-bg",
       "--ds-button-primary-bg-hover",
       "--ds-chart-series-1",
       "--ds-chart-series-10",
@@ -643,7 +646,7 @@ describe("tenant theme artifact byte-identity against pre-W4 fixtures", () => {
       "#0a0f18"
     );
     expect(bithireDark?.text, "the vertical does author a dark sidebar ink").toBe(
-      "#9aacbf"
+      "var(--ds-color-text-secondary)"
     );
     expect(artifact.modeDeltas?.length).toBe(1);
     expect(artifact.modeDeltas?.[0]?.mode).toBe("dark");

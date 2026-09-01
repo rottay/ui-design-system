@@ -11,15 +11,15 @@ export {
   BitHireIconPreset,
   isBitHirePresetIconName,
   resolveBitHirePresetIcon,
-} from '../../../../graphics/icons/presentation/semantic/generated/presets/bithire';
+} from '../../../../graphics/icons/semantic/generated/presets/bithire';
 export type {
   BitHireIconPresetProps,
   BitHirePresetIconName,
-} from '../../../../graphics/icons/presentation/semantic/generated/presets/bithire';
+} from '../../../../graphics/icons/semantic/generated/presets/bithire';
 export type {
   SemanticIconComponent,
   SemanticIconProps,
-} from '../../../../graphics/icons/runtime/semantic/create-icon';
+} from '../../../../graphics/icons/semantic/runtime/create-icon';
 export {
   GRAPHIC_ASSET_CLASSES,
   GRAPHIC_ASSET_PROVIDERS,

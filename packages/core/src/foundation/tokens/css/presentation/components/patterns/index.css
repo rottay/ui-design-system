@@ -1,0 +1,3661 @@
+/**
+ * Pattern Tokens - Rottay Design System
+ *
+ * Tenant-free reusable styling contracts for application surfaces and compact
+ * data patterns. Apps can compose these tokens without depending on a vertical
+ * namespace.
+ *
+ * This file is imported inside `rottay-components`. It owns the whole
+ * pattern styling contract: the custom properties, the keyframes AND the
+ * paint. The former split -- killable paint held in an unlayered
+ * patterns-paint.css -- was retired with the P-76 paint-bridge mechanism on
+ * 2026-07-25; css-layer-paint-gate.mjs now rejects a `*-paint.css` import
+ * outright. Preflight no longer outranks this file because the canonical
+ * layer order declares Tailwind's `base` before `rottay-components`.
+ */
+
+:root {
+  /* Surface patterns */
+  --ds-workspace-shell-overlay: var(--ds-material-canvas-texture, transparent);
+  --ds-surface-card-bg: var(
+    --ds-material-card-background,
+    var(--ds-surface-card, var(--ds-card-bg))
+  );
+  --ds-surface-card-border: var(
+    --ds-material-card-border,
+    var(--ds-color-border)
+  );
+  --ds-surface-card-border-strong: var(
+    --ds-material-card-border-strong,
+    var(--ds-color-border-secondary)
+  );
+  --ds-surface-card-border-soft: var(--ds-color-border-subtle);
+  --ds-surface-card-shadow: var(
+    --ds-material-card-shadow,
+    var(--ds-card-shadow, var(--ds-shadow-sm))
+  );
+  --ds-surface-card-shadow-hover: var(
+    --ds-material-card-shadow-hover,
+    var(--ds-card-shadow-hover, var(--ds-shadow-md))
+  );
+  --ds-surface-card-color: var(
+    --ds-material-card-foreground,
+    var(--ds-color-text-primary)
+  );
+  --ds-surface-card-color-muted: var(
+    --ds-material-card-foreground-muted,
+    var(--ds-color-text-secondary)
+  );
+  --ds-surface-panel-bg: var(
+    --ds-material-panel-background,
+    var(--ds-surface-panel, var(--ds-color-bg-secondary))
+  );
+  --ds-surface-panel-color: var(
+    --ds-material-panel-foreground,
+    var(--ds-color-text-primary)
+  );
+  --ds-surface-panel-border: var(
+    --ds-material-panel-border,
+    var(--ds-color-border)
+  );
+  --ds-surface-panel-shadow: var(--ds-material-panel-shadow, none);
+  --ds-surface-panel-focus-ring: var(
+    --ds-material-panel-focus-ring,
+    var(--ds-shadow-focus-ring)
+  );
+  --ds-surface-panel-texture: var(--ds-material-panel-texture, none);
+  --ds-surface-control-bg: var(
+    --ds-material-control-background,
+    var(--ds-surface-control, var(--ds-color-bg-input))
+  );
+  --ds-surface-control-color: var(
+    --ds-material-control-foreground,
+    var(--ds-color-text-primary)
+  );
+  --ds-surface-control-border: var(
+    --ds-material-control-border,
+    var(--ds-color-border-subtle)
+  );
+  --ds-surface-control-shadow: var(
+    --ds-material-control-shadow,
+    0 1px 2px color-mix(in srgb, var(--ds-color-text-primary) 3%, transparent)
+  );
+  --ds-surface-control-focus-ring: var(
+    --ds-material-control-focus-ring,
+    var(--ds-shadow-focus-ring)
+  );
+  --ds-control-ink: var(--ds-color-text-primary);
+  --ds-control-ink-muted: var(--ds-color-text-secondary);
+  --ds-control-on-brand: var(
+    --ds-color-text-on-primary,
+    var(--ds-color-text-inverse)
+  );
+  --ds-control-surface: var(--ds-surface-card-bg);
+  --ds-control-surface-raised: color-mix(
+    in srgb,
+    var(--ds-control-surface) 86%,
+    var(--ds-surface-panel-bg)
+  );
+  --ds-control-brand-tint: color-mix(
+    in srgb,
+    var(--ds-color-primary) 10%,
+    var(--ds-control-surface)
+  );
+  --ds-control-brand-tint-hover: color-mix(
+    in srgb,
+    var(--ds-color-primary) 15%,
+    var(--ds-control-surface)
+  );
+  --ds-control-brand-border: color-mix(
+    in srgb,
+    var(--ds-color-primary) 30%,
+    var(--ds-color-border)
+  );
+  --ds-surface-hero-bg: linear-gradient(
+    145deg,
+    var(--ds-surface-card-bg),
+    color-mix(in srgb, var(--ds-color-primary) 6%, var(--ds-surface-panel-bg))
+  );
+  --ds-workspace-hero-bg: var(--ds-surface-hero-bg);
+  --ds-surface-focus-ring: 0 0 0 3px
+    color-mix(in srgb, var(--ds-color-primary) 14%, transparent);
+  --ds-surface-icon-bg: linear-gradient(
+    145deg,
+    color-mix(in srgb, var(--ds-color-primary) 12%, var(--ds-surface-card-bg)),
+    color-mix(in srgb, var(--ds-color-secondary) 10%, var(--ds-surface-card-bg))
+  );
+  --ds-surface-icon-border: color-mix(
+    in srgb,
+    var(--ds-color-primary) 22%,
+    var(--ds-surface-card-border)
+  );
+  --ds-icon-tile-bg: var(--ds-surface-icon-bg);
+  --ds-icon-tile-border: var(--ds-surface-icon-border);
+  --ds-surface-chip-bg: color-mix(
+    in srgb,
+    var(--ds-color-primary) 8%,
+    var(--ds-surface-card-bg)
+  );
+  --ds-surface-chip-border: color-mix(
+    in srgb,
+    var(--ds-color-primary) 18%,
+    var(--ds-surface-card-border)
+  );
+  --ds-surface-highlight-faint: color-mix(
+    in srgb,
+    var(--ds-surface-card-bg) 34%,
+    transparent
+  );
+  --ds-surface-highlight-soft: color-mix(
+    in srgb,
+    var(--ds-surface-card-bg) 46%,
+    transparent
+  );
+  --ds-surface-highlight-medium: color-mix(
+    in srgb,
+    var(--ds-surface-card-bg) 64%,
+    transparent
+  );
+  --ds-surface-highlight-strong: color-mix(
+    in srgb,
+    var(--ds-surface-card-bg) 78%,
+    transparent
+  );
+  --ds-shell-shimmer-faint: linear-gradient(
+    90deg,
+    transparent,
+    var(--ds-surface-highlight-faint),
+    transparent
+  );
+  --ds-shell-shimmer-soft: linear-gradient(
+    90deg,
+    transparent,
+    var(--ds-surface-highlight-soft),
+    transparent
+  );
+  --ds-shell-shimmer-medium: linear-gradient(
+    90deg,
+    transparent,
+    var(--ds-surface-highlight-medium),
+    transparent
+  );
+  --ds-shell-shimmer-strong: linear-gradient(
+    90deg,
+    transparent,
+    var(--ds-surface-highlight-strong),
+    transparent
+  );
+  --ds-shell-active-bg: var(--ds-color-neutral-100, var(--ds-surface-panel-bg));
+  --ds-shell-active-gradient: linear-gradient(
+    90deg,
+    var(--ds-shell-active-bg),
+    transparent
+  );
+  --ds-shell-dropdown-shadow: var(--ds-shadow-dropdown, var(--ds-shadow-lg));
+  --ds-command-grid-size: var(--ds-shell-grid-size, 22px);
+  --ds-command-grid-line-soft: color-mix(
+    in srgb,
+    var(--ds-color-primary) 6%,
+    transparent
+  );
+  --ds-command-grid-line: color-mix(
+    in srgb,
+    var(--ds-color-primary) 11%,
+    transparent
+  );
+  --ds-command-grid-line-strong: color-mix(
+    in srgb,
+    var(--ds-color-primary) 18%,
+    transparent
+  );
+  --ds-command-grid-bg: linear-gradient(
+      var(--ds-command-grid-line-soft) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      90deg,
+      var(--ds-command-grid-line-soft) 1px,
+      transparent 1px
+    );
+  --ds-command-grid-bg-strong: linear-gradient(
+      var(--ds-command-grid-line) 1px,
+      transparent 1px
+    ),
+    linear-gradient(90deg, var(--ds-command-grid-line) 1px, transparent 1px);
+  --ds-command-grid-opacity: 0.16;
+  --ds-command-font: var(--ds-font-family-mono, monospace);
+  --ds-command-letter-spacing: var(--ds-letter-spacing-normal, 0);
+  --ds-command-glow: 0 0 0 1px
+      color-mix(in srgb, var(--ds-color-primary) 6%, transparent),
+    0 10px 28px color-mix(in srgb, var(--ds-color-primary) 5%, transparent);
+  --ds-command-line: linear-gradient(
+    90deg,
+    transparent,
+    color-mix(in srgb, var(--ds-color-primary) 62%, transparent),
+    transparent
+  );
+  --ds-command-rail-bg: linear-gradient(
+    180deg,
+    var(--ds-surface-card-bg) 0%,
+    var(--ds-surface-panel-bg) 100%
+  );
+
+  /* Rich / premium cards */
+  --ds-rich-card-bg: var(--ds-premium-card-bg);
+  --ds-rich-card-border: var(--ds-premium-card-border);
+  --ds-rich-card-border-hover: var(--ds-premium-card-border-hover);
+  --ds-rich-card-border-selected: var(--ds-premium-card-selected-border);
+  --ds-rich-card-ring-selected: var(--ds-premium-card-selected-ring);
+  --ds-rich-card-sheen: var(--ds-premium-card-sheen);
+  --ds-rich-card-header-bg: color-mix(
+    in srgb,
+    var(--ds-surface-card-bg) 82%,
+    var(--ds-surface-panel-bg)
+  );
+  --ds-rich-card-section-bg: var(--ds-surface-card-bg);
+  --ds-rich-card-section-alt-bg: color-mix(
+    in srgb,
+    var(--ds-color-primary) 4%,
+    var(--ds-surface-panel-bg)
+  );
+  --ds-rich-card-footer-bg: var(--ds-premium-card-footer-bg);
+  --ds-premium-card-accent: var(
+    --ds-signal-card-accent,
+    var(--ds-color-primary)
+  );
+  --ds-premium-card-header-bg: var(--ds-rich-card-header-bg);
+  --ds-premium-card-section-bg: var(--ds-rich-card-section-bg);
+  --ds-premium-card-section-alt-bg: var(--ds-rich-card-section-alt-bg);
+  --ds-premium-card-rim: linear-gradient(
+    90deg,
+    transparent,
+    color-mix(in srgb, var(--ds-premium-card-accent) 34%, transparent) 18%,
+    color-mix(
+        in srgb,
+        var(--ds-color-secondary, var(--ds-premium-card-accent)) 24%,
+        transparent
+      )
+      50%,
+    color-mix(in srgb, var(--ds-premium-card-accent) 34%, transparent) 82%,
+    transparent
+  );
+  --ds-surface-card-grid-size: var(--ds-premium-card-grid-size, 22px);
+  --ds-surface-card-grid-line: color-mix(
+    in srgb,
+    var(--ds-premium-card-accent) 5%,
+    transparent
+  );
+  --ds-surface-card-grid-line-strong: color-mix(
+    in srgb,
+    var(--ds-premium-card-accent) 8%,
+    transparent
+  );
+  --ds-surface-card-grid-bg: linear-gradient(
+      var(--ds-surface-card-grid-line) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      90deg,
+      var(--ds-surface-card-grid-line) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      115deg,
+      transparent 0%,
+      color-mix(in srgb, var(--ds-surface-card-bg) 34%, transparent) 46%,
+      transparent 66%
+    );
+
+  /* Signal / metric cards */
+  --ds-signal-card-accent: var(--ds-color-primary);
+  --ds-signal-card-soft: color-mix(
+    in srgb,
+    var(--ds-signal-card-accent) 11%,
+    var(--ds-surface-card-bg)
+  );
+  --ds-signal-card-bg: var(--ds-premium-card-bg);
+  --ds-signal-card-border: color-mix(
+    in srgb,
+    var(--ds-signal-card-accent) 12%,
+    var(--ds-surface-card-border)
+  );
+  --ds-signal-card-border-hover: color-mix(
+    in srgb,
+    var(--ds-signal-card-accent) 24%,
+    var(--ds-surface-card-border)
+  );
+  --ds-signal-card-shadow: var(--ds-premium-card-shadow);
+  --ds-signal-card-shadow-hover: var(--ds-premium-card-shadow-hover);
+  --ds-signal-card-radius: var(--ds-premium-card-radius);
+  /* RHYTHM: the pattern card/panel families mount the tenant
+     `appearance.rhythm` axis on their OWN preset channel, never on the card.css
+     rungs they derive from -- those rungs stay the unscaled base (the Card
+     primitive skin multiplies them separately into its private
+     --ds-card-padding-current, so scaling them here would reach that chain
+     twice). Each channel below is declared exactly once, so no read needs to
+     re-multiply. */
+  --ds-signal-card-padding: calc(var(--ds-premium-card-padding) * var(--ds-rhythm-effective-scale, 1));
+  --ds-signal-card-grid-bg: var(--ds-premium-card-grid-bg);
+  --ds-signal-card-icon-bg: var(--ds-premium-card-icon-bg);
+  --ds-signal-card-icon-border: var(--ds-premium-card-icon-border);
+  --ds-signal-card-title-color: var(--ds-premium-card-title-color);
+  --ds-signal-card-body-color: var(--ds-premium-card-body-color);
+  --ds-signal-card-section-bg: var(--ds-rich-card-section-bg);
+  --ds-signal-card-section-alt-bg: var(--ds-rich-card-section-alt-bg);
+  --ds-signal-card-footer-bg: var(--ds-premium-card-footer-bg);
+  --ds-signal-card-status-bg: var(--ds-premium-card-status-bg);
+  --ds-signal-card-status-border: var(--ds-premium-card-status-border);
+  --ds-signal-card-status-color: var(--ds-premium-card-status-color);
+  --ds-signal-card-action-color: var(--ds-premium-card-action-color);
+  --ds-signal-card-badge-bg: var(--ds-premium-card-status-bg);
+  --ds-signal-card-badge-border: var(--ds-premium-card-status-border);
+  --ds-signal-card-badge-color: var(--ds-premium-card-status-color);
+  --ds-signal-card-meter-track: var(--ds-premium-card-meter-track);
+  --ds-signal-card-meter-track-border: var(
+    --ds-premium-card-meter-track-border
+  );
+  --ds-signal-card-meter-fill: var(--ds-premium-card-meter-fill);
+  --ds-signal-card-top-line-display: none;
+
+  --ds-metric-card-bg: var(--ds-premium-card-bg);
+  --ds-metric-card-border: var(--ds-premium-card-border);
+  --ds-metric-card-border-hover: var(--ds-premium-card-border-hover);
+  --ds-metric-card-selected-border: var(--ds-premium-card-selected-border);
+  --ds-metric-card-selected-ring: var(--ds-premium-card-selected-ring);
+  --ds-metric-card-shadow: var(--ds-premium-card-shadow);
+  --ds-metric-card-shadow-hover: var(--ds-premium-card-shadow-hover);
+  --ds-metric-card-radius: var(--ds-premium-card-radius);
+  --ds-metric-card-padding: calc(var(--ds-card-sm-padding) * var(--ds-rhythm-effective-scale, 1));
+  --ds-metric-card-min-height: 118px;
+  --ds-metric-card-sheen: var(--ds-premium-card-sheen);
+  --ds-metric-card-icon-bg: var(--ds-premium-card-icon-bg);
+  --ds-metric-card-icon-border: var(--ds-premium-card-icon-border);
+  --ds-metric-card-icon-color: var(--ds-premium-card-icon-color);
+  --ds-metric-card-label-color: var(--ds-premium-card-label-color);
+  --ds-metric-card-value-color: var(--ds-premium-card-value-color);
+  --ds-metric-card-value-color-hover: var(--ds-premium-card-value-color-hover);
+  --ds-metric-card-number-min-width: var(--ds-premium-card-number-min-width);
+  --ds-metric-card-number-font-variant: var(
+    --ds-premium-card-number-font-variant
+  );
+  --ds-metric-card-meter-height: 6px;
+  --ds-metric-card-meter-track: var(--ds-premium-card-meter-track);
+  --ds-metric-card-meter-track-border: var(
+    --ds-premium-card-meter-track-border
+  );
+  --ds-metric-card-meter-fill: var(--ds-premium-card-meter-fill);
+  --ds-metric-card-meter-fill-success: var(
+    --ds-meter-fill-success,
+    var(--ds-premium-card-meter-fill)
+  );
+  --ds-metric-card-meter-fill-warning: var(
+    --ds-meter-fill-warning,
+    linear-gradient(90deg, var(--ds-color-warning), var(--ds-color-accent))
+  );
+  --ds-metric-card-meter-fill-error: var(
+    --ds-meter-fill-error,
+    linear-gradient(90deg, var(--ds-color-error), var(--ds-color-primary))
+  );
+  --ds-metric-card-meter-fill-neutral: var(
+    --ds-meter-fill-neutral,
+    linear-gradient(90deg, var(--ds-color-text-muted), var(--ds-color-primary))
+  );
+
+  /* Tables and compact collection chrome */
+  --ds-table-header-bg-hover: color-mix(
+    in srgb,
+    var(--ds-color-primary) 5%,
+    var(--ds-table-header-bg)
+  );
+  --ds-table-header-border: color-mix(
+    in srgb,
+    var(--ds-table-border) 82%,
+    transparent
+  );
+  --ds-table-header-shadow: inset 0 -1px 0 var(--ds-table-header-border);
+  --ds-table-resize-bg: color-mix(
+    in srgb,
+    var(--ds-color-primary) 22%,
+    var(--ds-table-border)
+  );
+  --ds-table-resize-bg-hover: var(--ds-color-primary);
+  --ds-table-reorder-bg: color-mix(
+    in srgb,
+    var(--ds-color-primary) 10%,
+    var(--ds-table-bg)
+  );
+  --ds-table-action-bg: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--ds-table-bg) 60%, transparent),
+    var(--ds-table-bg)
+  );
+  --ds-table-action-border: color-mix(
+    in srgb,
+    var(--ds-table-border) 70%,
+    transparent
+  );
+  --ds-table-action-slots-width: 88px;
+  --ds-table-sheen: linear-gradient(
+    90deg,
+    var(--ds-card-side-accent-soft, transparent),
+    transparent 24%
+  );
+  --ds-table-row-hover-shadow: inset 0 0 0 1px
+    color-mix(in srgb, var(--ds-color-primary) 18%, transparent);
+  --ds-workspace-card-bg: var(--ds-premium-card-bg);
+  --ds-workspace-card-border: var(--ds-premium-card-border);
+  --ds-workspace-card-border-hover: var(--ds-premium-card-border-hover);
+  --ds-workspace-card-shadow: var(--ds-premium-card-depth);
+  --ds-workspace-card-shadow-hover: var(--ds-premium-card-shadow-hover);
+  --ds-workspace-card-radius: var(--ds-premium-card-radius);
+  --ds-workspace-card-padding: calc(var(--ds-card-md-padding) * var(--ds-rhythm-effective-scale, 1));
+  --ds-workspace-card-grid-bg: var(--ds-premium-card-grid-bg);
+  --ds-workspace-card-footer-bg: var(--ds-premium-card-footer-bg);
+  --ds-workspace-card-status-bg: var(--ds-premium-card-status-bg);
+  --ds-workspace-card-status-border: var(--ds-premium-card-status-border);
+  --ds-workspace-card-status-color: var(--ds-premium-card-status-color);
+  --ds-workspace-card-action-color: var(--ds-premium-card-action-color);
+
+  --ds-compact-card-bg: var(--ds-premium-card-bg);
+  --ds-compact-card-border: var(--ds-premium-card-border);
+  --ds-compact-card-border-hover: var(--ds-premium-card-border-hover);
+  --ds-compact-card-shadow: var(--ds-premium-card-shadow);
+  --ds-compact-card-shadow-hover: var(--ds-premium-card-shadow-hover);
+  --ds-compact-card-radius: var(--ds-radius-md);
+  --ds-compact-card-padding: calc(var(--ds-card-sm-padding) * var(--ds-rhythm-effective-scale, 1));
+  --ds-compact-card-gap: calc(var(--ds-spacing-2, 8px) * var(--ds-rhythm-effective-scale, 1));
+  --ds-compact-card-min-height: 92px;
+
+  --ds-tall-card-bg: var(--ds-premium-card-bg);
+  --ds-tall-card-border: var(--ds-premium-card-border);
+  --ds-tall-card-border-hover: var(--ds-premium-card-border-hover);
+  --ds-tall-card-shadow: var(--ds-premium-card-depth);
+  --ds-tall-card-shadow-hover: var(--ds-premium-card-shadow-hover);
+  --ds-tall-card-radius: var(--ds-radius-xl);
+  --ds-tall-card-padding: calc(var(--ds-card-lg-padding) * var(--ds-rhythm-effective-scale, 1));
+  --ds-tall-card-gap: calc(var(--ds-spacing-4, 16px) * var(--ds-rhythm-effective-scale, 1));
+  --ds-tall-card-min-height: 240px;
+  --ds-tall-card-footer-bg: var(--ds-premium-card-footer-bg);
+
+  --ds-collection-card-bg: var(--ds-premium-card-bg);
+  --ds-collection-card-bg-hover: var(--ds-premium-card-bg-hover);
+  --ds-collection-card-border: var(--ds-premium-card-border);
+  --ds-collection-card-border-hover: var(--ds-premium-card-border-hover);
+  --ds-collection-card-selected-border: var(--ds-premium-card-selected-border);
+  --ds-collection-card-selected-ring: var(--ds-premium-card-selected-ring);
+  --ds-collection-card-shadow: var(--ds-premium-card-shadow);
+  --ds-collection-card-shadow-hover: var(--ds-premium-card-shadow-hover);
+  --ds-collection-card-radius: var(--ds-premium-card-radius);
+  --ds-collection-card-padding: calc(var(--ds-card-md-padding) * var(--ds-rhythm-effective-scale, 1));
+  --ds-collection-card-footer-bg: var(--ds-premium-card-footer-bg);
+  --ds-collection-card-status-bg: var(--ds-premium-card-status-bg);
+  --ds-collection-card-status-border: var(--ds-premium-card-status-border);
+  --ds-collection-card-status-color: var(--ds-premium-card-status-color);
+  --ds-collection-card-action-color: var(--ds-premium-card-action-color);
+
+  /* The listing grid's gap is room between cards, so it takes rhythm; the
+     min-card widths below are card SIZE and stay exact. A tenant artifact that
+     names --ds-listing-grid-gap outright overrides this whole declaration and
+     keeps its exact geometry, which is the intended sovereignty. */
+  --ds-listing-grid-gap: calc(var(--ds-card-grid-gap) * var(--ds-rhythm-effective-scale, 1));
+  --ds-listing-grid-min-card-width: 280px;
+  --ds-listing-grid-min-compact-width: 220px;
+  --ds-listing-grid-min-tall-width: 320px;
+  --ds-listing-grid-columns: repeat(
+    auto-fill,
+    minmax(var(--ds-listing-grid-min-card-width), 1fr)
+  );
+  --ds-listing-grid-card-gap: calc(var(--ds-premium-card-gap) * var(--ds-rhythm-effective-scale, 1));
+  --ds-listing-grid-card-bg: var(--ds-collection-card-bg);
+  --ds-listing-grid-card-border: var(--ds-collection-card-border);
+  --ds-listing-grid-card-shadow: var(--ds-collection-card-shadow);
+  --ds-listing-grid-selected-ring: var(--ds-collection-card-selected-ring);
+  --ds-listing-grid-empty-bg: var(--ds-collection-card-bg);
+  --ds-listing-grid-empty-border: var(--ds-collection-card-border);
+  --ds-listing-grid-skeleton-bg: var(--ds-premium-card-bg);
+
+  /* Pills and meters */
+  --ds-filter-pill-frame-border: color-mix(
+    in srgb,
+    var(--ds-color-primary) 10%,
+    var(--ds-surface-card-border)
+  );
+  --ds-filter-pill-frame-shadow: 0 1px 2px
+      color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent),
+    inset 0 0 0 1px
+      color-mix(in srgb, var(--ds-surface-card-bg) 50%, transparent);
+  --ds-filter-pill-focus-ring: 0 0 0 3px
+    color-mix(in srgb, var(--ds-color-primary) 22%, transparent);
+  --ds-cell-pill-bg: color-mix(
+    in srgb,
+    var(--ds-color-primary) 6%,
+    var(--ds-surface-card-bg)
+  );
+  --ds-cell-pill-border: color-mix(
+    in srgb,
+    var(--ds-color-primary) 16%,
+    var(--ds-surface-card-border)
+  );
+  --ds-cell-pill-color: var(--ds-color-text-secondary);
+  --ds-cell-pill-dot-current: currentColor;
+  --ds-cell-pill-shadow: inset 0 1px 0
+      color-mix(in srgb, var(--ds-surface-card-bg) 78%, transparent),
+    0 1px 2px color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent);
+  --ds-meter-track: color-mix(
+    in srgb,
+    var(--ds-surface-card-border) 48%,
+    var(--ds-surface-panel-bg)
+  );
+  --ds-meter-track-border: color-mix(
+    in srgb,
+    var(--ds-surface-card-border) 82%,
+    transparent
+  );
+  /* Meter colour is semantic state, not surface ornament. Each fill is a
+     single tenant token so a published anatomy can control it without a
+     baked-in two-colour brand treatment. */
+  --ds-meter-fill: var(--ds-color-primary);
+  --ds-meter-fill-success: var(--ds-color-success);
+  --ds-meter-fill-warning: var(--ds-color-warning);
+  --ds-meter-fill-error: var(--ds-color-error);
+  --ds-meter-fill-neutral: var(--ds-color-text-muted);
+  --ds-cell-meter-track: color-mix(
+    in srgb,
+    var(--ds-surface-panel-bg) 78%,
+    var(--ds-surface-card-bg)
+  );
+  --ds-cell-meter-track-border: color-mix(
+    in srgb,
+    var(--ds-surface-card-border) 78%,
+    transparent
+  );
+  --ds-cell-meter-fill: var(--ds-meter-fill);
+  --ds-cell-meter-shadow: inset 0 1px 1px
+    color-mix(in srgb, var(--ds-color-text-primary) 7%, transparent);
+
+  /* Empty/error/chart surfaces */
+  --ds-empty-state-bg: linear-gradient(
+    145deg,
+    color-mix(in srgb, var(--ds-color-primary) 5%, var(--ds-surface-card-bg)),
+    var(--ds-surface-panel-bg)
+  );
+  --ds-empty-state-border: color-mix(
+    in srgb,
+    var(--ds-color-primary) 16%,
+    var(--ds-surface-card-border)
+  );
+  --ds-empty-state-icon-bg: var(--ds-surface-icon-bg);
+  --ds-empty-state-icon-border: var(--ds-surface-icon-border);
+  --ds-empty-bg: var(--ds-empty-state-bg);
+  --ds-empty-border: var(--ds-empty-state-border);
+  --ds-empty-icon-bg: var(--ds-empty-state-icon-bg);
+  --ds-empty-icon-border: var(--ds-empty-state-icon-border);
+  --ds-error-state-bg: linear-gradient(
+    145deg,
+    color-mix(in srgb, var(--ds-color-error) 7%, var(--ds-surface-card-bg)),
+    var(--ds-surface-panel-bg)
+  );
+  --ds-error-state-border: color-mix(
+    in srgb,
+    var(--ds-color-error) 28%,
+    var(--ds-surface-card-border)
+  );
+  --ds-error-state-icon-bg: color-mix(
+    in srgb,
+    var(--ds-color-error) 10%,
+    var(--ds-surface-card-bg)
+  );
+  --ds-chart-panel-bg: linear-gradient(
+    145deg,
+    var(--ds-surface-card-bg),
+    color-mix(in srgb, var(--ds-color-secondary) 4%, var(--ds-surface-panel-bg))
+  );
+  --ds-chart-card-bg: var(--ds-chart-panel-bg);
+  --ds-chart-plot-bg: color-mix(
+    in srgb,
+    var(--ds-surface-panel-bg) 78%,
+    var(--ds-surface-card-bg)
+  );
+  --ds-chart-accent: var(--ds-color-primary);
+  --ds-chart-grid: color-mix(
+    in srgb,
+    var(--ds-color-primary) 12%,
+    var(--ds-surface-card-border)
+  );
+  --ds-chart-axis: var(--ds-color-text-muted);
+  --ds-chart-grid-color: var(--ds-chart-grid);
+  --ds-chart-axis-color: var(--ds-chart-axis);
+  --ds-chart-tooltip-bg: var(--ds-surface-card-bg);
+  --ds-chart-tooltip-border: color-mix(
+    in srgb,
+    var(--ds-color-primary) 24%,
+    var(--ds-surface-card-border)
+  );
+  /* Theme-aware categorical fallbacks. Every color clears WCAG 2.2 non-text
+   * contrast (3:1) against the representative BitHire and The Management
+   * Miami card/plot surfaces. These are data colors, never status aliases.
+   * Tenant/DB-owned --ds-chart-category-* channels remain the outer override. */
+  --ds-chart-accessible-1: #2f6b9a;
+  --ds-chart-accessible-2: #a23b72;
+  --ds-chart-accessible-3: #1f7a55;
+  --ds-chart-accessible-4: #9a5700;
+  --ds-chart-accessible-5: #355cb5;
+  --ds-chart-accessible-6: #7a4595;
+  --ds-chart-accessible-7: #5f6368;
+  --ds-chart-accessible-8: #006d77;
+  --ds-chart-accessible-9: #9b4a5a;
+  --ds-chart-accessible-10: #4d6a00;
+  --ds-chart-default-1: #0f766e;
+  --ds-chart-default-2: #8c6d46;
+  --ds-chart-default-3: #b24d3a;
+  --ds-chart-default-4: #296f68;
+  --ds-chart-default-5: #735838;
+  --ds-chart-default-6: #963f31;
+  --ds-chart-default-7: #3d756f;
+  --ds-chart-default-8: #7d6140;
+  --ds-chart-default-9: #a04435;
+  --ds-chart-default-10: #5e5a52;
+  --ds-chart-monochrome-1: #2c5587;
+  --ds-chart-monochrome-2: #3a6fb0;
+  --ds-chart-monochrome-3: #21528b;
+  --ds-chart-monochrome-4: #4b78ad;
+  --ds-chart-monochrome-5: #315f97;
+  --ds-chart-monochrome-6: #103968;
+  --ds-chart-monochrome-7: #526f91;
+  --ds-chart-monochrome-8: #37699f;
+  --ds-chart-monochrome-9: #274b77;
+  --ds-chart-monochrome-10: #5a789a;
+  --ds-chart-pastel-1: #527aa3;
+  --ds-chart-pastel-2: #9b557a;
+  --ds-chart-pastel-3: #3d8065;
+  --ds-chart-pastel-4: #9a652b;
+  --ds-chart-pastel-5: #5c6fb0;
+  --ds-chart-pastel-6: #80628f;
+  --ds-chart-pastel-7: #686868;
+  --ds-chart-pastel-8: #3b777c;
+  --ds-chart-pastel-9: #95606a;
+  --ds-chart-pastel-10: #62752e;
+  --ds-chart-vibrant-1: #006b63;
+  --ds-chart-vibrant-2: #a12b68;
+  --ds-chart-vibrant-3: #007a4d;
+  --ds-chart-vibrant-4: #a65000;
+  --ds-chart-vibrant-5: #244fc0;
+  --ds-chart-vibrant-6: #702a91;
+  --ds-chart-vibrant-7: #4e545b;
+  --ds-chart-vibrant-8: #00727b;
+  --ds-chart-vibrant-9: #a3364f;
+  --ds-chart-vibrant-10: #486900;
+  --ds-skeleton-bg: linear-gradient(
+    90deg,
+    var(--ds-surface-panel-bg) 25%,
+    color-mix(in srgb, var(--ds-color-primary) 8%, var(--ds-surface-card-bg))
+      50%,
+    var(--ds-surface-panel-bg) 75%
+  );
+  --ds-page-transition-duration: var(--ds-motion-reveal);
+  --ds-workflow-gap: calc(32px * var(--ds-rhythm-effective-scale, 1));
+  --ds-workflow-rail-width: 360px;
+
+  /* Command/AI home surfaces */
+  --ds-command-home-max-width: var(--ds-command-surface-max-width, 1120px);
+  --ds-command-home-gap: calc(var(--ds-spacing-4, 16px) * var(--ds-rhythm-effective-scale, 1));
+  --ds-command-home-panel-gap: calc(var(--ds-spacing-3, 14px) * var(--ds-rhythm-effective-scale, 1));
+  --ds-command-home-grid-line: var(
+    --ds-command-grid-line-soft,
+    var(
+      --ds-shell-command-grid-line-soft,
+      color-mix(in srgb, var(--ds-color-primary) 8%, transparent)
+    )
+  );
+  --ds-command-home-panel-border: color-mix(
+    in srgb,
+    var(--ds-color-primary) 20%,
+    var(--ds-color-border-secondary, var(--ds-color-border-primary))
+  );
+  --ds-command-home-panel-border-soft: color-mix(
+    in srgb,
+    var(--ds-command-home-panel-border) 68%,
+    var(--ds-surface-card-bg)
+  );
+  --ds-command-home-panel-shadow: var(
+    --ds-command-glow,
+    0 1px 2px color-mix(in srgb, var(--ds-color-text-primary) 5%, transparent),
+    0 16px 42px color-mix(in srgb, var(--ds-color-primary) 7%, transparent)
+  );
+  --ds-command-home-panel-bg: var(
+    --ds-premium-card-bg,
+    linear-gradient(
+      180deg,
+      var(--ds-surface-card-bg) 0%,
+      color-mix(
+          in srgb,
+          var(--ds-surface-panel-bg) 56%,
+          var(--ds-surface-card-bg)
+        )
+        100%
+    )
+  );
+  --ds-command-home-panel-bg-strong: linear-gradient(
+    180deg,
+    var(--ds-surface-card-bg) 0%,
+    color-mix(
+        in srgb,
+        var(--ds-surface-panel-bg) 32%,
+        var(--ds-surface-card-bg)
+      )
+      100%
+  );
+  --ds-command-home-compact-action-height: var(
+    --ds-command-action-height,
+    202px
+  );
+  --ds-command-home-console-min-height: var(
+    --ds-command-console-min-height,
+    calc(100vh - 108px)
+  );
+  /* `--ds-command-console-padding` is a consumer hook: a caller that names the
+     console padding has stated exact geometry, so only the DS fallback takes
+     rhythm -- per component, since a scale cannot apply to a shorthand. */
+  --ds-command-home-console-padding: var(--ds-command-console-padding, calc(clamp(20px, 3vw, 34px) * var(--ds-rhythm-effective-scale, 1)) calc(clamp(16px, 4vw, 56px) * var(--ds-rhythm-effective-scale, 1)) calc(24px * var(--ds-rhythm-effective-scale, 1)));
+  --ds-command-home-console-bg: repeating-linear-gradient(
+      90deg,
+      var(--ds-command-home-grid-line) 0 1px,
+      transparent 1px 30px
+    ),
+    repeating-linear-gradient(
+      0deg,
+      var(--ds-command-home-grid-line) 0 1px,
+      transparent 1px 30px
+    ),
+    var(--ds-workspace-shell-overlay, transparent),
+    linear-gradient(
+      180deg,
+      color-mix(
+          in srgb,
+          var(--ds-surface-card-bg) 96%,
+          var(--ds-color-primary) 4%
+        )
+        0%,
+      color-mix(
+          in srgb,
+          var(--ds-surface-panel-bg) 72%,
+          var(--ds-surface-card-bg)
+        )
+        100%
+    );
+  --ds-command-home-surface-bg: repeating-linear-gradient(
+      90deg,
+      var(--ds-command-home-grid-line) 0 1px,
+      transparent 1px 26px
+    ),
+    repeating-linear-gradient(
+      0deg,
+      var(--ds-command-home-grid-line) 0 1px,
+      transparent 1px 26px
+    ),
+    var(
+      --ds-command-rail-bg,
+      linear-gradient(
+        180deg,
+        var(--ds-surface-card-bg) 0%,
+        color-mix(
+            in srgb,
+            var(--ds-surface-panel-bg) 58%,
+            var(--ds-surface-card-bg)
+          )
+          100%
+      )
+    );
+  --ds-command-home-hero-bg: repeating-linear-gradient(
+      90deg,
+      var(--ds-command-home-grid-line) 0 1px,
+      transparent 1px 28px
+    ),
+    repeating-linear-gradient(
+      0deg,
+      var(--ds-command-home-grid-line) 0 1px,
+      transparent 1px 28px
+    ),
+    var(
+      --ds-premium-card-bg,
+      linear-gradient(
+        180deg,
+        var(--ds-surface-card-bg) 0%,
+        color-mix(
+            in srgb,
+            var(--ds-surface-panel-bg) 50%,
+            var(--ds-surface-card-bg)
+          )
+          100%
+      )
+    );
+  --ds-command-home-icon-bg: var(
+    --ds-surface-icon-bg,
+    color-mix(in srgb, var(--ds-color-primary) 9%, var(--ds-surface-card-bg))
+  );
+  --ds-command-home-icon-border: var(
+    --ds-surface-icon-border,
+    color-mix(
+      in srgb,
+      var(--ds-color-primary) 24%,
+      var(--ds-color-border-primary)
+    )
+  );
+  --ds-command-home-control-bg: var(
+    --ds-toolbar-control-bg,
+    var(--ds-button-default-bg, var(--ds-surface-card-bg))
+  );
+  --ds-command-home-control-border: var(
+    --ds-toolbar-control-border,
+    var(--ds-button-default-border, var(--ds-color-border-primary))
+  );
+  --ds-command-home-control-hover-bg: var(
+    --ds-button-default-bg-hover,
+    color-mix(in srgb, var(--ds-color-primary) 6%, var(--ds-surface-card-bg))
+  );
+  --ds-command-home-control-hover-border: var(
+    --ds-button-secondary-border,
+    var(--ds-color-border-focus)
+  );
+  --ds-command-home-card-tone: var(--ds-color-primary);
+  --ds-command-home-card-bg: linear-gradient(
+      90deg,
+      color-mix(in srgb, var(--ds-command-home-card-tone) 6%, transparent) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--ds-command-home-card-tone) 4%, transparent) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      180deg,
+      var(--ds-surface-card-bg),
+      var(--ds-surface-panel-bg)
+    );
+  --ds-command-home-card-shadow: var(
+    --ds-surface-card-shadow,
+    var(
+      --ds-card-shadow,
+      0 1px 2px color-mix(in srgb, var(--ds-color-text-primary) 5%, transparent)
+    )
+  );
+  --ds-command-home-card-shadow-hover: var(
+    --ds-surface-card-shadow-hover,
+    var(
+      --ds-card-shadow-hover,
+      0 2px 6px color-mix(in srgb, var(--ds-color-text-primary) 8%, transparent)
+    )
+  );
+  --ds-command-home-meter-bg: var(
+    --ds-meter-track,
+    color-mix(in srgb, var(--ds-color-border-primary) 72%, transparent)
+  );
+  --ds-command-home-meter-fill: var(
+    --ds-meter-fill,
+    linear-gradient(90deg, var(--ds-color-primary), var(--ds-color-success))
+  );
+}
+
+:where(:root, [data-ds-root]):is([data-theme="dark"], .dark) {
+  --ds-chart-accessible-1: #7db7e8;
+  --ds-chart-accessible-2: #f08cb7;
+  --ds-chart-accessible-3: #62d2a2;
+  --ds-chart-accessible-4: #f3b766;
+  --ds-chart-accessible-5: #8faeff;
+  --ds-chart-accessible-6: #c59add;
+  --ds-chart-accessible-7: #c5c7c9;
+  --ds-chart-accessible-8: #65cdd5;
+  --ds-chart-accessible-9: #e59aa8;
+  --ds-chart-accessible-10: #b7d86a;
+  --ds-chart-default-1: #65cfc1;
+  --ds-chart-default-2: #d5b58a;
+  --ds-chart-default-3: #f08a74;
+  --ds-chart-default-4: #8addd2;
+  --ds-chart-default-5: #e2c49b;
+  --ds-chart-default-6: #f6a18f;
+  --ds-chart-default-7: #52b8ac;
+  --ds-chart-default-8: #c9a575;
+  --ds-chart-default-9: #e77a64;
+  --ds-chart-default-10: #beb8ad;
+  --ds-chart-monochrome-1: #6bb5f5;
+  --ds-chart-monochrome-2: #8cc8fa;
+  --ds-chart-monochrome-3: #3b9af0;
+  --ds-chart-monochrome-4: #a0d0fa;
+  --ds-chart-monochrome-5: #5aaaf2;
+  --ds-chart-monochrome-6: #b7dafb;
+  --ds-chart-monochrome-7: #72b9f4;
+  --ds-chart-monochrome-8: #93c9f7;
+  --ds-chart-monochrome-9: #4d9fe8;
+  --ds-chart-monochrome-10: #c4e1fc;
+  --ds-chart-pastel-1: #94bfe3;
+  --ds-chart-pastel-2: #e7a7c2;
+  --ds-chart-pastel-3: #8bd0b1;
+  --ds-chart-pastel-4: #e5be87;
+  --ds-chart-pastel-5: #aabbf0;
+  --ds-chart-pastel-6: #c5aad2;
+  --ds-chart-pastel-7: #c9c9c9;
+  --ds-chart-pastel-8: #8dc9cd;
+  --ds-chart-pastel-9: #d5a8b0;
+  --ds-chart-pastel-10: #bed28b;
+  --ds-chart-vibrant-1: #55dccb;
+  --ds-chart-vibrant-2: #ff73b0;
+  --ds-chart-vibrant-3: #4de09e;
+  --ds-chart-vibrant-4: #ffb44d;
+  --ds-chart-vibrant-5: #7f9fff;
+  --ds-chart-vibrant-6: #d38bf1;
+  --ds-chart-vibrant-7: #d1d5db;
+  --ds-chart-vibrant-8: #45d5e1;
+  --ds-chart-vibrant-9: #ff8194;
+  --ds-chart-vibrant-10: #b5e34b;
+}
+
+@keyframes ds-surface-enter {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes ds-meter-sweep {
+  from {
+    transform: translateX(-100%);
+  }
+
+  to {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes ds-command-home-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+:where(.ds-workspace-frame) {
+  position: relative;
+  isolation: isolate;
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
+  border-radius: var(--ds-radius-md);
+  color: var(--ds-color-text-primary);
+  font-family: var(--ds-font-family-base);
+  animation: ds-surface-enter var(--ds-motion-reveal)
+    var(--ds-motion-ease-enter) both;
+}
+
+:where(.ds-workspace-frame--list) {
+  --ds-workspace-shell-bg: linear-gradient(
+    180deg,
+    var(--ds-surface-card-bg) 0%,
+    var(--ds-surface-canvas, var(--ds-surface-panel-bg)) 50%,
+    color-mix(in srgb, var(--ds-color-primary) 4%, var(--ds-surface-panel-bg))
+      100%
+  );
+}
+
+:where(.ds-workspace-frame--detail) {
+  --ds-workspace-shell-overlay: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--ds-color-primary) 5.5%, transparent) 0%,
+    transparent 44%,
+    color-mix(
+        in srgb,
+        var(--ds-color-secondary, var(--ds-color-primary)) 7%,
+        transparent
+      )
+      100%
+  );
+}
+
+:where(.ds-workspace-frame--form) {
+  overflow: visible;
+  --ds-workspace-shell-bg: linear-gradient(
+    180deg,
+    var(--ds-surface-card-bg) 0%,
+    var(--ds-surface-canvas, var(--ds-surface-panel-bg)) 46%,
+    color-mix(in srgb, var(--ds-color-primary) 5%, var(--ds-surface-panel-bg))
+      100%
+  );
+}
+
+:where(.ds-workspace-frame)::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+:where(.ds-workspace-frame__inner) {
+  position: relative;
+  z-index: 1;
+}
+
+:where(.ds-workspace-frame) > :not(:where(.ds-workspace-frame__inner)) {
+  position: relative;
+  z-index: 1;
+}
+
+:where(.ds-workspace-frame--loading) {
+  min-height: min(720px, calc(100vh - 64px));
+}
+
+:where(.ds-workspace-grid) {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(
+      280px,
+      var(--ds-workflow-rail-width, 360px)
+    );
+  gap: clamp(20px, 2.2vw, 32px);
+  width: 100%;
+}
+
+:where(.ds-workspace-grid__main, .ds-workspace-grid__rail) {
+  min-width: 0;
+}
+
+:where(.ds-command-grid) {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: var(--ds-command-grid-opacity, 0.18);
+}
+
+:where(
+    .ds-surface-hero,
+    .ds-surface-card,
+    .ds-surface-rail-card,
+    .ds-surface-table-card,
+    .ds-rich-card,
+    .ds-metric-card,
+    .ds-stat-card
+  ) {
+  color: var(--ds-surface-card-color);
+}
+
+:where(.ds-surface-panel) {
+  color: var(--ds-surface-panel-color);
+}
+
+:where(.ds-surface-control-row) {
+  color: var(--ds-surface-control-color);
+}
+
+:where(.ds-surface-hero) {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--ds-radius-md);
+}
+
+:where(.ds-surface-card, .ds-surface-rail-card) {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  border-radius: var(--ds-radius-md);
+  animation: ds-surface-enter var(--ds-motion-reveal)
+    var(--ds-motion-ease-enter) both;
+  transition: var(--ds-premium-card-transition),
+    filter var(--ds-motion-feedback) var(--ds-motion-ease-enter);
+}
+
+:where(.ds-surface-card, .ds-surface-rail-card)::before,
+:where(.ds-surface-table-card)::before,
+:where(.ds-rich-card)::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.28;
+  mask-image: linear-gradient(
+    180deg,
+    var(--ds-color-text-primary),
+    transparent 82%
+  );
+  transition: opacity var(--ds-motion-feedback) var(--ds-motion-ease-enter);
+}
+
+:where(.ds-surface-card, .ds-surface-rail-card)::after,
+:where(.ds-surface-table-card)::after,
+:where(.ds-rich-card)::after {
+  content: none;
+}
+
+:where(
+    .ds-surface-card,
+    .ds-surface-rail-card,
+    .ds-surface-table-card,
+    .ds-rich-card
+  )
+  > * {
+  position: relative;
+  z-index: 2;
+}
+
+:where(.ds-surface-card, .ds-surface-rail-card):is(
+    a,
+    button,
+    [role="button"],
+    [data-interactive="true"]
+  ):hover {
+  transform: var(--ds-premium-card-hover-transform, translateY(-1px));
+  filter: saturate(1.01);
+}
+
+:where(.ds-surface-card, .ds-surface-rail-card):is(
+    a,
+    button,
+    [role="button"],
+    [data-interactive="true"]
+  ):hover::before {
+  opacity: 0.42;
+}
+
+:where(.ds-surface-card, .ds-surface-rail-card):is(
+    a,
+    button,
+    [role="button"],
+    [data-interactive="true"]
+  ):active {
+  transform: translateY(0);
+  filter: saturate(1);
+}
+
+:where(.ds-surface-card, .ds-surface-rail-card):is(
+    [aria-disabled="true"],
+    [data-disabled="true"]
+  ) {
+  pointer-events: none;
+  filter: saturate(0.72);
+}
+
+:where(.ds-surface-panel) {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  border-radius: var(--ds-radius-sm);
+  transition: border-color var(--ds-motion-feedback)
+      var(--ds-motion-ease-enter),
+    background var(--ds-motion-feedback) var(--ds-motion-ease-enter),
+    box-shadow var(--ds-motion-feedback) var(--ds-motion-ease-enter);
+}
+
+:where(.ds-surface-panel)::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.16;
+  mask-image: linear-gradient(
+    180deg,
+    var(--ds-color-text-primary),
+    transparent 76%
+  );
+}
+
+:where(.ds-surface-panel) > * {
+  position: relative;
+  z-index: 1;
+}
+
+:where(.ds-surface-control-row) {
+  border-radius: var(--ds-radius-sm);
+}
+
+:where(.ds-surface-table-card) {
+  position: relative;
+  isolation: isolate;
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
+  border-radius: var(--ds-radius-md);
+  transition: border-color var(--ds-motion-feedback)
+      var(--ds-motion-ease-enter),
+    box-shadow var(--ds-motion-feedback) var(--ds-motion-ease-enter),
+    filter var(--ds-motion-feedback) var(--ds-motion-ease-enter);
+}
+
+:where(:where(.ds-surface-table-card), .ds-collection-enhanced)
+  :where(.ds-engine-modern) {
+  --ds-table-bg: var(--ds-surface-card-bg);
+  --ds-table-border: var(--ds-color-border);
+  --ds-table-row-bg: var(--ds-surface-card-bg);
+  --ds-table-cell-color: var(--ds-color-text-primary);
+  min-width: 0;
+}
+
+:where(.ds-rich-card) {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  color: var(--ds-color-text-primary);
+  border-radius: var(--ds-radius-md);
+  animation: ds-surface-enter var(--ds-motion-reveal)
+    var(--ds-motion-ease-enter) both;
+  transition: border-color var(--ds-motion-feedback)
+      var(--ds-motion-ease-enter),
+    box-shadow var(--ds-motion-feedback) var(--ds-motion-ease-enter),
+    transform var(--ds-motion-feedback) var(--ds-motion-ease-enter),
+    filter var(--ds-motion-feedback) var(--ds-motion-ease-enter);
+}
+
+:where(.ds-rich-card--interactive):hover {
+  transform: translateY(-1px);
+  filter: saturate(1.015);
+}
+
+:where(
+    .ds-rich-card--interactive:hover,
+    .ds-rich-card--interactive:focus-within,
+    .ds-rich-card--selected
+  )::before {
+  opacity: 0.44;
+}
+
+:where(.ds-rich-card__header) {
+  position: relative;
+  overflow: hidden;
+}
+
+:where(.ds-rich-card__icon) {
+  border-radius: var(--ds-radius-md);
+  color: var(--ds-color-primary);
+  transition: border-color var(--ds-motion-feedback)
+      var(--ds-motion-ease-enter),
+    transform var(--ds-motion-feedback) var(--ds-motion-ease-enter);
+}
+
+:where(
+    .ds-rich-card--interactive:hover,
+    .ds-rich-card--interactive:focus-within
+  )
+  :where(.ds-rich-card__icon) {
+  transform: translateY(-1px);
+}
+
+:where(.ds-rich-card__label) {
+  color: var(--ds-color-text-muted);
+  font-family: var(--ds-font-family-mono);
+  font-weight: 760;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+:where(.ds-metric-card-link) {
+  border-radius: var(--ds-radius-md);
+  color: inherit;
+}
+
+:where(.ds-metric-card-link):focus-visible {
+  outline: none;
+}
+
+:where(.ds-metric-card, .ds-stat-card) {
+  position: relative;
+  isolation: isolate;
+  min-width: 0;
+  max-width: 100%;
+  color: var(--ds-color-text-primary);
+  container-type: inline-size;
+  --ds-signal-card-bg: linear-gradient(
+    145deg,
+    color-mix(
+        in srgb,
+        var(--ds-surface-card-bg) 94%,
+        var(--ds-signal-card-soft, transparent)
+      )
+      0%,
+    color-mix(
+        in srgb,
+        var(--ds-surface-panel-bg) 82%,
+        var(--ds-signal-card-soft, transparent)
+      )
+      58%,
+    color-mix(
+        in srgb,
+        var(--ds-surface-card-bg) 88%,
+        var(--ds-signal-card-accent, var(--ds-color-primary)) 12%
+      )
+      100%
+  );
+  transition: max-height var(--ds-motion-disclosure) var(--ds-motion-ease-move),
+    opacity var(--ds-motion-disclosure) var(--ds-motion-ease-enter),
+    padding var(--ds-motion-disclosure) var(--ds-motion-ease-move),
+    border-color var(--ds-motion-feedback) var(--ds-motion-ease-enter),
+    box-shadow var(--ds-motion-feedback) var(--ds-motion-ease-enter),
+    transform var(--ds-motion-feedback) var(--ds-motion-ease-enter),
+    filter var(--ds-motion-feedback) var(--ds-motion-ease-enter);
+}
+
+:where(.ds-metric-card--hidden) {
+  overflow: hidden;
+}
+
+:where(.ds-metric-card):where(.ds-rich-card)::before {
+  opacity: 0.34;
+}
+
+:where(.ds-metric-card)
+  > :not(:where(.ds-command-grid)):not(:where(.ds-metric-card__halo)) {
+  position: relative;
+  z-index: 1;
+}
+
+:where(.ds-metric-card__halo) {
+  position: absolute;
+  right: -54px;
+  bottom: -48px;
+  z-index: 0;
+  width: 132px;
+  height: 132px;
+  pointer-events: none;
+  opacity: 0.3;
+}
+
+:where(.ds-metric-card__header) {
+  min-height: 38px;
+  flex-shrink: 0;
+}
+
+:where(.ds-metric-card__title-row, .ds-metric-card__body-row) {
+  min-width: 0;
+}
+
+:where(.ds-metric-card__status-dot) {
+  flex: 0 0 auto;
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+}
+
+:where(.ds-metric-card__body) {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-width: 0;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 7px;
+}
+
+:where(.ds-metric-card__label) {
+  overflow: hidden;
+  color: color-mix(
+    in srgb,
+    var(--ds-color-text-primary) 78%,
+    var(--ds-color-text-muted)
+  );
+  font-family: var(--ds-font-family-mono);
+  font-size: 11px;
+  font-weight: 820;
+  letter-spacing: 0;
+  line-height: 1.15;
+  text-overflow: ellipsis;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+:where(.ds-metric-card__subtitle) {
+  overflow: hidden;
+  color: var(--ds-color-text-muted);
+  font-weight: 620;
+  line-height: 1.2;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+:where(.ds-metric-card__icon) {
+  width: 38px;
+  height: 38px;
+  border-radius: var(--ds-radius-md);
+  color: var(--ds-color-primary);
+}
+
+:where(.ds-metric-card__value, .ds-stat-card__value) {
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+  color: var(--ds-color-text-primary);
+  font-family: var(--ds-font-family-display);
+  font-size: var(--ds-metric-card-value-size, var(--ds-font-size-fluid-4xl));
+  font-weight: 840;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.05;
+  letter-spacing: 0;
+  overflow-wrap: anywhere;
+  text-wrap: balance;
+}
+
+:where(.ds-metric-card__operational) {
+  display: -webkit-box;
+  max-width: 100%;
+  overflow: hidden;
+  color: var(--ds-color-text-muted);
+  font-weight: 620;
+  line-height: 1.45;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+:where(.ds-metric-card__trend) {
+  flex-shrink: 0;
+  min-height: 26px;
+  max-width: 45%;
+  overflow: hidden;
+  border-radius: 999px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+:where(.ds-metric-card__trend) > span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+:where(.ds-metric-card__footer) {
+  flex-shrink: 0;
+  min-height: 44px;
+}
+
+:where(.ds-metric-card__progress-label, .ds-metric-card__progress-value) {
+  font-family: var(--ds-font-family-mono);
+  font-weight: 760;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0;
+  line-height: 1;
+}
+
+:where(.ds-metric-card__progress-label) {
+  color: var(--ds-color-text-muted);
+}
+
+:where(.ds-metric-card__progress-value) {
+  color: var(--ds-signal-card-accent, var(--ds-color-primary));
+}
+
+:where(.ds-metric-card__progress) {
+  position: relative;
+  height: var(--ds-metric-card-meter-height, 6px);
+  overflow: hidden;
+  border-radius: 999px;
+}
+
+:where(.ds-metric-card__progress-bar) {
+  position: relative;
+  overflow: hidden;
+  height: 100%;
+  border-radius: inherit;
+  transition: width var(--ds-motion-rearrange) var(--ds-motion-ease-move);
+}
+
+:where(.ds-metric-card__progress-bar)::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  animation: ds-meter-sweep var(--ds-motion-attention)
+    var(--ds-motion-ease-enter) var(--ds-motion-feedback) 1;
+}
+
+:where(.ds-metric-card__status-row) {
+  min-width: 0;
+}
+
+:where(.ds-metric-card__status-row) > * {
+  min-width: 0;
+}
+
+:where(.ds-metric-card__status-text, .ds-metric-card__status-tag) {
+  overflow: hidden;
+  font-family: var(--ds-font-family-mono);
+  font-weight: 760;
+  letter-spacing: 0;
+  line-height: 1.2;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+:where(.ds-metric-card__status-text) {
+  color: color-mix(
+    in srgb,
+    var(--ds-color-text-primary) 72%,
+    var(--ds-color-text-muted)
+  );
+}
+
+:where(.ds-metric-card__status-tag) {
+  flex-shrink: 0;
+  max-width: 44%;
+  border-radius: 999px;
+  color: var(--ds-signal-card-accent, var(--ds-color-primary));
+}
+
+:where(.ds-metric-card--interactive):hover {
+  transform: translateY(-2px);
+  filter: saturate(1.015);
+}
+
+:where(.ds-metric-card-link):focus-visible :where(.ds-metric-card) {
+  transform: translateY(-1px);
+}
+
+:is(.ds-command-home-shell) {
+  display: grid;
+  gap: var(--ds-command-home-gap);
+  min-width: 0;
+  width: 100%;
+  color: var(--ds-color-text-primary);
+}
+
+:is(.ds-command-home-shell *) {
+  box-sizing: border-box;
+}
+
+:is(.ds-command-home-shell a) {
+  color: inherit;
+  text-decoration: none;
+}
+
+:is(.ds-command-home-console) {
+  display: grid;
+  gap: 20px;
+  justify-self: center;
+  min-height: var(--ds-command-home-console-min-height);
+  min-width: 0;
+  width: min(100%, var(--ds-command-home-max-width));
+  max-width: var(--ds-command-home-max-width);
+  overflow: hidden;
+  border-radius: var(--ds-radius-lg, 12px);
+}
+
+:is(.ds-command-home-console > *) {
+  min-width: 0;
+}
+
+:is(.ds-command-home-hero) {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 18px;
+  width: 100%;
+  min-width: 0;
+  border-radius: var(--ds-radius-lg, 12px);
+}
+
+:is(
+    .ds-command-home-icon,
+    .ds-command-home-hero__mark,
+    .ds-command-home-message-avatar,
+    .ds-command-home-capability__icon,
+    .ds-command-home-prompt-row__icon
+  ) {
+  display: grid;
+  flex: 0 0 auto;
+  place-items: center;
+  color: var(--ds-color-primary);
+}
+
+:is(.ds-command-home-hero__mark) {
+  width: 42px;
+  height: 42px;
+  border-radius: var(--ds-radius-sm, 6px);
+}
+
+:is(.ds-command-home-hero__status) {
+  justify-content: flex-end;
+  justify-self: end;
+  min-width: 0;
+  max-width: min(100%, 430px);
+}
+
+:is(.ds-command-home-hero__pill) {
+  min-height: 30px;
+  border-radius: var(--ds-radius-sm, 6px);
+  color: var(--ds-color-text-secondary);
+  font-size: 0.75rem;
+  font-weight: 760;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+:is(
+    .ds-command-home-eyebrow,
+    .ds-command-home-section-title,
+    .ds-command-home-launchpad-card__eyebrow,
+    .ds-launchpad-card__eyebrow,
+    .ds-command-home-next-move__action
+  ) {
+  color: var(--ds-color-primary);
+  font-family: var(--ds-font-family-mono);
+  font-weight: 820;
+  letter-spacing: 0;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+:is(.ds-command-home-eyebrow, .ds-command-home-section-title) {
+  font-size: 0.75rem;
+}
+
+:is(.ds-command-home-title) {
+  color: var(--ds-color-text-primary);
+  font-family: var(
+    --ds-font-family-display,
+    var(--ds-font-family-heading, var(--ds-font-family-base))
+  );
+  font-size: var(--ds-command-home-title-size, 2rem);
+  font-weight: 880;
+  letter-spacing: 0;
+  line-height: 1.08;
+  overflow-wrap: anywhere;
+}
+
+:is(.ds-command-home-lede) {
+  max-width: 720px;
+  color: var(--ds-color-text-secondary);
+  font-size: 0.90625rem;
+  line-height: 1.45;
+}
+
+:is(.ds-command-home-subtle) {
+  min-width: 0;
+  color: var(--ds-color-text-secondary);
+  font-size: 0.8125rem;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+
+:is(.ds-command-home-status-dot) {
+  width: 8px;
+  height: 8px;
+  flex: 0 0 auto;
+  border-radius: 999px;
+}
+
+:is(.ds-command-home-capability__icon, .ds-command-home-prompt-row__icon) {
+  width: 34px;
+  height: 34px;
+}
+
+:is(.ds-command-home-error) {
+  justify-self: center;
+  width: min(100%, var(--ds-command-home-max-width));
+  border-radius: var(--ds-radius-sm, 6px);
+  color: var(--ds-color-text-primary);
+  font-size: 0.8125rem;
+}
+
+:is(.ds-command-home-launchpad, .ds-launchpad) {
+  display: grid;
+  gap: var(--ds-command-home-panel-gap);
+  width: 100%;
+  min-width: 0;
+  border-radius: var(--ds-radius-lg, 12px);
+}
+
+:is(.ds-command-home-launchpad__header, .ds-launchpad__header) {
+  width: 100%;
+  min-width: 0;
+}
+
+:is(.ds-command-home-launchpad__title, .ds-launchpad__title) {
+  color: var(--ds-color-text-primary);
+  font-size: 1.05rem;
+  font-weight: 840;
+  line-height: 1.2;
+}
+
+:is(.ds-command-home-launchpad__grid, .ds-launchpad__grid) {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+  min-width: 0;
+}
+
+:is(.ds-command-home-launchpad-card, .ds-launchpad-card) {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 10px;
+  min-width: 0;
+  border-radius: var(--ds-radius-md, 8px);
+  transition: border-color var(--ds-motion-feedback)
+      var(--ds-motion-ease-enter),
+    box-shadow var(--ds-motion-feedback) var(--ds-motion-ease-enter),
+    transform var(--ds-motion-feedback) var(--ds-motion-ease-enter);
+}
+
+:is(.ds-command-home-launchpad-card, .ds-launchpad-card):hover {
+  transform: translateY(-1px);
+}
+
+:is(.ds-command-home-launchpad-card__eyebrow, .ds-launchpad-card__eyebrow) {
+  font-size: 0.6875rem;
+}
+
+:is(.ds-command-home-launchpad-card__title, .ds-launchpad-card__title) {
+  color: var(--ds-color-text-primary);
+  font-size: 0.9375rem;
+  font-weight: 820;
+  line-height: 1.2;
+}
+
+:is(.ds-command-home-launchpad-card__copy, .ds-launchpad-card__copy) {
+  color: var(--ds-color-text-secondary);
+  font-size: 0.78125rem;
+  line-height: 1.45;
+}
+
+:is(.ds-command-home-launchpad-card__arrow, .ds-launchpad-card__arrow) {
+  color: var(--ds-color-text-muted);
+}
+
+:is(
+    .ds-command-home-launchpad-card[data-tone="green"]
+      .ds-command-home-capability__icon,
+    .ds-launchpad-card[data-tone="green"] .ds-command-home-capability__icon
+  ),
+:is(
+    .ds-command-home-next-move[data-tone="green"]
+      .ds-command-home-prompt-row__icon
+  ) {
+  color: var(--ds-color-success);
+}
+
+:is(
+    .ds-command-home-launchpad-card[data-tone="teal"]
+      .ds-command-home-capability__icon,
+    .ds-launchpad-card[data-tone="teal"] .ds-command-home-capability__icon
+  ),
+:is(
+    .ds-command-home-next-move[data-tone="teal"]
+      .ds-command-home-prompt-row__icon
+  ) {
+  color: var(--ds-color-success);
+}
+
+:is(
+    .ds-command-home-launchpad-card[data-tone="amber"]
+      .ds-command-home-capability__icon,
+    .ds-launchpad-card[data-tone="amber"] .ds-command-home-capability__icon
+  ) {
+  color: var(--ds-color-warning);
+}
+
+:is(.ds-command-home-command-grid) {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(300px, 360px);
+  align-items: start;
+  gap: var(--ds-command-home-gap);
+  width: 100%;
+  min-width: 0;
+}
+
+:is(.ds-command-home-chat-panel, .ds-ai-chat-panel, .ds-command-home-rail) {
+  min-width: 0;
+}
+
+:is(.ds-command-home-chat-panel, .ds-ai-chat-panel) {
+  display: grid;
+  gap: 14px;
+  border-radius: var(--ds-radius-lg, 12px);
+}
+
+:is(.ds-command-home-rail) {
+  display: grid;
+  gap: 14px;
+  align-content: start;
+  width: 100%;
+  max-width: 100%;
+}
+
+:is(.ds-command-home-brief) {
+  display: grid;
+  place-items: center;
+  min-height: 178px;
+  border-radius: var(--ds-radius-lg, 12px);
+  text-align: center;
+}
+
+:is(.ds-command-home-brief__icon) {
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  border-radius: var(--ds-radius-md, 8px);
+  color: var(--ds-color-primary);
+}
+
+:is(.ds-command-home-brief__title) {
+  color: var(--ds-color-text-primary);
+  font-size: 1rem;
+  font-weight: 820;
+  line-height: 1.25;
+}
+
+:is(.ds-command-home-brief__copy) {
+  max-width: 520px;
+  color: var(--ds-color-text-secondary);
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+:is(.ds-command-home-chat-stream, .ds-ai-chat-stream) {
+  width: 100%;
+  min-height: 240px;
+  max-height: 380px;
+  min-width: 0;
+  border-radius: var(--ds-radius-md, 8px);
+  overflow: auto;
+}
+
+:is(.ds-command-home-message-row, .ds-ai-chat-message-row) {
+  width: 100%;
+  min-width: 0;
+}
+
+:is(.ds-command-home-message-avatar, .ds-ai-chat-message-avatar) {
+  width: 30px;
+  height: 30px;
+  border-radius: var(--ds-radius-sm, 6px);
+}
+
+:is(.ds-command-home-message, .ds-ai-chat-message) {
+  max-width: min(78%, 720px);
+  min-width: 0;
+  border-radius: var(--ds-radius-md, 8px);
+}
+
+:is(.ds-command-home-message--user, .ds-ai-chat-message--user) {
+  color: var(--ds-color-text-on-primary, #fff);
+}
+
+:is(.ds-command-home-message__text, .ds-ai-chat-message__text) {
+  color: inherit;
+  font-size: 0.875rem;
+  line-height: 1.55;
+  white-space: pre-wrap;
+}
+
+:is(.ds-command-home-tool-call, .ds-ai-chat-tool-call) {
+  width: fit-content;
+  max-width: 100%;
+  border-radius: var(--ds-radius-sm, 6px);
+}
+
+:is(
+    .ds-command-home-tool-call__text,
+    .ds-ai-chat-tool-call__text,
+    .ds-command-home-message__error,
+    .ds-ai-chat-message__error
+  ) {
+  font-size: 0.75rem;
+  line-height: 1.35;
+}
+
+:is(.ds-command-home-message__error, .ds-ai-chat-message__error) {
+  color: var(--ds-color-danger, var(--ds-color-error));
+}
+
+:is(.ds-command-home-prompt-area, .ds-ai-prompt-area) {
+  width: 100%;
+  min-width: 0;
+}
+
+:is(.ds-command-home-prompts, .ds-ai-prompts) {
+  display: grid;
+  gap: 8px;
+}
+
+:is(.ds-command-home-prompt-row, .ds-ai-prompt-row) {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-width: 0;
+  width: 100%;
+  color: var(--ds-color-text-primary);
+  cursor: pointer;
+  text-align: start;
+  transition: border-color var(--ds-motion-feedback)
+      var(--ds-motion-ease-enter),
+    box-shadow var(--ds-motion-feedback) var(--ds-motion-ease-enter),
+    transform var(--ds-motion-feedback) var(--ds-motion-ease-enter);
+}
+
+:is(.ds-command-home-prompt-row, .ds-ai-prompt-row):hover {
+  transform: translateY(-1px);
+}
+
+:is(.ds-command-home-prompt-row, .ds-ai-prompt-row):disabled {
+  cursor: wait;
+  opacity: 0.72;
+}
+
+:is(.ds-command-home-prompt-row__label, .ds-ai-prompt-row__label) {
+  color: var(--ds-color-text-primary);
+  font-size: 0.90625rem;
+  font-weight: 650;
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+}
+
+:is(.ds-command-home-prompt-row__intent, .ds-ai-prompt-row__intent) {
+  color: var(--ds-color-text-secondary);
+  font-size: 0.75rem;
+  line-height: 1.25;
+}
+
+:is(.ds-command-home-composer, .ds-ai-composer) {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  gap: 10px;
+  width: 100%;
+  height: var(--ds-command-home-compact-action-height);
+  min-width: 0;
+  border-radius: var(--ds-radius-lg, 12px);
+}
+
+:is(
+    .ds-command-home-composer__toolbar,
+    .ds-command-home-composer__footer,
+    .ds-ai-composer__toolbar,
+    .ds-ai-composer__footer
+  ) {
+  min-width: 0;
+}
+
+:is(.ds-command-home-composer__input, .ds-ai-composer__input) {
+  display: grid;
+  min-width: 0;
+  min-height: 0;
+}
+
+:is(.ds-command-home-composer, .ds-ai-composer) :is(textarea) {
+  height: 100% !important;
+  min-height: 0 !important;
+  max-height: none !important;
+  border-radius: var(--ds-radius-md, 8px) !important;
+  background: var(--ds-surface-card-bg) !important;
+}
+
+:is(
+    .ds-command-home-context-select,
+    .ds-ai-context-select,
+    .ds-command-home-icon-button,
+    .ds-ai-icon-button
+  ) {
+  color: var(--ds-color-text-secondary);
+  cursor: pointer;
+  font-family: inherit;
+  transition: border-color var(--ds-motion-feedback)
+      var(--ds-motion-ease-enter),
+    color var(--ds-motion-feedback) var(--ds-motion-ease-enter),
+    background var(--ds-motion-feedback) var(--ds-motion-ease-enter);
+}
+
+:is(.ds-command-home-context-select, .ds-ai-context-select) {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 32px;
+  font-size: 0.8125rem;
+  font-weight: 690;
+}
+
+:is(.ds-command-home-icon-button, .ds-ai-icon-button) {
+  display: inline-grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+}
+
+:is(
+    .ds-command-home-context-select,
+    .ds-ai-context-select,
+    .ds-command-home-icon-button,
+    .ds-ai-icon-button
+  ):hover {
+  color: var(--ds-color-primary);
+}
+
+:is(
+    .ds-command-home-context-select,
+    .ds-ai-context-select,
+    .ds-command-home-icon-button,
+    .ds-ai-icon-button
+  ):disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+:is(.ds-command-home-send, .ds-ai-send) {
+  min-width: 48px;
+}
+
+:is(.ds-command-home-live-pill, .ds-live-pill) {
+  min-width: 0;
+  color: var(--ds-color-success);
+  font-size: 0.75rem;
+  font-weight: 760;
+  white-space: nowrap;
+}
+
+:is(.ds-command-home-rail-card, .ds-rail-card) {
+  display: grid;
+  gap: 12px;
+  min-width: 0;
+  border-radius: var(--ds-radius-lg, 12px);
+}
+
+:is(.ds-command-home-rail-card__title, .ds-rail-card__title) {
+  color: var(--ds-color-text-primary);
+  font-size: 0.9375rem;
+  font-weight: 820;
+  line-height: 1.2;
+}
+
+:is(.ds-command-home-rail-card__copy, .ds-rail-card__copy) {
+  color: var(--ds-color-text-secondary);
+  font-size: 0.8125rem;
+  line-height: 1.45;
+}
+
+:is(.ds-command-home-rail-card__badge, .ds-rail-card__badge) {
+  border-radius: var(--ds-radius-sm, 6px);
+  color: var(--ds-color-success);
+  font-size: 0.75rem;
+  font-weight: 760;
+}
+
+:is(.ds-command-home-today__score) {
+  color: var(--ds-color-text-primary);
+  font-size: 2rem;
+  font-weight: 880;
+  line-height: 1;
+}
+
+:is(.ds-command-home-meter, .ds-meter) {
+  width: 100%;
+  height: 7px;
+  overflow: hidden;
+  border-radius: 999px;
+}
+
+:is(.ds-command-home-meter, .ds-meter) > span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+}
+
+:is(.ds-command-home-next-move) {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 10px;
+  min-width: 0;
+  border-radius: var(--ds-radius-md, 8px);
+  transition: border-color var(--ds-motion-feedback)
+      var(--ds-motion-ease-enter),
+    box-shadow var(--ds-motion-feedback) var(--ds-motion-ease-enter),
+    transform var(--ds-motion-feedback) var(--ds-motion-ease-enter);
+}
+
+:is(.ds-command-home-next-move):hover {
+  transform: translateY(-1px);
+}
+
+:is(.ds-command-home-next-move__title) {
+  color: var(--ds-color-text-primary);
+  font-size: 0.875rem;
+  font-weight: 800;
+  line-height: 1.25;
+}
+
+:is(.ds-command-home-next-move__copy) {
+  color: var(--ds-color-text-secondary);
+  font-size: 0.75rem;
+  line-height: 1.4;
+}
+
+:is(.ds-command-home-next-move__action) {
+  font-size: 0.6875rem;
+  font-weight: 840;
+}
+
+:is(.ds-command-home-search-card) {
+  height: var(--ds-command-home-compact-action-height);
+  min-height: var(--ds-command-home-compact-action-height);
+  align-content: stretch;
+  grid-template-rows: auto minmax(0, 1fr);
+}
+
+:is(.ds-command-home-search-list) {
+  display: grid;
+  grid-template-rows: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  min-height: 0;
+  height: 100%;
+}
+
+:is(.ds-command-home-search-lane) {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  min-width: 0;
+  min-height: 40px;
+  height: 100%;
+  border-radius: var(--ds-radius-md, 8px);
+  color: var(--ds-color-text-primary);
+  font-size: 0.875rem;
+  font-weight: 760;
+  transition: border-color var(--ds-motion-feedback)
+      var(--ds-motion-ease-enter),
+    box-shadow var(--ds-motion-feedback) var(--ds-motion-ease-enter),
+    transform var(--ds-motion-feedback) var(--ds-motion-ease-enter);
+}
+
+:is(.ds-command-home-search-lane):hover {
+  transform: translateY(-1px);
+}
+
+:is(.ds-command-home-footnote) {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  min-width: 0;
+  color: var(--ds-color-text-secondary);
+}
+
+:is(.ds-command-home-footnote__text, .ds-command-home-footnote__layer p) {
+  display: block;
+  min-width: 0;
+  max-width: 100%;
+  font-size: 0.75rem;
+  line-height: 1.45;
+  writing-mode: horizontal-tb;
+  overflow-wrap: normal;
+  word-break: normal;
+  white-space: normal;
+}
+
+:is(.ds-command-home-footnote__layer) {
+  display: flex;
+  align-items: center;
+  justify-self: end;
+  gap: 7px;
+  min-width: 0;
+  white-space: nowrap;
+}
+
+:is(.ds-command-home-footnote-dot) {
+  width: 7px;
+  height: 7px;
+  flex: 0 0 auto;
+  border-radius: 999px;
+}
+
+:is(.ds-command-home-arrow) {
+  color: var(--ds-color-text-muted);
+}
+
+:is(.ds-command-home-spin) {
+  animation: ds-command-home-spin calc(var(--ds-motion-attention) * 3) linear
+    infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :is(.ds-command-home-spin) {
+    animation: none;
+  }
+}
+
+@container ds-page (max-width: 980px) {
+  :is(.ds-command-home-launchpad__grid, .ds-launchpad__grid) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  :is(.ds-command-home-command-grid, .ds-workspace-grid) {
+    grid-template-columns: 1fr;
+  }
+
+  :is(
+      .ds-command-home-composer,
+      .ds-ai-composer,
+      .ds-command-home-search-card
+    ) {
+    height: auto;
+    min-height: var(--ds-command-home-compact-action-height);
+  }
+}
+
+@container ds-page (max-width: 640px) {
+  :is(.ds-command-home-hero) {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  :is(.ds-command-home-hero__status) {
+    justify-content: flex-start;
+  }
+
+  :is(.ds-command-home-console) {
+    min-height: auto;
+  }
+
+  :is(.ds-command-home-message, .ds-ai-chat-message) {
+    max-width: 100%;
+  }
+
+  :is(.ds-command-home-launchpad__grid, .ds-launchpad__grid) {
+    grid-template-columns: 1fr;
+  }
+
+  :is(.ds-command-home-launchpad-card, .ds-launchpad-card) {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+
+  :is(.ds-command-home-launchpad-card__arrow, .ds-launchpad-card__arrow) {
+    display: none;
+  }
+
+  :is(.ds-command-home-composer__footer, .ds-ai-composer__footer) {
+    align-items: stretch !important;
+    flex-direction: column;
+  }
+
+  :is(.ds-command-home-send, .ds-ai-send) {
+    width: 100%;
+  }
+}
+
+/*
+ * Command home runtime contract.
+ *
+ * These scoped selectors intentionally carry normal specificity so this DS-owned
+ * surface wins over the generic Box/Flex/Stack/Button primitives that apps use
+ * to compose it. The earlier pattern rules stay tokenized and reusable; this
+ * layer preserves the actual rendered contract after moving the Home styles
+ * out of app-local CSS.
+ */
+.ds-command-home-shell .ds-command-home-console {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 22px;
+  justify-self: center;
+  width: min(100%, var(--ds-command-home-max-width));
+  max-width: var(--ds-command-home-max-width);
+  min-width: 0;
+  min-height: var(--ds-command-home-console-min-height);
+  overflow: hidden;
+  border-radius: 12px;
+}
+
+.ds-command-home-shell .ds-command-home-hero,
+.ds-command-home-shell .ds-launchpad,
+.ds-command-home-shell .ds-command-home-rail-card,
+.ds-command-home-shell .ds-command-home-brief,
+.ds-command-home-shell .ds-ai-composer {
+  position: relative;
+  min-width: 0;
+  overflow: hidden;
+  border-radius: 10px;
+}
+
+.ds-command-home-shell .ds-command-home-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 18px;
+  width: 100%;
+}
+
+.ds-command-home-shell .ds-command-home-hero__status {
+  justify-content: flex-end;
+  justify-self: end;
+  max-width: min(100%, 430px);
+  min-width: 0;
+}
+
+.ds-command-home-shell .ds-command-home-hero__mark,
+.ds-command-home-shell .ds-command-home-capability__icon,
+.ds-command-home-shell .ds-command-home-prompt-row__icon,
+.ds-command-home-shell .ds-command-home-brief__icon,
+.ds-command-home-shell .ds-ai-chat-message-avatar {
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  color: var(--ds-color-primary);
+}
+
+.ds-command-home-shell .ds-command-home-hero__mark {
+  width: 42px;
+  height: 42px;
+}
+
+.ds-command-home-shell .ds-command-home-eyebrow,
+.ds-command-home-shell .ds-command-home-section-title,
+.ds-command-home-shell .ds-launchpad-card__eyebrow,
+.ds-command-home-shell .ds-command-home-next-move__action {
+  color: var(--ds-color-primary) !important;
+  font-family: var(--ds-font-family-mono) !important;
+  font-size: 0.6875rem !important;
+  font-weight: 820 !important;
+  letter-spacing: 0 !important;
+  line-height: 1.2 !important;
+  text-transform: uppercase !important;
+}
+
+.ds-command-home-shell .ds-command-home-title {
+  color: var(--ds-color-text-primary) !important;
+  font-size: var(--ds-command-home-title-size, 2rem) !important;
+  font-weight: 880 !important;
+  letter-spacing: 0 !important;
+  line-height: 1.08 !important;
+}
+
+.ds-command-home-shell .ds-command-home-lede,
+.ds-command-home-shell .ds-command-home-subtle {
+  color: var(--ds-color-text-secondary) !important;
+}
+
+.ds-command-home-shell .ds-launchpad .ds-command-home-section-title,
+.ds-command-home-shell .ds-ai-prompt-area .ds-command-home-section-title,
+.ds-command-home-shell
+  .ds-command-home-rail-card
+  .ds-command-home-section-title,
+.ds-command-home-shell .ds-launchpad-card__eyebrow {
+  color: var(--ds-color-text-muted) !important;
+}
+
+.ds-command-home-shell .ds-launchpad__title {
+  color: var(--ds-color-text-primary) !important;
+  font-size: 1rem !important;
+  font-weight: 840 !important;
+  letter-spacing: 0 !important;
+  line-height: 1.2 !important;
+}
+
+.ds-command-home-shell .ds-launchpad-card__title,
+.ds-command-home-shell .ds-rail-card__title,
+.ds-command-home-shell .ds-command-home-brief__title,
+.ds-command-home-shell .ds-command-home-next-move__title {
+  color: var(--ds-color-text-primary) !important;
+  font-weight: 820 !important;
+  letter-spacing: 0 !important;
+  line-height: 1.2 !important;
+}
+
+.ds-command-home-shell .ds-launchpad-card__title,
+.ds-command-home-shell .ds-command-home-next-move__title {
+  font-size: 0.875rem !important;
+}
+
+.ds-command-home-shell .ds-launchpad-card__copy,
+.ds-command-home-shell .ds-rail-card__copy,
+.ds-command-home-shell .ds-command-home-brief__copy,
+.ds-command-home-shell .ds-command-home-next-move__copy,
+.ds-command-home-shell .ds-ai-prompt-row__intent {
+  color: var(--ds-color-text-secondary) !important;
+  font-size: 0.78125rem !important;
+  line-height: 1.4 !important;
+}
+
+.ds-command-home-shell .ds-command-home-capability__icon,
+.ds-command-home-shell .ds-command-home-prompt-row__icon {
+  width: 34px;
+  height: 34px;
+}
+
+.ds-command-home-shell .ds-launchpad {
+  display: grid;
+  gap: var(--ds-command-home-panel-gap);
+  width: 100%;
+}
+
+.ds-command-home-shell .ds-launchpad__header {
+  width: 100%;
+  min-width: 0;
+}
+
+.ds-command-home-shell .ds-launchpad__grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+  min-width: 0;
+}
+
+.ds-command-home-shell .ds-launchpad-card {
+  --ds-command-home-card-tone: var(--ds-color-primary);
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: start;
+  gap: 10px;
+  min-width: 0;
+  min-height: 110px;
+  border: 1px solid
+    color-mix(
+      in srgb,
+      var(--ds-command-home-card-tone) 18%,
+      var(--ds-surface-card-border, var(--ds-color-border-secondary))
+    ) !important;
+  border-radius: var(--ds-radius-sm, 6px);
+}
+
+.ds-command-home-shell .ds-launchpad-card[data-tone="blue"],
+.ds-command-home-shell .ds-command-home-next-move[data-tone="blue"] {
+  --ds-command-home-card-tone: var(--ds-color-primary);
+}
+
+.ds-command-home-shell .ds-launchpad-card[data-tone="green"],
+.ds-command-home-shell .ds-command-home-next-move[data-tone="green"] {
+  --ds-command-home-card-tone: var(--ds-color-success);
+}
+
+.ds-command-home-shell .ds-launchpad-card[data-tone="teal"],
+.ds-command-home-shell .ds-command-home-next-move[data-tone="teal"] {
+  --ds-command-home-card-tone: var(--ds-color-accent, var(--ds-color-success));
+}
+
+.ds-command-home-shell .ds-launchpad-card[data-tone="amber"],
+.ds-command-home-shell .ds-command-home-next-move[data-tone="amber"] {
+  --ds-command-home-card-tone: var(--ds-color-warning);
+}
+
+.ds-command-home-shell .ds-launchpad-card:hover {
+  border-color: color-mix(
+    in srgb,
+    var(--ds-command-home-card-tone) 30%,
+    var(--ds-surface-card-border, var(--ds-color-border-secondary))
+  ) !important;
+  transform: translateY(-1px);
+}
+
+.ds-command-home-shell .ds-launchpad-card__arrow {
+  align-self: start;
+  color: var(--ds-color-text-muted);
+}
+
+.ds-command-home-shell .ds-command-home-command-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 320px);
+  align-items: start;
+  gap: 14px;
+  width: 100%;
+  min-width: 0;
+}
+
+.ds-command-home-shell .ds-ai-chat-panel {
+  display: grid;
+  gap: 14px;
+  min-width: 0;
+}
+
+.ds-command-home-shell .ds-command-home-rail {
+  display: grid;
+  align-content: start;
+  gap: 14px;
+  min-width: 0;
+  width: 100%;
+  max-width: 100%;
+}
+
+.ds-command-home-shell .ds-command-home-rail-card {
+  display: grid;
+  gap: 12px;
+}
+
+.ds-command-home-shell .ds-command-home-brief {
+  display: grid;
+  place-items: center;
+  min-height: 178px;
+  text-align: center;
+}
+
+.ds-command-home-shell .ds-ai-prompts {
+  display: grid;
+  gap: 8px;
+}
+
+.ds-command-home-shell .ds-ai-prompt-row {
+  --ds-command-home-card-tone: var(--ds-color-primary);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  min-width: 0;
+  border: 1px solid
+    color-mix(
+      in srgb,
+      var(--ds-command-home-card-tone) 18%,
+      var(--ds-surface-card-border, var(--ds-color-border-secondary))
+    ) !important;
+  color: var(--ds-color-text-primary);
+  background: var(--ds-command-home-card-bg) !important;
+  background-size: 24px 24px, 24px 24px, auto !important;
+  box-shadow: var(--ds-command-home-card-shadow) !important;
+  text-align: start;
+}
+
+.ds-command-home-shell .ds-ai-prompt-row:hover {
+  border-color: color-mix(
+    in srgb,
+    var(--ds-command-home-card-tone) 30%,
+    var(--ds-surface-card-border, var(--ds-color-border-secondary))
+  ) !important;
+  box-shadow: var(--ds-command-home-card-shadow-hover) !important;
+  transform: translateY(-1px);
+}
+
+.ds-command-home-shell .ds-ai-prompt-row__label {
+  color: var(--ds-color-text-primary) !important;
+  font-size: 0.875rem !important;
+  font-weight: 760 !important;
+  letter-spacing: 0 !important;
+  line-height: 1.25 !important;
+}
+
+.ds-command-home-shell .ds-ai-composer {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  gap: 10px;
+  width: 100%;
+  height: var(--ds-command-home-compact-action-height);
+  min-width: 0;
+}
+
+.ds-command-home-shell .ds-ai-composer__input {
+  display: grid;
+  min-width: 0;
+  min-height: 0;
+}
+
+.ds-command-home-shell .ds-ai-composer textarea {
+  width: 100%;
+  height: 100% !important;
+  min-height: 0 !important;
+  max-height: none !important;
+  resize: none;
+  border-radius: var(--ds-radius-md, 8px) !important;
+  background: var(--ds-surface-card-bg) !important;
+}
+
+.ds-command-home-shell .ds-ai-context-select,
+.ds-command-home-shell .ds-ai-icon-button {
+  color: var(--ds-color-text-secondary);
+}
+
+.ds-command-home-shell .ds-ai-context-select {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 32px;
+  font-size: 0.8125rem;
+  font-weight: 690;
+}
+
+.ds-command-home-shell .ds-ai-icon-button {
+  display: inline-grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+}
+
+.ds-command-home-shell .ds-command-home-search-card {
+  height: var(--ds-command-home-compact-action-height);
+  min-height: var(--ds-command-home-compact-action-height);
+  align-content: stretch;
+  grid-template-rows: auto minmax(0, 1fr);
+}
+
+.ds-command-home-shell .ds-command-home-search-list {
+  display: grid;
+  grid-template-rows: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  height: 100%;
+  min-height: 0;
+}
+
+.ds-command-home-shell .ds-command-home-search-lane,
+.ds-command-home-shell .ds-command-home-next-move {
+  --ds-command-home-card-tone: var(--ds-color-primary);
+  min-width: 0;
+  border: 1px solid
+    color-mix(
+      in srgb,
+      var(--ds-command-home-card-tone) 18%,
+      var(--ds-surface-card-border, var(--ds-color-border-secondary))
+    ) !important;
+  border-radius: var(--ds-radius-sm, 6px);
+  background: var(--ds-command-home-card-bg) !important;
+  background-size: 24px 24px, 24px 24px, auto !important;
+  box-shadow: var(--ds-command-home-card-shadow) !important;
+}
+
+.ds-command-home-shell .ds-command-home-search-lane:hover,
+.ds-command-home-shell .ds-command-home-next-move:hover {
+  border-color: color-mix(
+    in srgb,
+    var(--ds-command-home-card-tone) 30%,
+    var(--ds-surface-card-border, var(--ds-color-border-secondary))
+  ) !important;
+  box-shadow: var(--ds-command-home-card-shadow-hover) !important;
+  transform: translateY(-1px);
+}
+
+.ds-command-home-shell .ds-command-home-search-lane {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  min-height: 40px;
+  height: 100%;
+}
+
+.ds-command-home-shell .ds-command-home-next-move {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 10px;
+}
+
+.ds-command-home-shell .ds-command-home-footnote {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  min-width: 0;
+}
+
+.ds-command-home-shell .ds-command-home-footnote__text,
+.ds-command-home-shell .ds-command-home-footnote__layer p {
+  display: block;
+  min-width: 0;
+  max-width: 100%;
+  writing-mode: horizontal-tb;
+  white-space: normal;
+  word-break: normal;
+  overflow-wrap: normal;
+}
+
+.ds-command-home-shell .ds-command-home-footnote__layer {
+  display: flex;
+  align-items: center;
+  justify-self: end;
+  gap: 7px;
+  min-width: 0;
+  white-space: nowrap;
+}
+
+@container ds-page (max-width: 860px) {
+  .ds-command-home-shell .ds-command-home-command-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@container ds-page (max-width: 760px) {
+  .ds-command-home-shell .ds-launchpad__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .ds-command-home-shell .ds-ai-composer,
+  .ds-command-home-shell .ds-command-home-search-card {
+    height: auto;
+    min-height: var(--ds-command-home-compact-action-height);
+  }
+}
+
+@container ds-page (max-width: 640px) {
+  .ds-command-home-shell .ds-command-home-hero {
+    grid-template-columns: 1fr;
+    align-items: flex-start;
+  }
+
+  .ds-command-home-shell .ds-command-home-hero__status {
+    justify-content: flex-start;
+    justify-self: start;
+  }
+
+  .ds-command-home-shell .ds-launchpad__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .ds-command-home-shell .ds-ai-composer__footer {
+    align-items: stretch !important;
+    flex-direction: column;
+  }
+
+  .ds-command-home-shell .ds-ai-send {
+    width: 100%;
+  }
+}
+
+/*
+ * Data-table column-priority collapse (spec §10 -- component-owned layout).
+ *
+ * Named-container query: an unnamed `@container` resolves the nearest
+ * ancestor container, which breaks the moment a table renders inside another
+ * container (a rail, a card). `ds-table` is declared by the modern and
+ * rustic engine roots (`container-type: inline-size; container-name:
+ * ds-table`); classic (antd) declares neither and is unaffected by this rule.
+ *
+ * 640px is a documented component constant, not a breakpoint token: it is
+ * the width below which a table built from the design-language's column
+ * widths no longer has room for every column (roughly a half-split of the
+ * 1280 layout). Only columns the consumer marked `priority: 'low'`
+ * (`ColumnDef.priority`) are hidden here -- every other column is unaffected
+ * at any container width.
+ */
+@container ds-table (max-width: 640px) {
+  :where(.ds-pattern-data-table [data-col-priority="low"]) {
+    display: none;
+  }
+}
+
+/* ==========================================================================
+ * Pattern chrome paint -- migrated back from patterns-paint.css
+ *
+ * These selectors were split into an unlayered patterns-paint.css when the
+ * P-76 paint-bridge mechanism existed. That mechanism was retired on
+ * 2026-07-25: css-layer-paint-gate.mjs now rejects a `*-paint.css` import as
+ * an `obsolete paint bridge import`, so the split file reached no bundle and
+ * these channels stopped painting in every vertical. The sibling bridges were
+ * completed at the time (the personality bridge was deleted and the Collapse
+ * bridge was folded into `runtime/bridges/collapse/index.css`); this one was
+ * not, so the restore is a
+ * pre-existing-defect fix, not a new design.
+ *
+ * Layering is why this is safe here. The canonical order declared at the top
+ * of both entrypoints is `@layer theme, base, rottay-framework, ...,
+ * rottay-components, rottay-engines, ...`, which places Tailwind's own
+ * `base` -- and therefore its preflight reset -- BEFORE rottay-components.
+ * Preflight loses to this layer on layer order, which is exactly what the
+ * unlayered bridge was invented to achieve. Engine skins stay in
+ * rottay-engines, a later layer, so any skin contesting one of these
+ * channels still wins regardless of source order here.
+ *
+ * Rules whose channels already ship from a layered skin were NOT migrated,
+ * and the one @media-scoped rule keeps its query -- source order and
+ * conditional scope are preserved exactly as authored.
+ * ==========================================================================
+ */
+
+
+:where(.ds-workspace-frame) {
+  border: 1px solid var(--ds-workspace-shell-border, var(--ds-color-border));
+  background: var(--ds-workspace-shell-bg);
+  box-shadow: var(--ds-workspace-shell-shadow, var(--ds-card-shadow));
+}
+
+:where(.ds-workspace-frame)::before {
+  background: var(--ds-workspace-shell-overlay);
+}
+
+:where(.ds-workspace-frame--padded) > :where(.ds-workspace-frame__inner) {
+  padding: var(--ds-workspace-frame-padding, clamp(16px, 2.2vw, 28px));
+}
+
+:where(.ds-command-grid) {
+  background-image: var(--ds-command-grid-bg-strong);
+  background-size: var(--ds-command-grid-size) var(--ds-command-grid-size);
+}
+
+:where(.ds-surface-hero) {
+  border: 1px solid var(--ds-color-border-secondary);
+  background: var(--ds-workspace-hero-bg);
+  box-shadow: var(--ds-card-shadow);
+}
+
+:where(.ds-surface-card, .ds-surface-rail-card) {
+  border: 1px solid var(--ds-premium-card-border);
+  background: var(--ds-premium-card-bg);
+  background-clip: padding-box;
+  box-shadow: var(--ds-premium-card-shadow);
+}
+
+:where(.ds-surface-card, .ds-surface-rail-card)::before,
+:where(.ds-surface-table-card)::before,
+:where(.ds-rich-card)::before {
+  background-image: var(--ds-premium-card-texture, none),
+    var(--ds-surface-card-grid-bg), var(--ds-premium-card-sheen);
+  background-size: auto,
+    var(--ds-surface-card-grid-size) var(--ds-surface-card-grid-size), auto;
+}
+
+:where(.ds-surface-card, .ds-surface-rail-card):is(
+    a,
+    button,
+    [role="button"],
+    [data-interactive="true"]
+  ):hover {
+  border-color: var(--ds-premium-card-border-hover);
+  box-shadow: var(--ds-premium-card-shadow-hover);
+}
+
+:where(.ds-surface-card, .ds-surface-rail-card):is(
+    a,
+    button,
+    [role="button"],
+    [data-interactive="true"]
+  ):active {
+  border-color: var(--ds-premium-card-active-border);
+  background: var(--ds-premium-card-bg-active);
+  box-shadow: var(--ds-premium-card-shadow-active);
+}
+
+:where(.ds-surface-card, .ds-surface-rail-card):is(
+    [aria-selected="true"],
+    [data-selected="true"]
+  ) {
+  border-color: var(--ds-premium-card-selected-border);
+  background: var(--ds-premium-card-bg-selected);
+  box-shadow: var(--ds-premium-card-shadow-selected);
+}
+
+:where(.ds-surface-card, .ds-surface-rail-card):is(
+    [aria-disabled="true"],
+    [data-disabled="true"]
+  ) {
+  border-color: var(--ds-premium-card-disabled-border);
+  background: var(--ds-premium-card-bg-disabled);
+  box-shadow: none;
+}
+
+:where(.ds-surface-panel) {
+  border: 1px solid var(--ds-surface-panel-border);
+  background: var(--ds-surface-panel-bg);
+  box-shadow: var(--ds-surface-panel-shadow);
+}
+
+:where(.ds-surface-panel)::before {
+  background-image: var(--ds-surface-panel-texture),
+    var(--ds-surface-card-grid-bg);
+  background-size: auto,
+    var(--ds-surface-card-grid-size) var(--ds-surface-card-grid-size);
+}
+
+:where(.ds-surface-panel):focus-within {
+  border-color: var(
+    --ds-material-panel-border-hover,
+    var(--ds-surface-panel-border)
+  );
+  box-shadow: var(--ds-surface-panel-focus-ring);
+}
+
+:where(.ds-surface-control-row) {
+  border: 1px solid var(--ds-surface-control-border);
+  background: var(--ds-surface-control-bg);
+  box-shadow: var(--ds-surface-control-shadow);
+}
+
+:where(.ds-surface-control-row):focus-within {
+  border-color: var(
+    --ds-material-control-border-hover,
+    var(--ds-surface-control-border)
+  );
+  box-shadow: var(--ds-surface-control-focus-ring);
+}
+
+:where(.ds-surface-table-card) {
+  border: 1px solid var(--ds-premium-card-border);
+  background: var(--ds-premium-card-bg);
+  box-shadow: var(--ds-premium-card-shadow);
+}
+
+:where(.ds-rich-card) {
+  background: var(--ds-premium-card-bg);
+  border: 1px solid var(--ds-premium-card-border);
+  box-shadow: var(--ds-premium-card-shadow);
+}
+
+:where(.ds-rich-card--interactive):hover {
+  background: var(--ds-premium-card-bg-hover);
+  border-color: var(--ds-premium-card-border-hover);
+  box-shadow: var(--ds-premium-card-shadow-hover);
+}
+
+:where(.ds-rich-card--interactive):active {
+  background: var(--ds-premium-card-bg-active);
+  border-color: var(--ds-premium-card-active-border);
+  box-shadow: var(--ds-premium-card-shadow-active);
+}
+
+:where(.ds-rich-card--interactive):focus-within {
+  border-color: var(--ds-premium-card-border-hover);
+  box-shadow: var(--ds-premium-card-selected-ring);
+}
+
+:where(.ds-rich-card--selected) {
+  background: var(--ds-premium-card-bg-selected);
+  border-color: var(--ds-premium-card-selected-border);
+  box-shadow: var(--ds-premium-card-shadow-selected);
+}
+
+:where(.ds-rich-card)[aria-disabled="true"],
+:where(.ds-rich-card)[data-disabled="true"] {
+  border-color: var(--ds-premium-card-disabled-border);
+  background: var(--ds-premium-card-bg-disabled);
+  box-shadow: none;
+}
+
+:where(.ds-rich-card__header) {
+  background: var(--ds-premium-card-header-bg);
+  border-bottom: 1px solid var(--ds-color-border-subtle);
+}
+
+:where(.ds-rich-card__section) {
+  background: var(--ds-premium-card-section-bg);
+  border-top: 1px solid var(--ds-color-border-subtle);
+}
+
+:where(.ds-rich-card__section--alt) {
+  background: var(--ds-premium-card-section-alt-bg);
+}
+
+:where(.ds-rich-card__footer) {
+  background: var(--ds-premium-card-footer-bg);
+  border-top: 1px solid var(--ds-color-border-subtle);
+}
+
+:where(.ds-rich-card__icon) {
+  border: 1px solid var(--ds-icon-tile-border);
+  background: var(--ds-icon-tile-bg);
+  box-shadow: 0 1px 2px
+    color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent);
+}
+
+:where(
+    .ds-rich-card--interactive:hover,
+    .ds-rich-card--interactive:focus-within
+  )
+  :where(.ds-rich-card__icon) {
+  border-color: color-mix(in srgb, currentColor 34%, var(--ds-color-border));
+}
+
+:where(.ds-metric-card):where(.ds-rich-card)::before {
+  background-image: var(--ds-surface-card-grid-bg),
+    linear-gradient(
+      115deg,
+      transparent 0%,
+      var(--ds-surface-highlight-faint) 46%,
+      transparent 64%
+    ),
+    linear-gradient(
+      180deg,
+      color-mix(
+        in srgb,
+        var(--ds-signal-card-accent, var(--ds-color-primary)) 5%,
+        transparent
+      ),
+      transparent 52%
+    );
+  background-size: 18px 18px, 18px 18px, auto;
+}
+
+:where(.ds-metric-card__halo) {
+  background: radial-gradient(
+    circle,
+    color-mix(
+        in srgb,
+        var(--ds-signal-card-accent, var(--ds-color-primary)) 9%,
+        transparent
+      )
+      0%,
+    transparent 66%
+  );
+}
+
+:where(.ds-metric-card__header) {
+  margin-bottom: 10px;
+}
+
+:where(.ds-metric-card__status-dot) {
+  background: var(--ds-signal-card-accent, var(--ds-color-primary));
+  box-shadow: 0 0 0 4px
+      color-mix(
+        in srgb,
+        var(--ds-signal-card-accent, var(--ds-color-primary)) 10%,
+        transparent
+      ),
+    0 0 12px
+      color-mix(
+        in srgb,
+        var(--ds-signal-card-accent, var(--ds-color-primary)) 24%,
+        transparent
+      );
+}
+
+:where(.ds-metric-card__icon) {
+  border: 1px solid
+    color-mix(
+      in srgb,
+      var(--ds-signal-card-accent, var(--ds-color-primary)) 20%,
+      var(--ds-color-border)
+    );
+  /* The accent is mixed into `--ds-color-bg-elevated`, not into
+     `--ds-icon-tile-bg`: the tile channel is a gradient by default, and one
+     gradient argument invalidates the color-mix -- which drops the whole
+     shorthand, costing the sheen layer above it as well as this ground. The
+     gradient still paints directly on the rich-card tile. */
+  background: linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--ds-surface-card-bg) 84%, transparent),
+      transparent
+    ),
+    color-mix(
+      in srgb,
+      var(--ds-signal-card-accent, var(--ds-color-primary)) 12%,
+      var(--ds-color-bg-elevated)
+    );
+  box-shadow: 0 1px 2px
+    color-mix(
+      in srgb,
+      var(--ds-signal-card-accent, var(--ds-color-primary)) 8%,
+      transparent
+    );
+}
+
+:where(.ds-metric-card__trend) {
+  padding: 5px 8px;
+  border: 1px solid
+    color-mix(
+      in srgb,
+      var(--ds-signal-card-accent, var(--ds-color-primary)) 13%,
+      var(--ds-color-border)
+    );
+  background: color-mix(
+    in srgb,
+    var(--ds-surface-panel-bg) 76%,
+    var(--ds-surface-card-bg)
+  );
+  box-shadow: inset 0 1px 0
+    color-mix(in srgb, var(--ds-surface-card-bg) 72%, transparent);
+}
+
+:where(.ds-metric-card__trend--up) {
+  border-color: color-mix(
+    in srgb,
+    var(--ds-color-success) 24%,
+    var(--ds-color-border)
+  );
+  background: color-mix(
+    in srgb,
+    var(--ds-color-success) 10%,
+    var(--ds-surface-card-bg)
+  );
+}
+
+:where(.ds-metric-card__trend--down) {
+  border-color: color-mix(
+    in srgb,
+    var(--ds-color-error) 24%,
+    var(--ds-color-border)
+  );
+  background: color-mix(
+    in srgb,
+    var(--ds-color-error) 10%,
+    var(--ds-surface-card-bg)
+  );
+}
+
+:where(.ds-metric-card__footer) {
+  margin-top: auto;
+  padding-top: 12px;
+}
+
+:where(.ds-metric-card__progress-meta) {
+  margin-bottom: 7px;
+}
+
+:where(.ds-metric-card__progress) {
+  background: linear-gradient(
+      90deg,
+      color-mix(in srgb, var(--ds-color-border) 70%, transparent),
+      color-mix(
+        in srgb,
+        var(--ds-signal-card-accent, var(--ds-color-primary)) 9%,
+        transparent
+      )
+    ),
+    color-mix(in srgb, var(--ds-color-border) 58%, transparent);
+  box-shadow: inset 0 1px 1px
+      color-mix(in srgb, var(--ds-color-text-primary) 10%, transparent),
+    0 0 0 1px color-mix(in srgb, var(--ds-surface-card-bg) 62%, transparent);
+}
+
+:where(.ds-metric-card__progress-bar) {
+  background: var(--ds-meter-fill);
+  box-shadow: 0 0 16px
+    color-mix(
+      in srgb,
+      var(--ds-signal-card-accent, var(--ds-color-primary)) 32%,
+      transparent
+    );
+}
+
+:where(.ds-metric-card__progress-bar)::after {
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--ds-surface-highlight-medium),
+    transparent
+  );
+}
+
+:where(.ds-metric-card__status-row) {
+  margin-top: 10px;
+}
+
+:where(.ds-metric-card__status-tag) {
+  padding: 3px 7px;
+  border: 1px solid
+    color-mix(
+      in srgb,
+      var(--ds-signal-card-accent, var(--ds-color-primary)) 18%,
+      var(--ds-color-border)
+    );
+  background: color-mix(
+    in srgb,
+    var(--ds-signal-card-accent, var(--ds-color-primary)) 8%,
+    var(--ds-surface-card-bg)
+  );
+}
+
+:where(.ds-metric-card--interactive):hover {
+  border-color: color-mix(
+    in srgb,
+    var(--ds-signal-card-accent, var(--ds-color-primary)) 24%,
+    var(--ds-color-border)
+  );
+  box-shadow: var(--ds-signal-card-shadow-hover);
+}
+
+:where(.ds-metric-card-link):focus-visible :where(.ds-metric-card) {
+  border-color: color-mix(
+    in srgb,
+    var(--ds-signal-card-accent, var(--ds-color-primary)) 42%,
+    var(--ds-color-border)
+  );
+  box-shadow: var(--ds-signal-card-shadow-hover), var(--ds-shadow-focus-ring);
+}
+
+:where(.ds-metric-card--interactive:hover, .ds-metric-card-link:focus-visible)
+  :where(.ds-metric-card__icon) {
+  border-color: color-mix(
+    in srgb,
+    var(--ds-signal-card-accent, var(--ds-color-primary)) 40%,
+    var(--ds-color-border)
+  );
+}
+
+:is(.ds-command-home-console) {
+  margin-inline: auto;
+  padding: var(--ds-command-home-console-padding);
+  border: 1px solid var(--ds-command-home-panel-border);
+  background-clip: padding-box;
+  background: var(--ds-command-home-console-bg);
+  box-shadow: var(--ds-command-home-panel-shadow),
+    inset 0 1px 0 color-mix(in srgb, var(--ds-surface-card-bg) 78%, transparent);
+}
+
+:is(.ds-command-home-hero) {
+  padding: 16px 18px;
+  border: 1px solid var(--ds-command-home-panel-border-soft);
+  background-clip: padding-box;
+  background: var(--ds-command-home-hero-bg);
+  box-shadow: 0 1px 1px
+      color-mix(in srgb, var(--ds-color-text-primary) 5%, transparent),
+    0 12px 30px color-mix(in srgb, var(--ds-color-primary) 7%, transparent),
+    inset 0 1px 0 color-mix(in srgb, var(--ds-surface-card-bg) 78%, transparent);
+}
+
+:is(
+    .ds-command-home-icon,
+    .ds-command-home-hero__mark,
+    .ds-command-home-message-avatar,
+    .ds-command-home-capability__icon,
+    .ds-command-home-prompt-row__icon
+  ) {
+  border: 1px solid var(--ds-command-home-icon-border);
+  background: var(--ds-command-home-icon-bg);
+}
+
+:is(.ds-command-home-hero__pill) {
+  padding: 6px 10px;
+  border: 1px solid var(--ds-command-home-control-border);
+  background: var(--ds-command-home-control-bg);
+}
+
+:is(.ds-command-home-title) {
+  margin: 0;
+}
+
+:is(.ds-command-home-status-dot) {
+  background: var(--ds-color-success);
+  box-shadow: 0 0 0 4px
+    color-mix(in srgb, var(--ds-color-success) 12%, transparent);
+}
+
+:is(.ds-command-home-capability__icon, .ds-command-home-prompt-row__icon) {
+  border-radius: var(--ds-radius-sm, 6px);
+}
+
+:is(.ds-command-home-error) {
+  padding: 10px 12px;
+  border: 1px solid
+    color-mix(
+      in srgb,
+      var(--ds-color-warning) 34%,
+      var(--ds-color-border-primary)
+    );
+  background: color-mix(
+    in srgb,
+    var(--ds-color-warning) 8%,
+    var(--ds-surface-card-bg)
+  );
+}
+
+:is(.ds-command-home-launchpad, .ds-launchpad) {
+  padding: 16px;
+  border: 1px solid var(--ds-command-home-panel-border-soft);
+  background-clip: padding-box;
+  background: var(--ds-command-home-surface-bg);
+}
+
+:is(.ds-command-home-launchpad-card, .ds-launchpad-card) {
+  padding: 13px;
+  border: 1px solid var(--ds-command-home-panel-border-soft);
+  background-clip: padding-box;
+  background: var(--ds-command-home-panel-bg);
+  box-shadow: 0 1px 1px
+      color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent),
+    0 10px 24px color-mix(in srgb, var(--ds-color-primary) 6%, transparent);
+}
+
+:is(.ds-command-home-launchpad-card, .ds-launchpad-card):hover {
+  border-color: var(--ds-command-home-control-hover-border);
+  box-shadow: 0 16px 32px
+    color-mix(in srgb, var(--ds-color-primary) 8%, transparent);
+}
+
+:is(
+    .ds-command-home-launchpad-card[data-tone="green"]
+      .ds-command-home-capability__icon,
+    .ds-launchpad-card[data-tone="green"] .ds-command-home-capability__icon
+  ),
+:is(
+    .ds-command-home-next-move[data-tone="green"]
+      .ds-command-home-prompt-row__icon
+  ) {
+  border-color: color-mix(
+    in srgb,
+    var(--ds-color-success) 32%,
+    var(--ds-color-border-primary)
+  );
+  background: color-mix(
+    in srgb,
+    var(--ds-color-success) 9%,
+    var(--ds-surface-card-bg)
+  );
+}
+
+:is(
+    .ds-command-home-launchpad-card[data-tone="teal"]
+      .ds-command-home-capability__icon,
+    .ds-launchpad-card[data-tone="teal"] .ds-command-home-capability__icon
+  ),
+:is(
+    .ds-command-home-next-move[data-tone="teal"]
+      .ds-command-home-prompt-row__icon
+  ) {
+  border-color: color-mix(
+    in srgb,
+    var(--ds-color-success) 26%,
+    var(--ds-color-border-primary)
+  );
+  background: color-mix(
+    in srgb,
+    var(--ds-color-success) 7%,
+    var(--ds-surface-card-bg)
+  );
+}
+
+:is(
+    .ds-command-home-launchpad-card[data-tone="amber"]
+      .ds-command-home-capability__icon,
+    .ds-launchpad-card[data-tone="amber"] .ds-command-home-capability__icon
+  ) {
+  border-color: color-mix(
+    in srgb,
+    var(--ds-color-warning) 36%,
+    var(--ds-color-border-primary)
+  );
+  background: color-mix(
+    in srgb,
+    var(--ds-color-warning) 9%,
+    var(--ds-surface-card-bg)
+  );
+}
+
+:is(.ds-command-home-chat-panel, .ds-ai-chat-panel) {
+  padding: 14px;
+  border: 1px solid var(--ds-command-home-panel-border-soft);
+  background-clip: padding-box;
+  background: var(--ds-command-home-surface-bg);
+  box-shadow: 0 1px 1px
+      color-mix(in srgb, var(--ds-color-text-primary) 5%, transparent),
+    0 14px 34px color-mix(in srgb, var(--ds-color-primary) 7%, transparent);
+}
+
+:is(.ds-command-home-brief) {
+  padding: 22px;
+  border: 1px solid var(--ds-command-home-panel-border-soft);
+  background: radial-gradient(
+      circle at 50% 0%,
+      color-mix(in srgb, var(--ds-color-primary) 8%, transparent),
+      transparent 46%
+    ),
+    var(--ds-command-home-panel-bg);
+}
+
+:is(.ds-command-home-brief__icon) {
+  margin-block-end: 12px;
+  border: 1px solid
+    color-mix(
+      in srgb,
+      var(--ds-color-primary) 34%,
+      var(--ds-color-border-primary)
+    );
+  background: color-mix(
+    in srgb,
+    var(--ds-color-primary) 8%,
+    var(--ds-surface-card-bg)
+  );
+}
+
+:is(.ds-command-home-chat-stream, .ds-ai-chat-stream) {
+  padding: 14px;
+  border: 1px solid var(--ds-command-home-panel-border-soft);
+  background: var(--ds-command-home-panel-bg);
+}
+
+:is(.ds-command-home-message-avatar, .ds-ai-chat-message-avatar) {
+  margin-inline-end: 8px;
+}
+
+:is(.ds-command-home-message, .ds-ai-chat-message) {
+  padding: 12px 13px;
+  border: 1px solid var(--ds-color-border-primary);
+  box-shadow: var(--ds-shadow-xs);
+}
+
+:is(.ds-command-home-message--assistant, .ds-ai-chat-message--assistant) {
+  background: color-mix(
+    in srgb,
+    var(--ds-surface-card-bg) 88%,
+    var(--ds-color-primary) 4%
+  );
+}
+
+:is(.ds-command-home-message--user, .ds-ai-chat-message--user) {
+  background: var(--ds-color-primary);
+  border-color: color-mix(
+    in srgb,
+    var(--ds-color-primary) 75%,
+    var(--ds-color-border-primary)
+  );
+}
+
+:is(.ds-command-home-tools, .ds-ai-chat-tools) {
+  margin-block-start: 8px;
+}
+
+:is(.ds-command-home-tool-call, .ds-ai-chat-tool-call) {
+  padding: 5px 7px;
+  border: 1px solid var(--ds-command-home-control-border);
+  background: var(--ds-command-home-control-bg);
+}
+
+:is(.ds-command-home-message__error, .ds-ai-chat-message__error) {
+  margin-block-start: 6px;
+}
+
+:is(.ds-command-home-prompt-row, .ds-ai-prompt-row) {
+  padding: 10px 14px;
+  border: 1px solid var(--ds-command-home-panel-border-soft);
+  border-radius: var(--ds-radius-md, 8px);
+  background: var(--ds-command-home-control-bg);
+}
+
+:is(.ds-command-home-prompt-row, .ds-ai-prompt-row):hover {
+  border-color: color-mix(
+    in srgb,
+    var(--ds-color-primary) 48%,
+    var(--ds-color-border-primary)
+  );
+  box-shadow: 0 12px 28px
+    color-mix(in srgb, var(--ds-color-primary) 8%, transparent);
+}
+
+:is(.ds-command-home-composer, .ds-ai-composer) {
+  padding: 10px;
+  border: 1px solid var(--ds-command-home-panel-border-soft);
+  box-shadow: 0 18px 42px
+    color-mix(in srgb, var(--ds-color-primary) 8%, transparent);
+}
+
+:is(
+    .ds-command-home-context-select,
+    .ds-ai-context-select,
+    .ds-command-home-icon-button,
+    .ds-ai-icon-button
+  ) {
+  border: 1px solid var(--ds-command-home-control-border);
+  border-radius: var(--ds-radius-sm, 6px);
+  background: var(--ds-command-home-control-bg);
+}
+
+:is(.ds-command-home-context-select, .ds-ai-context-select) {
+  padding: 6px 10px;
+}
+
+:is(.ds-command-home-icon-button, .ds-ai-icon-button) {
+  padding: 0;
+}
+
+:is(
+    .ds-command-home-context-select,
+    .ds-ai-context-select,
+    .ds-command-home-icon-button,
+    .ds-ai-icon-button
+  ):hover {
+  border-color: var(--ds-command-home-control-hover-border);
+  background: var(--ds-command-home-control-hover-bg);
+}
+
+:is(.ds-command-home-send, .ds-ai-send) {
+  padding-inline: 16px;
+}
+
+:is(.ds-command-home-rail-card, .ds-rail-card) {
+  padding: 14px;
+  border: 1px solid var(--ds-command-home-panel-border-soft);
+  background-clip: padding-box;
+  background: var(--ds-command-home-surface-bg);
+  box-shadow: 0 1px 1px
+      color-mix(in srgb, var(--ds-color-text-primary) 5%, transparent),
+    0 14px 32px color-mix(in srgb, var(--ds-color-primary) 7%, transparent);
+}
+
+:is(.ds-command-home-rail-card__badge, .ds-rail-card__badge) {
+  padding: 5px 10px;
+  border: 1px solid
+    color-mix(
+      in srgb,
+      var(--ds-color-success) 34%,
+      var(--ds-color-border-primary)
+    );
+  background: color-mix(
+    in srgb,
+    var(--ds-color-success) 8%,
+    var(--ds-surface-card-bg)
+  );
+}
+
+:is(.ds-command-home-meter, .ds-meter) {
+  background: var(--ds-command-home-meter-bg);
+}
+
+:is(.ds-command-home-meter, .ds-meter) > span {
+  background: var(--ds-command-home-meter-fill);
+}
+
+:is(.ds-command-home-next-move) {
+  padding: 11px;
+}
+
+:is(.ds-command-home-search-lane) {
+  padding: 9px 11px;
+}
+
+:is(.ds-command-home-footnote) {
+  padding-inline: 4px;
+}
+
+:is(.ds-command-home-footnote__text, .ds-command-home-footnote__layer p) {
+  margin: 0;
+}
+
+@media (max-width: 640px) {
+  :is(.ds-command-home-console) {
+    padding: 14px;
+  }
+}
+
+.ds-command-home-shell .ds-command-home-console {
+  margin-inline: auto;
+  padding: var(--ds-command-home-console-padding);
+  border: 1px solid var(--ds-command-home-panel-border);
+  background: var(--ds-command-home-console-bg);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.9) inset,
+    var(--ds-command-home-panel-shadow);
+}
+
+.ds-command-home-shell .ds-command-home-hero,
+.ds-command-home-shell .ds-launchpad,
+.ds-command-home-shell .ds-command-home-rail-card,
+.ds-command-home-shell .ds-command-home-brief,
+.ds-command-home-shell .ds-ai-composer {
+  border: 1px solid var(--ds-command-home-panel-border);
+  background-clip: padding-box;
+  background: var(--ds-command-home-surface-bg);
+  box-shadow: 0 1px 2px rgba(22, 42, 67, 0.08),
+    0 12px 28px rgba(22, 42, 67, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.95);
+}
+
+.ds-command-home-shell .ds-command-home-hero {
+  padding: 16px 18px;
+  background: var(--ds-command-home-hero-bg);
+}
+
+.ds-command-home-shell .ds-command-home-hero__mark,
+.ds-command-home-shell .ds-command-home-capability__icon,
+.ds-command-home-shell .ds-command-home-prompt-row__icon,
+.ds-command-home-shell .ds-command-home-brief__icon,
+.ds-command-home-shell .ds-ai-chat-message-avatar {
+  border: 1px solid var(--ds-command-home-icon-border);
+  border-radius: var(--ds-radius-sm, 6px);
+  background: var(--ds-command-home-icon-bg);
+}
+
+.ds-command-home-shell .ds-launchpad {
+  padding: 18px;
+}
+
+.ds-command-home-shell .ds-launchpad-card {
+  padding: 14px;
+  background-clip: padding-box;
+  background: var(--ds-command-home-card-bg);
+  background-size: 24px 24px, 24px 24px, auto;
+  box-shadow: var(--ds-command-home-card-shadow);
+}
+
+.ds-command-home-shell .ds-launchpad-card:hover {
+  box-shadow: var(--ds-command-home-card-shadow-hover);
+}
+
+.ds-command-home-shell .ds-launchpad-card__arrow {
+  margin-block-start: 2px;
+}
+
+.ds-command-home-shell .ds-ai-chat-panel {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.ds-command-home-shell .ds-command-home-rail-card {
+  padding: 14px;
+  background: var(--ds-command-home-card-bg);
+  background-size: 24px 24px, 24px 24px, auto;
+  box-shadow: var(--ds-command-home-card-shadow);
+}
+
+.ds-command-home-shell .ds-command-home-brief {
+  padding: 22px;
+}
+
+.ds-command-home-shell .ds-ai-prompt-row {
+  padding: 10px 14px;
+  border-radius: var(--ds-radius-sm, 6px);
+}
+
+.ds-command-home-shell .ds-ai-composer {
+  padding: 12px;
+  border-color: var(--ds-command-home-panel-border);
+}
+
+.ds-command-home-shell .ds-ai-context-select,
+.ds-command-home-shell .ds-ai-icon-button {
+  border: 1px solid var(--ds-command-home-control-border);
+  border-radius: var(--ds-radius-sm, 6px);
+  background: var(--ds-command-home-control-bg);
+}
+
+.ds-command-home-shell .ds-ai-context-select {
+  padding: 6px 10px;
+}
+
+.ds-command-home-shell .ds-ai-icon-button {
+  padding: 0;
+}
+
+.ds-command-home-shell .ds-command-home-search-lane {
+  padding: 9px 11px;
+}
+
+.ds-command-home-shell .ds-command-home-next-move {
+  padding: 11px;
+}
+
+.ds-command-home-shell .ds-command-home-footnote {
+  padding-inline: 4px;
+}
+
+.ds-command-home-shell .ds-command-home-footnote__text,
+.ds-command-home-shell .ds-command-home-footnote__layer p {
+  margin: 0;
+}

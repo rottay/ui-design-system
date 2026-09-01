@@ -105,7 +105,10 @@ describe("font-pack css", () => {
 
 describe("first-party vertical font ownership", () => {
   const readBundle = (name: string): string =>
-    readFileSync(resolve(coreRoot, "styles", name), "utf8");
+    readFileSync(
+      resolve(coreRoot, "artifacts/generated/css/verticals", name.replace(/\.css$/u, ''), "index.css"),
+      "utf8",
+    );
 
   it("projects each roster row's exact font-pack ownership into its bundle", () => {
     for (const row of FIRST_PARTY_VERTICAL_ROSTER) {

@@ -1,0 +1,7496 @@
+{
+  "schemaVersion": 1,
+  "supplierPackages": [
+    "@ant-design/icons",
+    "@phosphor-icons/react",
+    "@react-three/drei",
+    "@react-three/fiber",
+    "@thesvg/react",
+    "antd",
+    "d3",
+    "framer-motion",
+    "lucide-react",
+    "motion",
+    "three"
+  ],
+  "nonRuntimeEntrypoints": [
+    "./fonts/editorial-display.css",
+    "./fonts/editorial-text.css",
+    "./fonts/geometric-display.css",
+    "./fonts/grotesk-display.css",
+    "./fonts/humanist-text.css",
+    "./fonts/plex-mono.css",
+    "./hooks-manifest",
+    "./public-entrypoints-manifest",
+    "./styles",
+    "./styles.css",
+    "./styles/bithire",
+    "./styles/default",
+    "./styles/evnto",
+    "./styles/modern",
+    "./styles/rottay",
+    "./supplier-contract",
+    "./tenant-theme-canary-fixtures"
+  ],
+  "entrypoints": {
+    ".": {
+      "exports": [
+        "ACTION_DOCK_DEFAULTS",
+        "ADAPTIVE_OVERLAY_DEFAULTS",
+        "AFFIX_DEFAULTS",
+        "ALERT_DIALOG_DEFAULTS",
+        "ALIGN_ITEMS_MAP",
+        "ANCHOR_DEFAULTS",
+        "APCA_BODY_TEXT_MIN_LC",
+        "ASPECT_RATIO_DEFAULTS",
+        "AUTOCOMPLETE_DEFAULTS",
+        "ActionDock",
+        "ActiveFiltersBar",
+        "ActivityCards",
+        "ActivityCompact",
+        "ActivitySurface",
+        "ActivityTicker",
+        "ActivityTimeline",
+        "AdaptiveOverlay",
+        "Affix",
+        "Alert",
+        "AlertDialog",
+        "Anchor",
+        "AntdConfigProvider",
+        "AppShell",
+        "AreaChart",
+        "AsciiDiagram",
+        "AsciiFrame",
+        "AspectRatio",
+        "AssistantStatusBadge",
+        "AssistantStatusIndicator",
+        "AuditSurface",
+        "Aurora",
+        "AuthSurface",
+        "AutoComplete",
+        "Avatar",
+        "AvatarBadge",
+        "AvatarFallback",
+        "AvatarGroup",
+        "BACKTOP_DEFAULTS",
+        "BOTTOM_TAB_BAR_DEFAULTS",
+        "BOX_DEFAULTS",
+        "BackTop",
+        "Badge",
+        "BarChart",
+        "BillingSurface",
+        "BottomTabBar",
+        "Box",
+        "BrandingPreviewSandbox",
+        "Breadcrumb",
+        "BulkSelectToggle",
+        "BulletChart",
+        "Button",
+        "CALLOUT_COLORS",
+        "CALLOUT_DEFAULTS",
+        "CASCADER_DEFAULTS",
+        "CHART_METRIC_TREND_RENDERER_ID",
+        "CHART_RANKED_ROWS_RENDERER_ID",
+        "CODE_BLOCK_DEFAULTS",
+        "COLLAPSE_DEFAULTS",
+        "COLORPICKER_DEFAULTS",
+        "CONFIRM_DIALOG_DEFAULTS",
+        "CONFIRM_DIALOG_VARIANT_COLORS",
+        "CONTAINER_DEFAULTS",
+        "CONTAINER_MAX_WIDTHS",
+        "CONTAINER_PADDINGS",
+        "CONTEXTMENU_DEFAULTS",
+        "Calendar",
+        "CalendarHeatMap",
+        "Callout",
+        "Card",
+        "Carousel",
+        "Cascader",
+        "ChartFamilyFrame",
+        "ChartFrame",
+        "ChartImperativePlot",
+        "ChartMetricTrendView",
+        "ChartRankedRowsView",
+        "ChartScaffold",
+        "ChartTooltip",
+        "ChatSurface",
+        "Checkbox",
+        "CheckboxGroup",
+        "CodeBlock",
+        "Collapse",
+        "CollectionHeader",
+        "CollectionWorkspace",
+        "CollectionWorkspaceSurface",
+        "ColorPicker",
+        "ColumnMenu",
+        "ColumnSettingsDropdown",
+        "CommandCenterSurface",
+        "CommandRegistryProvider",
+        "CompareSurface",
+        "ConfirmActionCard",
+        "ConfirmDialog",
+        "ConnectedCommandPalette",
+        "Container",
+        "ContextMenu",
+        "CopyToCheck",
+        "CountUp",
+        "CropMarks",
+        "DAYS_SHORT",
+        "DEFAULT_COLORS",
+        "DEFAULT_COMPACT_CONFIG",
+        "DEFAULT_FALLBACK_LOCALE",
+        "DEFAULT_LOCALE",
+        "DEFAULT_LOCALES",
+        "DEFAULT_MARGIN",
+        "DEFAULT_OPERATORS_BY_TYPE",
+        "DEFAULT_PACK",
+        "DEFAULT_PRODUCT_PROFILE_KEY",
+        "DEFAULT_RESPONSIVE_POSTURE",
+        "DEFAULT_RESPONSIVE_POSTURE_ID",
+        "DEFAULT_TENANT_CONFIG",
+        "DEFAULT_TENANT_SLUG",
+        "DEFAULT_TENANT_THEME_PREVIEW_DEBOUNCE_MS",
+        "DENSITY_POSTURES",
+        "DETAIL_HEADER_DEFAULTS",
+        "DIVIDER_DEFAULTS",
+        "DIVIDER_DEFAULT_COLORS",
+        "DIVIDER_SPACING_MAP",
+        "DROPDOWN_DEFAULTS",
+        "DSErrorBoundary",
+        "DashboardHeader",
+        "DashboardSurface",
+        "DataTerminalCard",
+        "DataTerminalCardProvider",
+        "DataTerminalStat",
+        "DatePicker",
+        "DecisionComparison",
+        "DecisionInboxSurface",
+        "DecisionPanorama",
+        "DensityScope",
+        "Descriptions",
+        "DesignSystemProvider",
+        "DetailFormSurface",
+        "DetailHeader",
+        "DetailSurface",
+        "Divider",
+        "Drawer",
+        "Dropdown",
+        "EMPHASIS_FAMILIES",
+        "ENGINE_REGISTRY",
+        "EXPERIENCE_PROFILES",
+        "EXPERIENCE_PROFILE_ENVELOPES",
+        "EXPRESSIVE_A11Y_FLOORS",
+        "EXPRESSIVE_EDGE_PROFILES",
+        "EXPRESSIVE_ELEVATION_PROFILES",
+        "EXPRESSIVE_GEOMETRY_PROFILES",
+        "EXPRESSIVE_ICON_PROFILES",
+        "EXPRESSIVE_MATERIAL_PROFILES",
+        "EXPRESSIVE_MOTIF_PROFILES",
+        "EXPRESSIVE_PROFILE_SCHEMA_VERSION",
+        "EXPRESSIVE_TYPE_PROFILES",
+        "EditHeader",
+        "EditorSurface",
+        "EffectRuntimeProvider",
+        "Empty",
+        "EmptyStateSurface",
+        "EngineContext",
+        "EngineErrorBoundary",
+        "EngineProvider",
+        "ErrorCategory",
+        "ErrorHandler",
+        "ErrorSeverity",
+        "ExportButton",
+        "FALLBACK_ENGINE",
+        "FIRST_PARTY_ARTIFACT_REGENERATE_COMMAND",
+        "FIRST_PARTY_ARTIFACT_SPECS",
+        "FIRST_PARTY_BRAND_THEME_REQUIRED_KEYS",
+        "FLEX_ALIGN_MAP",
+        "FLEX_DEFAULTS",
+        "FLEX_JUSTIFY_MAP",
+        "FLOAT_BUTTON_DEFAULTS",
+        "FORMFIELD_DEFAULTS",
+        "FOUNDATION_AUTHORITIES",
+        "FRECENCY_HALF_LIFE_MS",
+        "FadeIn",
+        "FeatureContext",
+        "FeatureGate",
+        "FeatureProvider",
+        "FeatureWorkspaceFrame",
+        "FieldFiltersPanel",
+        "FileBrowserSurface",
+        "Flex",
+        "FloatButton",
+        "FocusModeProvider",
+        "Form",
+        "FormFactsCard",
+        "FormField",
+        "FormHeader",
+        "FormSections",
+        "FormSurface",
+        "FunnelChart",
+        "GAP_MAP",
+        "GENERATED_ARTIFACT_BANNER",
+        "GRID_DEFAULTS",
+        "GRID_ITEM_DEFAULTS",
+        "GanttChart",
+        "GaugeChart",
+        "GlassCard",
+        "GlowEffect",
+        "GradientBackground",
+        "Grid",
+        "GridItem",
+        "GridPattern",
+        "GuidedDraftFormSurface",
+        "HOVERCARD_DEFAULTS",
+        "HamburgerToX",
+        "HeaderSurface",
+        "Heading",
+        "HeatMap",
+        "Hide",
+        "Histogram",
+        "HoverCard",
+        "I18nContext",
+        "I18nProvider",
+        "IconFrame",
+        "Image",
+        "ImageFallback",
+        "ImageSkeleton",
+        "ImportExportSurface",
+        "InlineEditControl",
+        "InlineEditField",
+        "InlineEditFooter",
+        "InlineEditGrid",
+        "InlineEditSection",
+        "InlineEditor",
+        "InlineEditorGroup",
+        "Input",
+        "InputAddon",
+        "InputGroup",
+        "InputNumber",
+        "IntegrationSurface",
+        "InvertSection",
+        "JUSTIFY_ITEMS_MAP",
+        "KBD_DEFAULTS",
+        "KanbanSurface",
+        "Kbd",
+        "LAYOUT_DEFAULTS",
+        "LEGACY_SIZE_SPANS",
+        "LOCALE_CONFIGS",
+        "Layout",
+        "LineChart",
+        "Link",
+        "List",
+        "ListSurface",
+        "ListToolbar",
+        "LiveCursor",
+        "LoadingIndicator",
+        "LoadingOverlay",
+        "MENTIONS_DEFAULTS",
+        "MENU_DEFAULTS",
+        "MOBILE_HEADER_DEFAULTS",
+        "MODAL_PROMOTE_TRANSITION_NAME",
+        "MONTHS_FULL",
+        "MONTHS_SHORT",
+        "Magnetic",
+        "MarkdownView",
+        "MarketingSurface",
+        "MediaSurface",
+        "Mentions",
+        "Menu",
+        "MenuDivider",
+        "MenuGroup",
+        "MenuItem",
+        "MenuSubMenu",
+        "MessageBubble",
+        "MessageItem",
+        "MessageProvider",
+        "Meter",
+        "MetricsCards",
+        "MetricsChart",
+        "MetricsMinimal",
+        "MetricsRows",
+        "MobileHeader",
+        "Modal",
+        "ModalBody",
+        "ModalCloseButton",
+        "ModalFooter",
+        "ModalHeader",
+        "MonoStat",
+        "MoreFieldsToggle",
+        "Morph",
+        "MotionProvider",
+        "NAV_LINK_DEFAULTS",
+        "NAV_LINK_TYPE_COLORS",
+        "NavLink",
+        "NavigationLinkProvider",
+        "NetworkGraph",
+        "NoiseTexture",
+        "NotificationItem",
+        "NotificationProvider",
+        "NotificationSurface",
+        "OAUTH_TRANSITION_VARIANT_ORDER",
+        "OAuthTransitionScreen",
+        "OPERATOR_DEFINITIONS",
+        "OTPINPUT_DEFAULTS",
+        "OTPInput",
+        "OperationalSurface",
+        "PASSWORD_INPUT_DEFAULTS",
+        "POPCONFIRM_DEFAULTS",
+        "POPOVER_DEFAULTS",
+        "PREVIEW_SCOPE_ATTRIBUTE",
+        "PRIMARY_SEED_FIELD",
+        "PRODUCT_PROFILES",
+        "PageShellSurface",
+        "Pagination",
+        "Paragraph",
+        "Parallax",
+        "ParticleField",
+        "Particles",
+        "PasswordInput",
+        "PatternActivityLog",
+        "PatternApprovalInbox",
+        "PatternApprovalWorkflow",
+        "PatternBrandStudio",
+        "PatternCalendarView",
+        "PatternCockpitHeader",
+        "PatternColumnSettings",
+        "PatternCommandPalette",
+        "PatternCommentThread",
+        "PatternDataTable",
+        "PatternDecisionComparison",
+        "PatternDecisionPanorama",
+        "PatternDetailPanel",
+        "PatternEmptyState",
+        "PatternEnvironmentToggle",
+        "PatternFeatureWorkspaceFrame",
+        "PatternFileManager",
+        "PatternFilterBuilder",
+        "PatternFilterPanel",
+        "PatternFormBuilder",
+        "PatternGalleryView",
+        "PatternGridView",
+        "PatternInvoiceTemplate",
+        "PatternKanbanBoard",
+        "PatternListToolbar",
+        "PatternLiveFeed",
+        "PatternLocaleSwitcher",
+        "PatternMapView",
+        "PatternModerationGallery",
+        "PatternNotificationCenter",
+        "PatternOperationalLedger",
+        "PatternPageShell",
+        "PatternPricingTable",
+        "PatternRecordFacts",
+        "PatternSavedViewsBar",
+        "PatternShiftMatrix",
+        "PatternShortcutsOverlay",
+        "PatternStatsGrid",
+        "PatternStepWizard",
+        "PatternTenantPreview",
+        "PatternTimeline",
+        "PatternTreeView",
+        "PatternUserProfileCard",
+        "PatternVirtualList",
+        "PatternWidgetBoard",
+        "PatternWorkbenchHeader",
+        "PatternWorkspaceSwitcher",
+        "PieChart",
+        "Popconfirm",
+        "Popover",
+        "PremiumFormFactsCard",
+        "PremiumFormSections",
+        "Presence",
+        "PresenceBar",
+        "PresenceTypingIndicator",
+        "PreviewDiffCard",
+        "PricingSurface",
+        "ProductProfileContext",
+        "ProductProfileProvider",
+        "ProfileSurface",
+        "Progress",
+        "PulseValue",
+        "QRCode",
+        "RADIUS_MAP",
+        "RATE_DEFAULTS",
+        "RATE_SIZE_MAP",
+        "RATIO_PRESETS",
+        "RECIPE_PROFILES",
+        "RECIPE_PROFILE_SCHEMA_VERSION",
+        "RECORD_MORPH_TRANSITION_CLASS",
+        "RESIZE_HANDLE_DEFAULTS",
+        "RESPONSIVE_BREAKPOINTS",
+        "RESPONSIVE_BREAKPOINT_ORDER",
+        "RESPONSIVE_POSTURE_PROFILES",
+        "RESPONSIVE_POSTURE_SCHEMA_VERSION",
+        "RadarChart",
+        "Radio",
+        "RadioGroup",
+        "Rate",
+        "RecipeProfileProvider",
+        "RecordActionBar",
+        "RecordFacts",
+        "RecordField",
+        "RecordFieldGrid",
+        "RecordPanel",
+        "RecordSummaryStrip",
+        "RecordWorkbenchSurface",
+        "ReportSurface",
+        "ResizeHandle",
+        "ResponsiveContext",
+        "ResponsiveProvider",
+        "ResponsiveSlot",
+        "Result",
+        "SCROLLBAR_SIZES",
+        "SCROLL_AREA_DEFAULTS",
+        "SEED_SHADOWING_FIELDS",
+        "SEGMENTED_DEFAULTS",
+        "SEMANTIC_MATERIAL_ROLES",
+        "SEMANTIC_SURFACE_DEFAULTS",
+        "SEMANTIC_SURFACE_ROLES",
+        "SEMANTIC_TYPOGRAPHY_ROLES",
+        "SHADOW_MAP",
+        "SHEET_DEFAULTS",
+        "SHELL_DEFAULTS",
+        "SIDEBAR_CONTRAST_ATTRIBUTION",
+        "SLIDER_DEFAULTS",
+        "SPACE_ALIGN_MAP",
+        "SPACE_DEFAULTS",
+        "SPACE_SIZE_MAP",
+        "SPACING_MAP",
+        "SPLITTER_DEFAULTS",
+        "STACK_ALIGN_MAP",
+        "STACK_DEFAULTS",
+        "STACK_JUSTIFY_MAP",
+        "STACK_SPACING_MAP",
+        "STATUS_SEED_FIELDS",
+        "STATUS_SEED_SHADOWING_FIELDS",
+        "STEPPER_DEFAULTS",
+        "STEPPER_FONT_SIZE_MAP",
+        "STEPPER_SIZE_MAP",
+        "STEPS_DEFAULTS",
+        "STRENGTH_COLORS",
+        "STRENGTH_WIDTHS",
+        "SankeyChart",
+        "SavedViewsMenu",
+        "ScaleIn",
+        "ScatterChart",
+        "SchedulerSurface",
+        "ScopeSwitcher",
+        "ScrollArea",
+        "ScrollReveal",
+        "SearchCommandBar",
+        "SearchSurface",
+        "SectionFrame",
+        "Segmented",
+        "Select",
+        "SelectionPreviewRail",
+        "SemanticSurface",
+        "SemanticSurfaceSupport",
+        "SettingsSurface",
+        "Sheet",
+        "ShimmerText",
+        "ShortcutProvider",
+        "ShortcutScope",
+        "Show",
+        "SidebarSurface",
+        "Skeleton",
+        "SkeletonAvatar",
+        "SkeletonButton",
+        "SkeletonCard",
+        "SkeletonForm",
+        "SkeletonListItem",
+        "SkeletonParagraph",
+        "SkeletonTable",
+        "SkeletonText",
+        "SlideIn",
+        "Slider",
+        "Space",
+        "Sparkline",
+        "Spinner",
+        "Splitter",
+        "Spotlight",
+        "Stack",
+        "StaggerChildren",
+        "Statistic",
+        "StatsHeader",
+        "StatusFilterPills",
+        "Stepper",
+        "StepperContent",
+        "StepperStep",
+        "Steps",
+        "StreamingText",
+        "SurfaceActionBar",
+        "SurfaceCapabilityAnatomy",
+        "SurfaceEmptyState",
+        "SurfaceErrorBoundary",
+        "SurfaceErrorState",
+        "SurfaceLoadingSkeleton",
+        "SurfaceOfflineBanner",
+        "SurfaceSectionCard",
+        "SurfaceStaleBanner",
+        "SurfaceTabbedLabel",
+        "Switch",
+        "SystemCssVariablesBridge",
+        "TAB_PANEL_TRANSITION_CLASS",
+        "TAGINPUT_DEFAULTS",
+        "TENANT_CAPABILITY_REGISTRY",
+        "TENANT_INTERNAL_MANIFEST",
+        "TENANT_PRO_MANIFEST",
+        "TENANT_STANDARD_MANIFEST",
+        "TENANT_THEME_ANATOMY_VARIANTS",
+        "TENANT_THEME_CHROME_FAMILIES",
+        "TENANT_THEME_COMPILER_VERSION",
+        "TENANT_THEME_CONFIG_SCHEMA",
+        "TENANT_THEME_CONFIG_SCHEMA_DIGEST",
+        "TENANT_THEME_DOCUMENT_SCHEMA_DIGEST",
+        "TENANT_THEME_EFFECT_INTENSITY_BOUNDS",
+        "TENANT_THEME_FONT_PACK_IDS",
+        "TENANT_THEME_NEUTRAL_OVERRIDE_TOKENS",
+        "TENANT_THEME_OVERRIDE_TOKENS",
+        "TENANT_THEME_RADIUS_SCALE_BOUNDS",
+        "TENANT_THEME_REFERENCE_TOKENS",
+        "TENANT_THEME_RHYTHM_FACTORS",
+        "TENANT_THEME_RHYTHM_SCALE_BOUNDS",
+        "TENANT_THEME_SCHEMA_VERSION",
+        "TENANT_THEME_TYPE_SCALE_BOUNDS",
+        "TENANT_THEME_V1_COVERAGE",
+        "TENANT_THEME_VERTICAL_ENVELOPES",
+        "TENANT_VISUAL_CHANNELS",
+        "THICKNESS_MAP",
+        "TONE_TO_AVATAR_VARIANT",
+        "TONE_TO_BADGE_VARIANT",
+        "TONE_TO_CALLOUT_VARIANT",
+        "TONE_TO_TAG_VARIANT",
+        "TONE_TO_VARIANT",
+        "TOUR_DEFAULTS",
+        "TRANSFER_DEFAULTS",
+        "TREESELECT_DEFAULTS",
+        "Table",
+        "TableToolbar",
+        "Tabs",
+        "Tag",
+        "TagGroup",
+        "TagInput",
+        "TeamSurface",
+        "TenantContext",
+        "TenantProvider",
+        "TenantThemePreviewReport",
+        "TenantThemeValidationError",
+        "TerminalBlock",
+        "Text",
+        "TextReveal",
+        "Textarea",
+        "TextureBackdrop",
+        "ThemeContext",
+        "ThemeProvider",
+        "TimePicker",
+        "Timeline",
+        "Toast",
+        "ToastContainer",
+        "ToastProvider",
+        "Toggle",
+        "TokenInspector",
+        "ToolCallCard",
+        "Tooltip",
+        "TooltipSeries",
+        "TooltipValue",
+        "Tour",
+        "Transfer",
+        "Tree",
+        "TreeMap",
+        "TreeSelect",
+        "TreeViewConnector",
+        "Typewriter",
+        "TypingIndicator",
+        "Typography",
+        "UNSAVED_CHANGES_GUARD_CONTRACT",
+        "UPLOAD_DEFAULTS",
+        "Upload",
+        "VERTICAL_REGISTRY",
+        "VIEW_TRANSITION_DIRECTION_ATTRIBUTE",
+        "ViewModeSwitcher",
+        "VisualizationSurface",
+        "VisuallyHidden",
+        "VoiceInputButton",
+        "WATERMARK_DEFAULTS",
+        "WaterfallChart",
+        "Watermark",
+        "WidgetBoard",
+        "WizardSurface",
+        "WorkspaceAdvancedFilters",
+        "WorkspaceColumnsMenu",
+        "WorkspaceCommandBar",
+        "WorkspaceFilterRail",
+        "WorkspaceHeader",
+        "WorkspacePreviewRail",
+        "WorkspaceScopes",
+        "WorkspaceShell",
+        "WorkspaceViewsMenu",
+        "actionsColumn",
+        "apcaContrast",
+        "appearanceMatchesArtifact",
+        "applyFormat",
+        "applyModeOverlay",
+        "applyStreamCommit",
+        "ar",
+        "arePropsEqual",
+        "assertExpressiveEdgeWidthInvariant",
+        "assertTenantThemeEnvelopeDeclaresAdvanced",
+        "bithireBrandTheme",
+        "brandModeSelector",
+        "brandTenantSelector",
+        "brandThemeRampSurface",
+        "brandThemeToChromeVariables",
+        "brandThemeToPersonality",
+        "brandThemeToTenantAppearance",
+        "brandThemeToTenantAppearanceAdvanced",
+        "brandThemeToTokenOverrides",
+        "buildChartTrendPoints",
+        "buildHideMediaQuery",
+        "buildMinWidthQuery",
+        "buildRangeQuery",
+        "buildRecipeManifest",
+        "buildShowMediaQuery",
+        "buildTenantThemePreviewScope",
+        "buildViewModes",
+        "canonicalizeTenantThemeValue",
+        "cellRenderers",
+        "claimRootAttribute",
+        "claimRootAttributeSet",
+        "claimRootClass",
+        "claimRootStyleProperty",
+        "clampDensityIntoExpressiveEnvelope",
+        "clampIntoExpressiveEnvelope",
+        "clearCustomRegistry",
+        "clearServerHeaders",
+        "clearTenantCache",
+        "column",
+        "columns",
+        "compileBrandTheme",
+        "compileBrandThemeDeprecated",
+        "compileTenantThemeConfig",
+        "compileTenantThemePreview",
+        "compileTheme",
+        "composeRootAttributeReleases",
+        "configureCustomEngine",
+        "configureDomainLookup",
+        "configureTenantApi",
+        "copyToClipboard",
+        "countActiveFilters",
+        "createAuthSurfaceConfig",
+        "createCompoundComponent",
+        "createCustomWrapper",
+        "createEdgeConfigDomainLookup",
+        "createEngineComponent",
+        "createFormSurfaceConfig",
+        "createMarketingSurfaceConfig",
+        "createPropsComparator",
+        "createRecipeVariant",
+        "createSubComponent",
+        "createTenantConfig",
+        "daysInMonthCount",
+        "decayedFrecency",
+        "deepMergeTokenOverrides",
+        "defaultViewModeIcons",
+        "defaultViewModeLabels",
+        "deriveExtendedPaletteFloor",
+        "deriveStatusTintFloor",
+        "deriveTenantColorRamps",
+        "describeChart",
+        "deserializeBrandTheme",
+        "directionFromIndexDelta",
+        "en",
+        "errorInDev",
+        "es",
+        "evntoBrandTheme",
+        "exportChart",
+        "fetchRemoteTenantConfig",
+        "filterDetailSurfaceTabs",
+        "filterSurfaceActions",
+        "filterSurfaceColumns",
+        "filterSurfaceFields",
+        "filterSurfaceRowActions",
+        "filterSurfaceTabbedViews",
+        "firstDayOfMonth",
+        "formatCurrency",
+        "formatDate",
+        "formatDateRange",
+        "formatDateStr",
+        "formatDisplay",
+        "formatFileSize",
+        "formatList",
+        "formatNumber",
+        "formatPercent",
+        "formatRelativeTime",
+        "formatShortcutKey",
+        "formatTime",
+        "formatTimeStr",
+        "fr",
+        "generateCalendarGrid",
+        "generateClipboardText",
+        "generateCsv",
+        "generateFilterId",
+        "generateJson",
+        "getAvailableEngines",
+        "getCustomComponent",
+        "getCustomEngineConfig",
+        "getDefaultEngine",
+        "getDefaultTenant",
+        "getDefaultTenantConfig",
+        "getEngine",
+        "getFirstPartyTenantThemeVerticalEnvelope",
+        "getHighlighter",
+        "getKeyboardNavDate",
+        "getKnownTenantConfig",
+        "getKnownTenantSlugs",
+        "getOAuthTransitionApp",
+        "getOAuthTransitionDefaultVariant",
+        "getOAuthTransitionPool",
+        "getOAuthTransitionProvider",
+        "getOAuthTransitionVariant",
+        "getOperatorsForField",
+        "getOperatorsForFieldWithCustom",
+        "getProductProfile",
+        "getRegisteredComponentCount",
+        "getRegisteredComponents",
+        "getRegisteredPacks",
+        "getStableEngines",
+        "getTenantConfig",
+        "getTenantThemeVerticalEnvelope",
+        "getThicknessValue",
+        "getUnresolvedTenantConfig",
+        "getVerticalPreset",
+        "governedExitMs",
+        "governedFlashMs",
+        "hasCustomComponent",
+        "hasSurfaceError",
+        "heightPxToRows",
+        "hydrateTenantThemeConfig",
+        "inferSharedHeaderActionKind",
+        "isAllSurfaceAccess",
+        "isBundledTenant",
+        "isDarkSurfaceTheme",
+        "isDateInRange",
+        "isFieldVisibleForRow",
+        "isFilterGroup",
+        "isFilterRule",
+        "isKnownTenant",
+        "isOAuthProvider",
+        "isOAuthTransitionVariantId",
+        "isResolvedSurfaceAccess",
+        "isSameDay",
+        "isValidBranding",
+        "isValidEngine",
+        "isValidEngineName",
+        "isValidPlan",
+        "isValidTenantConfig",
+        "loadStaticTenantConfig",
+        "mapSurfaceData",
+        "mergeOperatorsByType",
+        "mergePartialPersonality",
+        "message",
+        "normalizeLayoutRevision",
+        "normalizeSurfaceDensity",
+        "normalizeSurfaceError",
+        "notification",
+        "pad2",
+        "parseDateValue",
+        "parseInline",
+        "parseMarkdown",
+        "parseTenantThemeConfig",
+        "parseTenantThemeDocument",
+        "pickOAuthTransitionVariant",
+        "placementsToGridStyles",
+        "preloadTenantConfig",
+        "probeTenantThemePackWarnings",
+        "projectChartSummaryRows",
+        "pt",
+        "quantizeEmphasis",
+        "rankByFrecency",
+        "recordMorphStyle",
+        "recordTransitionName",
+        "recordUse",
+        "registerCustomComponent",
+        "registerCustomComponents",
+        "registerHighlighter",
+        "renderFirstPartyArtifact",
+        "renderVerticalArtifact",
+        "reportVisualAuthorityConflict",
+        "resetVisualAuthorityDiagnostics",
+        "resolveAccessor",
+        "resolveActiveResponsivePosture",
+        "resolveAdaptiveLayout",
+        "resolveChartProjection",
+        "resolveChartScaffoldState",
+        "resolveColumnValue",
+        "resolveContainerPosture",
+        "resolveDocumentLocaleAttributes",
+        "resolveEngine",
+        "resolveExitFallbackMs",
+        "resolveExperienceProfile",
+        "resolveExpressiveAxes",
+        "resolveFamilyEmphasis",
+        "resolveFieldAccessForRow",
+        "resolveFromDomain",
+        "resolveFromHeader",
+        "resolveFromSubdomain",
+        "resolveGalleryKey",
+        "resolveGridRowKey",
+        "resolveHeader",
+        "resolveListCardMinWidth",
+        "resolveLocaleDirection",
+        "resolveMeterThreshold",
+        "resolvePersonalityPreset",
+        "resolvePosture",
+        "resolveRecipeProfile",
+        "resolveRequestTenant",
+        "resolveRequestTenantAsync",
+        "resolveResponsivePosture",
+        "resolveRowKey",
+        "resolveSharedHeaderActionIcon",
+        "resolveSharedHeaderActionTooltip",
+        "resolveSharedHeaderActionVariant",
+        "resolveStackSpacing",
+        "resolveSurfaceAction",
+        "resolveSurfaceButtonVariant",
+        "resolveSurfaceCapability",
+        "resolveSurfaceCapabilityRegistry",
+        "resolveSurfaceDetailActionVariant",
+        "resolveSurfacePermission",
+        "resolveSurfaceTabsType",
+        "resolveTenant",
+        "resolveValue",
+        "resolveVisualAuthority",
+        "rottayBrandTheme",
+        "sanitizeExpressiveOverrides",
+        "sanitizeHref",
+        "selectTenantThemeAdjustments",
+        "semanticMaterialsToCssVariables",
+        "semanticSurfaceRolesToCssVariables",
+        "serializeBrandTheme",
+        "setSemanticTypographyVariables",
+        "setServerHeaders",
+        "sha256TenantThemeValue",
+        "startDirectionalViewTransition",
+        "startDsViewTransition",
+        "stringifySurfaceValue",
+        "stripTime",
+        "surfaceSectionCardRecipe",
+        "tabPanelTransitionName",
+        "tabPanelTransitionStyle",
+        "tenantPostureFloors",
+        "tenantThemeAnatomyAttributes",
+        "tenantThemeArtifactRootAttributes",
+        "themeModeSelector",
+        "toBreakpoint",
+        "toCanonicalSize",
+        "toLegacySize",
+        "toOperatorDefinition",
+        "toSupportedLocale",
+        "toast",
+        "triggerDownload",
+        "unregisterCustomComponent",
+        "useAccentTokens",
+        "useActiveResponsivePosture",
+        "useAdaptivePosture",
+        "useAriaAnnounce",
+        "useAutoSave",
+        "useBreakpoints",
+        "useCardTokens",
+        "useChartBrush",
+        "useChartCompact",
+        "useChartDimensions",
+        "useChartExport",
+        "useChartPersonality",
+        "useChartStream",
+        "useChartTheme",
+        "useChartTooltip",
+        "useChartViewport",
+        "useChat",
+        "useCollapseTokens",
+        "useCollectionWorkspace",
+        "useColorTokens",
+        "useCommandPaletteItems",
+        "useCommandSources",
+        "useCommands",
+        "useCreateTenant",
+        "useCrossTabSync",
+        "useCustomStatus",
+        "useDataTable",
+        "useDeferredPending",
+        "useDensity",
+        "useDirection",
+        "useDirectionalViewTransition",
+        "useDraftSave",
+        "useDsFocusMode",
+        "useEngineContext",
+        "useErrorHandler",
+        "useExecuteCommand",
+        "useExpressiveEmphasis",
+        "useFeatureContext",
+        "useFeatureContextAlias",
+        "useFeatures",
+        "useFilterPanel",
+        "useFlipLayout",
+        "useForm",
+        "useFormBuilder",
+        "useFormDiff",
+        "useGlobalSearch",
+        "useGlobalShortcut",
+        "useGlobalShortcuts",
+        "useGroupedData",
+        "useHasFeature",
+        "useHasShortcutProvider",
+        "useHighlighter",
+        "useI18nContext",
+        "useInView",
+        "useInfiniteScroll",
+        "useInlineEditing",
+        "useKanban",
+        "useKeyboardNavigation",
+        "useLayoutPreference",
+        "useLocale",
+        "useMeasuredScroll",
+        "useMediaQuery",
+        "useMessage",
+        "useMotionPersonality",
+        "useMotionTokens",
+        "useMousePosition",
+        "useNavigationLink",
+        "useNotification",
+        "useNotificationPreferences",
+        "useOptimisticList",
+        "useOptimisticUpdate",
+        "useOptionalDirection",
+        "useOptionalTokens",
+        "useOptionalTranslation",
+        "useOverlayLayer",
+        "usePdfExport",
+        "usePresence",
+        "useProductProfile",
+        "useProductProfileContext",
+        "usePulseOnChange",
+        "useRecipeProfile",
+        "useRecipeProfileDefaults",
+        "useReducedMotion",
+        "useRegisterCommandSource",
+        "useRegisterCommands",
+        "useRegisteredShortcuts",
+        "useResponsive",
+        "useResponsiveValue",
+        "useRouterState",
+        "useRovingTabindex",
+        "useScrollProgress",
+        "useShellContext",
+        "useShortcutScope",
+        "useSmoothCounter",
+        "useSortableList",
+        "useSpacingTokens",
+        "useStreamingText",
+        "useSurfaceProfileDefaults",
+        "useSurfaceProfileDefaultsWithOverrides",
+        "useSurfaceQuery",
+        "useSurfaceState",
+        "useTableExport",
+        "useTenant",
+        "useTenantBranding",
+        "useTenantContext",
+        "useTenantThemePreview",
+        "useTheme",
+        "useThemeContext",
+        "useToast",
+        "useTokens",
+        "useTranslation",
+        "useTypographyTokens",
+        "useUndoRedo",
+        "useUnsavedChangesGuard",
+        "useVariant",
+        "useViewTransition",
+        "useVirtualScroll",
+        "useVoiceInput",
+        "validateExperienceProfileSelection",
+        "validateRecipeProfileSelection",
+        "validateResponsivePostureSelection",
+        "validateTenantThemeAgainstVerticalEnvelope",
+        "validateTenantThemeConfig",
+        "validateTenantThemeDocument",
+        "warnInDev",
+        "warnOnceInDev",
+        "widgetItemsToAdaptiveInputs"
+      ],
+      "symbols": {
+        "ActionDock": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
+        "ActiveFiltersBar": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
+        "ActivityCards": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
+        "ActivityCompact": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
+        "ActivitySurface": [
+          "@ant-design/icons",
+          "@phosphor-icons/react",
+          "antd",
+          "d3",
+          "motion"
+        ],
+        "ActivityTicker": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
+        "ActivityTimeline": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
+        "AdaptiveOverlay": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
+        "Affix": [
+          "antd"
+        ],
+        "Alert": [
+          "@phosphor-icons/react",
+          "antd"
+        ],
+        "AlertDialog": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
+        "Anchor": [
+          "antd"
+        ],
+        "AntdConfigProvider": [
+          "antd"
+        ],
+        "AppShell": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
+        "AreaChart": [
+          "antd",
+          "d3",
+          "motion"
+        ],
+        "AsciiDiagram": [
+          "antd",
+          "motion"
+        ],
+        "AssistantStatusBadge": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
+        "AssistantStatusIndicator": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
+        "AuditSurface": [
+          "@ant-design/icons",
+          "@phosphor-icons/react",
+          "antd",
+          "d3",
+          "motion"
+        ],
+        "Aurora": [
+          "antd",
+          "motion"
+        ],
+        "AuthSurface": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
+        "AutoComplete": [
+          "@phosphor-icons/react",
+          "antd"
+        ],
+        "Avatar": [
+          "@phosphor-icons/react",
+          "antd"
+        ],
+        "BackTop": [
+          "@phosphor-icons/react",
+          "antd"
+        ],
+        "Badge": [
+          "@phosphor-icons/react",
+          "antd"
+        ],
+        "BarChart": [
+          "antd",
+          "d3",
+          "motion"
+        ],
+        "BillingSurface": [
+          "@ant-design/icons",
+          "@phosphor-icons/react",
+          "antd",
+          "d3",
+          "motion"
+        ],
+        "BottomTabBar": [
+          "antd"
+        ],
+        "BrandingPreviewSandbox": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
+        "Breadcrumb": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
+        "buildViewModes": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
+        "BulkSelectToggle": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
+        "BulletChart": [
+          "antd",
+          "d3",
+          "motion"
+        ],
+        "Button": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
+        "Calendar": [
+          "@phosphor-icons/react",
+          "antd"
+        ],
+        "CalendarHeatMap": [
+          "antd",
+          "d3",
+          "motion"
+        ],
+        "Callout": [
+          "@phosphor-icons/react"
+        ],
+        "Card": [
+          "@phosphor-icons/react",
+          "antd"
+        ],
+        "Carousel": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
+        "Cascader": [
+          "@phosphor-icons/react",
+          "antd"
+        ],
+        "ChatSurface": [
+          "@ant-design/icons",
+          "@phosphor-icons/react",
+          "antd",
+          "d3",
+          "motion"
+        ],
+        "Checkbox": [
+          "antd"
+        ],
+        "CheckboxGroup": [
+          "antd"
+        ],
+        "CodeBlock": [
+          "@phosphor-icons/react"
+        ],
+        "Collapse": [
+          "@phosphor-icons/react",
+          "antd"
+        ],
+        "CollectionHeader": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
+        "CollectionWorkspace": [
+          "@ant-design/icons",
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
+        "CollectionWorkspaceSurface": [
+          "@ant-design/icons",
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
+        "ColorPicker": [
+          "antd"
+        ],
+        "ColumnMenu": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
+        "ColumnSettingsDropdown": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
+        "CommandCenterSurface": [
+          "@ant-design/icons",
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
+        "CompareSurface": [
+          "@ant-design/icons",
+          "@phosphor-icons/react",
+          "antd",
+          "d3",
+          "motion"
+        ],
+        "ConfirmActionCard": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
+        "ConfirmDialog": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
+        "ConnectedCommandPalette": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
+        "ContextMenu": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
+        "CopyToCheck": [
+          "@phosphor-icons/react"
+        ],
+        "CountUp": [
+          "antd",
+          "motion"
+        ],
+        "DashboardHeader": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
+        "DashboardSurface": [
+          "@ant-design/icons",
+          "@phosphor-icons/react",
+          "antd",
+          "d3",
+          "motion"
+        ],
+        "DataTerminalCard": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
+        "DataTerminalCardProvider": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
+        "DataTerminalStat": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
+        "DatePicker": [
+          "@phosphor-icons/react",
+          "antd"
+        ],
+        "DecisionInboxSurface": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
+        "defaultViewModeIcons": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
+        "defaultViewModeLabels": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
+        "Descriptions": [
+          "antd"
+        ],
+        "DesignSystemProvider": [
+          "antd",
+          "motion"
+        ],
+        "DetailFormSurface": [
+          "@ant-design/icons",
+          "@phosphor-icons/react",
+          "antd",
+          "d3",
+          "motion"
+        ],
+        "DetailHeader": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
+        "DetailSurface": [
+          "@ant-design/icons",
+          "@phosphor-icons/react",
+          "antd",
+          "d3",
+          "motion"
+        ],
+        "directionFromIndexDelta": [
+          "motion"
+        ],
+        "Divider": [
+          "antd"
+        ],
+        "Drawer": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
+        "Dropdown": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
+        "EditHeader": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
+        "EditorSurface": [
+          "@ant-design/icons",
+          "@phosphor-icons/react",
+          "antd",
+          "d3",
+          "motion"
+        ],
+        "Empty": [
+          "@phosphor-icons/react",
+          "antd"
+        ],
+        "EmptyStateSurface": [
+          "@ant-design/icons",
+          "@phosphor-icons/react",
+          "antd",
+          "d3",
+          "motion"
+        ],
+        "ExportButton": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
+        "FadeIn": [
+          "antd",
+          "motion"
+        ],
+        "FieldFiltersPanel": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
+        "FileBrowserSurface": [
+          "@ant-design/icons",
+          "@phosphor-icons/react",
+          "antd",
+          "d3",
+          "motion"
+        ],
+        "Flex": [
+          "antd"
+        ],
+        "FloatButton": [
+          "@phosphor-icons/react",
+          "antd"
+        ],
+        "Form": [
+          "@phosphor-icons/react",
+          "antd"
+        ],
+        "FormFactsCard": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
+        "FormField": [
+          "@phosphor-icons/react",
+          "antd"
+        ],
+        "FormHeader": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
+        "FormSections": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
+        "FormSurface": [
+          "@ant-design/icons",
+          "@phosphor-icons/react",
+          "antd",
+          "d3",
+          "motion"
+        ],
+        "FunnelChart": [
+          "antd",
+          "d3",
+          "motion"
+        ],
+        "GanttChart": [
+          "antd",
+          "d3",
+          "motion"
+        ],
+        "GaugeChart": [
+          "antd",
+          "d3",
+          "motion"
+        ],
+        "GlowEffect": [
+          "antd",
+          "motion"
+        ],
+        "GradientBackground": [
+          "antd",
+          "motion"
+        ],
+        "GridPattern": [
+          "antd",
+          "motion"
+        ],
+        "GuidedDraftFormSurface": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
+        "HeaderSurface": [
+          "@ant-design/icons",
+          "@phosphor-icons/react",
+          "antd",
+          "d3",
+          "motion"
+        ],
+        "Heading": [
+          "antd"
+        ],
+        "HeatMap": [
+          "antd",
+          "d3",
+          "motion"
+        ],
+        "Histogram": [
+          "antd",
+          "d3",
+          "motion"
+        ],
+        "HoverCard": [
+          "antd",
+          "motion"
+        ],
+        "IconFrame": [
+          "@phosphor-icons/react"
+        ],
+        "Image": [
+          "@phosphor-icons/react",
+          "antd"
+        ],
+        "ImageFallback": [
+          "@phosphor-icons/react"
+        ],
+        "ImportExportSurface": [
+          "@ant-design/icons",
+          "@phosphor-icons/react",
+          "antd",
+          "d3",
+          "motion"
+        ],
+        "inferSharedHeaderActionKind": [
+          "@phosphor-icons/react"
+        ],
+        "InlineEditControl": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
+        "InlineEditField": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
+        "InlineEditFooter": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
+        "InlineEditGrid": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
+        "InlineEditor": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
+        "InlineEditorGroup": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
+        "InlineEditSection": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
+        "Input": [
+          "@phosphor-icons/react",
+          "antd"
+        ],
+        "InputNumber": [
+          "@phosphor-icons/react",
+          "antd"
+        ],
+        "IntegrationSurface": [
+          "@ant-design/icons",
+          "@phosphor-icons/react",
+          "antd",
+          "d3",
+          "motion"
+        ],
+        "KanbanSurface": [
+          "@ant-design/icons",
+          "@phosphor-icons/react",
+          "antd",
+          "d3",
+          "motion"
+        ],
+        "Layout": [
+          "@phosphor-icons/react",
+          "antd"
+        ],
+        "LineChart": [
+          "antd",
+          "d3",
+          "motion"
+        ],
+        "Link": [
+          "antd"
+        ],
+        "List": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
+        "ListSurface": [
+          "@ant-design/icons",
+          "@phosphor-icons/react",
+          "antd",
+          "d3",
+          "motion"
+        ],
+        "ListToolbar": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
+        "LiveCursor": [
+          "@phosphor-icons/react",
+          "antd"
+        ],
+        "LoadingOverlay": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
+        "Magnetic": [
+          "antd",
+          "motion"
+        ],
+        "MarketingSurface": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
+        "MediaSurface": [
+          "@ant-design/icons",
+          "@phosphor-icons/react",
+          "antd",
+          "d3",
+          "motion"
+        ],
+        "Mentions": [
+          "antd"
+        ],
+        "Menu": [
+          "@phosphor-icons/react",
+          "antd"
+        ],
+        "MenuSubMenu": [
+          "@phosphor-icons/react"
+        ],
+        "message": [
+          "@phosphor-icons/react",
+          "antd"
+        ],
+        "MessageBubble": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
+        "MessageItem": [
+          "@phosphor-icons/react",
+          "antd"
+        ],
+        "MessageProvider": [
+          "@phosphor-icons/react",
+          "antd"
+        ],
+        "MetricsCards": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
+        "MetricsChart": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
+        "MetricsMinimal": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
+        "MetricsRows": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
+        "MobileHeader": [
+          "@phosphor-icons/react",
+          "antd"
+        ],
+        "Modal": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
+        "MODAL_PROMOTE_TRANSITION_NAME": [
+          "motion"
+        ],
+        "ModalCloseButton": [
+          "@phosphor-icons/react"
+        ],
+        "ModalHeader": [
+          "@phosphor-icons/react"
+        ],
+        "MonoStat": [
+          "antd",
+          "motion"
+        ],
+        "MoreFieldsToggle": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
+        "Morph": [
+          "antd",
+          "motion"
+        ],
+        "MotionProvider": [
+          "motion"
+        ],
+        "NavLink": [
+          "@phosphor-icons/react",
+          "antd"
+        ],
+        "NetworkGraph": [
+          "antd",
+          "d3",
+          "motion"
+        ],
+        "normalizeSurfaceDensity": [
+          "antd"
+        ],
+        "notification": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
+        "NotificationItem": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
+        "NotificationProvider": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
+        "NotificationSurface": [
+          "@ant-design/icons",
+          "@phosphor-icons/react",
+          "antd",
+          "d3",
+          "motion"
+        ],
+        "OperationalSurface": [
+          "@ant-design/icons",
+          "@phosphor-icons/react",
+          "antd",
+          "d3",
+          "motion"
+        ],
+        "PageShellSurface": [
+          "@ant-design/icons",
+          "@phosphor-icons/react",
+          "antd",
+          "d3",
+          "motion"
+        ],
+        "Pagination": [
+          "@phosphor-icons/react",
+          "antd"
+        ],
+        "Paragraph": [
+          "antd"
+        ],
+        "Parallax": [
+          "motion"
+        ],
+        "ParticleField": [
+          "motion"
+        ],
+        "Particles": [
+          "motion"
+        ],
+        "PasswordInput": [
+          "@phosphor-icons/react",
+          "antd"
+        ],
+        "PatternActivityLog": [
+          "@ant-design/icons",
+          "@phosphor-icons/react",
+          "antd"
+        ],
+        "PatternApprovalInbox": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
+        "PatternApprovalWorkflow": [
+          "@ant-design/icons",
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
+        "PatternBrandStudio": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
+        "PatternCalendarView": [
+          "@phosphor-icons/react",
+          "antd"
+        ],
+        "PatternCockpitHeader": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
+        "PatternColumnSettings": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
+        "PatternCommandPalette": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
+        "PatternCommentThread": [
+          "@ant-design/icons",
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
+        "PatternDataTable": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
+        "PatternDetailPanel": [
+          "@ant-design/icons",
+          "@phosphor-icons/react",
+          "antd"
+        ],
+        "PatternEmptyState": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
+        "PatternEnvironmentToggle": [
+          "@ant-design/icons",
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
+        "PatternFileManager": [
+          "@ant-design/icons",
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
+        "PatternFilterBuilder": [
+          "@ant-design/icons",
+          "@phosphor-icons/react",
+          "antd"
+        ],
+        "PatternFilterPanel": [
+          "@phosphor-icons/react",
+          "antd"
+        ],
+        "PatternFormBuilder": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
+        "PatternGalleryView": [
+          "@phosphor-icons/react",
+          "antd"
+        ],
+        "PatternGridView": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
+        "PatternInvoiceTemplate": [
+          "@ant-design/icons",
+          "@phosphor-icons/react",
+          "antd"
+        ],
+        "PatternKanbanBoard": [
+          "@ant-design/icons",
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
+        "PatternListToolbar": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
+        "PatternLiveFeed": [
+          "@ant-design/icons",
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
+        "PatternLocaleSwitcher": [
+          "@ant-design/icons",
+          "@phosphor-icons/react",
+          "antd"
+        ],
+        "PatternMapView": [
+          "@phosphor-icons/react",
+          "antd"
+        ],
+        "PatternModerationGallery": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
+        "PatternNotificationCenter": [
+          "@ant-design/icons",
+          "@phosphor-icons/react",
+          "antd"
+        ],
+        "PatternOperationalLedger": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
+        "PatternPageShell": [
+          "@ant-design/icons",
+          "@phosphor-icons/react",
+          "antd"
+        ],
+        "PatternPricingTable": [
+          "@ant-design/icons",
+          "@phosphor-icons/react",
+          "antd"
+        ],
+        "PatternRecordFacts": [
+          "@phosphor-icons/react"
+        ],
+        "PatternSavedViewsBar": [
+          "@ant-design/icons",
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
+        "PatternShiftMatrix": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
+        "PatternShortcutsOverlay": [
+          "@phosphor-icons/react",
+          "antd"
+        ],
+        "PatternStatsGrid": [
+          "@ant-design/icons",
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
+        "PatternStepWizard": [
+          "@phosphor-icons/react",
+          "antd"
+        ],
+        "PatternTenantPreview": [
+          "@phosphor-icons/react"
+        ],
+        "PatternTimeline": [
+          "@phosphor-icons/react",
+          "antd"
+        ],
+        "PatternTreeView": [
+          "@ant-design/icons",
+          "@phosphor-icons/react",
+          "antd"
+        ],
+        "PatternUserProfileCard": [
+          "@ant-design/icons",
+          "antd"
+        ],
+        "PatternWidgetBoard": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
+        "PatternWorkbenchHeader": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
+        "PatternWorkspaceSwitcher": [
+          "@ant-design/icons",
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
+        "PieChart": [
+          "antd",
+          "d3",
+          "motion"
+        ],
+        "Popconfirm": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
+        "Popover": [
+          "antd"
+        ],
+        "PremiumFormFactsCard": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
+        "PremiumFormSections": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
+        "Presence": [
+          "motion"
+        ],
+        "PresenceBar": [
+          "@phosphor-icons/react",
+          "antd"
+        ],
+        "PresenceTypingIndicator": [
+          "@phosphor-icons/react",
+          "antd"
+        ],
+        "PreviewDiffCard": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
+        "PricingSurface": [
+          "@ant-design/icons",
+          "@phosphor-icons/react",
+          "antd",
+          "d3",
+          "motion"
+        ],
+        "ProfileSurface": [
+          "@ant-design/icons",
+          "@phosphor-icons/react",
+          "antd",
+          "d3",
+          "motion"
+        ],
+        "Progress": [
+          "@phosphor-icons/react",
+          "antd"
+        ],
+        "QRCode": [
+          "@phosphor-icons/react",
+          "antd"
+        ],
+        "RadarChart": [
+          "antd",
+          "d3",
+          "motion"
+        ],
+        "Radio": [
+          "antd"
+        ],
+        "RadioGroup": [
+          "antd"
+        ],
+        "Rate": [
+          "antd"
+        ],
+        "RECORD_MORPH_TRANSITION_CLASS": [
+          "motion"
+        ],
+        "RecordActionBar": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
+        "RecordFacts": [
+          "@phosphor-icons/react"
+        ],
+        "RecordField": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
+        "recordMorphStyle": [
+          "motion"
+        ],
+        "RecordSummaryStrip": [
+          "antd"
+        ],
+        "recordTransitionName": [
+          "motion"
+        ],
+        "RecordWorkbenchSurface": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
+        "ReportSurface": [
+          "@ant-design/icons",
+          "@phosphor-icons/react",
+          "antd",
+          "d3",
+          "motion"
+        ],
+        "resolveListCardMinWidth": [
+          "antd"
+        ],
+        "resolveSharedHeaderActionIcon": [
+          "@phosphor-icons/react"
+        ],
+        "resolveSharedHeaderActionTooltip": [
+          "@phosphor-icons/react"
+        ],
+        "resolveSharedHeaderActionVariant": [
+          "@phosphor-icons/react"
+        ],
+        "resolveSurfaceTabsType": [
+          "antd"
+        ],
+        "Result": [
+          "@phosphor-icons/react",
+          "antd"
+        ],
+        "SankeyChart": [
+          "antd",
+          "d3",
+          "motion"
+        ],
+        "SavedViewsMenu": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
+        "ScaleIn": [
+          "antd",
+          "motion"
+        ],
+        "ScatterChart": [
+          "antd",
+          "d3",
+          "motion"
+        ],
+        "SchedulerSurface": [
+          "@ant-design/icons",
+          "@phosphor-icons/react",
+          "antd",
+          "d3",
+          "motion"
+        ],
+        "ScrollReveal": [
+          "antd",
+          "motion"
+        ],
+        "SearchCommandBar": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
+        "SearchSurface": [
+          "@ant-design/icons",
+          "@phosphor-icons/react",
+          "antd",
+          "d3",
+          "motion"
+        ],
+        "Segmented": [
+          "antd"
+        ],
+        "Select": [
+          "@phosphor-icons/react",
+          "antd"
+        ],
+        "SelectionPreviewRail": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
+        "SettingsSurface": [
+          "@ant-design/icons",
+          "@phosphor-icons/react",
+          "antd",
+          "d3",
+          "motion"
+        ],
+        "Sheet": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
+        "ShimmerText": [
+          "antd",
+          "motion"
+        ],
+        "SidebarSurface": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
+        "Skeleton": [
+          "antd"
+        ],
+        "SlideIn": [
+          "antd",
+          "motion"
+        ],
+        "Slider": [
+          "antd"
+        ],
+        "Space": [
+          "antd"
+        ],
+        "Sparkline": [
+          "antd",
+          "d3",
+          "motion"
+        ],
+        "Spinner": [
+          "antd"
+        ],
+        "Splitter": [
+          "antd"
+        ],
+        "Spotlight": [
+          "antd",
+          "motion"
+        ],
+        "StaggerChildren": [
+          "antd",
+          "motion"
+        ],
+        "startDirectionalViewTransition": [
+          "motion"
+        ],
+        "startDsViewTransition": [
+          "motion"
+        ],
+        "Statistic": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
+        "StatsHeader": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
+        "StatusFilterPills": [
+          "antd"
+        ],
+        "Stepper": [
+          "@phosphor-icons/react",
+          "antd"
+        ],
+        "StepperStep": [
+          "@phosphor-icons/react"
+        ],
+        "Steps": [
+          "antd"
+        ],
+        "StreamingText": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
+        "SurfaceActionBar": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
+        "SurfaceCapabilityAnatomy": [
+          "antd"
+        ],
+        "SurfaceEmptyState": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
+        "SurfaceErrorState": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
+        "SurfaceLoadingSkeleton": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
+        "SurfaceOfflineBanner": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
+        "SurfaceSectionCard": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
+        "surfaceSectionCardRecipe": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
+        "SurfaceStaleBanner": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
+        "SurfaceTabbedLabel": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
+        "Switch": [
+          "antd"
+        ],
+        "SystemCssVariablesBridge": [
+          "antd"
+        ],
+        "TAB_PANEL_TRANSITION_CLASS": [
+          "motion"
+        ],
+        "Table": [
+          "@phosphor-icons/react",
+          "antd"
+        ],
+        "TableToolbar": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
+        "tabPanelTransitionName": [
+          "motion"
+        ],
+        "tabPanelTransitionStyle": [
+          "motion"
+        ],
+        "Tabs": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
+        "Tag": [
+          "@phosphor-icons/react",
+          "antd"
+        ],
+        "TagInput": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
+        "TeamSurface": [
+          "@ant-design/icons",
+          "@phosphor-icons/react",
+          "antd",
+          "d3",
+          "motion"
+        ],
+        "TenantThemePreviewReport": [
+          "@phosphor-icons/react",
+          "antd"
+        ],
+        "TerminalBlock": [
+          "antd",
+          "motion"
+        ],
+        "Text": [
+          "antd"
+        ],
+        "Textarea": [
+          "@phosphor-icons/react",
+          "antd"
+        ],
+        "TextReveal": [
+          "antd",
+          "motion"
+        ],
+        "Timeline": [
+          "antd"
+        ],
+        "TimePicker": [
+          "@phosphor-icons/react",
+          "antd"
+        ],
+        "Toast": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
+        "ToastContainer": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
+        "Toggle": [
+          "@phosphor-icons/react",
+          "antd"
+        ],
+        "ToolCallCard": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
+        "Tooltip": [
+          "antd"
+        ],
+        "Tour": [
+          "@phosphor-icons/react",
+          "antd"
+        ],
+        "Transfer": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
+        "Tree": [
+          "@phosphor-icons/react",
+          "antd"
+        ],
+        "TreeMap": [
+          "antd",
+          "d3",
+          "motion"
+        ],
+        "TreeSelect": [
+          "@phosphor-icons/react",
+          "antd"
+        ],
+        "Typewriter": [
+          "antd",
+          "motion"
+        ],
+        "TypingIndicator": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
+        "Typography": [
+          "antd"
+        ],
+        "Upload": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
+        "useAccentTokens": [
+          "antd"
+        ],
+        "useCardTokens": [
+          "antd"
+        ],
+        "useChartPersonality": [
+          "antd",
+          "motion"
+        ],
+        "useColorTokens": [
+          "antd"
+        ],
+        "useDeferredPending": [
+          "motion"
+        ],
+        "useDirectionalViewTransition": [
+          "motion"
+        ],
+        "useFlipLayout": [
+          "motion"
+        ],
+        "useForm": [
+          "@phosphor-icons/react",
+          "antd"
+        ],
+        "useMessage": [
+          "@phosphor-icons/react",
+          "antd"
+        ],
+        "useMotionPersonality": [
+          "antd",
+          "motion"
+        ],
+        "useMotionTokens": [
+          "antd"
+        ],
+        "useNotification": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
+        "useOptionalTokens": [
+          "antd"
+        ],
+        "usePresence": [
+          "motion"
+        ],
+        "useReducedMotion": [
+          "motion"
+        ],
+        "useShellContext": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
+        "useSmoothCounter": [
+          "motion"
+        ],
+        "useSpacingTokens": [
+          "antd"
+        ],
+        "useSurfaceProfileDefaults": [
+          "antd"
+        ],
+        "useSurfaceState": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
+        "useTokens": [
+          "antd"
+        ],
+        "useTypographyTokens": [
+          "antd"
+        ],
+        "useViewTransition": [
+          "motion"
+        ],
+        "VIEW_TRANSITION_DIRECTION_ATTRIBUTE": [
+          "motion"
+        ],
+        "ViewModeSwitcher": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
+        "VisualizationSurface": [
+          "@ant-design/icons",
+          "@phosphor-icons/react",
+          "antd",
+          "d3",
+          "motion"
+        ],
+        "VoiceInputButton": [
+          "@phosphor-icons/react",
+          "antd"
+        ],
+        "WaterfallChart": [
+          "antd",
+          "d3",
+          "motion"
+        ],
+        "Watermark": [
+          "antd"
+        ],
+        "WidgetBoard": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
+        "WizardSurface": [
+          "@ant-design/icons",
+          "@phosphor-icons/react",
+          "antd",
+          "d3",
+          "motion"
+        ],
+        "WorkspaceAdvancedFilters": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
+        "WorkspaceColumnsMenu": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
+        "WorkspaceCommandBar": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
+        "WorkspaceFilterRail": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
+        "WorkspaceHeader": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
+        "WorkspacePreviewRail": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
+        "WorkspaceShell": [
+          "motion"
+        ],
+        "WorkspaceViewsMenu": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ]
+      },
+      "supplierFreeExports": [
+        "ACTION_DOCK_DEFAULTS",
+        "ADAPTIVE_OVERLAY_DEFAULTS",
+        "AFFIX_DEFAULTS",
+        "ALERT_DIALOG_DEFAULTS",
+        "ALIGN_ITEMS_MAP",
+        "ANCHOR_DEFAULTS",
+        "APCA_BODY_TEXT_MIN_LC",
+        "ASPECT_RATIO_DEFAULTS",
+        "AUTOCOMPLETE_DEFAULTS",
+        "AsciiFrame",
+        "AspectRatio",
+        "AvatarBadge",
+        "AvatarFallback",
+        "AvatarGroup",
+        "BACKTOP_DEFAULTS",
+        "BOTTOM_TAB_BAR_DEFAULTS",
+        "BOX_DEFAULTS",
+        "Box",
+        "CALLOUT_COLORS",
+        "CALLOUT_DEFAULTS",
+        "CASCADER_DEFAULTS",
+        "CHART_METRIC_TREND_RENDERER_ID",
+        "CHART_RANKED_ROWS_RENDERER_ID",
+        "CODE_BLOCK_DEFAULTS",
+        "COLLAPSE_DEFAULTS",
+        "COLORPICKER_DEFAULTS",
+        "CONFIRM_DIALOG_DEFAULTS",
+        "CONFIRM_DIALOG_VARIANT_COLORS",
+        "CONTAINER_DEFAULTS",
+        "CONTAINER_MAX_WIDTHS",
+        "CONTAINER_PADDINGS",
+        "CONTEXTMENU_DEFAULTS",
+        "ChartFamilyFrame",
+        "ChartFrame",
+        "ChartImperativePlot",
+        "ChartMetricTrendView",
+        "ChartRankedRowsView",
+        "ChartScaffold",
+        "ChartTooltip",
+        "CommandRegistryProvider",
+        "Container",
+        "CropMarks",
+        "DAYS_SHORT",
+        "DEFAULT_COLORS",
+        "DEFAULT_COMPACT_CONFIG",
+        "DEFAULT_FALLBACK_LOCALE",
+        "DEFAULT_LOCALE",
+        "DEFAULT_LOCALES",
+        "DEFAULT_MARGIN",
+        "DEFAULT_OPERATORS_BY_TYPE",
+        "DEFAULT_PACK",
+        "DEFAULT_PRODUCT_PROFILE_KEY",
+        "DEFAULT_RESPONSIVE_POSTURE",
+        "DEFAULT_RESPONSIVE_POSTURE_ID",
+        "DEFAULT_TENANT_CONFIG",
+        "DEFAULT_TENANT_SLUG",
+        "DEFAULT_TENANT_THEME_PREVIEW_DEBOUNCE_MS",
+        "DENSITY_POSTURES",
+        "DETAIL_HEADER_DEFAULTS",
+        "DIVIDER_DEFAULTS",
+        "DIVIDER_DEFAULT_COLORS",
+        "DIVIDER_SPACING_MAP",
+        "DROPDOWN_DEFAULTS",
+        "DSErrorBoundary",
+        "DecisionComparison",
+        "DecisionPanorama",
+        "DensityScope",
+        "EMPHASIS_FAMILIES",
+        "ENGINE_REGISTRY",
+        "EXPERIENCE_PROFILES",
+        "EXPERIENCE_PROFILE_ENVELOPES",
+        "EXPRESSIVE_A11Y_FLOORS",
+        "EXPRESSIVE_EDGE_PROFILES",
+        "EXPRESSIVE_ELEVATION_PROFILES",
+        "EXPRESSIVE_GEOMETRY_PROFILES",
+        "EXPRESSIVE_ICON_PROFILES",
+        "EXPRESSIVE_MATERIAL_PROFILES",
+        "EXPRESSIVE_MOTIF_PROFILES",
+        "EXPRESSIVE_PROFILE_SCHEMA_VERSION",
+        "EXPRESSIVE_TYPE_PROFILES",
+        "EffectRuntimeProvider",
+        "EngineContext",
+        "EngineErrorBoundary",
+        "EngineProvider",
+        "ErrorCategory",
+        "ErrorHandler",
+        "ErrorSeverity",
+        "FALLBACK_ENGINE",
+        "FIRST_PARTY_ARTIFACT_REGENERATE_COMMAND",
+        "FIRST_PARTY_ARTIFACT_SPECS",
+        "FIRST_PARTY_BRAND_THEME_REQUIRED_KEYS",
+        "FLEX_ALIGN_MAP",
+        "FLEX_DEFAULTS",
+        "FLEX_JUSTIFY_MAP",
+        "FLOAT_BUTTON_DEFAULTS",
+        "FORMFIELD_DEFAULTS",
+        "FOUNDATION_AUTHORITIES",
+        "FRECENCY_HALF_LIFE_MS",
+        "FeatureContext",
+        "FeatureGate",
+        "FeatureProvider",
+        "FeatureWorkspaceFrame",
+        "FocusModeProvider",
+        "GAP_MAP",
+        "GENERATED_ARTIFACT_BANNER",
+        "GRID_DEFAULTS",
+        "GRID_ITEM_DEFAULTS",
+        "GlassCard",
+        "Grid",
+        "GridItem",
+        "HOVERCARD_DEFAULTS",
+        "HamburgerToX",
+        "Hide",
+        "I18nContext",
+        "I18nProvider",
+        "ImageSkeleton",
+        "InputAddon",
+        "InputGroup",
+        "InvertSection",
+        "JUSTIFY_ITEMS_MAP",
+        "KBD_DEFAULTS",
+        "Kbd",
+        "LAYOUT_DEFAULTS",
+        "LEGACY_SIZE_SPANS",
+        "LOCALE_CONFIGS",
+        "LoadingIndicator",
+        "MENTIONS_DEFAULTS",
+        "MENU_DEFAULTS",
+        "MOBILE_HEADER_DEFAULTS",
+        "MONTHS_FULL",
+        "MONTHS_SHORT",
+        "MarkdownView",
+        "MenuDivider",
+        "MenuGroup",
+        "MenuItem",
+        "Meter",
+        "ModalBody",
+        "ModalFooter",
+        "NAV_LINK_DEFAULTS",
+        "NAV_LINK_TYPE_COLORS",
+        "NavigationLinkProvider",
+        "NoiseTexture",
+        "OAUTH_TRANSITION_VARIANT_ORDER",
+        "OAuthTransitionScreen",
+        "OPERATOR_DEFINITIONS",
+        "OTPINPUT_DEFAULTS",
+        "OTPInput",
+        "PASSWORD_INPUT_DEFAULTS",
+        "POPCONFIRM_DEFAULTS",
+        "POPOVER_DEFAULTS",
+        "PREVIEW_SCOPE_ATTRIBUTE",
+        "PRIMARY_SEED_FIELD",
+        "PRODUCT_PROFILES",
+        "PatternDecisionComparison",
+        "PatternDecisionPanorama",
+        "PatternFeatureWorkspaceFrame",
+        "PatternVirtualList",
+        "ProductProfileContext",
+        "ProductProfileProvider",
+        "PulseValue",
+        "RADIUS_MAP",
+        "RATE_DEFAULTS",
+        "RATE_SIZE_MAP",
+        "RATIO_PRESETS",
+        "RECIPE_PROFILES",
+        "RECIPE_PROFILE_SCHEMA_VERSION",
+        "RESIZE_HANDLE_DEFAULTS",
+        "RESPONSIVE_BREAKPOINTS",
+        "RESPONSIVE_BREAKPOINT_ORDER",
+        "RESPONSIVE_POSTURE_PROFILES",
+        "RESPONSIVE_POSTURE_SCHEMA_VERSION",
+        "RecipeProfileProvider",
+        "RecordFieldGrid",
+        "RecordPanel",
+        "ResizeHandle",
+        "ResponsiveContext",
+        "ResponsiveProvider",
+        "ResponsiveSlot",
+        "SCROLLBAR_SIZES",
+        "SCROLL_AREA_DEFAULTS",
+        "SEED_SHADOWING_FIELDS",
+        "SEGMENTED_DEFAULTS",
+        "SEMANTIC_MATERIAL_ROLES",
+        "SEMANTIC_SURFACE_DEFAULTS",
+        "SEMANTIC_SURFACE_ROLES",
+        "SEMANTIC_TYPOGRAPHY_ROLES",
+        "SHADOW_MAP",
+        "SHEET_DEFAULTS",
+        "SHELL_DEFAULTS",
+        "SIDEBAR_CONTRAST_ATTRIBUTION",
+        "SLIDER_DEFAULTS",
+        "SPACE_ALIGN_MAP",
+        "SPACE_DEFAULTS",
+        "SPACE_SIZE_MAP",
+        "SPACING_MAP",
+        "SPLITTER_DEFAULTS",
+        "STACK_ALIGN_MAP",
+        "STACK_DEFAULTS",
+        "STACK_JUSTIFY_MAP",
+        "STACK_SPACING_MAP",
+        "STATUS_SEED_FIELDS",
+        "STATUS_SEED_SHADOWING_FIELDS",
+        "STEPPER_DEFAULTS",
+        "STEPPER_FONT_SIZE_MAP",
+        "STEPPER_SIZE_MAP",
+        "STEPS_DEFAULTS",
+        "STRENGTH_COLORS",
+        "STRENGTH_WIDTHS",
+        "ScopeSwitcher",
+        "ScrollArea",
+        "SectionFrame",
+        "SemanticSurface",
+        "SemanticSurfaceSupport",
+        "ShortcutProvider",
+        "ShortcutScope",
+        "Show",
+        "SkeletonAvatar",
+        "SkeletonButton",
+        "SkeletonCard",
+        "SkeletonForm",
+        "SkeletonListItem",
+        "SkeletonParagraph",
+        "SkeletonTable",
+        "SkeletonText",
+        "Stack",
+        "StepperContent",
+        "SurfaceErrorBoundary",
+        "TAGINPUT_DEFAULTS",
+        "TENANT_CAPABILITY_REGISTRY",
+        "TENANT_INTERNAL_MANIFEST",
+        "TENANT_PRO_MANIFEST",
+        "TENANT_STANDARD_MANIFEST",
+        "TENANT_THEME_ANATOMY_VARIANTS",
+        "TENANT_THEME_CHROME_FAMILIES",
+        "TENANT_THEME_COMPILER_VERSION",
+        "TENANT_THEME_CONFIG_SCHEMA",
+        "TENANT_THEME_CONFIG_SCHEMA_DIGEST",
+        "TENANT_THEME_DOCUMENT_SCHEMA_DIGEST",
+        "TENANT_THEME_EFFECT_INTENSITY_BOUNDS",
+        "TENANT_THEME_FONT_PACK_IDS",
+        "TENANT_THEME_NEUTRAL_OVERRIDE_TOKENS",
+        "TENANT_THEME_OVERRIDE_TOKENS",
+        "TENANT_THEME_RADIUS_SCALE_BOUNDS",
+        "TENANT_THEME_REFERENCE_TOKENS",
+        "TENANT_THEME_RHYTHM_FACTORS",
+        "TENANT_THEME_RHYTHM_SCALE_BOUNDS",
+        "TENANT_THEME_SCHEMA_VERSION",
+        "TENANT_THEME_TYPE_SCALE_BOUNDS",
+        "TENANT_THEME_V1_COVERAGE",
+        "TENANT_THEME_VERTICAL_ENVELOPES",
+        "TENANT_VISUAL_CHANNELS",
+        "THICKNESS_MAP",
+        "TONE_TO_AVATAR_VARIANT",
+        "TONE_TO_BADGE_VARIANT",
+        "TONE_TO_CALLOUT_VARIANT",
+        "TONE_TO_TAG_VARIANT",
+        "TONE_TO_VARIANT",
+        "TOUR_DEFAULTS",
+        "TRANSFER_DEFAULTS",
+        "TREESELECT_DEFAULTS",
+        "TagGroup",
+        "TenantContext",
+        "TenantProvider",
+        "TenantThemeValidationError",
+        "TextureBackdrop",
+        "ThemeContext",
+        "ThemeProvider",
+        "ToastProvider",
+        "TokenInspector",
+        "TooltipSeries",
+        "TooltipValue",
+        "TreeViewConnector",
+        "UNSAVED_CHANGES_GUARD_CONTRACT",
+        "UPLOAD_DEFAULTS",
+        "VERTICAL_REGISTRY",
+        "VisuallyHidden",
+        "WATERMARK_DEFAULTS",
+        "WorkspaceScopes",
+        "actionsColumn",
+        "apcaContrast",
+        "appearanceMatchesArtifact",
+        "applyFormat",
+        "applyModeOverlay",
+        "applyStreamCommit",
+        "ar",
+        "arePropsEqual",
+        "assertExpressiveEdgeWidthInvariant",
+        "assertTenantThemeEnvelopeDeclaresAdvanced",
+        "bithireBrandTheme",
+        "brandModeSelector",
+        "brandTenantSelector",
+        "brandThemeRampSurface",
+        "brandThemeToChromeVariables",
+        "brandThemeToPersonality",
+        "brandThemeToTenantAppearance",
+        "brandThemeToTenantAppearanceAdvanced",
+        "brandThemeToTokenOverrides",
+        "buildChartTrendPoints",
+        "buildHideMediaQuery",
+        "buildMinWidthQuery",
+        "buildRangeQuery",
+        "buildRecipeManifest",
+        "buildShowMediaQuery",
+        "buildTenantThemePreviewScope",
+        "canonicalizeTenantThemeValue",
+        "cellRenderers",
+        "claimRootAttribute",
+        "claimRootAttributeSet",
+        "claimRootClass",
+        "claimRootStyleProperty",
+        "clampDensityIntoExpressiveEnvelope",
+        "clampIntoExpressiveEnvelope",
+        "clearCustomRegistry",
+        "clearServerHeaders",
+        "clearTenantCache",
+        "column",
+        "columns",
+        "compileBrandTheme",
+        "compileBrandThemeDeprecated",
+        "compileTenantThemeConfig",
+        "compileTenantThemePreview",
+        "compileTheme",
+        "composeRootAttributeReleases",
+        "configureCustomEngine",
+        "configureDomainLookup",
+        "configureTenantApi",
+        "copyToClipboard",
+        "countActiveFilters",
+        "createAuthSurfaceConfig",
+        "createCompoundComponent",
+        "createCustomWrapper",
+        "createEdgeConfigDomainLookup",
+        "createEngineComponent",
+        "createFormSurfaceConfig",
+        "createMarketingSurfaceConfig",
+        "createPropsComparator",
+        "createRecipeVariant",
+        "createSubComponent",
+        "createTenantConfig",
+        "daysInMonthCount",
+        "decayedFrecency",
+        "deepMergeTokenOverrides",
+        "deriveExtendedPaletteFloor",
+        "deriveStatusTintFloor",
+        "deriveTenantColorRamps",
+        "describeChart",
+        "deserializeBrandTheme",
+        "en",
+        "errorInDev",
+        "es",
+        "evntoBrandTheme",
+        "exportChart",
+        "fetchRemoteTenantConfig",
+        "filterDetailSurfaceTabs",
+        "filterSurfaceActions",
+        "filterSurfaceColumns",
+        "filterSurfaceFields",
+        "filterSurfaceRowActions",
+        "filterSurfaceTabbedViews",
+        "firstDayOfMonth",
+        "formatCurrency",
+        "formatDate",
+        "formatDateRange",
+        "formatDateStr",
+        "formatDisplay",
+        "formatFileSize",
+        "formatList",
+        "formatNumber",
+        "formatPercent",
+        "formatRelativeTime",
+        "formatShortcutKey",
+        "formatTime",
+        "formatTimeStr",
+        "fr",
+        "generateCalendarGrid",
+        "generateClipboardText",
+        "generateCsv",
+        "generateFilterId",
+        "generateJson",
+        "getAvailableEngines",
+        "getCustomComponent",
+        "getCustomEngineConfig",
+        "getDefaultEngine",
+        "getDefaultTenant",
+        "getDefaultTenantConfig",
+        "getEngine",
+        "getFirstPartyTenantThemeVerticalEnvelope",
+        "getHighlighter",
+        "getKeyboardNavDate",
+        "getKnownTenantConfig",
+        "getKnownTenantSlugs",
+        "getOAuthTransitionApp",
+        "getOAuthTransitionDefaultVariant",
+        "getOAuthTransitionPool",
+        "getOAuthTransitionProvider",
+        "getOAuthTransitionVariant",
+        "getOperatorsForField",
+        "getOperatorsForFieldWithCustom",
+        "getProductProfile",
+        "getRegisteredComponentCount",
+        "getRegisteredComponents",
+        "getRegisteredPacks",
+        "getStableEngines",
+        "getTenantConfig",
+        "getTenantThemeVerticalEnvelope",
+        "getThicknessValue",
+        "getUnresolvedTenantConfig",
+        "getVerticalPreset",
+        "governedExitMs",
+        "governedFlashMs",
+        "hasCustomComponent",
+        "hasSurfaceError",
+        "heightPxToRows",
+        "hydrateTenantThemeConfig",
+        "isAllSurfaceAccess",
+        "isBundledTenant",
+        "isDarkSurfaceTheme",
+        "isDateInRange",
+        "isFieldVisibleForRow",
+        "isFilterGroup",
+        "isFilterRule",
+        "isKnownTenant",
+        "isOAuthProvider",
+        "isOAuthTransitionVariantId",
+        "isResolvedSurfaceAccess",
+        "isSameDay",
+        "isValidBranding",
+        "isValidEngine",
+        "isValidEngineName",
+        "isValidPlan",
+        "isValidTenantConfig",
+        "loadStaticTenantConfig",
+        "mapSurfaceData",
+        "mergeOperatorsByType",
+        "mergePartialPersonality",
+        "normalizeLayoutRevision",
+        "normalizeSurfaceError",
+        "pad2",
+        "parseDateValue",
+        "parseInline",
+        "parseMarkdown",
+        "parseTenantThemeConfig",
+        "parseTenantThemeDocument",
+        "pickOAuthTransitionVariant",
+        "placementsToGridStyles",
+        "preloadTenantConfig",
+        "probeTenantThemePackWarnings",
+        "projectChartSummaryRows",
+        "pt",
+        "quantizeEmphasis",
+        "rankByFrecency",
+        "recordUse",
+        "registerCustomComponent",
+        "registerCustomComponents",
+        "registerHighlighter",
+        "renderFirstPartyArtifact",
+        "renderVerticalArtifact",
+        "reportVisualAuthorityConflict",
+        "resetVisualAuthorityDiagnostics",
+        "resolveAccessor",
+        "resolveActiveResponsivePosture",
+        "resolveAdaptiveLayout",
+        "resolveChartProjection",
+        "resolveChartScaffoldState",
+        "resolveColumnValue",
+        "resolveContainerPosture",
+        "resolveDocumentLocaleAttributes",
+        "resolveEngine",
+        "resolveExitFallbackMs",
+        "resolveExperienceProfile",
+        "resolveExpressiveAxes",
+        "resolveFamilyEmphasis",
+        "resolveFieldAccessForRow",
+        "resolveFromDomain",
+        "resolveFromHeader",
+        "resolveFromSubdomain",
+        "resolveGalleryKey",
+        "resolveGridRowKey",
+        "resolveHeader",
+        "resolveLocaleDirection",
+        "resolveMeterThreshold",
+        "resolvePersonalityPreset",
+        "resolvePosture",
+        "resolveRecipeProfile",
+        "resolveRequestTenant",
+        "resolveRequestTenantAsync",
+        "resolveResponsivePosture",
+        "resolveRowKey",
+        "resolveStackSpacing",
+        "resolveSurfaceAction",
+        "resolveSurfaceButtonVariant",
+        "resolveSurfaceCapability",
+        "resolveSurfaceCapabilityRegistry",
+        "resolveSurfaceDetailActionVariant",
+        "resolveSurfacePermission",
+        "resolveTenant",
+        "resolveValue",
+        "resolveVisualAuthority",
+        "rottayBrandTheme",
+        "sanitizeExpressiveOverrides",
+        "sanitizeHref",
+        "selectTenantThemeAdjustments",
+        "semanticMaterialsToCssVariables",
+        "semanticSurfaceRolesToCssVariables",
+        "serializeBrandTheme",
+        "setSemanticTypographyVariables",
+        "setServerHeaders",
+        "sha256TenantThemeValue",
+        "stringifySurfaceValue",
+        "stripTime",
+        "tenantPostureFloors",
+        "tenantThemeAnatomyAttributes",
+        "tenantThemeArtifactRootAttributes",
+        "themeModeSelector",
+        "toBreakpoint",
+        "toCanonicalSize",
+        "toLegacySize",
+        "toOperatorDefinition",
+        "toSupportedLocale",
+        "toast",
+        "triggerDownload",
+        "unregisterCustomComponent",
+        "useActiveResponsivePosture",
+        "useAdaptivePosture",
+        "useAriaAnnounce",
+        "useAutoSave",
+        "useBreakpoints",
+        "useChartBrush",
+        "useChartCompact",
+        "useChartDimensions",
+        "useChartExport",
+        "useChartStream",
+        "useChartTheme",
+        "useChartTooltip",
+        "useChartViewport",
+        "useChat",
+        "useCollapseTokens",
+        "useCollectionWorkspace",
+        "useCommandPaletteItems",
+        "useCommandSources",
+        "useCommands",
+        "useCreateTenant",
+        "useCrossTabSync",
+        "useCustomStatus",
+        "useDataTable",
+        "useDensity",
+        "useDirection",
+        "useDraftSave",
+        "useDsFocusMode",
+        "useEngineContext",
+        "useErrorHandler",
+        "useExecuteCommand",
+        "useExpressiveEmphasis",
+        "useFeatureContext",
+        "useFeatureContextAlias",
+        "useFeatures",
+        "useFilterPanel",
+        "useFormBuilder",
+        "useFormDiff",
+        "useGlobalSearch",
+        "useGlobalShortcut",
+        "useGlobalShortcuts",
+        "useGroupedData",
+        "useHasFeature",
+        "useHasShortcutProvider",
+        "useHighlighter",
+        "useI18nContext",
+        "useInView",
+        "useInfiniteScroll",
+        "useInlineEditing",
+        "useKanban",
+        "useKeyboardNavigation",
+        "useLayoutPreference",
+        "useLocale",
+        "useMeasuredScroll",
+        "useMediaQuery",
+        "useMousePosition",
+        "useNavigationLink",
+        "useNotificationPreferences",
+        "useOptimisticList",
+        "useOptimisticUpdate",
+        "useOptionalDirection",
+        "useOptionalTranslation",
+        "useOverlayLayer",
+        "usePdfExport",
+        "useProductProfile",
+        "useProductProfileContext",
+        "usePulseOnChange",
+        "useRecipeProfile",
+        "useRecipeProfileDefaults",
+        "useRegisterCommandSource",
+        "useRegisterCommands",
+        "useRegisteredShortcuts",
+        "useResponsive",
+        "useResponsiveValue",
+        "useRouterState",
+        "useRovingTabindex",
+        "useScrollProgress",
+        "useShortcutScope",
+        "useSortableList",
+        "useStreamingText",
+        "useSurfaceProfileDefaultsWithOverrides",
+        "useSurfaceQuery",
+        "useTableExport",
+        "useTenant",
+        "useTenantBranding",
+        "useTenantContext",
+        "useTenantThemePreview",
+        "useTheme",
+        "useThemeContext",
+        "useToast",
+        "useTranslation",
+        "useUndoRedo",
+        "useUnsavedChangesGuard",
+        "useVariant",
+        "useVirtualScroll",
+        "useVoiceInput",
+        "validateExperienceProfileSelection",
+        "validateRecipeProfileSelection",
+        "validateResponsivePostureSelection",
+        "validateTenantThemeAgainstVerticalEnvelope",
+        "validateTenantThemeConfig",
+        "validateTenantThemeDocument",
+        "warnInDev",
+        "warnOnceInDev",
+        "widgetItemsToAdaptiveInputs"
+      ]
+    },
+    "./server": {
+      "exports": [
+        "DEFAULT_TENANT_SLUG",
+        "FONT_PACK_IDS",
+        "FONT_PACK_MANIFEST",
+        "TENANT_THEME_ANATOMY_VARIANTS",
+        "TENANT_THEME_ARTIFACT_DIGEST_ATTRIBUTE",
+        "TENANT_THEME_ARTIFACT_ELEMENT_ID_PREFIX",
+        "TENANT_THEME_ARTIFACT_SLUG_ATTRIBUTE",
+        "TENANT_THEME_ARTIFACT_VERTICAL_ATTRIBUTE",
+        "TENANT_THEME_CHROME_FAMILIES",
+        "TENANT_THEME_COMPILER_VERSION",
+        "TENANT_THEME_CONFIG_SCHEMA",
+        "TENANT_THEME_CONFIG_SCHEMA_DIGEST",
+        "TENANT_THEME_DOCUMENT_SCHEMA_DIGEST",
+        "TENANT_THEME_FONT_PACK_IDS",
+        "TENANT_THEME_OVERRIDE_TOKENS",
+        "TENANT_THEME_REFERENCE_TOKENS",
+        "TENANT_THEME_SCHEMA_VERSION",
+        "TENANT_THEME_V1_COVERAGE",
+        "TENANT_THEME_VERTICAL_ENVELOPES",
+        "TENANT_VISUAL_CHANNELS",
+        "TenantThemeValidationError",
+        "brandModeSelector",
+        "brandTenantSelector",
+        "brandingContrastRatio",
+        "buildThemePrepaintScript",
+        "canonicalizeTenantThemeValue",
+        "censusRuntimeVisualPayload",
+        "compileBrandTheme",
+        "compileTenantThemeConfig",
+        "compileTheme",
+        "createEdgeConfigDomainLookup",
+        "emitTenantThemeArtifactForSsr",
+        "getCodeOwnedRuntimeConfig",
+        "getKnownTenantConfig",
+        "getKnownTenantSlugs",
+        "getTenantThemeVerticalEnvelope",
+        "hydrateTenantThemeConfig",
+        "isBundledTenant",
+        "isCodeOwnedTenantConfig",
+        "isKnownTenant",
+        "parseTenantThemeConfig",
+        "parseTenantThemeDocument",
+        "provideServerIconExpressiveProfile",
+        "resolveActiveIconExpressiveProfile",
+        "resolveDocumentRootAttributes",
+        "resolveRequestTenant",
+        "resolveRequestTenantAsync",
+        "resolveVisualAuthority",
+        "sha256TenantThemeValue",
+        "tenantThemeAnatomyAttributes",
+        "tenantThemeArtifactCssIntegrity",
+        "tenantThemeArtifactElementId",
+        "tenantThemeArtifactRootAttributes",
+        "toSupportedLocale",
+        "validateBrandingContrast",
+        "validateTenantThemeAgainstVerticalEnvelope",
+        "validateTenantThemeConfig",
+        "validateTenantThemeDocument"
+      ],
+      "symbols": {},
+      "supplierFreeExports": [
+        "DEFAULT_TENANT_SLUG",
+        "FONT_PACK_IDS",
+        "FONT_PACK_MANIFEST",
+        "TENANT_THEME_ANATOMY_VARIANTS",
+        "TENANT_THEME_ARTIFACT_DIGEST_ATTRIBUTE",
+        "TENANT_THEME_ARTIFACT_ELEMENT_ID_PREFIX",
+        "TENANT_THEME_ARTIFACT_SLUG_ATTRIBUTE",
+        "TENANT_THEME_ARTIFACT_VERTICAL_ATTRIBUTE",
+        "TENANT_THEME_CHROME_FAMILIES",
+        "TENANT_THEME_COMPILER_VERSION",
+        "TENANT_THEME_CONFIG_SCHEMA",
+        "TENANT_THEME_CONFIG_SCHEMA_DIGEST",
+        "TENANT_THEME_DOCUMENT_SCHEMA_DIGEST",
+        "TENANT_THEME_FONT_PACK_IDS",
+        "TENANT_THEME_OVERRIDE_TOKENS",
+        "TENANT_THEME_REFERENCE_TOKENS",
+        "TENANT_THEME_SCHEMA_VERSION",
+        "TENANT_THEME_V1_COVERAGE",
+        "TENANT_THEME_VERTICAL_ENVELOPES",
+        "TENANT_VISUAL_CHANNELS",
+        "TenantThemeValidationError",
+        "brandModeSelector",
+        "brandTenantSelector",
+        "brandingContrastRatio",
+        "buildThemePrepaintScript",
+        "canonicalizeTenantThemeValue",
+        "censusRuntimeVisualPayload",
+        "compileBrandTheme",
+        "compileTenantThemeConfig",
+        "compileTheme",
+        "createEdgeConfigDomainLookup",
+        "emitTenantThemeArtifactForSsr",
+        "getCodeOwnedRuntimeConfig",
+        "getKnownTenantConfig",
+        "getKnownTenantSlugs",
+        "getTenantThemeVerticalEnvelope",
+        "hydrateTenantThemeConfig",
+        "isBundledTenant",
+        "isCodeOwnedTenantConfig",
+        "isKnownTenant",
+        "parseTenantThemeConfig",
+        "parseTenantThemeDocument",
+        "provideServerIconExpressiveProfile",
+        "resolveActiveIconExpressiveProfile",
+        "resolveDocumentRootAttributes",
+        "resolveRequestTenant",
+        "resolveRequestTenantAsync",
+        "resolveVisualAuthority",
+        "sha256TenantThemeValue",
+        "tenantThemeAnatomyAttributes",
+        "tenantThemeArtifactCssIntegrity",
+        "tenantThemeArtifactElementId",
+        "tenantThemeArtifactRootAttributes",
+        "toSupportedLocale",
+        "validateBrandingContrast",
+        "validateTenantThemeAgainstVerticalEnvelope",
+        "validateTenantThemeConfig",
+        "validateTenantThemeDocument"
+      ]
+    },
+    "./contracts/foundation": {
+      "exports": [],
+      "symbols": {},
+      "supplierFreeExports": []
+    },
+    "./contracts/patterns": {
+      "exports": [],
+      "symbols": {},
+      "supplierFreeExports": []
+    },
+    "./contracts/i18n": {
+      "exports": [],
+      "symbols": {},
+      "supplierFreeExports": []
+    },
+    "./contracts/runtime": {
+      "exports": [],
+      "symbols": {},
+      "supplierFreeExports": []
+    },
+    "./contracts/primitives": {
+      "exports": [],
+      "symbols": {},
+      "supplierFreeExports": []
+    },
+    "./contracts/structures": {
+      "exports": [],
+      "symbols": {},
+      "supplierFreeExports": []
+    },
+    "./contracts/surfaces": {
+      "exports": [],
+      "symbols": {},
+      "supplierFreeExports": []
+    },
+    "./runtime/i18n": {
+      "exports": [
+        "DEFAULT_FALLBACK_LOCALE",
+        "I18nProvider",
+        "LOCALE_CONFIGS",
+        "useI18nContext",
+        "useLocale"
+      ],
+      "symbols": {},
+      "supplierFreeExports": [
+        "DEFAULT_FALLBACK_LOCALE",
+        "I18nProvider",
+        "LOCALE_CONFIGS",
+        "useI18nContext",
+        "useLocale"
+      ]
+    },
+    "./runtime/motion": {
+      "exports": [
+        "CountUp",
+        "FadeIn",
+        "GridPattern",
+        "NoiseTexture",
+        "ScaleIn",
+        "useInView"
+      ],
+      "symbols": {
+        "CountUp": [
+          "antd",
+          "motion"
+        ],
+        "FadeIn": [
+          "antd",
+          "motion"
+        ],
+        "GridPattern": [
+          "antd",
+          "motion"
+        ],
+        "ScaleIn": [
+          "antd",
+          "motion"
+        ]
+      },
+      "supplierFreeExports": [
+        "NoiseTexture",
+        "useInView"
+      ]
+    },
+    "./runtime/navigation": {
+      "exports": [
+        "NavigationLinkProvider"
+      ],
+      "symbols": {},
+      "supplierFreeExports": [
+        "NavigationLinkProvider"
+      ]
+    },
+    "./runtime/forms": {
+      "exports": [
+        "useUnsavedChangesGuard"
+      ],
+      "symbols": {},
+      "supplierFreeExports": [
+        "useUnsavedChangesGuard"
+      ]
+    },
+    "./runtime/cross-tab-sync": {
+      "exports": [
+        "useCrossTabSync"
+      ],
+      "symbols": {},
+      "supplierFreeExports": [
+        "useCrossTabSync"
+      ]
+    },
+    "./runtime/provider": {
+      "exports": [
+        "DesignSystemProvider"
+      ],
+      "symbols": {
+        "DesignSystemProvider": [
+          "antd",
+          "motion"
+        ]
+      },
+      "supplierFreeExports": []
+    },
+    "./runtime/root-attributes": {
+      "exports": [
+        "claimRootAttribute",
+        "claimRootAttributeSet",
+        "composeRootAttributeReleases"
+      ],
+      "symbols": {},
+      "supplierFreeExports": [
+        "claimRootAttribute",
+        "claimRootAttributeSet",
+        "composeRootAttributeReleases"
+      ]
+    },
+    "./runtime/responsive": {
+      "exports": [
+        "useBreakpoints",
+        "useMediaQuery",
+        "useResponsive"
+      ],
+      "symbols": {},
+      "supplierFreeExports": [
+        "useBreakpoints",
+        "useMediaQuery",
+        "useResponsive"
+      ]
+    },
+    "./runtime/tenant": {
+      "exports": [
+        "getKnownTenantConfig",
+        "useTenant"
+      ],
+      "symbols": {},
+      "supplierFreeExports": [
+        "getKnownTenantConfig",
+        "useTenant"
+      ]
+    },
+    "./runtime/visual-authority": {
+      "exports": [
+        "resolveVisualAuthority"
+      ],
+      "symbols": {},
+      "supplierFreeExports": [
+        "resolveVisualAuthority"
+      ]
+    },
+    "./runtime/tenant-theme": {
+      "exports": [
+        "TENANT_THEME_COMPILER_VERSION"
+      ],
+      "symbols": {},
+      "supplierFreeExports": [
+        "TENANT_THEME_COMPILER_VERSION"
+      ]
+    },
+    "./primitives/button": {
+      "exports": [
+        "Button"
+      ],
+      "symbols": {
+        "Button": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ]
+      },
+      "supplierFreeExports": []
+    },
+    "./primitives/checkbox": {
+      "exports": [
+        "Checkbox"
+      ],
+      "symbols": {
+        "Checkbox": [
+          "antd"
+        ]
+      },
+      "supplierFreeExports": []
+    },
+    "./primitives/date-picker": {
+      "exports": [
+        "DatePicker"
+      ],
+      "symbols": {
+        "DatePicker": [
+          "@phosphor-icons/react",
+          "antd"
+        ]
+      },
+      "supplierFreeExports": []
+    },
+    "./primitives/input": {
+      "exports": [
+        "Input"
+      ],
+      "symbols": {
+        "Input": [
+          "@phosphor-icons/react",
+          "antd"
+        ]
+      },
+      "supplierFreeExports": []
+    },
+    "./primitives/input-number": {
+      "exports": [
+        "InputNumber"
+      ],
+      "symbols": {
+        "InputNumber": [
+          "@phosphor-icons/react",
+          "antd"
+        ]
+      },
+      "supplierFreeExports": []
+    },
+    "./primitives/radio": {
+      "exports": [
+        "Radio"
+      ],
+      "symbols": {
+        "Radio": [
+          "antd"
+        ]
+      },
+      "supplierFreeExports": []
+    },
+    "./primitives/select": {
+      "exports": [
+        "Select"
+      ],
+      "symbols": {
+        "Select": [
+          "@phosphor-icons/react",
+          "antd"
+        ]
+      },
+      "supplierFreeExports": []
+    },
+    "./primitives/slider": {
+      "exports": [
+        "Slider"
+      ],
+      "symbols": {
+        "Slider": [
+          "antd"
+        ]
+      },
+      "supplierFreeExports": []
+    },
+    "./primitives/switch": {
+      "exports": [
+        "Switch"
+      ],
+      "symbols": {
+        "Switch": [
+          "antd"
+        ]
+      },
+      "supplierFreeExports": []
+    },
+    "./primitives/textarea": {
+      "exports": [
+        "Textarea"
+      ],
+      "symbols": {
+        "Textarea": [
+          "@phosphor-icons/react",
+          "antd"
+        ]
+      },
+      "supplierFreeExports": []
+    },
+    "./primitives/toggle": {
+      "exports": [
+        "Toggle"
+      ],
+      "symbols": {
+        "Toggle": [
+          "@phosphor-icons/react",
+          "antd"
+        ]
+      },
+      "supplierFreeExports": []
+    },
+    "./primitives/breadcrumb": {
+      "exports": [
+        "Breadcrumb"
+      ],
+      "symbols": {
+        "Breadcrumb": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ]
+      },
+      "supplierFreeExports": []
+    },
+    "./primitives/float-button": {
+      "exports": [
+        "FloatButton"
+      ],
+      "symbols": {
+        "FloatButton": [
+          "@phosphor-icons/react",
+          "antd"
+        ]
+      },
+      "supplierFreeExports": []
+    },
+    "./primitives/segmented": {
+      "exports": [
+        "Segmented"
+      ],
+      "symbols": {
+        "Segmented": [
+          "antd"
+        ]
+      },
+      "supplierFreeExports": []
+    },
+    "./primitives/steps": {
+      "exports": [
+        "Steps"
+      ],
+      "symbols": {
+        "Steps": [
+          "antd"
+        ]
+      },
+      "supplierFreeExports": []
+    },
+    "./primitives/tabs": {
+      "exports": [
+        "Tabs"
+      ],
+      "symbols": {
+        "Tabs": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ]
+      },
+      "supplierFreeExports": []
+    },
+    "./primitives/box": {
+      "exports": [
+        "Box"
+      ],
+      "symbols": {},
+      "supplierFreeExports": [
+        "Box"
+      ]
+    },
+    "./primitives/divider": {
+      "exports": [
+        "Divider"
+      ],
+      "symbols": {
+        "Divider": [
+          "antd"
+        ]
+      },
+      "supplierFreeExports": []
+    },
+    "./primitives/flex": {
+      "exports": [
+        "Flex"
+      ],
+      "symbols": {
+        "Flex": [
+          "antd"
+        ]
+      },
+      "supplierFreeExports": []
+    },
+    "./primitives/grid": {
+      "exports": [
+        "Grid"
+      ],
+      "symbols": {},
+      "supplierFreeExports": [
+        "Grid"
+      ]
+    },
+    "./primitives/responsive": {
+      "exports": [
+        "Show"
+      ],
+      "symbols": {},
+      "supplierFreeExports": [
+        "Show"
+      ]
+    },
+    "./primitives/stack": {
+      "exports": [
+        "Stack"
+      ],
+      "symbols": {},
+      "supplierFreeExports": [
+        "Stack"
+      ]
+    },
+    "./primitives/avatar": {
+      "exports": [
+        "Avatar"
+      ],
+      "symbols": {
+        "Avatar": [
+          "@phosphor-icons/react",
+          "antd"
+        ]
+      },
+      "supplierFreeExports": []
+    },
+    "./primitives/badge": {
+      "exports": [
+        "Badge"
+      ],
+      "symbols": {
+        "Badge": [
+          "@phosphor-icons/react",
+          "antd"
+        ]
+      },
+      "supplierFreeExports": []
+    },
+    "./primitives/card": {
+      "exports": [
+        "Card"
+      ],
+      "symbols": {
+        "Card": [
+          "@phosphor-icons/react",
+          "antd"
+        ]
+      },
+      "supplierFreeExports": []
+    },
+    "./primitives/empty": {
+      "exports": [
+        "Empty"
+      ],
+      "symbols": {
+        "Empty": [
+          "@phosphor-icons/react",
+          "antd"
+        ]
+      },
+      "supplierFreeExports": []
+    },
+    "./primitives/image": {
+      "exports": [
+        "Image"
+      ],
+      "symbols": {
+        "Image": [
+          "@phosphor-icons/react",
+          "antd"
+        ]
+      },
+      "supplierFreeExports": []
+    },
+    "./primitives/table": {
+      "exports": [
+        "Table"
+      ],
+      "symbols": {
+        "Table": [
+          "@phosphor-icons/react",
+          "antd"
+        ]
+      },
+      "supplierFreeExports": []
+    },
+    "./primitives/tag": {
+      "exports": [
+        "Tag"
+      ],
+      "symbols": {
+        "Tag": [
+          "@phosphor-icons/react",
+          "antd"
+        ]
+      },
+      "supplierFreeExports": []
+    },
+    "./primitives/tooltip": {
+      "exports": [
+        "Tooltip"
+      ],
+      "symbols": {
+        "Tooltip": [
+          "antd"
+        ]
+      },
+      "supplierFreeExports": []
+    },
+    "./primitives/typography": {
+      "exports": [
+        "Heading",
+        "Link",
+        "Text"
+      ],
+      "symbols": {
+        "Heading": [
+          "antd"
+        ],
+        "Link": [
+          "antd"
+        ],
+        "Text": [
+          "antd"
+        ]
+      },
+      "supplierFreeExports": []
+    },
+    "./primitives/alert": {
+      "exports": [
+        "Alert"
+      ],
+      "symbols": {
+        "Alert": [
+          "@phosphor-icons/react",
+          "antd"
+        ]
+      },
+      "supplierFreeExports": []
+    },
+    "./primitives/message": {
+      "exports": [
+        "message"
+      ],
+      "symbols": {
+        "message": [
+          "@phosphor-icons/react",
+          "antd"
+        ]
+      },
+      "supplierFreeExports": []
+    },
+    "./primitives/modal": {
+      "exports": [
+        "Modal"
+      ],
+      "symbols": {
+        "Modal": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ]
+      },
+      "supplierFreeExports": []
+    },
+    "./primitives/progress": {
+      "exports": [
+        "Progress"
+      ],
+      "symbols": {
+        "Progress": [
+          "@phosphor-icons/react",
+          "antd"
+        ]
+      },
+      "supplierFreeExports": []
+    },
+    "./primitives/skeleton": {
+      "exports": [
+        "Skeleton"
+      ],
+      "symbols": {
+        "Skeleton": [
+          "antd"
+        ]
+      },
+      "supplierFreeExports": []
+    },
+    "./primitives/spinner": {
+      "exports": [
+        "Spinner"
+      ],
+      "symbols": {
+        "Spinner": [
+          "antd"
+        ]
+      },
+      "supplierFreeExports": []
+    },
+    "./primitives/toast": {
+      "exports": [
+        "Toast",
+        "ToastContainer",
+        "ToastProvider",
+        "toast",
+        "useToast"
+      ],
+      "symbols": {
+        "Toast": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
+        "ToastContainer": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ]
+      },
+      "supplierFreeExports": [
+        "ToastProvider",
+        "toast",
+        "useToast"
+      ]
+    },
+    "./primitives/dropdown": {
+      "exports": [
+        "Dropdown"
+      ],
+      "symbols": {
+        "Dropdown": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ]
+      },
+      "supplierFreeExports": []
+    },
+    "./patterns/presence": {
+      "exports": [
+        "PresenceBar"
+      ],
+      "symbols": {
+        "PresenceBar": [
+          "@phosphor-icons/react",
+          "antd"
+        ]
+      },
+      "supplierFreeExports": []
+    },
+    "./patterns/data-table": {
+      "exports": [
+        "PatternDataTable"
+      ],
+      "symbols": {
+        "PatternDataTable": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ]
+      },
+      "supplierFreeExports": []
+    },
+    "./patterns/list-toolbar": {
+      "exports": [
+        "ListToolbar"
+      ],
+      "symbols": {
+        "ListToolbar": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ]
+      },
+      "supplierFreeExports": []
+    },
+    "./patterns/record-facts": {
+      "exports": [
+        "RecordFacts"
+      ],
+      "symbols": {
+        "RecordFacts": [
+          "@phosphor-icons/react"
+        ]
+      },
+      "supplierFreeExports": []
+    },
+    "./patterns/stats-grid": {
+      "exports": [
+        "PatternStatsGrid"
+      ],
+      "symbols": {
+        "PatternStatsGrid": [
+          "@ant-design/icons",
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ]
+      },
+      "supplierFreeExports": []
+    },
+    "./patterns/widget-board": {
+      "exports": [
+        "WidgetBoard",
+        "normalizeLayoutRevision"
+      ],
+      "symbols": {
+        "WidgetBoard": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ]
+      },
+      "supplierFreeExports": [
+        "normalizeLayoutRevision"
+      ]
+    },
+    "./patterns/adaptive-overlay": {
+      "exports": [
+        "AdaptiveOverlay"
+      ],
+      "symbols": {
+        "AdaptiveOverlay": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ]
+      },
+      "supplierFreeExports": []
+    },
+    "./patterns/empty-state": {
+      "exports": [
+        "PatternEmptyState"
+      ],
+      "symbols": {
+        "PatternEmptyState": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ]
+      },
+      "supplierFreeExports": []
+    },
+    "./patterns/command-palette": {
+      "exports": [
+        "PatternCommandPalette"
+      ],
+      "symbols": {
+        "PatternCommandPalette": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ]
+      },
+      "supplierFreeExports": []
+    },
+    "./patterns/shortcuts-overlay": {
+      "exports": [
+        "PatternShortcutsOverlay"
+      ],
+      "symbols": {
+        "PatternShortcutsOverlay": [
+          "@phosphor-icons/react",
+          "antd"
+        ]
+      },
+      "supplierFreeExports": []
+    },
+    "./patterns/feature-workspace-frame": {
+      "exports": [
+        "FeatureWorkspaceFrame"
+      ],
+      "symbols": {},
+      "supplierFreeExports": [
+        "FeatureWorkspaceFrame"
+      ]
+    },
+    "./patterns/kanban-board": {
+      "exports": [
+        "PatternKanbanBoard"
+      ],
+      "symbols": {
+        "PatternKanbanBoard": [
+          "@ant-design/icons",
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ]
+      },
+      "supplierFreeExports": []
+    },
+    "./patterns/charts": {
+      "exports": [
+        "AreaChart",
+        "BarChart",
+        "BulletChart",
+        "CalendarHeatMap",
+        "FunnelChart",
+        "GanttChart",
+        "GaugeChart",
+        "HeatMap",
+        "Histogram",
+        "LineChart",
+        "NetworkGraph",
+        "PieChart",
+        "RadarChart",
+        "SankeyChart",
+        "ScatterChart",
+        "Sparkline",
+        "TreeMap",
+        "WaterfallChart"
+      ],
+      "symbols": {
+        "AreaChart": [
+          "antd",
+          "d3",
+          "motion"
+        ],
+        "BarChart": [
+          "antd",
+          "d3",
+          "motion"
+        ],
+        "BulletChart": [
+          "antd",
+          "d3",
+          "motion"
+        ],
+        "CalendarHeatMap": [
+          "antd",
+          "d3",
+          "motion"
+        ],
+        "FunnelChart": [
+          "antd",
+          "d3",
+          "motion"
+        ],
+        "GanttChart": [
+          "antd",
+          "d3",
+          "motion"
+        ],
+        "GaugeChart": [
+          "antd",
+          "d3",
+          "motion"
+        ],
+        "HeatMap": [
+          "antd",
+          "d3",
+          "motion"
+        ],
+        "Histogram": [
+          "antd",
+          "d3",
+          "motion"
+        ],
+        "LineChart": [
+          "antd",
+          "d3",
+          "motion"
+        ],
+        "NetworkGraph": [
+          "antd",
+          "d3",
+          "motion"
+        ],
+        "PieChart": [
+          "antd",
+          "d3",
+          "motion"
+        ],
+        "RadarChart": [
+          "antd",
+          "d3",
+          "motion"
+        ],
+        "SankeyChart": [
+          "antd",
+          "d3",
+          "motion"
+        ],
+        "ScatterChart": [
+          "antd",
+          "d3",
+          "motion"
+        ],
+        "Sparkline": [
+          "antd",
+          "d3",
+          "motion"
+        ],
+        "TreeMap": [
+          "antd",
+          "d3",
+          "motion"
+        ],
+        "WaterfallChart": [
+          "antd",
+          "d3",
+          "motion"
+        ]
+      },
+      "supplierFreeExports": []
+    },
+    "./structures/dashboard-header": {
+      "exports": [
+        "DashboardHeader"
+      ],
+      "symbols": {
+        "DashboardHeader": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ]
+      },
+      "supplierFreeExports": []
+    },
+    "./structures/record-summary": {
+      "exports": [
+        "RecordSummaryStrip"
+      ],
+      "symbols": {
+        "RecordSummaryStrip": [
+          "antd"
+        ]
+      },
+      "supplierFreeExports": []
+    },
+    "./structures/app-shell": {
+      "exports": [
+        "AppShell"
+      ],
+      "symbols": {
+        "AppShell": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ]
+      },
+      "supplierFreeExports": []
+    },
+    "./structures/action-dock": {
+      "exports": [
+        "ActionDock"
+      ],
+      "symbols": {
+        "ActionDock": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ]
+      },
+      "supplierFreeExports": []
+    },
+    "./structures/column-menu": {
+      "exports": [
+        "ColumnMenu"
+      ],
+      "symbols": {
+        "ColumnMenu": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ]
+      },
+      "supplierFreeExports": []
+    },
+    "./surfaces/collection-workspace": {
+      "exports": [
+        "CollectionWorkspaceSurface"
+      ],
+      "symbols": {
+        "CollectionWorkspaceSurface": [
+          "@ant-design/icons",
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ]
+      },
+      "supplierFreeExports": []
+    },
+    "./surfaces/oauth-transition": {
+      "exports": [
+        "OAuthTransitionScreen",
+        "getOAuthTransitionDefaultVariant",
+        "getOAuthTransitionProvider",
+        "isOAuthProvider",
+        "isOAuthTransitionVariantId"
+      ],
+      "symbols": {},
+      "supplierFreeExports": [
+        "OAuthTransitionScreen",
+        "getOAuthTransitionDefaultVariant",
+        "getOAuthTransitionProvider",
+        "isOAuthProvider",
+        "isOAuthTransitionVariantId"
+      ]
+    },
+    "./icons": {
+      "exports": [
+        "AccessibilityIcon",
+        "ActivityIcon",
+        "AlertCircleIcon",
+        "AlertIcon",
+        "AlertOctagonIcon",
+        "AlertTriangleIcon",
+        "AlignCenterIcon",
+        "AlignJustifyIcon",
+        "AlignLeftIcon",
+        "ArchiveIcon",
+        "ArrowDownIcon",
+        "ArrowDownLeftIcon",
+        "ArrowDownRightIcon",
+        "ArrowLeftIcon",
+        "ArrowLeftRightIcon",
+        "ArrowRightIcon",
+        "ArrowUpDownIcon",
+        "ArrowUpIcon",
+        "ArrowUpRightIcon",
+        "AudioLinesIcon",
+        "AudioWaveformIcon",
+        "AwardIcon",
+        "BadgeCheckIcon",
+        "BadgeDollarSignIcon",
+        "BanIcon",
+        "BarChart3Icon",
+        "BarcodeIcon",
+        "BaseIcon",
+        "BellIcon",
+        "BellOffIcon",
+        "BookOpenIcon",
+        "BookmarkIcon",
+        "BookmarkPlusIcon",
+        "BotIcon",
+        "BoxesIcon",
+        "BracesIcon",
+        "BrainCircuitIcon",
+        "BrainIcon",
+        "BriefcaseBusinessIcon",
+        "BriefcaseIcon",
+        "Building2Icon",
+        "BuildingIcon",
+        "CalculatorIcon",
+        "CalendarCheckIcon",
+        "CalendarClockIcon",
+        "CalendarDaysIcon",
+        "CalendarIcon",
+        "CalendarPlusIcon",
+        "CameraIcon",
+        "ChartNoAxesColumnIcon",
+        "CheckCheckIcon",
+        "CheckCircle2Icon",
+        "CheckCircleIcon",
+        "CheckIcon",
+        "CheckSquareIcon",
+        "ChefHatIcon",
+        "ChevronDownIcon",
+        "ChevronLeftIcon",
+        "ChevronRightIcon",
+        "ChevronUpIcon",
+        "ChromeIcon",
+        "CircleAlertIcon",
+        "CircleDashedIcon",
+        "CircleDollarSignIcon",
+        "CircleDotIcon",
+        "CircleIcon",
+        "CircuitBoardIcon",
+        "ClipboardCheckIcon",
+        "ClipboardCopyIcon",
+        "ClipboardIcon",
+        "ClipboardListIcon",
+        "Clock3Icon",
+        "ClockIcon",
+        "Code2Icon",
+        "CodeIcon",
+        "CoffeeIcon",
+        "CoinsIcon",
+        "Columns3Icon",
+        "CommandIcon",
+        "CompassIcon",
+        "CopyIcon",
+        "CpuIcon",
+        "CreditCardIcon",
+        "CrosshairIcon",
+        "CrownIcon",
+        "DatabaseIcon",
+        "DollarSignIcon",
+        "DotIcon",
+        "DownloadIcon",
+        "DramaIcon",
+        "Edit2Icon",
+        "Edit3Icon",
+        "EditIcon",
+        "ExternalLinkIcon",
+        "EyeIcon",
+        "EyeOffIcon",
+        "FileAudioIcon",
+        "FileCheck2Icon",
+        "FileCheckIcon",
+        "FileCodeIcon",
+        "FileDownIcon",
+        "FileEditIcon",
+        "FileIcon",
+        "FilePenLineIcon",
+        "FilePlus2Icon",
+        "FileQuestionIcon",
+        "FileSearchIcon",
+        "FileSignatureIcon",
+        "FileStackIcon",
+        "FileTextIcon",
+        "FileTypeIcon",
+        "FileWarningIcon",
+        "FilterIcon",
+        "FingerprintIcon",
+        "FlagIcon",
+        "FlameIcon",
+        "FlaskConicalIcon",
+        "FolderIcon",
+        "FolderOpenIcon",
+        "FolderTreeIcon",
+        "FunnelIcon",
+        "GaugeIcon",
+        "GemIcon",
+        "GiftIcon",
+        "GitBranchIcon",
+        "GitCompareIcon",
+        "GithubIcon",
+        "Globe2Icon",
+        "GlobeIcon",
+        "GraduationCapIcon",
+        "Grid3x3Icon",
+        "GridIcon",
+        "GripVerticalIcon",
+        "HandIcon",
+        "HandshakeIcon",
+        "HashIcon",
+        "HeadphonesIcon",
+        "HeartHandshakeIcon",
+        "HeartIcon",
+        "HelpCircleIcon",
+        "HighlighterIcon",
+        "HistoryIcon",
+        "HomeIcon",
+        "ICON_CORPUS",
+        "ICON_NAMES",
+        "ICON_PROVENANCE",
+        "ICON_SIZE_MAP",
+        "ICON_SIZE_TOKENS",
+        "Icon",
+        "ImageIcon",
+        "ImageOffIcon",
+        "InboxIcon",
+        "InfinityIcon",
+        "InfoIcon",
+        "InstagramIcon",
+        "KanbanIcon",
+        "KeyIcon",
+        "KeyRoundIcon",
+        "KeyboardIcon",
+        "LandmarkIcon",
+        "LanguagesIcon",
+        "Layers3Icon",
+        "LayersIcon",
+        "LayoutDashboardIcon",
+        "LayoutGridIcon",
+        "LayoutIcon",
+        "LayoutListIcon",
+        "LayoutTemplateIcon",
+        "LightbulbIcon",
+        "LineChartIcon",
+        "Link2Icon",
+        "LinkIcon",
+        "LinkedinIcon",
+        "ListChecksIcon",
+        "ListFilterIcon",
+        "ListIcon",
+        "Loader2Icon",
+        "LoaderCircleIcon",
+        "LockIcon",
+        "LockKeyholeIcon",
+        "LogOutIcon",
+        "MailIcon",
+        "MailOpenIcon",
+        "MapPinIcon",
+        "Maximize2Icon",
+        "MedalIcon",
+        "MegaphoneIcon",
+        "MenuIcon",
+        "MessageCircleIcon",
+        "MessageSquareIcon",
+        "MessageSquarePlusIcon",
+        "MessageSquareQuoteIcon",
+        "MessageSquareTextIcon",
+        "MessageSquareWarningIcon",
+        "Mic2Icon",
+        "MicIcon",
+        "MicOffIcon",
+        "MicVocalIcon",
+        "Minimize2Icon",
+        "MinusCircleIcon",
+        "MinusIcon",
+        "MonitorIcon",
+        "MonitorSmartphoneIcon",
+        "MoreHorizontalIcon",
+        "MoreVerticalIcon",
+        "MoveIcon",
+        "MusicIcon",
+        "NavigationIcon",
+        "PackageCheckIcon",
+        "PackageIcon",
+        "PackageSearchIcon",
+        "PaletteIcon",
+        "PalmtreeIcon",
+        "PanelLeftCloseIcon",
+        "PanelLeftOpenIcon",
+        "PanelRightCloseIcon",
+        "PaperclipIcon",
+        "PauseCircleIcon",
+        "PauseIcon",
+        "PencilIcon",
+        "PencilLineIcon",
+        "PercentIcon",
+        "PhoneCallIcon",
+        "PhoneIcon",
+        "PhoneIncomingIcon",
+        "PhoneOffIcon",
+        "PieChartIcon",
+        "PinIcon",
+        "PinOffIcon",
+        "PlaneIcon",
+        "PlayCircleIcon",
+        "PlayIcon",
+        "PlugIcon",
+        "PlusCircleIcon",
+        "PlusIcon",
+        "PowerIcon",
+        "PowerOffIcon",
+        "PrinterIcon",
+        "QrCodeIcon",
+        "QuoteIcon",
+        "RadarIcon",
+        "RadioIcon",
+        "RadioTowerIcon",
+        "ReceiptIcon",
+        "ReceiptTextIcon",
+        "RefreshCcwIcon",
+        "RefreshCwIcon",
+        "Repeat2Icon",
+        "RepeatIcon",
+        "ReplyIcon",
+        "RocketIcon",
+        "RotateCcwIcon",
+        "RotateCwIcon",
+        "RouteIcon",
+        "SaveIcon",
+        "ScaleIcon",
+        "ScanFaceIcon",
+        "ScanLineIcon",
+        "ScanSearchIcon",
+        "SearchIcon",
+        "SearchXIcon",
+        "SendIcon",
+        "SendMessageIcon",
+        "ServerIcon",
+        "Settings2Icon",
+        "SettingsIcon",
+        "Share2Icon",
+        "ShieldAlertIcon",
+        "ShieldCheckIcon",
+        "ShieldIcon",
+        "ShieldOffIcon",
+        "ShieldXIcon",
+        "ShoppingBagIcon",
+        "ShoppingCartIcon",
+        "ShuffleIcon",
+        "SignalHighIcon",
+        "SkipBackIcon",
+        "SkipForwardIcon",
+        "SlidersHorizontalIcon",
+        "SmartphoneIcon",
+        "SparklesIcon",
+        "SquareIcon",
+        "StarIcon",
+        "StickyNoteIcon",
+        "StoreIcon",
+        "Table2Icon",
+        "TabletIcon",
+        "TagIcon",
+        "TagsIcon",
+        "TargetIcon",
+        "ThumbsDownIcon",
+        "ThumbsUpIcon",
+        "TicketIcon",
+        "TimerIcon",
+        "TimerResetIcon",
+        "ToggleLeftIcon",
+        "ToggleRightIcon",
+        "Trash2Icon",
+        "TrendingDownIcon",
+        "TrendingUpIcon",
+        "TrophyIcon",
+        "TruckIcon",
+        "TwitterIcon",
+        "Undo2Icon",
+        "UnlockIcon",
+        "UnplugIcon",
+        "UploadIcon",
+        "UserCheckIcon",
+        "UserCogIcon",
+        "UserIcon",
+        "UserMinusIcon",
+        "UserPlusIcon",
+        "UserRoundCheckIcon",
+        "UserRoundIcon",
+        "UserXIcon",
+        "UsersIcon",
+        "UsersRoundIcon",
+        "UtensilsCrossedIcon",
+        "VariableIcon",
+        "VideoIcon",
+        "Volume2Icon",
+        "VolumeXIcon",
+        "VoteIcon",
+        "WalletCardsIcon",
+        "WalletIcon",
+        "Wand2Icon",
+        "WarehouseIcon",
+        "WebhookIcon",
+        "WifiIcon",
+        "WifiOffIcon",
+        "WineIcon",
+        "WorkflowIcon",
+        "WrenchIcon",
+        "XCircleIcon",
+        "XIcon",
+        "ZapIcon",
+        "createIcon",
+        "isIconName"
+      ],
+      "symbols": {
+        "AccessibilityIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ActivityIcon": [
+          "@phosphor-icons/react"
+        ],
+        "AlertCircleIcon": [
+          "@phosphor-icons/react"
+        ],
+        "AlertOctagonIcon": [
+          "@phosphor-icons/react"
+        ],
+        "AlertTriangleIcon": [
+          "@phosphor-icons/react"
+        ],
+        "AlignCenterIcon": [
+          "@phosphor-icons/react"
+        ],
+        "AlignJustifyIcon": [
+          "@phosphor-icons/react"
+        ],
+        "AlignLeftIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ArchiveIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ArrowDownIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ArrowDownLeftIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ArrowDownRightIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ArrowLeftIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ArrowLeftRightIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ArrowRightIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ArrowUpDownIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ArrowUpIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ArrowUpRightIcon": [
+          "@phosphor-icons/react"
+        ],
+        "AudioLinesIcon": [
+          "@phosphor-icons/react"
+        ],
+        "AudioWaveformIcon": [
+          "@phosphor-icons/react"
+        ],
+        "AwardIcon": [
+          "@phosphor-icons/react"
+        ],
+        "BadgeCheckIcon": [
+          "@phosphor-icons/react"
+        ],
+        "BadgeDollarSignIcon": [
+          "@phosphor-icons/react"
+        ],
+        "BanIcon": [
+          "@phosphor-icons/react"
+        ],
+        "BarChart3Icon": [
+          "@phosphor-icons/react"
+        ],
+        "BarcodeIcon": [
+          "@phosphor-icons/react"
+        ],
+        "BellIcon": [
+          "@phosphor-icons/react"
+        ],
+        "BellOffIcon": [
+          "@phosphor-icons/react"
+        ],
+        "BookmarkIcon": [
+          "@phosphor-icons/react"
+        ],
+        "BookmarkPlusIcon": [
+          "@phosphor-icons/react"
+        ],
+        "BookOpenIcon": [
+          "@phosphor-icons/react"
+        ],
+        "BotIcon": [
+          "@phosphor-icons/react"
+        ],
+        "BoxesIcon": [
+          "@phosphor-icons/react"
+        ],
+        "BracesIcon": [
+          "@phosphor-icons/react"
+        ],
+        "BrainCircuitIcon": [
+          "@phosphor-icons/react"
+        ],
+        "BrainIcon": [
+          "@phosphor-icons/react"
+        ],
+        "BriefcaseBusinessIcon": [
+          "@phosphor-icons/react"
+        ],
+        "BriefcaseIcon": [
+          "@phosphor-icons/react"
+        ],
+        "Building2Icon": [
+          "@phosphor-icons/react"
+        ],
+        "BuildingIcon": [
+          "@phosphor-icons/react"
+        ],
+        "CalculatorIcon": [
+          "@phosphor-icons/react"
+        ],
+        "CalendarCheckIcon": [
+          "@phosphor-icons/react"
+        ],
+        "CalendarClockIcon": [
+          "@phosphor-icons/react"
+        ],
+        "CalendarDaysIcon": [
+          "@phosphor-icons/react"
+        ],
+        "CalendarIcon": [
+          "@phosphor-icons/react"
+        ],
+        "CalendarPlusIcon": [
+          "@phosphor-icons/react"
+        ],
+        "CameraIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ChartNoAxesColumnIcon": [
+          "@phosphor-icons/react"
+        ],
+        "CheckCheckIcon": [
+          "@phosphor-icons/react"
+        ],
+        "CheckCircle2Icon": [
+          "@phosphor-icons/react"
+        ],
+        "CheckCircleIcon": [
+          "@phosphor-icons/react"
+        ],
+        "CheckIcon": [
+          "@phosphor-icons/react"
+        ],
+        "CheckSquareIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ChefHatIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ChevronDownIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ChevronLeftIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ChevronRightIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ChevronUpIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ChromeIcon": [
+          "@phosphor-icons/react"
+        ],
+        "CircleAlertIcon": [
+          "@phosphor-icons/react"
+        ],
+        "CircleDashedIcon": [
+          "@phosphor-icons/react"
+        ],
+        "CircleDollarSignIcon": [
+          "@phosphor-icons/react"
+        ],
+        "CircleDotIcon": [
+          "@phosphor-icons/react"
+        ],
+        "CircleIcon": [
+          "@phosphor-icons/react"
+        ],
+        "CircuitBoardIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ClipboardCheckIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ClipboardCopyIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ClipboardIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ClipboardListIcon": [
+          "@phosphor-icons/react"
+        ],
+        "Clock3Icon": [
+          "@phosphor-icons/react"
+        ],
+        "ClockIcon": [
+          "@phosphor-icons/react"
+        ],
+        "Code2Icon": [
+          "@phosphor-icons/react"
+        ],
+        "CodeIcon": [
+          "@phosphor-icons/react"
+        ],
+        "CoffeeIcon": [
+          "@phosphor-icons/react"
+        ],
+        "CoinsIcon": [
+          "@phosphor-icons/react"
+        ],
+        "Columns3Icon": [
+          "@phosphor-icons/react"
+        ],
+        "CommandIcon": [
+          "@phosphor-icons/react"
+        ],
+        "CompassIcon": [
+          "@phosphor-icons/react"
+        ],
+        "CopyIcon": [
+          "@phosphor-icons/react"
+        ],
+        "CpuIcon": [
+          "@phosphor-icons/react"
+        ],
+        "CreditCardIcon": [
+          "@phosphor-icons/react"
+        ],
+        "CrosshairIcon": [
+          "@phosphor-icons/react"
+        ],
+        "CrownIcon": [
+          "@phosphor-icons/react"
+        ],
+        "DatabaseIcon": [
+          "@phosphor-icons/react"
+        ],
+        "DollarSignIcon": [
+          "@phosphor-icons/react"
+        ],
+        "DotIcon": [
+          "@phosphor-icons/react"
+        ],
+        "DownloadIcon": [
+          "@phosphor-icons/react"
+        ],
+        "DramaIcon": [
+          "@phosphor-icons/react"
+        ],
+        "Edit2Icon": [
+          "@phosphor-icons/react"
+        ],
+        "Edit3Icon": [
+          "@phosphor-icons/react"
+        ],
+        "EditIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ExternalLinkIcon": [
+          "@phosphor-icons/react"
+        ],
+        "EyeIcon": [
+          "@phosphor-icons/react"
+        ],
+        "EyeOffIcon": [
+          "@phosphor-icons/react"
+        ],
+        "FileAudioIcon": [
+          "@phosphor-icons/react"
+        ],
+        "FileCheck2Icon": [
+          "@phosphor-icons/react"
+        ],
+        "FileCheckIcon": [
+          "@phosphor-icons/react"
+        ],
+        "FileCodeIcon": [
+          "@phosphor-icons/react"
+        ],
+        "FileDownIcon": [
+          "@phosphor-icons/react"
+        ],
+        "FileEditIcon": [
+          "@phosphor-icons/react"
+        ],
+        "FileIcon": [
+          "@phosphor-icons/react"
+        ],
+        "FilePenLineIcon": [
+          "@phosphor-icons/react"
+        ],
+        "FilePlus2Icon": [
+          "@phosphor-icons/react"
+        ],
+        "FileQuestionIcon": [
+          "@phosphor-icons/react"
+        ],
+        "FileSearchIcon": [
+          "@phosphor-icons/react"
+        ],
+        "FileSignatureIcon": [
+          "@phosphor-icons/react"
+        ],
+        "FileStackIcon": [
+          "@phosphor-icons/react"
+        ],
+        "FileTextIcon": [
+          "@phosphor-icons/react"
+        ],
+        "FileTypeIcon": [
+          "@phosphor-icons/react"
+        ],
+        "FileWarningIcon": [
+          "@phosphor-icons/react"
+        ],
+        "FilterIcon": [
+          "@phosphor-icons/react"
+        ],
+        "FingerprintIcon": [
+          "@phosphor-icons/react"
+        ],
+        "FlagIcon": [
+          "@phosphor-icons/react"
+        ],
+        "FlameIcon": [
+          "@phosphor-icons/react"
+        ],
+        "FlaskConicalIcon": [
+          "@phosphor-icons/react"
+        ],
+        "FolderIcon": [
+          "@phosphor-icons/react"
+        ],
+        "FolderOpenIcon": [
+          "@phosphor-icons/react"
+        ],
+        "FolderTreeIcon": [
+          "@phosphor-icons/react"
+        ],
+        "FunnelIcon": [
+          "@phosphor-icons/react"
+        ],
+        "GaugeIcon": [
+          "@phosphor-icons/react"
+        ],
+        "GemIcon": [
+          "@phosphor-icons/react"
+        ],
+        "GiftIcon": [
+          "@phosphor-icons/react"
+        ],
+        "GitBranchIcon": [
+          "@phosphor-icons/react"
+        ],
+        "GitCompareIcon": [
+          "@phosphor-icons/react"
+        ],
+        "GithubIcon": [
+          "@phosphor-icons/react"
+        ],
+        "Globe2Icon": [
+          "@phosphor-icons/react"
+        ],
+        "GlobeIcon": [
+          "@phosphor-icons/react"
+        ],
+        "GraduationCapIcon": [
+          "@phosphor-icons/react"
+        ],
+        "Grid3x3Icon": [
+          "@phosphor-icons/react"
+        ],
+        "GridIcon": [
+          "@phosphor-icons/react"
+        ],
+        "GripVerticalIcon": [
+          "@phosphor-icons/react"
+        ],
+        "HandIcon": [
+          "@phosphor-icons/react"
+        ],
+        "HandshakeIcon": [
+          "@phosphor-icons/react"
+        ],
+        "HashIcon": [
+          "@phosphor-icons/react"
+        ],
+        "HeadphonesIcon": [
+          "@phosphor-icons/react"
+        ],
+        "HeartHandshakeIcon": [
+          "@phosphor-icons/react"
+        ],
+        "HeartIcon": [
+          "@phosphor-icons/react"
+        ],
+        "HelpCircleIcon": [
+          "@phosphor-icons/react"
+        ],
+        "HighlighterIcon": [
+          "@phosphor-icons/react"
+        ],
+        "HistoryIcon": [
+          "@phosphor-icons/react"
+        ],
+        "HomeIcon": [
+          "@phosphor-icons/react"
+        ],
+        "Icon": [
+          "@phosphor-icons/react"
+        ],
+        "ImageIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ImageOffIcon": [
+          "@phosphor-icons/react"
+        ],
+        "InboxIcon": [
+          "@phosphor-icons/react"
+        ],
+        "InfinityIcon": [
+          "@phosphor-icons/react"
+        ],
+        "InfoIcon": [
+          "@phosphor-icons/react"
+        ],
+        "InstagramIcon": [
+          "@phosphor-icons/react"
+        ],
+        "KanbanIcon": [
+          "@phosphor-icons/react"
+        ],
+        "KeyboardIcon": [
+          "@phosphor-icons/react"
+        ],
+        "KeyIcon": [
+          "@phosphor-icons/react"
+        ],
+        "KeyRoundIcon": [
+          "@phosphor-icons/react"
+        ],
+        "LandmarkIcon": [
+          "@phosphor-icons/react"
+        ],
+        "LanguagesIcon": [
+          "@phosphor-icons/react"
+        ],
+        "Layers3Icon": [
+          "@phosphor-icons/react"
+        ],
+        "LayersIcon": [
+          "@phosphor-icons/react"
+        ],
+        "LayoutDashboardIcon": [
+          "@phosphor-icons/react"
+        ],
+        "LayoutGridIcon": [
+          "@phosphor-icons/react"
+        ],
+        "LayoutIcon": [
+          "@phosphor-icons/react"
+        ],
+        "LayoutListIcon": [
+          "@phosphor-icons/react"
+        ],
+        "LayoutTemplateIcon": [
+          "@phosphor-icons/react"
+        ],
+        "LightbulbIcon": [
+          "@phosphor-icons/react"
+        ],
+        "LineChartIcon": [
+          "@phosphor-icons/react"
+        ],
+        "Link2Icon": [
+          "@phosphor-icons/react"
+        ],
+        "LinkedinIcon": [
+          "@phosphor-icons/react"
+        ],
+        "LinkIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ListChecksIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ListFilterIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ListIcon": [
+          "@phosphor-icons/react"
+        ],
+        "Loader2Icon": [
+          "@phosphor-icons/react"
+        ],
+        "LoaderCircleIcon": [
+          "@phosphor-icons/react"
+        ],
+        "LockIcon": [
+          "@phosphor-icons/react"
+        ],
+        "LockKeyholeIcon": [
+          "@phosphor-icons/react"
+        ],
+        "LogOutIcon": [
+          "@phosphor-icons/react"
+        ],
+        "MailIcon": [
+          "@phosphor-icons/react"
+        ],
+        "MailOpenIcon": [
+          "@phosphor-icons/react"
+        ],
+        "MapPinIcon": [
+          "@phosphor-icons/react"
+        ],
+        "Maximize2Icon": [
+          "@phosphor-icons/react"
+        ],
+        "MedalIcon": [
+          "@phosphor-icons/react"
+        ],
+        "MegaphoneIcon": [
+          "@phosphor-icons/react"
+        ],
+        "MenuIcon": [
+          "@phosphor-icons/react"
+        ],
+        "MessageCircleIcon": [
+          "@phosphor-icons/react"
+        ],
+        "MessageSquareIcon": [
+          "@phosphor-icons/react"
+        ],
+        "MessageSquarePlusIcon": [
+          "@phosphor-icons/react"
+        ],
+        "MessageSquareQuoteIcon": [
+          "@phosphor-icons/react"
+        ],
+        "MessageSquareTextIcon": [
+          "@phosphor-icons/react"
+        ],
+        "MessageSquareWarningIcon": [
+          "@phosphor-icons/react"
+        ],
+        "Mic2Icon": [
+          "@phosphor-icons/react"
+        ],
+        "MicIcon": [
+          "@phosphor-icons/react"
+        ],
+        "MicOffIcon": [
+          "@phosphor-icons/react"
+        ],
+        "MicVocalIcon": [
+          "@phosphor-icons/react"
+        ],
+        "Minimize2Icon": [
+          "@phosphor-icons/react"
+        ],
+        "MinusCircleIcon": [
+          "@phosphor-icons/react"
+        ],
+        "MinusIcon": [
+          "@phosphor-icons/react"
+        ],
+        "MonitorIcon": [
+          "@phosphor-icons/react"
+        ],
+        "MonitorSmartphoneIcon": [
+          "@phosphor-icons/react"
+        ],
+        "MoreHorizontalIcon": [
+          "@phosphor-icons/react"
+        ],
+        "MoreVerticalIcon": [
+          "@phosphor-icons/react"
+        ],
+        "MoveIcon": [
+          "@phosphor-icons/react"
+        ],
+        "MusicIcon": [
+          "@phosphor-icons/react"
+        ],
+        "NavigationIcon": [
+          "@phosphor-icons/react"
+        ],
+        "PackageCheckIcon": [
+          "@phosphor-icons/react"
+        ],
+        "PackageIcon": [
+          "@phosphor-icons/react"
+        ],
+        "PackageSearchIcon": [
+          "@phosphor-icons/react"
+        ],
+        "PaletteIcon": [
+          "@phosphor-icons/react"
+        ],
+        "PalmtreeIcon": [
+          "@phosphor-icons/react"
+        ],
+        "PanelLeftCloseIcon": [
+          "@phosphor-icons/react"
+        ],
+        "PanelLeftOpenIcon": [
+          "@phosphor-icons/react"
+        ],
+        "PanelRightCloseIcon": [
+          "@phosphor-icons/react"
+        ],
+        "PaperclipIcon": [
+          "@phosphor-icons/react"
+        ],
+        "PauseCircleIcon": [
+          "@phosphor-icons/react"
+        ],
+        "PauseIcon": [
+          "@phosphor-icons/react"
+        ],
+        "PencilIcon": [
+          "@phosphor-icons/react"
+        ],
+        "PencilLineIcon": [
+          "@phosphor-icons/react"
+        ],
+        "PercentIcon": [
+          "@phosphor-icons/react"
+        ],
+        "PhoneCallIcon": [
+          "@phosphor-icons/react"
+        ],
+        "PhoneIcon": [
+          "@phosphor-icons/react"
+        ],
+        "PhoneIncomingIcon": [
+          "@phosphor-icons/react"
+        ],
+        "PhoneOffIcon": [
+          "@phosphor-icons/react"
+        ],
+        "PieChartIcon": [
+          "@phosphor-icons/react"
+        ],
+        "PinIcon": [
+          "@phosphor-icons/react"
+        ],
+        "PinOffIcon": [
+          "@phosphor-icons/react"
+        ],
+        "PlaneIcon": [
+          "@phosphor-icons/react"
+        ],
+        "PlayCircleIcon": [
+          "@phosphor-icons/react"
+        ],
+        "PlayIcon": [
+          "@phosphor-icons/react"
+        ],
+        "PlugIcon": [
+          "@phosphor-icons/react"
+        ],
+        "PlusCircleIcon": [
+          "@phosphor-icons/react"
+        ],
+        "PlusIcon": [
+          "@phosphor-icons/react"
+        ],
+        "PowerIcon": [
+          "@phosphor-icons/react"
+        ],
+        "PowerOffIcon": [
+          "@phosphor-icons/react"
+        ],
+        "PrinterIcon": [
+          "@phosphor-icons/react"
+        ],
+        "QrCodeIcon": [
+          "@phosphor-icons/react"
+        ],
+        "QuoteIcon": [
+          "@phosphor-icons/react"
+        ],
+        "RadarIcon": [
+          "@phosphor-icons/react"
+        ],
+        "RadioIcon": [
+          "@phosphor-icons/react"
+        ],
+        "RadioTowerIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ReceiptIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ReceiptTextIcon": [
+          "@phosphor-icons/react"
+        ],
+        "RefreshCcwIcon": [
+          "@phosphor-icons/react"
+        ],
+        "RefreshCwIcon": [
+          "@phosphor-icons/react"
+        ],
+        "Repeat2Icon": [
+          "@phosphor-icons/react"
+        ],
+        "RepeatIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ReplyIcon": [
+          "@phosphor-icons/react"
+        ],
+        "RocketIcon": [
+          "@phosphor-icons/react"
+        ],
+        "RotateCcwIcon": [
+          "@phosphor-icons/react"
+        ],
+        "RotateCwIcon": [
+          "@phosphor-icons/react"
+        ],
+        "RouteIcon": [
+          "@phosphor-icons/react"
+        ],
+        "SaveIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ScaleIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ScanFaceIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ScanLineIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ScanSearchIcon": [
+          "@phosphor-icons/react"
+        ],
+        "SearchIcon": [
+          "@phosphor-icons/react"
+        ],
+        "SearchXIcon": [
+          "@phosphor-icons/react"
+        ],
+        "SendIcon": [
+          "@phosphor-icons/react"
+        ],
+        "SendMessageIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ServerIcon": [
+          "@phosphor-icons/react"
+        ],
+        "Settings2Icon": [
+          "@phosphor-icons/react"
+        ],
+        "SettingsIcon": [
+          "@phosphor-icons/react"
+        ],
+        "Share2Icon": [
+          "@phosphor-icons/react"
+        ],
+        "ShieldAlertIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ShieldCheckIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ShieldIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ShieldOffIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ShieldXIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ShoppingBagIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ShoppingCartIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ShuffleIcon": [
+          "@phosphor-icons/react"
+        ],
+        "SignalHighIcon": [
+          "@phosphor-icons/react"
+        ],
+        "SkipBackIcon": [
+          "@phosphor-icons/react"
+        ],
+        "SkipForwardIcon": [
+          "@phosphor-icons/react"
+        ],
+        "SlidersHorizontalIcon": [
+          "@phosphor-icons/react"
+        ],
+        "SmartphoneIcon": [
+          "@phosphor-icons/react"
+        ],
+        "SparklesIcon": [
+          "@phosphor-icons/react"
+        ],
+        "SquareIcon": [
+          "@phosphor-icons/react"
+        ],
+        "StarIcon": [
+          "@phosphor-icons/react"
+        ],
+        "StickyNoteIcon": [
+          "@phosphor-icons/react"
+        ],
+        "StoreIcon": [
+          "@phosphor-icons/react"
+        ],
+        "Table2Icon": [
+          "@phosphor-icons/react"
+        ],
+        "TabletIcon": [
+          "@phosphor-icons/react"
+        ],
+        "TagIcon": [
+          "@phosphor-icons/react"
+        ],
+        "TagsIcon": [
+          "@phosphor-icons/react"
+        ],
+        "TargetIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ThumbsDownIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ThumbsUpIcon": [
+          "@phosphor-icons/react"
+        ],
+        "TicketIcon": [
+          "@phosphor-icons/react"
+        ],
+        "TimerIcon": [
+          "@phosphor-icons/react"
+        ],
+        "TimerResetIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ToggleLeftIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ToggleRightIcon": [
+          "@phosphor-icons/react"
+        ],
+        "Trash2Icon": [
+          "@phosphor-icons/react"
+        ],
+        "TrendingDownIcon": [
+          "@phosphor-icons/react"
+        ],
+        "TrendingUpIcon": [
+          "@phosphor-icons/react"
+        ],
+        "TrophyIcon": [
+          "@phosphor-icons/react"
+        ],
+        "TruckIcon": [
+          "@phosphor-icons/react"
+        ],
+        "TwitterIcon": [
+          "@phosphor-icons/react"
+        ],
+        "Undo2Icon": [
+          "@phosphor-icons/react"
+        ],
+        "UnlockIcon": [
+          "@phosphor-icons/react"
+        ],
+        "UnplugIcon": [
+          "@phosphor-icons/react"
+        ],
+        "UploadIcon": [
+          "@phosphor-icons/react"
+        ],
+        "UserCheckIcon": [
+          "@phosphor-icons/react"
+        ],
+        "UserCogIcon": [
+          "@phosphor-icons/react"
+        ],
+        "UserIcon": [
+          "@phosphor-icons/react"
+        ],
+        "UserMinusIcon": [
+          "@phosphor-icons/react"
+        ],
+        "UserPlusIcon": [
+          "@phosphor-icons/react"
+        ],
+        "UserRoundCheckIcon": [
+          "@phosphor-icons/react"
+        ],
+        "UserRoundIcon": [
+          "@phosphor-icons/react"
+        ],
+        "UsersIcon": [
+          "@phosphor-icons/react"
+        ],
+        "UsersRoundIcon": [
+          "@phosphor-icons/react"
+        ],
+        "UserXIcon": [
+          "@phosphor-icons/react"
+        ],
+        "UtensilsCrossedIcon": [
+          "@phosphor-icons/react"
+        ],
+        "VariableIcon": [
+          "@phosphor-icons/react"
+        ],
+        "VideoIcon": [
+          "@phosphor-icons/react"
+        ],
+        "Volume2Icon": [
+          "@phosphor-icons/react"
+        ],
+        "VolumeXIcon": [
+          "@phosphor-icons/react"
+        ],
+        "VoteIcon": [
+          "@phosphor-icons/react"
+        ],
+        "WalletCardsIcon": [
+          "@phosphor-icons/react"
+        ],
+        "WalletIcon": [
+          "@phosphor-icons/react"
+        ],
+        "Wand2Icon": [
+          "@phosphor-icons/react"
+        ],
+        "WarehouseIcon": [
+          "@phosphor-icons/react"
+        ],
+        "WebhookIcon": [
+          "@phosphor-icons/react"
+        ],
+        "WifiIcon": [
+          "@phosphor-icons/react"
+        ],
+        "WifiOffIcon": [
+          "@phosphor-icons/react"
+        ],
+        "WineIcon": [
+          "@phosphor-icons/react"
+        ],
+        "WorkflowIcon": [
+          "@phosphor-icons/react"
+        ],
+        "WrenchIcon": [
+          "@phosphor-icons/react"
+        ],
+        "XCircleIcon": [
+          "@phosphor-icons/react"
+        ],
+        "XIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ZapIcon": [
+          "@phosphor-icons/react"
+        ]
+      },
+      "wildcard": [
+        "@phosphor-icons/react"
+      ],
+      "supplierFreeExports": [
+        "AlertIcon",
+        "BaseIcon",
+        "ICON_CORPUS",
+        "ICON_NAMES",
+        "ICON_PROVENANCE",
+        "ICON_SIZE_MAP",
+        "ICON_SIZE_TOKENS",
+        "createIcon",
+        "isIconName"
+      ]
+    },
+    "./icons/full": {
+      "exports": [
+        "GRAPHIC_ASSET_CLASSES",
+        "GRAPHIC_ASSET_PROVIDERS",
+        "GRAPHIC_ASSET_PROVIDER_BY_CLASS",
+        "GRAPHIC_ASSET_TELEMETRY_CODES",
+        "ICON_CORPUS",
+        "ICON_NAMES",
+        "ICON_PROVENANCE",
+        "Icon",
+        "getIconCorpusEntry",
+        "installGraphicAssetRuntimeControl",
+        "isIconName"
+      ],
+      "symbols": {
+        "Icon": [
+          "@phosphor-icons/react"
+        ]
+      },
+      "supplierFreeExports": [
+        "GRAPHIC_ASSET_CLASSES",
+        "GRAPHIC_ASSET_PROVIDERS",
+        "GRAPHIC_ASSET_PROVIDER_BY_CLASS",
+        "GRAPHIC_ASSET_TELEMETRY_CODES",
+        "ICON_CORPUS",
+        "ICON_NAMES",
+        "ICON_PROVENANCE",
+        "getIconCorpusEntry",
+        "installGraphicAssetRuntimeControl",
+        "isIconName"
+      ]
+    },
+    "./icons/presets/bithire": {
+      "exports": [
+        "BITHIRE_PRESET_ICON_COMPONENTS",
+        "BITHIRE_PRESET_ICON_NAMES",
+        "BitHireIconPreset",
+        "GRAPHIC_ASSET_CLASSES",
+        "GRAPHIC_ASSET_PROVIDERS",
+        "GRAPHIC_ASSET_PROVIDER_BY_CLASS",
+        "GRAPHIC_ASSET_TELEMETRY_CODES",
+        "installGraphicAssetRuntimeControl",
+        "isBitHirePresetIconName",
+        "resolveBitHirePresetIcon"
+      ],
+      "symbols": {
+        "BITHIRE_PRESET_ICON_COMPONENTS": [
+          "@phosphor-icons/react"
+        ],
+        "BITHIRE_PRESET_ICON_NAMES": [
+          "@phosphor-icons/react"
+        ],
+        "BitHireIconPreset": [
+          "@phosphor-icons/react"
+        ],
+        "isBitHirePresetIconName": [
+          "@phosphor-icons/react"
+        ],
+        "resolveBitHirePresetIcon": [
+          "@phosphor-icons/react"
+        ]
+      },
+      "supplierFreeExports": [
+        "GRAPHIC_ASSET_CLASSES",
+        "GRAPHIC_ASSET_PROVIDERS",
+        "GRAPHIC_ASSET_PROVIDER_BY_CLASS",
+        "GRAPHIC_ASSET_TELEMETRY_CODES",
+        "installGraphicAssetRuntimeControl"
+      ]
+    },
+    "./icons/corpus": {
+      "exports": [
+        "BITHIRE_ICON_NAMES",
+        "FOUNDATION_ICON_NAMES",
+        "GENERATED_ICON_CORPUS_VERSION",
+        "GENERATED_ICON_METADATA",
+        "GENERATED_ICON_NAMES",
+        "IDENTITY_ICON_NAMES",
+        "INTELLIGENCE_ICON_NAMES",
+        "OPERATIONS_ICON_NAMES"
+      ],
+      "symbols": {},
+      "supplierFreeExports": [
+        "BITHIRE_ICON_NAMES",
+        "FOUNDATION_ICON_NAMES",
+        "GENERATED_ICON_CORPUS_VERSION",
+        "GENERATED_ICON_METADATA",
+        "GENERATED_ICON_NAMES",
+        "IDENTITY_ICON_NAMES",
+        "INTELLIGENCE_ICON_NAMES",
+        "OPERATIONS_ICON_NAMES"
+      ]
+    },
+    "./icons/foundation": {
+      "exports": [
+        "ActionAddIcon",
+        "ActionArchiveIcon",
+        "ActionAttachIcon",
+        "ActionCloseIcon",
+        "ActionConcealIcon",
+        "ActionConfirmIcon",
+        "ActionCopyIcon",
+        "ActionDeleteIcon",
+        "ActionDownloadIcon",
+        "ActionEditIcon",
+        "ActionFilterIcon",
+        "ActionFocusIcon",
+        "ActionOpenExternalIcon",
+        "ActionPauseIcon",
+        "ActionPlayIcon",
+        "ActionPrintIcon",
+        "ActionRedoIcon",
+        "ActionRefreshIcon",
+        "ActionReorderIcon",
+        "ActionRetryIcon",
+        "ActionRevealIcon",
+        "ActionSaveIcon",
+        "ActionSearchIcon",
+        "ActionShareIcon",
+        "ActionSortIcon",
+        "ActionStopIcon",
+        "ActionUndoIcon",
+        "ActionUploadIcon",
+        "ActionVoteIcon",
+        "ActionZoomInIcon",
+        "ActionZoomOutIcon",
+        "AiAssistantIcon",
+        "AiComputeIcon",
+        "AiGenerateIcon",
+        "AiReasoningIcon",
+        "AiSparklesIcon",
+        "AiToolIcon",
+        "AppearanceThemeIcon",
+        "AuthPasskeyIcon",
+        "AuthPasswordIcon",
+        "AuthSsoIcon",
+        "CommunicationCallIcon",
+        "CommunicationEmailIcon",
+        "CommunicationInboxIcon",
+        "CommunicationMessageIcon",
+        "CommunicationMuteIcon",
+        "CommunicationNotificationIcon",
+        "CommunicationReplyIcon",
+        "CommunicationSendIcon",
+        "CommunicationVoiceIcon",
+        "ConnectivityNetworkIcon",
+        "ConnectivityWebIcon",
+        "ContentBookmarkIcon",
+        "ContentCodeIcon",
+        "ContentDocumentIcon",
+        "ContentFileIcon",
+        "ContentFolderIcon",
+        "ContentImageIcon",
+        "ContentLinkIcon",
+        "ContentNoteIcon",
+        "ContentQuoteIcon",
+        "ContentTranslationIcon",
+        "ContentVideoIcon",
+        "DataChartIcon",
+        "DataDatabaseIcon",
+        "DataGaugeIcon",
+        "DataLineChartIcon",
+        "DataPieChartIcon",
+        "DataReportIcon",
+        "DataScatterPlotIcon",
+        "DataTableIcon",
+        "DataTrendDownIcon",
+        "DataTrendIcon",
+        "DeviceCameraIcon",
+        "DeviceDesktopIcon",
+        "DeviceMicrophoneIcon",
+        "DeviceMobileIcon",
+        "DeviceTabletIcon",
+        "EntityEducationIcon",
+        "EntityGroupIcon",
+        "EntityOrganizationIcon",
+        "EntityPersonIcon",
+        "EntityPersonaIcon",
+        "EntityTagIcon",
+        "EntityTaskIcon",
+        "FOUNDATION_ICON_COMPONENTS",
+        "FOUNDATION_ICON_NAMES",
+        "FeedbackEmptyIcon",
+        "FeedbackHelpIcon",
+        "FeedbackTipIcon",
+        "FoundationIcon",
+        "GENERATED_ICON_CORPUS_VERSION",
+        "GENERATED_ICON_METADATA",
+        "LayoutCardsIcon",
+        "LayoutColumnsIcon",
+        "LayoutGridIcon",
+        "LayoutHierarchyIcon",
+        "LayoutListIcon",
+        "LayoutSidebarStartIcon",
+        "LayoutTabsIcon",
+        "LocationGlobalIcon",
+        "LocationPlaceIcon",
+        "NavigationBackIcon",
+        "NavigationCollapseIcon",
+        "NavigationDownIcon",
+        "NavigationExpandIcon",
+        "NavigationForwardIcon",
+        "NavigationHomeIcon",
+        "NavigationMenuIcon",
+        "NavigationMoreIcon",
+        "NavigationProfileIcon",
+        "NavigationRouteIcon",
+        "NavigationSettingsIcon",
+        "NavigationUpIcon",
+        "StatusAchievementIcon",
+        "StatusBlockedIcon",
+        "StatusDraftIcon",
+        "StatusErrorIcon",
+        "StatusFeaturedIcon",
+        "StatusInfoIcon",
+        "StatusInstantIcon",
+        "StatusLiveIcon",
+        "StatusLoadingIcon",
+        "StatusNeutralIcon",
+        "StatusOfflineIcon",
+        "StatusPausedIcon",
+        "StatusPendingIcon",
+        "StatusPremiumIcon",
+        "StatusPriorityIcon",
+        "StatusScheduledIcon",
+        "StatusSecureIcon",
+        "StatusSuccessIcon",
+        "StatusSyncedIcon",
+        "StatusVerifiedIcon",
+        "StatusWarningIcon",
+        "SystemAutomationIcon",
+        "SystemCommandIcon",
+        "SystemIntegrationIcon",
+        "SystemWorkflowIcon",
+        "TimeDateIcon",
+        "TimeDeadlineIcon",
+        "TimeLeaveIcon",
+        "TimeScheduleIcon",
+        "TimeTimestampIcon",
+        "isFoundationIconName",
+        "resolveFoundationIcon"
+      ],
+      "symbols": {
+        "ActionAddIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ActionArchiveIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ActionAttachIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ActionCloseIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ActionConcealIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ActionConfirmIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ActionCopyIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ActionDeleteIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ActionDownloadIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ActionEditIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ActionFilterIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ActionFocusIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ActionOpenExternalIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ActionPauseIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ActionPlayIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ActionPrintIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ActionRedoIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ActionRefreshIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ActionReorderIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ActionRetryIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ActionRevealIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ActionSaveIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ActionSearchIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ActionShareIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ActionSortIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ActionStopIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ActionUndoIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ActionUploadIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ActionVoteIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ActionZoomInIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ActionZoomOutIcon": [
+          "@phosphor-icons/react"
+        ],
+        "AiAssistantIcon": [
+          "@phosphor-icons/react"
+        ],
+        "AiComputeIcon": [
+          "@phosphor-icons/react"
+        ],
+        "AiGenerateIcon": [
+          "@phosphor-icons/react"
+        ],
+        "AiReasoningIcon": [
+          "@phosphor-icons/react"
+        ],
+        "AiSparklesIcon": [
+          "@phosphor-icons/react"
+        ],
+        "AiToolIcon": [
+          "@phosphor-icons/react"
+        ],
+        "AppearanceThemeIcon": [
+          "@phosphor-icons/react"
+        ],
+        "AuthPasskeyIcon": [
+          "@phosphor-icons/react"
+        ],
+        "AuthPasswordIcon": [
+          "@phosphor-icons/react"
+        ],
+        "AuthSsoIcon": [
+          "@phosphor-icons/react"
+        ],
+        "CommunicationCallIcon": [
+          "@phosphor-icons/react"
+        ],
+        "CommunicationEmailIcon": [
+          "@phosphor-icons/react"
+        ],
+        "CommunicationInboxIcon": [
+          "@phosphor-icons/react"
+        ],
+        "CommunicationMessageIcon": [
+          "@phosphor-icons/react"
+        ],
+        "CommunicationMuteIcon": [
+          "@phosphor-icons/react"
+        ],
+        "CommunicationNotificationIcon": [
+          "@phosphor-icons/react"
+        ],
+        "CommunicationReplyIcon": [
+          "@phosphor-icons/react"
+        ],
+        "CommunicationSendIcon": [
+          "@phosphor-icons/react"
+        ],
+        "CommunicationVoiceIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ConnectivityNetworkIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ConnectivityWebIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ContentBookmarkIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ContentCodeIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ContentDocumentIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ContentFileIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ContentFolderIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ContentImageIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ContentLinkIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ContentNoteIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ContentQuoteIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ContentTranslationIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ContentVideoIcon": [
+          "@phosphor-icons/react"
+        ],
+        "DataChartIcon": [
+          "@phosphor-icons/react"
+        ],
+        "DataDatabaseIcon": [
+          "@phosphor-icons/react"
+        ],
+        "DataGaugeIcon": [
+          "@phosphor-icons/react"
+        ],
+        "DataLineChartIcon": [
+          "@phosphor-icons/react"
+        ],
+        "DataPieChartIcon": [
+          "@phosphor-icons/react"
+        ],
+        "DataReportIcon": [
+          "@phosphor-icons/react"
+        ],
+        "DataScatterPlotIcon": [
+          "@phosphor-icons/react"
+        ],
+        "DataTableIcon": [
+          "@phosphor-icons/react"
+        ],
+        "DataTrendDownIcon": [
+          "@phosphor-icons/react"
+        ],
+        "DataTrendIcon": [
+          "@phosphor-icons/react"
+        ],
+        "DeviceCameraIcon": [
+          "@phosphor-icons/react"
+        ],
+        "DeviceDesktopIcon": [
+          "@phosphor-icons/react"
+        ],
+        "DeviceMicrophoneIcon": [
+          "@phosphor-icons/react"
+        ],
+        "DeviceMobileIcon": [
+          "@phosphor-icons/react"
+        ],
+        "DeviceTabletIcon": [
+          "@phosphor-icons/react"
+        ],
+        "EntityEducationIcon": [
+          "@phosphor-icons/react"
+        ],
+        "EntityGroupIcon": [
+          "@phosphor-icons/react"
+        ],
+        "EntityOrganizationIcon": [
+          "@phosphor-icons/react"
+        ],
+        "EntityPersonaIcon": [
+          "@phosphor-icons/react"
+        ],
+        "EntityPersonIcon": [
+          "@phosphor-icons/react"
+        ],
+        "EntityTagIcon": [
+          "@phosphor-icons/react"
+        ],
+        "EntityTaskIcon": [
+          "@phosphor-icons/react"
+        ],
+        "FeedbackEmptyIcon": [
+          "@phosphor-icons/react"
+        ],
+        "FeedbackHelpIcon": [
+          "@phosphor-icons/react"
+        ],
+        "FeedbackTipIcon": [
+          "@phosphor-icons/react"
+        ],
+        "FOUNDATION_ICON_COMPONENTS": [
+          "@phosphor-icons/react"
+        ],
+        "FoundationIcon": [
+          "@phosphor-icons/react"
+        ],
+        "isFoundationIconName": [
+          "@phosphor-icons/react"
+        ],
+        "LayoutCardsIcon": [
+          "@phosphor-icons/react"
+        ],
+        "LayoutColumnsIcon": [
+          "@phosphor-icons/react"
+        ],
+        "LayoutGridIcon": [
+          "@phosphor-icons/react"
+        ],
+        "LayoutHierarchyIcon": [
+          "@phosphor-icons/react"
+        ],
+        "LayoutListIcon": [
+          "@phosphor-icons/react"
+        ],
+        "LayoutSidebarStartIcon": [
+          "@phosphor-icons/react"
+        ],
+        "LayoutTabsIcon": [
+          "@phosphor-icons/react"
+        ],
+        "LocationGlobalIcon": [
+          "@phosphor-icons/react"
+        ],
+        "LocationPlaceIcon": [
+          "@phosphor-icons/react"
+        ],
+        "NavigationBackIcon": [
+          "@phosphor-icons/react"
+        ],
+        "NavigationCollapseIcon": [
+          "@phosphor-icons/react"
+        ],
+        "NavigationDownIcon": [
+          "@phosphor-icons/react"
+        ],
+        "NavigationExpandIcon": [
+          "@phosphor-icons/react"
+        ],
+        "NavigationForwardIcon": [
+          "@phosphor-icons/react"
+        ],
+        "NavigationHomeIcon": [
+          "@phosphor-icons/react"
+        ],
+        "NavigationMenuIcon": [
+          "@phosphor-icons/react"
+        ],
+        "NavigationMoreIcon": [
+          "@phosphor-icons/react"
+        ],
+        "NavigationProfileIcon": [
+          "@phosphor-icons/react"
+        ],
+        "NavigationRouteIcon": [
+          "@phosphor-icons/react"
+        ],
+        "NavigationSettingsIcon": [
+          "@phosphor-icons/react"
+        ],
+        "NavigationUpIcon": [
+          "@phosphor-icons/react"
+        ],
+        "resolveFoundationIcon": [
+          "@phosphor-icons/react"
+        ],
+        "StatusAchievementIcon": [
+          "@phosphor-icons/react"
+        ],
+        "StatusBlockedIcon": [
+          "@phosphor-icons/react"
+        ],
+        "StatusDraftIcon": [
+          "@phosphor-icons/react"
+        ],
+        "StatusErrorIcon": [
+          "@phosphor-icons/react"
+        ],
+        "StatusFeaturedIcon": [
+          "@phosphor-icons/react"
+        ],
+        "StatusInfoIcon": [
+          "@phosphor-icons/react"
+        ],
+        "StatusInstantIcon": [
+          "@phosphor-icons/react"
+        ],
+        "StatusLiveIcon": [
+          "@phosphor-icons/react"
+        ],
+        "StatusLoadingIcon": [
+          "@phosphor-icons/react"
+        ],
+        "StatusNeutralIcon": [
+          "@phosphor-icons/react"
+        ],
+        "StatusOfflineIcon": [
+          "@phosphor-icons/react"
+        ],
+        "StatusPausedIcon": [
+          "@phosphor-icons/react"
+        ],
+        "StatusPendingIcon": [
+          "@phosphor-icons/react"
+        ],
+        "StatusPremiumIcon": [
+          "@phosphor-icons/react"
+        ],
+        "StatusPriorityIcon": [
+          "@phosphor-icons/react"
+        ],
+        "StatusScheduledIcon": [
+          "@phosphor-icons/react"
+        ],
+        "StatusSecureIcon": [
+          "@phosphor-icons/react"
+        ],
+        "StatusSuccessIcon": [
+          "@phosphor-icons/react"
+        ],
+        "StatusSyncedIcon": [
+          "@phosphor-icons/react"
+        ],
+        "StatusVerifiedIcon": [
+          "@phosphor-icons/react"
+        ],
+        "StatusWarningIcon": [
+          "@phosphor-icons/react"
+        ],
+        "SystemAutomationIcon": [
+          "@phosphor-icons/react"
+        ],
+        "SystemCommandIcon": [
+          "@phosphor-icons/react"
+        ],
+        "SystemIntegrationIcon": [
+          "@phosphor-icons/react"
+        ],
+        "SystemWorkflowIcon": [
+          "@phosphor-icons/react"
+        ],
+        "TimeDateIcon": [
+          "@phosphor-icons/react"
+        ],
+        "TimeDeadlineIcon": [
+          "@phosphor-icons/react"
+        ],
+        "TimeLeaveIcon": [
+          "@phosphor-icons/react"
+        ],
+        "TimeScheduleIcon": [
+          "@phosphor-icons/react"
+        ],
+        "TimeTimestampIcon": [
+          "@phosphor-icons/react"
+        ]
+      },
+      "supplierFreeExports": [
+        "FOUNDATION_ICON_NAMES",
+        "GENERATED_ICON_CORPUS_VERSION",
+        "GENERATED_ICON_METADATA"
+      ]
+    },
+    "./icons/bithire": {
+      "exports": [
+        "BITHIRE_ICON_COMPONENTS",
+        "BITHIRE_ICON_NAMES",
+        "BithireCandidateIcon",
+        "BithireEvidenceIcon",
+        "BithireIcon",
+        "BithireInterviewIcon",
+        "BithireJobIcon",
+        "BithireOfferIcon",
+        "BithirePipelineIcon",
+        "GENERATED_ICON_CORPUS_VERSION",
+        "GENERATED_ICON_METADATA",
+        "isBithireIconName",
+        "resolveBithireIcon"
+      ],
+      "symbols": {
+        "BITHIRE_ICON_COMPONENTS": [
+          "@phosphor-icons/react"
+        ],
+        "BithireCandidateIcon": [
+          "@phosphor-icons/react"
+        ],
+        "BithireEvidenceIcon": [
+          "@phosphor-icons/react"
+        ],
+        "BithireIcon": [
+          "@phosphor-icons/react"
+        ],
+        "BithireInterviewIcon": [
+          "@phosphor-icons/react"
+        ],
+        "BithireJobIcon": [
+          "@phosphor-icons/react"
+        ],
+        "BithireOfferIcon": [
+          "@phosphor-icons/react"
+        ],
+        "BithirePipelineIcon": [
+          "@phosphor-icons/react"
+        ],
+        "isBithireIconName": [
+          "@phosphor-icons/react"
+        ],
+        "resolveBithireIcon": [
+          "@phosphor-icons/react"
+        ]
+      },
+      "supplierFreeExports": [
+        "BITHIRE_ICON_NAMES",
+        "GENERATED_ICON_CORPUS_VERSION",
+        "GENERATED_ICON_METADATA"
+      ]
+    },
+    "./icons/identity": {
+      "exports": [
+        "AccessAdminIcon",
+        "AccessApiKeyIcon",
+        "AccessDeniedIcon",
+        "AccessGrantedIcon",
+        "AccessKeyIcon",
+        "AccessLoginIcon",
+        "AccessLogoutIcon",
+        "AccessPermissionIcon",
+        "AccessPolicyIcon",
+        "AccessRoleIcon",
+        "ComplianceAuditIcon",
+        "ComplianceBreachIcon",
+        "ComplianceCaseIcon",
+        "ComplianceCertificationIcon",
+        "ComplianceConsentIcon",
+        "ComplianceControlIcon",
+        "ComplianceEvidenceIcon",
+        "ComplianceRegulationIcon",
+        "ComplianceRetentionIcon",
+        "ComplianceReviewIcon",
+        "GENERATED_ICON_CORPUS_VERSION",
+        "GENERATED_ICON_METADATA",
+        "IDENTITY_ICON_COMPONENTS",
+        "IDENTITY_ICON_NAMES",
+        "IdentityBadgeIcon",
+        "IdentityCredentialRotationIcon",
+        "IdentityDeactivatedIcon",
+        "IdentityDirectoryIcon",
+        "IdentityFederationIcon",
+        "IdentityIcon",
+        "IdentityImpersonationIcon",
+        "IdentityOrganizationSwitchIcon",
+        "IdentityProvisioningIcon",
+        "IdentityServiceAccountIcon",
+        "IdentitySessionIcon",
+        "IdentityTrustIcon",
+        "PrivacyDataIcon",
+        "PrivacyDeleteRequestIcon",
+        "PrivacyMaskedIcon",
+        "PrivacyRequestIcon",
+        "PrivacyVisibilityIcon",
+        "SecurityAlertIcon",
+        "SecurityDisabledIcon",
+        "SecurityEncryptionIcon",
+        "SecurityIncidentIcon",
+        "SecurityMonitoringIcon",
+        "SecurityPerimeterIcon",
+        "SecurityProtectionIcon",
+        "SecurityScanIcon",
+        "SecuritySecretIcon",
+        "SecurityThreatIcon",
+        "isIdentityIconName",
+        "resolveIdentityIcon"
+      ],
+      "symbols": {
+        "AccessAdminIcon": [
+          "@phosphor-icons/react"
+        ],
+        "AccessApiKeyIcon": [
+          "@phosphor-icons/react"
+        ],
+        "AccessDeniedIcon": [
+          "@phosphor-icons/react"
+        ],
+        "AccessGrantedIcon": [
+          "@phosphor-icons/react"
+        ],
+        "AccessKeyIcon": [
+          "@phosphor-icons/react"
+        ],
+        "AccessLoginIcon": [
+          "@phosphor-icons/react"
+        ],
+        "AccessLogoutIcon": [
+          "@phosphor-icons/react"
+        ],
+        "AccessPermissionIcon": [
+          "@phosphor-icons/react"
+        ],
+        "AccessPolicyIcon": [
+          "@phosphor-icons/react"
+        ],
+        "AccessRoleIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ComplianceAuditIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ComplianceBreachIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ComplianceCaseIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ComplianceCertificationIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ComplianceConsentIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ComplianceControlIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ComplianceEvidenceIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ComplianceRegulationIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ComplianceRetentionIcon": [
+          "@phosphor-icons/react"
+        ],
+        "ComplianceReviewIcon": [
+          "@phosphor-icons/react"
+        ],
+        "IDENTITY_ICON_COMPONENTS": [
+          "@phosphor-icons/react"
+        ],
+        "IdentityBadgeIcon": [
+          "@phosphor-icons/react"
+        ],
+        "IdentityCredentialRotationIcon": [
+          "@phosphor-icons/react"
+        ],
+        "IdentityDeactivatedIcon": [
+          "@phosphor-icons/react"
+        ],
+        "IdentityDirectoryIcon": [
+          "@phosphor-icons/react"
+        ],
+        "IdentityFederationIcon": [
+          "@phosphor-icons/react"
+        ],
+        "IdentityIcon": [
+          "@phosphor-icons/react"
+        ],
+        "IdentityImpersonationIcon": [
+          "@phosphor-icons/react"
+        ],
+        "IdentityOrganizationSwitchIcon": [
+          "@phosphor-icons/react"
+        ],
+        "IdentityProvisioningIcon": [
+          "@phosphor-icons/react"
+        ],
+        "IdentityServiceAccountIcon": [
+          "@phosphor-icons/react"
+        ],
+        "IdentitySessionIcon": [
+          "@phosphor-icons/react"
+        ],
+        "IdentityTrustIcon": [
+          "@phosphor-icons/react"
+        ],
+        "isIdentityIconName": [
+          "@phosphor-icons/react"
+        ],
+        "PrivacyDataIcon": [
+          "@phosphor-icons/react"
+        ],
+        "PrivacyDeleteRequestIcon": [
+          "@phosphor-icons/react"
+        ],
+        "PrivacyMaskedIcon": [
+          "@phosphor-icons/react"
+        ],
+        "PrivacyRequestIcon": [
+          "@phosphor-icons/react"
+        ],
+        "PrivacyVisibilityIcon": [
+          "@phosphor-icons/react"
+        ],
+        "resolveIdentityIcon": [
+          "@phosphor-icons/react"
+        ],
+        "SecurityAlertIcon": [
+          "@phosphor-icons/react"
+        ],
+        "SecurityDisabledIcon": [
+          "@phosphor-icons/react"
+        ],
+        "SecurityEncryptionIcon": [
+          "@phosphor-icons/react"
+        ],
+        "SecurityIncidentIcon": [
+          "@phosphor-icons/react"
+        ],
+        "SecurityMonitoringIcon": [
+          "@phosphor-icons/react"
+        ],
+        "SecurityPerimeterIcon": [
+          "@phosphor-icons/react"
+        ],
+        "SecurityProtectionIcon": [
+          "@phosphor-icons/react"
+        ],
+        "SecurityScanIcon": [
+          "@phosphor-icons/react"
+        ],
+        "SecuritySecretIcon": [
+          "@phosphor-icons/react"
+        ],
+        "SecurityThreatIcon": [
+          "@phosphor-icons/react"
+        ]
+      },
+      "supplierFreeExports": [
+        "GENERATED_ICON_CORPUS_VERSION",
+        "GENERATED_ICON_METADATA",
+        "IDENTITY_ICON_NAMES"
+      ]
+    },
+    "./icons/intelligence": {
+      "exports": [
+        "AiAgentIcon",
+        "AiAnomalyIcon",
+        "AiEmbeddingIcon",
+        "AiEvaluationIcon",
+        "AiExperimentIcon",
+        "AiFeedbackIcon",
+        "AiGuardrailIcon",
+        "AiModelIcon",
+        "AiPredictionIcon",
+        "AiPromptIcon",
+        "AiRecommendationIcon",
+        "AiResponseIcon",
+        "AiSpeechIcon",
+        "AiTrainingIcon",
+        "AiVisionIcon",
+        "AnalyticsActivityIcon",
+        "AnalyticsAreaIcon",
+        "AnalyticsBalanceIcon",
+        "AnalyticsBarIcon",
+        "AnalyticsCohortIcon",
+        "AnalyticsCompareIcon",
+        "AnalyticsDashboardIcon",
+        "AnalyticsForecastIcon",
+        "AnalyticsFunnelIcon",
+        "AnalyticsHeatmapIcon",
+        "AnalyticsKpiIcon",
+        "AnalyticsRadarIcon",
+        "AnalyticsRealtimeIcon",
+        "AnalyticsSegmentIcon",
+        "AnalyticsTimelineIcon",
+        "AnalyticsWaterfallIcon",
+        "DataClusterIcon",
+        "DataExportIcon",
+        "DataImportIcon",
+        "DataLineageIcon",
+        "DataModelIcon",
+        "DataObservabilityIcon",
+        "DataPipelineIcon",
+        "DataQualityIcon",
+        "DataQueryIcon",
+        "DataRelationshipIcon",
+        "DataSchemaIcon",
+        "DataStreamIcon",
+        "DataSyncIcon",
+        "DataTransformIcon",
+        "DataWarehouseIcon",
+        "GENERATED_ICON_CORPUS_VERSION",
+        "GENERATED_ICON_METADATA",
+        "INTELLIGENCE_ICON_COMPONENTS",
+        "INTELLIGENCE_ICON_NAMES",
+        "IntelligenceIcon",
+        "isIntelligenceIconName",
+        "resolveIntelligenceIcon"
+      ],
+      "symbols": {
+        "AiAgentIcon": [
+          "@phosphor-icons/react"
+        ],
+        "AiAnomalyIcon": [
+          "@phosphor-icons/react"
+        ],
+        "AiEmbeddingIcon": [
+          "@phosphor-icons/react"
+        ],
+        "AiEvaluationIcon": [
+          "@phosphor-icons/react"
+        ],
+        "AiExperimentIcon": [
+          "@phosphor-icons/react"
+        ],
+        "AiFeedbackIcon": [
+          "@phosphor-icons/react"
+        ],
+        "AiGuardrailIcon": [
+          "@phosphor-icons/react"
+        ],
+        "AiModelIcon": [
+          "@phosphor-icons/react"
+        ],
+        "AiPredictionIcon": [
+          "@phosphor-icons/react"
+        ],
+        "AiPromptIcon": [
+          "@phosphor-icons/react"
+        ],
+        "AiRecommendationIcon": [
+          "@phosphor-icons/react"
+        ],
+        "AiResponseIcon": [
+          "@phosphor-icons/react"
+        ],
+        "AiSpeechIcon": [
+          "@phosphor-icons/react"
+        ],
+        "AiTrainingIcon": [
+          "@phosphor-icons/react"
+        ],
+        "AiVisionIcon": [
+          "@phosphor-icons/react"
+        ],
+        "AnalyticsActivityIcon": [
+          "@phosphor-icons/react"
+        ],
+        "AnalyticsAreaIcon": [
+          "@phosphor-icons/react"
+        ],
+        "AnalyticsBalanceIcon": [
+          "@phosphor-icons/react"
+        ],
+        "AnalyticsBarIcon": [
+          "@phosphor-icons/react"
+        ],
+        "AnalyticsCohortIcon": [
+          "@phosphor-icons/react"
+        ],
+        "AnalyticsCompareIcon": [
+          "@phosphor-icons/react"
+        ],
+        "AnalyticsDashboardIcon": [
+          "@phosphor-icons/react"
+        ],
+        "AnalyticsForecastIcon": [
+          "@phosphor-icons/react"
+        ],
+        "AnalyticsFunnelIcon": [
+          "@phosphor-icons/react"
+        ],
+        "AnalyticsHeatmapIcon": [
+          "@phosphor-icons/react"
+        ],
+        "AnalyticsKpiIcon": [
+          "@phosphor-icons/react"
+        ],
+        "AnalyticsRadarIcon": [
+          "@phosphor-icons/react"
+        ],
+        "AnalyticsRealtimeIcon": [
+          "@phosphor-icons/react"
+        ],
+        "AnalyticsSegmentIcon": [
+          "@phosphor-icons/react"
+        ],
+        "AnalyticsTimelineIcon": [
+          "@phosphor-icons/react"
+        ],
+        "AnalyticsWaterfallIcon": [
+          "@phosphor-icons/react"
+        ],
+        "DataClusterIcon": [
+          "@phosphor-icons/react"
+        ],
+        "DataExportIcon": [
+          "@phosphor-icons/react"
+        ],
+        "DataImportIcon": [
+          "@phosphor-icons/react"
+        ],
+        "DataLineageIcon": [
+          "@phosphor-icons/react"
+        ],
+        "DataModelIcon": [
+          "@phosphor-icons/react"
+        ],
+        "DataObservabilityIcon": [
+          "@phosphor-icons/react"
+        ],
+        "DataPipelineIcon": [
+          "@phosphor-icons/react"
+        ],
+        "DataQualityIcon": [
+          "@phosphor-icons/react"
+        ],
+        "DataQueryIcon": [
+          "@phosphor-icons/react"
+        ],
+        "DataRelationshipIcon": [
+          "@phosphor-icons/react"
+        ],
+        "DataSchemaIcon": [
+          "@phosphor-icons/react"
+        ],
+        "DataStreamIcon": [
+          "@phosphor-icons/react"
+        ],
+        "DataSyncIcon": [
+          "@phosphor-icons/react"
+        ],
+        "DataTransformIcon": [
+          "@phosphor-icons/react"
+        ],
+        "DataWarehouseIcon": [
+          "@phosphor-icons/react"
+        ],
+        "INTELLIGENCE_ICON_COMPONENTS": [
+          "@phosphor-icons/react"
+        ],
+        "IntelligenceIcon": [
+          "@phosphor-icons/react"
+        ],
+        "isIntelligenceIconName": [
+          "@phosphor-icons/react"
+        ],
+        "resolveIntelligenceIcon": [
+          "@phosphor-icons/react"
+        ]
+      },
+      "supplierFreeExports": [
+        "GENERATED_ICON_CORPUS_VERSION",
+        "GENERATED_ICON_METADATA",
+        "INTELLIGENCE_ICON_NAMES"
+      ]
+    },
+    "./icons/operations": {
+      "exports": [
+        "BillingCreditCardIcon",
+        "BillingCurrencyIcon",
+        "BillingDiscountIcon",
+        "BillingInvoiceIcon",
+        "BillingPaymentIcon",
+        "BillingReceiptIcon",
+        "BillingRefundIcon",
+        "BillingSubscriptionIcon",
+        "BillingTaxIcon",
+        "BillingWalletIcon",
+        "CommerceCartIcon",
+        "CommerceCatalogIcon",
+        "CommerceCheckoutIcon",
+        "CommerceDeliveryIcon",
+        "CommerceInventoryIcon",
+        "CommerceOrderIcon",
+        "CommercePricingIcon",
+        "CommerceProductIcon",
+        "CommerceShippingIcon",
+        "CommerceStorefrontIcon",
+        "GENERATED_ICON_CORPUS_VERSION",
+        "GENERATED_ICON_METADATA",
+        "OPERATIONS_ICON_COMPONENTS",
+        "OPERATIONS_ICON_NAMES",
+        "OperationsCloudIcon",
+        "OperationsDashboardIcon",
+        "OperationsDeploymentIcon",
+        "OperationsHealthIcon",
+        "OperationsIcon",
+        "OperationsIncidentIcon",
+        "OperationsMaintenanceIcon",
+        "OperationsMonitoringIcon",
+        "OperationsServerIcon",
+        "OperationsSupportIcon",
+        "OperationsTargetIcon",
+        "WorkflowApprovalIcon",
+        "WorkflowAssignmentIcon",
+        "WorkflowBranchIcon",
+        "WorkflowConditionIcon",
+        "WorkflowDelayIcon",
+        "WorkflowLoopIcon",
+        "WorkflowMergeIcon",
+        "WorkflowQueueIcon",
+        "WorkflowRejectionIcon",
+        "WorkflowRolloutIcon",
+        "WorkflowStepIcon",
+        "WorkflowTemplateIcon",
+        "WorkflowTriggerIcon",
+        "WorkflowVersionIcon",
+        "WorkflowWebhookIcon",
+        "isOperationsIconName",
+        "resolveOperationsIcon"
+      ],
+      "symbols": {
+        "BillingCreditCardIcon": [
+          "@phosphor-icons/react"
+        ],
+        "BillingCurrencyIcon": [
+          "@phosphor-icons/react"
+        ],
+        "BillingDiscountIcon": [
+          "@phosphor-icons/react"
+        ],
+        "BillingInvoiceIcon": [
+          "@phosphor-icons/react"
+        ],
+        "BillingPaymentIcon": [
+          "@phosphor-icons/react"
+        ],
+        "BillingReceiptIcon": [
+          "@phosphor-icons/react"
+        ],
+        "BillingRefundIcon": [
+          "@phosphor-icons/react"
+        ],
+        "BillingSubscriptionIcon": [
+          "@phosphor-icons/react"
+        ],
+        "BillingTaxIcon": [
+          "@phosphor-icons/react"
+        ],
+        "BillingWalletIcon": [
+          "@phosphor-icons/react"
+        ],
+        "CommerceCartIcon": [
+          "@phosphor-icons/react"
+        ],
+        "CommerceCatalogIcon": [
+          "@phosphor-icons/react"
+        ],
+        "CommerceCheckoutIcon": [
+          "@phosphor-icons/react"
+        ],
+        "CommerceDeliveryIcon": [
+          "@phosphor-icons/react"
+        ],
+        "CommerceInventoryIcon": [
+          "@phosphor-icons/react"
+        ],
+        "CommerceOrderIcon": [
+          "@phosphor-icons/react"
+        ],
+        "CommercePricingIcon": [
+          "@phosphor-icons/react"
+        ],
+        "CommerceProductIcon": [
+          "@phosphor-icons/react"
+        ],
+        "CommerceShippingIcon": [
+          "@phosphor-icons/react"
+        ],
+        "CommerceStorefrontIcon": [
+          "@phosphor-icons/react"
+        ],
+        "isOperationsIconName": [
+          "@phosphor-icons/react"
+        ],
+        "OPERATIONS_ICON_COMPONENTS": [
+          "@phosphor-icons/react"
+        ],
+        "OperationsCloudIcon": [
+          "@phosphor-icons/react"
+        ],
+        "OperationsDashboardIcon": [
+          "@phosphor-icons/react"
+        ],
+        "OperationsDeploymentIcon": [
+          "@phosphor-icons/react"
+        ],
+        "OperationsHealthIcon": [
+          "@phosphor-icons/react"
+        ],
+        "OperationsIcon": [
+          "@phosphor-icons/react"
+        ],
+        "OperationsIncidentIcon": [
+          "@phosphor-icons/react"
+        ],
+        "OperationsMaintenanceIcon": [
+          "@phosphor-icons/react"
+        ],
+        "OperationsMonitoringIcon": [
+          "@phosphor-icons/react"
+        ],
+        "OperationsServerIcon": [
+          "@phosphor-icons/react"
+        ],
+        "OperationsSupportIcon": [
+          "@phosphor-icons/react"
+        ],
+        "OperationsTargetIcon": [
+          "@phosphor-icons/react"
+        ],
+        "resolveOperationsIcon": [
+          "@phosphor-icons/react"
+        ],
+        "WorkflowApprovalIcon": [
+          "@phosphor-icons/react"
+        ],
+        "WorkflowAssignmentIcon": [
+          "@phosphor-icons/react"
+        ],
+        "WorkflowBranchIcon": [
+          "@phosphor-icons/react"
+        ],
+        "WorkflowConditionIcon": [
+          "@phosphor-icons/react"
+        ],
+        "WorkflowDelayIcon": [
+          "@phosphor-icons/react"
+        ],
+        "WorkflowLoopIcon": [
+          "@phosphor-icons/react"
+        ],
+        "WorkflowMergeIcon": [
+          "@phosphor-icons/react"
+        ],
+        "WorkflowQueueIcon": [
+          "@phosphor-icons/react"
+        ],
+        "WorkflowRejectionIcon": [
+          "@phosphor-icons/react"
+        ],
+        "WorkflowRolloutIcon": [
+          "@phosphor-icons/react"
+        ],
+        "WorkflowStepIcon": [
+          "@phosphor-icons/react"
+        ],
+        "WorkflowTemplateIcon": [
+          "@phosphor-icons/react"
+        ],
+        "WorkflowTriggerIcon": [
+          "@phosphor-icons/react"
+        ],
+        "WorkflowVersionIcon": [
+          "@phosphor-icons/react"
+        ],
+        "WorkflowWebhookIcon": [
+          "@phosphor-icons/react"
+        ]
+      },
+      "supplierFreeExports": [
+        "GENERATED_ICON_CORPUS_VERSION",
+        "GENERATED_ICON_METADATA",
+        "OPERATIONS_ICON_NAMES"
+      ]
+    },
+    "./marks": {
+      "exports": [
+        "BRAND_MARK_NAMES",
+        "BRAND_MARK_PROVENANCE",
+        "BRAND_MARK_VARIANTS",
+        "BrandMark",
+        "CLOUD_PROVIDERS",
+        "CLOUD_SERVICES",
+        "CLOUD_SERVICE_MARK_PROVENANCE",
+        "CloudServiceMark",
+        "MARK_CATALOG_SOURCE",
+        "MARK_RENDERER_SOURCE",
+        "MARK_TRADEMARK_NOTICE",
+        "MARK_VARIANTS",
+        "isBrandMarkName",
+        "isCloudProvider",
+        "isCloudService",
+        "isMarkVariant"
+      ],
+      "symbols": {
+        "BrandMark": [
+          "@thesvg/react"
+        ],
+        "CloudServiceMark": [
+          "@thesvg/react"
+        ]
+      },
+      "wildcard": [
+        "@thesvg/react"
+      ],
+      "supplierFreeExports": [
+        "BRAND_MARK_NAMES",
+        "BRAND_MARK_PROVENANCE",
+        "BRAND_MARK_VARIANTS",
+        "CLOUD_PROVIDERS",
+        "CLOUD_SERVICES",
+        "CLOUD_SERVICE_MARK_PROVENANCE",
+        "MARK_CATALOG_SOURCE",
+        "MARK_RENDERER_SOURCE",
+        "MARK_TRADEMARK_NOTICE",
+        "MARK_VARIANTS",
+        "isBrandMarkName",
+        "isCloudProvider",
+        "isCloudService",
+        "isMarkVariant"
+      ]
+    },
+    "./marks/brand": {
+      "exports": [
+        "BRAND_MARK_NAMES",
+        "BRAND_MARK_PROVENANCE",
+        "BRAND_MARK_VARIANTS",
+        "BrandMark",
+        "GRAPHIC_ASSET_CLASSES",
+        "GRAPHIC_ASSET_PROVIDERS",
+        "GRAPHIC_ASSET_PROVIDER_BY_CLASS",
+        "GRAPHIC_ASSET_TELEMETRY_CODES",
+        "MARK_CATALOG_SOURCE",
+        "MARK_RENDERER_SOURCE",
+        "MARK_TRADEMARK_NOTICE",
+        "MARK_VARIANTS",
+        "installGraphicAssetRuntimeControl",
+        "isBrandMarkName",
+        "isMarkVariant"
+      ],
+      "symbols": {
+        "BrandMark": [
+          "@thesvg/react"
+        ]
+      },
+      "supplierFreeExports": [
+        "BRAND_MARK_NAMES",
+        "BRAND_MARK_PROVENANCE",
+        "BRAND_MARK_VARIANTS",
+        "GRAPHIC_ASSET_CLASSES",
+        "GRAPHIC_ASSET_PROVIDERS",
+        "GRAPHIC_ASSET_PROVIDER_BY_CLASS",
+        "GRAPHIC_ASSET_TELEMETRY_CODES",
+        "MARK_CATALOG_SOURCE",
+        "MARK_RENDERER_SOURCE",
+        "MARK_TRADEMARK_NOTICE",
+        "MARK_VARIANTS",
+        "installGraphicAssetRuntimeControl",
+        "isBrandMarkName",
+        "isMarkVariant"
+      ]
+    },
+    "./marks/cloud": {
+      "exports": [
+        "CLOUD_PROVIDERS",
+        "CLOUD_SERVICES",
+        "CLOUD_SERVICE_MARK_PROVENANCE",
+        "CloudServiceMark",
+        "GRAPHIC_ASSET_CLASSES",
+        "GRAPHIC_ASSET_PROVIDERS",
+        "GRAPHIC_ASSET_PROVIDER_BY_CLASS",
+        "GRAPHIC_ASSET_TELEMETRY_CODES",
+        "MARK_CATALOG_SOURCE",
+        "MARK_RENDERER_SOURCE",
+        "MARK_TRADEMARK_NOTICE",
+        "installGraphicAssetRuntimeControl",
+        "isCloudProvider",
+        "isCloudService"
+      ],
+      "symbols": {
+        "CloudServiceMark": [
+          "@thesvg/react"
+        ]
+      },
+      "supplierFreeExports": [
+        "CLOUD_PROVIDERS",
+        "CLOUD_SERVICES",
+        "CLOUD_SERVICE_MARK_PROVENANCE",
+        "GRAPHIC_ASSET_CLASSES",
+        "GRAPHIC_ASSET_PROVIDERS",
+        "GRAPHIC_ASSET_PROVIDER_BY_CLASS",
+        "GRAPHIC_ASSET_TELEMETRY_CODES",
+        "MARK_CATALOG_SOURCE",
+        "MARK_RENDERER_SOURCE",
+        "MARK_TRADEMARK_NOTICE",
+        "installGraphicAssetRuntimeControl",
+        "isCloudProvider",
+        "isCloudService"
+      ]
+    },
+    "./pictograms": {
+      "exports": [
+        "FEATURE_PICTOGRAM_CORPUS",
+        "FEATURE_PICTOGRAM_NAMES",
+        "FEATURE_PICTOGRAM_PROVENANCE",
+        "FeaturePictogram",
+        "GRAPHIC_ASSET_CLASSES",
+        "GRAPHIC_ASSET_PROVIDERS",
+        "GRAPHIC_ASSET_PROVIDER_BY_CLASS",
+        "GRAPHIC_ASSET_TELEMETRY_CODES",
+        "installGraphicAssetRuntimeControl",
+        "isFeaturePictogramName"
+      ],
+      "symbols": {},
+      "supplierFreeExports": [
+        "FEATURE_PICTOGRAM_CORPUS",
+        "FEATURE_PICTOGRAM_NAMES",
+        "FEATURE_PICTOGRAM_PROVENANCE",
+        "FeaturePictogram",
+        "GRAPHIC_ASSET_CLASSES",
+        "GRAPHIC_ASSET_PROVIDERS",
+        "GRAPHIC_ASSET_PROVIDER_BY_CLASS",
+        "GRAPHIC_ASSET_TELEMETRY_CODES",
+        "installGraphicAssetRuntimeControl",
+        "isFeaturePictogramName"
+      ]
+    },
+    "./charts": {
+      "exports": [
+        "CHART_METRIC_TREND_RENDERER_ID",
+        "CHART_RANKED_ROWS_RENDERER_ID",
+        "ChartFamilyFrame",
+        "ChartFrame",
+        "ChartImperativePlot",
+        "ChartInsightSummary",
+        "ChartMetricTrendView",
+        "ChartRankedRowsView",
+        "buildChartTrendPoints",
+        "projectChartSummaryRows",
+        "resolveChartProjection"
+      ],
+      "symbols": {},
+      "supplierFreeExports": [
+        "CHART_METRIC_TREND_RENDERER_ID",
+        "CHART_RANKED_ROWS_RENDERER_ID",
+        "ChartFamilyFrame",
+        "ChartFrame",
+        "ChartImperativePlot",
+        "ChartInsightSummary",
+        "ChartMetricTrendView",
+        "ChartRankedRowsView",
+        "buildChartTrendPoints",
+        "projectChartSummaryRows",
+        "resolveChartProjection"
+      ]
+    },
+    "./charts/spec": {
+      "exports": [
+        "CHART_GRAMMARS",
+        "CHART_GRAMMAR_IDS",
+        "CHART_GRAMMAR_REGISTRY",
+        "isChartGrammar",
+        "isChartGrammarId",
+        "isChartInsightSpec",
+        "isChartInsightSummary",
+        "resolveChartGrammar"
+      ],
+      "symbols": {},
+      "supplierFreeExports": [
+        "CHART_GRAMMARS",
+        "CHART_GRAMMAR_IDS",
+        "CHART_GRAMMAR_REGISTRY",
+        "isChartGrammar",
+        "isChartGrammarId",
+        "isChartInsightSpec",
+        "isChartInsightSummary",
+        "resolveChartGrammar"
+      ]
+    },
+    "./charts/access": {
+      "exports": [
+        "CHART_DATA_ACCESS_CSV_MIME_TYPE",
+        "CHART_DATA_ACCESS_PAGE_SIZE_MAX",
+        "CHART_DATA_ACCESS_SUMMARY_LIMIT",
+        "ChartDataAccess",
+        "sanitizeChartDataAccessCsvFilename",
+        "serializeChartDataAccessCsv"
+      ],
+      "symbols": {},
+      "supplierFreeExports": [
+        "CHART_DATA_ACCESS_CSV_MIME_TYPE",
+        "CHART_DATA_ACCESS_PAGE_SIZE_MAX",
+        "CHART_DATA_ACCESS_SUMMARY_LIMIT",
+        "ChartDataAccess",
+        "sanitizeChartDataAccessCsvFilename",
+        "serializeChartDataAccessCsv"
+      ]
+    },
+    "./charts/renderers": {
+      "exports": [
+        "SvgBarRenderer",
+        "SvgFunnelRenderer",
+        "SvgGaugeRenderer",
+        "SvgHeatMapRenderer",
+        "SvgLineRenderer",
+        "SvgPieRenderer",
+        "SvgRadarRenderer",
+        "SvgScatterRenderer",
+        "createSvgLineDatumKey"
+      ],
+      "symbols": {
+        "SvgBarRenderer": [
+          "d3"
+        ],
+        "SvgFunnelRenderer": [
+          "antd",
+          "d3",
+          "motion"
+        ],
+        "SvgGaugeRenderer": [
+          "antd",
+          "d3",
+          "motion"
+        ],
+        "SvgHeatMapRenderer": [
+          "d3"
+        ],
+        "SvgLineRenderer": [
+          "d3"
+        ],
+        "SvgPieRenderer": [
+          "d3"
+        ],
+        "SvgRadarRenderer": [
+          "antd",
+          "d3",
+          "motion"
+        ],
+        "SvgScatterRenderer": [
+          "d3"
+        ]
+      },
+      "supplierFreeExports": [
+        "createSvgLineDatumKey"
+      ]
+    },
+    "./motion": {
+      "exports": [
+        "MOTION_DIAL_BOUNDS",
+        "MOTION_PROFILE_DEFAULTS",
+        "MOTION_PROFILE_ENVELOPES",
+        "MOTION_RECIPE_NAMES",
+        "MotionProvider",
+        "motionRecipeCssVariables",
+        "normalizeTenantMotionDial",
+        "resolveMotionPolicy",
+        "resolveMotionRecipe",
+        "useMotionPolicy",
+        "useMotionPreference",
+        "useMotionRecipe",
+        "useMotionRecipePresentation"
+      ],
+      "symbols": {
+        "MotionProvider": [
+          "motion"
+        ]
+      },
+      "supplierFreeExports": [
+        "MOTION_DIAL_BOUNDS",
+        "MOTION_PROFILE_DEFAULTS",
+        "MOTION_PROFILE_ENVELOPES",
+        "MOTION_RECIPE_NAMES",
+        "motionRecipeCssVariables",
+        "normalizeTenantMotionDial",
+        "resolveMotionPolicy",
+        "resolveMotionRecipe",
+        "useMotionPolicy",
+        "useMotionPreference",
+        "useMotionRecipe",
+        "useMotionRecipePresentation"
+      ]
+    },
+    "./effects": {
+      "exports": [
+        "EFFECT_DEFINITIONS",
+        "EFFECT_IDS",
+        "EFFECT_REGISTRY",
+        "EFFECT_REGISTRY_VERSION",
+        "EFFECT_RESEARCH_PROVENANCE",
+        "getEffectDefinition",
+        "isEffectDefinition",
+        "isEffectId",
+        "resolveEffect"
+      ],
+      "symbols": {},
+      "supplierFreeExports": [
+        "EFFECT_DEFINITIONS",
+        "EFFECT_IDS",
+        "EFFECT_REGISTRY",
+        "EFFECT_REGISTRY_VERSION",
+        "EFFECT_RESEARCH_PROVENANCE",
+        "getEffectDefinition",
+        "isEffectDefinition",
+        "isEffectId",
+        "resolveEffect"
+      ]
+    },
+    "./spatial": {
+      "exports": [
+        "SPATIAL_SCENE_MODULE_VERSION",
+        "SpatialExperience"
+      ],
+      "symbols": {},
+      "supplierFreeExports": [
+        "SPATIAL_SCENE_MODULE_VERSION",
+        "SpatialExperience"
+      ]
+    },
+    "./spatial/spec": {
+      "exports": [
+        "SPATIAL_QUALITY_BUDGETS",
+        "SPATIAL_SCENE_MODULE_VERSION",
+        "downgradeSpatialMode",
+        "isSpatialSceneModule",
+        "resolveSpatialPolicy",
+        "resolveSpatialQualityBudget"
+      ],
+      "symbols": {},
+      "supplierFreeExports": [
+        "SPATIAL_QUALITY_BUDGETS",
+        "SPATIAL_SCENE_MODULE_VERSION",
+        "downgradeSpatialMode",
+        "isSpatialSceneModule",
+        "resolveSpatialPolicy",
+        "resolveSpatialQualityBudget"
+      ]
+    },
+    "./eslint": {
+      "exports": [
+        "configs",
+        "plugin",
+        "rules"
+      ],
+      "symbols": {},
+      "supplierFreeExports": [
+        "configs",
+        "plugin",
+        "rules"
+      ]
+    },
+    "./supplier-honesty-cli": {
+      "exports": [
+        "inferRenderedSuppliers",
+        "inspectInstalledDesignSystem",
+        "resolveInstalledContractMode",
+        "runSupplierHonesty",
+        "scanAppSuppliers"
+      ],
+      "symbols": {},
+      "supplierFreeExports": [
+        "inferRenderedSuppliers",
+        "inspectInstalledDesignSystem",
+        "resolveInstalledContractMode",
+        "runSupplierHonesty",
+        "scanAppSuppliers"
+      ]
+    }
+  }
+}

@@ -1,6 +1,6 @@
 'use client';
 
-import { ShowroomLink as Link } from '@/components/showroom-link';
+import { ShowroomLink as Link } from '@/components/navigation/link';
 import { Badge, Box, Card, Flex, Stack, Text } from '@rottay/design-system';
 import { useTokens } from '@rottay/design-system';
 import {
@@ -10,7 +10,7 @@ import {
   SparklesIcon,
 } from '@rottay/design-system/icons';
 import { CodeBlock } from '@/components/playground';
-import { DocsCompactList, DocsSectionHeader } from '@/components/docs/editorial-chrome';
+import { DocsCompactList, DocsSectionHeader } from '@/components/docs/editorial';
 import { patterns, primitives, structures, surfaces } from '@/data/registry';
 
 const ENTRY_PATHS = [

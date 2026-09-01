@@ -1,0 +1,26 @@
+/**
+ * Evnto Vertical CSS (source)
+ *
+ * Source file for development/symlink scenarios. Imports tenant-free base
+ * + evnto tenant only. Does NOT include compiled engine CSS.
+ *
+ * For production, apps consume dist/evnto.css (via styles/evnto export)
+ * which includes everything: base + tenant + modern engine.
+ *
+ * @see base.css - Tenant-free DS foundation
+ * @version 1.0.0
+ */
+@import '../base/index.css';
+/* Tenant paint is UNLAYERED by law: unlayered rules outrank every cascade
+   layer, which is what the coverage model requires -- the compiled artifact
+   must win every channel it declares.
+
+   NOTE ON THIS FILE'S STATUS: every `./styles/*` package export resolves to
+   dist/, and the build reads base.css plus the artifact by path -- it never
+   reads this entrypoint. So this file ships to nobody; it is kept as the
+   readable statement of bundle structure. It previously declared
+   `layer(rottay-tenants)`, which the shipped bundle never had, so the only
+   thing it produced was a false claim about the cascade.
+   See infrastructure/runtime/theming/foundation/cascade-layers:
+   TENANT_PAINT_IS_UNLAYERED. */
+@import '../../artifacts/evnto/index.css';

@@ -195,7 +195,7 @@ describe('personality subordination — contention is unreachable by contract', 
     const projection = readFileSync(
       resolve(
         process.cwd(),
-        'src/foundation/tokens/css/runtime/personality.css',
+        'src/foundation/tokens/css/runtime/personality/index.css',
       ),
       'utf8',
     );
@@ -308,7 +308,7 @@ describe('personality subordination — if contention became reachable', () => {
     // relationship lives in the emitted text and the shipped bundle, and that
     // is what is read here.
     const bundle = readFileSync(
-      resolve(process.cwd(), 'styles/bithire.css'),
+      resolve(process.cwd(), 'artifacts/generated/css/verticals/bithire/index.css'),
       'utf8',
     );
 

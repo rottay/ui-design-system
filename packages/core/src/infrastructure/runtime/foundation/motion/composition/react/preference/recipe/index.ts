@@ -27,7 +27,7 @@ export function useMotionRecipe(
 
 /**
  * Supplier-neutral curve identities mapped onto the motion canon's CSS easing
- * tokens (foundation/animations/transitions.css). `settled` still receives a
+ * tokens (foundation/animations/transitions/index.css). `settled` still receives a
  * valid easing because a settled recipe carries 0ms durations — the timing
  * function can never observably run; skins additionally disable interpolation
  * on `[data-recipe-state='final']`.

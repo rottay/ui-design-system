@@ -1,5 +1,5 @@
 /**
- * Strategic tests for the dual-mode BrandTheme contract (Codex C6.1).
+ * Strategic tests for the dual-mode BrandTheme contract (independent code audit C6.1).
  *
  * The defect this closes is duplicate authority: every vertical's non-default
  * mode used to be a hand-written block in its artifact extension, so a channel

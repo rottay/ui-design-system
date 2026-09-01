@@ -1,3 +1,3 @@
 "use client";
 
-export { Radio } from "../../../../ui/primitives/inputs/Radio";
+export { Radio } from "../../../../components/primitives/inputs/radio";

@@ -1,0 +1,6 @@
+{
+  "schemaVersion": 2,
+  "law": "scripts/ converges on build, check, generate, maintain, package and libraries; capabilities use <intent>/<subdomain?>/<capability>/index.mjs and behavioral names",
+  "policy": "decrease-only: listed transition debt may shrink but never grow",
+  "entries": []
+}

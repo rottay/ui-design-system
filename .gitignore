@@ -24,14 +24,8 @@ coverage-*/
 # Gate evidence is generated/uploaded by CI except for GAT-07's authoritative,
 # byte-checked semantic proof. Keep every other capture ignored.
 test-artifacts/*
-!test-artifacts/architecture/
-test-artifacts/architecture/*
-!test-artifacts/architecture/arc-11/
-!test-artifacts/architecture/arc-11/*.surface-capabilities.generated.json
 !test-artifacts/craft/
 test-artifacts/craft/*
-!test-artifacts/craft/cra-11/
-!test-artifacts/craft/cra-11/adaptive-contract-census.generated.json
 !test-artifacts/craft/cra-15/
 # Per-test measurement partials are intermediates; the sanctioned artifact is
 # the assembled browser-evidence.json (see cra-15-assemble.mjs).
@@ -41,14 +35,14 @@ test-artifacts/craft/cra-15/.run/
 !test-artifacts/craft/cra-17/icon-supplier-decision.json
 !test-artifacts/gates/
 test-artifacts/gates/*
-!test-artifacts/gates/gat-07/
-test-artifacts/gates/gat-07/*
-!test-artifacts/gates/gat-07/semantic-evidence.json
-!test-artifacts/gates/gat-07/semantic-hash.txt
 .gat07/
 # Playwright visual-regression run output (baselines under e2e/visual/__screenshots__/ ARE committed)
 packages/showroom/test-results/
 packages/showroom/playwright-report/
+packages/core/artifacts/quality/audits/accessibility/runs/
+packages/core/artifacts/quality/audits/engine/tokens/coverage/
+packages/core/artifacts/quality/audits/engine/tokens/contrast/
+packages/core/artifacts/quality/captures/visual-regressions/
 
 # Environment files
 .env

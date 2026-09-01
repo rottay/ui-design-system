@@ -1,0 +1,9 @@
+{
+  "$comment": "Explicit-review list for new packed entries. The package inventory fails when a path appears in the tarball that is neither in baseline/index.json nor listed here. To intentionally add a published file, record its exact npm-pack path and reason, then re-seed the baseline and empty this list after review.",
+  "additions": [
+    {
+      "path": "dist/entrypoints/suppliers/cli/index.js",
+      "reason": "Publish the supplier-honesty CLI from the compiled package boundary instead of shipping its source tree."
+    }
+  ]
+}

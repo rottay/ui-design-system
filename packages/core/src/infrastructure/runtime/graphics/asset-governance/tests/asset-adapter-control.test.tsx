@@ -2,10 +2,10 @@ import React from 'react';
 import { cleanup, render, screen } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-import { BrandMark } from '@/graphics/brand-marks/presentation/brand-mark';
-import { CloudServiceMark } from '@/graphics/brand-marks/presentation/cloud-service-mark';
-import { resolveMarkRendererDefault } from '@/graphics/brand-marks/runtime/adapters/thesvg-react';
-import { Icon } from '@/graphics/icons/presentation/semantic-icon';
+import { BrandMark } from '@/graphics/marks/presentation/brand-mark';
+import { CloudServiceMark } from '@/graphics/marks/presentation/cloud-service-mark';
+import { resolveMarkRendererDefault } from '@/graphics/marks/runtime/adapters/thesvg-react';
+import { Icon } from '@/graphics/icons/semantic/presentation/icon';
 import { FeaturePictogram } from '@/graphics/pictograms/presentation/feature-pictogram';
 import {
   GRAPHIC_ASSET_PROVIDER_BY_CLASS,

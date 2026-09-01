@@ -3,7 +3,7 @@ import { CardClient } from './card-client';
 /**
  * Internal route consumed only by scripts/design-cards/generate.mjs.
  * Renders one design-system component preview without showroom chrome so the
- * generator can harvest a clean, self-contained card for Claude Design.
+ * generator can harvest a clean, self-contained design card.
  */
 export const dynamic = 'force-dynamic';
 

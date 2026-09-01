@@ -654,7 +654,7 @@ export function deriveExtendedPaletteFloor(
 }
 
 /**
- * COH-1 — the FLOOR for the status-tint family: `--ds-color-{tone}-bg`,
+ * The floor for the status-tint family: `--ds-color-{tone}-bg`,
  * `--ds-color-{tone}-border` and `--ds-color-alpha-{tone}-{10,20}`, per tone.
  *
  * Each formula names the tone's OWN channel rather than resolving it, so the
@@ -673,7 +673,7 @@ export function deriveExtendedPaletteFloor(
  * paint a brown border under an amber well in bithire's warning tone.
  *
  * `--ds-color-alpha-info-20` is never emitted: it is a RETIRED channel
- * (`residual-adjudication.json`, `"decision": "RETIRE_PROPOSED", "executed":
+ * (`governance/tokens/decisions/writers/unused/system/index.json`, `"decision": "RETIRE_PROPOSED", "executed":
  * true`), and reviving it from this floor would resurrect a name the
  * programme already closed.
  *
@@ -683,7 +683,7 @@ export function deriveExtendedPaletteFloor(
  * dark `ramps.success` copying light's 50..800 verbatim) and PROPAGATE that
  * defect instead of curing it.
  *
- * COH-1 D4a correction: the guard does NOT exclude evnto's dark overlay by
+ * The guard does NOT exclude Evnto's dark overlay merely because
  * the overlay never declaring `successColor`. `applyModeOverlay` MERGES the
  * palette (`palette: mergeModeOverlay(bt.palette, overlay.palette)`), so a
  * dark block's palette always carries the base seed even when the overlay
@@ -693,7 +693,7 @@ export function deriveExtendedPaletteFloor(
  * keeps a key whose value differs from the base block's (`if (baseVars[key]
  * !== value)`), and dark's derived string is byte-identical to light's, so
  * the row is deduplicated, not suppressed at the source. The blind-ramp
- * defect this guard exists to stop (Opus F.1.2) is real and unchanged by
+ * defect this guard exists to stop is real and unchanged by
  * this correction -- only the EXPLANATION of why dark's delta stays empty
  * was wrong.
  *
@@ -932,7 +932,7 @@ function brandThemeToCssVariables(
     // them from an NTSC luma threshold is gone, so there is no second emitter
     // to collide with and no reason to keep the floor exported-but-unwired.
     Object.assign(vars, deriveExtendedPaletteFloor(effectivePrimary));
-    // COH-1: the status-tint floor, guarded per tone by that tone's own seed
+    // The status-tint floor, guarded per tone by that tone's own seed
     // (see `deriveStatusTintFloor`). Same precedence slot as the floor above:
     // merged before the authored ceiling so a per-channel override still wins.
     Object.assign(vars, deriveStatusTintFloor(bt.palette));
@@ -1298,7 +1298,7 @@ const TYPE_RAMP = [
  * `--ds-text-<name>-{size,weight,line-height,letter-spacing}` (tracking cannot
  * ride the `font` shorthand, so it is a separate facet; the facet names match the
  * existing foundation composite-text convention in
- * foundation/tokens/css/foundation/base/typography.css). The eyebrow reuses the detail size
+ * foundation/tokens/css/foundation/base/typography/index.css). The eyebrow reuses the detail size
  * at weight 600 with +0.08em tracking and is the sole uppercase in the product
  * (S1) — it carries a `-transform: uppercase` facet; every other ramp entry is
  * sentence case. The ramp is a fixed, tenant-independent closed set, so it is
@@ -1328,7 +1328,7 @@ function setTypeRampVariables(vars: Record<string, string>): void {
 /**
  * `fontSize` is optional here because the `body` role has no builder default:
  * body size is 14px canonical and its single authority is the theme layer
- * (foundation/tokens/css/foundation/themes/default.css). A BrandTheme that
+ * (foundation/tokens/css/foundation/themes/default/index.css). A BrandTheme that
  * wants a different body size still authors it via `typography.roles.body`,
  * which outranks this table.
  */
@@ -1658,7 +1658,7 @@ export const SEED_SHADOWING_FIELDS: Readonly<
 };
 
 /**
- * COH-1 — the SIBLING of `SEED_SHADOWING_FIELDS` for the status-tint family.
+ * The sibling of `SEED_SHADOWING_FIELDS` for the status-tint family.
  *
  * Deliberately a separate table, not an extension of `SEED_SHADOWING_FIELDS`:
  * that table is documented AND test-closed
@@ -1694,7 +1694,7 @@ export const STATUS_SEED_SHADOWING_FIELDS: Readonly<
 };
 
 /**
- * COH-1 D3 — the four status SEED fields, the sibling of `PRIMARY_SEED_FIELD`
+ * The four status seed fields, the sibling of `PRIMARY_SEED_FIELD`
  * for the status-tint family. Derived from `ON_TONE_ROLES` rather than
  * hand-listed so the closed vocabulary this feeds
  * (`CONSULTED_PROVENANCE_FIELDS`, `iso/index.ts`) cannot silently drift from
@@ -1788,7 +1788,7 @@ function applyTenantSeedDerivations(
 }
 
 /**
- * COH-1 — the SIBLING of `applyTenantSeedDerivations` for the four status
+ * The sibling of `applyTenantSeedDerivations` for the four status
  * tones: re-derive the bg/border/alpha family a TENANT's own status seed
  * owns, over an assembled block.
  *
@@ -1932,12 +1932,12 @@ function compileModeBlocks(
   tenantPosture?: AppearancePostureFields,
   // E-2: the overlay re-runs the whole lowering, so both halves travel together.
   tenantTypography?: BrandTheme["typography"],
-  // COH-1: the RAW tenant patch, read-only here -- see
+  // The raw tenant patch, read-only here -- see
   // `applyTenantStatusSeedDerivations`'s docblock for why the merged `bt`
   // and `authoredPaths` alone cannot tell "the tenant wrote this seed" from
   // "the patch builder always emits this key".
   tenantPatch?: Partial<BrandTheme>,
-  // COH-1 D1: the closed authorship channel. When present it is the SOLE
+  // The closed authorship channel. When present it is the sole
   // source of `toneSeedIsTenantAuthored`; when absent (the static arm, this
   // file's own synthetic fixtures) this falls back to reading `tenantPatch`
   // directly, exactly as before this field existed.
@@ -1985,7 +1985,7 @@ function compileModeBlocks(
                 authoredPaths.has(PRIMARY_SEED_FIELD)),
           }
     );
-    // COH-1: the status-tint sibling, same block, same authoredPaths. Seed
+    // The status-tint sibling uses the same block and authored paths. Seed
     // authorship is computed from the RAW tenant patch value (never from
     // `authoredPaths` membership alone -- see the function's docblock).
     applyTenantStatusSeedDerivations(
@@ -2182,7 +2182,7 @@ type BrandCompilerProvenanceInput = BrandCompilerInput & {
    */
   tenantPatch?: Partial<BrandTheme>;
   /**
-   * COH-1 D1 — status-seed AUTHORSHIP, a SIBLING of `tenantPatch`, never a
+   * Status-seed authorship is a sibling of `tenantPatch`, never a
    * widening of it. `tenantPatch` on the DB door is `tenantPostureFloors`'s
    * projection of exactly six posture keypaths (typography/surfaces/motion);
    * `palette` and `modes` are excluded from it BY DESIGN, so `tenantPatch`
@@ -2198,7 +2198,7 @@ type BrandCompilerProvenanceInput = BrandCompilerInput & {
    * `tenantPatch.palette` / `tenantPatch.modes` directly, exactly as before
    * this field existed. That is what keeps the static resolution-probe arm
    * and this file's own synthetic `compileBrandTheme` fixtures (guard-2/
-   * guard-3 in `coh-1-status-tint-tenant-derivation.test.ts`, which hand a
+   * guard test in `status-tint-derivation/index.test.ts`, which hands a
    * full BrandTheme-shaped `tenantPatch` straight to this function)
    * byte-for-byte unchanged.
    */
@@ -2206,7 +2206,7 @@ type BrandCompilerProvenanceInput = BrandCompilerInput & {
 };
 
 /**
- * COH-1 D1 — see `tenantStatusSeedAuthorship` above for why this exists as a
+ * See `tenantStatusSeedAuthorship` above for why this exists as a
  * sibling of `tenantPatch` rather than a widening of it.
  */
 export interface TenantStatusSeedAuthorship {
@@ -2340,7 +2340,7 @@ export const compileBrandTheme: CompileBrandTheme = (
           seedIsTenantAuthored: tenantAuthoredPaths.has(PRIMARY_SEED_FIELD),
         }
   );
-  // COH-1: the status-tint sibling. The base block has no overlay above it,
+  // The status-tint sibling. The base block has no overlay above it,
   // so seed authorship is just "did the raw tenant patch's own palette carry
   // this tone's seed" -- see the function's docblock for why that must read
   // the raw patch value, not `authoredPaths` membership. D1: prefer the
@@ -2466,7 +2466,7 @@ export function compileTheme(
      */
     tenantPatch?: BrandCompilerProvenanceInput["tenantPatch"];
     /**
-     * COH-1 D1: the closed status-seed authorship channel, SIBLING of
+     * The closed status-seed authorship channel is a sibling of
      * `tenantPatch` -- see `TenantStatusSeedAuthorship`'s docblock. SOLE
      * PROVIDER on the DB door: `compileTenantThemeConfig`, computed from the
      * raw `ThemePatch` (`migrateV1`'s output) before `tenantPostureFloors`

@@ -1,4 +1,4 @@
 export type {
   DashboardAction,
   DashboardMetric,
-} from "../../../../ui/structures/headers/dashboard";
+} from "../../../../components/structures/headers/dashboard";

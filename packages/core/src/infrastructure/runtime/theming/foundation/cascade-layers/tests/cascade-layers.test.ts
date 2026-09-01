@@ -159,10 +159,15 @@ describe('shipped bundle parity (dev must equal prod)', () => {
    * writes both from one in-memory bundle and `--check` diffs them byte for
    * byte), so reading the mirror is reading production.
    */
-  const SHIPPED = ['bithire', 'evnto', 'rottay', 'index'] as const;
+  const SHIPPED = {
+    bithire: 'artifacts/generated/css/verticals/bithire/index.css',
+    evnto: 'artifacts/generated/css/verticals/evnto/index.css',
+    rottay: 'artifacts/generated/css/verticals/rottay/index.css',
+    combined: 'artifacts/generated/css/all-verticals/index.css',
+  } as const;
 
-  it.each(SHIPPED)('styles/%s.css ships tenant paint unlayered', (bundle) => {
-    const css = readCss(`styles/${bundle}.css`);
+  it.each(Object.entries(SHIPPED))('%s bundle ships tenant paint unlayered', (_name, bundle) => {
+    const css = readCss(bundle);
 
     expect(css).toContain('@layer');
     // The precise property: no BLOCK may open the removed layer, and no order
@@ -173,16 +178,16 @@ describe('shipped bundle parity (dev must equal prod)', () => {
     expect(parseDeclaredLayerOrder(css)).not.toContain('rottay-tenants');
   });
 
-  it.each(SHIPPED)('styles/%s.css keeps the personality bridge layered', (bundle) => {
+  it.each(Object.entries(SHIPPED))('%s bundle keeps the personality bridge layered', (_name, bundle) => {
     // Personality must stay INSIDE a layer: that is what makes it lose to the
     // unlayered artifact and therefore subordinate, as the coverage model says.
-    expect(readCss(`styles/${bundle}.css`)).toContain(`@layer ${PERSONALITY_CASCADE_LAYER}`);
+    expect(readCss(bundle)).toContain(`@layer ${PERSONALITY_CASCADE_LAYER}`);
   });
 
   it('ships the same declared layer order the TypeScript mirror states', () => {
-    for (const bundle of SHIPPED) {
-      const declared = parseDeclaredLayerOrder(readCss(`styles/${bundle}.css`));
-      expect(declared, `styles/${bundle}.css`).toEqual([...ROTTAY_CASCADE_LAYER_ORDER]);
+    for (const bundle of Object.values(SHIPPED)) {
+      const declared = parseDeclaredLayerOrder(readCss(bundle));
+      expect(declared, bundle).toEqual([...ROTTAY_CASCADE_LAYER_ORDER]);
     }
   });
 
@@ -191,7 +196,7 @@ describe('shipped bundle parity (dev must equal prod)', () => {
     // its most specific argument, statically, so the artifact is (0,1,1) for
     // EVERY tenant -- including custom ones that only match the `:where()` arm.
     // An application `:root` is (0,1,0) and therefore loses.
-    expect(readCss('styles/bithire.css')).toContain(
+    expect(readCss('artifacts/generated/css/verticals/bithire/index.css')).toContain(
       ":is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire']))",
     );
   });

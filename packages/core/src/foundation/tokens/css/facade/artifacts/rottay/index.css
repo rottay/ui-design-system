@@ -359,8 +359,8 @@
   --ds-color-error-700: #B91C1C;
   --ds-color-error-800: #991B1B;
   --ds-color-error-900: #7F1D1D;
-  --ds-color-error-bg: rgba(239, 68, 68, 0.10);
-  --ds-color-error-border: rgba(239, 68, 68, 0.22);
+  --ds-color-error-bg: var(--ds-color-error-50);
+  --ds-color-error-border: color-mix(in srgb, var(--ds-color-error) 20%, transparent);
   --ds-color-info: #60A5FA;
   --ds-color-info-100: rgba(59, 130, 246, 0.12);
   --ds-color-info-200: #BFDBFE;
@@ -372,8 +372,8 @@
   --ds-color-info-700: #1D4ED8;
   --ds-color-info-800: #1E40AF;
   --ds-color-info-900: #1E3A8A;
-  --ds-color-info-bg: rgba(59, 130, 246, 0.10);
-  --ds-color-info-border: rgba(59, 130, 246, 0.22);
+  --ds-color-info-bg: var(--ds-color-info-50);
+  --ds-color-info-border: color-mix(in srgb, var(--ds-color-info) 20%, transparent);
   --ds-color-interactive-bg-active: #2A2A2F;
   --ds-color-interactive-bg-hover: rgba(255, 255, 255, 0.04);
   --ds-color-interactive-bg-muted: #1A1A1E;
@@ -435,8 +435,8 @@
   --ds-color-success-700: #166534;
   --ds-color-success-800: #14532D;
   --ds-color-success-900: #052E16;
-  --ds-color-success-bg: rgba(34, 197, 94, 0.10);
-  --ds-color-success-border: rgba(34, 197, 94, 0.22);
+  --ds-color-success-bg: var(--ds-color-success-50);
+  --ds-color-success-border: color-mix(in srgb, var(--ds-color-success) 20%, transparent);
   --ds-color-surface: #18181B;
   --ds-color-surface-muted: #222226;
   --ds-color-surface-secondary: #1A1A1E;
@@ -460,8 +460,8 @@
   --ds-color-warning-700: #B45309;
   --ds-color-warning-800: #92400E;
   --ds-color-warning-900: #78350F;
-  --ds-color-warning-bg: rgba(245, 158, 11, 0.10);
-  --ds-color-warning-border: rgba(245, 158, 11, 0.22);
+  --ds-color-warning-bg: var(--ds-color-warning-50);
+  --ds-color-warning-border: color-mix(in srgb, var(--ds-color-warning) 20%, transparent);
   --ds-command-palette-backdrop: rgba(0, 0, 0, 0.60);
   --ds-command-palette-bg: #1A1A1E;
   --ds-command-palette-border: #2A2A2F;

@@ -8,8 +8,8 @@
  * through every one of them.
  *
  * The multiplication chain under test (declared at :root by
- * foundation/base/spacing.css and foundation/themes/default.css, reprojected at
- * non-root boundaries by foundation/base/density.css):
+ * foundation/base/spacing/index.css and foundation/themes/default/index.css, reprojected at
+ * non-root boundaries by foundation/base/density/index.css):
  *
  *   global    = clamp(0.5, --ds-density-scale × --ds-density-mode-factor, 3)
  *   effective = clamp(0.5, global × --ds-density-local-factor, 3)
@@ -79,7 +79,7 @@ import { DensityScope, useDensity } from '../index';
  */
 
 const densityCss = readFileSync(
-  resolve(process.cwd(), 'src/foundation/tokens/css/foundation/base/density.css'),
+  resolve(process.cwd(), 'src/foundation/tokens/css/foundation/base/density/index.css'),
   'utf8',
 );
 

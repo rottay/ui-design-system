@@ -1,3 +1,3 @@
 "use client";
 
-export { Box } from "../../../../ui/primitives/layout/Box";
+export { Box } from "../../../../components/primitives/layout/box";

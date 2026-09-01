@@ -36,7 +36,7 @@ const declaration = (css: string, name: string): string | undefined =>
 describe('SC-7 overlay panel/scrim separation', () => {
   it('keeps the foundation aliases pointed at different authorities', () => {
     const css = readFileSync(
-      resolve(process.cwd(), 'src/foundation/tokens/css/foundation/themes/default.css'),
+      resolve(process.cwd(), 'src/foundation/tokens/css/foundation/themes/default/index.css'),
       'utf8'
     );
 

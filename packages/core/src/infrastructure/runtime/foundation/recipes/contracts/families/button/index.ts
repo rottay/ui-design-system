@@ -5,7 +5,7 @@
  * skin selects on. It lives below the UI tier because both sides need it and
  * neither may depend on the other — the engine resolves it into a recipe, the
  * public manifest states its shape. The paint those classes answer to lives in
- * `foundation/tokens/css/runtime/engines/modern/skin/button.css`.
+ * `foundation/tokens/css/runtime/engines/modern/skin/button/index.css`.
  */
 
 /**
@@ -13,7 +13,7 @@
  * `primary` for the className, the `data-variant` attribute and therefore the
  * paint, all three together.
  *
- * The paint itself lives in `foundation/tokens/css/runtime/engines/modern/skin/button.css`, keyed
+ * The paint itself lives in `foundation/tokens/css/runtime/engines/modern/skin/button/index.css`, keyed
  * on `data-variant`. This set is the contract those rules answer to; a variant
  * added here without a rule there renders unpainted, and the state matrix in
  * `packages/showroom/e2e/visual/states.spec.ts` is what says so.

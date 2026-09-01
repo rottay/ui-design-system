@@ -5,7 +5,7 @@
  * Includes transitions and keyframe animations.
  */
 
-@import './transitions.css';
-@import './keyframes.css';
-@import './premium.css';
-@import './collection-stagger.css';
+@import './transitions/index.css';
+@import './keyframes/index.css';
+@import './premium/index.css';
+@import './collection-stagger/index.css';

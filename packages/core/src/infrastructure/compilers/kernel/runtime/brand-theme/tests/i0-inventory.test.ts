@@ -270,10 +270,10 @@ describe("first-party artifact integrity", () => {
 
   it("public entrypoint source files exist in facade/entrypoints/", () => {
     for (const f of [
-      "facade/entrypoints/styles.css",
-      "facade/entrypoints/rottay.css",
-      "facade/entrypoints/bithire.css",
-      "facade/entrypoints/evnto.css",
+      "facade/entrypoints/styles/index.css",
+      "facade/entrypoints/rottay/index.css",
+      "facade/entrypoints/bithire/index.css",
+      "facade/entrypoints/evnto/index.css",
     ]) {
       expect(existsSync(resolve(CSS_SRC, f)), `${f} must exist`).toBe(true);
     }
@@ -949,12 +949,12 @@ describe("H3 contract: bithire", () => {
     // them to values nothing emits.
     //   - `--ds-premium-card-header-top-line-display`,
     //     `--ds-table-header-bubble-bg` and `--ds-shell-breadcrumb-height`
-    //     were RETIRED by SEV-DEAD-21 (`residual-adjudication.json`:
+    //     were RETIRED by SEV-DEAD-21 (`governance/tokens/decisions/writers/unused/system/index.json`:
     //     "PARTIALLY RETIRED source-only by SEV-DEAD-21 (7 of 8 names)").
     //     `brand-authored-residue-retirement.test.ts` asserts that retirement
     //     and is green, so re-anchoring here would contradict a passing test.
     //     For the top-line specifically the owner already adjudicated
-    //     (`premium-dead-adjudication.json`, `--ds-signal-card-top-line-display`,
+    //     (`governance/tokens/decisions/writers/unused/cards/index.json`, `--ds-signal-card-top-line-display`,
     //     OWNER_DECISION): "NO top-line part exists anywhere [...] wiring it
     //     would require inventing an element nothing renders."
     //   - `--ds-global-search-results-width` is NOT part of SEV-DEAD-21. The
@@ -1249,7 +1249,7 @@ describe("H3 contract: evnto", () => {
 
 describe("VERTICAL-CONFLICT-9 · DEAD-61 short atom", () => {
   const ledger = JSON.parse(
-    readFileSync(resolve(process.cwd(), "src/foundation/tokens/residual-adjudication.json"), "utf-8")
+    readFileSync(resolve(process.cwd(), "governance/tokens/decisions/writers/unused/system/index.json"), "utf-8")
   );
 
   const ROSTER = [
@@ -1320,7 +1320,7 @@ describe("VERTICAL-CONFLICT-9 · DEAD-61 short atom", () => {
   // (no PostCSS needed)`. It read all three `_source/extension.css` files,
   // which were deleted in this tranche, and asserted none of the 9 CONFLICT9
   // roster channels was re-declared there. There is no authored extension left
-  // to declare them; law G2 of `scripts/verticals/first-party-single-author-gate/index.mjs`
+  // to declare them; law G2 of `scripts/check/verticals/single-author/index.mjs`
   // fails on any resurrected extension source or `_source/` directory, which
   // is strictly stronger than a per-channel absence scan. The compiled-surface
   // assertions for the same 9 channels are directly below and untouched.
@@ -1458,7 +1458,7 @@ describe("VERTICAL-CONFLICT-9 · DEAD-61 short atom", () => {
     // all three). With the source gone those bounds are satisfied by zero, so
     // the test would have stayed green while measuring nothing. The successor
     // does not bound the second author, it forbids it:
-    // `scripts/verticals/first-party-single-author-gate/index.mjs`.
+    // `scripts/check/verticals/single-author/index.mjs`.
   });
 
   describe("mutants", () => {

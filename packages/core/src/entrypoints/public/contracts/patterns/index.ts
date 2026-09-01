@@ -14,17 +14,17 @@ export type {
   SavedView,
   ViewMode,
 } from "../../../../foundation/contracts/runtime/components/patterns/data";
-export type { AggregationFn } from "../../../../ui/patterns/data/data-table/contracts";
-export type { ListToolbarProps } from "../../../../ui/patterns/data/list-toolbar/contracts";
+export type { AggregationFn } from "../../../../components/patterns/data/data-table/contracts";
+export type { ListToolbarProps } from "../../../../components/patterns/data/list-toolbar/contracts";
 export type {
   RecordFact,
   RecordFactSpan,
-} from "../../../../ui/patterns/data/record-facts/contracts";
+} from "../../../../components/patterns/data/record-facts/contracts";
 export type {
   WidgetBoardItem,
   WidgetBoardSize,
-} from "../../../../ui/patterns/data/widget-board/contracts";
-export type { LayoutIntent } from "../../../../ui/patterns/runtime/adaptive-layout/foundation";
-export type { CommandItem } from "../../../../ui/patterns/navigation/command-palette/contracts";
-export type { ShortcutDisplayItem } from "../../../../ui/patterns/navigation/shortcuts-overlay/contracts";
-export type { Series } from "../../../../ui/patterns/visualization/charts/contracts";
+} from "../../../../components/patterns/data/widget-board/contracts";
+export type { LayoutIntent } from "../../../../components/patterns/runtime/adaptive-layout/foundation";
+export type { CommandItem } from "../../../../components/patterns/navigation/command-palette/contracts";
+export type { ShortcutDisplayItem } from "../../../../components/patterns/navigation/shortcuts-overlay/contracts";
+export type { Series } from "../../../../components/patterns/visualization/charts/contracts";

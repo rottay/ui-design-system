@@ -1,0 +1,141 @@
+/**
+ * SurfaceSectionCard skin (long-tail skin ownership; R2+R3 quiet-premium pass).
+ * Engine-agnostic.
+ *
+ * DELIBERATELY UNLAYERED. Every tenant layer sorts before Tailwind preflight;
+ * an unlayered skin keeps component paint above that reset while leaving
+ * caller inline overrides in charge.
+ *
+ * A surface owns composition, so the Card root is scoped by the className the
+ * surface passes through. The optional header is a reusable piece of anatomy:
+ * context, semantic icon, title/copy and actions. Every paint channel resolves
+ * through tenant variables; consumers only provide content.
+ *
+ * R2+R3 craft decisions:
+ * - The section card is NOT interactive: no hover sweep on the header and no
+ *   icon lift. A reactive gradient on a static wrapper is noise, not craft.
+ * - The header keeps one quiet gradient (it separates chrome from content);
+ *   the icon well is a hairline tile with no bloom shadow.
+ * - Logical properties throughout (RTL-safe); every literal that was baked in
+ *   (icon size, header min-height, tracking) is now a tenant channel.
+ */
+
+.ds-surface.ds-section-card[data-part='root'] {
+  overflow: hidden;
+  container-type: inline-size;
+  container-name: ds-section-card;
+  border-color: var(--ds-surface-card-border-strong, var(--ds-card-border));
+  background: var(--ds-surface-card-bg, var(--ds-card-bg));
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 82%, transparent),
+    var(--ds-card-shadow, var(--ds-elevation-1));
+}
+
+.ds-surface.ds-section-card > .ds-section-card__body[data-part='body'] {
+  min-inline-size: 0;
+}
+
+.ds-surface.ds-section-card [data-part='content'] {
+  min-inline-size: 0;
+}
+
+.ds-surface.ds-section-card [data-part='header'] {
+  position: relative;
+  z-index: 1;
+  min-inline-size: 0;
+  min-block-size: var(--ds-section-card-header-min-height, 68px);
+  padding: var(--ds-card-header-padding, var(--ds-spacing-4, 16px));
+  border-block-end: 1px solid
+    var(--ds-card-header-border, var(--ds-surface-card-border));
+  background: var(
+    --ds-card-header-bg,
+    linear-gradient(
+      112deg,
+      color-mix(in srgb, var(--ds-color-primary) 5%, var(--ds-surface-card-bg)),
+      var(--ds-surface-card-bg) 62%
+    )
+  );
+  box-shadow: inset 0 1px 0
+    color-mix(in srgb, var(--ds-color-bg-elevated) 88%, transparent);
+}
+
+.ds-surface.ds-section-card [data-part='header-main'] {
+  flex: 1 1 auto;
+  min-inline-size: 0;
+}
+
+.ds-surface.ds-section-card [data-part='header-icon'] {
+  display: inline-grid;
+  flex: 0 0 auto;
+  inline-size: var(--ds-section-card-icon-size, 38px);
+  block-size: var(--ds-section-card-icon-size, 38px);
+  place-items: center;
+  border: 1px solid
+    var(--ds-workspace-card-icon-border, var(--ds-color-border-primary));
+  border-radius: var(--ds-radius-lg, 11px);
+  background: var(--ds-workspace-card-icon-bg, var(--ds-surface-card-bg));
+  color: var(--ds-workspace-card-icon-color, var(--ds-color-primary));
+  box-shadow: inset 0 1px 0
+    color-mix(in srgb, var(--ds-color-bg-elevated) 88%, transparent);
+}
+
+.ds-surface.ds-section-card [data-part='header-copy'] {
+  min-inline-size: 0;
+}
+
+.ds-surface.ds-section-card
+  .ds-section-card__eyebrow[data-part='root'][data-part='root'][data-part='root'] {
+  color: var(--ds-card-header-color, var(--ds-color-text-muted));
+  font-family: var(--ds-font-family-mono, ui-monospace, monospace);
+  font-size: var(--ds-text-eyebrow-size, var(--ds-font-size-xs));
+  font-weight: var(--ds-font-weight-semibold, 600);
+  letter-spacing: var(--ds-section-card-eyebrow-tracking, 0.11em);
+  line-height: 1.25;
+  text-transform: uppercase;
+}
+
+.ds-surface.ds-section-card
+  .ds-section-card__title[data-part='root'][data-part='root'][data-part='root'] {
+  color: var(--ds-card-title-color, var(--ds-color-text-primary));
+  font-family: var(--ds-font-family-heading, var(--ds-font-family-base));
+  font-size: var(--ds-card-title-font-size, var(--ds-font-size-lg, 16px));
+  font-weight: var(--ds-card-title-font-weight, var(--ds-font-weight-semibold, 600));
+  letter-spacing: var(--ds-card-title-letter-spacing, var(--ds-letter-spacing-heading));
+  line-height: 1.25;
+  text-wrap: balance;
+}
+
+.ds-surface.ds-section-card
+  .ds-section-card__description[data-part='root'][data-part='root'][data-part='root'] {
+  color: var(--ds-card-subtitle-color, var(--ds-color-text-muted));
+  font-size: var(--ds-font-size-xs, 12px);
+  line-height: 1.4;
+}
+
+.ds-surface.ds-section-card [data-part='header-actions'] {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.ds-surface.ds-section-card [data-part='section-content'] {
+  min-inline-size: 0;
+  padding: var(--ds-card-body-padding, var(--ds-spacing-5, 20px));
+}
+
+.ds-surface.ds-section-card[data-has-header='false'] [data-part='section-content'] {
+  padding: var(--ds-card-body-padding, var(--ds-spacing-5, 20px));
+}
+
+@container ds-section-card (max-width: 560px) {
+  .ds-surface.ds-section-card [data-part='header'] {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .ds-surface.ds-section-card [data-part='header-actions'],
+  .ds-surface.ds-section-card [data-part='header-actions'] > * {
+    inline-size: 100%;
+  }
+}

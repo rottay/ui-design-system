@@ -29,7 +29,7 @@ import {
   BUNDLED_TENANT_SLUGS,
 } from '@/infrastructure/runtime/tenant/foundation/configuration/registry';
 import { bithireBrandTheme, evntoBrandTheme, rottayBrandTheme } from '@/foundation/tokens/ts/presentation/brand-themes';
-import { themanagementmiamiBrandTheme } from '@/tooling/testing/fixtures/brand-themes/themanagementmiami';
+import { themanagementmiamiBrandTheme } from '@tests/fixtures/brand-themes/themanagementmiami';
 
 // ── Helpers ─────────────────────────────────────────────
 
@@ -437,7 +437,7 @@ describe('shared pipeline: chrome vars NOW generated (G1)', () => {
    * and for what replaced it; this paragraph is retained as history, not as
    * a description of the code currently in this file.
    *
-   * SECOND HARDENING — POSTCSS MIGRATION (Codex veto, 2026-08-05). The
+   * SECOND HARDENING — POSTCSS MIGRATION (independent code audit veto, 2026-08-05). The
    * line-anchored regex above turned out to share the exact defect it was
    * hardened to fix: it pattern-matches a structured language instead of
    * parsing it. Three concrete holes, one root cause: `extractDeclarationValue`

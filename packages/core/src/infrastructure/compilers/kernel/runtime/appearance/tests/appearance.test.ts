@@ -224,7 +224,7 @@ describe("appearanceGeneralToVariables", () => {
 
   it(
     "density normal (the identity factor) stays undeclared, mirroring " +
-      "foundation/base/density.css never declaring :root[data-density='comfortable'] " +
+      "foundation/base/density/index.css never declaring :root[data-density='comfortable'] " +
       "(F9 fix, WO-CRA-23 R1): declaring 1 here would outrank that lower-" +
       "specificity rule and make a live data-density change inert",
     () => {
@@ -782,7 +782,7 @@ describe("compileAppearanceVariables", () => {
   });
 
   it("snaps an authored on-primary below the floor instead of publishing it", () => {
-    // Codex K2/K3 verdict (TMM 3.57:1): no tenant combination below the
+    // independent code audit K2/K3 verdict (TMM 3.57:1): no tenant combination below the
     // normal-text floor may survive compilation.
     const compiled = compileAppearanceVariables({
       general: { palette: { primary: "#0F766E" } },

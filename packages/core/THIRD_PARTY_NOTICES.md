@@ -1,7 +1,7 @@
 # Third-party notices and governed graphics provenance
 
 This notice ships with `@rottay/design-system`. Its machine-audited source is
-`provenance/graphics/pack-allowlist.json`. License labels below describe the
+`governance/graphics/sources/index.json`. License labels below describe the
 pinned source records; they do not grant trademark, affiliation, endorsement,
 publicity, or other brand-use rights.
 
@@ -12,7 +12,7 @@ publicity, or other brand-use rights.
 - Usage: bundled SSR glyphs behind the supplier-independent semantic `Icon` facade.
 - Source: https://github.com/phosphor-icons/react
 - License: MIT; the complete text is reproduced below and archived at
-  `provenance/graphics/licenses/phosphor-icons-react-LICENSE`.
+  `governance/graphics/licenses/phosphor-icons-react/index.md`.
 
 ## BrandMark source and renderer
 
@@ -22,7 +22,7 @@ The governed catalog is `thesvg@3.2.6` and the external renderer is
 - Catalog source: https://github.com/glincker/thesvg/tree/main/packages/thesvg
 - Renderer source: https://github.com/glincker/thesvg/tree/main/packages/react
 - Package license: MIT; the complete text is reproduced below and archived at
-  `provenance/graphics/licenses/thesvg-LICENSE`.
+  `governance/graphics/licenses/thesvg/index.md`.
 
 | BrandMark | Catalog slug | Asset license in pinned catalog | Source URL |
 | --- | --- | --- | --- |

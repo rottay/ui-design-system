@@ -19,7 +19,7 @@ import { render, screen, waitFor } from '@testing-library/react';
 import { afterEach, describe, expect, it } from 'vitest';
 
 import type { TenantConfig } from '@/foundation/contracts';
-import ModernTooltip from '@/ui/primitives/display/Tooltip/engines/modern';
+import ModernTooltip from '@/components/primitives/display/tooltip/engines/modern';
 import { DesignSystemProvider } from '..';
 
 function tenantConfig(): TenantConfig {

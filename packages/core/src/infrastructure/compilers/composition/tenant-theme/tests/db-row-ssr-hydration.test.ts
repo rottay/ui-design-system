@@ -7,7 +7,7 @@
  * a "live DB" test would be a lie. What it proves is everything downstream of
  * the row read — which is precisely the part that can regress silently.
  *
- * The live `DB -> SSR -> browser` certification stays with Codex in R2.
+ * The live `DB -> SSR -> browser` certification stays with independent code audit in R2.
  *
  * WHY IT IS SEPARATE FROM `db-row-canary.test.ts`. That file proves the
  * compiler's OUTPUT is correct and divergent. This one proves the PLUMBING:

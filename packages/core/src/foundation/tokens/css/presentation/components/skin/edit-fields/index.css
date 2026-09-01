@@ -1,0 +1,464 @@
+/**
+ * edit-fields skin (record-and-form skin ownership). Engine-agnostic: this structures family
+ * renders ONE DOM tree under every engine, so one file serves all four.
+ *
+ * DELIBERATELY UNLAYERED. Every `@layer rottay-*` declared in
+ * `foundation/base.css` sorts BEFORE Tailwind's own unnamed `base` layer, whose
+ * preflight zeroes `border-width` on every element. A layered rule here could not
+ * paint a border at all. Unlayered outranks preflight and still yields to a
+ * consumer's inline `style` prop -- the precedence the inline objects held.
+ *
+ * BORDER-COLOR FLOOR (P-48): the Rottay artifact ships an unlayered
+ * `html[data-tenant]:not([data-theme]):not(.light) *` border-color rule at
+ * specificity (0,3,1). A rule painting a real border colour reaches (0,4,0) from
+ * the two scope classes + two DISTINCT attributes in the chain (`data-kind`,
+ * `data-saving`, `id`) -- never by repeating an identical one (4th-tanda law).
+ *
+ * SELECTOR LAW. `data-part` is a shared VOCABULARY, and this family shares four
+ * of its part names -- `section`, `section-header`, `section-title`,
+ * `section-description`, `section-content` -- with `form-sections`, plus `field`
+ * and `field-label` with `record`. The two families are DESIGNED to compose
+ * (an InlineEditSection inside a FormSections section, and vice versa), so a bare
+ * `[data-part='section-title']` under this scope would repaint the other family's
+ * title. Every rule below therefore:
+ *   1. anchors on the element that carries BOTH scope classes and the part
+ *      (`.ds-structure.ds-edit-fields[data-part='section']`), and
+ *   2. reaches inner parts only through a DIRECT-CHILD hop into
+ *      `section-header` / `editor-header` / `field-label-row` / `footer-support`.
+ * A nested FormSections/RecordField always lands in the CONTENT region, never
+ * inside one of those four chrome rows, so no rule here can escape into it. The
+ * one node inside a chrome row that a consumer supplies is `actions`/`meta`; a
+ * component nested there that also stamps `section-title` would be pathological.
+ *
+ * C-12 WAVE (record/detail composition): the private
+ * `--_ds-edit-fields-density` channel (canonical
+ * `--ds-density-global-effective-scale`, fallback 1) scales the chrome's
+ * deliberate px rhythm so the read↔edit footprint holds at every tenant
+ * density; the region seams ride `--ds-divider-width`/`--ds-divider-style`
+ * (floors 1px solid); the requirement pill case rides
+ * `--ds-typography-label-transform` (fallback `uppercase`); and the field
+ * error grew the semantic `status.error` icon beside the message — the
+ * per-field state never reads through colour alone.
+ *
+ * C1 ELEVATION (shared cell rhythm): the read view's ledger cell padding
+ * (12px/14px, the record.css literals) reaches the edit cell scaled by the
+ * SAME density factor, so toggling read↔edit keeps every label and control
+ * on the read cell's footprint instead of jumping to an unpadded field.
+ * The active field gains a quiet focus-within wash behind its label ink
+ * shift — "the active field reads at a glance down a long form" now holds
+ * at cell level, not only at type level. Under the existing 30rem container
+ * cut the collapsed single column drops its row gap and sews cells with the
+ * family's divider-grammar seam — the same one-column ledger read the
+ * record field-grid keeps at 320/390px.
+ *
+ * MATERIAL INVARIANT — DELIBERATELY FLAT AND RULED (structure-material wave).
+ * This file contains no `box-shadow` at all, and that is the contract. An
+ * inline-edit region is a form, and the house law is that forms are not card
+ * stacks: hierarchy comes from section headers, seams and aligned controls,
+ * never from boxed field cards floating over the page. Every separation here
+ * is already a rule on the governed edge axis
+ * (`--ds-divider-width`/`--ds-divider-style`, floors 1px solid), the active
+ * field is marked by a ground wash plus a label ink shift rather than a lift,
+ * and the sticky toggle dock takes the canonical `--ds-surface-canvas` paint
+ * plus one seam instead of a shadow — the comment on that rule states the
+ * refusal explicitly ("this structure does not introduce a second theme
+ * channel").
+ *
+ * So the family is not deaf to a tenant's material law; it hears it on the
+ * edge axis, which is the axis a ruled direction actually moves. Giving it an
+ * elevation read would satisfy a census and contradict the anatomy.
+ */
+
+/* --- InlineEditor ---------------------------------------------------------- */
+
+/* One private density factor per chrome root (canonical
+   `--ds-density-global-effective-scale`, fallback 1): the edit chrome's
+   deliberate px rhythm follows the tenant density posture — the same
+   read↔edit footprint at every density (C-12). */
+.ds-structure.ds-edit-fields[data-part='group'],
+.ds-structure.ds-edit-fields[data-part='editor'],
+.ds-structure.ds-edit-fields[data-part='grid'],
+.ds-structure.ds-edit-fields[data-part='section'],
+.ds-structure.ds-edit-fields[data-part='field'],
+.ds-structure.ds-edit-fields[data-part='footer'] {
+  --_ds-edit-fields-density: var(--ds-density-global-effective-scale, 1);
+}
+
+.ds-structure.ds-edit-fields[data-part='group'] {
+  inline-size: 100%;
+  min-inline-size: 0;
+}
+
+.ds-structure.ds-edit-fields[data-part='editor'] > [data-part='editor-header'] {
+  padding-block-end: calc(14px * var(--_ds-edit-fields-density, 1));
+}
+
+.ds-structure.ds-edit-fields[data-part='editor'] > [data-part='editor-header'] [data-part='editor-lead'] {
+  flex: 1 1 420px;
+  min-inline-size: 0;
+}
+
+.ds-structure.ds-edit-fields[data-part='editor'] > [data-part='editor-header'] [data-part='editor-copy'] {
+  min-inline-size: 0;
+}
+
+.ds-structure.ds-edit-fields[data-part='editor'] > [data-part='editor-header'] [data-part='editor-icon'] {
+  display: grid;
+  flex-shrink: 0;
+  inline-size: 32px;
+  block-size: 32px;
+  place-items: center;
+  border-radius: var(--ds-radius-sm, 8px);
+  color: var(--ds-color-primary);
+  background: color-mix(in srgb, var(--ds-color-primary) 10%, var(--ds-surface-card, var(--ds-color-bg-elevated)));
+  border: 1px solid color-mix(in srgb, var(--ds-color-primary) 22%, var(--ds-color-border-secondary));
+}
+
+.ds-structure.ds-edit-fields[data-part='editor'] > [data-part='editor-header'] [data-part='editor-eyebrow'] {
+  color: var(--ds-color-text-muted);
+  letter-spacing: 0.08em;
+  line-height: 1;
+  /* Overline channel first, then the label personality channel; the
+     fallback keeps the pre-wave uppercase (C-12). */
+  text-transform: var(--ds-page-header-eyebrow-text-transform, var(--ds-typography-label-transform, uppercase));
+}
+
+.ds-structure.ds-edit-fields[data-part='editor'] > [data-part='editor-header'] [data-part='editor-title'] {
+  color: var(--ds-color-text-primary);
+}
+
+.ds-structure.ds-edit-fields[data-part='editor'] > [data-part='editor-header'] [data-part='editor-description'] {
+  color: var(--ds-color-text-secondary);
+  line-height: 1.45;
+}
+
+.ds-structure.ds-edit-fields[data-part='editor'] > [data-part='editor-header'] [data-part='editor-actions'] {
+  flex: 0 1 auto;
+  min-inline-size: 0;
+}
+
+/* --- InlineEditGrid -------------------------------------------------------- */
+
+.ds-structure.ds-edit-fields[data-part='grid'] {
+  container: ds-edit-fields-grid / inline-size;
+  display: grid;
+  grid-template-columns: var(--ds-edit-fields-grid-columns, repeat(3, minmax(0, 1fr)));
+  gap: var(--ds-edit-fields-grid-gap, 14px);
+  align-items: start;
+  inline-size: 100%;
+  padding-block: calc(14px * var(--_ds-edit-fields-density, 1));
+}
+
+/* Fields stack with no gaps under the narrow cut (the consumer's wide
+   `columns` value still applies above the cut through the channel). C1: the
+   collapsed single column reads as the same ledger the record field-grid
+   keeps at 320/390px — the row gap folds away and the family's
+   divider-grammar seam sews stacked cells, with each cell's own block
+   padding keeping the air symmetric around the rule. */
+@container ds-edit-fields-grid (inline-size < 30rem) {
+  .ds-structure.ds-edit-fields[data-part='grid'] {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: 0;
+  }
+
+  .ds-structure.ds-edit-fields[data-part='grid'] > .ds-structure.ds-edit-fields[data-part='field']:not(:first-child) {
+    border-block-start: var(--ds-divider-width, 1px) var(--ds-divider-style, solid) var(--ds-color-border-secondary);
+  }
+}
+
+.ds-structure.ds-edit-fields[data-part='grid'][data-kind] {
+  /* Tenant divider grammar reaches the region seam (floors 1px solid). */
+  border-top: var(--ds-divider-width, 1px) var(--ds-divider-style, solid) var(--ds-color-border-secondary);
+}
+
+/* --- InlineEditSection ----------------------------------------------------- */
+
+.ds-structure.ds-edit-fields[data-part='section'] {
+  inline-size: 100%;
+  min-inline-size: 0;
+}
+
+.ds-structure.ds-edit-fields[data-part='section'] > [data-part='section-header'] {
+  padding-block-end: 10px;
+}
+
+.ds-structure.ds-edit-fields[data-part='section'] > [data-part='section-header'] [data-part='section-lead'] {
+  flex: 1 1 360px;
+  min-inline-size: 0;
+}
+
+.ds-structure.ds-edit-fields[data-part='section'] > [data-part='section-header'] [data-part='section-copy'],
+.ds-structure.ds-edit-fields[data-part='section'] > [data-part='section-header'] [data-part='section-actions'] {
+  min-inline-size: 0;
+}
+
+.ds-structure.ds-edit-fields[data-part='section'] > [data-part='section-header'] [data-part='section-icon'] {
+  display: flex;
+}
+
+.ds-structure.ds-edit-fields[data-part='section'] > [data-part='section-header'] [data-part='section-number'] {
+  font-family: var(--ds-font-family-mono, monospace);
+  letter-spacing: 0.08em;
+}
+
+.ds-structure.ds-edit-fields[data-part='section'] > [data-part='section-header'] [data-part='section-icon'],
+.ds-structure.ds-edit-fields[data-part='section'] > [data-part='section-header'] [data-part='section-number'],
+.ds-structure.ds-edit-fields[data-part='section'] > [data-part='section-header'] [data-part='section-description'] {
+  color: var(--ds-color-text-muted);
+}
+
+.ds-structure.ds-edit-fields[data-part='section'] > [data-part='section-header'] [data-part='section-description'] {
+  line-height: 1.4;
+}
+
+.ds-structure.ds-edit-fields[data-part='section'] > [data-part='section-header'] [data-part='section-title'] {
+  color: var(--ds-color-text-primary);
+}
+
+/* --- InlineEditField ------------------------------------------------------- */
+
+.ds-structure.ds-edit-fields[data-part='field'] {
+  min-inline-size: 0;
+}
+
+/* Shared read↔edit cell rhythm (C1): the edit cell takes the read ledger
+   cell's deliberate padding (record.css's 12px/14px literals) scaled by the
+   same density factor, so toggling read↔edit keeps label and control on the
+   read cell's footprint instead of jumping to an unpadded field. Fields
+   nested inside an InlineEditSection are not grid children and keep the
+   section's own chrome. The radius only shows through the focus wash. */
+.ds-structure.ds-edit-fields[data-part='grid'] > .ds-structure.ds-edit-fields[data-part='field'] {
+  padding: calc(12px * var(--_ds-edit-fields-density, 1)) calc(14px * var(--_ds-edit-fields-density, 1));
+  border-radius: var(--ds-radius-lg, 14px);
+  transition: background var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out);
+}
+
+/* Active-field wash: the focus-within label ink shift already names the
+   active field; the quiet cell wash makes the same field read at a glance
+   down a long form — the cue the label rule above promises, at cell level.
+   `data-requirement` is always stamped, so the chain buys its floor from it. */
+.ds-structure.ds-edit-fields[data-part='grid'] > .ds-structure.ds-edit-fields[data-part='field'][data-requirement]:focus-within {
+  background: color-mix(in srgb, var(--ds-color-bg-secondary) 42%, transparent);
+}
+
+.ds-structure.ds-edit-fields[data-part='field'] > [data-part='field-label-row'] {
+  display: grid;
+  gap: 0;
+  margin-block-end: calc(8px * var(--_ds-edit-fields-density, 1));
+  min-inline-size: 0;
+}
+
+.ds-structure.ds-edit-fields[data-part='field'] > [data-part='field-label-row'][data-has-hint='true'] {
+  gap: 3px;
+}
+
+.ds-structure.ds-edit-fields[data-part='field'] > [data-part='field-label-row'] [data-part='field-number'] {
+  font-family: var(--ds-font-family-mono, monospace);
+  line-height: 1;
+}
+
+.ds-structure.ds-edit-fields[data-part='field'] > [data-part='field-label-row'] [data-part='field-icon'] {
+  display: flex;
+}
+
+.ds-structure.ds-edit-fields[data-part='field'] > [data-part='field-label-row'] [data-part='field-label'] {
+  font-size: var(--ds-font-size-sm, 0.875rem);
+  font-weight: var(--ds-font-weight-semibold, 600);
+}
+
+.ds-structure.ds-edit-fields[data-part='field'] > [data-part='field-label-row'] [data-part='field-label'][data-linked='true'] {
+  cursor: pointer;
+}
+
+.ds-structure.ds-edit-fields[data-part='field'] > [data-part='field-label-row'] [data-part='field-requirement'] {
+  display: inline-flex;
+}
+
+.ds-structure.ds-edit-fields[data-part='field'] > [data-part='field-label-row'] [data-part='field-requirement-copy'] {
+  letter-spacing: 0.06em;
+  /* Personality channel: tenant label casing reaches the requirement pill;
+     absent a personality the exact pre-wave uppercase stands (C-12). */
+  text-transform: var(--ds-typography-label-transform, uppercase);
+}
+
+.ds-structure.ds-edit-fields[data-part='field'] > [data-part='field-label-row'] [data-part='field-hint'] {
+  min-inline-size: 0;
+  line-height: 1.35;
+}
+
+/* `field-label-row` carries no consumer slot: every node under it is rendered by
+   this component, so the descendant hops below cannot escape. */
+.ds-structure.ds-edit-fields[data-part='field'] > [data-part='field-label-row'] [data-part='field-number'],
+.ds-structure.ds-edit-fields[data-part='field'] > [data-part='field-label-row'] [data-part='field-icon'],
+.ds-structure.ds-edit-fields[data-part='field'] > [data-part='field-label-row'] [data-part='field-requirement-copy'],
+.ds-structure.ds-edit-fields[data-part='field'] > [data-part='field-label-row'] > [data-part='field-hint'] {
+  color: var(--ds-color-text-muted);
+}
+
+.ds-structure.ds-edit-fields[data-part='field'] > [data-part='field-label-row'] [data-part='field-label'] {
+  color: var(--ds-color-text-secondary);
+  transition: color var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out);
+}
+
+/* Focus cue: while any control inside the field holds focus, its label steps
+   up to primary ink so the active field reads at a glance down a long form.
+   `data-requirement` is always stamped, so the chain buys its floor from it. */
+.ds-structure.ds-edit-fields[data-part='field'][data-requirement]:focus-within > [data-part='field-label-row'] [data-part='field-label'] {
+  color: var(--ds-color-text-primary);
+}
+
+/* Error cue: the invalid field's label takes the error ink (the message and
+   `aria-invalid` already carry the state to AT). */
+.ds-structure.ds-edit-fields[data-part='field'][data-error='true'] > [data-part='field-label-row'] [data-part='field-label'] {
+  color: var(--ds-color-error);
+}
+
+.ds-structure.ds-edit-fields[data-part='field'] > [data-part='field-label-row'] [data-part='field-requirement-dot'] {
+  flex-shrink: 0;
+  inline-size: 5px;
+  block-size: 5px;
+  border-radius: 999px;
+}
+
+/* The dot takes its colour from its OWN requirement pill, not from an ancestor
+   field: a field nested inside another field's control slot would otherwise
+   inherit the outer field's requirement. Hence the direct-child hop from the
+   `[data-requirement]` that owns it. */
+.ds-structure.ds-edit-fields[data-part='field'] > [data-part='field-label-row'] [data-part='field-requirement'][data-requirement='required'] > [data-part='field-requirement-dot'] {
+  background: var(--ds-color-warning);
+}
+
+.ds-structure.ds-edit-fields[data-part='field'] > [data-part='field-label-row'] [data-part='field-requirement'][data-requirement='recommended'] > [data-part='field-requirement-dot'] {
+  background: var(--ds-color-primary);
+}
+
+.ds-structure.ds-edit-fields[data-part='field'] > [data-part='field-label-row'] [data-part='field-requirement'][data-requirement='optional'] > [data-part='field-requirement-dot'] {
+  background: var(--ds-color-text-muted);
+}
+
+/* The error copy must clear Typography's own skin, which colours every `Text`
+   at (0,4,0) via `[data-color='default']`: the chain below reaches (0,6,0)
+   from the two scope classes + field + field-error-row + field-error + its
+   `id` -- never a repeated attribute (4th-tanda law). The row owns the rhythm;
+   the semantic status icon is the non-colour shape cue (C-12). */
+.ds-structure.ds-edit-fields[data-part='field'] > [data-part='field-error-row'] {
+  margin-block-start: 5px;
+  min-inline-size: 0;
+}
+
+.ds-structure.ds-edit-fields[data-part='field'] > [data-part='field-error-row'] [data-part='field-error-icon'] {
+  flex-shrink: 0;
+  margin-block-start: 1px;
+  color: var(--ds-color-error);
+}
+
+.ds-structure.ds-edit-fields[data-part='field'] > [data-part='field-error-row'] [data-part='field-error'][id] {
+  color: var(--ds-color-error);
+  line-height: 1.4;
+}
+
+/* --- InlineEditControl ------------------------------------------------------ */
+
+.ds-structure.ds-edit-fields[data-part='control'] {
+  box-sizing: border-box;
+  min-inline-size: 0;
+  max-inline-size: 100%;
+}
+
+/* --- MoreFieldsToggle ------------------------------------------------------- */
+
+.ds-structure.ds-edit-fields[data-part='toggle'] {
+  display: flex;
+  justify-content: center;
+  inline-size: 100%;
+  min-inline-size: 0;
+}
+
+.ds-structure.ds-edit-fields[data-part='toggle'][data-expanded='true'] {
+  justify-content: flex-end;
+}
+
+/* Sticky dock: while expanded + sticky the engine docks the control inline
+   (`position: sticky`), so the skin gives it a real surface — content that
+   scrolls under the dock must not bleed through. The canonical canvas surface
+   owns that paint; this structure does not introduce a second theme channel. */
+.ds-structure.ds-edit-fields[data-part='toggle'][data-sticky='true'][data-expanded='true'] {
+  padding-block: 8px;
+  background: var(--ds-surface-canvas, var(--ds-color-bg-primary));
+  border-block-start: var(--ds-divider-width, 1px) var(--ds-divider-style, solid) var(--ds-color-border-secondary);
+}
+
+/* --- InlineEditFooter ------------------------------------------------------ */
+
+.ds-structure.ds-edit-fields[data-part='footer'][data-saving] {
+  padding-block-start: calc(14px * var(--_ds-edit-fields-density, 1));
+  margin-block-start: calc(14px * var(--_ds-edit-fields-density, 1));
+  border-top: var(--ds-divider-width, 1px) var(--ds-divider-style, solid) var(--ds-color-border-secondary);
+  transition: border-color var(--ds-motion-normal) var(--ds-motion-ease-out);
+}
+
+.ds-structure.ds-edit-fields[data-part='footer'] > [data-part='footer-support'] {
+  flex: 1 1 280px;
+  min-inline-size: 0;
+}
+
+.ds-structure.ds-edit-fields[data-part='footer'] > [data-part='footer-actions'] {
+  min-inline-size: 0;
+}
+
+.ds-structure.ds-edit-fields[data-part='footer'] > [data-part='footer-support'] > [data-part='footer-note'],
+.ds-structure.ds-edit-fields[data-part='footer'] > [data-part='footer-support'] > [data-part='footer-summary'],
+.ds-structure.ds-edit-fields[data-part='footer'] > [data-part='footer-support'] > [data-part='footer-hidden-summary'] {
+  color: var(--ds-color-text-muted);
+}
+
+/* The footer summary slot is the error channel when one is present -- the footer
+   root reports it on `data-error`. */
+.ds-structure.ds-edit-fields[data-part='footer'][data-error='true'] > [data-part='footer-support'] > [data-part='footer-summary'] {
+  color: var(--ds-color-error);
+}
+
+/* reduced motion: the label's focus-cue fade, the cell wash fade and the
+   footer's border fade go quiet (state still reads through the static ink
+   and the static wash). */
+@media (prefers-reduced-motion: reduce) {
+  .ds-structure.ds-edit-fields[data-part='field'] > [data-part='field-label-row'] [data-part='field-label'],
+  .ds-structure.ds-edit-fields[data-part='grid'] > .ds-structure.ds-edit-fields[data-part='field'],
+  .ds-structure.ds-edit-fields[data-part='footer'][data-saving] {
+    transition: none;
+  }
+}
+
+/* forced-colors: tints and hairlines are forced away. The editor icon well and
+   the requirement dots keep system-colour marks (the requirement state reads
+   through the pill COPY, never the dot's colour -- and the copy now reaches
+   AT); hairlines degrade to ButtonText; the error text and the invalid
+   label stay distinguishable because `aria-invalid` and the error message id
+   carry the state to AT even when its ink auto-maps. Composed primitives
+   (Button, Tooltip) own their own forced-colors contracts. */
+@media (forced-colors: active) {
+  .ds-structure.ds-edit-fields[data-part='toggle'][data-sticky='true'][data-expanded='true'] {
+    background: Canvas;
+    border-block-start-color: ButtonText;
+  }
+  .ds-structure.ds-edit-fields[data-part='editor'] > [data-part='editor-header'] [data-part='editor-icon'] {
+    border-color: ButtonText;
+    background: Canvas;
+    color: ButtonText;
+  }
+  .ds-structure.ds-edit-fields[data-part='grid'][data-kind],
+  .ds-structure.ds-edit-fields[data-part='footer'][data-saving] {
+    border-top-color: ButtonText;
+  }
+  .ds-structure.ds-edit-fields[data-part='field'] > [data-part='field-error-row'] [data-part='field-error-icon'] {
+    color: CanvasText;
+  }
+  .ds-structure.ds-edit-fields[data-part='field'] > [data-part='field-label-row'] [data-part='field-requirement'][data-requirement] > [data-part='field-requirement-dot'] {
+    background: ButtonText;
+  }
+  /* The collapsed-ledger seams and the active-cell wash re-express in system
+     colours; the focused control keeps its own primitive ring. */
+  .ds-structure.ds-edit-fields[data-part='grid'] > .ds-structure.ds-edit-fields[data-part='field'] {
+    border-color: ButtonText;
+  }
+}

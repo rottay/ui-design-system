@@ -1,3 +1,3 @@
 "use client";
 
-export { ListToolbar } from "../../../../ui/patterns/data/list-toolbar";
+export { ListToolbar } from "../../../../components/patterns/data/list-toolbar";

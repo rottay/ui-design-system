@@ -1,3 +1,3 @@
 "use client";
 
-export { Flex } from "../../../../ui/primitives/layout/Flex";
+export { Flex } from "../../../../components/primitives/layout/flex";

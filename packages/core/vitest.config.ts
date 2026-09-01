@@ -18,6 +18,8 @@ const integrationPatterns = [
   'src/**/*.engine-advanced.test.{ts,tsx}',
   'src/**/*-engine.test.{ts,tsx}',
   'src/**/*-engine-advanced.test.{ts,tsx}',
+  'tests/integration/**/*.test.{ts,tsx}',
+  'tests/system/personality-primitives/index.test.tsx',
 ];
 
 export default defineConfig({
@@ -25,7 +27,7 @@ export default defineConfig({
   test: {
     globals: true,
     environment: 'happy-dom',
-    setupFiles: './src/tooling/testing/setup/index.ts',
+    setupFiles: './tests/setup/index.ts',
     css: true,
     pool: 'forks',
     // Each fork loads React + Ant Design + engine tree (~1-2 GB per worker).
@@ -46,6 +48,7 @@ export default defineConfig({
     reporters: ['verbose'],
     coverage: {
       provider: 'v8',
+      reportsDirectory: 'artifacts/generated/reports/coverage',
       reporter: ['text', 'json', 'json-summary', 'html'],
       thresholds: {
         statements: 80,
@@ -55,7 +58,7 @@ export default defineConfig({
       },
       exclude: [
         'node_modules/',
-        'src/tooling/testing/setup/index.ts',
+        'tests/setup/index.ts',
         '**/*.stories.tsx',
         '**/*.d.ts',
         '**/*.md',
@@ -73,7 +76,13 @@ export default defineConfig({
         extends: true,
         test: {
           name: 'unit',
-          include: ['src/**/*.test.{ts,tsx}'],
+          include: [
+            'src/**/*.test.{ts,tsx}',
+            'tests/architecture/**/*.test.{ts,tsx}',
+            'tests/fixtures/**/*.test.{ts,tsx}',
+            'tests/support/**/*.test.{ts,tsx}',
+            'tests/system/**/*.test.{ts,tsx}',
+          ],
           exclude: [
             ...integrationPatterns,
             'node_modules/**',
@@ -94,7 +103,9 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': resolve(__dirname, './src'),
-      '@ui': resolve(__dirname, './src/ui'),
+      '@ui': resolve(__dirname, './src/components'),
+      '@checks': resolve(__dirname, './scripts/check'),
+      '@tests': resolve(__dirname, './tests'),
     },
   },
 });

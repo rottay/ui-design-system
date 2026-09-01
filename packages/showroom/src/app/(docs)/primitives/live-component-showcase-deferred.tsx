@@ -5,7 +5,7 @@ import { Box, Card, Stack, Text } from '@/components/showroom-ui';
 import {
   SHOWROOM_SURFACES,
   mixWithCanvas,
-} from '@/components/playground/surface-tokens';
+} from '@/components/playground/tokens/surfaces';
 
 const LiveComponentShowcase = dynamic(
   () =>

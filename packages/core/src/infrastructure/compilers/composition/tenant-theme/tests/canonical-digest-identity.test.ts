@@ -303,7 +303,7 @@ describe("digest identity across the canonicalization extraction", () => {
     // T2, whose containers hung off existing sections, these 26 are TOP-LEVEL
     // families: `BrandChrome` 28 -> 54 and `TenantThemeChrome` 22 -> 48. The
     // full rationale and the per-family static=DB proof live in
-    // `rottay-t3-mass-drain.test.ts`; this file's job is unchanged — prove the
+    // `rottay-extension/components/index.test.ts`; this file's job is unchanged — prove the
     // move happened HERE too and is the declared one.
     //
     // Every predecessor stays pinned and stays asserted as a value the

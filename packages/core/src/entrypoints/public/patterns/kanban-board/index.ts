@@ -1,3 +1,3 @@
 "use client";
 
-export { PatternKanbanBoard } from "../../../../ui/patterns/visualization/kanban-board";
+export { PatternKanbanBoard } from "../../../../components/patterns/visualization/kanban-board";

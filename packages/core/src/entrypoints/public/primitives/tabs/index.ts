@@ -1,3 +1,3 @@
 "use client";
 
-export { Tabs } from "../../../../ui/primitives/navigation/Tabs";
+export { Tabs } from "../../../../components/primitives/navigation/tabs";

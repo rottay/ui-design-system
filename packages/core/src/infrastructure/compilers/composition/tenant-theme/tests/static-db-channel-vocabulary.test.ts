@@ -78,7 +78,7 @@ const CUSTOMER_DOCUMENT: TenantThemeDocument = {
         foreground: { muted: "#6B6154", disabled: "#80766A" },
         // P0: las 4 semillas de estado por la via DB tipada. Se autoran AQUI, en
         // el documento local de esta prueba, y no en el fixture publicado
-        // `themanagement-db-row`: ese alimenta `tenant-theme-canary-fixtures.json`,
+        // `themanagement-db-row`: ese alimenta `contracts/themes/canaries/index.json`,
         // que es artefacto de paquete, y tocarlo habria cambiado un specimen
         // enviado sin que este lote lo necesite.
         status: {

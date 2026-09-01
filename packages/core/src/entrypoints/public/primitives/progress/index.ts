@@ -1,3 +1,3 @@
 "use client";
 
-export { Progress } from "../../../../ui/primitives/feedback/Progress";
+export { Progress } from "../../../../components/primitives/feedback/progress";

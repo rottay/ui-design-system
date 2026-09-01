@@ -1,7 +1,7 @@
 'use client';
 
 /**
- * Chrome-free single-component preview used by the Claude Design card generator.
+ * Chrome-free single-component preview used by the design-card generator.
  *
  * Mirrors the proven provider wiring in docs-provider-shell.tsx but drops the
  * ShowroomShell so the harvested DOM contains only the component itself. The

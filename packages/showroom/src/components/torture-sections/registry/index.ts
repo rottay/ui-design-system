@@ -20,8 +20,8 @@ export const TORTURE_SECTION_FLAGS = [
   'overlayfb',
   'overlay',
   'nav',
-  'display1',
-  'display2',
+  'mediaStates',
+  'dataDisplayStates',
   'layout',
   'forms',
   'record',
@@ -31,9 +31,9 @@ export const TORTURE_SECTION_FLAGS = [
   'dashboard',
   'communication',
   'workspace',
-  'miscH2',
-  'ckH1',
-  'ckE',
+  'applicationSurfaces',
+  'tenantBranding',
+  'visualizations',
   'longTail',
 ] as const;
 
@@ -42,7 +42,7 @@ export type TortureSectionFlag = (typeof TORTURE_SECTION_FLAGS)[number];
 export const TORTURE_SCENES = {
   primitives: {
     label: 'Primitives',
-    flags: ['interactive', 'fields', 'dropdowns', 'pickers', 'statusfb', 'overlayfb', 'overlay', 'nav', 'display1', 'display2', 'layout'],
+    flags: ['interactive', 'fields', 'dropdowns', 'pickers', 'statusfb', 'overlayfb', 'overlay', 'nav', 'mediaStates', 'dataDisplayStates', 'layout'],
   },
   forms: {
     label: 'Forms & input systems',
@@ -54,19 +54,19 @@ export const TORTURE_SCENES = {
   },
   workflow: {
     label: 'Workflow & communication',
-    flags: ['record', 'navigation', 'communication', 'miscH2'],
+    flags: ['record', 'navigation', 'communication', 'applicationSurfaces'],
   },
   dashboard: {
     label: 'Dashboards & charts',
-    flags: ['dashboard', 'ckE'],
+    flags: ['dashboard', 'visualizations'],
   },
   shell: {
     label: 'Shell, navigation & structure',
-    flags: ['nav', 'headers', 'headers-patterns', 'navigation', 'workspace', 'ckH1'],
+    flags: ['nav', 'headers', 'headers-patterns', 'navigation', 'workspace', 'tenantBranding'],
   },
   surfaces: {
     label: 'Surfaces & long tail',
-    flags: ['record', 'dashboard', 'workspace', 'miscH2', 'longTail'],
+    flags: ['record', 'dashboard', 'workspace', 'applicationSurfaces', 'longTail'],
   },
   all: {
     label: 'Coverage atlas',

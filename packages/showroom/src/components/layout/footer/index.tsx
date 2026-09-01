@@ -1,10 +1,10 @@
 "use client";
 
-import { ShowroomLink as Link } from "@/components/showroom-link";
+import { ShowroomLink as Link } from "@/components/navigation/link";
 import { Box, Flex, Text } from "@/components/showroom-ui";
 import { ExternalLinkIcon } from "@rottay/design-system/icons";
 import { useShowroomRuntime } from "@/components/showroom-context";
-import { DOC_COUNTS, ENGINE_OPTIONS, getPreviewOption } from "../runtime-options";
+import { DOC_COUNTS, ENGINE_OPTIONS, getPreviewOption } from "../runtime/options";
 
 const FOOTER_LINKS = [
   { href: "/developers/getting-started", label: "Getting Started" },

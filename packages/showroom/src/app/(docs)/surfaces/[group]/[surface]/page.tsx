@@ -1,20 +1,20 @@
-import { ShowroomLink as Link } from '@/components/showroom-link';
+import { ShowroomLink as Link } from '@/components/navigation/link';
 import { Badge, Box, Card, Flex, Stack, Text } from '@rottay/design-system';
-import { ENGINE_OPTIONS } from '@/components/layout/runtime-options';
+import { ENGINE_OPTIONS } from '@/components/layout/runtime/options';
 import { CodeBlock } from '@/components/playground';
 import {
   SHOWROOM_SURFACES,
   mixWithCanvas,
   mixWithSurface,
-} from '@/components/playground/surface-tokens';
-import { RuntimeFingerprint } from '@/components/runtime/runtime-fingerprint';
+} from '@/components/playground/tokens/surfaces';
+import { RuntimeFingerprint } from '@/components/runtime/fingerprint';
 import {
   surfaceGroups,
   surfaces,
   type SurfaceEntry,
   type SurfaceGroup,
 } from '@/data/registry';
-import { formatShowroomLabel } from '@/components/layout/config';
+import { formatShowroomLabel } from '@/components/layout/navigation/config';
 import { SurfaceEnginePreview } from './surface-engine-preview';
 
 const SURFACE_COMPOSITIONS: Record<

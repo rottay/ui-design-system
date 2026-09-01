@@ -19,7 +19,7 @@
 import { describe, expect, it } from 'vitest';
 
 import { compileBrandTheme } from '../index';
-import { tortureDarkBrandTheme, tortureLightBrandTheme } from '@/tooling/testing/fixtures/brand-themes/torture';
+import { tortureDarkBrandTheme, tortureLightBrandTheme } from '@tests/fixtures/brand-themes/torture';
 import { bithireBrandTheme, rottayBrandTheme } from '@/foundation/tokens/ts/presentation/brand-themes';
 
 describe('the clear-mode ground is a BrandTheme channel', () => {

@@ -189,7 +189,7 @@ export function recordTransitionName(key: string): string {
 
 /* ==========================================================================
    View Transitions v2 -- direction-aware choreography
-   CSS lives in foundation/tokens/css/foundation/animations/transitions.css
+   CSS lives in foundation/tokens/css/foundation/animations/transitions/index.css
    (the "VIEW TRANSITIONS V2" section); this module owns the runtime side:
    the direction attribute stamped on <html> and the shared name/class
    vocabulary the CSS keys on.

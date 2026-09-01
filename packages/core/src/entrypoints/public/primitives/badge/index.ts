@@ -1,3 +1,3 @@
 "use client";
 
-export { Badge } from "../../../../ui/primitives/display/Badge";
+export { Badge } from "../../../../components/primitives/display/badge";

@@ -1,3 +1,3 @@
 "use client";
 
-export { FeatureWorkspaceFrame } from "../../../../ui/patterns/shell/feature-workspace-frame";
+export { FeatureWorkspaceFrame } from "../../../../components/patterns/shell/feature-workspace-frame";

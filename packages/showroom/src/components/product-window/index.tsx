@@ -2,7 +2,7 @@ import type { ElementType } from "react";
 
 import type { ProductWindowProps } from './contracts';
 
-import "./ProductWindow.css";
+import "./styles/index.css";
 
 /**
  * ProductWindow — the sanctioned color exception (spec section 1).
