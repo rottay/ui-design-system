@@ -7,8 +7,9 @@
 This major consolidates the design system onto its target architecture
 (`docs/architecture/index.md`): one capability, one owner, one public name. It
 accumulates every public-API removal of the remediation programme; it is
-finalized at publish time. Consumers must run the codemods in
-`packages/core/scripts/maintain/codemods/` before upgrading.
+finalized at publish time. Before upgrading to 3.0, consumers must run the
+codemods that will ship with the 3.0 release; they are not available yet and
+will be documented in the release notes.
 
 ### Breaking changes
 
