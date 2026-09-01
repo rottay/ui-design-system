@@ -1,0 +1,230 @@
+{
+  "note": "The MEASURABLE definition of a negative control. It is not the list of which negative controls apply — that list is owned by the modern-rescue manifest (a control file's calibration.negativeControls, narrowed by a family file's themeControls[].negativeControls) and is read from there at run time. This file only answers 'given that declared phrase, which computed properties must not move'. A manifest phrase with no entry here is UNRESOLVED and fails the run by name; the harness never guesses a phrase's meaning and never drops one it cannot read.",
+  "assertionVocabulary": {
+    "did-not-move": "The named properties must read the same value in the mutation phase as in the baseline phase. Any single moved row is a violation."
+  },
+  "targetScopeVocabulary": {
+    "every-measured-target": "The claim holds everywhere, so it is checked on every measured target with no binding required.",
+    "declared-targets": "The claim is about a specific kind of element (a control, an icon, a numeric-gap instance), so the run MUST bind the target keys it applies to. An unbound declared-targets entry fails closed rather than silently checking nothing."
+  },
+  "entries": [
+    {
+      "id": "numeric-instance-gaps-exact",
+      "assertion": "did-not-move",
+      "targetScope": "declared-targets",
+      "phrases": [
+        "numeric instance gaps remain exact",
+        "numeric gaps remain exact",
+        "columnGap and rowGap numeric values remain exact and override main gap per CSS",
+        "finite numeric spacing remains exact and never scales",
+        "numeric and tuple size remain exact"
+      ],
+      "properties": ["gap", "column-gap", "row-gap"],
+      "meaning": "A numeric gap is exact instance geometry. Rhythm is applied at the preset rungs, never at a consume site, so an instance that asked for 8px must still read 8px.",
+      "partiallyMechanised": []
+    },
+    {
+      "id": "control-height-fixed",
+      "assertion": "did-not-move",
+      "targetScope": "declared-targets",
+      "phrases": ["control height remains fixed"],
+      "properties": ["block-size", "height", "min-block-size", "min-height", "max-block-size", "max-height", "aspect-ratio", "scale", "zoom", "contain-intrinsic-size", "@rect-inline-size", "@rect-block-size"],
+      "meaning": "Rhythm scales the room around a control, never the control. Bound to control-bearing targets deliberately: a LAYOUT container's intrinsic height legitimately grows when its gaps grow, so checking this everywhere would report the intended effect as a violation. Includes the indirect vectors a rule could use to change the control's rendered size without touching height/block-size directly: max-height (the physical dual of max-block-size), aspect-ratio (a fixed width plus a moved aspect-ratio moves height too), scale, zoom and contain-intrinsic-size. The two `@rect-*` reserved observables are the RENDERED box read from getBoundingClientRect, so a padding/border/transform mutation that changes what is actually painted cannot hide behind an unmoved computed longhand.",
+      "partiallyMechanised": []
+    },
+    {
+      "id": "touch-target-fixed",
+      "assertion": "did-not-move",
+      "targetScope": "declared-targets",
+      "phrases": ["touch target remains fixed"],
+      "properties": ["block-size", "inline-size", "min-block-size", "min-inline-size", "max-inline-size", "min-width", "max-width", "aspect-ratio", "scale", "zoom", "contain-intrinsic-size", "@rect-inline-size", "@rect-block-size"],
+      "meaning": "The coarse-pointer touch floor must survive every rhythm stop by construction rather than by clamping, so the hit box of a bound interactive target may not move at all. 'May not move at all' includes the ceiling as well as the floor (max-inline-size and its physical dual max-width; min-width is min-inline-size's physical dual) and the indirect vectors that resize a box without changing its own size properties: aspect-ratio, scale, zoom and contain-intrinsic-size. The two `@rect-*` reserved observables are the RENDERED box read from getBoundingClientRect, so this assertion does not depend on width/height strings alone.",
+      "partiallyMechanised": []
+    },
+    {
+      "id": "icon-size-fixed",
+      "assertion": "did-not-move",
+      "targetScope": "declared-targets",
+      "phrases": ["icon size remains fixed"],
+      "properties": ["width", "height", "inline-size", "block-size", "aspect-ratio", "scale", "zoom", "contain-intrinsic-size", "@rect-inline-size", "@rect-block-size"],
+      "meaning": "Icon boxes are sized by the icon channels, not by layout rhythm. Includes the indirect vectors that could change an icon's rendered box without moving its own width/height/inline-size/block-size: aspect-ratio, scale, zoom and contain-intrinsic-size. The two `@rect-*` reserved observables are the RENDERED box read from getBoundingClientRect, so this assertion does not depend on width/height strings alone.",
+      "partiallyMechanised": []
+    },
+    {
+      "id": "font-metrics-fixed",
+      "assertion": "did-not-move",
+      "targetScope": "every-measured-target",
+      "phrases": ["font metrics remain fixed"],
+      "properties": [
+        "font-size",
+        "font-family",
+        "font-weight",
+        "font-style",
+        "line-height",
+        "letter-spacing"
+      ],
+      "meaning": "Rhythm is a spacing axis. It shares no channel with the type scale, so no measured element may change a font metric under it.",
+      "partiallyMechanised": []
+    },
+    {
+      "id": "color-fixed",
+      "assertion": "did-not-move",
+      "targetScope": "every-measured-target",
+      "phrases": ["color remains fixed"],
+      "properties": [
+        "color",
+        "background-color",
+        "border-top-color",
+        "border-right-color",
+        "border-bottom-color",
+        "border-left-color"
+      ],
+      "meaning": "Rhythm shares no channel with any palette seed.",
+      "partiallyMechanised": []
+    },
+    {
+      "id": "border-fixed",
+      "assertion": "did-not-move",
+      "targetScope": "every-measured-target",
+      "phrases": ["border remains fixed"],
+      "properties": [
+        "border-top-width",
+        "border-right-width",
+        "border-bottom-width",
+        "border-left-width",
+        "border-top-style",
+        "border-top-left-radius",
+        "border-top-right-radius",
+        "border-bottom-left-radius",
+        "border-bottom-right-radius"
+      ],
+      "meaning": "Border geometry belongs to the shape axis. Radius is included on purpose: a rhythm stop that moved a corner would be reaching a channel it does not own.",
+      "partiallyMechanised": []
+    },
+    {
+      "id": "border-width-style-fixed",
+      "assertion": "did-not-move",
+      "targetScope": "every-measured-target",
+      "phrases": ["border width and style remain fixed"],
+      "properties": [
+        "border-top-width",
+        "border-right-width",
+        "border-bottom-width",
+        "border-left-width",
+        "border-top-style",
+        "border-right-style",
+        "border-bottom-style",
+        "border-left-style"
+      ],
+      "meaning": "The stroke of the border and the corner of the border are two different channels of the shape axis. `border-fixed` deliberately bundles them, which is correct for an axis that owns NEITHER -- a rhythm stop that moved a corner would be reaching outside itself. It is unusable for the radius dial itself: binding it would assert that the very channel under test must not move. This entry is `border-fixed` minus the four radius longhands, so a radius stop still has to prove it left the stroke alone. Use it INSTEAD OF `border remains fixed`, never alongside it.",
+      "partiallyMechanised": []
+    },
+    {
+      "id": "motion-fixed",
+      "assertion": "did-not-move",
+      "targetScope": "every-measured-target",
+      "phrases": ["motion remains fixed"],
+      "properties": [
+        "transition-duration",
+        "transition-property",
+        "transition-timing-function",
+        "animation-duration",
+        "animation-name",
+        "animation-timing-function"
+      ],
+      "meaning": "Rhythm has no motion authority.",
+      "partiallyMechanised": []
+    },
+    {
+      "id": "flex-root-non-spacing-geometry-unchanged",
+      "assertion": "did-not-move",
+      "targetScope": "declared-targets",
+      "phrases": [
+        "direction wrap alignment width overflow font color border and motion remain unchanged",
+        "direction wrap align justify and touch ownership remain unchanged"
+      ],
+      "properties": [
+        "flex-direction",
+        "flex-wrap",
+        "align-items",
+        "justify-content",
+        "width",
+        "overflow-x",
+        "overflow-y",
+        "font-size",
+        "font-family",
+        "color",
+        "border-top-width",
+        "border-top-color",
+        "transition-duration"
+      ],
+      "meaning": "The Flex family narrows the control-level claim onto its own root: only the gap axes may move.",
+      "partiallyMechanised": ["touch ownership"]
+    },
+    {
+      "id": "grid-root-non-spacing-geometry-unchanged",
+      "assertion": "did-not-move",
+      "targetScope": "declared-targets",
+      "phrases": [
+        "track templates item spans auto-flow alignment font color border and motion remain unchanged"
+      ],
+      "properties": [
+        "grid-auto-flow",
+        "align-items",
+        "justify-content",
+        "font-size",
+        "font-family",
+        "color",
+        "border-top-width",
+        "border-top-color",
+        "transition-duration"
+      ],
+      "meaning": "The Grid family narrows the control-level claim onto its own root.",
+      "partiallyMechanised": ["item spans", "track templates: getComputedStyle resolves grid-template-columns/rows to USED track sizes rather than the authored template, and flexible tracks in a fixed-width container must absorb any gap change by arithmetic (measured repeat(2, minmax(0,1fr)) at 1280px: 632.5px tracks + 15px gap at normal, 631px tracks + 18px gap at airy, both exactly 1280). Asserting did-not-move on them reports the control's intended effect as a violation, for the same reason control height is not asserted on a layout container."]
+    },
+    {
+      "id": "stack-root-non-spacing-geometry-unchanged",
+      "assertion": "did-not-move",
+      "targetScope": "declared-targets",
+      "phrases": [
+        "direction reverse wrap alignment full-size divider thickness font color and motion remain unchanged"
+      ],
+      "properties": [
+        "flex-direction",
+        "flex-wrap",
+        "align-items",
+        "justify-content",
+        "font-size",
+        "font-family",
+        "color",
+        "border-top-width",
+        "transition-duration"
+      ],
+      "meaning": "The Stack family narrows the control-level claim onto its own root and its divider part.",
+      "partiallyMechanised": ["full-size"]
+    },
+    {
+      "id": "space-root-non-spacing-geometry-unchanged",
+      "assertion": "did-not-move",
+      "targetScope": "declared-targets",
+      "phrases": [
+        "direction wrap alignment separator count font color border and motion remain unchanged",
+        "separator count direction wrap alignment and touch ownership remain unchanged"
+      ],
+      "properties": [
+        "flex-direction",
+        "flex-wrap",
+        "align-items",
+        "justify-content",
+        "font-size",
+        "font-family",
+        "color",
+        "border-top-width",
+        "border-top-color",
+        "transition-duration"
+      ],
+      "meaning": "The Space family narrows the control-level claim onto its own root.",
+      "partiallyMechanised": ["separator count"]
+    }
+  ]
+}

@@ -51,7 +51,11 @@ const FIXTURE_BASE_DIRS = [
  * (paths relative to `src/components`), run the gate, and return its parsed result.
  */
 function runGateOn(componentDirs, fixtureFiles = []) {
-  const root = mkdtempSync(join(tmpdir(), 'folder-naming-'));
+  const sandbox = mkdtempSync(join(tmpdir(), 'folder-naming-'));
+  // The gate resolves the Showroom tree as a sibling of the package root, so
+  // the fixture package sits one level down and that sibling stays inside the
+  // sandbox the `finally` removes.
+  const root = join(sandbox, 'core');
   try {
     mkdirSync(join(root, 'scripts/check/architecture/conventions/folder-naming'), { recursive: true });
     copyFileSync(gate, join(root, 'scripts/check/architecture/conventions/folder-naming/index.mjs'));
@@ -87,7 +91,7 @@ function runGateOn(componentDirs, fixtureFiles = []) {
       output: `${proc.stdout}${proc.stderr}`,
     };
   } finally {
-    rmSync(root, { recursive: true, force: true });
+    rmSync(sandbox, { recursive: true, force: true });
   }
 }
 

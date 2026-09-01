@@ -203,25 +203,11 @@ test('the taxonomy chain is enforced, and freshness runs ahead of it', () => {
   }
 });
 
-test('the manifest-generator drill is reachable and enforced ahead of its gate, and REV-C removed the modern-rescue tooling cohort for good', () => {
-  // REV-C (2026-08-31, Codex decision, Fable-audited): `modern-rescue-tooling-drills`
-  // named two suites, `scripts/check/modern-rescue/check/index.test.mjs` and
-  // `scripts/generate/tokens/manifest/generation/index.test.mjs`, neither of
-  // which resolves against HEAD or the current worktree -- both sat under
-  // paths that moved (or never landed) with the still-uncommitted
-  // architecture-refactor migration. The gate, its two sibling gates
-  // (`modern-rescue-program-contract`, `modern-rescue-checkpoint-state`) and
-  // `lane-control-drills` (same fate, `scripts/check/orchestration/**`) were
-  // removed outright rather than left excluded-with-a-dead-path: attribution
-  // lives in /private/tmp/rottay-revc-sonnet-report.md, not in dead wiring.
-  //
-  // That removal also dropped drill coverage for
-  // `modern-rescue-customization-manifest-freshness`, which stayed and stays
-  // blocking: its own generator drill,
-  // `manifest/generator/index.test.mjs` (HEAD-tracked, unlike its former
-  // cohort-mate), was restored standalone as `manifest-generator-drill`.
-  // This test proves that restoration and proves the removed cohort does not
-  // resurface anywhere in the manifest, not merely under its old id.
+test('the manifest-generator drill is reachable and enforced ahead of its gate, and the removed modern-rescue tooling cohort stays gone', () => {
+  // The drill guards the blocking freshness gate against a silently-dead
+  // generator, so it is wired standalone and must run strictly before it.
+  // The removed modern-rescue tooling cohort must not resurface anywhere in
+  // the manifest, not merely under its old ids.
   //
   // Every clause below is load-bearing, so state them separately rather than
   // as one loose "is it mentioned somewhere" check.
@@ -237,7 +223,6 @@ test('the manifest-generator drill is reachable and enforced ahead of its gate, 
   const EXCLUDED_CARRIER_PATHS = [
     'scripts/check/modern-rescue/check/index.mjs',
     'scripts/check/modern-rescue/check/index.test.mjs',
-    'scripts/generate/tokens/manifest/generation/index.test.mjs',
   ];
 
   const indexOf = (id) => {
@@ -268,7 +253,7 @@ test('the manifest-generator drill is reachable and enforced ahead of its gate, 
   assert.deepEqual(
     carriers.map((gate) => gate.id),
     [DRILL],
-    `manifest/generator/index.test.mjs must be carried exactly once, by ${DRILL}`,
+    `${DRILL_ARGV[2]} must be carried exactly once, by ${DRILL}`,
   );
 
   // The removed cohort must be gone, not merely renamed or re-excluded.
@@ -289,13 +274,22 @@ test('the manifest-generator drill is reachable and enforced ahead of its gate, 
       `${path} is an excluded carrier path removed under REV-C and must not appear in any gate's run array`,
     );
   }
-  assert.equal(
-    CI_GATES.some((gate) =>
-      gate.run.some((arg) => typeof arg === 'string' && arg.startsWith('scripts/check/orchestration')),
-    ),
-    false,
-    'no gate may reference scripts/check/orchestration/** -- the whole tree is absent from HEAD and the worktree',
-  );
+  // The orchestration tree is wired selectively, not wholesale: only commands
+  // whose transitive graph stays clear of the excluded trees may be gated.
+  const EXCLUDED_TREE_READERS = [
+    'scripts/check/orchestration/public/containment/index.mjs',
+    'scripts/check/orchestration/public/program-state/index.mjs',
+    'scripts/check/orchestration/public/work-order/index.mjs',
+    'scripts/check/orchestration/public/write-set-intersection/index.mjs',
+    'scripts/check/tokens/cascade/probe/public/cli/index.mjs',
+  ];
+  for (const path of EXCLUDED_TREE_READERS) {
+    assert.equal(
+      CI_GATES.some((gate) => gate.run.includes(path)),
+      false,
+      `${path} reaches an excluded tree and must not be wired into any gate`,
+    );
+  }
 });
 
 test('DRILL: a gate killed by a signal counts as a failure, not a pass', () => {

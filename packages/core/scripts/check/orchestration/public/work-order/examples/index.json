@@ -1,0 +1,58 @@
+{
+  "id": "WO-AVA-01",
+  "wave": 2,
+  "batch": "wave-2-primitives-a",
+  "laneRole": "family",
+  "row": "primitive/display/avatar",
+  "model": {
+    "name": "sonnet",
+    "reason": "The pre-pass resolved every name in the substitution table in all three shipped bundles and found the same value in each, so no vertical's scale diverges on these six channels and the edit cannot become a repaint in one product only. The table is closed at six pairs, all inside one family's own skin CSS, with no declaration added and no name declared that today appears only inside a var() fallback.",
+    "prePassEvidence": "packages/core/scripts/check/modern-rescue/README.md"
+  },
+  "writeSet": ["packages/core/src/components/primitives/display/avatar/**"],
+  "writeExcludes": [],
+  "readSet": [
+    "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/avatar/index.css",
+    "packages/core/src/foundation/tokens/css/presentation/components/skin/avatar-compounds/index.css",
+    "packages/core/artifacts/generated/css/**/*.css"
+  ],
+  "editClass": "substitution",
+  "substitutionTable": [
+    {
+      "old": "--ds-avatar-ring-color",
+      "new": "--ds-avatar-ring",
+      "expectedCount": 4,
+      "files": ["packages/core/src/components/primitives/display/avatar/engines/modern/index.tsx"],
+      "note": "Read sites only. The declaration stays where it is; this lane does not declare or delete a name."
+    },
+    {
+      "old": "--ds-avatar-fallback-bg-color",
+      "new": "--ds-avatar-fallback-bg",
+      "expectedCount": 2,
+      "files": ["packages/core/src/components/primitives/display/avatar/engines/modern/index.tsx"]
+    }
+  ],
+  "expectedDiffInvariants": {
+    "selectorMultisetUnchanged": true,
+    "declarationCountDelta": 0,
+    "filesSubsetOfWriteSet": true
+  },
+  "forbiddenOps": [
+    "declaring any --ds-* name, above all one that today appears only inside a var() fallback",
+    "editing any file under foundation/tokens/css/**",
+    "reordering, reformatting, deduping or renaming anything outside the substitution table",
+    "touching Classic or Rustic engine files — both are read-only for this programme",
+    "git checkout or git restore on a directory",
+    "git add -A, or any commit pathspec broader than commitPathspecs",
+    "pushing"
+  ],
+  "mandatorySentence": "Make only the edits enumerated in the substitution table. Never declare a token name that is not in your table — above all, never declare a name that currently appears only inside `var()` fallbacks. Do not reorder, reformat, dedupe, rename, or fix anything adjacent; every out-of-scope observation is a written finding, not an edit.",
+  "verificationCommands": [
+    "node packages/core/scripts/check/engine/tokens/audit/index.mjs --check",
+    "node packages/core/scripts/check/orchestration/public/containment/index.mjs --plan packages/core/scripts/check/orchestration/plans/examples/index.json --lane F1 --expect-changes",
+    "git diff -- packages/core/src/components/primitives/display/avatar | grep -c '^[+-]' "
+  ],
+  "findingsFile": "packages/core/artifacts/quality/programs/modern-rescue/findings-WO-AVA-01.md",
+  "commitPathspecs": ["packages/core/src/components/primitives/display/avatar"],
+  "notes": "Example only. The substitution pairs are illustrative and the pre-pass evidence path points at a file that exists so the validator's existence check can be seen passing; a real work order cites its own pre-pass artifact."
+}

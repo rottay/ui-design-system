@@ -675,7 +675,7 @@
     "csssource:check": "node scripts/check/engine/css/source-integrity/index.mjs",
     "containerquery:check": "node scripts/check/engine/css/container-queries/index.mjs --check",
     "containerquery:seed": "node scripts/check/engine/css/container-queries/index.mjs --seed",
-    "theme-parity:check": "node scripts/tokens/theme-channel-parity-gate/index.mjs --check",
+    "theme-parity:check": "node scripts/check/tokens/cascade/channels/theme-parity/index.mjs --check",
     "ds-prefix:check": "node scripts/check/tokens/governance/private-prefix/index.mjs",
     "exports:artifact:check": "node scripts/package/artifacts/exports/index.mjs",
     "root-catalog:check": "node scripts/check/tokens/cascade/roots/catalog-freshness/index.mjs",

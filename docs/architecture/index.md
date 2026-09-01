@@ -35,7 +35,10 @@ documents, and first-level folders whose names say what they contain. Nothing el
 
 `packages/core` has seven source-controlled roots — `src/`, `scripts/`, `tests/`,
 `contracts/`, `governance/`, `artifacts/` and `docs/`. `dist/` is disposable build
-output, never an authority.
+output, never an authority. `governance/` holds the capability manifest and the
+vendored-supplier records; `artifacts/` holds committed quality evidence and generated
+reports. Which files in them may be edited by hand is settled in
+[ownership.md](../ownership.md).
 
 ## 3. Source ownership
 
@@ -276,7 +279,20 @@ The full model — merge chain, token layers, what a tenant may and may not chan
   source-layer names are not alternative script destinations.
 - Every script is an `<intent>/<subdomain?>/<capability>/index.mjs` owner with its tests
   and baselines inside its own folder. The root says what the command does; the rest of
-  the path says to what and how.
+  the path says to what and how — `check/tokens/cascade/probe/` reads as one sentence.
+- Under `check/`, the subdomain names the class of thing being proved: among others
+  `architecture/`, `automation/`, `boundaries/`, `docs/`, `engine/`, `evidence/`,
+  `localization/`, `orchestration/`, `taxonomy/`, `tokens/`, `touch-targets/` and
+  `verticals/`. `evidence/` splits into `certification/`, which owns what a claim must
+  prove, and `framework/`, which owns the machinery that proves it.
+- `check/modern-rescue/` is a bounded programme zone rather than a general subdomain. It
+  carries its own README, and that README — not this document — is the authority for
+  everything inside it.
+- `libraries/` holds the shared resolvers the gates depend on, so that a rule is written
+  once and every caller inherits it. `libraries/taxonomy/owner-resolution/` is the
+  representative case: it maps each inventory row onto a real directory, case-exact, and
+  refuses to resolve rather than returning the empty answer that would read as a clean
+  tree.
 - **Every gate is wired or it does not exist.** A check nobody runs is not a check.
   Equally, every test must be reachable by a runner glob.
 - Codemods are single-use and declare their expiry; one whose target path no longer exists

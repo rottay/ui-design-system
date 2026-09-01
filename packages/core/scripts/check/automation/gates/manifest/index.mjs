@@ -48,17 +48,6 @@ export const CI_GATES = Object.freeze([
   { id: 'effects:provenance', run: ['pnpm', 'run', 'effects:provenance'], blocking: true },
   { id: 'contract:check', run: ['pnpm', 'run', 'contract:check'], blocking: true },
   { id: 'daisy-projection-contract', run: ['node', '--test', 'scripts/generate/framework-class-paint/tests/index.test.mjs'], blocking: true },
-  // REV-C (2026-08-31, Codex decision): modern-rescue-tooling-drills,
-  // modern-rescue-program-contract and modern-rescue-checkpoint-state were
-  // removed here, not merely excluded -- their run paths do not exist in
-  // HEAD or in any confirmed HEAD-tracked equivalent, and this manifest
-  // carries no dead wiring. Full attribution, the paths that were checked,
-  // and the resulting drill-coverage gap for
-  // `modern-rescue-customization-manifest-freshness` (whose drill,
-  // `manifest/generator/index.test.mjs`, lived only inside the removed
-  // `modern-rescue-tooling-drills` entry) are recorded in
-  // /private/tmp/rottay-revc-sonnet-report.md, not restated here. They land
-  // with the MR/evidence lot (WO-CRA-23 / receipts lot).
   { id: 'quality-evidence-v2-drills', run: ['node', '--test', 'scripts/quality-evidence/v2/drills.test.mjs'], blocking: true },
   // The `spacing.rhythm` control census the modern-rescue manifest asks for:
   // rhythm owns the room around a control, never the control's size, capacity,
@@ -89,7 +78,7 @@ export const CI_GATES = Object.freeze([
   // check stopped firing. Drill first: a classifier that returned a
   // live/protected verdict for everything would report zero findings and
   // look exactly like a clean tree.
-  { id: 'channel-liveness-drill', run: ['node', '--test', 'scripts/tokens/channel-liveness-gate/index.test.mjs'], blocking: true },
+  { id: 'channel-liveness-drill', run: ['node', '--test', 'scripts/check/tokens/cascade/channels/liveness/index.test.mjs'], blocking: true },
   // Excluded from blocking: the channel debt this gate measures is
   // authorship/theme-value work, not zero-delta rewiring — proven empirically
   // on 2026-08-20 when the 12 zero-delta recables of F2.4 drained ZERO
@@ -103,7 +92,7 @@ export const CI_GATES = Object.freeze([
   // re-baselined.
   {
     id: 'channel-liveness',
-    run: ['node', 'scripts/tokens/channel-liveness-gate/index.mjs', '--check'],
+    run: ['node', 'scripts/check/tokens/cascade/channels/liveness/index.mjs', '--check'],
     blocking: false,
     excluded: {
       reason: 'Channel debt is authorship/theme-value work, not zero-delta rewiring (proven 2026-08-20: 12 recables drained 0 findings). Ladders accent/tints/overlays/glass drain in F4A/F4B; the rest + 52 unknown-family in F2-asymmetric. Drill remains blocking.',
@@ -279,9 +268,13 @@ export const CI_GATES = Object.freeze([
   // in CI instead.
 
   // --- white-label channel + theme parity ---
-  { id: 'theme-channel-parity', run: ['node', 'scripts/tokens/theme-channel-parity-gate/index.mjs', '--check', '--quiet'], blocking: true },
-  { id: 'tenant-channel-consumer', run: ['node', 'scripts/tokens/tenant-channel-consumer-gate/index.mjs', '--check'], blocking: true },
-  { id: 'tenant-channel-consumer-modern', run: ['node', 'scripts/tokens/tenant-channel-consumer-gate/index.mjs', '--modern-check'], blocking: true },
+  { id: 'theme-channel-parity', run: ['node', 'scripts/check/tokens/cascade/channels/theme-parity/index.mjs', '--check', '--quiet'], blocking: true },
+  { id: 'tenant-channel-consumer', run: ['node', 'scripts/check/tokens/cascade/channels/consumers/index.mjs', '--check'], blocking: true },
+  { id: 'tenant-channel-consumer-modern', run: ['node', 'scripts/check/tokens/cascade/channels/consumers/index.mjs', '--modern-check'], blocking: true },
+  // Drill first: the reachability census is baseline-backed, so a measurer that
+  // quietly stopped resolving names would report zero violations and read as clean.
+  { id: 'tenant-reachability-drill', run: ['node', 'scripts/check/orchestration/tests/drills/tenant-reachability/index.mjs'], blocking: true },
+  { id: 'tenant-reachability', run: ['node', 'scripts/check/orchestration/public/tenant-reachability/index.mjs', '--check'], blocking: true },
   { id: 'i18n-key-parity', run: ['node', 'scripts/check/localization/index.mjs', '--check'], blocking: true },
   // CI checks app-bithire out explicitly and local workspace runs discover the
   // sibling repository. NOT `--optional`: a missing corpus is a hard failure,
@@ -350,14 +343,8 @@ export const CI_GATES = Object.freeze([
   // stale rows. The explicit entry below, and its position ahead of this
   // chain, are the CI-level contract -- a hidden side effect is not one.
   //
-  // Drill first, same rationale as the freshness gate it proves: a generator
-  // that has quietly stopped detecting drift reports zero findings and looks
-  // identical to a clean tree. This entry was restored standalone (REV-C,
-  // 2026-08-31) after `modern-rescue-tooling-drills` was removed for
-  // referencing an MR path absent from HEAD -- that removal took this drill
-  // down with it even though `manifest/generator/index.test.mjs` itself was
-  // never MR/evidence-scoped and resolves cleanly. Full attribution in
-  // /private/tmp/rottay-revc-sonnet-report.md (rev 4).
+  // Drill first: a generator that has quietly stopped detecting drift reports
+  // zero findings and looks identical to a clean tree.
   {
     id: 'manifest-generator-drill',
     run: ['node', '--test', 'manifest/generator/index.test.mjs'],
@@ -401,12 +388,6 @@ export const CI_GATES = Object.freeze([
     run: ['node', 'scripts/check/taxonomy/parity-gate/index.mjs'],
     blocking: true,
   },
-  // REV-C (2026-08-31, Codex decision): lane-control-drills was removed
-  // here, not merely excluded -- its run path
-  // (scripts/check/orchestration/tests/drills/index.mjs) does not exist in
-  // HEAD or in any confirmed HEAD-tracked equivalent. Full attribution in
-  // /private/tmp/rottay-revc-sonnet-report.md. Lands with the MR/evidence
-  // lot (WO-CRA-23 / receipts lot).
   // The --ds_ experimentation space never reaches shipped CSS (canon: --ds-).
   {
     id: 'ds-prefix',

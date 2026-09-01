@@ -15,7 +15,7 @@ Run from the repository root unless noted. `@rottay/design-system` is the
 | Script tests | Node test runner + Vitest | `packages/core/scripts/**/*.test.mjs` | `pnpm --filter @rottay/design-system run test:scripts` |
 | Type check | `tsc --noEmit` | whole package | `pnpm --filter @rottay/design-system run typecheck` |
 | Structure + ownership | custom Node scripts | source-tree conventions | `pnpm --filter @rottay/design-system run structure:check` |
-| Quality gate manifest | mixed (101 blocking, 1 excluded) | whole package | `pnpm --filter @rottay/design-system run gates:ci` |
+| Quality gate manifest | mixed (103 entries: 102 blocking, 1 excluded) | whole package | `pnpm --filter @rottay/design-system run gates:ci` |
 | Build | `tsc` + Vite | package output | `pnpm --filter @rottay/design-system run build` |
 | Accessibility | Playwright + axe | Showroom galleries | `pnpm --filter @rottay/showroom exec playwright test e2e/a11y` |
 | Visual regression / whitelabel / responsive | Playwright | Showroom production build | `pnpm --filter @rottay/showroom run test:gates` |
@@ -33,9 +33,10 @@ pnpm --filter @rottay/design-system run structure:check
 pnpm --filter @rottay/design-system run build
 ```
 
-`pnpm --filter @rottay/design-system run gates:ci` (`gates:ci:list` to see
-every gate id) runs the full 101-gate blocking manifest, but not every gate in
-it is runnable outside the organization — see §3.
+`pnpm --filter @rottay/design-system run gates:ci` runs the whole manifest;
+`gates:ci:list` prints every gate id with its state, which is the answer that
+cannot go stale. Not every gate in it is runnable outside the organization —
+see §3.
 
 ## 3. What runs only in the org
 
@@ -71,6 +72,14 @@ List every gate and its state:
 ```bash
 pnpm --filter @rottay/design-system run gates:ci:list
 ```
+
+Recorded evidence has two homes. Committed quality evidence — audits,
+certification records and programme reports — lives under
+`packages/core/artifacts/quality/`. Craft evidence that a gate reads at the
+repository level lives in the repository-root `test-artifacts/` tree, which is
+tracked and live rather than scratch output; a blocking packaging gate reads it.
+A gate's own baselines and allowlists stay inside that gate's own folder, never
+loose in a shared root.
 
 ## 5. Visual regression
 
