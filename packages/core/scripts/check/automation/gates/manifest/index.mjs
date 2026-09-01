@@ -550,6 +550,10 @@ export const CI_GATES = Object.freeze([
     run: ['node', '--test', 'scripts/check/automation/gates/honesty/index.test.mjs'],
     blocking: true,
   },
+  // The published documentation set has no other mechanical guard: a broken
+  // link, a legacy path reference, non-English prose or a malformed diagram
+  // is otherwise silent until a reader hits it.
+  { id: 'docs-public-set:check', run: ['pnpm', 'run', 'docs-public-set:check'], blocking: true },
 ]);
 
 /** Gates the runner will actually enforce. */
