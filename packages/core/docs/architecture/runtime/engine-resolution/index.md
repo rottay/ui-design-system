@@ -1,7 +1,7 @@
 # Engine resolution mechanics
 
 This is an operational annex to the repository's
-[architecture authority](../../../../../../docs/ARCHITECTURE.md). The authority
+[architecture authority](../../../../../../docs/architecture/index.md). The authority
 defines ownership and dependency direction; this page explains how a component
 is selected at runtime.
 

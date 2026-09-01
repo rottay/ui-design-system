@@ -1,7 +1,7 @@
 # Core package documentation
 
 The repository architecture authority is
-[`docs/ARCHITECTURE.md`](../../../docs/ARCHITECTURE.md). This directory keeps
+[`docs/ARCHITECTURE.md`](../../../docs/architecture/index.md). This directory keeps
 package-level operating guides and references; it does not define a second
 architecture.
 

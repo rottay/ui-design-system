@@ -1,271 +1,101 @@
 # @rottay/design-system
 
-Multi-tenant, multi-engine design system for the Rottay ecosystem. Provides a unified component library used across Platform, BitHire, and Evnto with runtime engine switching and premium white-label branding.
+A multi-engine, multi-tenant React design system. One component API renders through
+three interchangeable presentation engines, and a tenant's entire visual identity is a
+compiled artifact rather than a fork: brand, palette, shape, density and motion are data
+that the build lowers into CSS custom properties, so re-theming a product never means
+editing a component.
 
-## Architecture
+- **Engine-switched components.** Every primitive ships `classic`, `modern` and `rustic`
+  implementations selected at runtime; a `custom` pack registry lets a tenant substitute
+  its own components without a fork.
+- **White-label by compilation.** A theme is lowered once, server-side, into the exact
+  CSS artifact the page embeds — not assembled in the browser.
+- **Enforced boundaries.** Icon suppliers, raw HTML, hardcoded colors and database access
+  in components are blocked by shipped ESLint rules, not by convention.
 
-```
-packages/
-  core/        @rottay/design-system    Publishable component library (npm)
-  showroom/    @rottay/showroom         Commercial showcase (showroom.rottay.com)
-```
-
-### Engine Model
-
-Components ship three physical engines selected at runtime via `createEngineComponent()`. A
-fourth `custom` identity is resolved through the runtime component-pack registry; it is not a
-fourth implementation copied into every primitive:
-
-| Engine      | Backend            | Use Case             |
-| ----------- | ------------------ | -------------------- |
-| **classic** | Ant Design 5.x     | Enterprise admin UIs |
-| **modern**  | Rottay token skins | Responsive premium UI |
-| **rustic**  | Vanilla CSS        | Lightweight fallback |
-| **custom**  | Pluggable          | White-label tenants  |
-
-Each engine-backed primitive has physical implementations under
-`engines/{classic,modern,rustic}/index.tsx`. `custom` resolves a registered
-component pack and otherwise delegates to its configured physical fallback.
-
-### Source Ownership
-
-`packages/core/src` is an ownership tree:
-
-```text
-src/
-  foundation/       Contracts, kernels, presets, i18n and tokens
-  infrastructure/   Compilers and browser/React runtime orchestration
-  graphics/         Icons, marks, pictograms and motion
-  components/       Primitives -> patterns -> structures -> surfaces
-  entrypoints/       Classified package-subpath boundaries
-  index.ts           The only loose source-root file; package-root facade
-```
-
-These five directories are the complete physical source-root roster.
-`components/` owns the four UI tiers and `entrypoints/` owns package boundaries.
-Authored production units use `folder/index.ts(x)`, and related units gain an
-explicit family level instead of becoming loose peer files.
-
-`packages/core/scripts` has exactly six intent roots:
-`build/`, `check/`, `generate/`, `libraries/`, `maintain/`, and `package/`.
-Source-layout names are not valid script roots.
-
-The seven source-controlled package roots are `src/`, `scripts/`, `tests/`,
-`contracts/`, `governance/`, `artifacts/`, and `docs/`. `dist/` is disposable
-build output, not an authority root.
-
-### Component Taxonomy (4 Tiers)
-
-```
-src/components/
-  primitives/     Leaf components with engine switch
-    display/        Avatar, Badge, Card, Table, Typography...
-    inputs/         Button, Input, Select, DatePicker, Checkbox...
-    feedback/       Alert, Message, Modal, Notification...
-    layout/         Box, Flex, Grid, Stack, Divider...
-    navigation/     Breadcrumb, Menu, Pagination, Steps, Tabs...
-    overlay/        Drawer, Dropdown, Popover, Tooltip...
-
-  patterns/         Reusable task-level compositions; engine-backed where needed
-    data/           DataTable, list tooling, grid/gallery views
-    forms/          FormBuilder, FormWizard, FilterBuilder
-    visualization/  Charts, calendar, kanban, map, timeline, tree
-    communication/  Chat, Notification feeds
-    workflow/       Approval workflows, moderation, operational ledger
-    navigation/     Command palette, shortcuts, locale/workspace switchers
-    customization/  Brand studio, tenant preview, token inspection
-    shell/          Generic page/workbench shell patterns
-    foundation/     Pattern contracts and recipes
-    runtime/        Shared filtering, forms, kanban and pulse behavior
-
-  structures/       Page chrome that wraps patterns
-    headers/        Collection, dashboard, detail, edit, form and mobile headers
-    workspace/      Toolbars, filters, command palette, view controls
-    record/         Record content, edit fields and form sections
-    dashboard/      Insights, stats header and data terminal card
-    feedback/       LoadingOverlay
-    shell/          Reusable application-shell structures
-
-  surfaces/         Declarative page-level recipes
-    foundation/     Contracts and shared support
-    runtime/        Builders, state and adaptive behavior
-    composition/    Layout shells
-    presentation/   Complete page recipes
-```
-
-The generated, on-disk inventory is
-[`packages/core/docs/generated/component-taxonomy/index.md`](packages/core/docs/generated/component-taxonomy/index.md).
-
-For a folder-by-folder map of the whole repository -- what each directory does,
-which directories duplicate each other, and which are empty scaffolding -- see
-[`docs/history/inventories/repository-map/2026-08/index.md`](docs/history/inventories/repository-map/2026-08/index.md). The keep/delete decisions taken
-from that map -- what stays, what is removed, and which duplicate becomes the
-canonical owner -- are in
-[`docs/history/programs/architecture-refactor/2026-08/retention/index.md`](docs/history/programs/architecture-refactor/2026-08/retention/index.md). The
-independent claim-by-claim verification of that map is in
-[`docs/history/audits/architecture-refactor/2026-08/independent-verification/index.md`](docs/history/audits/architecture-refactor/2026-08/independent-verification/index.md), and a third
-independent audit -- which overturned several of those decisions -- is in
-[`docs/history/audits/architecture-refactor/2026-08/coordination/index.md`](docs/history/audits/architecture-refactor/2026-08/coordination/index.md). The architecture
-reference is [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md).
-
-### Branding Model
-
-```
-DS base tokens --> vertical baseline --> BrandTheme --> CSS artifacts
-```
-
-- **BrandTheme** (~140 CSS variables): palette, typography, surfaces, motion, charts, chrome
-- **First-party brands**: `foundation/tokens/ts/presentation/brand-themes/{platform,bithire,evnto}/index.ts`
-- **Tenant customization**: bounded `TenantThemeDocument` publication; the
-  compiler normalizes allowlisted chrome sections (controls, table, card,
-  modal, tabs, sidebar, layout)
-- Vertical identity is **static-first** (file-defined). Published customer
-  tenant branding is **bounded and DB-owned**, then server-compiled into the
-  exact SSR/hydration artifact.
-
-Runtime visual ownership is explicit and mutually exclusive. The productive
-customer path is `compiled-artifact`; `provider` remains useful for bundled
-verticals, previews and compatibility:
-
-- `visualAuthority="provider"` (default) preserves bundled/runtime behavior: the provider may load tenant CSS and emit branding, token, appearance, and generated chrome variables.
-- `visualAuthority="compiled-artifact"` is for applications that already mounted the canonical compiled artifact during SSR. Tenant config still powers tenant, locale, theme, motion, feature, and component context, while the provider emits no competing tenant CSS variables, personality bridge, or chrome stylesheet.
+## What using it looks like
 
 ```tsx
-<style id="tenant-theme-artifact">{/* exact server-compiled CSS */}</style>
-<DesignSystemProvider
-  tenantConfig={canonicalTenantConfig}
-  visualAuthority="compiled-artifact"
->
-  <App />
-</DesignSystemProvider>
-```
+import { DesignSystemProvider, Button, Card, Stack, Text } from '@rottay/design-system';
+import '@rottay/design-system/styles.css';
 
-Do not select `compiled-artifact` without mounting the artifact first: the mode intentionally has no provider-owned visual fallback.
-
-### Icon System
-
-The default supplier is Phosphor behind a supplier-independent boundary;
-Lucide is compatibility-only, not the default. Two current counts describe two
-different contracts:
-
-- the stable `Icon` facade accepts 50 governed compatibility roles;
-- generated semantic packs contain 263 roles across foundation, BitHire,
-  identity, intelligence and operations.
-
-Product code must not import a functional icon vendor directly.
-
-```tsx
-import { Icon } from "@rottay/design-system/icons";
-
-<Icon name="action.search" label="Search" />;
-<Icon name="action.add" label="Add" />;
-<Icon name="status.success" label="Success" />;
-```
-
-### Chart System
-
-18 D3-backed chart families live under
-`components/patterns/visualization/charts/families/`: Bar, Line, Area, Pie, Scatter,
-Radar, Gauge, Histogram, Funnel, Waterfall, Sankey, Gantt, Sparkline,
-CalendarHeatMap, HeatMap, TreeMap, NetworkGraph and BulletChart. They are
-engine-agnostic, theme-aware and personality-driven.
-
-## Package Exports
-
-| Export                                  | Description                                                            |
-| --------------------------------------- | ---------------------------------------------------------------------- |
-| `@rottay/design-system`                 | All components, hooks, utilities                                       |
-| `@rottay/design-system/icons`           | Canonical 263-role `Icon` facade plus compatibility/catalog exports    |
-| `@rottay/design-system/icons/{foundation,bithire,identity,intelligence,operations}` | Generated packs; 263 governed roles in total |
-| `@rottay/design-system/marks`           | Governed brand and cloud-provider marks                                |
-| `@rottay/design-system/server`          | Server-only utilities (branding validation)                            |
-| `@rottay/design-system/eslint`          | ESLint rules (no-raw-html, no-hardcoded-colors, no-db-in-components)   |
-| `@rottay/design-system/styles`          | Full bundle: skins, states, keyframes, tokens, code-owned verticals    |
-| `@rottay/design-system/styles/rottay`   | Rottay vertical CSS                                                    |
-| `@rottay/design-system/styles/default`  | Alias of the Rottay bundle (`dist/rottay.css`)                         |
-| `@rottay/design-system/styles/bithire`  | BitHire vertical CSS                                                   |
-| `@rottay/design-system/styles/evnto`    | Evnto vertical CSS                                                     |
-| `@rottay/design-system/styles/modern`   | Supplemental modern-engine CSS only; not a standalone component bundle |
-
-## Usage
-
-```tsx
-import { Button, Card, Flex, Text } from "@rottay/design-system";
-import { Icon } from "@rottay/design-system/icons";
-import "@rottay/design-system/styles";
-
-export default function Example() {
+export function App() {
   return (
-    <Card>
-      <Flex gap="4" align="center">
-        <Icon name="action.search" decorative />
-        <Text>Search results</Text>
-        <Button type="primary">Action</Button>
-      </Flex>
-    </Card>
+    <DesignSystemProvider forceEngine="modern" tenantSlug="acme" locale="en">
+      <Card>
+        <Stack gap="4">
+          <Text as="h1">Quarterly report</Text>
+          <Button variant="primary" onClick={() => console.log('exported')}>
+            Export
+          </Button>
+        </Stack>
+      </Card>
+    </DesignSystemProvider>
   );
 }
 ```
 
-Import exactly one full or vertical stylesheet at the application entry. Production applications
-should prefer their `styles/<vertical>` export. The `styles/modern` export is supplemental and does
-not contain the base component skins or Toast keyframes.
-
-## Development
-
-```bash
-# Install
-pnpm install
-
-# Core library dev (watch mode)
-pnpm --filter @rottay/design-system dev
-
-# Showroom dev
-pnpm --filter @rottay/showroom dev           # http://localhost:7001
-
-# Build
-pnpm --filter @rottay/design-system build
-
-# Tests
-pnpm --filter @rottay/design-system test
-pnpm --filter @rottay/design-system test:coverage
-
-# Storybook
-pnpm --filter @rottay/design-system storybook  # http://localhost:6006
-
-# Typecheck
-pnpm --filter @rottay/design-system typecheck
-pnpm --filter @rottay/showroom typecheck
-
-# Lint
-pnpm --filter @rottay/design-system lint:folders
-pnpm --filter @rottay/design-system lint:integration
+```mermaid
+flowchart TD
+  A["Your application"] --> P["DesignSystemProvider<br/>engine · tenant · locale"]
+  P --> C["Components<br/>primitives → patterns → structures → surfaces"]
+  P --> T["Compiled theme<br/>CSS custom properties"]
+  T --> C
 ```
 
-## Tech Stack
+## Install
 
-- **Build**: Vite + vite-plugin-dts + PostCSS
-- **Test**: Vitest + Testing Library + happy-dom
-- **Storybook**: v9 with React + Vite
-- **Styles**: CSS variables + Tailwind 4 (modern engine) + PostCSS
-- **Charts**: D3.js v7
-- **Animation**: Motion for React v12 (`motion/react`)
-- **Types**: TypeScript 5.9
+The package is distributed through a private registry under the `@rottay` scope and
+requires authentication. See [docs/getting-started.md](docs/getting-started.md) for
+registry setup, peer dependencies and the required stylesheet import.
 
-## Peer Dependencies
+## Repository layout
 
-Apps consuming DS symbols must declare the runtime suppliers those symbols
-reach. For example, an app using Ant-backed controls and motion primitives
-declares:
-
-```json
-{
-  "antd": "^5.21.0",
-  "@ant-design/icons": "^5.5.0",
-  "motion": "12.42.2"
-}
+```text
+packages/core/        The publishable library: components, tokens, engines, contracts
+packages/showroom/    Reference application and visual gallery for the library
+docs/                 Documentation set for consumers and contributors
+scripts/              Workspace-level checks and maintenance commands
+.changeset/           Release intents; version bumps and changelog entries
 ```
 
-The packaged `rottay-ds-supplier-honesty` command reports the exact suppliers
-required by each app. Motion is governed as `motion@12.42.2`; its internal
-`framer-motion` package is transitively owned and must not be declared directly.
+## Capabilities at a glance
+
+| Area | What ships |
+|---|---|
+| Engines | `classic` (Ant Design), `modern` (token skins), `rustic` (vanilla CSS), `custom` (pack registry) |
+| Component tiers | primitives, patterns, structures, surfaces |
+| Icons | **282** governed semantic roles behind a supplier-independent `Icon` facade |
+| Charts | 18 D3-backed chart families, token-aware and accessible |
+| Lint rules | **6** rules: `no-raw-html`, `no-hardcoded-colors`, `no-db-in-components`, `no-direct-lucide`, `no-motion-literals`, `no-size-type-outside-classic` |
+
+## Documentation
+
+Start at the hub: **[docs/README.md](docs/README.md)**.
+
+| Document | Answers |
+|---|---|
+| [Getting started](docs/getting-started.md) | How do I install it and render something? |
+| [Architecture](docs/architecture/index.md) | How is it built, and how does an engine resolve? |
+| [Public API](docs/api.md) | What may I import, and what is stable? |
+| [Customization](docs/customization.md) | How do I make it look like my product? |
+| [Testing and gates](docs/testing.md) | What is verified, and what can I run? |
+
+Contributors should also read [ownership](docs/ownership.md) — which files are authored
+and which are generated — and [releasing](docs/releasing.md).
+
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for setup, conventions and the review contract.
+
+## License
+
+Released under the [MIT License](LICENSE). Note the distinction: the **source is open**,
+while **package publication stays private and controlled** — releases go to a restricted
+registry under the `@rottay` scope, and there is no public npm distribution. See
+[docs/releasing.md](docs/releasing.md).
+
+## Security
+
+Report vulnerabilities privately as described in [SECURITY.md](SECURITY.md).

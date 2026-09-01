@@ -1,7 +1,7 @@
 # Package architecture references
 
 The canonical repository and package architecture is
-[`docs/ARCHITECTURE.md`](../../../../docs/ARCHITECTURE.md). These package-level
+[`docs/ARCHITECTURE.md`](../../../../docs/architecture/index.md). These package-level
 references explain operational mechanics without creating a second authority.
 
 The package is organized into six source-controlled roots: `src/`, `scripts/`,

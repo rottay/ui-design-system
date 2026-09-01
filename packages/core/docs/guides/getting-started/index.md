@@ -453,7 +453,7 @@ Provider-owned compatibility tokens resolve through engine defaults, vertical
 overrides and either BrandTheme or legacy profile/tenant inputs. A productive
 customer artifact is already compiled and is not re-merged by the client.
 
-See the canonical [architecture guide](../../../../../docs/ARCHITECTURE.md) and
+See the canonical [architecture guide](../../../../../docs/architecture/index.md) and
 the package [customization-cascade annex](../../architecture/runtime/customization-cascade/index.md)
 for the full token and personality merge chains.
 
@@ -589,7 +589,7 @@ does not emit a competing bridge.
 
 | Resource                  | Path                                             |
 | ------------------------- | ------------------------------------------------ |
-| Architecture guide        | [repository architecture](../../../../../docs/ARCHITECTURE.md) |
+| Architecture guide        | [repository architecture](../../../../../docs/architecture/index.md) |
 | Engine splitting strategy | [engine splitting](../../architecture/engine-splitting/index.md) |
 | Performance budget        | [performance budget](../../quality/performance-budget/index.md) |
 | Full component catalog    | `/.ai-docs/design-system/COMPONENT_INDEX.md`     |

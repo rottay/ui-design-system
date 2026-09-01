@@ -1,7 +1,7 @@
 # Customization cascade mechanics
 
 This is an operational annex to the repository's
-[architecture authority](../../../../../../docs/ARCHITECTURE.md). The canonical
+[architecture authority](../../../../../../docs/architecture/index.md). The canonical
 tenant split is documented in [Tenant authority](../../tenant-authority/index.md).
 
 ## Two productive paths

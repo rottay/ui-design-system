@@ -1,7 +1,7 @@
 # Component and surface owner mechanics
 
 This is an operational annex to the repository's
-[architecture authority](../../../../../../docs/ARCHITECTURE.md). That document
+[architecture authority](../../../../../../docs/architecture/index.md). That document
 owns the canonical tree and admissible dependency direction.
 
 ## UI ownership stack

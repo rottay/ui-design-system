@@ -50,7 +50,7 @@ Apps, verticals, and modules must never query tables owned by another module/sch
 - **Capability Map (read first)**: `/docs-engineering/engineering/design-system/capability-map/README.md` — the full DS surface in two orientations (what a tenant can white-label; what an app can consume, with the app-bithire reference adoption per row). Read it BEFORE building new UI, adding a tenant knob, or hand-rolling anything the DS already ships.
 - **Catálogo Central**: `/docs-engineering/README.md`
 - **Component Reference**: `/docs-engineering/engineering/design-system/`
-- **Architecture (target law)**: [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) —
+- **Architecture (target law)**: [`docs/ARCHITECTURE.md`](docs/architecture/index.md) —
   the normative definition of what this repository must be: doctrine, the full
   target tree with every owner's purpose and relations, and the delta against
   the current tree. Read it before moving, renaming or deleting anything.

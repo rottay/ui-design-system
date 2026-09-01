@@ -1,16 +1,18 @@
 # @rottay/design-system
 
-[![npm version](https://img.shields.io/github/package-json/v/rottay/design-system?filename=packages%2Fcore%2Fpackage.json&label=version)](https://github.com/rottay/design-system)
+[![npm version](https://img.shields.io/github/package-json/v/rottay/ui-design-system?filename=packages%2Fcore%2Fpackage.json&label=version)](https://github.com/rottay/ui-design-system)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.7-blue)](https://www.typescriptlang.org/)
 [![React](https://img.shields.io/badge/React-18%20%7C%2019-61dafb)](https://react.dev/)
 
-Internal multi-tenant, multi-engine React component library powering all Rottay applications (Evnto, BitHire, Platform).
+Multi-tenant, multi-engine React component library with token-driven skins and white-label runtime theming.
 
 ---
 
-## Capability discovery
+## Before you build
 
-Before building UI or reaching for a raw element, read the **[Design System Capability Map](../../../docs-engineering/engineering/design-system/capability-map/README.md)** — the full surface in two orientations: what a tenant can white-label (customization axes with their DB document fields) and what an app can consume (components and runtime, each with the app-bithire reference adoption).
+Read [Architecture](../../docs/architecture/index.md) for the system's shape and
+engine model, and [Public API](../../docs/api.md) for what you may import and
+its stability policy.
 
 ---
 
@@ -29,8 +31,10 @@ Before building UI or reaching for a raw element, read the **[Design System Capa
 
 ## Distribution
 
-`@rottay/design-system` is distributed as a **private package** via [GitHub Packages](https://github.com/features/packages).
-It is intended exclusively for internal use across Rottay products (Evnto, BitHire, Platform).
+The repository is public and MIT-licensed (root [`LICENSE`](../../LICENSE));
+the package is distributed as a private package via GitHub Packages under the
+`@rottay` scope with restricted access. Public npm publication is not
+currently offered.
 
 **Within the monorepo**, the package is available via the workspace protocol -- no extra configuration needed:
 
@@ -38,7 +42,7 @@ It is intended exclusively for internal use across Rottay products (Evnto, BitHi
 "@rottay/design-system": "workspace:*"
 ```
 
-**Outside the monorepo** (e.g., a new Rottay app in a separate repository), configure your `.npmrc` to authenticate with GitHub Packages:
+**Rottay org members**, installing outside the monorepo, configure `.npmrc` to authenticate with GitHub Packages:
 
 ```ini
 @rottay:registry=https://npm.pkg.github.com
@@ -47,14 +51,16 @@ It is intended exclusively for internal use across Rottay products (Evnto, BitHi
 
 `GITHUB_TOKEN` must have `read:packages` scope and belong to a user with access to the `rottay` organization.
 
-See [Getting Started](./docs/guides/getting-started/index.md) for full setup instructions.
+Anyone else can build the package from source — see
+[Getting Started](../../docs/getting-started.md) for the build-from-source
+path and full peer-dependency setup.
 
 ---
 
 ## Quick Start
 
 ```bash
-pnpm add @rottay/design-system react react-dom antd @ant-design/icons
+pnpm add @rottay/design-system react react-dom antd @ant-design/icons @phosphor-icons/react d3 motion
 ```
 
 ```tsx
@@ -90,8 +96,8 @@ Component skins, interaction states and keyframes live in the stylesheet.
 
 | Document                                           | Description                                                                             |
 | -------------------------------------------------- | --------------------------------------------------------------------------------------- |
-| [Getting Started](./docs/guides/getting-started/index.md)            | Installation, registry setup, first component, separate-repo usage                      |
-| [Architecture](../../docs/ARCHITECTURE.md)         | Canonical ownership, dependency and package architecture                                |
+| [Getting Started](../../docs/getting-started.md)            | Installation, registry setup, first component, separate-repo usage                      |
+| [Architecture](../../docs/architecture/index.md)         | Canonical ownership, dependency and package architecture                                |
 | [Package docs](./docs/index.md)                    | Active operating guides, generated references and historical snapshots                  |
 | [Structures](./docs/architecture/ui-tiers/structures/index.md) | What structures is, decision guide, family catalog                         |
 | [Taxonomy Reference](./docs/generated/component-taxonomy/index.md) | Auto-generated inventory (run `pnpm docs:taxonomy` to refresh)        |
@@ -155,4 +161,7 @@ pnpm analyze          # Build + bundle size check against budget
 
 ## License
 
-Proprietary -- `@rottay/design-system` is private, closed-source software owned by Rottay. Distribution is restricted to the `rottay` GitHub organization via GitHub Packages (`"access": "restricted"`). It is not licensed for use outside Rottay products.
+The repository is public and MIT-licensed — see the root [`LICENSE`](../../LICENSE).
+The package itself is distributed as a private package via GitHub Packages
+under the `@rottay` scope with restricted access (`"access": "restricted"`);
+public npm publication is not currently offered.
