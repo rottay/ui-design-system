@@ -38,7 +38,9 @@
  * it exists and still carries its generated banner, and names the step that
  * owns the bytes.
  *
- * WHY THREE STATES, NOT TWO. `UNVERIFIABLE` means no owner exposes a check.
+ * WHY THREE STATES, NOT TWO. `UNVERIFIABLE` means no owner exposes a check —
+ * a state no shipped row is in today, kept because the next generated document
+ * may arrive before its checker does.
  * `UNRUNNABLE` means a configured check could not execute at all — a spawn
  * failure, a missing module, a crash — and carries the underlying diagnostic.
  * Only a clean non-zero exit from a check that actually ran is `STALE`. Both
@@ -104,6 +106,7 @@ export const REQUIRED_DOCUMENTS = Object.freeze([
   'docs/customization.md',
   'docs/ownership.md',
   'docs/releasing.md',
+  'packages/core/README.md',
 ]);
 
 /**
@@ -187,7 +190,14 @@ export function caseExactExists(absolutePath, root) {
   return true;
 }
 
-/** Markdown files in the public set: repository root and `docs/`, no history. */
+/**
+ * Public documents that live outside the root and `docs/` sweep. The package
+ * README is published to the registry as the package's front page, so it is
+ * part of the public set even though it sits inside `packages/`.
+ */
+export const ADDITIONAL_PUBLIC_DOCUMENTS = Object.freeze(['packages/core/README.md']);
+
+/** Markdown files in the public set: repository root, `docs/`, and the package README. */
 export function collectPublicDocuments(root) {
   const found = [];
   const consider = (absolute) => {
@@ -216,6 +226,11 @@ export function collectPublicDocuments(root) {
   };
   const docsDir = join(root, 'docs');
   if (existsSync(docsDir)) walk(docsDir);
+
+  for (const relative of ADDITIONAL_PUBLIC_DOCUMENTS) {
+    if (isExcluded(relative)) continue;
+    if (caseExactExists(resolve(root, relative), root)) found.push(relative);
+  }
 
   return found.sort();
 }
@@ -400,8 +415,10 @@ export const GENERATED_DOCUMENTS = Object.freeze([
   },
   {
     document: 'packages/core/docs/generated/component-taxonomy/index.md',
-    // scripts/generate/taxonomy/index.mjs exposes no --check mode.
-    verification: 'none',
+    // The writer owns a read-only --check that renders in memory and compares
+    // bytes. It reads only the component tree, so it needs no build.
+    verification: 'command',
+    check: ['node', 'scripts/generate/taxonomy/index.mjs', '--check'],
   },
 ]);
 

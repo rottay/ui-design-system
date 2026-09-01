@@ -715,6 +715,7 @@
     "lint:integration": "node scripts/check/architecture/audits/integration/index.mjs",
     "lint:vertical": "node scripts/check/architecture/audits/verticals/index.mjs",
     "docs:taxonomy": "node scripts/generate/taxonomy/index.mjs",
+    "docs:taxonomy:check": "node scripts/generate/taxonomy/index.mjs --check",
     "docs-public-set:check": "node scripts/check/docs/index.mjs --check",
     "build:fonts": "node scripts/build/font-packs/index.mjs",
     "runtime-hardening:final": "node scripts/evidence/cra-15-runtime-hardening-gate/index.mjs --check",

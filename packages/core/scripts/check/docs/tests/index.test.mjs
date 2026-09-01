@@ -22,11 +22,12 @@ import path from 'node:path';
 import test from 'node:test';
 
 import {
+  ADDITIONAL_PUBLIC_DOCUMENTS,
   EXCLUDED_SEGMENTS,
+  GENERATED_DOCUMENTS,
   LEGACY_REFERENCES,
   REQUIRED_DOCUMENTS,
   auditPublicDocs,
-  GENERATED_DOCUMENTS,
   caseExactExists,
   classifyGeneratorFailure,
   collectPublicDocuments,
@@ -54,6 +55,7 @@ function makeFixture(overrides = {}) {
     'docs/customization.md': '# Customization\n\nSee [ownership](ownership.md).\n',
     'docs/ownership.md': '# Ownership\n\nSee [releasing](releasing.md).\n',
     'docs/releasing.md': '# Releasing\n\nSee [architecture](architecture/index.md).\n',
+    'packages/core/README.md': '# Package\n\nSee [architecture](../../docs/architecture/index.md).\n',
     ...overrides,
   };
   for (const [relative, contents] of Object.entries(files)) {
@@ -279,10 +281,16 @@ test('the shipped table never invokes the controls generator', () => {
   assert.ok(controls, 'the controls catalog must still be represented');
   assert.equal(controls.check, undefined, 'no command may be configured for it');
 
-  // No shipped row spawns anything at all, and the module carries no path to
-  // the controls generator. Ownership itself is asserted by its own drill.
+  // The controls generator specifically must never be spawned: it imports the
+  // built package, which is what produced a false STALE in an unbuilt tree.
+  // Other rows may legitimately own a checker.
   for (const row of GENERATED_DOCUMENTS) {
-    assert.equal(row.check, undefined, `${row.document} must not configure a command`);
+    const command = (row.check ?? []).join(' ');
+    assert.equal(
+      command.includes('customization/controls'),
+      false,
+      `${row.document} must not invoke the controls generator`,
+    );
   }
   const source = fs.readFileSync(new URL('../index.mjs', import.meta.url), 'utf8');
   assert.equal(
@@ -328,27 +336,75 @@ test('classifyGeneratorFailure separates a clean refusal from a crash', () => {
   assert.equal(classifyGeneratorFailure({ signal: 'SIGKILL', status: null }).state, 'UNRUNNABLE');
 });
 
-test('the gate passes on a tree with no dist/, the condition that produced a false STALE', () => {
-  // The shipped table is used verbatim; both generated documents exist with
-  // banners and nothing is spawned, so an unbuilt checkout is clean.
-  const root = makeFixture({
-    'packages/core/docs/generated/customization-controls/index.md': BANNERED,
-    'packages/core/docs/generated/component-taxonomy/index.md': BANNERED,
-  });
-  assert.equal(fs.existsSync(path.join(root, 'packages/core/dist')), false, 'precondition: no dist/');
+test('no shipped row needs a build, which is why a dist-less tree is clean', () => {
+  // The controls row spawns nothing at all.
+  const controls = GENERATED_DOCUMENTS.find((row) => row.document.includes('customization-controls'));
+  assert.equal(controls.verification, 'ci');
+  assert.equal(controls.check, undefined);
 
-  const result = auditPublicDocs({ repoRoot: root, packageRoot: path.join(root, 'packages/core') });
-  assert.deepEqual(result.findings, [], 'a tree without dist/ must not produce findings');
+  // The taxonomy row does spawn, but its checker reads the component tree and
+  // never imports the built package — which is what made the old controls
+  // invocation report a false STALE in an unbuilt checkout.
+  const taxonomy = GENERATED_DOCUMENTS.find((row) => row.document.includes('component-taxonomy'));
+  assert.equal(taxonomy.verification, 'command');
+  assert.deepEqual(taxonomy.check, ['node', 'scripts/generate/taxonomy/index.mjs', '--check']);
+
+  const writer = fs.readFileSync(path.join(REPO_ROOT, 'packages/core', taxonomy.check[1]), 'utf8');
+  assert.equal(/from '[^']*dist/u.test(writer), false, 'the taxonomy writer must not import dist/');
+  assert.equal(/require\([^)]*dist/u.test(writer), false);
+});
+
+test('the real tree passes with the shipped table, taxonomy included', () => {
+  const result = auditPublicDocs({
+    repoRoot: REPO_ROOT,
+    packageRoot: path.join(REPO_ROOT, 'packages/core'),
+  });
+  assert.deepEqual(result.findings, [], 'the committed public set must be clean');
   assert.deepEqual(
     result.generated.map((row) => row.state).sort(),
-    ['UNVERIFIABLE', 'VERIFIED-BY-CI'],
+    ['FRESH', 'VERIFIED-BY-CI'],
   );
-  // The reason it is clean: no shipped row is command-owned, so nothing spawns
-  // and the absence of a build cannot be misread as staleness.
-  for (const row of GENERATED_DOCUMENTS) {
-    assert.notEqual(row.verification, 'command', `${row.document} must not be command-owned`);
-  }
 });
+
+test('the package README is in the required set and is actually scanned', () => {
+  assert.ok(REQUIRED_DOCUMENTS.includes('packages/core/README.md'));
+  assert.ok(ADDITIONAL_PUBLIC_DOCUMENTS.includes('packages/core/README.md'));
+
+  const documents = collectPublicDocuments(REPO_ROOT);
+  assert.ok(documents.includes('packages/core/README.md'), 'it must appear in the scanned set');
+
+  // Scanning must be real: its links are counted and resolve, and it is run
+  // through the language detector like every other public document.
+  const source = fs.readFileSync(path.join(REPO_ROOT, 'packages/core/README.md'), 'utf8');
+  const links = localLinksOf(source);
+  assert.ok(links.length >= 5, `expected the package README to contribute links, found ${links.length}`);
+  for (const target of links) {
+    const absolute = path.resolve(path.join(REPO_ROOT, 'packages/core'), target);
+    assert.equal(caseExactExists(absolute, REPO_ROOT), true, `${target} must resolve case-exact`);
+  }
+  assert.equal(detectSpanish(source).spanish, false, 'the package README must scan as English');
+});
+
+test('RED: a missing package README is reported, and a defect inside it is caught', () => {
+  // Present but broken: the scan reaches into its content, not just its name.
+  const withDefect = makeFixture({
+    'packages/core/README.md': '# Package\n\nSee [gone](../../docs/missing.md) and `src/ui/x`.\n',
+  });
+  const found = audit(withDefect);
+  assert.ok(kinds(found).includes('broken-link'), 'its links must be checked');
+  assert.ok(kinds(found).includes('legacy-path'), 'its prose must be checked');
+
+  // Absent: reported as a missing required document.
+  const withoutIt = makeFixture({ 'packages/core/README.md': null });
+  const missing = audit(withoutIt);
+  assert.ok(
+    missing.findings.some(
+      (finding) => finding.kind === 'missing-required' && finding.document === 'packages/core/README.md',
+    ),
+    'an absent package README must be a missing-required finding',
+  );
+});
+
 
 test('excluded historical content cannot fail the gate', () => {
   // Each excluded tree gets a document carrying every defect at once.

@@ -3,8 +3,6 @@
 
 # Component Taxonomy Reference
 
-Generated on 2026-08-31.
-
 ## Primitives
 
 > Engine-switched leaf components. Governed = has a public entry AND is
@@ -12,12 +10,12 @@ Generated on 2026-08-31.
 
 | Category | Components |
 |---|---|
-| `display/` | 24 (Avatar, Badge, Calendar, Callout, Card, ...) |
-| `feedback/` | 11 (Alert, Drawer, Message, Modal, Notification, ...) |
-| `inputs/` | 25 (AutoComplete, Button, Cascader, Checkbox, ColorPicker, ...) |
-| `layout/` | 16 (AsciiFrame, AspectRatio, Box, Collapse, Container, ...) |
-| `navigation/` | 12 (Affix, Anchor, BackTop, Breadcrumb, FloatButton, ...) |
-| `overlay/` | 10 (AlertDialog, ConfirmDialog, ContextMenu, Dropdown, HoverCard, ...) |
+| `display/` | 24 (avatar, badge, calendar, callout, card, ...) |
+| `feedback/` | 11 (alert, drawer, message, modal, notification, ...) |
+| `inputs/` | 25 (auto-complete, button, cascader, checkbox, color-picker, ...) |
+| `layout/` | 16 (ascii-frame, aspect-ratio, box, collapse, container, ...) |
+| `navigation/` | 12 (affix, anchor, back-top, breadcrumb, float-button, ...) |
+| `overlay/` | 10 (alert-dialog, confirm-dialog, context-menu, dropdown, hover-card, ...) |
 
 **Total**: 6 categories containing 98 governed primitive components.
 
