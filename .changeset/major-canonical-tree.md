@@ -5,7 +5,7 @@
 ## 3.0.0 — the canonical-tree release
 
 This major consolidates the design system onto its target architecture
-(`docs/ARCHITECTURE.md`): one capability, one owner, one public name. It
+(`docs/architecture/index.md`): one capability, one owner, one public name. It
 accumulates every public-API removal of the remediation programme; it is
 finalized at publish time. Consumers must run the codemods in
 `packages/core/scripts/maintain/codemods/` before upgrading.
@@ -37,8 +37,11 @@ finalized at publish time. Consumers must run the codemods in
   `CollectionWorkspaceSurface`. `RecordWorkbenchSurface` → use `DetailSurface`.
 - `MapView` (integration placeholder without a map provider).
 - The patterns side of the collection-chrome duplicates (`TableToolbar`,
-  `SavedViewsMenu`, `FieldFiltersPanel`, `ColumnSettings`) — canonical owners
-  named in `docs/ARCHITECTURE.md` §3.
+  `SavedViewsMenu`, `FieldFiltersPanel`, `ColumnSettings`) — canonical owners:
+  `packages/core/src/components/structures/workspace/table-toolbar`,
+  `packages/core/src/components/structures/workspace/saved-views-menu`,
+  `packages/core/src/components/structures/workspace/field-filters-panel`,
+  `packages/core/src/components/patterns/data/column-settings`.
 
 **Renames**
 
