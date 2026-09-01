@@ -40,8 +40,8 @@ at most one more click.
 |---|---|
 | [Contributing](../CONTRIBUTING.md) | How do I set up, and what does review expect? |
 | [Security](../SECURITY.md) | How do I report a vulnerability? |
-
-Not yet published in this repository: `CODE_OF_CONDUCT.md`, root `CHANGELOG.md`.
+| [Code of Conduct](../CODE_OF_CONDUCT.md) | What behavior does this community expect? |
+| [Changelog](../CHANGELOG.md) | What changed, release by release? |
 
 ## Conventions
 
