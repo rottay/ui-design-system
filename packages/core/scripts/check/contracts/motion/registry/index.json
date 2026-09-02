@@ -21,7 +21,7 @@
     "allowedDynamicKeyframes": [
       {
         "repo": "ui-design-system",
-        "path": "packages/core/src/ui/patterns/visualization/charts/families/sparkline/index.tsx",
+        "path": "packages/core/src/components/patterns/visualization/charts/families/sparkline/index.tsx",
         "symbol": "${animationName}",
         "owner": "design-system",
         "requiresSourcePattern": "const animationName = `ds-sparkline-draw-",
@@ -29,7 +29,7 @@
       },
       {
         "repo": "ui-design-system",
-        "path": "packages/core/src/ui/primitives/feedback/Toast/compound/AnimatedCheck/index.tsx",
+        "path": "packages/core/src/components/primitives/feedback/toast/compound/animated-check/index.tsx",
         "symbol": "${animationName}",
         "owner": "design-system",
         "requiresSourcePattern": "const animationName = `ds-toast-animated-check-",
@@ -37,7 +37,7 @@
       },
       {
         "repo": "ui-design-system",
-        "path": "packages/core/src/ui/primitives/feedback/Toast/compound/UndoToast/index.tsx",
+        "path": "packages/core/src/components/primitives/feedback/toast/compound/undo-toast/index.tsx",
         "symbol": "${ringAnimName}",
         "owner": "design-system",
         "requiresSourcePattern": "const ringAnimName = `ds-toast-undo-ring-",
@@ -45,7 +45,7 @@
       },
       {
         "repo": "ui-design-system",
-        "path": "packages/core/src/ui/primitives/feedback/Toast/compound/UndoToast/index.tsx",
+        "path": "packages/core/src/components/primitives/feedback/toast/compound/undo-toast/index.tsx",
         "symbol": "${barAnimName}",
         "owner": "design-system",
         "requiresSourcePattern": "const barAnimName = `ds-toast-undo-bar-",
@@ -172,23 +172,45 @@
           "scope": "ds-internal",
           "maxCount": 111,
           "maxFiles": 14,
-          "digest": "56c4602ad5e8230ed545b9b476cb9a622701e19bbaede43ce0abc2a6d18c0b3c"
+          "digest": "c5d9d928adf324c6194de9c455850b7139646a89764b111ba18ab43463106e9d"
         },
         {
           "repo": "ui-design-system",
           "scope": "showroom",
           "maxCount": 30,
           "maxFiles": 7,
-          "digest": "689e0822b993931ca61e6da7c636ce35763540207707a7af750bb3758e052739"
+          "digest": "3a5d0b745eee95c0f9c457add715227bc66cc57113d64789084e770bb6843de4"
         },
         {
           "repo": "ui-design-system",
           "scope": "test",
           "maxCount": 24,
           "maxFiles": 6,
-          "digest": "533132e9c12c94276cfe2946d607b3e2a006c9b8743722cae58b8c1ae6d47658"
+          "digest": "afd02f272ddb36ae96e225e3258277228986bcbaf542420dbc333203a7826dd9"
         }
       ],
+      "canonicalTreeRelocation": {
+        "verifiedBy": "Current scanner over HEAD archive versus the working tree: zero semantic additions; 111 internal and 24 test findings retain identical bodies after path normalization.",
+        "removed": "The retired AnimatedCheck source removes one inherited internal finding already excluded by the 111 ceiling."
+      },
+      "canonicalShowroomTreeRelocation": {
+        "commit": "a3ba2e479e5eb050546c71b41418d9c36ab318d7",
+        "classification": "path-only staleness correction for the canonical ui-design-system slice",
+        "notACleanup": true,
+        "notARebaseline": true,
+        "statement": "This is NOT a cleanup and NOT a rebaseline. The ancestor commit above relocated showroom paths; the finding multiset is unchanged in kind, symbol and evidence, so only the path-keyed digest went stale. No finding was added, removed or excused.",
+        "pathOnlyMultisetProof": "12/11",
+        "additions": 0,
+        "removals": 0,
+        "countsUnchanged": {
+          "maxCount": 30,
+          "maxFiles": 7
+        },
+        "previousDigest": "689e0822b993931ca61e6da7c636ce35763540207707a7af750bb3758e052739",
+        "digest": "3a5d0b745eee95c0f9c457add715227bc66cc57113d64789084e770bb6843de4",
+        "scope": "ui-design-system/showroom",
+        "fleetStatus": "Canonical DS slice only. The full four-repo fleet remains red; no fleet-level expectation is adjusted by this entry. No fleet count is asserted here: any figure quoted elsewhere comes from the ruling, not from a measurement of this committed tree. The fleet total is environment-dependent, because cross-repo channels such as global-keyframes count a keyframe name defined in more than one SCANNED repository, so the number moves with the roster and with each sibling checkout's state."
+      },
       "reanchor": {
         "kind": "one-off-reanchor",
         "snapshotSha": "f3720ea8",
@@ -278,23 +300,45 @@
           "scope": "ds-internal",
           "maxCount": 346,
           "maxFiles": 139,
-          "digest": "b2a4ab937aea40d1b14a0af74b22a0b809d0c70376e27c7ca29d9e3c2fb5a8db"
+          "digest": "a8d87249f1f8d9aa1054d37dc9d5cc7fe71df38e1058379a5170b7bf72f922f0"
         },
         {
           "repo": "ui-design-system",
           "scope": "showroom",
           "maxCount": 42,
           "maxFiles": 16,
-          "digest": "167bbc9f40a5b2b51dae8eab51cfbb95c57ec0a228556e1a11a3762c8c9c2660"
+          "digest": "9053b0b84301684ee004abc46864082451d98c130414eefc8fd1f7aec7fd8871"
         },
         {
           "repo": "ui-design-system",
           "scope": "test",
-          "maxCount": 43,
-          "maxFiles": 16,
-          "digest": "29123ac6d7afed6db9f94a90d74cf9be6a2de5a630610934fd3181ec5d278d31"
+          "maxCount": 42,
+          "maxFiles": 15,
+          "digest": "5d3ed99663a8ff79b8d0d471b31cc13c7e23b2db6d4481f21c8d8631d153e6f5"
         }
       ],
+      "canonicalTreeRelocation": {
+        "verifiedBy": "Current scanner over HEAD archive versus the working tree: zero semantic additions; all 346 internal findings retain identical bodies after relocation.",
+        "removed": "Deleting the unused showroom torture fixture removes its lone 220ms test finding, tightening 43/16 to 42/15."
+      },
+      "canonicalShowroomTreeRelocation": {
+        "commit": "a3ba2e479e5eb050546c71b41418d9c36ab318d7",
+        "classification": "path-only staleness correction for the canonical ui-design-system slice",
+        "notACleanup": true,
+        "notARebaseline": true,
+        "statement": "This is NOT a cleanup and NOT a rebaseline. The ancestor commit above relocated showroom paths; the finding multiset is unchanged in kind, symbol and evidence, so only the path-keyed digest went stale. No finding was added, removed or excused.",
+        "pathOnlyMultisetProof": "12/11",
+        "additions": 0,
+        "removals": 0,
+        "countsUnchanged": {
+          "maxCount": 42,
+          "maxFiles": 16
+        },
+        "previousDigest": "167bbc9f40a5b2b51dae8eab51cfbb95c57ec0a228556e1a11a3762c8c9c2660",
+        "digest": "9053b0b84301684ee004abc46864082451d98c130414eefc8fd1f7aec7fd8871",
+        "scope": "ui-design-system/showroom",
+        "fleetStatus": "Canonical DS slice only. The full four-repo fleet remains red; no fleet-level expectation is adjusted by this entry. No fleet count is asserted here: any figure quoted elsewhere comes from the ruling, not from a measurement of this committed tree. The fleet total is environment-dependent, because cross-repo channels such as global-keyframes count a keyframe name defined in more than one SCANNED repository, so the number moves with the roster and with each sibling checkout's state."
+      },
       "reanchor": {
         "kind": "one-off-reanchor",
         "snapshotSha": "26299ebf",
@@ -350,7 +394,7 @@
         "comparisonSha": "becf692f923779df87f69ae2babce521ad46a9c0",
         "snapshotDate": "2026-08-10",
         "owner": "claude/cra12-exemption-reanchor",
-        "verifiedBy": "The scanner was changed to stop counting a transition-*/animation-* time literal as raw-motion-timing when it sits inside an @media (prefers-reduced-motion) block AND every time literal in its value is <=1ms (packages/core/scripts/cra-12-motion-governance.mjs, drilled in cra-12-motion-governance.reanchor.test.mjs). This entry re-anchors the ui-design-system/ds-internal row ONLY to that new scanner's exact finding multiset (path+kind+symbol+evidence, excluding line number, matching groupDigest()), compared against a clean `git archive becf692f9` versus HEAD: 61 removals and 2 additions, net -59 (373->349 findings, 153->140 files). Removals are the accessibility rollout leaving governed motion channels or literal decorative timings behind (e.g. dashboard-activity-interactions.css, dashboard-metrics-interactions.css, several src/ui/structures/dashboard/insights/presentation/**.tsx inline styles, search-command-bar.css, widget-board.css) plus the 22-file prefers-reduced-motion guard rollout (R5 batch, commit 449ad4ba9) no longer counting its own near-zero escape hatch. The 2 additions are both `animation-duration: 1ms` in runtime/engines/modern/skin/alert-dialog.css:258 and confirm-dialog.css:275, added by commit 6c9f6ccf1 as parity with popover.css's existing `html[data-ds-motion='reduced']` runtime motion-switch idiom -- a real near-zero duration, but keyed off a data-attribute selector, not a media query, so it correctly falls outside the narrow exemption and is genuine new debt, not a scanner artifact. Verified by reading both files' surrounding CSS and by `git log -S \"data-ds-motion='reduced']\"` confirming the selector did not exist at becf692f9.",
+        "verifiedBy": "The scanner was changed to stop counting a transition-*/animation-* time literal as raw-motion-timing when it sits inside an @media (prefers-reduced-motion) block AND every time literal in its value is <=1ms (packages/core/scripts/cra-12-motion-governance.mjs, drilled in tests/index.test.mjs). This entry re-anchors the ui-design-system/ds-internal row ONLY to that new scanner's exact finding multiset (path+kind+symbol+evidence, excluding line number, matching groupDigest()), compared against a clean `git archive becf692f9` versus HEAD: 61 removals and 2 additions, net -59 (373->349 findings, 153->140 files). Removals are the accessibility rollout leaving governed motion channels or literal decorative timings behind (e.g. dashboard-activity-interactions.css, dashboard-metrics-interactions.css, several src/components/structures/dashboard/insights/presentation/**.tsx inline styles, search-command-bar.css, widget-board.css) plus the 22-file prefers-reduced-motion guard rollout (R5 batch, commit 449ad4ba9) no longer counting its own near-zero escape hatch. The 2 additions are both `animation-duration: 1ms` in runtime/engines/modern/skin/alert-dialog.css:258 and confirm-dialog.css:275, added by commit 6c9f6ccf1 as parity with popover.css's existing `html[data-ds-motion='reduced']` runtime motion-switch idiom -- a real near-zero duration, but keyed off a data-attribute selector, not a media query, so it correctly falls outside the narrow exemption and is genuine new debt, not a scanner artifact. Verified by reading both files' surrounding CSS and by `git log -S \"data-ds-motion='reduced']\"` confirming the selector did not exist at becf692f9.",
         "reason": "The exemption was added because a 22-file prefers-reduced-motion accessibility rollout (fix(modern): repair token chains and reduced motion, 449ad4ba9) was reading as new motion debt: there is no motion posture called \"0.01ms\", so counting the sanctioned near-zero escape hatch taught the gate to flag accessibility work. This drain re-anchors ds-internal to the corrected scanner's output on the current tree, honestly including the 2 additions the accepted new debt actually contains rather than claiming removal-only.",
         "notAnImprovement": "349 ds-internal raw-motion findings remain inherited debt. The decrease is the exemption correcting a miscount plus real cleanup, not a quality-complete claim or a licence to add further literal timing fallbacks.",
         "supersededBy": "modernRescueRegistryReconciliation (2026-08-13). That entry re-anchors both ui-design-system rows this one left open. It is a logical successor, not a deletion: the exemption this entry introduced, its miscount analysis, and its two honestly-declared additions all still stand and are the state the successor compares against.",
@@ -361,7 +405,7 @@
         "comparisonSha": "e23a9d7d378eaa393f584c500cceafcb15ce3809",
         "snapshotDate": "2026-08-13",
         "owner": "codex/modern-rescue",
-        "verifiedBy": "A clean `git archive e23a9d7d3` was scanned with the current CRA12 implementation and its exact finding multiset (path+kind+symbol+evidence, matching groupDigest({includePath:true})) was compared against the working tree. That archive reproduces the superseded ui-design-system/ds-internal row byte-exact -- 349 findings in 140 files, digest ac4fce9a3fdd6cd4ef4bc4015d9311e66cb367d4c2e30b7f40036aa1966799e3 -- so it is the true anchor, not an approximation. TEST ROW: the change is provably path-only and is NOT a decrease. Count and file count are unchanged at 47/16; a single finding was relocated, `transitionDuration: \"220ms\"` (kind css-or-style-time, symbol transitionDuration), from the deleted packages/core/src/foundation/tokens/ts/presentation/brand-themes/fixtures/themanagementmiami/index.ts to packages/core/src/tooling/testing/fixtures/brand-themes/themanagementmiami/index.ts, with kind, symbol and evidence byte-identical. The proof is constructive: rewriting that one path new -> old in the live finding set and re-digesting reconstructs the superseded digest 140abdf2886366b0bcb5177f02a60388c10acbaa153da278b4acae9a117c7909 exactly, so nothing but the path key moved. DS-INTERNAL ROW: 6 removals and 3 reviewed additions, net 349 -> 346 findings and 140 -> 139 files. The 6 removals are, exactly: foundation/tokens/css/presentation/components/skin/collection-workspace.css `transition: width var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),`; foundation/tokens/css/presentation/components/skin/dashboard-header.css `transition: background-position var(--ds-motion-slow, 320ms) var(--ds-motion-ease-out, ease-out),`, `animation: ds-dashboard-header-sheen var(--ds-dashboard-header-sheen-duration, 16s) var(--ds-motion-ease-in-out, ease-in-out) infinite` and `animation: ds-foundation-pulse var(--ds-motion-attention, 2s) var(--ds-motion-ease-in-out, ease-in-out) infinite`; and ui/patterns/data/table-checkbox-styles/index.tsx `transition: background 0.15s ease` and `transition: opacity 0.15s ease`, which is the exact and complete retirement of that file's 2 rows in 1 file. The 3 reviewed additions are, exactly: foundation/tokens/css/presentation/components/skin/collection-header.css `animation: ds-collection-header-enter var(--ds-motion-calm, var(--ds-motion-slow, 320ms))`; foundation/tokens/css/presentation/components/skin/collection-workspace.css `transition: width var(--ds-list-preview-motion-duration, var(--ds-motion-fast, 120ms))`; and foundation/tokens/css/presentation/components/skin/form-header.css `animation: ds-header-enter var(--ds-motion-calm, var(--ds-motion-slow, 320ms))`. The file delta is likewise exact: dashboard-header.css and table-checkbox-styles/index.tsx drop to zero findings and leave the row, form-header.css enters it, so 140 - 2 + 1 = 139. The OAuth `animation-delay: var(--step-delay, 0ms)` fallback is deliberately NOT enumerated here and is not claimed as a removal by this entry: the anchor and the working tree each carry the same three occurrences in skin/oauth-transition.css, so against this comparison it is a no-op. It was introduced and corrected inside an already-accepted atom, and the correction is proven by the scanner-level test in cra-12-motion-governance.test.mjs, not by this row.",
+        "verifiedBy": "A clean `git archive e23a9d7d3` was scanned with the current CRA12 implementation and its exact finding multiset (path+kind+symbol+evidence, matching groupDigest({includePath:true})) was compared against the working tree. That archive reproduces the superseded ui-design-system/ds-internal row byte-exact -- 349 findings in 140 files, digest ac4fce9a3fdd6cd4ef4bc4015d9311e66cb367d4c2e30b7f40036aa1966799e3 -- so it is the true anchor, not an approximation. TEST ROW: the change is provably path-only and is NOT a decrease. Count and file count are unchanged at 47/16; a single finding was relocated, `transitionDuration: \"220ms\"` (kind css-or-style-time, symbol transitionDuration), from the deleted packages/core/src/foundation/tokens/ts/presentation/brand-themes/fixtures/themanagementmiami/index.ts to packages/core/tests/fixtures/brand-themes/themanagementmiami/index.ts, with kind, symbol and evidence byte-identical. The proof is constructive: rewriting that one path new -> old in the live finding set and re-digesting reconstructs the superseded digest 140abdf2886366b0bcb5177f02a60388c10acbaa153da278b4acae9a117c7909 exactly, so nothing but the path key moved. DS-INTERNAL ROW: 6 removals and 3 reviewed additions, net 349 -> 346 findings and 140 -> 139 files. The 6 removals are, exactly: foundation/tokens/css/presentation/components/skin/collection-workspace.css `transition: width var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),`; foundation/tokens/css/presentation/components/skin/dashboard-header.css `transition: background-position var(--ds-motion-slow, 320ms) var(--ds-motion-ease-out, ease-out),`, `animation: ds-dashboard-header-sheen var(--ds-dashboard-header-sheen-duration, 16s) var(--ds-motion-ease-in-out, ease-in-out) infinite` and `animation: ds-foundation-pulse var(--ds-motion-attention, 2s) var(--ds-motion-ease-in-out, ease-in-out) infinite`; and ui/patterns/data/table-checkbox-styles/index.tsx `transition: background 0.15s ease` and `transition: opacity 0.15s ease`, which is the exact and complete retirement of that file's 2 rows in 1 file. The 3 reviewed additions are, exactly: foundation/tokens/css/presentation/components/skin/collection-header.css `animation: ds-collection-header-enter var(--ds-motion-calm, var(--ds-motion-slow, 320ms))`; foundation/tokens/css/presentation/components/skin/collection-workspace.css `transition: width var(--ds-list-preview-motion-duration, var(--ds-motion-fast, 120ms))`; and foundation/tokens/css/presentation/components/skin/form-header.css `animation: ds-header-enter var(--ds-motion-calm, var(--ds-motion-slow, 320ms))`. The file delta is likewise exact: dashboard-header.css and table-checkbox-styles/index.tsx drop to zero findings and leave the row, form-header.css enters it, so 140 - 2 + 1 = 139. The OAuth `animation-delay: var(--step-delay, 0ms)` fallback is deliberately NOT enumerated here and is not claimed as a removal by this entry: the anchor and the working tree each carry the same three occurrences in skin/oauth-transition.css, so against this comparison it is a no-op. It was introduced and corrected inside an already-accepted atom, and the correction is proven by the scanner-level test in cra-12-motion-governance.test.mjs, not by this row.",
         "reason": "The Modern Rescue wave replaced a raw fallback cadence in collection-workspace with a governed tenant channel and retired the dashboard-header decorative sheen/pulse and the TableCheckboxStyles inline transitions, while collection-header and form-header gained a `var(--ds-motion-calm, var(--ds-motion-slow, 320ms))` chain whose innermost rung is still a literal. That is 3 net fewer findings but it is NOT removal-only, and this entry refuses to describe it as such: three new raw-timing identities entered the tree and were reviewed and accepted as the cost of the calm-channel rollout. The test row is re-anchored for an unrelated and stronger reason -- a fixture relocation with a reconstructive digest proof -- and it changes no ceiling at all.",
         "notAnImprovement": "346 ds-internal raw-motion findings across 139 files remain INHERITED DEBT, and 47 test findings in 16 files are unchanged. A -3 net that contains +3 additions is not a cleanup result and is not a licence to add a fourth. The `var(--ds-motion-calm, var(--ds-motion-slow, 320ms))` shape in particular is a literal wearing two layers of indirection; it was accepted once, under review, and must not become the house idiom.",
         "doNotRepeat": "This is a one-off, evidence-backed reconciliation against a named commit, NOT the routine way to update a baseline and NOT permission to refresh rows from aggregate counts. Never re-run --print-baseline to make this row green. Any future change to either row requires the same exact multiset comparison against this snapshot: enumerate every removal and every addition by path, kind, symbol and evidence, and state the additions honestly rather than netting them against removals. A count at or below these ceilings whose digest drifts is still a failure and still needs that enumeration.",
@@ -372,7 +416,7 @@
             "comparisonSha": "becf692f923779df87f69ae2babce521ad46a9c0",
             "snapshotDate": "2026-08-10",
             "owner": "claude/cra12-exemption-reanchor",
-            "supersededBecause": "That entry re-anchored ui-design-system/ds-internal to 349/140 and deliberately left ui-design-system/test un-re-anchored, holding it open on one blocking precondition: the exemption's block detector had to stop treating the string '@media (prefers-reduced-motion: reduce)' inside a .ts assertion as a real CSS block before the test row could move. The precondition is met -- reducedMotionRanges() now returns no ranges for a non-.css extension, drilled in cra-12-motion-governance.reanchor.test.mjs -- and the test row's change is independently proven path-only, so this entry closes what that one left open.",
+            "supersededBecause": "That entry re-anchored ui-design-system/ds-internal to 349/140 and deliberately left ui-design-system/test un-re-anchored, holding it open on one blocking precondition: the exemption's block detector had to stop treating the string '@media (prefers-reduced-motion: reduce)' inside a .ts assertion as a real CSS block before the test row could move. The precondition is met -- reducedMotionRanges() now returns no ranges for a non-.css extension, drilled in tests/index.test.mjs -- and the test row's change is independently proven path-only, so this entry closes what that one left open.",
             "retained": "Its history stays in place and is not rewritten. The scanner exemption it introduced is still live and still correct; its finding that the 2 alert-dialog/confirm-dialog `animation-duration: 1ms` rows are genuine new debt keyed off `html[data-ds-motion='reduced']` rather than a media query still stands; and its ds-internal snapshot is the very tree this entry compares against."
           }
         ]
@@ -382,7 +426,7 @@
         "comparisonSha": "aee0d5daaa00ac3025abd5fe95d46c8cc926934b^",
         "snapshotDate": "2026-08-26",
         "owner": "claude/gate-debt-3",
-        "verifiedBy": "scanSource() run against the pre-commit content of packages/core/src/ui/structures/dashboard/tests/DashboardEmbeddedCssRecovery.contract.test.ts (extracted via `git show aee0d5daaa^:<path>`) compared to the working tree's current content of the same single file -- the only file in this row whose content changed since the last anchor (confirmed: the other 15 files in the ui-design-system/test row are unchanged since 2026-07-17..2026-08-24, none touching raw-motion-timing-relevant syntax). Exact finding multiset (kind, symbol, evidence) for that one file: 28 -> 24, 4 removals, 0 additions: `animation: 'ds-metrics-minimal-slide-in 0.4s ease-out both'` (line 187), `animation: 'ds-metrics-cards-card-enter 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) both'` (line 201), `animation: 'ds-metrics-chart-slide-in 0.4s ease-out both'` (line 215), `animation: 'ds-metrics-rows-row-slide-in 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both'` (line 229). The row-wide count moves 47 -> 43 (-4), exactly matching this one file's delta; maxFiles stays 16 (no file entered or left the row).",
+        "verifiedBy": "scanSource() run against the pre-commit content of packages/core/src/components/structures/dashboard/tests/DashboardEmbeddedCssRecovery.contract.test.ts (extracted via `git show aee0d5daaa^:<path>`) compared to the working tree's current content of the same single file -- the only file in this row whose content changed since the last anchor (confirmed: the other 15 files in the ui-design-system/test row are unchanged since 2026-07-17..2026-08-24, none touching raw-motion-timing-relevant syntax). Exact finding multiset (kind, symbol, evidence) for that one file: 28 -> 24, 4 removals, 0 additions: `animation: 'ds-metrics-minimal-slide-in 0.4s ease-out both'` (line 187), `animation: 'ds-metrics-cards-card-enter 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) both'` (line 201), `animation: 'ds-metrics-chart-slide-in 0.4s ease-out both'` (line 215), `animation: 'ds-metrics-rows-row-slide-in 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both'` (line 229). The row-wide count moves 47 -> 43 (-4), exactly matching this one file's delta; maxFiles stays 16 (no file entered or left the row).",
         "reason": "Already-committed CI-1 work (test(modern-rescue): CI-1 -- mechanical burn-down of the CI backlog, aee0d5daaa, 2026-08-24) moved four metrics entrance-animation shorthand values from a literal duration+easing pair to the tokenized `var(--ds-motion-reveal) var(--ds-motion-ease-enter, ease-out)` form, three new RTL keyframe mirrors were added alongside them (bare keyframe-name values, no raw duration literal, so they do not enter this channel), and nobody ran gates:ci end-to-end since the 2026-08-23 DT succession to re-anchor this row against that legitimate change. This entry closes that gap. The DT's initial hypothesis for this row (a resolution-probe/C5 test file) was checked and rejected before writing: none of the C5-touched resolution-probe files contain any transition/animation-timing syntax at all, and none appear anywhere in this channel's 16-file ui-design-system/test set.",
         "notAnImprovement": "43 ui-design-system/test raw-motion-timing findings remain inherited debt across the same 16 files. The lower row is a permanent ratchet, not a claim that these tests' motion coverage is complete, and not permission to add a raw timing literal to any of the 16 files."
       }
@@ -432,7 +476,7 @@
           "scope": "ds-internal",
           "maxCount": 27,
           "maxFiles": 19,
-          "digest": "441c5377adeec13ca29745ef24bcef8f07f1685ef45e3938af248d6c15859675"
+          "digest": "1c075161df28ec3b9a3129bb1bf7a7c1cd49a28817e87397713e4769fb83e05e"
         },
         {
           "repo": "ui-design-system",
@@ -446,9 +490,12 @@
           "scope": "test",
           "maxCount": 1,
           "maxFiles": 1,
-          "digest": "719d15de441c34f601b49cc6486ddcce4085584c24e6838787c3b2adb7529094"
+          "digest": "87558f7c31b028cfdb3aee3533649bc41663d090ce8fe6aa074b58745c56dfdd"
         }
       ],
+      "canonicalTreeRelocation": {
+        "verifiedBy": "Current scanner over HEAD archive versus the working tree: zero semantic additions or removals; all 27 internal and one test finding retain identical bodies after relocation."
+      },
       "reanchor": {
         "kind": "one-off-reanchor",
         "snapshotSha": "26299ebf",

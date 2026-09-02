@@ -12,12 +12,12 @@ import { createHash } from 'node:crypto';
 import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { dirname, extname, relative, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { repoRoot as findRepoRoot } from '../../lib/repo-root/index.mjs';
+import { repoRoot as findRepoRoot } from '../../../libraries/repo-root/index.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 export const designSystemRoot = findRepoRoot(HERE);
 export const defaultWorkspaceRoot = resolve(designSystemRoot, '..');
-export const defaultRegistryPath = resolve(HERE, 'cra-12-motion-governance.registry.json');
+export const defaultRegistryPath = resolve(HERE, 'registry/index.json');
 
 export const DEFAULT_REPOSITORIES = Object.freeze([
   {
@@ -116,7 +116,7 @@ function scopeFor(repo, path) {
   if (repo === 'ui-design-system') return 'ds-internal';
   if (path.includes('/showcase/')) return 'showroom';
   // Consumer repositories keep their own source taxonomy. These paths refer to
-  // app-bithire/app-platform/app-evnto, not to the design-system `src/ui` tier.
+  // app-bithire/app-platform/app-evnto, not to the design-system `src/components` tier.
   if (path.startsWith('src/components/landing/') || path.startsWith('src/components/marketing/')) return 'marketing';
   return 'product';
 }

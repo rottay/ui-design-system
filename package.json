@@ -69,7 +69,7 @@
     "roadmap:check": "pnpm roadmap:test && node scripts/maintain/roadmap/status/index.mjs check",
     "roadmap:commercial": "node scripts/maintain/roadmap/commercial-status/index.mjs status",
     "roadmap:commercial:check": "node scripts/maintain/roadmap/commercial-status/index.mjs check",
-    "motion-contracts:check": "node packages/core/scripts/evidence/cra-12-motion-governance/index.mjs",
+    "motion-contracts:check": "node packages/core/scripts/check/contracts/motion/index.mjs",
     "adaptive-contracts:generate": "pnpm --filter @rottay/design-system run adaptive-contracts:generate",
     "adaptive-contracts:check": "pnpm --filter @rottay/design-system run adaptive-contracts:check",
     "adaptive-contracts:gate": "pnpm --filter @rottay/design-system run adaptive-contracts:gate",

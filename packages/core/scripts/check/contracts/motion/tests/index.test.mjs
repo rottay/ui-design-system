@@ -29,13 +29,13 @@ import test from 'node:test';
 import {
   packageRoot as findPackageRoot,
   repoRoot as findRepoRoot,
-} from '../../lib/repo-root/index.mjs';
+} from '../../../../libraries/repo-root/index.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const packageRoot = findPackageRoot(HERE);
 const LIVE = findRepoRoot(HERE);
-const gate = resolve(HERE, 'index.mjs');
-const registryPath = resolve(HERE, 'cra-12-motion-governance.registry.json');
+const gate = resolve(HERE, '../index.mjs');
+const registryPath = resolve(HERE, '../registry/index.json');
 
 // T-1b (sandbox isolation): the DRILL below used to write/remove a plant
 // directly under the live-scanned tree. A single test tolerates that, but a
@@ -45,8 +45,6 @@ const registryPath = resolve(HERE, 'cra-12-motion-governance.registry.json');
 // the corpus, built once per module in `test.before` and reused by every
 // drill via `--workspace-root`; the real tree is asserted absent of the plant
 // at every step (D-4).
-const CORPUS_FILE_COUNT = 4338; // packages/core/src (3984) + packages/showroom/src (354) -- gate-debt 3 (2026-08-26): 9 legitimate F4B additions to packages/core/src, confirmed by direct recount against the tree, showroom unchanged
-
 let SANDBOX_TMP;
 let WS;
 let sandboxPackageRoot;
@@ -88,10 +86,13 @@ test.before(() => {
   }
   const core = countCorpusEntries(join(WS, 'packages/core/src'));
   const showroom = countCorpusEntries(join(WS, 'packages/showroom/src'));
+  const liveCore = countCorpusEntries(join(LIVE, 'packages/core/src'));
+  const liveShowroom = countCorpusEntries(join(LIVE, 'packages/showroom/src'));
   const totalFiles = core.files + showroom.files;
   const totalSymlinks = core.symlinks + showroom.symlinks;
-  if (totalFiles !== CORPUS_FILE_COUNT) {
-    throw new Error(`T-1b sandbox fence: expected ${CORPUS_FILE_COUNT} corpus files, got ${totalFiles}`);
+  const expectedFiles = liveCore.files + liveShowroom.files;
+  if (totalFiles !== expectedFiles) {
+    throw new Error(`T-1b sandbox fence: expected ${expectedFiles} corpus files, got ${totalFiles}`);
   }
   if (totalSymlinks !== 0) {
     throw new Error(`T-1b sandbox fence: expected 0 symlinks in the copied corpus, got ${totalSymlinks}`);
@@ -217,7 +218,7 @@ test('every baseline channel still carries owner, reason and a future expiry', (
  * The exemption is deliberately narrow, and these drills pin all three edges of it.
  */
 test('the reduced-motion near-zero is exempt, and nothing wider is', async () => {
-  const { scanSource } = await import('./index.mjs');
+  const { scanSource } = await import('../index.mjs');
   const raw = (source) =>
     scanSource({ source, extension: '.css', repo: 'ui-design-system', path: 'packages/core/src/x.css' })
       .findings.filter((entry) => entry.channel === 'raw-motion-timing');
@@ -254,7 +255,7 @@ test('the reduced-motion near-zero is exempt, and nothing wider is', async () =>
  * a false negative, which in a ratchet does not merely under-report, it licenses new debt.
  */
 test('the reduced-motion exemption does not apply to prose in a TS file', async () => {
-  const { scanSource } = await import('./index.mjs');
+  const { scanSource } = await import('../index.mjs');
   const source = `
 const guard = '@media (prefers-reduced-motion: reduce)';
 expect(skin).toContain(guard);

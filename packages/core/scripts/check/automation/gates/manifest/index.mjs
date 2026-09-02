@@ -311,13 +311,13 @@ export const CI_GATES = Object.freeze([
   // a5a4c3b4 reproduced every one of them, so the registry -- authored
   // 2026-07-17 -- had simply gone stale. The ui-design-system rows were
   // re-anchored to that commit ONCE, with provenance recorded in
-  // `evidence/cra-12-motion-governance/registry/index.json` under `reanchor`.
+  // `scripts/check/contracts/motion/registry/index.json` under `reanchor`.
   //
   // The cross-repo slice stays out of this job: it audits four sibling
   // repositories and throws on a missing one. app-bithire and app-platform
   // carry their own motion debt and own their own rows.
-  { id: 'motion-contracts', run: ['node', 'scripts/evidence/cra-12-motion-governance/index.mjs', '--repositories', 'ui-design-system'], blocking: true },
-  { id: 'motion-contracts-drill', run: ['node', '--test', 'scripts/evidence/cra-12-motion-governance/cra-12-motion-governance.reanchor.test.mjs'], blocking: true },
+  { id: 'motion-contracts', run: ['node', 'scripts/check/contracts/motion/index.mjs', '--repositories', 'ui-design-system'], blocking: true },
+  { id: 'motion-contracts-drill', run: ['node', '--test', 'scripts/check/contracts/motion/tests/index.test.mjs'], blocking: true },
 
   // --- canonical taxonomy parity (WO-CRA-23 source-plumbing item 10) ---
   //

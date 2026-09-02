@@ -8,7 +8,7 @@ import {
   buildCra11Census,
   serializeCra11Census,
   stringLiteralContentSpan,
-} from '../../lib/evidence/cra-11-adaptive-contract-census/index.mjs';
+} from '../../../libraries/evidence/contracts/index.mjs';
 
 const TSCONFIG = `${JSON.stringify({
   compilerOptions: {
@@ -42,7 +42,7 @@ async function fixtureWorkspace() {
     await mkdir(path.join(root, 'src'), { recursive: true });
   }
 
-  await put(coreRoot, 'src/ui/surfaces/foundation/contracts/index.ts', `
+  await put(coreRoot, 'src/components/surfaces/foundation/contracts/index.ts', `
     export interface DemoMobileConfig {
       active?: boolean;
       dead?: boolean;
@@ -62,11 +62,11 @@ async function fixtureWorkspace() {
       inert?: boolean;
     }
   `);
-  await put(coreRoot, 'src/ui/surfaces/foundation/contracts/adaptive/index.ts', `
+  await put(coreRoot, 'src/components/surfaces/foundation/contracts/adaptive/index.ts', `
     export interface SurfacePosture { collection?: 'table' | 'cards'; custom?: Record<string, unknown>; }
     export interface AdaptiveConfig { desktop?: SurfacePosture; tablet?: SurfacePosture; phone?: SurfacePosture; }
   `);
-  await put(coreRoot, 'src/ui/surfaces/presentation/renderer.ts', `
+  await put(coreRoot, 'src/components/surfaces/presentation/renderer.ts', `
     import type { DemoMobileConfig, SectionMobileConfig, TransportMobileVisualConfig, VisualConfig } from '../foundation/contracts';
     import type { AdaptiveConfig } from '../foundation/contracts/adaptive';
     import { forwardResponsiveVisual } from '../runtime/responsive-transport';
@@ -83,7 +83,7 @@ async function fixtureWorkspace() {
         .map((section) => section.mobileSpan);
     }
   `);
-  await put(coreRoot, 'src/ui/surfaces/runtime/responsive-transport.ts', `
+  await put(coreRoot, 'src/components/surfaces/runtime/responsive-transport.ts', `
     interface ResponsiveTransport {
       stackOnMobile?: boolean;
       stackOnTablet?: boolean;
@@ -99,7 +99,7 @@ async function fixtureWorkspace() {
       return consumeResponsiveVisual(forwarded);
     }
   `);
-  await put(coreRoot, 'src/ui/surfaces/runtime/builders/index.ts', `
+  await put(coreRoot, 'src/components/surfaces/runtime/builders/index.ts', `
     import type { DemoMobileConfig, VisualConfig } from '../../foundation/contracts';
     import type { AdaptiveConfig } from '../../foundation/contracts/adaptive';
     export const demo: DemoMobileConfig = { dead: true };
@@ -112,7 +112,7 @@ async function fixtureWorkspace() {
     const build = () => ({});
     export { build as createIndirectConfig };
   `);
-  await put(coreRoot, 'src/ui/surfaces/tests/renderer.test.ts', `
+  await put(coreRoot, 'src/components/surfaces/tests/renderer.test.ts', `
     import type { DemoMobileConfig } from '../foundation/contracts';
     export const observe = (config: DemoMobileConfig) => config.dead;
   `);
@@ -250,7 +250,7 @@ test('census is deterministic, changes on source mutation and fails closed on op
 test('duplicate public adaptive field identities fail closed instead of merging evidence', async () => {
   const fixture = await fixtureWorkspace();
   try {
-    const contract = path.join(fixture.coreRoot, 'src/ui/surfaces/foundation/contracts/index.ts');
+    const contract = path.join(fixture.coreRoot, 'src/components/surfaces/foundation/contracts/index.ts');
     const original = await readFile(contract, 'utf8');
     await writeFile(contract, `${original}\nexport interface DemoMobileConfig { active?: boolean; }\n`);
     const census = await buildCra11Census(fixture);
@@ -266,7 +266,7 @@ test('duplicate public adaptive field identities fail closed instead of merging 
 test('computed adaptive field access fails closed instead of claiming a renderer', async () => {
   const fixture = await fixtureWorkspace();
   try {
-    const renderer = path.join(fixture.coreRoot, 'src/ui/surfaces/presentation/renderer.ts');
+    const renderer = path.join(fixture.coreRoot, 'src/components/surfaces/presentation/renderer.ts');
     const original = await readFile(renderer, 'utf8');
     await writeFile(renderer, `${original}\nexport const opaque = (config: import('../foundation/contracts').DemoMobileConfig, key: keyof import('../foundation/contracts').DemoMobileConfig) => config[key];\n`);
     const census = await buildCra11Census(fixture);

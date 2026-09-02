@@ -6,15 +6,15 @@ import { fileURLToPath } from 'node:url';
 import {
   buildCra11Census,
   serializeCra11Census,
-} from '../../lib/evidence/cra-11-adaptive-contract-census/index.mjs';
-import { repoRoot as findRepoRoot } from '../../lib/repo-root/index.mjs';
+} from '../../../libraries/evidence/contracts/index.mjs';
+import { repoRoot as findRepoRoot } from '../../../libraries/repo-root/index.mjs';
 
 const scriptDirectory = path.dirname(fileURLToPath(import.meta.url));
 const designSystemRoot = findRepoRoot(scriptDirectory);
 const workspaceRoot = path.dirname(designSystemRoot);
 const artifactPath = path.join(
   designSystemRoot,
-  'test-artifacts/craft/cra-11/adaptive-contract-census.generated.json',
+  'packages/core/artifacts/quality/certification/contracts/adaptive/index.json',
 );
 const check = process.argv.includes('--check');
 const requireClean = process.argv.includes('--require-clean');
@@ -29,7 +29,7 @@ if (printJson) {
   const committed = await readFile(artifactPath, 'utf8').catch(() => '');
   if (committed !== serialized) {
     console.error(`[cra-11] stale adaptive/factory census: ${artifactPath}`);
-    console.error('[cra-11] run pnpm cra11:generate after intentional contract/source changes');
+    console.error('[cra-11] run pnpm adaptive-contracts:generate after intentional contract/source changes');
     process.exitCode = 1;
   }
 } else {

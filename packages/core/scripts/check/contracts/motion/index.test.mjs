@@ -302,7 +302,7 @@ test('exact snapshot passes unchanged and fails new, stale, expired, and body dr
 
 /*
  * CRA12-REGISTRY-RECONCILIATION, 2026-08-13. The reconciliation these three drills defend is
- * recorded in `cra-12-motion-governance.registry.json` under
+ * recorded in `registry/index.json` under
  * `baselines['raw-motion-timing'].modernRescueRegistryReconciliation`. Two of its claims are
  * mechanical, so they are provable here in memory -- no workspace scan, no temp tree, no file
  * mutation:
@@ -329,8 +329,8 @@ const checkboxBody = (property) => `${transitionKey}: ${property} ${['0.', '15',
 
 const RELOCATED_FROM =
   'packages/core/src/foundation/tokens/ts/presentation/brand-themes/fixtures/themanagementmiami/index.ts';
-const RELOCATED_TO = 'packages/core/src/tooling/testing/fixtures/brand-themes/themanagementmiami/index.ts';
-const CHECKBOX_PATH = 'packages/core/src/ui/patterns/data/table-checkbox-styles/index.tsx';
+const RELOCATED_TO = 'packages/core/tests/fixtures/brand-themes/themanagementmiami/index.ts';
+const CHECKBOX_PATH = 'packages/core/src/components/patterns/data/table-checkbox-styles/index.tsx';
 const COLLECTION_WORKSPACE_PATH =
   'packages/core/src/foundation/tokens/css/presentation/components/skin/collection-workspace.css';
 
@@ -363,7 +363,7 @@ test('the reconciled test row moved by path only, and the digest still refuses t
   const before = [
     dsFinding({ path: RELOCATED_FROM, scope: 'test', symbol: durationKey, evidence: brandThemeBody(220) }),
     dsFinding({
-      path: 'packages/core/src/tooling/testing/fixtures/tenants/quality-evidence/index.ts',
+      path: 'packages/core/tests/fixtures/tenants/quality-evidence/index.ts',
       scope: 'test', symbol: durationKey, evidence: brandThemeBody(180),
     }),
   ];
@@ -419,7 +419,7 @@ test('the retired TableCheckboxStyles bodies cannot come back under the lowered 
   );
 
   // The reconciled ceiling is real, not a fixture: pin the row this drill is about.
-  const contract = JSON.parse(readFileSync(new URL('./cra-12-motion-governance.registry.json', import.meta.url), 'utf8'));
+  const contract = JSON.parse(readFileSync(new URL('./registry/index.json', import.meta.url), 'utf8'));
   const row = contract.baselines['raw-motion-timing'].files
     .find((entry) => entry.repo === 'ui-design-system' && entry.scope === 'ds-internal');
   assert.deepEqual(
@@ -427,7 +427,7 @@ test('the retired TableCheckboxStyles bodies cannot come back under the lowered 
     {
       maxCount: 346,
       maxFiles: 139,
-      digest: 'b2a4ab937aea40d1b14a0af74b22a0b809d0c70376e27c7ca29d9e3c2fb5a8db',
+      digest: 'a8d87249f1f8d9aa1054d37dc9d5cc7fe71df38e1058379a5170b7bf72f922f0',
     },
   );
 
