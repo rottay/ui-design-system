@@ -44,7 +44,7 @@ export const CI_GATES = Object.freeze([
   // The structural packaging check composes the cheaper license check above
   // with supplier identity, entrypoint closure, declarations and retention.
   // Final acceptance remains a separate mode while sighted evidence is pending.
-  { id: 'graphics-packaging-integrity', run: ['node', 'scripts/evidence/cra-17-integral-gate/index.mjs', '--structural'], blocking: true },
+  { id: 'graphics-packaging-integrity', run: ['node', 'scripts/check/graphics-packaging/index.mjs', '--structural'], blocking: true },
   { id: 'effects:provenance', run: ['pnpm', 'run', 'effects:provenance'], blocking: true },
   { id: 'contract:check', run: ['pnpm', 'run', 'contract:check'], blocking: true },
   { id: 'daisy-projection-contract', run: ['node', '--test', 'scripts/generate/framework-class-paint/tests/index.test.mjs'], blocking: true },

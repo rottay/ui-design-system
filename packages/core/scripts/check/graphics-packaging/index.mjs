@@ -11,11 +11,11 @@ import {
 import { dirname, relative, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { auditGraphicsPackaging } from '../../packaging/cra-17-license-gate/index.mjs';
+import { auditGraphicsPackaging } from '../../package/graphics/licenses/index.mjs';
 import {
   auditPublicDeclarationClosures,
-} from '../../packaging/cra-17-public-declaration-gate/index.mjs';
-import { repoRoot as findRepoRoot } from '../../lib/repo-root/index.mjs';
+} from '../../package/public-api/declarations/index.mjs';
+import { repoRoot as findRepoRoot } from '../../libraries/repo-root/index.mjs';
 
 const SCRIPT_PATH = fileURLToPath(import.meta.url);
 const DEFAULT_REPO_ROOT = findRepoRoot(dirname(SCRIPT_PATH));
@@ -31,21 +31,21 @@ const EXPECTED_FACADES = Object.freeze([
     facade: 'Icon',
     subpath: './icons',
     entry: 'src/entrypoints/icons/index.ts',
-    owner: 'src/graphics/icons/presentation/semantic-icon/index.tsx',
+    owner: 'src/graphics/icons/semantic/presentation/icon/index.tsx',
   },
   {
     assetClass: 'brand-mark',
     facade: 'BrandMark',
     subpath: './marks/brand',
     entry: 'src/entrypoints/graphics/marks/brand/index.ts',
-    owner: 'src/graphics/brand-marks/presentation/brand-mark/index.tsx',
+    owner: 'src/graphics/marks/presentation/brand-mark/index.tsx',
   },
   {
     assetClass: 'cloud-service-mark',
     facade: 'CloudServiceMark',
     subpath: './marks/cloud',
     entry: 'src/entrypoints/graphics/marks/cloud/index.ts',
-    owner: 'src/graphics/brand-marks/presentation/cloud-service-mark/index.tsx',
+    owner: 'src/graphics/marks/presentation/cloud-service-mark/index.tsx',
   },
   {
     assetClass: 'feature-pictogram',
@@ -78,7 +78,7 @@ const EXPECTED_BUNDLE_FIXTURES = Object.freeze({
 const SOURCE_EXTENSIONS = /\.(?:cjs|css|js|json|jsx|mjs|ts|tsx)$/u;
 const TEST_PATH = /(?:^|\/)(?:__tests__|tests|stories)(?:\/|$)|\.(?:spec|stories|test)\.[^.]+$/u;
 const LUCIDE_TEXT = /lucide/iu;
-const LUCIDE_RULE_PATH = /packages\/core\/src\/tooling\/eslint\//u;
+const LUCIDE_RULE_PATH = /packages\/core\/src\/entrypoints\/eslint\//u;
 const CONFIG_PATH = /(?:^|\/)(?:\.npmrc|package\.json|supplier-contract\.json|tsconfig(?:\.[^/]+)?\.json|(?:[^/]+\.)?config\.(?:cjs|js|json|mjs|ts))$/u;
 
 function portable(path, root) {
@@ -193,9 +193,9 @@ export function auditNoLucideBoundary({ repoRoot, paths } = {}) {
     resolve(root, 'pnpm-lock.yaml'),
     resolve(root, 'pnpm-workspace.yaml'),
     resolve(coreRoot, 'package.json'),
-    resolve(coreRoot, 'supplier-contract.json'),
+    resolve(coreRoot, 'contracts/runtime/suppliers/index.json'),
     resolve(coreRoot, 'THIRD_PARTY_NOTICES.md'),
-    resolve(coreRoot, 'provenance/graphics/pack-allowlist.json'),
+    resolve(coreRoot, 'governance/graphics/sources/index.json'),
     resolve(coreRoot, 'tsconfig.json'),
     resolve(coreRoot, 'vite.config.ts'),
     resolve(coreRoot, 'vitest.config.ts'),
@@ -217,7 +217,7 @@ export function auditNoLucideBoundary({ repoRoot, paths } = {}) {
     if (TEST_PATH.test(display) || LUCIDE_RULE_PATH.test(display)) continue;
     const source = readFileSync(path, 'utf8');
     let scanned = source;
-    if (display === 'packages/core/supplier-contract.json') {
+    if (display === 'packages/core/contracts/runtime/suppliers/index.json') {
       // Ruling R1a (2026-07-18): 'lucide-react' stays listed in the contract's
       // supplierPackages because the tracking feeds live governance/ban machinery
       // (app-side supplier audits, the runtime-alias expectation, the showroom
@@ -297,13 +297,13 @@ function auditSupplierAndCatalog(repoRoot, errors) {
   const adapter = readJson(
     resolve(
       coreRoot,
-      'src/graphics/icons/foundation/semantic/adapters/phosphor-2.1.10.json',
+      'src/graphics/icons/semantic/sources/adapters/phosphor-2.1.10.json',
     ),
     errors,
     'Phosphor adapter',
   );
   const corpus = readJson(
-    resolve(coreRoot, 'src/graphics/icons/foundation/semantic/corpus/manifest.json'),
+    resolve(coreRoot, 'src/graphics/icons/semantic/sources/corpus/manifest.json'),
     errors,
     'semantic icon corpus',
   );
@@ -425,7 +425,7 @@ function auditBundleRetention(repoRoot, errors, pending) {
     'core package manifest',
   );
   const presetManifest = readJson(
-    resolve(coreRoot, 'src/graphics/icons/foundation/semantic/presets/bithire/manifest.json'),
+    resolve(coreRoot, 'src/graphics/icons/semantic/sources/presets/bithire/manifest.json'),
     errors,
     'BitHire icon preset manifest',
   );

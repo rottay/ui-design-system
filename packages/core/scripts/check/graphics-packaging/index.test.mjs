@@ -78,7 +78,7 @@ test('negative drill rejects Lucide in a productive manifest while allowing the 
     const manifest = resolve(root, 'package.json');
     const rule = resolve(
       root,
-      'packages/core/src/tooling/eslint/runtime/rules/no-direct-lucide/index.ts',
+      'packages/core/src/entrypoints/eslint/rules/no-direct-lucide/index.ts',
     );
     mkdirSync(resolve(rule, '..'), { recursive: true });
     writeFileSync(rule, "export const message = 'Do not import lucide-react';\n");
