@@ -1372,7 +1372,7 @@ export async function buildCra11Census({ designSystemRoot, workspaceRoot = path.
 
   return {
     schemaVersion: CRA11_CENSUS_SCHEMA_VERSION,
-    generatedBy: 'packages/core/scripts/check/evidence/certification/contracts/adaptive/index.mjs',
+    generatedBy: 'packages/core/scripts/check/contracts/adaptive/index.mjs',
     source: 'typescript-ast-productive-source-census',
     scope: {
       adaptiveDeclarations: 'ui-design-system/packages/core/src/components/surfaces/foundation/contracts',
