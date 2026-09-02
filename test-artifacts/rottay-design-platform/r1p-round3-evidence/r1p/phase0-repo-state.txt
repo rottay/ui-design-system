@@ -24,4 +24,4 @@ ca53acf047c7db38d582c96ee2b9cdcb8c3d3d95
  M packages/core/scripts/app-ds-boundary-gate.mjs
  M packages/core/scripts/app-ds-boundary-gate.test.mjs
  M packages/core/scripts/cra-12-motion-governance.registry.json
- M packages/core/scripts/i18n-key-parity-gate.baseline.json
+ M packages/core/scripts/i18n-baseline/index.json

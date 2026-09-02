@@ -58,7 +58,7 @@ CSS. Two real DEFECTS to fix structurally (per decision 5): the search `onBlur` 
 - If full-dir vitest times out on concurrent edits, scope to your component test files and say so.
 
 ## Verify (your files) + report
-`cd packages/core && node scripts/engine-token-audit.mjs | grep -E "<your files>"` → each 0.
+`cd packages/core && node scripts/infrastructure/engine-token-audit.mjs | grep -E "<your files>"` → each 0.
 `pnpm vitest run <your component dirs>` → green (report which; if a pre-existing test asserts a
 moved-out inline value via toHaveStyle, DON'T edit it — report the file+line for the orchestrator).
 Report: per-component one-line (sites→0, skin file, states/handlers converted, portal posture);

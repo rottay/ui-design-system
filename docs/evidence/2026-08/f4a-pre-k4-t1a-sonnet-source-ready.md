@@ -23,7 +23,7 @@ Las 43 pruebas de `program-check.test.mjs` y las 79 de la cohorte (+ `manifest/g
 |---|---|---|
 | HEAD | `9d5582dfdf1d02f1d7e8fd468720b1d829e50454` | idéntico |
 | staged | 0 | 0 (`git diff --cached --stat` vacío) |
-| dirty | 5 paths de T-0 + roadmap (E-1: `fb441fb4…` no `a4aabd…`) | exactamente 6: `docs/ROADMAP-EJECUCION-2026-08-19.md`, `docs/prompt-codex-continue.md`, `packages/core/scripts/ci/gates-manifest/index.mjs`, `packages/core/scripts/quality-evidence/programs/modern-rescue/README.md`, `.../checkpoint.intent.json`, `packages/core/src/tooling/lane-control/public/program-state/index.mjs` |
+| dirty | 5 paths de T-0 + roadmap (E-1: `fb441fb4…` no `a4aabd…`) | exactamente 6: `docs/ROADMAP-EJECUCION-2026-08-19.md`, `docs/prompt-codex-continue.md`, `packages/core/scripts/ci/gates-manifest/index.mjs`, `packages/core/scripts/quality-evidence/programs/modern-rescue/README.md`, `.../checkpoint/index.json`, `packages/core/src/tooling/lane-control/public/program-state/index.mjs` |
 | roadmap SHA | `fb441fb4941dff55101e9ba91bb15f9d2ddc4f995376c4ac64ab7311b6a08b12` | idéntico |
 | `packages/core/manifest/**` | 360 archivos, byte-idéntico a HEAD | `git status --porcelain packages/core/manifest` vacío, `find … -type f \| wc -l` = 360 |
 | residuo `*.t1-test-backup` / `*.f1-drill-backup` | 0 | 0 (repo entero, ambos patrones) |
@@ -41,7 +41,7 @@ Ningún dirty inesperado. Ningún residuo previo. S-B no disparó.
 packages/core/scripts/quality-evidence/programs/modern-rescue/program-check.test.mjs
 ```
 
-Nada más. `program-check.mjs`, `gates-manifest/index.mjs`, `runner/index.test.mjs`, `gates-manifest.flags.test.mjs`, `manifest/generator/index.test.mjs`, el roadmap y todo lo demás permanecen **byte-idénticos a como estaban al abrir esta sesión** (confirmado en §7, A-7).
+Nada más. `program-check.mjs`, `gates-manifest/index.mjs`, `runner/index.test.mjs`, `gates-tests/flags/index.test.mjs`, `manifest/generator/index.test.mjs`, el roadmap y todo lo demás permanecen **byte-idénticos a como estaban al abrir esta sesión** (confirmado en §7, A-7).
 
 **Pre-hash:** `e5bec79dd95d7b861bf3979d81d9f10f415ea7a696d06b0265639e1ee39caef1`
 **Post-hash:** `6b20d27226c3529971a18e2799c57da3ac383aad2c742bccf2dcaae84b0fa1e2`
@@ -257,9 +257,9 @@ index 93491ce6f..38d7e7ec2 100644
 | **A-2** | Suite directa | `node --test program-check.test.mjs` (Node 22.17.0) → **43/43 pass, 0 fail**, mismo número que HEAD (`grep -c '^test(' ` = 43 en ambos) |
 | **A-3** | Cohorte serial, invocación EXACTA del gate, ×3 | `node --test program-check.test.mjs manifest/generator/index.test.mjs` desde `packages/core` → **79/79 pass, 0 fail** las tres veces (runs de 26.1s / 24.5s / 24.9s) |
 | **A-4** | Los dos gates | (a) `node scripts/quality-evidence/programs/modern-rescue/program-check.mjs` → `CONSTITUTION_READY`, exit 0. (b) `node manifest/generator/index.mjs --check` → `customization-manifest OK (20 controles × 255 familias = 5100 celdas; 5100 desconocido; 0 aceptado)`, exit 0 |
-| **A-5** | Pierna 1 (`pnpm test:scripts`) | Corrida completa (Node 22, background, ~258s el primer segmento): **1719 tests, 1705 pass, 13 fail, 1 skip**. Los 13 `location:` de las fallas: `app-ds-hook-contract-gate` (×1, el race `export-missing/export-unshipped` ya documentado — pasó limpio en `gates:ci` §6 minutos después, confirmando que es flaky, no determinista, exactamente la descripción de R-1/T-1b), `ck-h1-floor-identity` (×3), `ck-h1-inert-prestep` (×2), `skin-evidence-gate` (×1), `token-audit.runtime-svg.integration.test.mjs` (×1, `Cannot find module .../runtime-svg-paint-census.mjs`), `cra-15-runtime-hardening-gate` (×1), `generate-semantic-icons` (×1), `surface-capability-census` (×1), `core-structure-audit` (×2). **Ninguna de las 13 toca `program-check.test.mjs`, `program-check.mjs` ni `manifest/generator/index.test.mjs`** — cero overlap con el write-set o su clausura. Como mi diff está confinado a un solo archivo que nada más importa, y estos 13 son pre-existentes en subsistemas no tocados, no hay regresión atribuible a T-1a. La cadena `&&` no llegó a segmentos 2/3 (effect-registry-audit, vitest) por el fail-fast de shell en el primer segmento — comportamiento del script, no de mi cambio |
+| **A-5** | Pierna 1 (`pnpm test:scripts`) | Corrida completa (Node 22, background, ~258s el primer segmento): **1719 tests, 1705 pass, 13 fail, 1 skip**. Los 13 `location:` de las fallas: `app-ds-hook-contract-gate` (×1, el race `export-missing/export-unshipped` ya documentado — pasó limpio en `gates:ci` §6 minutos después, confirmando que es flaky, no determinista, exactamente la descripción de R-1/T-1b), `ck-h1-floor-identity` (×3), `ck-h1-inert-prestep` (×2), `skin-evidence-gate` (×1), `token-tests/runtime-svg/index.test.mjs` (×1, `Cannot find module .../runtime-svg-paint-census.mjs`), `cra-15-runtime-hardening-gate` (×1), `generate-semantic-icons` (×1), `surface-capability-census` (×1), `core-structure-audit` (×2). **Ninguna de las 13 toca `program-check.test.mjs`, `program-check.mjs` ni `manifest/generator/index.test.mjs`** — cero overlap con el write-set o su clausura. Como mi diff está confinado a un solo archivo que nada más importa, y estos 13 son pre-existentes en subsistemas no tocados, no hay regresión atribuible a T-1a. La cadena `&&` no llegó a segmentos 2/3 (effect-registry-audit, vitest) por el fail-fast de shell en el primer segmento — comportamiento del script, no de mi cambio |
 | **A-6** | Diff | `git diff --name-only` = exactamente **7** paths: los 5 de T-0 + roadmap + el único de T-1a |
-| **A-7** | Manifiesto de gates intacto | `runner --list`: **89 blocking, 2 excluded**, sin mover; entrada `modern-rescue-tooling-drills` con argv **verbatim** sin `--test-concurrency`; `gates-manifest.flags.test.mjs` → 2/2 pass; `scripts/ci/runner/index.test.mjs` → 13/13 pass — ninguno de los dos tocado |
+| **A-7** | Manifiesto de gates intacto | `runner --list`: **89 blocking, 2 excluded**, sin mover; entrada `modern-rescue-tooling-drills` con argv **verbatim** sin `--test-concurrency`; `gates-tests/flags/index.test.mjs` → 2/2 pass; `scripts/ci/runner/index.test.mjs` → 13/13 pass — ninguno de los dos tocado |
 
 `gates:ci` completo (§6) corrido al cierre, serial y solo, bajo Node 22.17.0.
 
@@ -357,7 +357,7 @@ git status --short:
  M docs/prompt-codex-continue.md
  M packages/core/scripts/ci/gates-manifest/index.mjs
  M packages/core/scripts/quality-evidence/programs/modern-rescue/README.md
- M packages/core/scripts/quality-evidence/programs/modern-rescue/checkpoint.intent.json
+ M packages/core/scripts/quality-evidence/programs/modern-rescue/checkpoint/index.json
  M packages/core/scripts/quality-evidence/programs/modern-rescue/program-check.test.mjs
  M packages/core/src/tooling/lane-control/public/program-state/index.mjs
 git diff --check: limpio

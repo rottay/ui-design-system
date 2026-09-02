@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "law": "decrease-only: every counter must stay equal or decrease; any change requires source review and an explicit baseline update",
+  "source": "artifacts/generated/manifest/themes/parity/source/index.json",
+  "silentPairs": 2,
+  "placeholderPairs": 3943,
+  "untaggedAuthoredLeaves": 3,
+  "divergentSlots": 64,
+  "knownExceptions": {
+    "silentPairs": [
+      "rottay:OVERLAY.chrome.table.cellColor",
+      "evnto:OVERLAY.chrome.table.cellColor"
+    ],
+    "untaggedAuthoredLeaves": [
+      "rottay:OVERLAY.chrome.sidebar.footerBg",
+      "bithire:OVERLAY.chrome.cardComponent.bgHover",
+      "bithire:OVERLAY.chrome.table.cellColor"
+    ]
+  }
+}

@@ -1,0 +1,118 @@
+{
+  "schemaVersion": 1,
+  "controlId": "shape.radius-scale",
+  "lifecycleState": "OPERATIONAL",
+  "tier": "standard",
+  "scope": "tenant",
+  "semanticOwner": {
+    "owner": "design-system",
+    "registryPath": "packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts",
+    "registryDigest": "5941d2eebc8749b7c04aa34aae6135f2eb34f6514842b3b5e040f7ed4faac138"
+  },
+  "title": "Radius scale dial",
+  "valueType": "scale",
+  "domain": {
+    "kind": "bounded",
+    "enumValues": [],
+    "bounds": {
+      "min": 0.75,
+      "max": 1.25
+    },
+    "defaultBehavior": "1 (vertical envelope may clamp tighter)"
+  },
+  "ingress": {
+    "staticBrandThemePath": "surfaces.radiusScale",
+    "dbTenantThemePath": "appearance.general.shape.radiusScale"
+  },
+  "declaredOutputs": {
+    "channels": [
+      "--ds-radius-scale",
+      "--ds-radius-md"
+    ],
+    "rootAttributes": [],
+    "representativeOnly": true
+  },
+  "dependsOn": [],
+  "compatibility": "additive, unset-to-rollback",
+  "productiveConsumerWitness": {
+    "consumer": "src/foundation/tokens/css/runtime/engines/modern/skin/card.css",
+    "symbol": "var(--ds-radius"
+  },
+  "calibration": {
+    "assessmentState": "COMPUTED_VERIFIED",
+    "normalizedStops": [
+      {
+        "id": "recto",
+        "value": 0.75,
+        "law": "vertical-only: bajo el piso tenant T3 {0.8,1.2} (rechazo); parada legitima del tema VERTICAL - asimetria adjudicada (edgeLaw)"
+      },
+      {
+        "id": "sutil",
+        "value": 0.9
+      },
+      {
+        "id": "suave",
+        "value": 1,
+        "law": "DEFAULT/NO-OP, deliberately unreceipted. 1 IS the ramp identity, so a stop at 1 is the absence of a dial rather than a value of it. Measured through the DB door it is not even expressible on two of three verticals: compileTenantThemeConfig emits NO --ds-radius-scale for rottay or evnto (writing the vertical default is a no-op the compiler elides) and the harness correctly refuses the arm as an empty lowering. bithire DOES emit \"1\" because its own baseline is 1.25, so writing 1 is a real change there. That asymmetry is a property of the doors, not a defect: a positive receipt at this stop would be claiming a delta that only one vertical has."
+      },
+      {
+        "id": "amplio",
+        "value": 1.15
+      }
+    ],
+    "staticDbParityEvidenceIds": [
+      "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/shape-radius-scale/computed-static-db/rottay-sutil.json.receipt.json",
+      "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/shape-radius-scale/computed-static-db/bithire-sutil.json.receipt.json",
+      "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/shape-radius-scale/computed-static-db/evnto-sutil.json.receipt.json"
+    ],
+    "exactRestoreEvidenceIds": [
+      "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/shape-radius-scale/computed-static-db/rottay-amplio.json.receipt.json",
+      "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/shape-radius-scale/computed-static-db/bithire-amplio.json.receipt.json",
+      "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/shape-radius-scale/computed-static-db/evnto-amplio.json.receipt.json"
+    ],
+    "negativeControls": [
+      "control height remains fixed",
+      "font metrics remain fixed",
+      "color remains fixed",
+      "border width and style remain fixed",
+      "motion remains fixed"
+    ],
+    "nextAction": "OBTAIN_CODEX_SIGHTED_ACCEPTANCE. The computed half is done and receipted on three verticals through both doors at sutil and amplio; SIGHTED_ACCEPTED is not claimable from a computed run.",
+    "axisSeparationLaw": "DECISION (b) ejecutada: el eje geometry del preset expresivo (sharp .85 / soft 1.15 / rounded 1.25 / pill-accented 1.1, expansion:193-196) co-suministra buttonStyle+radiusScale como POSTURA COMPUESTA y puede aterrizar entre stops (puntos nombrados, no rejilla); los dos juegos de nombres son DISJUNTOS (stops: recto/sutil/suave/amplio; posturas: sharp/soft/rounded/pill-accented) y la precedencia raiz-explicita > composite resuelve toda coexistencia en el tema espejo",
+    "sourceBindings": {
+      "staticLowerer": "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
+      "dbLowerer": "packages/core/src/infrastructure/compilers/composition/tenant-theme/index.ts",
+      "semanticAuthority": "packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts",
+      "staticField": "packages/core/src/foundation/contracts/composition/tenants/themes/index.ts#BrandSurfaces",
+      "rampDefinition": "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
+      "registeredProperty": "packages/core/src/foundation/tokens/css/foundation/base/properties.css",
+      "computedMounts": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card.css",
+      "regressionFence": "packages/core/src/tooling/resolution-probe/runtime/ingress/tests/index.test.mjs"
+    },
+    "measuredResult": {
+      "instrument": "packages/core/src/tooling/resolution-probe (causal command), Chromium, --bundle fresh, 1280x800 dpr1",
+      "scenarios": "6 = {rottay,bithire,evnto} x {sutil,amplio}, both ingress doors on ONE scene, both themes. All six self-check harness-live; ingressEquivalence identical with 0 differing rows in all six; restore.exact true and negativeControls.held true on every arm of every scenario.",
+      "directChannel": "--ds-radius-scale read directly on token-readout moved on BOTH arms in all six scenarios: rottay and evnto 1 -> 0.9 and 1 -> 1.15; bithire 1.25 -> 0.9 and 1.25 -> 1.15.",
+      "paintedDelta": "card-modern-md/root border-top-left-radius and border-bottom-right-radius, identical on both arms and both themes: rottay 14px -> 12.6px (sutil) and 14px -> 16.1px (amplio); evnto 18px -> 16.2px and 18px -> 20.7px; bithire 10px -> 7.2px and 10px -> 9.2px.",
+      "chain": "Four hops, visible in the token-readout row: --ds-radius-scale -> --ds-radius-lg = calc(--ds-radius-lg-base * --ds-radius-scale) -> --ds-card-border-radius -> painted longhand.",
+      "verticalDivergence": "bithire is the FORK the modern README named, and this run measured it. It authors the compensation pair (surfaces.borderRadius alongside radiusScale 1.25), so its compiled base is emitted as calc(10px / 1.25) = 8px and the painted 10px is that base times its own 1.25 baseline. The dial stays fully live there — 8px * 0.9 = 7.2px, 8px * 1.15 = 9.2px — but it moves from 1.25 rather than from 1, and its card channel resolves from a 10px base while --ds-radius-lg resolves from 14px. rottay and evnto author no borderRadius and sit at the ramp identity."
+    },
+    "negativeControlsScopeNote": "The radius dial owns the CORNER and nothing else, so the negative set is the rest of the measured root: its box (control height remains fixed, bound to card-modern-md/root and carrying the two @rect-* observables so a transform or zoom cannot hide behind an unmoved longhand), its type, its colour, its border STROKE and its motion. \"border remains fixed\" is deliberately NOT declared and must never be: that vocabulary entry bundles all four border-*-radius longhands with the widths and styles, so binding it here would assert that the very channel under test must not move. It is replaced by \"border width and style remain fixed\" (border-width-style-fixed), which is the same entry minus the four radius longhands. \"touch target remains fixed\" is not declared for the same reason it is not declared on effect-intensity: the only bindable target here is a Card root, which is not a control-bearing element.",
+    "evidenceKindLabellingRule": "Every one of the six artifacts proves BOTH a computed delta and an exact restore; each is a three-phase both-arm run. evidenceKind names the ROLE the receipt is claimed for, not the only thing its artifact contains: the three sutil receipts are claimed as static-db-computed-parity and the three amplio receipts as exact-restore. A reader who wants the other half of either receipt will find it in the same artifact.",
+    "knownDefects": [
+      "CORRECTED IN THIS ROUND, recorded because the green cell above is only trustworthy if the reader knows what it replaced. This control shipped declaring surfaces.borderRadius.* as its static door. That is not merely a wildcard buildIngressInput cannot walk: borderRadius.{sm,md,lg,xl} sets --ds-radius-{step}-base, and when a scale is live compileBrandTheme emits that base as calc(authored / scale) precisely so the foundation calc reproduces the authored value. It is the COMPENSATION path — the anti-door — and pointing the control at it lowered a constant --ds-radius-scale:1 at every stop on all three verticals. The empty-lowering guard did not fire, because the compiler emits that channel unconditionally as a default, so the run would have reported a live control as INERT. Fixed at the authority (capabilities/index.ts brandThemePath -> surfaces.radiusScale) and regenerated. Refutation and mutation proof: packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/shape-radius-scale/computed-static-db/.",
+      "FALSE-INERT VECTOR STILL OPEN, control-level scope only. lowerStop fails closed when a compiler emits NONE of the declared channels, but not when it emits one at a constant default. Any control whose declared channel has a non-conditional default can therefore carry a non-empty arm that encodes no stop. Reported, not fixed here."
+    ],
+    "unmeasuredScope": [
+      "Responsive divergence. The probe pins one viewport (1280x800, dpr 1), so no claim is made about this control at another breakpoint.",
+      "Every consumer of --ds-radius-scale other than Card. This calibration measured ONE family, primitive/display/card. The control-level claim is about the channel and the two doors, not about every surface the ramp rounds.",
+      "The four non-lg steps of the ramp (--ds-radius-{sm,md,xl}) and --ds-radius-full. token-readout shows them resolving, but no painted fixture in this packet consumes them, so they are inventoried rather than proven.",
+      "recto (0.75) has no receipt on either arm by design: it is below the tenant envelope on all three verticals (DB rejects it) and is a vertical-only stop, so forcing a static-only receipt would publish a parity row that has no counterpart. The rejection itself is proven in the preflight refutation artifact."
+    ],
+    "channels": [
+      "--ds-radius-scale",
+      "--ds-radius-md"
+    ]
+  },
+  "retiredAliases": []
+}

@@ -29,7 +29,7 @@ from `theme.css`/`personality.css`. CK-C is greenfield with respect to suppressi
 not because of P-76, but because these files predate any bridge-rule authoring for
 them at all.
 
-**Coverage checklist** (from `node scripts/engine-token-audit.mjs | grep -E
+**Coverage checklist** (from `node scripts/infrastructure/engine-token-audit.mjs | grep -E
 "fleet.inlinePaint.(structures/workspace|patterns/data)"`, 2026-07-13): 11 components
 (list-toolbar, saved-views, search-command-bar, column-menu, saved-views-menu,
 active-filters-bar, export-button, scope-switcher, view-mode-switcher,

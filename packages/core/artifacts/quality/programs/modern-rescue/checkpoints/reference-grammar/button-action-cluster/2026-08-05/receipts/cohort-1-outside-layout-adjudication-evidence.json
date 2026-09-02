@@ -1,0 +1,173 @@
+{
+  "schemaVersion": 1,
+  "receiptId": "wo-cra-23-R1-C1-outside-layout-adjudication-evidence",
+  "disposition": "ANALYSIS ONLY. No file was moved, no file was deleted, and the evidence contract was not edited. This receipt supplies the evidence an adjudicator needs to choose a direction; it does not choose one, and the recommendation in it is labelled as a recommendation.",
+  "recordedOn": "2026-08-05",
+  "recordedBy": "R1-quality-integrator",
+
+  "question": "R1/packets/ and R1/tools/ are outside the evidence contract's roundLayout allowlist and are the only two structural blockers left in round-evidence R1. What is actually in them, what depends on them, and what would each remedy really cost?",
+
+  "contractFinding": {
+    "roundLayoutAllowlist": [
+      "manifest.json", "conflict-graph.json", "family-quality-matrix.json", "control-propagation.json",
+      "static-db-parity.json", "tenant-divergence.json", "tenant-art-direction-compliance.json",
+      "kimi-proposal-adjudications.json", "responsive-geometry.json", "visual-craft.json",
+      "checkpoint.json", "i18n-rtl.json", "prototype-decisions.json",
+      "scorecards/", "receipts/", "captures/", "recordings/", "SHA256SUMS", "SUMMARY.json", "SUMMARY.md"
+    ],
+    "observation": "A case-insensitive search of evidence-contract/index.json for 'packet' and for 'tools' returns NOTHING. The contract does not know either directory.",
+    "correctionToAPriorFraming": "The coordinator's brief suggested packets/ 'looks session-invented (it is absent from the contract's own enumeration)' while tools/ holds live instruments. Absence from the contract does not distinguish them: tools/ is equally absent. The real distinction is coupling, measured below, and it points the other way from what absence alone would suggest — tools/ is the one that cannot be moved, packets/ is the one that technically could."
+  },
+
+  "inventory": {
+    "packets": {
+      "fileCount": 4,
+      "bytes": 29180,
+      "files": [
+        "packets/architecture-integrator.json",
+        "packets/button-family.json",
+        "packets/quality-integrator.json",
+        "packets/reference-lab.json"
+      ],
+      "artifactClass": "lane work packets — INPUT declarations. Common shape: schemaVersion, roundId, cohort, lane, laneClass, ownedFamilies, ownedFiles, observableDefect, applicableRubricDimensions. They declare what a lane owns and intends.",
+      "executableCoupling": "NONE. Nothing imports, requires, or loads a packet programmatically. They are pure data."
+    },
+    "tools": {
+      "fileCount": 12,
+      "bytes": 330435,
+      "files": [
+        "tools/apply-ctrl04-preservation-pins.mjs",
+        "tools/button-shadow-preservation-probe.mjs",
+        "tools/capture-lab.mjs",
+        "tools/emit-i18n-gate-receipt.mjs",
+        "tools/fab17-anchor-fixture/run.mjs",
+        "tools/group-axis-census.mjs",
+        "tools/locale-parity-check.mjs",
+        "tools/overlay-causality-probe.mjs",
+        "tools/receipt-io.mjs",
+        "tools/role-adoptability-map.mjs",
+        "tools/schema-digest-independent-proof.mjs",
+        "tools/tenant-divergence-measure.mjs"
+      ],
+      "artifactClass": "live executable instruments — the probes and emitters that PRODUCE receipts.",
+      "externalInvokers": "NONE FOUND. No package.json script and nothing under packages/core/scripts or packages/showroom invokes these tools; they are run by hand. So migration would not break a pipeline — the damage is to evidence bindings, not to automation."
+    }
+  },
+
+  "blastRadius": {
+    "method": "grep for the literal paths R1/tools and R1/packets across every .json, .mjs, .md, .ts and .tsx in the repository outside node_modules, then classify each hit as EXECUTABLE (a path the runtime loads or a guard enforces) or NARRATIVE (prose asserting where something lives).",
+    "tools": {
+      "citingReceipts": 9,
+      "totalCitations": 16,
+      "executable": {
+        "selfHashProvenancePaths": 8,
+        "frozenInstrumentPath": 1,
+        "detail": "8 are structured `path` + `sha256` pairs inside harnessSelfHash / self-attestation blocks in cohort-1-capture-harness-self-test.json and cohort-1-i18n-gate.json. 1 is the `instrument` field of a FROZEN receipt."
+      },
+      "narrative": 7
+    },
+    "packets": {
+      "citingReceipts": 2,
+      "totalCitations": 159,
+      "executable": { "count": 0 },
+      "narrative": 159,
+      "detail": "153 of the 159 are in inherited-entry-ledger-v2.json, almost all one repeated per-entry boilerplate: 'No packet under R1/packets/*.json lists this path in ownedFiles or filesActuallyChanged...'. The remaining 6 are in cohort-1-stressmatrix-completion-map.json. Every one of them ASSERTS A LOCATION, so all 159 become factually stale the moment the directory moves, even though none of them breaks anything at runtime."
+    }
+  },
+
+  "hardBlockers": [
+    {
+      "id": "BLOCKER-1-fail-closed-location-guard",
+      "where": "tools/receipt-io.mjs:55-63",
+      "what": "EXPECTED_ANCESTORS = ['tools','R1','wo-cra-23','quality-evidence','test-artifacts','core','packages']. deriveRepoRoot() walks this fixed chain and THROWS if any ancestor name does not match, index 0 being the tool's own parent directory — literally the string 'tools'.",
+      "dependents": ["tools/receipt-io.mjs", "tools/capture-lab.mjs", "tools/emit-i18n-gate-receipt.mjs"],
+      "consequence": "Moving these out of a directory named 'tools' makes deriveRepoRoot throw immediately. The guard is deliberately fail-closed — its own error text reads 'Refusing to guess a repo root'. It also says: 'if this tool moved, update EXPECTED_ANCESTORS in receipt-io.mjs to match.' So migration REQUIRES a source edit to a live instrument.",
+      "note": "The depth arithmetic would survive. Tools resolve the core root as path.resolve(HERE,'..','..','..','..','..') — five levels up from R1/tools. R1/receipts sits at the identical depth, so the computed root would still be correct. It is the NAME check, not the depth walk, that fires. A migration that only moved files and fixed nothing would fail loudly rather than silently, which is the good news in this finding."
+    },
+    {
+      "id": "BLOCKER-2-frozen-instrument-path",
+      "where": "receipts/cohort-1-instrument-freeze-handoff.json",
+      "what": "A FROZEN receipt whose `instrument` field is the literal path test-artifacts/quality-evidence/wo-cra-23/R1/tools/overlay-causality-probe.mjs, bound to FINAL_SHA f2091b2e92f10298..., mtimeEpoch 1785951047, sizeBytes 159415, plus a stabilityProof of three spaced samples by the coordinator and an independent 3/3 corroboration by the auditor.",
+      "consequence": "Content SHA and size survive a move, and `mv` on one filesystem preserves mtime, so three of the four bindings would still verify. The PATH would not. A frozen handoff that names a file which is no longer there is a broken record, and repairing it means editing frozen evidence.",
+      "precision": "This is a path-binding break, NOT a hash break. Stating it as 'the freeze is invalidated' would overclaim."
+    },
+    {
+      "id": "BLOCKER-3-self-attestation-paths",
+      "where": "receipts/cohort-1-capture-harness-self-test.json, receipts/cohort-1-i18n-gate.json",
+      "what": "8 recorded path+sha256 pairs. These are SELF-attestations: each tool hashed itself, at that path, at run time.",
+      "consequence": "The hashes stay valid; the paths do not. Re-pointing them means either hand-editing evidence (which makes it no longer a machine self-attestation) or re-running the instruments to regenerate — and re-running is a new capture, against a frozen capture set."
+    }
+  ],
+
+  "options": [
+    {
+      "id": "a-forward-migration",
+      "summary": "Move both directories into receipts/, the only plausible allowlisted destination.",
+      "costForTools": [
+        "Requires editing tools/receipt-io.mjs (EXPECTED_ANCESTORS) — a source edit to a live instrument in the same family as a frozen one.",
+        "Breaks 8 self-attestation path records across 2 receipts.",
+        "Breaks the `instrument` path of 1 FROZEN receipt.",
+        "Repairing any of the above means editing frozen or machine-attested evidence by hand."
+      ],
+      "costForPackets": [
+        "No executable break at all.",
+        "Makes 159 narrative citations factually stale, 153 of them in one ledger."
+      ],
+      "sharedCost": "A CATEGORY ERROR in both cases. receipts/ means 'records of results'. A packet is an INPUT declaration and an instrument is an EXECUTABLE that produces receipts; neither is a receipt. Filing them there would satisfy the allowlist while making the taxonomy false — the same 'name it something it is not so the checker passes' failure class this round has spent itself unwinding elsewhere.",
+      "verdictState": "Highest cost, and the only option that damages existing evidence."
+    },
+    {
+      "id": "b-preserved-invalid",
+      "summary": "Leave both in place, record them as knowingly-outside-layout under a named deferral.",
+      "cost": [
+        "Zero edits, zero risk, no evidence damaged.",
+        "round-evidence R1 stays valid:false permanently unless the contract changes, so R1 can never be sealed from this state."
+      ],
+      "verdictState": "Cheapest, and safe, but it is a HOLDING state rather than a terminal one. It defers the same decision to whoever tries to seal the round."
+    },
+    {
+      "id": "c-contract-amendment",
+      "summary": "Add tools/ and/or packets/ to the roundLayout allowlist.",
+      "cost": [
+        "One edit to evidence-contract/index.json — an adjudicator's artifact, explicitly not mine to touch.",
+        "Preserves every path, every hash, every frozen record, the fail-closed guard, and the taxonomy.",
+        "The real risk is precedent: the allowlist exists to stop arbitrary sprawl, so an amendment must be a deliberate decision that these are recognised artifact classes, not a rubber stamp to clear a blocker."
+      ],
+      "verdictState": "Lowest damage. Cost is a governance decision rather than an evidence cost."
+    }
+  ],
+
+  "RECOMMENDATION": {
+    "label": "THIS IS A RECOMMENDATION, NOT A DECISION. The direction is the adjudicator's.",
+    "recommend": "Option (c), contract amendment, for BOTH directories — but for one shared reason rather than two special cases.",
+    "reasoning": [
+      "The allowlist is under-specified, not violated. A round of this shape legitimately produces three artifact classes: INPUTS (lane packets), INSTRUMENTS (the probes that generate evidence), and OUTPUTS (receipts, captures, recordings). The allowlist names outputs richly and does not name the other two at all. packets/ and tools/ are not sprawl; they are two unnamed classes doing exactly what their names say.",
+      "Option (a) is the only one that destroys evidence, and it destroys the most load-bearing kind: machine self-attestations and a frozen instrument binding. Paying evidence damage to satisfy a naming rule inverts the purpose of the rule.",
+      "Filing an executable under receipts/ would make the tree pass the checker while making it describe itself falsely. That is the two-authorities defect wearing different clothes: the checker would say 'receipt' and the filesystem would hold an instrument.",
+      "I do NOT recommend the asymmetric split (amend for tools/, migrate packets/ since it is technically movable). It buys one fewer allowlist entry at the price of 159 stale citations and a second category error. Technically-movable is not the same as should-be-moved."
+    ],
+    "ifTheAdjudicatorWantsMinimumContractSurface": "The defensible fallback is (c) for tools/ and (b) for packets/ — amend for the class that cannot move without evidence damage, and hold packets/ as a named deferral pending a later decision on whether inputs belong in the round layout at all. This still leaves round-evidence invalid, so it does not unblock sealing.",
+    "notRecommended": "Option (a) for tools/ under any framing. The fail-closed guard, the frozen instrument path and the 8 self-attestations make it the most expensive path available, and its cost lands on the evidence rather than on the contract."
+  },
+
+  "whatThisDoesAndDoesNotEstablish": {
+    "establishes": [
+      "A complete file-level inventory of both directories.",
+      "A measured, not estimated, blast radius: 16 citations across 9 receipts for tools/, 159 across 2 for packets/, each classified executable vs narrative.",
+      "Three named hard blockers to migration, each located to a file and line where applicable.",
+      "That no automation invokes these tools, so migration risk is to evidence bindings and not to any pipeline."
+    ],
+    "doesNotEstablish": [
+      "Any decision. The direction is not chosen here.",
+      "Any claim about the two deferred artifacts (manifest.json, SHA256SUMS), which remain correctly deferred until contents freeze.",
+      "Any verdict on the work order. This receipt describes results only; roadmap/registry.json remains the sole authority for work-order state."
+    ]
+  },
+  "SUPERSEDED_BY_ADJUDICATION": {
+    "supersededOn": "2026-08-05",
+    "ruling": "The coordinator adjudicated BOUNDED FORWARD MIGRATION — option (a). Options (b) preserved-invalid and (c) contract amendment were NOT taken. My recommendation of (c) was not followed, and that is the adjudicator's call, correctly made outside this receipt.",
+    "effectOnThisReceipt": "Every R1/tools and R1/packets path named ABOVE describes the PRE-MIGRATION state and has deliberately been left unrewritten — rewriting them would make the analysis describe a layout that never posed the problem it analyses. Read this receipt as a historical record of why the migration was shaped the way it was.",
+    "executed": "See cohort-1-outside-layout-migration.json for the manifest of what moved, what was re-verified, and the one source edit required.",
+    "oneAnalysisFindingProvedDecisive": "The claim above that migration would force an edit to the FROZEN instrument held only for a NESTED move. Because R1/receipts sits at the same depth as the old R1/tools, a FLAT move preserved every depth constant and the frozen instrument was never touched. The migration was therefore materially cheaper than option (a) was costed at here."
+  }
+}

@@ -447,7 +447,7 @@ doc comment states the mechanism explicitly and correctly:
 The team knows the extension shadows the compiler. Three limits on that gate:
 
 1. **It is a decrease-only ratchet parked at 152, not 0.**
-   `scripts/engine-token-audit.baseline.json:20` → `"color.handAuthoredRampSteps": 152`.
+   `scripts/engine-token-baseline/index.json:20` → `"color.handAuthoredRampSteps": 152`.
    Measured live, matching the baseline exactly:
 
    | slug | hand-authored ramp hex steps in `_source/extension.css` |

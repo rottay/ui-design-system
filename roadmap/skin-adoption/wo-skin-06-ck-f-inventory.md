@@ -8,7 +8,7 @@ named `background*`, `border*`, `outline*`, `color`, `boxShadow`, `textShadow`,
 `fill`, `stroke`, `accentColor`, `filter`, `backdropFilter`,
 `WebkitBackdropFilter`, or `transform`, or an imperative `.style.<paint> =` /
 `.style.setProperty('paint-prop', …)` write — reproduced exactly from
-`scripts/lib/inline-paint-counter.mjs`'s lexer for this report (bracket-stack
+`scripts/tooling/libraries/inline-paint-counter.mjs`'s lexer for this report (bracket-stack
 scan, string/comment-safe, same `ARC09_PAINT_KEY_RE`). **STATIC** = author-time
 constant, moves to the skin verbatim. **STATE-SELECTED** = a ternary/map/switch
 over static values, keyed by React state or a prop (per the triage's §2
@@ -24,7 +24,7 @@ rule consistently; see the note under Menu's accent bar precedent in
 WO-SKIN-04 for the boundary case this diverges from, by design, for internal
 consistency).
 
-**Coverage checklist** (`node scripts/engine-token-audit.mjs | grep
+**Coverage checklist** (`node scripts/infrastructure/engine-token-audit.mjs | grep
 "fleet.inlinePaint.runtime/patterns/communication"`, 2026-07-13): 10 files, **272**
 sites by the counter's count. `EXAMPLES`/`.stories.tsx`/`tests/` files are
 excluded from the family total (docs/test files, not shipped components).

@@ -1,0 +1,133 @@
+{
+  "schemaVersion": 1,
+  "programId": "modern-rescue",
+  "workOrderId": "WO-CRA-23",
+  "humanEntry": "packages/core/scripts/tooling/quality/evidence/programs/modern-rescue/README.md",
+  "checkpointIntent": "packages/core/scripts/tooling/quality/evidence/programs/modern-rescue/checkpoint/index.json",
+  "customizationManifest": "packages/core/governance/manifest/index.json",
+  "statusAuthority": "roadmap/registry.json",
+  "workOrderAuthority": "packages/core/scripts/tooling/quality/evidence/programs/modern-rescue/README.md",
+  "qualityTooling": "packages/core/scripts/tooling/quality/evidence",
+  "evidenceRoot": "packages/core/artifacts/quality/programs/modern-rescue",
+  "artDirectionContract": "packages/core/scripts/tooling/quality/evidence/programs/modern-rescue/art-direction/index.json",
+  "visualCraftContract": "packages/core/scripts/tooling/quality/evidence/programs/modern-rescue/visual-craft/index.json",
+  "r7CustomizationContract": "packages/core/scripts/tooling/quality/evidence/programs/modern-rescue/customization-model/index.json",
+  "r7Enabled": false,
+  "referenceLab": {
+    "route": "/probe/ds-reference",
+    "page": "packages/showroom/src/app/probe/ds-reference/page.tsx",
+    "sceneRegistry": "packages/showroom/src/components/torture-sections/registry/index.ts",
+    "sceneRoutes": "packages/showroom/src/app/probe/whitelabel-torture/scenes",
+    "substrate": "packages/showroom/src/app/probe/whitelabel-torture/page.tsx",
+    "sameTree": true,
+    "hardcodedDataOnly": true,
+    "applicationImportsAllowed": false,
+    "tenantSources": {
+      "bithire-static": "canonical static BrandTheme",
+      "themanagement-db": "published tenant-theme-canary-fixtures document resolved through the production compiler"
+    },
+    "scenes": [
+      "primitives",
+      "forms",
+      "data",
+      "workflow",
+      "dashboard",
+      "shell",
+      "surfaces",
+      "all"
+    ],
+    "captureLaw": "capture each tenant in its own html-root iframe or single-tenant load; compare identical scene, viewport, locale and content",
+    "authorityLaw": "this lab decides DS grammar and tenant divergence; product applications are later integration consumers and cannot certify or reject DS craft",
+    "modularizationOwner": "R0 must split the existing monolithic torture route behind scene-owned import boundaries without duplicating trees fixtures or data"
+  },
+  "verticalScope": {
+    "law": "The DS and its reference lab are the only build and visual-certification target; deferred is a sequencing state, not a removal, and generic guarantees (fail-closed transport, exports contract) are preserved intact.",
+    "bithire": {
+      "role": "consumer-readiness-only",
+      "readiness": ["install-pin", "exports-imports", "build", "typecheck", "smoke"],
+      "forbiddenLots": ["migration", "adoption", "hardcode-drain", "canary-over-current-ui"],
+      "note": "BitHire will be fully rebuilt; no screen of its current UI is a destination or visual reference, and no BitHire semantics enter the DS."
+    },
+    "appPlatform": { "disposition": "DEFERRED" },
+    "appEvnto": { "disposition": "DEFERRED" }
+  },
+  "f4cCanary": {
+    "visibilityHours": 48,
+    "scope": "DS reference lab only; no cohort expansion before an accepted canary",
+    "stopCondition": "any unexpected diff in non-status channels or painted properties, any exact-restore failure, or any constitutional gate turning red rolls the canary back to HEAD state and opens a defect",
+    "authorityLaw": "the canary certifies the cascade effect in the lab; it is not programme closure and not a BitHire UI review"
+  },
+  "inventoryAuthorities": {
+    "controls": "packages/core/docs/generated/customization-controls/index.md",
+    "tokenCensus": "packages/core/scripts/foundation/tokens/customization/surface/report/index.json",
+    "appHooks": "packages/core/contracts/customization/public-css-hooks/index.json",
+    "capabilities": "packages/core/src/foundation/contracts/composition/tenants/capabilities",
+    "themeContracts": "packages/core/src/foundation/contracts/composition/tenants/themes",
+    "staticBrandThemes": "packages/core/src/foundation/tokens/ts/presentation/brand-themes",
+    "dbFixtures": "packages/core/src/tooling/testing/fixtures/tenants",
+    "prototypeLedger": "packages/core/governance/tokens/prototypes/index.json",
+    "preservation": "packages/core/scripts/foundation/tokens/customization/preservation/manifest/index.json"
+  },
+  "denominators": {
+    "visibleFamilies": 255,
+    "primitives": 105,
+    "patternsExcludingCharts": 57,
+    "charts": 18,
+    "structures": 39,
+    "pageSurfaces": 36
+  },
+  "controlBaselines": {
+    "standard": 14,
+    "proCapabilities": 7,
+    "expertExactAllowlist": 290,
+    "expertExactAllowlistDigest": "4964f8eb4cd6bcca0c44ce19270b078e441dbbfde49eb5b78d9f01be2978f296",
+    "expertMaximumOverridesPerDocument": 200,
+    "appPublicHooks": 93,
+    "productivePrototypes": 0
+  },
+  "currentImpactTruth": {
+    "operationalTokens": 4398,
+    "exact": 38,
+    "inferred": 836,
+    "unknown": 3524,
+    "purpose": "Starting evidence deficit; not a quality score or target denominator."
+  },
+  "invariants": [
+    "one status authority",
+    "one static and DB normalization model",
+    "one semantic icon supplier",
+    "no tenant selectors or tenant conditional component trees",
+    "the BitHire and The Management fixtures prove that public controls produce real, predictable and consistent differences on the same tree, by static BrandTheme and by DB TenantTheme with parity (owner amendment 2026-08-30: the binding art-direction compliance invariant is retired)",
+    "R1 visual evidence comes only from the hardcoded DS reference lab with zero product application CSS routes APIs or domain fixtures",
+    "advisor narratives are ephemeral non-canonical input; accepted findings are reproduced against source and incorporated into the owning contract",
+    "no public token creation by family writers",
+    "every productive CSS rule has one family or foundation-runtime owner",
+    "zero dead orphaned or causally disconnected CSS at accepted round scope, full Modern corpus closure in R5/R6 and complete replay after R7 customization changes",
+    "every tenant-variable CSS decision resolves directly or derivationally through the canonical static BrandTheme and DB TenantTheme chain",
+    "all creative proposals adjudicated within their round",
+    "tests do not award visual quality points",
+    "only the DT (Kimi K3) may accept sighted quality",
+    "Fable 5 independently audits every integrated lot; Codex independently audits each product-slice or phase close and every compiler manifest public-control or hard-to-reverse architecture change; the DT never self-audits",
+    "Opus is the primary source writer; Sonnet scouts and performs only exact closed mechanical work; Kimi K3 may implement shared integration delicate surgery or a critical unblock under an explicit write-set",
+    "R1 schedules conflict-free cross-layer product slices in parallel rather than visiting primitives one by one; shared compiler contracts foundation tokens manifest barrels i18n generated artifacts builds server and browser remain singleton or serialized",
+    "except for constitutional amendments every execution lot changes product source and visible behavior; source and product work consumes at least 80 percent of the effort and no new instrument exists without a named unmeasurable blocker",
+    "rottay bithire and evnto theme records have identical typed keypaths ordering and template comments and differ only in sanctioned identity values or profile selections",
+    "theme hardcodes are confined to palette and status seeds font pairings bounded profile or recipe selections and source-justified irreducible identity ratios; downstream family paint geometry rhythm typography states and effects derive through governed roots and recipes",
+    "literal CSS fallbacks are resilience floors only: accepted baseline and mutation resolve through a producer, removal reaches the governed themed root and only an isolated missing-root drill may exercise the literal",
+    "source comments default to zero and never narrate agents rounds cohorts migrations receipts or programme history",
+    "R1 creates no new Modern Rescue script gate census drill or evidence format unless an unmeasurable blocker is named and independently confirmed; the default action is reuse merge or deletion",
+    "packages/core/scripts/foundation/tokens/manifest/generation/index.mjs is the single manifest write/check entrypoint and runs once per integrated batch from product source and evidence",
+    "loose Modern Rescue tooling migrates mechanically to descriptive folder/index capabilities without blocking product slices; the existing scripts-tree gate expands to quality-evidence only after migration",
+    "new layer grammars stop after three calibration families and every cohort stops after at most twenty-five families for DT review",
+    "each round stops before the next owner-authorized round",
+    "local commits follow Fable audit and DT verification of the bounded packet without waiting for the owner under the standing authorization; Codex acceptance is required before the integrated slice is declared closed",
+    "this program never pushes; publication requires an explicit owner-authorized release window",
+    "BitHire enters only as final consumer-readiness (install/pin, exports/imports, build, typecheck, smoke); no migration, adoption, hardcode-drain or canary lots over its current UI, and no BitHire semantics enter the DS",
+    "app-platform and app-evnto are DEFERRED: no migration lots open against them; deferred is a sequencing state, not a removal",
+    "dark mode carries no dedicated work in this stage; a lot touching shared surfaces must not degrade the authored dark baselines",
+    "governed channel precedence: explicit tenant value > authored vertical value > DS base; no compiler, gate or component branches on tenant or vertical name",
+    "instance overrides use the existing tiers (profileOverrides, RecipeProfileProvider, scoped attributes); no scope field is added to the tenant capability registry",
+    "accumulated local-ahead is owner policy, not a defect or a blocker; external local backup is recommended hygiene, never a gate",
+    "a cohort release gate (reliable instruments, accepted F4C canary, zero active brandable hardcodes in the adopted cohort, static+DB lab certification) authorizes early cohort exit; it is not programme closure"
+  ]
+}

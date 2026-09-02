@@ -56,7 +56,7 @@ Cada tranche es atómico y serial: prehash/backup por contenido, write-set exact
 
 Opus debe producir un brief ejecutable exacto, todavía read-only, que:
 
-- corrija `checkpoint.intent.json` a la autoridad/roles/bloqueos vigentes sin inventar avance;
+- corrija `checkpoint/index.json` a la autoridad/roles/bloqueos vigentes sin inventar avance;
 - regenere exclusivamente el bloque stampado de `packages/core/scripts/quality-evidence/programs/modern-rescue/README.md` mediante la herramienta canónica;
 - cablee `program-state --check` como gate blocking y declare el nuevo canon esperado `89 blocking + 2 excluded`;
 - derive write-set, comandos antes/después, stop conditions, restore por backups/prehash y pruebas causales;

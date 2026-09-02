@@ -1,0 +1,109 @@
+{
+  "schemaVersion": 2,
+  "roundId": "R0",
+  "purpose": "Prototype ledger truth and the compatibility-path consumer censuses that must exist before any R5 retirement decision.",
+  "prototypeLedger": {
+    "authority": "packages/core/src/foundation/tokens/prototype-ledger.json",
+    "gate": "packages/core/scripts/prototype-ledger-gate.mjs",
+    "kind": "hand-maintained governed data, gate-checked; not machine-generated",
+    "entries": 80,
+    "statusDistribution": { "retired": 80 },
+    "allRetired": true,
+    "verification": "full enumeration, not a sample — no status value other than 'retired' appears in the file",
+    "categoryDistribution": {
+      "PRIVATE": 59,
+      "DERIVE_FROM_EXISTING": 11,
+      "FOUNDATION_AUTHORITY": 4,
+      "MERGE_RENAME": 3,
+      "RECIPE_AXIS": 1,
+      "RUNTIME_INSTANCE_BRIDGE": 1,
+      "DELETE": 1
+    },
+    "consistencyCheck": "program/index.json#controlBaselines.productivePrototypes is 0, which agrees: zero non-retired prototypes remain",
+    "staleWordingDefectClosedInR0": {
+      "defect": "the generated lifecycle view printed '80 ledger entries' with no retired/live split, so the raw count read as live prototype debt",
+      "generatorFixed": "packages/core/scripts/tokens-catalog.mjs — the row now computes and prints the retired split",
+      "publishedResult": "docs-engineering/engineering/design-system/tokens/governance/lifecycle-and-deprecations.md now reads '80 ledger entries (80 retired, 0 live)'",
+      "regenerate": "pnpm -C packages/core tokens:catalog:write"
+    }
+  },
+  "compatibilityConsumerCensuses": {
+    "law": "A census is evidence, never deletion permission. Retirement requires owner attribution, consumer evidence, a successor where visual capacity exists, and source-to-generated reconciliation. Zero importers is not dead code.",
+    "requiredBefore": "R5 may retire any of these",
+    "overlayModal": {
+      "definition": "packages/core/src/ui/primitives/overlay/index.ts:11 — export { Modal as OverlayModal } from './Modal'",
+      "publicPath": "root export only, no dedicated subpath",
+      "deprecationMarkers": [
+        "overlay/index.ts:10 — @deprecated Use the canonical Modal export from feedback/Modal.",
+        "overlay/Modal/index.ts:4-8 — @deprecated Compatibility surface for the former overlay-owned Modal.",
+        "overlay/Modal/engines/{classic,modern,rustic}/index.tsx — @deprecated Compatibility adapter.",
+        "overlay/Modal/contracts/index.ts:1-6 — @deprecated Contract adapter."
+      ],
+      "identityProof": "the overlay modern engine is 9 lines re-exporting ModernModal from the facade, versus 543 lines in feedback/Modal's modern engine. OverlayModal is JS-reference-identical to feedback/Modal's Modal — not a wrapper and not a divergent implementation.",
+      "runtimeConsumers": [
+        "packages/showroom/src/app/probe/whitelabel-torture/page.tsx:77,1636,1644 — imported and rendered",
+        "packages/showroom/src/app/(docs)/primitives/[category]/[component]/live-preview.tsx:60,709,717,736,1674 — imported and rendered",
+        "packages/core/src/ui/primitives/overlay/Modal/tests/*.test.tsx — 8 files exercising the alias path"
+      ],
+      "siblingAppConsumers": "zero references in app-bithire, app-platform and app-evnto source",
+      "successor": "feedback/Modal — every hop in the re-export chain already resolves there",
+      "docDriftFound": "docs-engineering/.../primitives/overlay/README.md:13,105-115 claims OverlayModal is used internally by Sheet and Drawer. Verified FALSE: neither imports it, and Drawer's focus trap comes from runtime/overlay/focus-management independently. This drift must be corrected before anyone uses it to judge removal safety.",
+      "missingBeforeRetirement": [
+        "repoint the two showroom runtime render sites",
+        "decide the fate of the vestigial overlay/Modal scaffold (contracts, compound, 3 engine shims, 8 tests, 1 stories file)",
+        "correct the false internal-use claim in the overlay README",
+        "no consumer scan outside the three named sibling apps was in scope"
+      ],
+      "verdict": "NO_DEATH_PROOF_YET"
+    },
+    "brandThemeEngineBridge": {
+      "definition": [
+        "packages/core/src/foundation/contracts/composition/tenants/themes/index.ts:205 — BrandTheme.engineBridge (optional input)",
+        "same file:1952 — CompiledBrand.engineBridge (required output)"
+      ],
+      "deprecationMarkers": "NONE — this is the outlier. Neither field carries a @deprecated tag. The only deprecation-adjacent signal is program governance: customization-model/index.json lists engineBridge under forbiddenInitialDestinations, which bars it for NEW capability rather than deprecating the field.",
+      "runtimeReads": [
+        "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts:1413-1414 — read from the input",
+        "same file:1421 — written into the returned CompiledBrand"
+      ],
+      "downstreamReads": "none — an exhaustive sweep of packages/core/src found no third site. Callers destructure only cssVariables, or store the object without ever reading .engineBridge off it.",
+      "otherConsumers": "zero in showroom and zero in the three sibling apps",
+      "verdict": "compiles through and dead-ends with zero observable rendering effect today",
+      "successor": "none named. The chrome.* sections are the closest real analog but no source or doc declares them a replacement.",
+      "missingBeforeRetirement": [
+        "no @deprecated marker exists, so the deprecation decision has not been made at the contract level",
+        "no successor is named",
+        "a source-only sweep cannot rule out a live tenant-theme DB document setting this key",
+        "brand-compiler.test.ts:361-367 asserts passthrough and would need updating"
+      ]
+    },
+    "componentExtensions": {
+      "definitions": [
+        "ComponentExtensions<T> — foundation/contracts/kernel/tokens/extensions/index.ts:824",
+        "ExtensionHelpers<T> — same file:869",
+        "EngineAwareProps.extensions — foundation/contracts/runtime/engine/index.ts:57"
+      ],
+      "deprecationMarkers": [
+        "extensions/index.ts:821-823 — @deprecated No runtime effect. DS-IMP-021 owns replacement/removal after the deferred external-import census; do not add new consumers.",
+        "runtime/engine/index.ts:54-56 — @deprecated ... Use each component's evidenced props/compounds."
+      ],
+      "typeSurfaceReach": "EngineAwareProps is extended by roughly 70 primitive prop interfaces, so .extensions sits in the type surface of nearly every primitive",
+      "runtimeReads": "none. The only runtime touch is Card's three engine files destructuring `extensions: _extensions` purely to keep it out of the DOM spread — a discard, not a read.",
+      "jsxUsage": "zero `extensions={...}` anywhere in core or showroom",
+      "existingGate": {
+        "scripts": ["scripts/gat-07-exact-proof.mjs", "scripts/lib/gat-07-static-analysis.mjs"],
+        "asserts": "staticallyResolvedPotentialConsumers = 0 and staticallyResolvedExtensionRuntimeReferences = 0, via real TS symbol resolution rather than string grep",
+        "wiring": ".github/workflows/ci.yml — CI blocking",
+        "blindSpot": "the gate's scope is packages/core/src plus packages/showroom/src only. It contains zero references to the three sibling app repos."
+      },
+      "siblingAppConsumers": "zero — this census fills the gate's blind spot as a one-time snapshot; it is not wired into any recurring check, so a future app-side reintroduction would not be auto-caught",
+      "successor": "none — every source doc says to use each component's evidenced props and compounds, case by case",
+      "missingBeforeRetirement": [
+        "WO-GAT-09 is the declared final certification authority and has not closed",
+        "the gate's scope excludes the sibling repos and this snapshot is not recurring",
+        "the type is still publicly exported at package root, so a consumer outside the three named apps is structurally possible and unverified",
+        "Card's three engine files still destructure and discard extensions"
+      ]
+    }
+  }
+}

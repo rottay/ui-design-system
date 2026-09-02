@@ -1,0 +1,1168 @@
+{
+  "schemaVersion": 1,
+  "familyId": "primitive/layout/stack",
+  "identity": {
+    "layer": "primitive",
+    "category": "layout",
+    "name": "Stack",
+    "components": [
+      "Stack"
+    ],
+    "sourceRoot": "packages/core/src/ui/primitives",
+    "sourceOwner": "packages/core/src/ui/primitives/layout/Stack",
+    "publicComponents": [
+      "Stack"
+    ],
+    "unresolvedPublicComponents": [],
+    "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
+    "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
+    "inventoryRowDigest": "554d2c2be0cbed9d404eae2f7cff4e32e9f39f94f864548739fff84318e12d95"
+  },
+  "maximumClaim": "SOURCE_BOUND",
+  "review": {
+    "verdict": null,
+    "acceptedSourceDigest": null,
+    "evidenceIds": [],
+    "decisionReason": null
+  },
+  "anatomy": {
+    "assessmentState": "SOURCE_BOUND",
+    "partCensusCompleteness": "MODERN_ROOT_AND_GENERATED_DIVIDER_BOUND_RESPONSIVE_STYLE_ARTIFACT_REQUIRES_BROWSER_PROOF",
+    "sourceBindings": [
+      "packages/core/src/ui/primitives/layout/Stack/index.ts",
+      "packages/core/src/ui/primitives/layout/Stack/contracts/index.ts",
+      "packages/core/src/ui/primitives/layout/Stack/compound/index.ts",
+      "packages/core/src/ui/primitives/layout/Stack/runtime/presentation/index.ts",
+      "packages/core/src/ui/primitives/layout/Stack/runtime/responsive/index.tsx",
+      "packages/core/src/ui/primitives/layout/Stack/engines/classic/index.tsx",
+      "packages/core/src/ui/primitives/layout/Stack/engines/modern/index.tsx",
+      "packages/core/src/ui/primitives/layout/Stack/engines/rustic/index.tsx",
+      "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives.css"
+    ],
+    "stableParts": [
+      "root",
+      "divider"
+    ],
+    "states": [],
+    "variantAxes": [
+      "data-align",
+      "data-full-width",
+      "data-layout-motion",
+      "data-direction",
+      "data-spacing"
+    ],
+    "propertyGroups": [
+      "axis-and-flow",
+      "alignment-and-distribution",
+      "sequence-spacing",
+      "divider-anatomy",
+      "responsive-projection",
+      "fill-sizing",
+      "layout-motion",
+      "semantic-polymorphic-root"
+    ],
+    "invariants": [
+      "Modern owns one polymorphic root and optional aria-hidden divider parts interleaved without dropping numeric zero children.",
+      "gap takes precedence over spacing while both retain the same public StackSpacing contract.",
+      "Preset spacing follows the tenant spacing ramp; numeric spacing is intended as exact instance geometry.",
+      "Divider centering reads the same current-gap channel and must not double the distance between adjacent children.",
+      "Responsive direction moves divider centering to the matching axis even though responsive values stamp no scalar data-direction.",
+      "Reverse changes visual direction without reversing source child order.",
+      "A consumer's explicit numeric gap is exact geometry and is never density-scaled; only the named presets scale. [at skin/layout-primitives.css:437]",
+      "The modern preset twins tie the base rule's specificity exactly (0,1,0) so source order, not specificity, decides the winner. This is a stated specificity-budget decision. [at skin/layout-primitives.css:309]",
+      "The divider offset is derived from the CURRENT gap (calc(gap / -2)), so a divider stays centred in the gap under any spacing preset. [at skin/layout-primitives.css:462]"
+    ],
+    "sourceEvidence": {
+      "methodProvenance": {
+        "cohort": "layout",
+        "scoutArtifact": "mr-anatomy-layout.json",
+        "scoutSelfGradedConfidence": "SOURCE_BOUND",
+        "confidenceFieldIsNotLoadBearing": "Admission was decided structurally and from a source index of what the DS actually stamps, not from the scout grade. The double-census adjudication measured scout self-confidence at Cohen kappa 0.179 (REC-4).",
+        "partAnchoringRule": "R-8, decided from source: a part is admitted only where the DS stamps data-part with that name, or a DS component-identity class pair matches. Scout prose is corroboration, not authority.",
+        "sourcePartStampsFound": 1,
+        "dynamicPartExpressionsInSource": 0,
+        "openMethodAxesNotYetRuled": [
+          "part-ownership-across-component-boundaries",
+          "inherited-primitive-paint-attribution",
+          "family-private-channel-inclusion"
+        ]
+      },
+      "partAnchors": [
+        {
+          "part": "root",
+          "anchorKind": "ds-class-pair",
+          "anchor": "component-identity pair rottay-stack + rottay-stack--{engine}",
+          "at": [
+            "Stack/engines/modern/index.tsx:116"
+          ]
+        },
+        {
+          "part": "divider",
+          "anchorKind": "data-part",
+          "anchor": "data-part=\"divider\" + class rottay-stack-divider",
+          "at": [
+            "Stack/runtime/responsive/index.tsx:223"
+          ]
+        }
+      ],
+      "partCensus": {},
+      "stateCensus": "No interaction or lifecycle state is distinguished.",
+      "demotedFromStates": {
+        "entries": [
+          "vertical",
+          "horizontal",
+          "responsive",
+          "wrapped",
+          "reversed",
+          "divided",
+          "full-width",
+          "full-height",
+          "rearranging"
+        ],
+        "reason": "RULING R-5: `states` is interaction and lifecycle only."
+      },
+      "variantAxisAnchors": [
+        {
+          "token": "data-align / data-justify / data-wrap / data-reverse",
+          "at": [
+            "Stack/runtime/presentation/index.ts:17"
+          ]
+        },
+        {
+          "token": "data-full-width / data-full-height",
+          "at": [
+            "Stack/runtime/presentation/index.ts:22"
+          ]
+        },
+        {
+          "token": "data-layout-motion",
+          "at": [
+            "Stack/runtime/presentation/index.ts:24"
+          ]
+        },
+        {
+          "token": "data-direction",
+          "at": [
+            "Stack/runtime/responsive/index.tsx:129"
+          ]
+        },
+        {
+          "token": "data-spacing",
+          "values": "xs / sm / md / lg / xl / 2xl / 3xl / 4xl",
+          "at": [
+            "Stack/contracts/index.ts:320",
+            "skin/layout-primitives.css:371-431"
+          ]
+        }
+      ],
+      "engineDivergence": "Three engine siblings, all class-anchored; the divider part is engine-independent (it lives in the shared responsive runtime, Stack/runtime/responsive/index.tsx:223-231). Rhythm scaling is modern-only via :where(.rottay-stack--modern) twins. Only the modern engine stamps data-component (modern/index.tsx:139).",
+      "variableReadCensus": {
+        "attribution": "UNATTRIBUTED RAW EVIDENCE. Measured reads and declarations, not mapped to any controlId. themeControls stays UNKNOWN until the mapping wave; this block must not be read as a control edge.",
+        "dsVariableReads": [
+          {
+            "var": "--ds-spacing-1,2,4,6,8,10,12,16",
+            "part": "root[data-spacing=*]",
+            "at": "skin/layout-primitives.css:371,379,387,395,403,411,419,427 (base) and :375,383,391,399,407,415,423,431 (modern twins)",
+            "fallback": null,
+            "lands": "gap"
+          },
+          {
+            "var": "--ds-rhythm-effective-scale",
+            "part": "root (modern only)",
+            "at": "skin/layout-primitives.css:309, 375, 383, 391, 399, 407, 415, 423, 431; Stack/contracts/index.ts:335",
+            "fallback": "1",
+            "lands": "multiplier inside calc() on gap"
+          },
+          {
+            "var": "--_ds-stack-gap-current",
+            "part": "root / divider",
+            "at": "skin/layout-primitives.css:300, 301, 315, 464; Stack/runtime/responsive/index.tsx:138",
+            "fallback": "0px",
+            "lands": "gap bookkeeping for the divider offset",
+            "note": "PRIVATE PROVISIONAL channel."
+          },
+          {
+            "var": "--ds-stack-divider-inset",
+            "part": "divider",
+            "at": "skin/layout-primitives.css:302, 314, 468; Stack/runtime/responsive/index.tsx:137",
+            "fallback": "0px",
+            "lands": "margin-inline",
+            "note": "UNDECLARED READ."
+          },
+          {
+            "var": "--ds-stack-divider-size",
+            "part": "divider",
+            "at": "skin/layout-primitives.css:459",
+            "fallback": "1px",
+            "lands": "block-size / inline-size"
+          },
+          {
+            "var": "--_ds-stack-divider-gap-block",
+            "part": "divider",
+            "at": "skin/layout-primitives.css:462",
+            "fallback": "calc(var(--_ds-stack-gap-current, 0px) / -2)",
+            "lands": "margin-block",
+            "note": "PRIVATE PROVISIONAL channel."
+          },
+          {
+            "var": "--_ds-stack-divider-gap-inline",
+            "part": "divider",
+            "at": "skin/layout-primitives.css:466",
+            "fallback": "var(--ds-stack-divider-inset, 0px)",
+            "lands": "margin-inline",
+            "note": "PRIVATE PROVISIONAL channel."
+          },
+          {
+            "var": "--ds-stack-divider-color",
+            "part": "divider",
+            "at": "skin/layout-primitives.css:470",
+            "fallback": "var(--ds-color-border-subtle)",
+            "lands": "background-color"
+          },
+          {
+            "var": "--ds-stack-divider-opacity",
+            "part": "divider",
+            "at": "skin/layout-primitives.css:474",
+            "fallback": "0.72",
+            "lands": "opacity"
+          },
+          {
+            "var": "--ds-stack-gap",
+            "part": "root",
+            "at": "skin/layout-primitives.css:437",
+            "fallback": null,
+            "lands": "gap",
+            "note": "INSTANCE_API projection: a consumer's numeric gap is honored as exact geometry and is explicitly NOT density-scaled (source comment at :437)."
+          },
+          {
+            "var": "--ds-transition-rearrange",
+            "part": "root",
+            "at": "Stack/runtime/presentation/index.ts:85",
+            "fallback": null,
+            "lands": "transition"
+          }
+        ],
+        "censusTotals": {
+          "distinctDsNamesScoped": 18,
+          "readOccurrencesScoped": 41,
+          "distinctDsNamesTsOwners": 12
+        },
+        "tenantConditionalDeclaration": {
+          "at": "packages/core/src/infrastructure/compilers/kernel/foundation/css/chrome-variables/index.ts:1371-1451",
+          "emits": [
+            "--ds-stack-divider-size",
+            "--ds-stack-divider-color",
+            "--ds-stack-divider-opacity"
+          ],
+          "note": "--ds-stack-divider-inset is NOT emitted, which is why it stays undeclared."
+        }
+      }
+    },
+    "evidenceIds": [],
+    "nextAction": "BROWSER_PROVE_SEQUENCE_GEOMETRY_DIVIDER_CENTERING_RESPONSIVE_AXIS_RTL_AND_LARGE_TEXT_WITH_SOURCE_HASH"
+  },
+  "themeControls": [
+    {
+      "controlId": "palette.seeds",
+      "disposition": "UNKNOWN",
+      "verificationState": "SOURCE_BOUND",
+      "unknownReason": "DIVIDER_AND_NEGATIVE_COMPUTED_PROOF_MISSING",
+      "applicabilityHypothesis": "APPLICABILITY_SPLIT_CANDIDATE: root is paint-invariant, while the default divider consumes --ds-color-border-subtle and may move with palette-derived border color.",
+      "outputBindings": [
+        "--ds-stack-divider-color",
+        "--ds-color-border-subtle"
+      ],
+      "stableParts": [
+        "root",
+        "divider"
+      ],
+      "computedProperties": [
+        "background-color"
+      ],
+      "sourceBindings": [
+        "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives.css"
+      ],
+      "evidenceIds": [],
+      "nextAction": "DIFF_PALETTE_STOPS_AND_SEPARATE_ROOT_INVARIANCE_FROM_DIVIDER_BORDER_COLOR_CAUSALITY",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reviewedFrom": "anatomy",
+        "uncoveredByDesign": {
+          "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
+            "--ds-color-border-subtle"
+          ]
+        },
+        "reasons": [
+          {
+            "root": "palette.seeds",
+            "why": "la anatomia de stack no lee ningun canal propio de este control: lo gobierna el canal compartido de la raiz (nivel 2 de la forma canonica), sin socket de familia"
+          }
+        ]
+      }
+    },
+    {
+      "controlId": "typography.pairing",
+      "disposition": "UNKNOWN",
+      "verificationState": "SOURCE_BOUND",
+      "unknownReason": "DESCENDANT_AND_NEGATIVE_PROOF_MISSING",
+      "applicabilityHypothesis": "INVARIANT_CANDIDATE: Stack owns sequence geometry, not fonts; changed child metrics must preserve gap and divider placement.",
+      "sourceBindings": [
+        "packages/core/src/ui/primitives/layout/Stack/engines/modern/index.tsx"
+      ],
+      "evidenceIds": [],
+      "nextAction": "PROVE_NO_ROOT_FONT_BINDING_AND_STRESS_BASELINE_ALIGNMENT_WITH_EACH_PAIRING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "source": "huecos-fable",
+        "reasons": [
+          {
+            "root": "typography.pairing",
+            "why": "el peso/espaciado/transformacion tipografica pertenece a la tabla de pairing gobernada, no a sockets de familia"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
+    },
+    {
+      "controlId": "typography.families",
+      "disposition": "UNKNOWN",
+      "verificationState": "SOURCE_BOUND",
+      "unknownReason": "DESCENDANT_AND_NEGATIVE_PROOF_MISSING",
+      "applicabilityHypothesis": "INVARIANT_CANDIDATE: font stacks inherit into children but Stack does not own text presentation.",
+      "sourceBindings": [
+        "packages/core/src/ui/primitives/layout/Stack/contracts/index.ts"
+      ],
+      "evidenceIds": [],
+      "nextAction": "PROVE_STACK_GAP_DIVIDER_AND_SAFE_SHRINK_WITH_LONG_CONTENT_ACROSS_FONT_STACKS",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "source": "huecos-fable",
+        "reasons": [
+          {
+            "root": "typography.families",
+            "why": "la familia tipografica autoral vive en los packs gobernados, no en sockets de familia"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
+    },
+    {
+      "controlId": "typography.scale",
+      "disposition": "UNKNOWN",
+      "verificationState": "SOURCE_BOUND",
+      "unknownReason": "LARGE_TEXT_STRESS_AND_NEGATIVE_PROOF_MISSING",
+      "applicabilityHypothesis": "INVARIANT_CANDIDATE_WITH_DESCENDANT_STRESS: scale changes child metrics; sequence order, governed gap and divider count must stay stable.",
+      "sourceBindings": [
+        "packages/core/src/ui/primitives/layout/Stack/engines/modern/index.tsx",
+        "packages/core/src/ui/primitives/layout/Stack/runtime/responsive/index.tsx"
+      ],
+      "stressCases": [
+        "200-percent-text",
+        "baseline-alignment",
+        "horizontal-wrap",
+        "long-unbreakable-child",
+        "divided-sequence"
+      ],
+      "evidenceIds": [],
+      "nextAction": "RUN_LARGE_TEXT_AND_LONG_TOKEN_GEOMETRY_PROBE_FOR_VERTICAL_HORIZONTAL_WRAP_AND_DIVIDERS",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "source": "huecos-fable",
+        "reasons": [
+          {
+            "root": "typography.scale",
+            "why": "la anatomia de stack no lee ningun canal propio de este control: lo gobierna el canal compartido de la raiz (nivel 2 de la forma canonica), sin socket de familia"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
+    },
+    {
+      "controlId": "shape.radius-scale",
+      "disposition": "UNKNOWN",
+      "verificationState": "SOURCE_BOUND",
+      "unknownReason": "NEGATIVE_COMPUTED_PROOF_MISSING",
+      "applicabilityHypothesis": "NOT_APPLICABLE_CANDIDATE: Stack root and divider own no radius or clipping surface.",
+      "sourceBindings": [
+        "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives.css"
+      ],
+      "evidenceIds": [],
+      "nextAction": "PROVE_ROOT_AND_DIVIDER_RADIUS_REMAIN_UNOWNED_ACROSS_STOPS",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "shape.radius-scale",
+            "why": "la anatomia de stack no lee ningun canal propio de este control: lo gobierna el canal compartido de la raiz (nivel 2 de la forma canonica), sin socket de familia"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
+    },
+    {
+      "controlId": "shape.button-style",
+      "disposition": "UNKNOWN",
+      "verificationState": "SOURCE_BOUND",
+      "unknownReason": "NEGATIVE_COMPUTED_PROOF_MISSING",
+      "applicabilityHypothesis": "NOT_APPLICABLE_CANDIDATE: Stack owns no button anatomy or button silhouette.",
+      "sourceBindings": [
+        "packages/core/src/ui/primitives/layout/Stack/contracts/index.ts"
+      ],
+      "evidenceIds": [],
+      "nextAction": "NEGATIVE_CENSUS_BUTTON_CHANNELS_AND_IDENTICAL_STACK_GEOMETRY",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "shape.button-style",
+            "why": "layout no es control de formulario: la silueta de boton no aplica"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
+    },
+    {
+      "controlId": "density.mode",
+      "disposition": "UNKNOWN",
+      "verificationState": "SOURCE_BOUND",
+      "unknownReason": "COMPUTED_STATIC_DB_AND_RESTORE_PROOF_MISSING",
+      "applicabilityHypothesis": "APPLICABLE_CANDIDATE_FOR_PRESET_SPACING: preset spacing uses density-scaled --ds-spacing-* once; numeric spacing must remain exact.",
+      "outputBindings": [
+        "--ds-spacing-1",
+        "--ds-spacing-2",
+        "--ds-spacing-4",
+        "--ds-spacing-6",
+        "--ds-spacing-8",
+        "--ds-spacing-10",
+        "--ds-spacing-12",
+        "--ds-spacing-16",
+        "--_ds-stack-gap-current"
+      ],
+      "computedProperties": [
+        "gap",
+        "margin-block",
+        "margin-inline"
+      ],
+      "sourceBindings": [
+        "packages/core/src/ui/primitives/layout/Stack/contracts/index.ts#SPACING_MAP",
+        "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives.css"
+      ],
+      "negativeControls": [
+        "numeric spacing remains exact",
+        "divider thickness, direction, order and touch ownership remain fixed"
+      ],
+      "evidenceIds": [],
+      "nextAction": "PROVE_PRESET_GAP_AND_DIVIDER_CENTERING_FOR_DENSITY_STOPS_STATIC_DB_AND_EXACT_RESET",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "source": "huecos-fable",
+        "reviewedFrom": "anatomy",
+        "uncoveredByDesign": {
+          "Intencion del consumidor (API de instancia o gap de layout): adjudicacion sostenida - el gap lo declara la app, no el tema": [
+            "--ds-stack-gap"
+          ]
+        },
+        "reasons": [
+          {
+            "root": "density.mode",
+            "why": "la anatomia de stack no lee ningun canal propio de este control: lo gobierna el canal compartido de la raiz (nivel 2 de la forma canonica), sin socket de familia"
+          }
+        ]
+      }
+    },
+    {
+      "controlId": "spacing.rhythm",
+      "disposition": "UNKNOWN",
+      "verificationState": "COMPUTED_VERIFIED",
+      "unknownReason": "DISPOSITION_SHAPE_AND_SIGHTED_ACCEPTANCE_PENDING. The computed evidence this row was waiting for now exists (see evidenceIds): both ingress doors measured on one scene, preset gap x0.85/x1.2 exact and monotonic, numeric gap unmoved, negative controls held, restore exact. disposition stays UNKNOWN for two reasons that are NOT missing measurement: the schema dispositionLaw for APPLICABLE requires separate staticSourceBindings/dbSourceBindings, which this cell shape does not carry (its sourceBindings is a flat array), and SIGHTED_ACCEPTED is not claimable from a computed run.",
+      "applicabilityHypothesis": "APPLICABLE_CANDIDATE_FOR_DEFAULT_SCALAR_AND_RESPONSIVE_PRESET_SPACING: default, scalar and responsive presets multiply by tight=0.85 normal=1 airy=1.2 and divider centering follows the same result at every breakpoint. Numeric spacing is exact and unsafe values normalize to 0px through one contract-level resolver shared by all three engines.",
+      "axisDispositions": [
+        {
+          "axis": "default-or-scalar-preset",
+          "hypothesis": "APPLICABLE",
+          "expectedComputed": "gap = computed(--ds-spacing-rung) * rhythm factor; neutral-density md baseline 16px yields 13.6px / 16px / 19.2px"
+        },
+        {
+          "axis": "divider-centering",
+          "hypothesis": "APPLICABLE_WITH_SAME_GAP",
+          "expectedComputed": "main-axis divider margin is -0.5 * computed current gap, preventing gap+divider+gap doubling"
+        },
+        {
+          "axis": "responsive-preset",
+          "hypothesis": "APPLICABLE_MODERN_ONLY",
+          "expectedComputed": "the generated media rule re-projects BOTH gap and --_ds-stack-gap-current as calc(<rung> * var(--ds-rhythm-effective-scale, 1)) under Modern, so the divider hairline stays centred in the scaled rhythm at every breakpoint; Classic and Rustic emit the unscaled rung and never reference the rhythm channel"
+        },
+        {
+          "axis": "numeric-scalar-or-responsive",
+          "hypothesis": "INVARIANT",
+          "expectedComputed": "finite non-negative number remains exact px in every engine; negative, NaN and Infinity normalize to 0px through the single contract resolver. Because that resolver is the shared contract, normalization reaches Classic and Rustic too: for NaN and Infinity this changes no rendered value, and for a negative it replaces an invalid-at-computed-value-time gap plus a wrong-direction positive divider margin with an explicit 0px. Reasoned from the cascade, not browser-proven."
+        }
+      ],
+      "outputBindings": [
+        "data-spacing",
+        "--ds-stack-gap",
+        "--_ds-stack-gap-current",
+        "--_ds-stack-divider-gap-block",
+        "--_ds-stack-divider-gap-inline",
+        "--ds-rhythm-effective-scale"
+      ],
+      "stableParts": [
+        "root",
+        "divider"
+      ],
+      "propertyGroups": [
+        "sequence-spacing",
+        "divider-anatomy",
+        "responsive-projection"
+      ],
+      "computedProperties": [
+        "gap",
+        "margin-block",
+        "margin-inline"
+      ],
+      "sourceBindings": [
+        "packages/core/src/ui/primitives/layout/Stack/contracts/index.ts#SPACING_MAP",
+        "packages/core/src/ui/primitives/layout/Stack/runtime/presentation/index.ts",
+        "packages/core/src/ui/primitives/layout/Stack/runtime/responsive/index.tsx",
+        "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives.css",
+        "packages/core/governance/manifest/controls/spacing/rhythm/index.json"
+      ],
+      "negativeControls": [
+        "finite numeric spacing remains exact and never scales",
+        "direction reverse wrap alignment full-size divider thickness font color and motion remain unchanged"
+      ],
+      "stressCases": [
+        "rtl-horizontal-and-reverse",
+        "responsive-direction-with-divider",
+        "responsive-spacing-at-xs-and-md",
+        "nested-stacks-with-independent-rhythm",
+        "fragment-and-zero-children",
+        "large-text-horizontal-wrap",
+        "spacing=none remains zero",
+        "negative, NaN and Infinity scalar and responsive gaps normalize to 0px and stamp no preset",
+        "fragment flattening preserves numeric zero children and one divider between rendered members"
+      ],
+      "restoreRequirements": [
+        "Unset static and DB rhythm restores factor 1, the same data-spacing and byte-equivalent computed gap.",
+        "Divider margins must restore from the same current-gap channel with no stale responsive axis flags.",
+        "Switching preset to numeric, none or unset must clear stale custom properties and preserve consumer style precedence."
+      ],
+      "evidenceIds": [
+        "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/spacing-rhythm/computed-static-db/stack-tight.json.receipt.json",
+        "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/spacing-rhythm/computed-static-db/stack-airy.json.receipt.json"
+      ],
+      "nextAction": "RESHAPE_SOURCE_BINDINGS_TO_SATISFY_DISPOSITION_LAW_THEN_OBTAIN_SIGHTED_ACCEPTANCE. The 0.85/1/1.2 computed proof for the scalar preset axis is DONE and receipted; the responsive-preset axis is not covered by these fixtures and remains unmeasured.",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "spacing.rhythm",
+            "why": "la anatomia de stack no lee ningun canal propio de este control: lo gobierna el canal compartido de la raiz (nivel 2 de la forma canonica), sin socket de familia"
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
+            "--ds-spacing-1",
+            "--ds-spacing-10",
+            "--ds-spacing-12",
+            "--ds-spacing-16",
+            "--ds-spacing-2",
+            "--ds-spacing-4",
+            "--ds-spacing-6",
+            "--ds-spacing-8"
+          ],
+          "Canales compartidos porque OTRA familia los lee de verdad (nivel 2; sus sockets viven en la familia duena)": [
+            "--ds-stack-divider-inset",
+            "--ds-stack-divider-opacity",
+            "--ds-stack-divider-size"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      },
+      "internalChannels": [
+        {
+          "channelId": "--_ds-stack-divider-gap-block",
+          "semanticOwner": "spacing.rhythm",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/layout/stack"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-stack-divider-gap-inline",
+          "semanticOwner": "spacing.rhythm",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/layout/stack"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-stack-gap-current",
+          "semanticOwner": "spacing.rhythm",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/layout/stack"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--ds-rhythm-effective-scale",
+          "semanticOwner": "spacing.rhythm",
+          "producer": "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/layout/stack"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--ds-stack-gap",
+          "semanticOwner": "spacing.rhythm",
+          "producer": "packages/core/src/ui/primitives/layout/Stack/runtime/presentation/index.ts",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/layout/stack"
+          ],
+          "sourceBindings": [
+            "packages/core/src/ui/primitives/layout/Stack/runtime/presentation/index.ts",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        }
+      ],
+      "mechanism": "THEME_CONTROL"
+    },
+    {
+      "controlId": "motion.dial",
+      "disposition": "UNKNOWN",
+      "verificationState": "SOURCE_BOUND",
+      "unknownReason": "COMPUTED_MOTION_AND_REDUCED_MOTION_PROOF_MISSING",
+      "applicabilityHypothesis": "APPLICABLE_CANDIDATE_WHEN motion=rearrange: root transition resolves through --ds-transition-rearrange; motion=none must remain none.",
+      "outputBindings": [
+        "data-layout-motion",
+        "--ds-transition-rearrange",
+        "--ds-motion-rearrange"
+      ],
+      "sourceBindings": [
+        "packages/core/src/ui/primitives/layout/Stack/runtime/presentation/index.ts",
+        "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css"
+      ],
+      "negativeControls": [
+        "motion=none remains transition:none",
+        "divider and child DOM identity remain stable",
+        "prefers-reduced-motion forces rearrange duration to zero"
+      ],
+      "evidenceIds": [],
+      "nextAction": "PROVE_DIAL_STOPS_ONLY_CHANGE_REARRANGE_CADENCE_AND_REDUCED_MOTION_WINS",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "motion.dial",
+            "why": "la anatomia de stack no lee ningun canal propio de este control: lo gobierna el canal compartido de la raiz (nivel 2 de la forma canonica), sin socket de familia"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
+    },
+    {
+      "controlId": "surfaces.elevation-posture",
+      "disposition": "UNKNOWN",
+      "verificationState": "SOURCE_BOUND",
+      "unknownReason": "NEGATIVE_COMPUTED_PROOF_MISSING",
+      "applicabilityHypothesis": "NOT_APPLICABLE_CANDIDATE: Stack is a transparent structural root without shadow ownership.",
+      "sourceBindings": [
+        "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives.css"
+      ],
+      "evidenceIds": [],
+      "nextAction": "PROVE_ROOT_AND_DIVIDER_SHADOW_BACKGROUND_AND_BORDER_GEOMETRY_ARE_UNCHANGED",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "surfaces.elevation-posture",
+            "why": "la anatomia de stack no lee ningun canal propio de este control: lo gobierna el canal compartido de la raiz (nivel 2 de la forma canonica), sin socket de familia"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
+    },
+    {
+      "controlId": "surfaces.effect-intensity",
+      "disposition": "UNKNOWN",
+      "verificationState": "SOURCE_BOUND",
+      "unknownReason": "NEGATIVE_COMPUTED_PROOF_MISSING",
+      "applicabilityHypothesis": "NOT_APPLICABLE_CANDIDATE: Stack owns no blur, texture, gradient or glass effect.",
+      "sourceBindings": [
+        "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives.css"
+      ],
+      "evidenceIds": [],
+      "nextAction": "NEGATIVE_CENSUS_EFFECT_CHANNELS_AND_COMPUTED_PAINT",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "Box/Flex/Grid no tienen superficie propia que acabar",
+        "source": "huecos-kimi",
+        "reviewedFrom": "anatomy",
+        "reasons": [
+          {
+            "root": "surfaces.effect-intensity",
+            "why": "la anatomia de stack no lee ningun canal propio de este control: lo gobierna el canal compartido de la raiz (nivel 2 de la forma canonica), sin socket de familia"
+          }
+        ]
+      }
+    },
+    {
+      "controlId": "navigation.sidebar-tone",
+      "disposition": "UNKNOWN",
+      "verificationState": "SOURCE_BOUND",
+      "unknownReason": "NEGATIVE_COMPUTED_PROOF_MISSING",
+      "applicabilityHypothesis": "NOT_APPLICABLE_CANDIDATE: generic Stack has no sidebar role or sidebar color consumer.",
+      "sourceBindings": [
+        "packages/core/src/ui/primitives/layout/Stack/contracts/index.ts"
+      ],
+      "evidenceIds": [],
+      "nextAction": "PROVE_SIDEBAR_TONE_CANNOT_SELECT_OR_PAINT_GENERIC_STACK",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "el layout no pinta chrome",
+        "source": "huecos-kimi",
+        "reasons": [
+          {
+            "root": "navigation.sidebar-tone",
+            "why": "layout no es chrome de navegacion: el tono de sidebar gobierna la navegacion lateral, nunca una primitiva de layout"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
+    },
+    {
+      "controlId": "experience.profile",
+      "disposition": "UNKNOWN",
+      "verificationState": "SOURCE_BOUND",
+      "unknownReason": "COMPOSED_PROFILE_DIFFERENTIAL_PROOF_MISSING",
+      "applicabilityHypothesis": "INVARIANT_CANDIDATE_EXCEPT_THROUGH_GOVERNED_SPACING_OR_DIVIDER_COLOR_AXES: Stack reads no experience-profile channel directly.",
+      "sourceBindings": [
+        "packages/core/src/ui/primitives/layout/Stack/engines/modern/index.tsx",
+        "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives.css"
+      ],
+      "evidenceIds": [],
+      "nextAction": "DIFF_EACH_PROFILE_AND_ATTRIBUTE_ANY_DELTA_TO_SPACING_PALETTE_OR_ANOTHER_GOVERNED_AXIS",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "experience.profile",
+            "why": "ningun componente lee --ds-experience-profile: marcador de :root, selecciona composicion en carga (L4)"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
+    },
+    {
+      "controlId": "chrome.families",
+      "disposition": "UNKNOWN",
+      "verificationState": "SOURCE_BOUND",
+      "unknownReason": "NEGATIVE_COMPUTED_PROOF_MISSING",
+      "applicabilityHypothesis": "NOT_APPLICABLE_CANDIDATE: no button, table or modal chrome channel is consumed by generic Stack.",
+      "sourceBindings": [
+        "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives.css"
+      ],
+      "evidenceIds": [],
+      "nextAction": "NEGATIVE_CENSUS_CHROME_FAMILY_CHANNELS",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "chrome.families",
+            "why": "layout no crea capas propias: el orden z lo gobierna la escala derivada de layer.stack"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
+    },
+    {
+      "controlId": "chrome.anatomy",
+      "disposition": "UNKNOWN",
+      "verificationState": "SOURCE_BOUND",
+      "unknownReason": "ROOT_ATTRIBUTE_NEGATIVE_PROOF_MISSING",
+      "applicabilityHypothesis": "NOT_APPLICABLE_CANDIDATE: data-anatomy-layout targets shells and headers, not Stack root or divider.",
+      "sourceBindings": [
+        "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives.css"
+      ],
+      "evidenceIds": [],
+      "nextAction": "PROVE_LAYOUT_ANATOMY_ATTRIBUTE_HAS_NO_STACK_SELECTOR_OR_COMPUTED_DELTA",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "chrome.anatomy",
+            "why": "la anatomia de stack no lee ningun canal propio de este control: lo gobierna el canal compartido de la raiz (nivel 2 de la forma canonica), sin socket de familia"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
+    },
+    {
+      "controlId": "token-overrides",
+      "disposition": "UNKNOWN",
+      "verificationState": "SOURCE_BOUND",
+      "unknownReason": "ALLOWLIST_MEMBERSHIP_AND_EXACT_RESTORE_PROOF_MISSING",
+      "applicabilityHypothesis": "APPLICABLE_CANDIDATE_ONLY_FOR_ALLOWLISTED_LAYOUT_CHANNELS: spacing, divider paint and motion overrides may reach Stack; sequence semantics remain instance-owned.",
+      "sourceBindings": [
+        "packages/core/src/ui/primitives/layout/Stack/contracts/index.ts#SPACING_MAP",
+        "packages/core/src/ui/primitives/layout/Stack/runtime/presentation/index.ts",
+        "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives.css"
+      ],
+      "negativeControls": [
+        "cannot override direction reverse wrap alignment order divider count or numeric gap",
+        "unknown and non-allowlisted channels fail closed"
+      ],
+      "evidenceIds": [],
+      "nextAction": "RESOLVE_ALLOWLIST_MEMBERSHIP_THEN_PROVE_AUTHORIZED_GAP_DIVIDER_OR_MOTION_CHANNELS_AND_EXACT_RESET",
+      "targetBinding": {
+        "status": "ESCAPE_HATCH",
+        "why": "es la valvula de escape, no el modelo -- textual del canon: \"escape hatch, not the model: every recurring override is a candidate for a real capability\". Alcanza cualquier canal por construccion (allowlist cerrada, max 200, falla cerrado) y por eso no declara nada por familia.",
+        "instrument": "un override recurrente sobre esta familia es EVIDENCIA de una capacidad faltante: convertilo en un control real, no lo normalices aqui",
+        "consumer": "src/infrastructure/compilers/composition/tenant-theme/index.ts :: tokenOverrides",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/token-overrides.json"
+      }
+    },
+    {
+      "controlId": "recipe-profile",
+      "disposition": "UNKNOWN",
+      "verificationState": "SOURCE_BOUND",
+      "unknownReason": "NEGATIVE_BINDING_PROOF_MISSING",
+      "applicabilityHypothesis": "INVARIANT_CANDIDATE: Stack exposes no recipe selection or recipe-profile consumer.",
+      "sourceBindings": [
+        "packages/core/src/ui/primitives/layout/Stack/contracts/index.ts",
+        "packages/core/src/ui/primitives/layout/Stack/engines/modern/index.tsx"
+      ],
+      "evidenceIds": [],
+      "nextAction": "PROVE_RECIPE_PROFILE_PRESERVES_IDENTICAL_ROOT_DIVIDER_AND_SEQUENCE",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "recipe-profile",
+            "why": "ningun componente lee --ds-recipe-profile: la receta rebinds raices (L4)"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
+    },
+    {
+      "controlId": "profiles.expressive",
+      "disposition": "UNKNOWN",
+      "verificationState": "SOURCE_BOUND",
+      "unknownReason": "COMPOSED_AXIS_NEGATIVE_PROOF_MISSING",
+      "applicabilityHypothesis": "INVARIANT_CANDIDATE: expressive type, edge and material outputs are not directly consumed by Stack.",
+      "sourceBindings": [
+        "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives.css"
+      ],
+      "evidenceIds": [],
+      "nextAction": "DIFF_EXPRESSIVE_AXES_AND_PROVE_NO_DIRECT_STACK_SELECTOR_OR_PAINT_BINDING",
+      "targetBinding": {
+        "status": "OVERLAY_OF_ROOTS",
+        "why": "no necesita raiz propia: dependsOn=[experience.profile] y sus seis ejes sobrescriben por eje los MISMOS canales que ya componen las raices existentes. Los sockets de esta celda son los sockets de las raices mapeadas, no unos nuevos.",
+        "axisToRoot": {
+          "type": [
+            "type.pairing",
+            "type.scale"
+          ],
+          "geometry": [
+            "shape.corner",
+            "shape.control-silhouette"
+          ],
+          "edge": [
+            "shape.edge"
+          ],
+          "material": [
+            "surface.finish"
+          ],
+          "elevation": [
+            "surface.elevation"
+          ],
+          "motif": [
+            "surface.finish"
+          ]
+        },
+        "consumer": "src/infrastructure/runtime/bootstrap/facade/react/provider/index.tsx :: sanitizeExpressiveOverrides",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/profiles.expressive.json"
+      }
+    },
+    {
+      "controlId": "palette.status-seeds",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reviewedFrom": "anatomy",
+        "reasons": [
+          {
+            "root": "palette.status-seeds",
+            "why": "la anatomia de stack no lee ningun canal de color de estado (success/warning/error/info): es un primitivo de layout que gobierna geometria/posicion/visibilidad, no expresa estado semantico; cero lecturas de --ds-color-(success|warning|error|info) en foundation/tokens/css/** (modern+rustic+presentation) ni en la anatomia TSX de primitive/layout/stack. Solo 5/20 familias de layout tienen skin propio (collapse, divider, layout, scroll-area, splitter) y las 5 dieron 0 hits."
+          }
+        ]
+      }
+    },
+    {
+      "controlId": "profiles.icon",
+      "disposition": "UNKNOWN",
+      "verificationState": "SOURCE_BOUND",
+      "unknownReason": "NEGATIVE_BINDING_PROOF_MISSING",
+      "applicabilityHypothesis": "NOT_APPLICABLE_CANDIDATE: Stack renders no owned icon and does not choose descendant glyph policy.",
+      "sourceBindings": [
+        "packages/core/src/ui/primitives/layout/Stack/engines/modern/index.tsx"
+      ],
+      "evidenceIds": [],
+      "nextAction": "PROVE_ICON_PROFILE_CHANGES_DESCENDANT_ICONS_ONLY",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "profiles.icon",
+            "why": "la anatomia no porta iconos de la libreria (flechas/grips son geometria propia, ver palette/chrome.anatomy)"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
+    },
+    {
+      "controlId": "responsive.posture",
+      "disposition": "UNKNOWN",
+      "verificationState": "SOURCE_BOUND",
+      "unknownReason": "CONTROL_TO_FAMILY_NEGATIVE_PROOF_MISSING",
+      "applicabilityHypothesis": "INVARIANT_CANDIDATE: Stack has its own viewport-breakpoint ResponsiveValue API and does not consume WidgetBoard responsive posture.",
+      "sourceBindings": [
+        "packages/core/src/ui/primitives/layout/Stack/runtime/responsive/index.tsx"
+      ],
+      "evidenceIds": [],
+      "nextAction": "PROVE_RESPONSIVE_POSTURE_CONTROL_DOES_NOT_CHANGE_STACK_BREAKPOINTS_DIRECTION_OR_GAP",
+      "targetBinding": {
+        "status": "NO_CSS_CHANNEL",
+        "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
+        "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
+        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/responsive.posture.json"
+      }
+    }
+  ],
+  "retiredThemeControls": [],
+  "recipeAnatomy": {
+    "assessmentState": "SOURCE_BOUND",
+    "sourceBindings": [
+      "packages/core/src/ui/primitives/layout/Stack/contracts/index.ts",
+      "packages/core/src/ui/primitives/layout/Stack/engines/modern/index.tsx",
+      "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives.css"
+    ],
+    "groupBindings": [],
+    "variants": [],
+    "deprecatedAliases": [],
+    "evidenceIds": [],
+    "nextAction": "NEGATIVE_PROVE_NO_RECIPE_PROFILE_OR_LAYOUT_ANATOMY_SELECTOR_TARGETS_STACK"
+  },
+  "instanceApi": {
+    "assessmentState": "SOURCE_BOUND",
+    "sourceBindings": [
+      "packages/core/src/ui/primitives/layout/Stack/contracts/index.ts#StackProps",
+      "packages/core/src/ui/primitives/layout/Stack/index.ts",
+      "packages/core/src/ui/primitives/layout/Stack/compound/index.ts"
+    ],
+    "contractSymbol": "StackProps",
+    "props": [
+      "as",
+      "direction",
+      "spacing",
+      "gap",
+      "align",
+      "justify",
+      "wrap",
+      "divider",
+      "reverse",
+      "fullWidth",
+      "fullHeight",
+      "motion",
+      "children",
+      "style",
+      "className",
+      "engine",
+      "id",
+      "dir",
+      "data-*",
+      "aria-*",
+      "remaining HTMLAttributes<HTMLElement>"
+    ],
+    "slots": [
+      "children",
+      "divider"
+    ],
+    "callbacks": [
+      "native HTMLAttributes event callbacks forwarded to polymorphic root"
+    ],
+    "controlledState": [],
+    "evidenceIds": [],
+    "nextAction": "VERIFY_PUBLIC_ENTRYPOINT_TYPES_POLYMORPHIC_REF_NATIVE_ATTRIBUTE_PRECEDENCE_AND_FALSEY_DIVIDER_SEMANTICS"
+  },
+  "hostAdaptation": {
+    "assessmentState": "SOURCE_BOUND",
+    "sourceBindings": [
+      "packages/core/src/ui/primitives/layout/Stack/engines/modern/index.tsx",
+      "packages/core/src/ui/primitives/layout/Stack/runtime/responsive/index.tsx",
+      "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives.css"
+    ],
+    "contexts": [
+      "standalone-page",
+      "embedded-workbench",
+      "narrow-region",
+      "rtl-subtree"
+    ],
+    "containerRules": [
+      "Modern pins min-inline-size:0 for safe nesting.",
+      "Responsive direction, spacing, align, justify and wrap emit scoped viewport media rules.",
+      "fullWidth and fullHeight project as 100 percent scalar root sizing.",
+      "Consumer inline style is merged last and may override engine structure deliberately."
+    ],
+    "invariants": [
+      "RTL is forwarded and horizontal flex-start/end follow the writing direction.",
+      "Divider orientation and centering follow responsive direction without physical-side assumptions.",
+      "Stack owns no interactive target; pointer, touch and keyboard behavior belongs to descendants or native handlers."
+    ],
+    "sourceTests": [
+      "packages/core/src/ui/primitives/layout/Stack/tests/Stack.modern-quality.test.tsx",
+      "packages/core/src/ui/primitives/layout/Stack/tests/Stack.responsive.test.tsx",
+      "packages/core/src/ui/primitives/layout/Stack/tests/Stack.modern-fragment-children.test.tsx",
+      "packages/core/src/ui/primitives/layout/Stack/tests/Stack.test.tsx"
+    ],
+    "evidenceIds": [],
+    "nextAction": "BROWSER_PROVE_PAGE_EMBED_WIDE_VIEWPORT_NARROW_HOST_RTL_DIVIDERS_LARGE_TEXT_AND_STYLE_PRECEDENCE"
+  },
+  "statesMotion": {
+    "assessmentState": "SOURCE_BOUND",
+    "sourceBindings": [
+      "packages/core/src/ui/primitives/layout/Stack/runtime/presentation/index.ts",
+      "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css",
+      "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives.css"
+    ],
+    "states": [
+      "default",
+      "responsive-breakpoint",
+      "wrapped",
+      "reversed",
+      "divided",
+      "rearranging",
+      "motion-none"
+    ],
+    "transitions": [
+      "motion=rearrange -> --ds-transition-rearrange",
+      "motion=none -> transition:none",
+      "divider identity remains stable through direction changes"
+    ],
+    "inputModes": [
+      "passive-layout",
+      "native-pointer-events-forwarded",
+      "native-keyboard-events-forwarded"
+    ],
+    "reducedMotion": [
+      "global reduced-motion authority forces --ds-motion-rearrange to 0s"
+    ],
+    "evidenceIds": [],
+    "nextAction": "COMPUTED_PROVE_MOTION_DIAL_REDUCED_MOTION_AND_STABLE_DIVIDER_GEOMETRY"
+  },
+  "invariants": {
+    "assessmentState": "SOURCE_BOUND",
+    "sourceBindings": [
+      "packages/core/src/ui/primitives/layout/Stack/contracts/index.ts",
+      "packages/core/src/ui/primitives/layout/Stack/engines/modern/index.tsx",
+      "packages/core/src/ui/primitives/layout/Stack/runtime/presentation/index.ts",
+      "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives.css"
+    ],
+    "entries": [
+      "One stable root owns sequence geometry; dividers are decorative and aria-hidden.",
+      "Fragment flattening preserves each rendered member and numeric zero child before divider interleaving.",
+      "Responsive projection never duplicates or reorders content.",
+      "Default and preset gaps share one current-gap authority with divider centering.",
+      "Theme controls never select direction reverse wrap order divider content or full-size posture.",
+      "Unsafe numeric gaps are an open defect and cannot be treated as verified exact geometry.",
+      "Unset tenant controls must exactly restore attributes, private gap channels, divider offsets and computed geometry."
+    ],
+    "evidenceIds": [],
+    "nextAction": "BIND_INVARIANTS_TO_NUMERIC_NEGATIVE_DRILLS_COMPUTED_OUTPUT_AND_SIGHTED_HOST_RECEIPTS"
+  },
+  "premiumCandidates": [
+    {
+      "id": "container-responsive-stack-values",
+      "proposalState": "PROPOSAL",
+      "countsAsCapability": false,
+      "gap": "ResponsiveValue is viewport-media based, so a narrow embedded host in a wide viewport cannot select compact direction or spacing from host width.",
+      "mechanism": "additive responsiveBasis=viewport|container contract with governed named-container projection; default remains viewport",
+      "candidateVariants": [
+        "viewport",
+        "container"
+      ],
+      "blockedBy": [
+        "two-consumer-demand",
+        "container-name-ownership",
+        "SSR-and-hydration-contract",
+        "responsive-divider-proof"
+      ]
+    },
+    {
+      "id": "responsive-fill-and-reverse",
+      "proposalState": "PROPOSAL",
+      "countsAsCapability": false,
+      "gap": "direction, spacing, align, justify and wrap are responsive, while reverse, fullWidth and fullHeight are scalar-only, leaving asymmetric host posture composition.",
+      "mechanism": "additive ResponsiveValue support for reverse and fill axes with exact current scalar defaults",
+      "candidateVariants": [
+        "responsive-reverse",
+        "responsive-inline-fill",
+        "responsive-block-fill"
+      ],
+      "blockedBy": [
+        "API-precedence-law",
+        "responsive-runtime-property-support",
+        "RTL-and-source-order-proof",
+        "container-posture-decision"
+      ]
+    }
+  ]
+}

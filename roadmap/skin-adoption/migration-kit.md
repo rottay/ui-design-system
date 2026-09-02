@@ -9,7 +9,7 @@ anatomy.
 
 ## Ground truth: what the counter counts (drive each listed file to 0)
 
-`node scripts/engine-token-audit.mjs` emits `fleet.inlinePaint.<path>: N` per file. A
+`node scripts/infrastructure/engine-token-audit.mjs` emits `fleet.inlinePaint.<path>: N` per file. A
 "site" is:
 - an **object-literal key** (innermost bracket is `{`) named `background*`, `border*`,
   `outline*`, `color`, `boxShadow`, `textShadow`, `fill`, `stroke`, `accentColor`,
@@ -153,7 +153,7 @@ name; delete the `<style>` tag. Do NOT redefine a globally-loaded keyframe (`spi
 
 ## Your verification (your files only) + report
 
-1. `cd packages/core && node scripts/engine-token-audit.mjs | grep -E "<your file paths>"`
+1. `cd packages/core && node scripts/infrastructure/engine-token-audit.mjs | grep -E "<your file paths>"`
    → every listed file shows `: 0`. Paste the tail.
 2. `cd packages/core && pnpm vitest run <your component dirs>` → existing tests green. Paste tail.
 Report: per-component one line (sites→0, skin file(s), states converted); the two tails;

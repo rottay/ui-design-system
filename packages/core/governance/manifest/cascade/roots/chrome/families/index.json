@@ -1,0 +1,305 @@
+{
+  "schemaVersion": 1,
+  "rootId": "chrome.families",
+  "tier": "pro",
+  "rootChannel": {
+    "channel": "--ds-button-primary-bg",
+    "emission": [
+      {
+        "kind": "compiler-emit",
+        "site": "packages/core/src/infrastructure/compilers/kernel/foundation/css/chrome-variables/index.ts",
+        "note": "mapeo canonico chrome->canal (ej. --ds-sidebar-bg: chrome.sidebar.bg en :185-186); en brand-theme el mapa de familias vive en :1523+ (--ds-button-primary-bg: chrome.controls.buttonPrimary.bg)."
+      }
+    ]
+  },
+  "dependsOn": [],
+  "derivations": [],
+  "derivationsEmptyReason": "ESCAPE HATCH adjudicado: chrome.families es el MAPA de que familia lee que canal semantico; las aristas alias semanticas->familia (p.ej. --ds-color-primary -> --ds-button-primary-bg) pertenecen al hogar de la raiz semantica (ley de hogar R6) y NO se redeclaran aqui. Descendientes transitivos propios medidos desde los 3 canales representativos: 1 (--ds-table-header-bg-hover), heredero del alias, no decision de esta raiz. No se inventa cascada.",
+  "terminalReach": [
+    {
+      "channelId": "--_ds-action-dock-panel-header-bg",
+      "familyId": "structure/workspace/action-dock",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-active-filters-bar-panel-header-bg",
+      "familyId": "structure/workspace/active-filters-bar",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-adaptive-overlay-z-index",
+      "familyId": "pattern/feedback/adaptive-overlay",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-alert-dialog-z-index",
+      "familyId": "primitive/overlay/alert-dialog",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-app-shell-z-index",
+      "familyId": "structure/shell/app-shell",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-bottom-tab-bar-z-index",
+      "familyId": "structure/shell/bottom-tab-bar",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-cockpit-header-z-index",
+      "familyId": "pattern/shell/cockpit-header",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-collection-header-z-index",
+      "familyId": "structure/headers/collection-header",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-column-menu-panel-header-bg",
+      "familyId": "structure/workspace/column-menu",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-confirm-dialog-z-index",
+      "familyId": "primitive/overlay/confirm-dialog",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-connected-command-palette-panel-header-bg",
+      "familyId": "structure/workspace/connected-command-palette",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-context-menu-z-index",
+      "familyId": "primitive/overlay/context-menu",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-dashboard-header-z-index",
+      "familyId": "structure/headers/dashboard-header",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-detail-header-z-index",
+      "familyId": "structure/headers/detail-header",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-dropdown-z-index",
+      "familyId": "primitive/overlay/dropdown",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-edit-header-z-index",
+      "familyId": "structure/headers/edit-header",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-export-button-panel-header-bg",
+      "familyId": "structure/workspace/export-button",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-feature-workspace-frame-z-index",
+      "familyId": "pattern/shell/feature-workspace-frame",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-field-filters-panel-panel-header-bg",
+      "familyId": "structure/workspace/field-filters-panel",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-form-header-z-index",
+      "familyId": "structure/headers/form-header",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-form-section-header-bg",
+      "familyId": "pattern/forms/filter-builder",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-form-section-header-bg",
+      "familyId": "pattern/forms/filter-panel",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-form-section-header-bg",
+      "familyId": "pattern/forms/invoice-template",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-form-section-header-bg",
+      "familyId": "pattern/forms/pattern-form-builder",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-form-section-header-bg",
+      "familyId": "pattern/forms/step-wizard",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-header-surface-z-index",
+      "familyId": "structure/headers/header-surface",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-hover-card-z-index",
+      "familyId": "primitive/overlay/hover-card",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-mobile-header-z-index",
+      "familyId": "structure/headers/mobile-header",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-page-shell-surface-z-index",
+      "familyId": "structure/shell/page-shell-surface",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-page-shell-z-index",
+      "familyId": "pattern/shell/pattern-page-shell",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-popconfirm-z-index",
+      "familyId": "primitive/overlay/popconfirm",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-popover-z-index",
+      "familyId": "primitive/overlay/popover",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-record-header-tint",
+      "familyId": "structure/record/edit-fields",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-record-header-tint",
+      "familyId": "structure/record/form-sections",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-record-header-tint",
+      "familyId": "structure/record/record-action-bar",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-record-header-tint",
+      "familyId": "structure/record/record-field",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-record-header-tint",
+      "familyId": "structure/record/record-field-grid",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-record-header-tint",
+      "familyId": "structure/record/record-panel",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-record-header-tint",
+      "familyId": "structure/record/record-summary-strip",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-saved-views-menu-panel-header-bg",
+      "familyId": "structure/workspace/saved-views-menu",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-scope-switcher-panel-header-bg",
+      "familyId": "structure/workspace/scope-switcher",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-search-command-bar-panel-header-bg",
+      "familyId": "structure/workspace/search-command-bar",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-section-frame-z-index",
+      "familyId": "structure/headers/section-frame",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-selection-preview-rail-panel-header-bg",
+      "familyId": "structure/workspace/selection-preview-rail",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-sheet-z-index",
+      "familyId": "primitive/overlay/sheet",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-stats-cell-tint",
+      "familyId": "structure/dashboard/dashboard-insights",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-stats-cell-tint",
+      "familyId": "structure/dashboard/data-terminal-card",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-stats-cell-tint",
+      "familyId": "structure/dashboard/stats-header",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-surface-chrome-z-index",
+      "familyId": "structure/shell/surface-chrome",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-table-toolbar-panel-header-bg",
+      "familyId": "structure/workspace/table-toolbar",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-tour-z-index",
+      "familyId": "primitive/overlay/tour",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-view-mode-switcher-panel-header-bg",
+      "familyId": "structure/workspace/view-mode-switcher",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-watermark-z-index",
+      "familyId": "primitive/overlay/watermark",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-workbench-header-z-index",
+      "familyId": "pattern/shell/workbench-header",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-workspace-shell-z-index",
+      "familyId": "structure/shell/workspace-shell",
+      "state": "PRESCRIPCION"
+    },
+    {
+      "channelId": "--_ds-sidebar-surface-z-index",
+      "familyId": "structure/shell/sidebar-surface",
+      "state": "PRESCRIPCION"
+    }
+  ],
+  "variantDisposition": "escape-hatch",
+  "variants": [],
+  "variantsEmptyReason": "ESCAPE HATCH adjudicado: chrome.families no tiene vocabulario de variantes porque NO ES UN EJE CON POSTURAS NOMBRADAS, es un MAPA DE SLOTS. El unico registro cerrado que existe en fuente es el de SLOTS y no el de valores: TENANT_THEME_CHROME_FAMILIES (foundation/contracts/composition/tenants/themes/tenant-theme/index.ts:416-465, 48 familias contadas en fuente, tipadas como keyof TenantThemeChrome :365) enumera QUE familia se puede tocar. Dentro de cada slot el tenant escribe LITERALES CRUDOS -- colores, tamanos, bordes -- sobre el canal mapeado (p.ej. --ds-button-primary-bg: chrome.controls.buttonPrimary.bg en brand-theme/index.ts:1522-1525, --ds-sidebar-bg: chrome.sidebar.bg en compilers/kernel/foundation/css/chrome-variables/index.ts:184-186), y ese valor es continuo, no elegible de una lista. Transcribir los 48 slots como 'variantes' confundiria SLOT con POSTURA y le daria a esta raiz un vocabulario que la fuente no declara. Ademas la disposicion GLOBAL de raiz es DEUDA RECONOCIDA por el owner, no estado final: customization-model/index.json:593-596 (escapeHatchSurvives) fija que el hatch sobrevive solo para la excepcion DECLARADA y que la disposicion debe pasar a ser POR SLOT, porque una excepcion sin slot es una amnistia general; hasta esa pasada, cualquier lista aqui mentiria sobre las familias ya migradas y sobre las todavia exceptuadas por igual. Vacio DECLARADO, no tapado.",
+  "overlaps": [],
+  "terminalReachLaw": "terminalReach es el cross-ref mecanico de internalChannels (semanticOwner = esta raiz), bidireccional fail-closed por validateCascadeRoot. Estado PRESCRIPCION: fase 1 es spec objetivo; la verdad transitiva la emite la capa GENERADA (cascade-extract/materialized), no se mantiene a mano (R1)."
+}

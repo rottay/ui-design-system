@@ -4,7 +4,7 @@
  M packages/core/scripts/build-vertical-artifacts.mjs
  M packages/core/scripts/ci-gates.manifest.mjs
  M packages/core/scripts/cra-12-motion-governance.registry.json
- M packages/core/scripts/i18n-key-parity-gate.baseline.json
+ M packages/core/scripts/i18n-baseline/index.json
  M packages/core/src/foundation/contracts/composition/tenants/themes/index.ts
  M packages/core/src/foundation/i18n/runtime/catalog/translations/locales/ar/components.json
  M packages/core/src/foundation/i18n/runtime/catalog/translations/locales/en/components.json

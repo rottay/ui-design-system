@@ -98,7 +98,7 @@ need attention, that's a different, much smaller task than what the inventory de
 `guided-draft-form` narrative is not live work.
 
 **2. Re-adjudicated against the current counter:** the historical comment-adjacency defect is fixed.
-`scripts/lib/inline-paint-counter.mjs` now tracks `prevMeaningful`, so comments no longer hide a live
+`scripts/tooling/libraries/inline-paint-counter.mjs` now tracks `prevMeaningful`, so comments no longer hide a live
 paint declaration that follows them. A fresh measurement reports both sites in
 `personality-helpers.tsx` (2, not the stale 1 from the inventory). Zero remains necessary but is never
 the only certification evidence: the AST invariant, direct source review and visual diff still guard

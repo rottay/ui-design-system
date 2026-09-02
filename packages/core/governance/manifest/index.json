@@ -1,0 +1,3772 @@
+{
+  "schemaVersion": 1,
+  "generatedBy": "node packages/core/scripts/foundation/tokens/manifest/generation/index.mjs --sync",
+  "authorityLaw": "Controls own semantics, groups own recipe vocabularies, families own applicability edges, and this index owns generated rollups.",
+  "inputsDigest": "cd7eafe66fb3d8d23661e9c551bb8e598c2f0d1955ed6dbf988a0323ed7c46cb",
+  "denominators": {
+    "canonicalFamilies": 255,
+    "activeStandardControls": 14,
+    "activeProCapabilities": 7,
+    "activePublicControls": 21,
+    "controlFamilyCells": 5355,
+    "recipeGroups": 3
+  },
+  "excludedRegistryRows": [
+    {
+      "controlId": "palette.dark-mode",
+      "tier": "internal",
+      "lifecycleState": "INTERNAL_NON_CERTIFYING",
+      "reason": "Only active Standard and Pro controls create R0-R6 family certification cells."
+    }
+  ],
+  "rollups": {
+    "familyMaximumClaims": {
+      "INVENTORIED_ONLY": 3,
+      "SOURCE_BOUND": 252,
+      "ASSESSED": 0,
+      "COMPUTED_VERIFIED": 0,
+      "SIGHTED_ACCEPTED": 0
+    },
+    "familyReviews": {
+      "unreviewed": 255,
+      "accepted": 0,
+      "assessedNotElevated": 0,
+      "blockedOwnerDecision": 0
+    },
+    "controlFamilyDispositions": {
+      "UNKNOWN": 5355,
+      "APPLICABLE": 0,
+      "INVARIANT_WITH_REASON": 0,
+      "NOT_APPLICABLE_WITH_REASON": 0
+    },
+    "skeletonsCountAsProgress": false
+  },
+  "generatedControlFamilyView": {
+    "law": "Generated from family cells. Controls must not hand-author a family edge; a declared row is not progress, and every row carries its own disposition and verificationState.",
+    "controls": [
+      {
+        "controlId": "palette.seeds",
+        "declaredFamilies": 5,
+        "unknownCells": 250,
+        "applicableFamilyIds": [],
+        "parts": [
+          "divider",
+          "root",
+          "separator"
+        ],
+        "propertyGroups": [
+          "control-seeded-fill-and-edge"
+        ],
+        "channels": [
+          "--_ds-button-ai-bg",
+          "--_ds-button-ai-bg-active",
+          "--_ds-button-ai-bg-hover",
+          "--_ds-button-ai-border",
+          "--_ds-button-ai-border-active",
+          "--_ds-button-ai-border-hover",
+          "--_ds-button-ai-color",
+          "--_ds-button-ai-color-active",
+          "--_ds-button-ai-color-hover",
+          "--_ds-button-dashed-bg",
+          "--_ds-button-dashed-bg-active",
+          "--_ds-button-dashed-bg-hover",
+          "--_ds-button-dashed-border",
+          "--_ds-button-dashed-border-active",
+          "--_ds-button-dashed-border-hover",
+          "--_ds-button-dashed-color",
+          "--_ds-button-dashed-color-active",
+          "--_ds-button-dashed-color-hover",
+          "--_ds-button-default-bg",
+          "--_ds-button-default-bg-active",
+          "--_ds-button-default-bg-hover",
+          "--_ds-button-default-border",
+          "--_ds-button-default-border-active",
+          "--_ds-button-default-border-hover",
+          "--_ds-button-default-color",
+          "--_ds-button-default-color-active",
+          "--_ds-button-default-color-hover",
+          "--_ds-button-disabled-bg",
+          "--_ds-button-disabled-border-color",
+          "--_ds-button-disabled-color",
+          "--_ds-button-error-bg",
+          "--_ds-button-error-bg-active",
+          "--_ds-button-error-bg-hover",
+          "--_ds-button-error-border",
+          "--_ds-button-error-border-active",
+          "--_ds-button-error-border-hover",
+          "--_ds-button-error-color",
+          "--_ds-button-error-color-active",
+          "--_ds-button-error-color-hover",
+          "--_ds-button-ghost-bg",
+          "--_ds-button-ghost-bg-active",
+          "--_ds-button-ghost-bg-hover",
+          "--_ds-button-ghost-border",
+          "--_ds-button-ghost-border-active",
+          "--_ds-button-ghost-border-hover",
+          "--_ds-button-ghost-color",
+          "--_ds-button-ghost-color-active",
+          "--_ds-button-ghost-color-hover",
+          "--_ds-button-info-bg",
+          "--_ds-button-info-bg-active",
+          "--_ds-button-info-bg-hover",
+          "--_ds-button-info-border",
+          "--_ds-button-info-border-active",
+          "--_ds-button-info-border-hover",
+          "--_ds-button-info-color",
+          "--_ds-button-info-color-active",
+          "--_ds-button-info-color-hover",
+          "--_ds-button-link-bg",
+          "--_ds-button-link-bg-active",
+          "--_ds-button-link-bg-hover",
+          "--_ds-button-link-border",
+          "--_ds-button-link-border-active",
+          "--_ds-button-link-border-hover",
+          "--_ds-button-link-color",
+          "--_ds-button-link-color-active",
+          "--_ds-button-link-color-hover",
+          "--_ds-button-link-text-decoration",
+          "--_ds-button-link-text-decoration-hover",
+          "--_ds-button-primary-bg",
+          "--_ds-button-primary-bg-active",
+          "--_ds-button-primary-bg-hover",
+          "--_ds-button-primary-border",
+          "--_ds-button-primary-border-active",
+          "--_ds-button-primary-border-hover",
+          "--_ds-button-primary-color",
+          "--_ds-button-primary-color-active",
+          "--_ds-button-primary-color-hover",
+          "--_ds-button-secondary-bg",
+          "--_ds-button-secondary-bg-active",
+          "--_ds-button-secondary-bg-hover",
+          "--_ds-button-secondary-border",
+          "--_ds-button-secondary-border-active",
+          "--_ds-button-secondary-border-hover",
+          "--_ds-button-secondary-color",
+          "--_ds-button-secondary-color-active",
+          "--_ds-button-secondary-color-hover",
+          "--_ds-button-selected-bg",
+          "--_ds-button-success-bg",
+          "--_ds-button-success-bg-active",
+          "--_ds-button-success-bg-hover",
+          "--_ds-button-success-border",
+          "--_ds-button-success-border-active",
+          "--_ds-button-success-border-hover",
+          "--_ds-button-success-color",
+          "--_ds-button-success-color-active",
+          "--_ds-button-success-color-hover",
+          "--_ds-button-text-bg",
+          "--_ds-button-text-bg-active",
+          "--_ds-button-text-bg-hover",
+          "--_ds-button-text-border",
+          "--_ds-button-text-border-active",
+          "--_ds-button-text-border-hover",
+          "--_ds-button-text-color",
+          "--_ds-button-text-color-active",
+          "--_ds-button-text-color-hover",
+          "--_ds-button-warning-bg",
+          "--_ds-button-warning-bg-active",
+          "--_ds-button-warning-bg-hover",
+          "--_ds-button-warning-border",
+          "--_ds-button-warning-border-active",
+          "--_ds-button-warning-border-hover",
+          "--_ds-button-warning-color",
+          "--_ds-button-warning-color-active",
+          "--_ds-button-warning-color-hover",
+          "--ds-color-border-subtle",
+          "--ds-stack-divider-color"
+        ],
+        "families": [
+          {
+            "familyId": "primitive/inputs/button",
+            "layer": "primitive",
+            "disposition": "UNKNOWN",
+            "verificationState": "COMPUTED_VERIFIED",
+            "stableParts": [
+              "root"
+            ],
+            "propertyGroups": [
+              "control-seeded-fill-and-edge"
+            ],
+            "computedProperties": [
+              "background-color",
+              "border-top-color"
+            ],
+            "channels": [
+              "--_ds-button-ai-bg",
+              "--_ds-button-ai-bg-active",
+              "--_ds-button-ai-bg-hover",
+              "--_ds-button-ai-border",
+              "--_ds-button-ai-border-active",
+              "--_ds-button-ai-border-hover",
+              "--_ds-button-ai-color",
+              "--_ds-button-ai-color-active",
+              "--_ds-button-ai-color-hover",
+              "--_ds-button-dashed-bg",
+              "--_ds-button-dashed-bg-active",
+              "--_ds-button-dashed-bg-hover",
+              "--_ds-button-dashed-border",
+              "--_ds-button-dashed-border-active",
+              "--_ds-button-dashed-border-hover",
+              "--_ds-button-dashed-color",
+              "--_ds-button-dashed-color-active",
+              "--_ds-button-dashed-color-hover",
+              "--_ds-button-default-bg",
+              "--_ds-button-default-bg-active",
+              "--_ds-button-default-bg-hover",
+              "--_ds-button-default-border",
+              "--_ds-button-default-border-active",
+              "--_ds-button-default-border-hover",
+              "--_ds-button-default-color",
+              "--_ds-button-default-color-active",
+              "--_ds-button-default-color-hover",
+              "--_ds-button-disabled-bg",
+              "--_ds-button-disabled-border-color",
+              "--_ds-button-disabled-color",
+              "--_ds-button-error-bg",
+              "--_ds-button-error-bg-active",
+              "--_ds-button-error-bg-hover",
+              "--_ds-button-error-border",
+              "--_ds-button-error-border-active",
+              "--_ds-button-error-border-hover",
+              "--_ds-button-error-color",
+              "--_ds-button-error-color-active",
+              "--_ds-button-error-color-hover",
+              "--_ds-button-ghost-bg",
+              "--_ds-button-ghost-bg-active",
+              "--_ds-button-ghost-bg-hover",
+              "--_ds-button-ghost-border",
+              "--_ds-button-ghost-border-active",
+              "--_ds-button-ghost-border-hover",
+              "--_ds-button-ghost-color",
+              "--_ds-button-ghost-color-active",
+              "--_ds-button-ghost-color-hover",
+              "--_ds-button-info-bg",
+              "--_ds-button-info-bg-active",
+              "--_ds-button-info-bg-hover",
+              "--_ds-button-info-border",
+              "--_ds-button-info-border-active",
+              "--_ds-button-info-border-hover",
+              "--_ds-button-info-color",
+              "--_ds-button-info-color-active",
+              "--_ds-button-info-color-hover",
+              "--_ds-button-link-bg",
+              "--_ds-button-link-bg-active",
+              "--_ds-button-link-bg-hover",
+              "--_ds-button-link-border",
+              "--_ds-button-link-border-active",
+              "--_ds-button-link-border-hover",
+              "--_ds-button-link-color",
+              "--_ds-button-link-color-active",
+              "--_ds-button-link-color-hover",
+              "--_ds-button-link-text-decoration",
+              "--_ds-button-link-text-decoration-hover",
+              "--_ds-button-primary-bg",
+              "--_ds-button-primary-bg-active",
+              "--_ds-button-primary-bg-hover",
+              "--_ds-button-primary-border",
+              "--_ds-button-primary-border-active",
+              "--_ds-button-primary-border-hover",
+              "--_ds-button-primary-color",
+              "--_ds-button-primary-color-active",
+              "--_ds-button-primary-color-hover",
+              "--_ds-button-secondary-bg",
+              "--_ds-button-secondary-bg-active",
+              "--_ds-button-secondary-bg-hover",
+              "--_ds-button-secondary-border",
+              "--_ds-button-secondary-border-active",
+              "--_ds-button-secondary-border-hover",
+              "--_ds-button-secondary-color",
+              "--_ds-button-secondary-color-active",
+              "--_ds-button-secondary-color-hover",
+              "--_ds-button-selected-bg",
+              "--_ds-button-success-bg",
+              "--_ds-button-success-bg-active",
+              "--_ds-button-success-bg-hover",
+              "--_ds-button-success-border",
+              "--_ds-button-success-border-active",
+              "--_ds-button-success-border-hover",
+              "--_ds-button-success-color",
+              "--_ds-button-success-color-active",
+              "--_ds-button-success-color-hover",
+              "--_ds-button-text-bg",
+              "--_ds-button-text-bg-active",
+              "--_ds-button-text-bg-hover",
+              "--_ds-button-text-border",
+              "--_ds-button-text-border-active",
+              "--_ds-button-text-border-hover",
+              "--_ds-button-text-color",
+              "--_ds-button-text-color-active",
+              "--_ds-button-text-color-hover",
+              "--_ds-button-warning-bg",
+              "--_ds-button-warning-bg-active",
+              "--_ds-button-warning-bg-hover",
+              "--_ds-button-warning-border",
+              "--_ds-button-warning-border-active",
+              "--_ds-button-warning-border-hover",
+              "--_ds-button-warning-color",
+              "--_ds-button-warning-color-active",
+              "--_ds-button-warning-color-hover"
+            ]
+          },
+          {
+            "familyId": "primitive/layout/flex",
+            "layer": "primitive",
+            "disposition": "UNKNOWN",
+            "verificationState": "SOURCE_BOUND",
+            "stableParts": [],
+            "propertyGroups": [],
+            "computedProperties": [
+              "display",
+              "flex-direction",
+              "gap"
+            ],
+            "channels": []
+          },
+          {
+            "familyId": "primitive/layout/grid",
+            "layer": "primitive",
+            "disposition": "UNKNOWN",
+            "verificationState": "SOURCE_BOUND",
+            "stableParts": [],
+            "propertyGroups": [],
+            "computedProperties": [],
+            "channels": []
+          },
+          {
+            "familyId": "primitive/layout/space",
+            "layer": "primitive",
+            "disposition": "UNKNOWN",
+            "verificationState": "SOURCE_BOUND",
+            "stableParts": [
+              "root",
+              "separator"
+            ],
+            "propertyGroups": [],
+            "computedProperties": [],
+            "channels": []
+          },
+          {
+            "familyId": "primitive/layout/stack",
+            "layer": "primitive",
+            "disposition": "UNKNOWN",
+            "verificationState": "SOURCE_BOUND",
+            "stableParts": [
+              "divider",
+              "root"
+            ],
+            "propertyGroups": [],
+            "computedProperties": [
+              "background-color"
+            ],
+            "channels": [
+              "--ds-color-border-subtle",
+              "--ds-stack-divider-color"
+            ]
+          }
+        ]
+      },
+      {
+        "controlId": "typography.pairing",
+        "declaredFamilies": 5,
+        "unknownCells": 250,
+        "applicableFamilyIds": [],
+        "parts": [],
+        "propertyGroups": [],
+        "channels": [
+          "--ds-font-family-base",
+          "--ds-font-family-heading"
+        ],
+        "families": [
+          {
+            "familyId": "primitive/display/typography",
+            "layer": "primitive",
+            "disposition": "UNKNOWN",
+            "verificationState": "SOURCE_BOUND",
+            "stableParts": [],
+            "propertyGroups": [],
+            "computedProperties": [],
+            "channels": [
+              "--ds-font-family-base",
+              "--ds-font-family-heading"
+            ]
+          },
+          {
+            "familyId": "primitive/layout/flex",
+            "layer": "primitive",
+            "disposition": "UNKNOWN",
+            "verificationState": "SOURCE_BOUND",
+            "stableParts": [],
+            "propertyGroups": [],
+            "computedProperties": [],
+            "channels": []
+          },
+          {
+            "familyId": "primitive/layout/grid",
+            "layer": "primitive",
+            "disposition": "UNKNOWN",
+            "verificationState": "SOURCE_BOUND",
+            "stableParts": [],
+            "propertyGroups": [],
+            "computedProperties": [],
+            "channels": []
+          },
+          {
+            "familyId": "primitive/layout/space",
+            "layer": "primitive",
+            "disposition": "UNKNOWN",
+            "verificationState": "SOURCE_BOUND",
+            "stableParts": [],
+            "propertyGroups": [],
+            "computedProperties": [],
+            "channels": []
+          },
+          {
+            "familyId": "primitive/layout/stack",
+            "layer": "primitive",
+            "disposition": "UNKNOWN",
+            "verificationState": "SOURCE_BOUND",
+            "stableParts": [],
+            "propertyGroups": [],
+            "computedProperties": [],
+            "channels": []
+          }
+        ]
+      },
+      {
+        "controlId": "typography.families",
+        "declaredFamilies": 5,
+        "unknownCells": 250,
+        "applicableFamilyIds": [],
+        "parts": [],
+        "propertyGroups": [],
+        "channels": [
+          "--ds-font-family-display",
+          "--ds-font-family-mono"
+        ],
+        "families": [
+          {
+            "familyId": "primitive/display/typography",
+            "layer": "primitive",
+            "disposition": "UNKNOWN",
+            "verificationState": "SOURCE_BOUND",
+            "stableParts": [],
+            "propertyGroups": [],
+            "computedProperties": [],
+            "channels": [
+              "--ds-font-family-display",
+              "--ds-font-family-mono"
+            ]
+          },
+          {
+            "familyId": "primitive/layout/flex",
+            "layer": "primitive",
+            "disposition": "UNKNOWN",
+            "verificationState": "SOURCE_BOUND",
+            "stableParts": [],
+            "propertyGroups": [],
+            "computedProperties": [],
+            "channels": []
+          },
+          {
+            "familyId": "primitive/layout/grid",
+            "layer": "primitive",
+            "disposition": "UNKNOWN",
+            "verificationState": "SOURCE_BOUND",
+            "stableParts": [],
+            "propertyGroups": [],
+            "computedProperties": [],
+            "channels": []
+          },
+          {
+            "familyId": "primitive/layout/space",
+            "layer": "primitive",
+            "disposition": "UNKNOWN",
+            "verificationState": "SOURCE_BOUND",
+            "stableParts": [],
+            "propertyGroups": [],
+            "computedProperties": [],
+            "channels": []
+          },
+          {
+            "familyId": "primitive/layout/stack",
+            "layer": "primitive",
+            "disposition": "UNKNOWN",
+            "verificationState": "SOURCE_BOUND",
+            "stableParts": [],
+            "propertyGroups": [],
+            "computedProperties": [],
+            "channels": []
+          }
+        ]
+      },
+      {
+        "controlId": "typography.scale",
+        "declaredFamilies": 5,
+        "unknownCells": 250,
+        "applicableFamilyIds": [],
+        "parts": [
+          "root",
+          "title"
+        ],
+        "propertyGroups": [
+          "surface-decoration"
+        ],
+        "channels": [
+          "--_ds-card-body-font-size",
+          "--_ds-card-body-font-size-sm",
+          "--_ds-card-body-line-height",
+          "--_ds-card-header-eyebrow-size",
+          "--_ds-card-subtitle-font-size",
+          "--_ds-card-title-font-size",
+          "--_ds-card-title-font-size-lg",
+          "--_ds-card-title-font-size-sm",
+          "--_ds-card-title-line-height"
+        ],
+        "families": [
+          {
+            "familyId": "primitive/display/card",
+            "layer": "primitive",
+            "disposition": "UNKNOWN",
+            "verificationState": "COMPUTED_VERIFIED",
+            "stableParts": [
+              "root",
+              "title"
+            ],
+            "propertyGroups": [
+              "surface-decoration"
+            ],
+            "computedProperties": [
+              "font-size",
+              "letter-spacing"
+            ],
+            "channels": [
+              "--_ds-card-body-font-size",
+              "--_ds-card-body-font-size-sm",
+              "--_ds-card-body-line-height",
+              "--_ds-card-header-eyebrow-size",
+              "--_ds-card-subtitle-font-size",
+              "--_ds-card-title-font-size",
+              "--_ds-card-title-font-size-lg",
+              "--_ds-card-title-font-size-sm",
+              "--_ds-card-title-line-height"
+            ]
+          },
+          {
+            "familyId": "primitive/layout/flex",
+            "layer": "primitive",
+            "disposition": "UNKNOWN",
+            "verificationState": "SOURCE_BOUND",
+            "stableParts": [],
+            "propertyGroups": [],
+            "computedProperties": [],
+            "channels": []
+          },
+          {
+            "familyId": "primitive/layout/grid",
+            "layer": "primitive",
+            "disposition": "UNKNOWN",
+            "verificationState": "SOURCE_BOUND",
+            "stableParts": [],
+            "propertyGroups": [],
+            "computedProperties": [],
+            "channels": []
+          },
+          {
+            "familyId": "primitive/layout/space",
+            "layer": "primitive",
+            "disposition": "UNKNOWN",
+            "verificationState": "SOURCE_BOUND",
+            "stableParts": [],
+            "propertyGroups": [],
+            "computedProperties": [],
+            "channels": []
+          },
+          {
+            "familyId": "primitive/layout/stack",
+            "layer": "primitive",
+            "disposition": "UNKNOWN",
+            "verificationState": "SOURCE_BOUND",
+            "stableParts": [],
+            "propertyGroups": [],
+            "computedProperties": [],
+            "channels": []
+          }
+        ]
+      },
+      {
+        "controlId": "shape.radius-scale",
+        "declaredFamilies": 5,
+        "unknownCells": 250,
+        "applicableFamilyIds": [],
+        "parts": [
+          "root"
+        ],
+        "propertyGroups": [
+          "surface-radius"
+        ],
+        "channels": [
+          "--_ds-card-header-extra-radius",
+          "--_ds-card-header-icon-radius",
+          "--_ds-card-image-radius",
+          "--_ds-card-radius",
+          "--_ds-card-radius-lg",
+          "--_ds-card-radius-sm",
+          "--_ds-card-radius-xl",
+          "--_ds-card-skeleton-radius"
+        ],
+        "families": [
+          {
+            "familyId": "primitive/display/card",
+            "layer": "primitive",
+            "disposition": "UNKNOWN",
+            "verificationState": "COMPUTED_VERIFIED",
+            "stableParts": [
+              "root"
+            ],
+            "propertyGroups": [
+              "surface-radius"
+            ],
+            "computedProperties": [
+              "border-bottom-right-radius",
+              "border-top-left-radius"
+            ],
+            "channels": [
+              "--_ds-card-header-extra-radius",
+              "--_ds-card-header-icon-radius",
+              "--_ds-card-image-radius",
+              "--_ds-card-radius",
+              "--_ds-card-radius-lg",
+              "--_ds-card-radius-sm",
+              "--_ds-card-radius-xl",
+              "--_ds-card-skeleton-radius"
+            ]
+          },
+          {
+            "familyId": "primitive/layout/flex",
+            "layer": "primitive",
+            "disposition": "UNKNOWN",
+            "verificationState": "SOURCE_BOUND",
+            "stableParts": [],
+            "propertyGroups": [],
+            "computedProperties": [],
+            "channels": []
+          },
+          {
+            "familyId": "primitive/layout/grid",
+            "layer": "primitive",
+            "disposition": "UNKNOWN",
+            "verificationState": "SOURCE_BOUND",
+            "stableParts": [],
+            "propertyGroups": [],
+            "computedProperties": [],
+            "channels": []
+          },
+          {
+            "familyId": "primitive/layout/space",
+            "layer": "primitive",
+            "disposition": "UNKNOWN",
+            "verificationState": "SOURCE_BOUND",
+            "stableParts": [],
+            "propertyGroups": [],
+            "computedProperties": [],
+            "channels": []
+          },
+          {
+            "familyId": "primitive/layout/stack",
+            "layer": "primitive",
+            "disposition": "UNKNOWN",
+            "verificationState": "SOURCE_BOUND",
+            "stableParts": [],
+            "propertyGroups": [],
+            "computedProperties": [],
+            "channels": []
+          }
+        ]
+      },
+      {
+        "controlId": "shape.button-style",
+        "declaredFamilies": 4,
+        "unknownCells": 251,
+        "applicableFamilyIds": [],
+        "parts": [],
+        "propertyGroups": [],
+        "channels": [],
+        "families": [
+          {
+            "familyId": "primitive/layout/flex",
+            "layer": "primitive",
+            "disposition": "UNKNOWN",
+            "verificationState": "SOURCE_BOUND",
+            "stableParts": [],
+            "propertyGroups": [],
+            "computedProperties": [],
+            "channels": []
+          },
+          {
+            "familyId": "primitive/layout/grid",
+            "layer": "primitive",
+            "disposition": "UNKNOWN",
+            "verificationState": "SOURCE_BOUND",
+            "stableParts": [],
+            "propertyGroups": [],
+            "computedProperties": [],
+            "channels": []
+          },
+          {
+            "familyId": "primitive/layout/space",
+            "layer": "primitive",
+            "disposition": "UNKNOWN",
+            "verificationState": "SOURCE_BOUND",
+            "stableParts": [],
+            "propertyGroups": [],
+            "computedProperties": [],
+            "channels": []
+          },
+          {
+            "familyId": "primitive/layout/stack",
+            "layer": "primitive",
+            "disposition": "UNKNOWN",
+            "verificationState": "SOURCE_BOUND",
+            "stableParts": [],
+            "propertyGroups": [],
+            "computedProperties": [],
+            "channels": []
+          }
+        ]
+      },
+      {
+        "controlId": "density.mode",
+        "declaredFamilies": 4,
+        "unknownCells": 251,
+        "applicableFamilyIds": [],
+        "parts": [
+          "root"
+        ],
+        "propertyGroups": [
+          "preset-and-exact-gap"
+        ],
+        "channels": [
+          "--_ds-space-small-size",
+          "--_ds-stack-gap-current",
+          "--ds-density-effective-scale",
+          "--ds-grid-gap",
+          "--ds-space-instance-gap",
+          "--ds-space-large-size",
+          "--ds-space-middle-size",
+          "--ds-space-small-size",
+          "--ds-spacing-1",
+          "--ds-spacing-10",
+          "--ds-spacing-12",
+          "--ds-spacing-16",
+          "--ds-spacing-2",
+          "--ds-spacing-4",
+          "--ds-spacing-6",
+          "--ds-spacing-8",
+          "data-size"
+        ],
+        "families": [
+          {
+            "familyId": "primitive/layout/flex",
+            "layer": "primitive",
+            "disposition": "UNKNOWN",
+            "verificationState": "SOURCE_BOUND",
+            "stableParts": [],
+            "propertyGroups": [],
+            "computedProperties": [
+              "column-gap",
+              "gap",
+              "row-gap"
+            ],
+            "channels": [
+              "--ds-spacing-1",
+              "--ds-spacing-10",
+              "--ds-spacing-12",
+              "--ds-spacing-16",
+              "--ds-spacing-2",
+              "--ds-spacing-4",
+              "--ds-spacing-6",
+              "--ds-spacing-8"
+            ]
+          },
+          {
+            "familyId": "primitive/layout/grid",
+            "layer": "primitive",
+            "disposition": "UNKNOWN",
+            "verificationState": "SOURCE_BOUND",
+            "stableParts": [],
+            "propertyGroups": [],
+            "computedProperties": [
+              "column-gap",
+              "gap",
+              "row-gap"
+            ],
+            "channels": [
+              "--ds-grid-gap",
+              "--ds-spacing-1",
+              "--ds-spacing-10",
+              "--ds-spacing-12",
+              "--ds-spacing-16",
+              "--ds-spacing-2",
+              "--ds-spacing-4",
+              "--ds-spacing-6",
+              "--ds-spacing-8"
+            ]
+          },
+          {
+            "familyId": "primitive/layout/space",
+            "layer": "primitive",
+            "disposition": "UNKNOWN",
+            "verificationState": "COMPUTED_VERIFIED",
+            "stableParts": [
+              "root"
+            ],
+            "propertyGroups": [
+              "preset-and-exact-gap"
+            ],
+            "computedProperties": [
+              "column-gap",
+              "gap",
+              "row-gap"
+            ],
+            "channels": [
+              "--_ds-space-small-size",
+              "--ds-density-effective-scale",
+              "--ds-space-instance-gap",
+              "--ds-space-large-size",
+              "--ds-space-middle-size",
+              "--ds-space-small-size",
+              "data-size"
+            ]
+          },
+          {
+            "familyId": "primitive/layout/stack",
+            "layer": "primitive",
+            "disposition": "UNKNOWN",
+            "verificationState": "SOURCE_BOUND",
+            "stableParts": [],
+            "propertyGroups": [],
+            "computedProperties": [
+              "gap",
+              "margin-block",
+              "margin-inline"
+            ],
+            "channels": [
+              "--_ds-stack-gap-current",
+              "--ds-spacing-1",
+              "--ds-spacing-10",
+              "--ds-spacing-12",
+              "--ds-spacing-16",
+              "--ds-spacing-2",
+              "--ds-spacing-4",
+              "--ds-spacing-6",
+              "--ds-spacing-8"
+            ]
+          }
+        ]
+      },
+      {
+        "controlId": "spacing.rhythm",
+        "declaredFamilies": 4,
+        "unknownCells": 251,
+        "applicableFamilyIds": [],
+        "parts": [
+          "divider",
+          "root",
+          "separator"
+        ],
+        "propertyGroups": [
+          "divider-anatomy",
+          "preset-and-exact-gap",
+          "responsive-projection",
+          "separator-anatomy",
+          "sequence-spacing",
+          "uniform-and-axis-gaps",
+          "uniform-and-split-gap"
+        ],
+        "channels": [
+          "--_ds-grid-column-gap",
+          "--_ds-grid-row-gap",
+          "--_ds-stack-divider-gap-block",
+          "--_ds-stack-divider-gap-inline",
+          "--_ds-stack-gap-current",
+          "--ds-density-effective-scale",
+          "--ds-flex-column-gap",
+          "--ds-flex-gap",
+          "--ds-flex-row-gap",
+          "--ds-grid-gap",
+          "--ds-rhythm-effective-scale",
+          "--ds-space-instance-gap",
+          "--ds-stack-gap",
+          "data-column-gap-preset",
+          "data-gap",
+          "data-gap-preset",
+          "data-row-gap-preset",
+          "data-size",
+          "data-spacing"
+        ],
+        "families": [
+          {
+            "familyId": "primitive/layout/flex",
+            "layer": "primitive",
+            "disposition": "UNKNOWN",
+            "verificationState": "COMPUTED_VERIFIED",
+            "stableParts": [
+              "root"
+            ],
+            "propertyGroups": [
+              "responsive-projection",
+              "uniform-and-split-gap"
+            ],
+            "computedProperties": [
+              "column-gap",
+              "gap",
+              "row-gap"
+            ],
+            "channels": [
+              "--ds-flex-column-gap",
+              "--ds-flex-gap",
+              "--ds-flex-row-gap",
+              "--ds-rhythm-effective-scale",
+              "data-column-gap-preset",
+              "data-gap",
+              "data-gap-preset",
+              "data-row-gap-preset"
+            ]
+          },
+          {
+            "familyId": "primitive/layout/grid",
+            "layer": "primitive",
+            "disposition": "UNKNOWN",
+            "verificationState": "COMPUTED_VERIFIED",
+            "stableParts": [
+              "root"
+            ],
+            "propertyGroups": [
+              "uniform-and-axis-gaps"
+            ],
+            "computedProperties": [
+              "column-gap",
+              "gap",
+              "row-gap"
+            ],
+            "channels": [
+              "--_ds-grid-column-gap",
+              "--_ds-grid-row-gap",
+              "--ds-grid-gap",
+              "--ds-rhythm-effective-scale",
+              "data-column-gap-preset",
+              "data-gap-preset",
+              "data-row-gap-preset"
+            ]
+          },
+          {
+            "familyId": "primitive/layout/space",
+            "layer": "primitive",
+            "disposition": "UNKNOWN",
+            "verificationState": "COMPUTED_VERIFIED",
+            "stableParts": [
+              "root",
+              "separator"
+            ],
+            "propertyGroups": [
+              "preset-and-exact-gap",
+              "separator-anatomy"
+            ],
+            "computedProperties": [
+              "column-gap",
+              "gap",
+              "row-gap"
+            ],
+            "channels": [
+              "--ds-density-effective-scale",
+              "--ds-rhythm-effective-scale",
+              "--ds-space-instance-gap",
+              "data-size"
+            ]
+          },
+          {
+            "familyId": "primitive/layout/stack",
+            "layer": "primitive",
+            "disposition": "UNKNOWN",
+            "verificationState": "COMPUTED_VERIFIED",
+            "stableParts": [
+              "divider",
+              "root"
+            ],
+            "propertyGroups": [
+              "divider-anatomy",
+              "responsive-projection",
+              "sequence-spacing"
+            ],
+            "computedProperties": [
+              "gap",
+              "margin-block",
+              "margin-inline"
+            ],
+            "channels": [
+              "--_ds-stack-divider-gap-block",
+              "--_ds-stack-divider-gap-inline",
+              "--_ds-stack-gap-current",
+              "--ds-rhythm-effective-scale",
+              "--ds-stack-gap",
+              "data-spacing"
+            ]
+          }
+        ]
+      },
+      {
+        "controlId": "motion.dial",
+        "declaredFamilies": 5,
+        "unknownCells": 250,
+        "applicableFamilyIds": [],
+        "parts": [],
+        "propertyGroups": [],
+        "channels": [
+          "--_ds-alert-action-active-transform",
+          "--_ds-space-motion-duration",
+          "--_ds-space-motion-easing",
+          "--ds-motion-fast",
+          "--ds-motion-intensity",
+          "--ds-motion-rearrange",
+          "--ds-space-motion-duration",
+          "--ds-space-motion-easing",
+          "--ds-transition-rearrange",
+          "data-layout-motion"
+        ],
+        "families": [
+          {
+            "familyId": "primitive/feedback/alert",
+            "layer": "primitive",
+            "disposition": "UNKNOWN",
+            "verificationState": "SOURCE_BOUND",
+            "stableParts": [],
+            "propertyGroups": [],
+            "computedProperties": [],
+            "channels": [
+              "--_ds-alert-action-active-transform",
+              "--ds-motion-intensity"
+            ]
+          },
+          {
+            "familyId": "primitive/layout/flex",
+            "layer": "primitive",
+            "disposition": "UNKNOWN",
+            "verificationState": "SOURCE_BOUND",
+            "stableParts": [],
+            "propertyGroups": [],
+            "computedProperties": [
+              "transition-duration",
+              "transition-property",
+              "transition-timing-function"
+            ],
+            "channels": [
+              "--ds-motion-rearrange",
+              "--ds-transition-rearrange",
+              "data-layout-motion"
+            ]
+          },
+          {
+            "familyId": "primitive/layout/grid",
+            "layer": "primitive",
+            "disposition": "UNKNOWN",
+            "verificationState": "SOURCE_BOUND",
+            "stableParts": [],
+            "propertyGroups": [],
+            "computedProperties": [],
+            "channels": [
+              "--ds-motion-rearrange",
+              "--ds-transition-rearrange",
+              "data-layout-motion"
+            ]
+          },
+          {
+            "familyId": "primitive/layout/space",
+            "layer": "primitive",
+            "disposition": "UNKNOWN",
+            "verificationState": "SOURCE_BOUND",
+            "stableParts": [],
+            "propertyGroups": [],
+            "computedProperties": [
+              "transition-duration",
+              "transition-property",
+              "transition-timing-function"
+            ],
+            "channels": [
+              "--_ds-space-motion-duration",
+              "--_ds-space-motion-easing",
+              "--ds-motion-fast",
+              "--ds-space-motion-duration",
+              "--ds-space-motion-easing"
+            ]
+          },
+          {
+            "familyId": "primitive/layout/stack",
+            "layer": "primitive",
+            "disposition": "UNKNOWN",
+            "verificationState": "SOURCE_BOUND",
+            "stableParts": [],
+            "propertyGroups": [],
+            "computedProperties": [],
+            "channels": [
+              "--ds-motion-rearrange",
+              "--ds-transition-rearrange",
+              "data-layout-motion"
+            ]
+          }
+        ]
+      },
+      {
+        "controlId": "surfaces.elevation-posture",
+        "declaredFamilies": 5,
+        "unknownCells": 250,
+        "applicableFamilyIds": [],
+        "parts": [
+          "root"
+        ],
+        "propertyGroups": [
+          "surface-decoration"
+        ],
+        "channels": [
+          "--_ds-card-bordered-shadow",
+          "--_ds-card-elevated-shadow",
+          "--_ds-card-elevated-shadow-hover",
+          "--_ds-card-elevation-surface",
+          "--_ds-card-flat-shadow",
+          "--_ds-card-ghost-shadow",
+          "--_ds-card-nested-shadow",
+          "--_ds-card-shadow",
+          "--_ds-card-shadow-active",
+          "--_ds-card-shadow-hover",
+          "--_ds-card-shadow-selected"
+        ],
+        "families": [
+          {
+            "familyId": "primitive/display/card",
+            "layer": "primitive",
+            "disposition": "UNKNOWN",
+            "verificationState": "COMPUTED_VERIFIED",
+            "stableParts": [
+              "root"
+            ],
+            "propertyGroups": [
+              "surface-decoration"
+            ],
+            "computedProperties": [
+              "box-shadow"
+            ],
+            "channels": [
+              "--_ds-card-bordered-shadow",
+              "--_ds-card-elevated-shadow",
+              "--_ds-card-elevated-shadow-hover",
+              "--_ds-card-elevation-surface",
+              "--_ds-card-flat-shadow",
+              "--_ds-card-ghost-shadow",
+              "--_ds-card-nested-shadow",
+              "--_ds-card-shadow",
+              "--_ds-card-shadow-active",
+              "--_ds-card-shadow-hover",
+              "--_ds-card-shadow-selected"
+            ]
+          },
+          {
+            "familyId": "primitive/layout/flex",
+            "layer": "primitive",
+            "disposition": "UNKNOWN",
+            "verificationState": "SOURCE_BOUND",
+            "stableParts": [],
+            "propertyGroups": [],
+            "computedProperties": [],
+            "channels": []
+          },
+          {
+            "familyId": "primitive/layout/grid",
+            "layer": "primitive",
+            "disposition": "UNKNOWN",
+            "verificationState": "SOURCE_BOUND",
+            "stableParts": [],
+            "propertyGroups": [],
+            "computedProperties": [],
+            "channels": []
+          },
+          {
+            "familyId": "primitive/layout/space",
+            "layer": "primitive",
+            "disposition": "UNKNOWN",
+            "verificationState": "SOURCE_BOUND",
+            "stableParts": [],
+            "propertyGroups": [],
+            "computedProperties": [],
+            "channels": []
+          },
+          {
+            "familyId": "primitive/layout/stack",
+            "layer": "primitive",
+            "disposition": "UNKNOWN",
+            "verificationState": "SOURCE_BOUND",
+            "stableParts": [],
+            "propertyGroups": [],
+            "computedProperties": [],
+            "channels": []
+          }
+        ]
+      },
+      {
+        "controlId": "surfaces.effect-intensity",
+        "declaredFamilies": 5,
+        "unknownCells": 250,
+        "applicableFamilyIds": [],
+        "parts": [
+          "root"
+        ],
+        "propertyGroups": [
+          "surface-decoration"
+        ],
+        "channels": [
+          "--_ds-card-loading-backdrop-blur",
+          "--_ds-card-skeleton-highlight",
+          "--_ds-card-surface-gradient"
+        ],
+        "families": [
+          {
+            "familyId": "primitive/display/card",
+            "layer": "primitive",
+            "disposition": "UNKNOWN",
+            "verificationState": "COMPUTED_VERIFIED",
+            "stableParts": [
+              "root"
+            ],
+            "propertyGroups": [
+              "surface-decoration"
+            ],
+            "computedProperties": [
+              "background-image",
+              "box-shadow"
+            ],
+            "channels": [
+              "--_ds-card-loading-backdrop-blur",
+              "--_ds-card-skeleton-highlight",
+              "--_ds-card-surface-gradient"
+            ]
+          },
+          {
+            "familyId": "primitive/layout/flex",
+            "layer": "primitive",
+            "disposition": "UNKNOWN",
+            "verificationState": "SOURCE_BOUND",
+            "stableParts": [],
+            "propertyGroups": [],
+            "computedProperties": [],
+            "channels": []
+          },
+          {
+            "familyId": "primitive/layout/grid",
+            "layer": "primitive",
+            "disposition": "UNKNOWN",
+            "verificationState": "SOURCE_BOUND",
+            "stableParts": [],
+            "propertyGroups": [],
+            "computedProperties": [],
+            "channels": []
+          },
+          {
+            "familyId": "primitive/layout/space",
+            "layer": "primitive",
+            "disposition": "UNKNOWN",
+            "verificationState": "SOURCE_BOUND",
+            "stableParts": [],
+            "propertyGroups": [],
+            "computedProperties": [],
+            "channels": []
+          },
+          {
+            "familyId": "primitive/layout/stack",
+            "layer": "primitive",
+            "disposition": "UNKNOWN",
+            "verificationState": "SOURCE_BOUND",
+            "stableParts": [],
+            "propertyGroups": [],
+            "computedProperties": [],
+            "channels": []
+          }
+        ]
+      },
+      {
+        "controlId": "navigation.sidebar-tone",
+        "declaredFamilies": 5,
+        "unknownCells": 250,
+        "applicableFamilyIds": [],
+        "parts": [],
+        "propertyGroups": [],
+        "channels": [
+          "--ds-sidebar-bg",
+          "--ds-sidebar-item-bg-active",
+          "--ds-sidebar-item-bg-hover",
+          "--ds-sidebar-item-color-active",
+          "--ds-sidebar-text",
+          "--ds-sidebar-text-muted"
+        ],
+        "families": [
+          {
+            "familyId": "primitive/layout/flex",
+            "layer": "primitive",
+            "disposition": "UNKNOWN",
+            "verificationState": "SOURCE_BOUND",
+            "stableParts": [],
+            "propertyGroups": [],
+            "computedProperties": [],
+            "channels": []
+          },
+          {
+            "familyId": "primitive/layout/grid",
+            "layer": "primitive",
+            "disposition": "UNKNOWN",
+            "verificationState": "SOURCE_BOUND",
+            "stableParts": [],
+            "propertyGroups": [],
+            "computedProperties": [],
+            "channels": []
+          },
+          {
+            "familyId": "primitive/layout/space",
+            "layer": "primitive",
+            "disposition": "UNKNOWN",
+            "verificationState": "SOURCE_BOUND",
+            "stableParts": [],
+            "propertyGroups": [],
+            "computedProperties": [],
+            "channels": []
+          },
+          {
+            "familyId": "primitive/layout/stack",
+            "layer": "primitive",
+            "disposition": "UNKNOWN",
+            "verificationState": "SOURCE_BOUND",
+            "stableParts": [],
+            "propertyGroups": [],
+            "computedProperties": [],
+            "channels": []
+          },
+          {
+            "familyId": "structure/shell/sidebar-surface",
+            "layer": "structure",
+            "disposition": "UNKNOWN",
+            "verificationState": "SOURCE_BOUND",
+            "stableParts": [],
+            "propertyGroups": [],
+            "computedProperties": [],
+            "channels": [
+              "--ds-sidebar-bg",
+              "--ds-sidebar-item-bg-active",
+              "--ds-sidebar-item-bg-hover",
+              "--ds-sidebar-item-color-active",
+              "--ds-sidebar-text",
+              "--ds-sidebar-text-muted"
+            ]
+          }
+        ]
+      },
+      {
+        "controlId": "experience.profile",
+        "declaredFamilies": 5,
+        "unknownCells": 250,
+        "applicableFamilyIds": [],
+        "parts": [
+          "root",
+          "title"
+        ],
+        "propertyGroups": [
+          "surface-decoration"
+        ],
+        "channels": [
+          "--ds-card-title-letter-spacing"
+        ],
+        "families": [
+          {
+            "familyId": "primitive/display/card",
+            "layer": "primitive",
+            "disposition": "UNKNOWN",
+            "verificationState": "COMPUTED_VERIFIED",
+            "stableParts": [
+              "root",
+              "title"
+            ],
+            "propertyGroups": [
+              "surface-decoration"
+            ],
+            "computedProperties": [
+              "background-image",
+              "letter-spacing"
+            ],
+            "channels": [
+              "--ds-card-title-letter-spacing"
+            ]
+          },
+          {
+            "familyId": "primitive/layout/flex",
+            "layer": "primitive",
+            "disposition": "UNKNOWN",
+            "verificationState": "SOURCE_BOUND",
+            "stableParts": [],
+            "propertyGroups": [],
+            "computedProperties": [],
+            "channels": []
+          },
+          {
+            "familyId": "primitive/layout/grid",
+            "layer": "primitive",
+            "disposition": "UNKNOWN",
+            "verificationState": "SOURCE_BOUND",
+            "stableParts": [],
+            "propertyGroups": [],
+            "computedProperties": [],
+            "channels": []
+          },
+          {
+            "familyId": "primitive/layout/space",
+            "layer": "primitive",
+            "disposition": "UNKNOWN",
+            "verificationState": "SOURCE_BOUND",
+            "stableParts": [],
+            "propertyGroups": [],
+            "computedProperties": [],
+            "channels": []
+          },
+          {
+            "familyId": "primitive/layout/stack",
+            "layer": "primitive",
+            "disposition": "UNKNOWN",
+            "verificationState": "SOURCE_BOUND",
+            "stableParts": [],
+            "propertyGroups": [],
+            "computedProperties": [],
+            "channels": []
+          }
+        ]
+      },
+      {
+        "controlId": "chrome.families",
+        "declaredFamilies": 4,
+        "unknownCells": 251,
+        "applicableFamilyIds": [],
+        "parts": [],
+        "propertyGroups": [],
+        "channels": [],
+        "families": [
+          {
+            "familyId": "primitive/layout/flex",
+            "layer": "primitive",
+            "disposition": "UNKNOWN",
+            "verificationState": "SOURCE_BOUND",
+            "stableParts": [],
+            "propertyGroups": [],
+            "computedProperties": [],
+            "channels": []
+          },
+          {
+            "familyId": "primitive/layout/grid",
+            "layer": "primitive",
+            "disposition": "UNKNOWN",
+            "verificationState": "SOURCE_BOUND",
+            "stableParts": [],
+            "propertyGroups": [],
+            "computedProperties": [],
+            "channels": []
+          },
+          {
+            "familyId": "primitive/layout/space",
+            "layer": "primitive",
+            "disposition": "UNKNOWN",
+            "verificationState": "SOURCE_BOUND",
+            "stableParts": [],
+            "propertyGroups": [],
+            "computedProperties": [],
+            "channels": []
+          },
+          {
+            "familyId": "primitive/layout/stack",
+            "layer": "primitive",
+            "disposition": "UNKNOWN",
+            "verificationState": "SOURCE_BOUND",
+            "stableParts": [],
+            "propertyGroups": [],
+            "computedProperties": [],
+            "channels": []
+          }
+        ]
+      },
+      {
+        "controlId": "chrome.anatomy",
+        "declaredFamilies": 4,
+        "unknownCells": 251,
+        "applicableFamilyIds": [],
+        "parts": [],
+        "propertyGroups": [],
+        "channels": [],
+        "families": [
+          {
+            "familyId": "primitive/layout/flex",
+            "layer": "primitive",
+            "disposition": "UNKNOWN",
+            "verificationState": "SOURCE_BOUND",
+            "stableParts": [],
+            "propertyGroups": [],
+            "computedProperties": [],
+            "channels": []
+          },
+          {
+            "familyId": "primitive/layout/grid",
+            "layer": "primitive",
+            "disposition": "UNKNOWN",
+            "verificationState": "SOURCE_BOUND",
+            "stableParts": [],
+            "propertyGroups": [],
+            "computedProperties": [],
+            "channels": []
+          },
+          {
+            "familyId": "primitive/layout/space",
+            "layer": "primitive",
+            "disposition": "UNKNOWN",
+            "verificationState": "SOURCE_BOUND",
+            "stableParts": [],
+            "propertyGroups": [],
+            "computedProperties": [],
+            "channels": []
+          },
+          {
+            "familyId": "primitive/layout/stack",
+            "layer": "primitive",
+            "disposition": "UNKNOWN",
+            "verificationState": "SOURCE_BOUND",
+            "stableParts": [],
+            "propertyGroups": [],
+            "computedProperties": [],
+            "channels": []
+          }
+        ]
+      },
+      {
+        "controlId": "token-overrides",
+        "declaredFamilies": 5,
+        "unknownCells": 250,
+        "applicableFamilyIds": [],
+        "parts": [],
+        "propertyGroups": [],
+        "channels": [],
+        "families": [
+          {
+            "familyId": "primitive/feedback/alert",
+            "layer": "primitive",
+            "disposition": "UNKNOWN",
+            "verificationState": "SOURCE_BOUND",
+            "stableParts": [],
+            "propertyGroups": [],
+            "computedProperties": [],
+            "channels": []
+          },
+          {
+            "familyId": "primitive/layout/flex",
+            "layer": "primitive",
+            "disposition": "UNKNOWN",
+            "verificationState": "SOURCE_BOUND",
+            "stableParts": [],
+            "propertyGroups": [],
+            "computedProperties": [],
+            "channels": []
+          },
+          {
+            "familyId": "primitive/layout/grid",
+            "layer": "primitive",
+            "disposition": "UNKNOWN",
+            "verificationState": "SOURCE_BOUND",
+            "stableParts": [],
+            "propertyGroups": [],
+            "computedProperties": [],
+            "channels": []
+          },
+          {
+            "familyId": "primitive/layout/space",
+            "layer": "primitive",
+            "disposition": "UNKNOWN",
+            "verificationState": "SOURCE_BOUND",
+            "stableParts": [],
+            "propertyGroups": [],
+            "computedProperties": [],
+            "channels": []
+          },
+          {
+            "familyId": "primitive/layout/stack",
+            "layer": "primitive",
+            "disposition": "UNKNOWN",
+            "verificationState": "SOURCE_BOUND",
+            "stableParts": [],
+            "propertyGroups": [],
+            "computedProperties": [],
+            "channels": []
+          }
+        ]
+      },
+      {
+        "controlId": "recipe-profile",
+        "declaredFamilies": 5,
+        "unknownCells": 250,
+        "applicableFamilyIds": [],
+        "parts": [],
+        "propertyGroups": [],
+        "channels": [],
+        "families": [
+          {
+            "familyId": "primitive/inputs/button",
+            "layer": "primitive",
+            "disposition": "UNKNOWN",
+            "verificationState": "SOURCE_BOUND",
+            "stableParts": [],
+            "propertyGroups": [],
+            "computedProperties": [],
+            "channels": []
+          },
+          {
+            "familyId": "primitive/layout/flex",
+            "layer": "primitive",
+            "disposition": "UNKNOWN",
+            "verificationState": "SOURCE_BOUND",
+            "stableParts": [],
+            "propertyGroups": [],
+            "computedProperties": [],
+            "channels": []
+          },
+          {
+            "familyId": "primitive/layout/grid",
+            "layer": "primitive",
+            "disposition": "UNKNOWN",
+            "verificationState": "SOURCE_BOUND",
+            "stableParts": [],
+            "propertyGroups": [],
+            "computedProperties": [],
+            "channels": []
+          },
+          {
+            "familyId": "primitive/layout/space",
+            "layer": "primitive",
+            "disposition": "UNKNOWN",
+            "verificationState": "SOURCE_BOUND",
+            "stableParts": [],
+            "propertyGroups": [],
+            "computedProperties": [],
+            "channels": []
+          },
+          {
+            "familyId": "primitive/layout/stack",
+            "layer": "primitive",
+            "disposition": "UNKNOWN",
+            "verificationState": "SOURCE_BOUND",
+            "stableParts": [],
+            "propertyGroups": [],
+            "computedProperties": [],
+            "channels": []
+          }
+        ]
+      },
+      {
+        "controlId": "profiles.expressive",
+        "declaredFamilies": 5,
+        "unknownCells": 250,
+        "applicableFamilyIds": [],
+        "parts": [],
+        "propertyGroups": [],
+        "channels": [],
+        "families": [
+          {
+            "familyId": "primitive/display/card",
+            "layer": "primitive",
+            "disposition": "UNKNOWN",
+            "verificationState": "SOURCE_BOUND",
+            "stableParts": [],
+            "propertyGroups": [],
+            "computedProperties": [],
+            "channels": []
+          },
+          {
+            "familyId": "primitive/layout/flex",
+            "layer": "primitive",
+            "disposition": "UNKNOWN",
+            "verificationState": "SOURCE_BOUND",
+            "stableParts": [],
+            "propertyGroups": [],
+            "computedProperties": [],
+            "channels": []
+          },
+          {
+            "familyId": "primitive/layout/grid",
+            "layer": "primitive",
+            "disposition": "UNKNOWN",
+            "verificationState": "SOURCE_BOUND",
+            "stableParts": [],
+            "propertyGroups": [],
+            "computedProperties": [],
+            "channels": []
+          },
+          {
+            "familyId": "primitive/layout/space",
+            "layer": "primitive",
+            "disposition": "UNKNOWN",
+            "verificationState": "SOURCE_BOUND",
+            "stableParts": [],
+            "propertyGroups": [],
+            "computedProperties": [],
+            "channels": []
+          },
+          {
+            "familyId": "primitive/layout/stack",
+            "layer": "primitive",
+            "disposition": "UNKNOWN",
+            "verificationState": "SOURCE_BOUND",
+            "stableParts": [],
+            "propertyGroups": [],
+            "computedProperties": [],
+            "channels": []
+          }
+        ]
+      },
+      {
+        "controlId": "palette.status-seeds",
+        "declaredFamilies": 0,
+        "unknownCells": 255,
+        "applicableFamilyIds": [],
+        "parts": [],
+        "propertyGroups": [],
+        "channels": [],
+        "families": []
+      },
+      {
+        "controlId": "profiles.icon",
+        "declaredFamilies": 4,
+        "unknownCells": 251,
+        "applicableFamilyIds": [],
+        "parts": [],
+        "propertyGroups": [],
+        "channels": [],
+        "families": [
+          {
+            "familyId": "primitive/layout/flex",
+            "layer": "primitive",
+            "disposition": "UNKNOWN",
+            "verificationState": "SOURCE_BOUND",
+            "stableParts": [],
+            "propertyGroups": [],
+            "computedProperties": [],
+            "channels": []
+          },
+          {
+            "familyId": "primitive/layout/grid",
+            "layer": "primitive",
+            "disposition": "UNKNOWN",
+            "verificationState": "SOURCE_BOUND",
+            "stableParts": [],
+            "propertyGroups": [],
+            "computedProperties": [],
+            "channels": []
+          },
+          {
+            "familyId": "primitive/layout/space",
+            "layer": "primitive",
+            "disposition": "UNKNOWN",
+            "verificationState": "SOURCE_BOUND",
+            "stableParts": [],
+            "propertyGroups": [],
+            "computedProperties": [],
+            "channels": []
+          },
+          {
+            "familyId": "primitive/layout/stack",
+            "layer": "primitive",
+            "disposition": "UNKNOWN",
+            "verificationState": "SOURCE_BOUND",
+            "stableParts": [],
+            "propertyGroups": [],
+            "computedProperties": [],
+            "channels": []
+          }
+        ]
+      },
+      {
+        "controlId": "responsive.posture",
+        "declaredFamilies": 5,
+        "unknownCells": 250,
+        "applicableFamilyIds": [],
+        "parts": [],
+        "propertyGroups": [],
+        "channels": [],
+        "families": [
+          {
+            "familyId": "pattern/data/widget-board",
+            "layer": "pattern",
+            "disposition": "UNKNOWN",
+            "verificationState": "COMPUTED_VERIFIED",
+            "stableParts": [],
+            "propertyGroups": [],
+            "computedProperties": [],
+            "channels": []
+          },
+          {
+            "familyId": "primitive/layout/flex",
+            "layer": "primitive",
+            "disposition": "UNKNOWN",
+            "verificationState": "SOURCE_BOUND",
+            "stableParts": [],
+            "propertyGroups": [],
+            "computedProperties": [],
+            "channels": []
+          },
+          {
+            "familyId": "primitive/layout/grid",
+            "layer": "primitive",
+            "disposition": "UNKNOWN",
+            "verificationState": "SOURCE_BOUND",
+            "stableParts": [],
+            "propertyGroups": [],
+            "computedProperties": [],
+            "channels": []
+          },
+          {
+            "familyId": "primitive/layout/space",
+            "layer": "primitive",
+            "disposition": "UNKNOWN",
+            "verificationState": "SOURCE_BOUND",
+            "stableParts": [],
+            "propertyGroups": [],
+            "computedProperties": [],
+            "channels": []
+          },
+          {
+            "familyId": "primitive/layout/stack",
+            "layer": "primitive",
+            "disposition": "UNKNOWN",
+            "verificationState": "SOURCE_BOUND",
+            "stableParts": [],
+            "propertyGroups": [],
+            "computedProperties": [],
+            "channels": []
+          }
+        ]
+      }
+    ]
+  },
+  "paths": {
+    "schema": "governance/manifest/schema/index.json",
+    "controlsRoot": "governance/manifest/controls",
+    "groupsRoot": "governance/manifest/recipes",
+    "familiesRoot": "governance/manifest/families"
+  },
+  "controls": [
+    {
+      "controlId": "palette.seeds",
+      "path": "governance/manifest/controls/palette/seeds/index.json",
+      "digest": "d40df9f7df1f4f47257c8daeee4ec4929da69a230d6e73afdd68f872cabc56b1"
+    },
+    {
+      "controlId": "typography.pairing",
+      "path": "governance/manifest/controls/typography/pairing/index.json",
+      "digest": "d7615c17d95b770c74642b0936ca3fc46bce8a2b6bb6edbe24b1b4ca084c9b77"
+    },
+    {
+      "controlId": "typography.families",
+      "path": "governance/manifest/controls/typography/families/index.json",
+      "digest": "432a3f5e5b94a5eb1acc847bcb5204c155f0e40d0ac8723b6afc924737e97891"
+    },
+    {
+      "controlId": "typography.scale",
+      "path": "governance/manifest/controls/typography/scale/index.json",
+      "digest": "fe8be95fafaaa3db8a14aaf3a460dea92dde5e5ec92830f8fb843eb848d5595c"
+    },
+    {
+      "controlId": "shape.radius-scale",
+      "path": "governance/manifest/controls/shape/radius-scale/index.json",
+      "digest": "06b8ba549f0f1eeaf33aedfbb32cfe134054d81ae18faf4e14945096d3c3d483"
+    },
+    {
+      "controlId": "shape.button-style",
+      "path": "governance/manifest/controls/shape/button-style/index.json",
+      "digest": "d5b38edd25fbd5bcd95b2edc5f02d9d389de4bc5c9ba824e3a29569571856ec6"
+    },
+    {
+      "controlId": "density.mode",
+      "path": "governance/manifest/controls/density/mode/index.json",
+      "digest": "48224c0e11248dadf6f911e4b4601f84a319cac98cc06cc2d6579f603ee15570"
+    },
+    {
+      "controlId": "spacing.rhythm",
+      "path": "governance/manifest/controls/spacing/rhythm/index.json",
+      "digest": "fa2705a6e3acdf619d783c7709da65be15be8b5e1a92dd04698f0eb6fb15e769"
+    },
+    {
+      "controlId": "motion.dial",
+      "path": "governance/manifest/controls/motion/dial/index.json",
+      "digest": "a695a9cc46af489012344eda6649d641111041f956953fd7264badc0efaf7c6f"
+    },
+    {
+      "controlId": "surfaces.elevation-posture",
+      "path": "governance/manifest/controls/surfaces/elevation-posture/index.json",
+      "digest": "96bc152311c88e9837643094163e037ef96f690662517c3e11ca101c806074ba"
+    },
+    {
+      "controlId": "surfaces.effect-intensity",
+      "path": "governance/manifest/controls/surfaces/effect-intensity/index.json",
+      "digest": "51313cc2a5b73b9d71cef829a1aa1ab2cd851b25182acafd4ae66596dfb6d61d"
+    },
+    {
+      "controlId": "navigation.sidebar-tone",
+      "path": "governance/manifest/controls/navigation/sidebar-tone/index.json",
+      "digest": "d0fa74bfa62b7632c36864f48cba664d90181983b8dd25fce23ead2186e5acfb"
+    },
+    {
+      "controlId": "experience.profile",
+      "path": "governance/manifest/controls/experience/profile/index.json",
+      "digest": "041f6cb5141d3080551a5eaf25e05c95ed8e20a1d8f35e965c8c3f4b95838f23"
+    },
+    {
+      "controlId": "chrome.families",
+      "path": "governance/manifest/controls/chrome/families/index.json",
+      "digest": "06636823aa5e64e99eb3de438ea0a673dec428c193c166a40724eb3cddea71d8"
+    },
+    {
+      "controlId": "chrome.anatomy",
+      "path": "governance/manifest/controls/chrome/anatomy/index.json",
+      "digest": "91f612b7ea26f2f2fc07d5e3bf8eb5385842115c23fd4549d456a0678adc5642"
+    },
+    {
+      "controlId": "token-overrides",
+      "path": "governance/manifest/controls/tokens/overrides/index.json",
+      "digest": "3fa08f27717758ebb81658c175889f92529036f57a543ec2b6e1c0ced14b3d8e"
+    },
+    {
+      "controlId": "recipe-profile",
+      "path": "governance/manifest/controls/recipes/profile/index.json",
+      "digest": "156cde689508039235dfb94b350ff9be238f07de6a370a0ac6014430bcb75876"
+    },
+    {
+      "controlId": "profiles.expressive",
+      "path": "governance/manifest/controls/profiles/expressive/index.json",
+      "digest": "6c7e8bc6164f67d1595bbf83931b0d30f08e5919498b2681390880f3b1ffcec6"
+    },
+    {
+      "controlId": "palette.status-seeds",
+      "path": "governance/manifest/controls/palette/status-seeds/index.json",
+      "digest": "2a792dd97d562be33be50c06d374302f8abd07b6e67c97db1542cdfe77acb50c"
+    },
+    {
+      "controlId": "profiles.icon",
+      "path": "governance/manifest/controls/profiles/icon/index.json",
+      "digest": "9db81e1a2abfb8c8a33f3b8407a3006e4a9ca0d8a92faa5266e391449103f15b"
+    },
+    {
+      "controlId": "responsive.posture",
+      "path": "governance/manifest/controls/responsive/posture/index.json",
+      "digest": "62fcdb96ee77726561adc4004048c47c64b3f99fb3640e48ef69d1d2d3139348"
+    }
+  ],
+  "groups": [
+    {
+      "groupId": "collection-card-anatomy",
+      "path": "governance/manifest/recipes/collection-card-anatomy/index.json",
+      "digest": "3405f055a091fc276fd73d6249e2e8f3ba63399e501b243c060aaf11988625b8"
+    },
+    {
+      "groupId": "collection-view-mode",
+      "path": "governance/manifest/recipes/collection-view-mode/index.json",
+      "digest": "77bb0f34a74b3f039899cf8c231aa259bb3101d308c145b8b620a89d1e9ae105"
+    },
+    {
+      "groupId": "data-table-presentation",
+      "path": "governance/manifest/recipes/data-table-presentation/index.json",
+      "digest": "bf487b8c153aacb305df1463d29831d5f9e19dac8eb97e636ff9bf89a999fa82"
+    }
+  ],
+  "families": [
+    {
+      "familyId": "chart/basic/area-chart",
+      "path": "governance/manifest/families/chart/basic/area-chart/index.json",
+      "digest": "16203ac5ceb732bbaaebeab3fd9f7f47ad3c55bddad38afd712a29e765fee8e9",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "chart/basic/bar-chart",
+      "path": "governance/manifest/families/chart/basic/bar-chart/index.json",
+      "digest": "fcecd20a9c7168249e45fef391e71daef4343885517dc7951e3a373e64d97222",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "chart/basic/line-chart",
+      "path": "governance/manifest/families/chart/basic/line-chart/index.json",
+      "digest": "104c0ac441c873b0f27678523ea6b6ece625080ca0f4f0af579650b7efc239c7",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "chart/basic/pie-chart",
+      "path": "governance/manifest/families/chart/basic/pie-chart/index.json",
+      "digest": "0750a63a9b37937d73fc51f79aaf3109a77d12aaec22c5008d1e1a8a91a3b5df",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "chart/basic/scatter-chart",
+      "path": "governance/manifest/families/chart/basic/scatter-chart/index.json",
+      "digest": "8b5371993509a141ebd19896bdf8c8c755f59e310d3474280089933340815355",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "chart/flow/funnel-chart",
+      "path": "governance/manifest/families/chart/flow/funnel-chart/index.json",
+      "digest": "9ac2a3a98e37cc380ece15fd87047d54c78d2e82f636df5b620da2e039d811c7",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "chart/flow/sankey-chart",
+      "path": "governance/manifest/families/chart/flow/sankey-chart/index.json",
+      "digest": "e9b8d613e1e973c4d36f2677b085c6a0b0c151d843a3a2106ef37dc58551324a",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "chart/flow/waterfall-chart",
+      "path": "governance/manifest/families/chart/flow/waterfall-chart/index.json",
+      "digest": "c37090e53e2f6cb87bc36f241cf4388228983b2926aba11c892f7ede2eb08055",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "chart/hierarchical/tree-map",
+      "path": "governance/manifest/families/chart/hierarchical/tree-map/index.json",
+      "digest": "627af12e05feca565d3002b63eb81ed0a7aa9101293300a1523f1dd02ddb30df",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "chart/kpi/bullet-chart",
+      "path": "governance/manifest/families/chart/kpi/bullet-chart/index.json",
+      "digest": "2a100bedb97862245ed1f38c900a56265c3acfe01e60f94169f572ce18c27b3d",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "chart/relational/network-graph",
+      "path": "governance/manifest/families/chart/relational/network-graph/index.json",
+      "digest": "59f83408d4680e4fbfac6c83fb50692c7463dbf19d42953ff8aa2f3f0477078f",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "chart/spatial/heat-map",
+      "path": "governance/manifest/families/chart/spatial/heat-map/index.json",
+      "digest": "a369b659b7c65a01e8a54b5bc9d5f37b709903b961520a1b3ca5b71508d5cfc0",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "chart/statistical/gauge-chart",
+      "path": "governance/manifest/families/chart/statistical/gauge-chart/index.json",
+      "digest": "7c2ef6b54b90283b8be836136c81bb7a5bd648722fdeed8834755f0b46439c8a",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "chart/statistical/histogram",
+      "path": "governance/manifest/families/chart/statistical/histogram/index.json",
+      "digest": "5b7fccc76a719ca193bbe5569ae80cb5998e4c47b8e828078d852b6b5d4014b3",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "chart/statistical/radar-chart",
+      "path": "governance/manifest/families/chart/statistical/radar-chart/index.json",
+      "digest": "a8c5046db0d1096438beba1e5d45b2be6e86c213ff7e77455198933bfa5446be",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "chart/temporal/calendar-heat-map",
+      "path": "governance/manifest/families/chart/temporal/calendar-heat-map/index.json",
+      "digest": "dc0bc0463333407bcb4c341f31706be06f4c2f99174656181759c25359181467",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "chart/temporal/gantt-chart",
+      "path": "governance/manifest/families/chart/temporal/gantt-chart/index.json",
+      "digest": "8a4e0672caa041bb3b3894f2284cfc35245c9d1ef8a4cdf4afed253dae457dda",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "chart/temporal/sparkline",
+      "path": "governance/manifest/families/chart/temporal/sparkline/index.json",
+      "digest": "a8a41317d281dfed1c95299ada0fefc856def5e75d7aabd6d1199eed4a27ca90",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "pattern/commerce/pricing-table",
+      "path": "governance/manifest/families/pattern/commerce/pricing-table/index.json",
+      "digest": "ff4caf6b0bd9de0b41e2db3902c2cc4266956ae09cb7b4b86c66bd0a5a18b5ea",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "pattern/communication/activity-log",
+      "path": "governance/manifest/families/pattern/communication/activity-log/index.json",
+      "digest": "2d3b0669ecd7ccc0937bb3e6b6e2e3917ce0d29694f114d28bc34ebcff0b7024",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "pattern/communication/assistant",
+      "path": "governance/manifest/families/pattern/communication/assistant/index.json",
+      "digest": "20803dbacc20dacfbcdbccd60e74300b0aeaf832afcb9ec6afa45be25a9b9edd",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "pattern/communication/comment-thread",
+      "path": "governance/manifest/families/pattern/communication/comment-thread/index.json",
+      "digest": "90d6b5d7084ebbde49744de6f96bb6b748ba3e9a96dfe642bf64d89380a20fdb",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "pattern/communication/live-feed",
+      "path": "governance/manifest/families/pattern/communication/live-feed/index.json",
+      "digest": "5458f62a1948a25da100ff70402295f1181c5bc9507176fb402eaa5b64d43c7c",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "pattern/communication/notification-center",
+      "path": "governance/manifest/families/pattern/communication/notification-center/index.json",
+      "digest": "8097b40e740756b04789136c42570d2b612e85e0d1740eea40a4fc77d60174db",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "pattern/communication/presence",
+      "path": "governance/manifest/families/pattern/communication/presence/index.json",
+      "digest": "42dcfbe21ba9e8c69e782ec4ee29c44f8e65d635e911b5c7b65c4b3fd0f7e7f3",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "pattern/customization/branding-preview-sandbox",
+      "path": "governance/manifest/families/pattern/customization/branding-preview-sandbox/index.json",
+      "digest": "13fb3e4f381fca5ad6858b5046c22c84c48b8436ab9d9e37ca2984d7ce7a44d0",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "pattern/customization/pattern-brand-studio",
+      "path": "governance/manifest/families/pattern/customization/pattern-brand-studio/index.json",
+      "digest": "f0efe56bd25f8b6239215c2beec80b6c85739a492e015cf0c69113b6f413ea32",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "pattern/customization/tenant-preview",
+      "path": "governance/manifest/families/pattern/customization/tenant-preview/index.json",
+      "digest": "883ad90158a7d6180882d44f5a2d9fc6fcca9ea1e0786d8aa05f0cc16f379ae9",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "pattern/customization/token-inspector",
+      "path": "governance/manifest/families/pattern/customization/token-inspector/index.json",
+      "digest": "a555727df5c367691f3a898e4921ae56fd4ce0bc7d258dd5ecfe3684cd1aa2df",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "pattern/data/bulk-select-toggle",
+      "path": "governance/manifest/families/pattern/data/bulk-select-toggle/index.json",
+      "digest": "b2aa1fd335c3dbce16f56a9ba94cbfe74e498112b7f935c83dc27cd328a42c6d",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "pattern/data/column-settings",
+      "path": "governance/manifest/families/pattern/data/column-settings/index.json",
+      "digest": "c7f7020ea9f8757945a43433a5c2f0f2107bba4b86f78ce4f432b23885b5338a",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "pattern/data/decision-comparison",
+      "path": "governance/manifest/families/pattern/data/decision-comparison/index.json",
+      "digest": "21603ea77f10f0c7c9d6dd4d401875656cbc9b76ae273196f1a60e32569693db",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "pattern/data/decision-panorama",
+      "path": "governance/manifest/families/pattern/data/decision-panorama/index.json",
+      "digest": "405605d37ecc984b36a4b24830b032ac7ba7264d22c28442305e4ff88686a7cf",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "pattern/data/detail-panel",
+      "path": "governance/manifest/families/pattern/data/detail-panel/index.json",
+      "digest": "9c6be94d7db19b86cf2b1217740befea412fcfb576a01de8397a4a8daa641898",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "pattern/data/file-manager",
+      "path": "governance/manifest/families/pattern/data/file-manager/index.json",
+      "digest": "12c4baac29516177b3bca365797703a40266f238c69afa70cef9a095fbd9119b",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "pattern/data/list-toolbar",
+      "path": "governance/manifest/families/pattern/data/list-toolbar/index.json",
+      "digest": "29f3e05beb84986d20b68495db35c50be23ad85e83cd02ec41aaa9828ba1b5fa",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "pattern/data/mono-stat",
+      "path": "governance/manifest/families/pattern/data/mono-stat/index.json",
+      "digest": "b33eaef1c7af6534a5c25291d73fbd34a0952c7997399ca4b1368721db31124c",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "pattern/data/pattern-data-table",
+      "path": "governance/manifest/families/pattern/data/pattern-data-table/index.json",
+      "digest": "252272e7a5caab77dd49cf454f2e7956e10180eedd0c1f9458765e4ea648273e",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "pattern/data/pattern-gallery-view",
+      "path": "governance/manifest/families/pattern/data/pattern-gallery-view/index.json",
+      "digest": "ad4e50acad7b1fed53ef7ac04ff60a39aae35a372765b5bf620d25b8ed5ca1e5",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "pattern/data/pattern-grid-view",
+      "path": "governance/manifest/families/pattern/data/pattern-grid-view/index.json",
+      "digest": "457a02bb5710f4b107cb78c161cdcda88df91373e1ec9ab4860387110e15c778",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "pattern/data/pattern-stats-grid",
+      "path": "governance/manifest/families/pattern/data/pattern-stats-grid/index.json",
+      "digest": "35e433b666f674cf6c7e82b6ee6d16bc4ea5fe5eb876703eeac581e251f96ff5",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "pattern/data/record-facts",
+      "path": "governance/manifest/families/pattern/data/record-facts/index.json",
+      "digest": "cbc2ba25efff704d86a509675eb53fa5c9203e8b6d34c64c622d3df2c8416d12",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "pattern/data/saved-views",
+      "path": "governance/manifest/families/pattern/data/saved-views/index.json",
+      "digest": "702be69c56aab466cd1d1e60ec18bfe6effd053d9a5671e132d02d9c65b446ac",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "pattern/data/status-filter-pills",
+      "path": "governance/manifest/families/pattern/data/status-filter-pills/index.json",
+      "digest": "517191eb882dc9781259fca592c23aab07f01d424afcd550101d3709ce788971",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "pattern/data/virtual-list",
+      "path": "governance/manifest/families/pattern/data/virtual-list/index.json",
+      "digest": "e30ee669fc80e47ddafcd069f315ee6075f30d26377b257b7234f4fc7a5d6dff",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "pattern/data/widget-board",
+      "path": "governance/manifest/families/pattern/data/widget-board/index.json",
+      "digest": "3d628095a20e3899a65e44a2e28b8eed9df0b6d9aff55f58f57a4701ac681fe0",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "pattern/feedback/adaptive-overlay",
+      "path": "governance/manifest/families/pattern/feedback/adaptive-overlay/index.json",
+      "digest": "a9581c8488ebba2e43cef5ee531fc1a4b9b05906f6006b3eca60cb1ea1eebd7b",
+      "maximumClaim": "INVENTORIED_ONLY",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "pattern/feedback/empty-state",
+      "path": "governance/manifest/families/pattern/feedback/empty-state/index.json",
+      "digest": "afbe6ddf0c795f1983034b6371e256568baf0a145bbb04b5c82f9cb43d08f562",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "pattern/feedback/terminal-block",
+      "path": "governance/manifest/families/pattern/feedback/terminal-block/index.json",
+      "digest": "facfb5d5fc47b5a8e040dc4c8e140a186e2f7f4a8712115c7e89b9b03a0751ac",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "pattern/forms/filter-builder",
+      "path": "governance/manifest/families/pattern/forms/filter-builder/index.json",
+      "digest": "a34004de93b664466386784ac455b5ce1940e1cfbf2d7d2e9392742a14289279",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "pattern/forms/filter-panel",
+      "path": "governance/manifest/families/pattern/forms/filter-panel/index.json",
+      "digest": "e3ff412ed6ffbc50136e98c17dc8c6e8f5732adb5c178ff11a5883c66694d2e6",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "pattern/forms/invoice-template",
+      "path": "governance/manifest/families/pattern/forms/invoice-template/index.json",
+      "digest": "162320b7afd095a9a11343781555d208ff4906e9330af72ebd59333dca9c2a83",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "pattern/forms/pattern-form-builder",
+      "path": "governance/manifest/families/pattern/forms/pattern-form-builder/index.json",
+      "digest": "58fba5912332c4f1a69f0b839acdc33a29fd326f0baa6a93ae3392541939a591",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "pattern/forms/step-wizard",
+      "path": "governance/manifest/families/pattern/forms/step-wizard/index.json",
+      "digest": "9dca61dcd40756e5f193e9795ce7b5e483c7b3bcb98c81676d9c3f7f7c1b85a4",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "pattern/identity/user-profile-card",
+      "path": "governance/manifest/families/pattern/identity/user-profile-card/index.json",
+      "digest": "54636fe42e0e7c073dd7067381efd6920d6ab76f2c2151e96a068c5a384cff85",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "pattern/navigation/command-palette",
+      "path": "governance/manifest/families/pattern/navigation/command-palette/index.json",
+      "digest": "c44887686679eaf8e3bd07e9e388e58fdcfce9afd094f12c778e882fc92bdbf5",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "pattern/navigation/environment-toggle",
+      "path": "governance/manifest/families/pattern/navigation/environment-toggle/index.json",
+      "digest": "833927a773e6b5791d1ee2d5e364258d7cb077dd62de1bab2ef281e8d86f4ca4",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "pattern/navigation/pattern-locale-switcher",
+      "path": "governance/manifest/families/pattern/navigation/pattern-locale-switcher/index.json",
+      "digest": "334c1d7547a82c4d74f8063c806441a0f5f01fb0c337df0910902d28f52bdf1f",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "pattern/navigation/shortcuts-overlay",
+      "path": "governance/manifest/families/pattern/navigation/shortcuts-overlay/index.json",
+      "digest": "c42cd50e6d390888f4b7c067f5967836808c8a50bda9a9a2ce3310cfd13d68e4",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "pattern/navigation/workspace-switcher",
+      "path": "governance/manifest/families/pattern/navigation/workspace-switcher/index.json",
+      "digest": "05a3265f532580dca9d670050d2113a28b1a1a49e6460659316b8d44607768a9",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "pattern/shell/cockpit-header",
+      "path": "governance/manifest/families/pattern/shell/cockpit-header/index.json",
+      "digest": "4f3bd61b3724be6560e9297570f984a41588717ef4c7c2adf89e04bff2181810",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "pattern/shell/feature-workspace-frame",
+      "path": "governance/manifest/families/pattern/shell/feature-workspace-frame/index.json",
+      "digest": "b381b829db6b709f2ee2be2e588101bb9b72416579f21b3c3b3e607146753dea",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "pattern/shell/pattern-page-shell",
+      "path": "governance/manifest/families/pattern/shell/pattern-page-shell/index.json",
+      "digest": "059643a20cb58bd0b66b13edfc6c9d7a2153935032d299ca81355d83edc30e04",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "pattern/shell/workbench-header",
+      "path": "governance/manifest/families/pattern/shell/workbench-header/index.json",
+      "digest": "4df0645030e701719375fe613cb7eafcad11a23261c7f48723e05c3b89153848",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "pattern/visualization/ascii-diagram",
+      "path": "governance/manifest/families/pattern/visualization/ascii-diagram/index.json",
+      "digest": "cbe5346ced7a2919f5f31ed073a818128abf537a4572b4956e77dda97bf8125b",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "pattern/visualization/pattern-calendar-view",
+      "path": "governance/manifest/families/pattern/visualization/pattern-calendar-view/index.json",
+      "digest": "7f51f9f1ae496dd1d48fd8d2764fe2fde4c1fe2923a047b5e4bc9412f15a4ea1",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "pattern/visualization/pattern-kanban-board",
+      "path": "governance/manifest/families/pattern/visualization/pattern-kanban-board/index.json",
+      "digest": "d3db8bdb75b1996aab47c1074cac4ce3bf1ea05c39499562554078b3f5db850b",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "pattern/visualization/pattern-map-view",
+      "path": "governance/manifest/families/pattern/visualization/pattern-map-view/index.json",
+      "digest": "5e7bdb8743eff3883f41378720a6063b8d8777dab8f6de5a6f62ab796646a17c",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "pattern/visualization/pattern-timeline",
+      "path": "governance/manifest/families/pattern/visualization/pattern-timeline/index.json",
+      "digest": "8daab7d8aa2310d0a8b55b09ee8b9e36c736ac69297ddfd53e46fb5bbeaa6ec1",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "pattern/visualization/pattern-tree-view",
+      "path": "governance/manifest/families/pattern/visualization/pattern-tree-view/index.json",
+      "digest": "04811340a24e7271bdba2e9f50d33079876666a6b74929fd58d00756153e8b86",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "pattern/workflow/approval-inbox",
+      "path": "governance/manifest/families/pattern/workflow/approval-inbox/index.json",
+      "digest": "6dec313520f5d245d52861c4e216005cb1b5e657a3e39cd837e5a911c496205d",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "pattern/workflow/approval-workflow",
+      "path": "governance/manifest/families/pattern/workflow/approval-workflow/index.json",
+      "digest": "979877dc63ca72cfdbc4730340d7ac887918d5c25425dae1a66873ec9fc482a1",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "pattern/workflow/moderation-gallery",
+      "path": "governance/manifest/families/pattern/workflow/moderation-gallery/index.json",
+      "digest": "a634a27d3eab318b2030e1e7e693bb756c3681ba34b314e53dab12ba9cf04c73",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "pattern/workflow/operational-ledger",
+      "path": "governance/manifest/families/pattern/workflow/operational-ledger/index.json",
+      "digest": "d378834eab81ac13e31ebe4235298d28e2348a52730af66bd15d9895795f9230",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "pattern/workflow/shift-matrix",
+      "path": "governance/manifest/families/pattern/workflow/shift-matrix/index.json",
+      "digest": "92760486a3d7f851152a4f24b4e17b8b9b6bf4634eb0756d1b3e1bad1515e1d1",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "primitive/display/avatar",
+      "path": "governance/manifest/families/primitive/display/avatar/index.json",
+      "digest": "197ce8498c03ad4f7e3da0f8518f280f378daef77a95076216a6d5a5bec0c5e7",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "primitive/display/badge",
+      "path": "governance/manifest/families/primitive/display/badge/index.json",
+      "digest": "bbee5c13f2f9c09e9b1b9fb9ea807de3ebe0ee57bcec06cace72d7495fc2a6d4",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "primitive/display/calendar",
+      "path": "governance/manifest/families/primitive/display/calendar/index.json",
+      "digest": "785dae9fb275bda4a709bdcaa4a0dbd3ea95940d66827279293ddc55847aa593",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "primitive/display/callout",
+      "path": "governance/manifest/families/primitive/display/callout/index.json",
+      "digest": "2509469e434ecb4813ab16c1cbc667d23aa036c1bf0ad78d8a6b9c259cc049bc",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "primitive/display/card",
+      "path": "governance/manifest/families/primitive/display/card/index.json",
+      "digest": "53dd56c7af1309b80d93a96fb98c74f0cfb043870dfa542aefe000f1c43516e0",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "primitive/display/carousel",
+      "path": "governance/manifest/families/primitive/display/carousel/index.json",
+      "digest": "6a76344b4ba402f3ab602833a36b04f038bc46f4d7d62d7b519b59886b91edd3",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "primitive/display/code-block",
+      "path": "governance/manifest/families/primitive/display/code-block/index.json",
+      "digest": "332d410bcf957fd2dd925334abe5e53d8af8242fb231998f85dbb7655800be73",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "primitive/display/crop-marks",
+      "path": "governance/manifest/families/primitive/display/crop-marks/index.json",
+      "digest": "d1b5e4f502d708306c4ff8e5748bcc7e87abb97c895d0e4742b281ebeca24346",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "primitive/display/descriptions",
+      "path": "governance/manifest/families/primitive/display/descriptions/index.json",
+      "digest": "155f74c8a9eb1cd48f686d39973ccde60ae60b3a4f410fc95fd7b2d0555f4f4a",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "primitive/display/empty",
+      "path": "governance/manifest/families/primitive/display/empty/index.json",
+      "digest": "3c3271e58959646a5dddcc2f94cfa15740210652ec54944549c1afa3c279b9c7",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "primitive/display/image",
+      "path": "governance/manifest/families/primitive/display/image/index.json",
+      "digest": "69d9d33b3651419565f2e9126988e622816fece1da0d10d0ada4e6594b64a12d",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "primitive/display/kbd",
+      "path": "governance/manifest/families/primitive/display/kbd/index.json",
+      "digest": "6ea67728867758d0746582acc45bbc22d15c696adc699f9b46e143a288506a56",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "primitive/display/list",
+      "path": "governance/manifest/families/primitive/display/list/index.json",
+      "digest": "edd3c8df972936d83d31e2f971243d1f799d4546caf8c9b33fe22bcf01ef3601",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "primitive/display/markdown-view",
+      "path": "governance/manifest/families/primitive/display/markdown-view/index.json",
+      "digest": "8868ef2b18fb5b8df1754bded79db2cc1268a3cbc698b2f83bc1899cd90c01dd",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "primitive/display/qr-code",
+      "path": "governance/manifest/families/primitive/display/qr-code/index.json",
+      "digest": "90a77209283bcbaca7d61c0393916df60dc0f96db66e9af7b6bed0f9156798e7",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "primitive/display/statistic",
+      "path": "governance/manifest/families/primitive/display/statistic/index.json",
+      "digest": "5d5cc0f69c72a820c0ea31a1c4854bfb30f43bdcef944e253f69ef889b65a799",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "primitive/display/table",
+      "path": "governance/manifest/families/primitive/display/table/index.json",
+      "digest": "4e77b361bd6efb055a118f545212abf9d4e01c062539d0ea54a89880527c2e0b",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "primitive/display/tag",
+      "path": "governance/manifest/families/primitive/display/tag/index.json",
+      "digest": "ecde6ce01aa67ddf5f32e541b1dbcce60f0febfeb517f9e3b0d8177e7aa10b61",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "primitive/display/texture-backdrop",
+      "path": "governance/manifest/families/primitive/display/texture-backdrop/index.json",
+      "digest": "293764e2d2823631875d52ce8b475b0ee2c08b867011e2725b45a5414a9c8f02",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "primitive/display/timeline",
+      "path": "governance/manifest/families/primitive/display/timeline/index.json",
+      "digest": "0ff1a25784949e340c23c6ce31e144c9ac48824bac1bae350524cba6e5d758bf",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "primitive/display/tooltip",
+      "path": "governance/manifest/families/primitive/display/tooltip/index.json",
+      "digest": "5643151b98fd8f10c039c7474dac892e876968de1b4371cb301dbf9ac8a5dc8a",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "primitive/display/tree",
+      "path": "governance/manifest/families/primitive/display/tree/index.json",
+      "digest": "063d8269394a528773cc2cd751dd95490cefac48d369f38874294d47adf2b15c",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "primitive/display/typewriter",
+      "path": "governance/manifest/families/primitive/display/typewriter/index.json",
+      "digest": "b16d5b30490def600a5138191681deb0d71d38b5391ec9bcaff934e6118c9072",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "primitive/display/typography",
+      "path": "governance/manifest/families/primitive/display/typography/index.json",
+      "digest": "8c6b09b3cb8463c10621b8a40c7c66da00da77e7bbd86c99e6ab9af7e8064265",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "primitive/feedback/alert",
+      "path": "governance/manifest/families/primitive/feedback/alert/index.json",
+      "digest": "6e607344c4cc64dc691dcbdbd97033cb4f5b6f27386b2d7804f0f54802d9dfa5",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "primitive/feedback/drawer",
+      "path": "governance/manifest/families/primitive/feedback/drawer/index.json",
+      "digest": "88963e7b87865f733eac2f7a6ccc6a760b1779c93a78d44c14ff9457b75f640f",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "primitive/feedback/message",
+      "path": "governance/manifest/families/primitive/feedback/message/index.json",
+      "digest": "7772e6e9757b1450a16d456014202acab5d2fb30fb0dc27cad8499166d2de157",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "primitive/feedback/modal",
+      "path": "governance/manifest/families/primitive/feedback/modal/index.json",
+      "digest": "9976ff4a8d63a09854687dde6d5e3e13a4f8cfc712c4f8ce1b04cbb1447d2b84",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "primitive/feedback/notification",
+      "path": "governance/manifest/families/primitive/feedback/notification/index.json",
+      "digest": "afb5fbd58e52fcb185e5db1e9dc26ac51603b799bb736dff393fc9dd76147f9a",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "primitive/feedback/progress",
+      "path": "governance/manifest/families/primitive/feedback/progress/index.json",
+      "digest": "8c6f481d8e5937a38cad0ef09f1179dbfbf3fba5b71aab3bc39c7794b9350724",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "primitive/feedback/rate",
+      "path": "governance/manifest/families/primitive/feedback/rate/index.json",
+      "digest": "691f103af2b43a5c0c19369419edb5d7faeda6e2fbf88991cf37c2f04400bdfe",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "primitive/feedback/result",
+      "path": "governance/manifest/families/primitive/feedback/result/index.json",
+      "digest": "eab4e24e37d84aebca9fd8756c14bd006d043e8494715302e0d6c78a1c8ad04d",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "primitive/feedback/skeleton",
+      "path": "governance/manifest/families/primitive/feedback/skeleton/index.json",
+      "digest": "4793ba98f4f37f35f134e2c6fc0a177e9ed76abce457dac61f9103bd5fa46d24",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "primitive/feedback/spinner",
+      "path": "governance/manifest/families/primitive/feedback/spinner/index.json",
+      "digest": "6c02ffba3ddc76575da2e8b6e79aa81e0689042f3c2ca1a0a8a735f24ecabf04",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "primitive/feedback/toast",
+      "path": "governance/manifest/families/primitive/feedback/toast/index.json",
+      "digest": "c0af534caa17f3b85efb080daa115a681b920d127d33f608ffb78f57d7ba4a7f",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "primitive/display/icon-frame",
+      "path": "governance/manifest/families/primitive/display/icon-frame/index.json",
+      "digest": "991ce08fc75b3de36e729b77fd50f9d795ab4ffe3466ef47b80bb4768f8a31cc",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "primitive/feedback/loading-indicator",
+      "path": "governance/manifest/families/primitive/feedback/loading-indicator/index.json",
+      "digest": "68dd3a260bee03beb059f8b445cbdadaa578fb705bb3f5ac3622061851b94055",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "primitive/display/meter",
+      "path": "governance/manifest/families/primitive/display/meter/index.json",
+      "digest": "8b28e32b07638a4fc43fb0efcb2098ccb5348679067c51c3e20189f52f1998f4",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "primitive/layout/resize-handle",
+      "path": "governance/manifest/families/primitive/layout/resize-handle/index.json",
+      "digest": "6b2e14cb982188bbf332d5fbb118b21d1744094c74ec5e0f41b9a0d5d73fedc9",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "primitive/layout/visually-hidden",
+      "path": "governance/manifest/families/primitive/layout/visually-hidden/index.json",
+      "digest": "49c095d8e7162de7c936108fa03e0f03c8f42df80137527f642109d9e6e82f47",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "primitive/inputs/auto-complete",
+      "path": "governance/manifest/families/primitive/inputs/auto-complete/index.json",
+      "digest": "dde29d65095a7b0c2090901218fb3a17edef599709e72eb5bda9b07f4ee667bb",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "primitive/inputs/button",
+      "path": "governance/manifest/families/primitive/inputs/button/index.json",
+      "digest": "9709a522fd55a48f97eb4ed63d602d88a56f810027194e5c259f76a09a3ddfcb",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "primitive/inputs/cascader",
+      "path": "governance/manifest/families/primitive/inputs/cascader/index.json",
+      "digest": "af72f66bc6e488b349cf949c7e00bede8b60fa241c96280400b8c5ffb78cccc0",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "primitive/inputs/checkbox",
+      "path": "governance/manifest/families/primitive/inputs/checkbox/index.json",
+      "digest": "125b303f3c07c4decdb0feb7735f0ac8d93df1a707a1ec264305098bee2f51b9",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "primitive/inputs/color-picker",
+      "path": "governance/manifest/families/primitive/inputs/color-picker/index.json",
+      "digest": "d96149283bd742e8039eb3e7acb7134c5f76a28d9f1d372c2d8f1953a05fdb01",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "primitive/inputs/date-picker",
+      "path": "governance/manifest/families/primitive/inputs/date-picker/index.json",
+      "digest": "f2b4b751c5ef1406fc034798daa1b47a7d19b4024a7b12e08513913a886c7d0d",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "primitive/inputs/form",
+      "path": "governance/manifest/families/primitive/inputs/form/index.json",
+      "digest": "1a64b1955654937f2d6797c56b8e5af44500ec736e23e2f9cf43b72e8df2a372",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "primitive/inputs/form-field",
+      "path": "governance/manifest/families/primitive/inputs/form-field/index.json",
+      "digest": "3a9edd2bce70c24a60e1a18e3904a15e64ceac176ec12141e20dc2da2a5f6ee9",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "primitive/inputs/input",
+      "path": "governance/manifest/families/primitive/inputs/input/index.json",
+      "digest": "6fa912ef79b4df8c858cb3c694b44e05a14a9daac991aded5dd4439624768031",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "primitive/inputs/input-number",
+      "path": "governance/manifest/families/primitive/inputs/input-number/index.json",
+      "digest": "5fe79450b637640cdc49b4fbca1ce22261c39b8b9f75e0ce1b5333da9ffb6ec7",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "primitive/inputs/mentions",
+      "path": "governance/manifest/families/primitive/inputs/mentions/index.json",
+      "digest": "66bdeab566eb12fe5c42f9bdd31464eed5fcdd3fc7b977b8e9c3ceb192565dc0",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "primitive/inputs/otp-input",
+      "path": "governance/manifest/families/primitive/inputs/otp-input/index.json",
+      "digest": "b1434c240618350446d0c9cd8c93abddddd9162533fca45a0df396b091287de0",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "primitive/inputs/password-input",
+      "path": "governance/manifest/families/primitive/inputs/password-input/index.json",
+      "digest": "7a0658e71dc6c79105474b2e822ce52044d9e1bfe2392aca10ddfde685d25fef",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "primitive/inputs/radio",
+      "path": "governance/manifest/families/primitive/inputs/radio/index.json",
+      "digest": "c97224ec0cd64960945767723077d041dbca008dae6a87afbbf6fcd6b64c931e",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "primitive/inputs/select",
+      "path": "governance/manifest/families/primitive/inputs/select/index.json",
+      "digest": "1cfdf3fd731564218c81f55566f4b872f179d4b90bdc91aba037b52f0bb1bd2b",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "primitive/inputs/slider",
+      "path": "governance/manifest/families/primitive/inputs/slider/index.json",
+      "digest": "fb2eed52d4b1e469baa0ca7f239c9f3993a8310dbd07d6c60faacba66266a608",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "primitive/inputs/switch",
+      "path": "governance/manifest/families/primitive/inputs/switch/index.json",
+      "digest": "92e5384a7b276107a233a40d0c4683f263764d9a838bcbb04386db172da207c5",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "primitive/inputs/tag-input",
+      "path": "governance/manifest/families/primitive/inputs/tag-input/index.json",
+      "digest": "85863daf3d916f77be82ee6b7e8c507cc7e89fbd3f4249c64d24493275d704c7",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "primitive/inputs/textarea",
+      "path": "governance/manifest/families/primitive/inputs/textarea/index.json",
+      "digest": "610618a67d9915fb5e86f6bc0ab4368991068a98adb097620197b46eabcc41d4",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "primitive/inputs/time-picker",
+      "path": "governance/manifest/families/primitive/inputs/time-picker/index.json",
+      "digest": "ff42924148d1c857c488ebdea44a3836b6fac27eef4a6a048b539b8117b99322",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "primitive/inputs/toggle",
+      "path": "governance/manifest/families/primitive/inputs/toggle/index.json",
+      "digest": "621c7855346d7376c9da0c2f1174dd9818cf4f1c03ffd0f200697dc8a481fdd4",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "primitive/inputs/transfer",
+      "path": "governance/manifest/families/primitive/inputs/transfer/index.json",
+      "digest": "0e618d8279ee03439ab6c7c23f8f6ec1b350602f532d85690e20dd982697db0e",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "primitive/inputs/tree-select",
+      "path": "governance/manifest/families/primitive/inputs/tree-select/index.json",
+      "digest": "4e4577309bba56750628c744888dfceec9de0358376274f379e701d8a8d20c18",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "primitive/inputs/upload",
+      "path": "governance/manifest/families/primitive/inputs/upload/index.json",
+      "digest": "ba5311738d7a527ecaa5fe8e937723d6400e757c0fec9615291f21b2adba76eb",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "primitive/inputs/voice-input-button",
+      "path": "governance/manifest/families/primitive/inputs/voice-input-button/index.json",
+      "digest": "f76e0a1fe83f5c22f26807bbcaaa985490126df99715afdb211fcd9393061685",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "primitive/layout/ascii-frame",
+      "path": "governance/manifest/families/primitive/layout/ascii-frame/index.json",
+      "digest": "6d12bc76c2ceec1fb4e7e35865070c5d1211df0d61c74888290a4e3dee645ffd",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "primitive/layout/aspect-ratio",
+      "path": "governance/manifest/families/primitive/layout/aspect-ratio/index.json",
+      "digest": "5f2bca123c42b4dfbe4eba8976cc4f6ad934215cc6065b15f284d283284eda26",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "primitive/layout/box",
+      "path": "governance/manifest/families/primitive/layout/box/index.json",
+      "digest": "6ea291ace27d6656f7efc7ac04a0211db064a9bcb0cab43431cfa9888e26a7ee",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "primitive/layout/collapse",
+      "path": "governance/manifest/families/primitive/layout/collapse/index.json",
+      "digest": "ce9ca5906767f546a0f1d5b53587e274837b3cc3a197c604d9c583a82b77436e",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "primitive/layout/container",
+      "path": "governance/manifest/families/primitive/layout/container/index.json",
+      "digest": "d3f4ca400a4c59f22167aea3e350dfb363e8263feabebece67d02f1efcee28ef",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "primitive/layout/divider",
+      "path": "governance/manifest/families/primitive/layout/divider/index.json",
+      "digest": "a880e864d6eb508bf59cc0e12b4fe0fe4e4d87d8717b6150d8b1e9ccc50ca421",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "primitive/layout/flex",
+      "path": "governance/manifest/families/primitive/layout/flex/index.json",
+      "digest": "b836f5406954ad1e554bf36ff7b02bdeba7875a9ff63cab516bc836e1a195a17",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "primitive/layout/grid",
+      "path": "governance/manifest/families/primitive/layout/grid/index.json",
+      "digest": "9fb107db7b355f6ca110e9140be571048651c6edd22745a06fc6aae5f9a125c5",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "primitive/layout/hide",
+      "path": "governance/manifest/families/primitive/layout/hide/index.json",
+      "digest": "050d1dbad0e28426c20021bf623841bb1634b201c071fdfbf8f21870d878c5c1",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "primitive/layout/invert-section",
+      "path": "governance/manifest/families/primitive/layout/invert-section/index.json",
+      "digest": "d83a935c3661d8d021c8d7f94566fa6aaa39b727ce5aeb955423153a637260c0",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "primitive/layout/layout",
+      "path": "governance/manifest/families/primitive/layout/layout/index.json",
+      "digest": "4c398cec6a00189f9bf801de813774d498a8cc5b3e9791782ea882b6077fceba",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "primitive/layout/responsive-slot",
+      "path": "governance/manifest/families/primitive/layout/responsive-slot/index.json",
+      "digest": "e2e78fa278a159681b2d607cb7e3a2047106f879edd8effaccba88a63b050a11",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "primitive/layout/scroll-area",
+      "path": "governance/manifest/families/primitive/layout/scroll-area/index.json",
+      "digest": "7a17aae095a068f9b42bab488c09b5d3c078188a0a0daf02c83bb5d60d377c0f",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "primitive/layout/semantic-surface",
+      "path": "governance/manifest/families/primitive/layout/semantic-surface/index.json",
+      "digest": "91d2a4dece6effaee8a44464d45d10d627f061c5a93a1d2f9e39538cbc519794",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "primitive/layout/show",
+      "path": "governance/manifest/families/primitive/layout/show/index.json",
+      "digest": "b97543e2c0e138ea45ce5e6768b6b64a8520294adca5d45ffc7f2674df7918cd",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "primitive/layout/space",
+      "path": "governance/manifest/families/primitive/layout/space/index.json",
+      "digest": "3b096fb060d1f952bb4fca6c818d36cd82e5e3e655deb0f0a75a7214a917bf07",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "primitive/layout/splitter",
+      "path": "governance/manifest/families/primitive/layout/splitter/index.json",
+      "digest": "c3f5b939cd27ac8e2ab552dc5b491027f20fcbe406d11a572b77383741bb66c7",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "primitive/layout/stack",
+      "path": "governance/manifest/families/primitive/layout/stack/index.json",
+      "digest": "7ea50d7b3345a3526d210eb92c04daaab55d02d0bbfe985a9e8c6af7c9992e98",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "primitive/navigation/affix",
+      "path": "governance/manifest/families/primitive/navigation/affix/index.json",
+      "digest": "df31d77ce6f2f167f4e41b7001d83a1c3ffafec308fd839c721826f604302fff",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "primitive/navigation/anchor",
+      "path": "governance/manifest/families/primitive/navigation/anchor/index.json",
+      "digest": "3a492c194b3f962875666413fe0e583fbe9de8d86e11367c02bb0bc1bd1270aa",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "primitive/navigation/back-top",
+      "path": "governance/manifest/families/primitive/navigation/back-top/index.json",
+      "digest": "8c698a7962858e9363399bb6928457d7610d0375a4a89e9e1b9311e93bfbabcd",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "primitive/navigation/breadcrumb",
+      "path": "governance/manifest/families/primitive/navigation/breadcrumb/index.json",
+      "digest": "5a14bd0f0f9f4c65c0c7c1b1bd80e62b3ad8b33abcf13b04ef88f7cb531e6d53",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "primitive/navigation/float-button",
+      "path": "governance/manifest/families/primitive/navigation/float-button/index.json",
+      "digest": "49fe15ad5842f908e445cce62cd6f11798343752a9f73f57a69f107f856c1467",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "primitive/navigation/link",
+      "path": "governance/manifest/families/primitive/navigation/link/index.json",
+      "digest": "1af3cd17a442a0f7a162db7b87279911ed422884d68c2b629c484c53df4fd724",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "primitive/navigation/menu",
+      "path": "governance/manifest/families/primitive/navigation/menu/index.json",
+      "digest": "9fec597a71886866d1e1a2bce43632ed72469da113b12fa9f71cf3704578c95b",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "primitive/navigation/pagination",
+      "path": "governance/manifest/families/primitive/navigation/pagination/index.json",
+      "digest": "f602be73021fd99bda42229382823262230512a0957adbabe7c3b5c8552c1d61",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "primitive/navigation/segmented",
+      "path": "governance/manifest/families/primitive/navigation/segmented/index.json",
+      "digest": "41047e1566366a504ce04e1c0e0cc66ec3bc201d376c2fad4f7679f409c49ce4",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "primitive/navigation/stepper",
+      "path": "governance/manifest/families/primitive/navigation/stepper/index.json",
+      "digest": "f42f4ce0e3e35e30bb2e7f499e64e2871f06d84b68cc6fdd6231d3036cda2080",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "primitive/navigation/steps",
+      "path": "governance/manifest/families/primitive/navigation/steps/index.json",
+      "digest": "23520c962af9c8765e5f8d297bd25db229acc01a62f96221d18ba27d40a533a1",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "primitive/navigation/tabs",
+      "path": "governance/manifest/families/primitive/navigation/tabs/index.json",
+      "digest": "9dd1ba80d489f19954b597659699cb13fa7c2bc0d0ef91ddffc7f2a1b5aafc3a",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "primitive/overlay/alert-dialog",
+      "path": "governance/manifest/families/primitive/overlay/alert-dialog/index.json",
+      "digest": "8cd1741223c7cbb912df6234eee7de9a75d05f45e7637b464bec0cd94a46e01b",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "primitive/overlay/confirm-dialog",
+      "path": "governance/manifest/families/primitive/overlay/confirm-dialog/index.json",
+      "digest": "06468467268e6c09f3622ae90413f7a4cf5a30cb3abbd9a2cf133d32e0993908",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "primitive/overlay/context-menu",
+      "path": "governance/manifest/families/primitive/overlay/context-menu/index.json",
+      "digest": "9f7d8b1b1bd47ab92ddb2abda346669fcf2f76981da4717e6a04b026d9692f07",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "primitive/overlay/dropdown",
+      "path": "governance/manifest/families/primitive/overlay/dropdown/index.json",
+      "digest": "3da6de02169d9e837b32d3ac7d0412d025e8eef42e9ba59d7dfd38aa3c171a83",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "primitive/overlay/hover-card",
+      "path": "governance/manifest/families/primitive/overlay/hover-card/index.json",
+      "digest": "ea42824060a529576b49e9ee8dc4de9e43563eada1f75ad03ddde6a8e4d9d600",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "primitive/overlay/popconfirm",
+      "path": "governance/manifest/families/primitive/overlay/popconfirm/index.json",
+      "digest": "325d64ef64f8ab2bc401f2d4e78fde04a082cbf967a950369b55c7dccdf7de08",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "primitive/overlay/popover",
+      "path": "governance/manifest/families/primitive/overlay/popover/index.json",
+      "digest": "868de4b66716da30363092be52ffef824d2392ead3d3759a0d70b72c7d3f40eb",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "primitive/overlay/sheet",
+      "path": "governance/manifest/families/primitive/overlay/sheet/index.json",
+      "digest": "3801c98fc2fbf6c1f1f4f7ca765c0d875a775afe0932b1fb5daf0d3ece6424d7",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "primitive/overlay/tour",
+      "path": "governance/manifest/families/primitive/overlay/tour/index.json",
+      "digest": "2aa89c8403676ff9352c8787ad1082a0431f8ae1019670e485ea0b689877df2c",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "primitive/overlay/watermark",
+      "path": "governance/manifest/families/primitive/overlay/watermark/index.json",
+      "digest": "8f4bcda2f5eea9961f378b7900fe85a6119cc2978ab06c45ec4fdea8031d65d9",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "structure/dashboard/dashboard-insights",
+      "path": "governance/manifest/families/structure/dashboard/dashboard-insights/index.json",
+      "digest": "4d9e4313d99c46299a378f2589d032454b6b436801f17f060ebb15843d86afc5",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "structure/dashboard/data-terminal-card",
+      "path": "governance/manifest/families/structure/dashboard/data-terminal-card/index.json",
+      "digest": "cd80ceb65bd0ac9697604301267ac696cf4403d53bf376cd19d66f11ffc4f9ee",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "structure/dashboard/stats-header",
+      "path": "governance/manifest/families/structure/dashboard/stats-header/index.json",
+      "digest": "5c5aa514a61ec82bf696566584fda4fd228ee753a157b649bd318a4809de832a",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "structure/feedback/loading-overlay",
+      "path": "governance/manifest/families/structure/feedback/loading-overlay/index.json",
+      "digest": "ea6c912e214a2ee9d3524305ed6cf2143750cc377a8068a687c5d2d667eabd6b",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "structure/feedback/capability-anatomy",
+      "path": "governance/manifest/families/structure/feedback/capability-anatomy/index.json",
+      "digest": "27e4115295887c61a37fa58eb66b968c05970582e9609f365a43453ddcac1aa1",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "structure/feedback/surface-lifecycle",
+      "path": "governance/manifest/families/structure/feedback/surface-lifecycle/index.json",
+      "digest": "458da5c730e2e308a9e3b5d663a185752d89fccd94040bcb37320317f856740b",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "structure/headers/collection-header",
+      "path": "governance/manifest/families/structure/headers/collection-header/index.json",
+      "digest": "669ce82ada9807faf61f409e23a017070134cd04a2d52599381cfe00d062b943",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "structure/headers/dashboard-header",
+      "path": "governance/manifest/families/structure/headers/dashboard-header/index.json",
+      "digest": "8d8dec5cd7a1b5c88dcd2ba2da23c1dfd360a84630984f6eda35cdce3aa0be27",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "structure/headers/detail-header",
+      "path": "governance/manifest/families/structure/headers/detail-header/index.json",
+      "digest": "8405cad5ef3d8dc1224f973c9ed8b37dc6b52c364969f0ad3b5dfdf460b6f144",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "structure/headers/edit-header",
+      "path": "governance/manifest/families/structure/headers/edit-header/index.json",
+      "digest": "5dc63467b1d0bbed4e472b681cbf34cb1ce30e710297f981d98a4d488589ebf3",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "structure/headers/form-header",
+      "path": "governance/manifest/families/structure/headers/form-header/index.json",
+      "digest": "f8a132cb25cf3b77364dedf62f4bf28b6d426529a881a9c00ea1ad3e5993544a",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "structure/headers/header-surface",
+      "path": "governance/manifest/families/structure/headers/header-surface/index.json",
+      "digest": "b670b1836dc589533ed57c35802546da2e29d8fdff28de0e966c5b3255283b24",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "structure/headers/mobile-header",
+      "path": "governance/manifest/families/structure/headers/mobile-header/index.json",
+      "digest": "cf5811f91b4e35c1f68eb4b627a21c84eacfaea6ea854353054cb68cf4f0e506",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "structure/headers/section-frame",
+      "path": "governance/manifest/families/structure/headers/section-frame/index.json",
+      "digest": "50b99462295d5084b43beb1aa5448634c0a922f450d59e15a1cece422038d221",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "structure/record/edit-fields",
+      "path": "governance/manifest/families/structure/record/edit-fields/index.json",
+      "digest": "5fa5e9c1a9c71c6561fb0a9ce3aacf9cae85287afae9c8af1ba363fcae48c9f2",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "structure/record/form-sections",
+      "path": "governance/manifest/families/structure/record/form-sections/index.json",
+      "digest": "a1aa37e0c1ac0a84411995ace28fcd37d44e14c0c1d9a485f13da04137480339",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "structure/record/record-action-bar",
+      "path": "governance/manifest/families/structure/record/record-action-bar/index.json",
+      "digest": "de9972a59fb90526c325f2510229b70ca970256893cb15b47b102905fe7fd849",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "structure/record/record-field",
+      "path": "governance/manifest/families/structure/record/record-field/index.json",
+      "digest": "a8ef23084b29d670f9a52cdcba54ca9ef0c528f598ac67629a430f99c08b9637",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "structure/record/record-field-grid",
+      "path": "governance/manifest/families/structure/record/record-field-grid/index.json",
+      "digest": "4fbc5553f57a6e5911decae94b91185827a2c14fd545379d9b5c2df7c62ebebe",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "structure/record/record-panel",
+      "path": "governance/manifest/families/structure/record/record-panel/index.json",
+      "digest": "024184492f7578836e448f6f2b45990680b55b6c5e70a07225d6a6250e7b7117",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "structure/record/record-summary-strip",
+      "path": "governance/manifest/families/structure/record/record-summary-strip/index.json",
+      "digest": "9898064528a6fdc9ff830a31e6e68065c7127ff7e9ccf4043c44dc5184ca47a1",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "structure/shell/app-shell",
+      "path": "governance/manifest/families/structure/shell/app-shell/index.json",
+      "digest": "3f0c098da7b0b89884ca561a2c8c229e271420ae25e0f0d44c055603357a6a6f",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "structure/shell/bottom-tab-bar",
+      "path": "governance/manifest/families/structure/shell/bottom-tab-bar/index.json",
+      "digest": "35effed983ba6145353baa5f9bef61305921c7332615c00fdcbffa9218eb6e94",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "structure/shell/sidebar-surface",
+      "path": "governance/manifest/families/structure/shell/sidebar-surface/index.json",
+      "digest": "d70e95101d66beb26444669ff67d3efc573e991b30d1df72b4517082f554cff9",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "structure/shell/page-shell-surface",
+      "path": "governance/manifest/families/structure/shell/page-shell-surface/index.json",
+      "digest": "edb187efe54348c0b76ff230d7a96597ca892c9bd9aba9ecafdd927151820fe3",
+      "maximumClaim": "INVENTORIED_ONLY",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "structure/shell/surface-chrome",
+      "path": "governance/manifest/families/structure/shell/surface-chrome/index.json",
+      "digest": "bbfcf514f66b5248552c37bfb7e506dc08e2db18d8b8960c3d6b14796ce58a74",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "structure/shell/workspace-shell",
+      "path": "governance/manifest/families/structure/shell/workspace-shell/index.json",
+      "digest": "a79c3fb85266fc12f1c63ab8dcb9340559068d1a742809b79abab4219e94c523",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "structure/workspace/action-dock",
+      "path": "governance/manifest/families/structure/workspace/action-dock/index.json",
+      "digest": "ed5cbf7faf67cd42ecf9cc9ec0fefab4f703e02661f3499c69c473006b0cee2b",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "structure/workspace/active-filters-bar",
+      "path": "governance/manifest/families/structure/workspace/active-filters-bar/index.json",
+      "digest": "ca85521dfd641040e1e3081d7adfeba11de838ee04fd88eb1c3ba42e326970d9",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "structure/workspace/column-menu",
+      "path": "governance/manifest/families/structure/workspace/column-menu/index.json",
+      "digest": "8968c78b570bba5f281f6f4cf660715e57aab74f2fa2c548979e5ddf52d2a27b",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "structure/workspace/connected-command-palette",
+      "path": "governance/manifest/families/structure/workspace/connected-command-palette/index.json",
+      "digest": "4901ffa84c72055340de962debe3bf114db77b13a951999c76bfe14f74e4dad0",
+      "maximumClaim": "INVENTORIED_ONLY",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "structure/workspace/export-button",
+      "path": "governance/manifest/families/structure/workspace/export-button/index.json",
+      "digest": "85d16a23255a90bda85181146a05a22ab2b140fdcdb845c7d97a473d96a973c8",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "structure/workspace/field-filters-panel",
+      "path": "governance/manifest/families/structure/workspace/field-filters-panel/index.json",
+      "digest": "78847e7a05f1e06c60471dde7f0f418112f113498da8e03063a327f066e02f0c",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "structure/workspace/saved-views-menu",
+      "path": "governance/manifest/families/structure/workspace/saved-views-menu/index.json",
+      "digest": "475aebadb55ec61e95809fb9c60d8118f385b4c0e162ea7e91e67b014c923f8d",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "structure/workspace/scope-switcher",
+      "path": "governance/manifest/families/structure/workspace/scope-switcher/index.json",
+      "digest": "6f0f70a01ebfb97acb3420a163110e7d657e46a4303f260ccfff55e95797f498",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "structure/workspace/search-command-bar",
+      "path": "governance/manifest/families/structure/workspace/search-command-bar/index.json",
+      "digest": "cc6ca215946da037abda3f88e6f062922b8d412861875a61dc221e87acb40a57",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "structure/workspace/selection-preview-rail",
+      "path": "governance/manifest/families/structure/workspace/selection-preview-rail/index.json",
+      "digest": "d4b08b34f9a0fddc17ff92fe162e5b976d5ff58f5e1a51b59ae6f6b36dd0cd8f",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "structure/workspace/table-toolbar",
+      "path": "governance/manifest/families/structure/workspace/table-toolbar/index.json",
+      "digest": "c6811c31f91ec6482ebbdf94f3caf98a271259ab792aec84b4aa5666f80740ef",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "structure/workspace/view-mode-switcher",
+      "path": "governance/manifest/families/structure/workspace/view-mode-switcher/index.json",
+      "digest": "d0242db2cf0f45bb5b1f356ae14a1fd29024be03c2f0ec77a6d2cdc1425b7f0a",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "surface/admin/audit",
+      "path": "governance/manifest/families/surface/admin/audit/index.json",
+      "digest": "e9c72421514c46663a3caddd8e14b93ac65d2e13104e648d53b5c1cf9e5e5b8e",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "surface/admin/billing",
+      "path": "governance/manifest/families/surface/admin/billing/index.json",
+      "digest": "45329dc3fa1449b1c8d2de17b62292ddc67da15de6e0eb913dbb9b7e0d4a9066",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "surface/admin/file-browser",
+      "path": "governance/manifest/families/surface/admin/file-browser/index.json",
+      "digest": "42a148ca1c3abad06ce2d84eff2bae1a6b4e6ac527c540f121182a166ecca64b",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "surface/admin/import-export",
+      "path": "governance/manifest/families/surface/admin/import-export/index.json",
+      "digest": "80a885ec5fcbfa4ba63b1895dc33df3311658c9ed83755c5591c18c4b9000bee",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "surface/admin/integration",
+      "path": "governance/manifest/families/surface/admin/integration/index.json",
+      "digest": "9eeef35ab7b782d86f74db8eb201222a6379766a07e6620e2c246fe69fb9e819",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "surface/admin/profile",
+      "path": "governance/manifest/families/surface/admin/profile/index.json",
+      "digest": "186226dddcc68c0c08c4c2367870ab3986b1eaaccc8d0c871f480c66860800d0",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "surface/admin/settings",
+      "path": "governance/manifest/families/surface/admin/settings/index.json",
+      "digest": "57c36323c4a324f65a3250668e7f8365347196823a800c5be306bcf6270a151a",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "surface/admin/team",
+      "path": "governance/manifest/families/surface/admin/team/index.json",
+      "digest": "e6bb3e7c4eaa97b4d031baf3913ba5be623b051058bbfd8345be8b4e536bd8e6",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "surface/data/compare",
+      "path": "governance/manifest/families/surface/data/compare/index.json",
+      "digest": "b083ff16a2ac6faf147d6e09fb251513c22e9eaf76916fc85c43ac3971863180",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "surface/data/dashboard",
+      "path": "governance/manifest/families/surface/data/dashboard/index.json",
+      "digest": "18a8cbdaaa4847977c75e38339697482a587e9b1360f161b7c3ab030650eaf0b",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "surface/data/detail",
+      "path": "governance/manifest/families/surface/data/detail/index.json",
+      "digest": "9f46cf189f03ac14eed4283172b28101da21d134787905c876a6fc0dd1c39a1a",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "surface/data/list",
+      "path": "governance/manifest/families/surface/data/list/index.json",
+      "digest": "22a2965040dc93e8b18e1d066468872884b8a9dcd201f5d54419b51f4cc8e228",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "surface/data/report",
+      "path": "governance/manifest/families/surface/data/report/index.json",
+      "digest": "b89d3bc02e317cc5d1a9c2358543d09af5983aee80b93394669436e24312f4ce",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "surface/data/search",
+      "path": "governance/manifest/families/surface/data/search/index.json",
+      "digest": "29086287bbf6587bc6713c3df5607bf489696eff4ff22dca9771146f3ad1a438",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "surface/data/visualization",
+      "path": "governance/manifest/families/surface/data/visualization/index.json",
+      "digest": "1afbcb4e28ea9436af9ecf5dd14ef24df3187fb68ff2aded46ec6bdf93352ba0",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "surface/experience/auth",
+      "path": "governance/manifest/families/surface/experience/auth/index.json",
+      "digest": "49dd11e7254a12a6cefb9864dc5ab03419377f68cd872100738e4981fbbccad3",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "surface/experience/chat",
+      "path": "governance/manifest/families/surface/experience/chat/index.json",
+      "digest": "bf48e7747ccd755816ace49426925a087219edfe5f07e021295c77aaae5b040f",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "surface/experience/editor",
+      "path": "governance/manifest/families/surface/experience/editor/index.json",
+      "digest": "f9b4b2c2928f2c36d74f5059f248982fbc05348d86add424ece445c1d8c76e65",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "surface/experience/empty-state",
+      "path": "governance/manifest/families/surface/experience/empty-state/index.json",
+      "digest": "8dec0510a8dffe0a0731e8ab2d79ccf12efe85c4dc671a6e79e4c275c325bcd8",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "surface/experience/marketing",
+      "path": "governance/manifest/families/surface/experience/marketing/index.json",
+      "digest": "d641e4e6ca21d0b6375b03f0ad9cf71e80f1304b8c6c745d4070116dec5e7287",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "surface/experience/media",
+      "path": "governance/manifest/families/surface/experience/media/index.json",
+      "digest": "3b6e13d4246097d4e5ab20f6bbfd8ed00d4bf175e714f3627ab1c45471063e8e",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "surface/experience/notification",
+      "path": "governance/manifest/families/surface/experience/notification/index.json",
+      "digest": "bfc186fa3e90405445497896082d8703b581a1ebea2e06450f3e58ea79ecfd65",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "surface/experience/oauth-transition",
+      "path": "governance/manifest/families/surface/experience/oauth-transition/index.json",
+      "digest": "f8471fec2170b75c5a578dec1c52a468a7bb92e095b24d52b6d737d5e67f98a0",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "surface/experience/pricing",
+      "path": "governance/manifest/families/surface/experience/pricing/index.json",
+      "digest": "f36fadaba74bffb0de3aab28aee75eb89777b525c9357701f20ce8c7e3280b18",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "surface/forms/detail-form",
+      "path": "governance/manifest/families/surface/forms/detail-form/index.json",
+      "digest": "14b9a12822c5256bb927a0adf19bce1292b8f51a29f2c2530eeab9872f29ce10",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "surface/forms/form",
+      "path": "governance/manifest/families/surface/forms/form/index.json",
+      "digest": "218acaf893e7507198c988edfa1dca16010a03b775108e3b76c9df62d6344f42",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "surface/forms/guided-draft-form",
+      "path": "governance/manifest/families/surface/forms/guided-draft-form/index.json",
+      "digest": "06aed87044fe11085e92b2ff77df24f1abd18db3559d1873424c3f9babba4eab",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "surface/forms/wizard",
+      "path": "governance/manifest/families/surface/forms/wizard/index.json",
+      "digest": "87fdff18c21650665beaac4576dc5ec81856c92b8ef7f8ee56e7181db94b0920",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "surface/operations/activity",
+      "path": "governance/manifest/families/surface/operations/activity/index.json",
+      "digest": "e81db7c545f2f3f58b88a0496886a5152b4f9e0218e0443aa0620bcc7a090da9",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "surface/operations/kanban",
+      "path": "governance/manifest/families/surface/operations/kanban/index.json",
+      "digest": "c74db007cdab69f71c7da93c4282319ad0c8738bfeebd4c81d2afcc6fbf08fed",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "surface/operations/operational",
+      "path": "governance/manifest/families/surface/operations/operational/index.json",
+      "digest": "0b815556702ffb4e3ae5dd9a624ea29ebe86db8de2d82c6ba93a5ef1f976e8f9",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "surface/operations/scheduler",
+      "path": "governance/manifest/families/surface/operations/scheduler/index.json",
+      "digest": "8d68b809edf71d943566f28a2eaf44c952ff59f89a5e25cdb680650a84152555",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "surface/workspace/collection-workspace",
+      "path": "governance/manifest/families/surface/workspace/collection-workspace/index.json",
+      "digest": "c097d1379ed8a9c92f1ba0a75b80cb9cf3c6d088de75da5a92d83298406a92d1",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "surface/workspace/command-center",
+      "path": "governance/manifest/families/surface/workspace/command-center/index.json",
+      "digest": "2538d47898fc716a5a841490ee7af064f4579e0917b79568dd34dbf273fc05d3",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "surface/workspace/decision-inbox",
+      "path": "governance/manifest/families/surface/workspace/decision-inbox/index.json",
+      "digest": "88a18697aaeebd1cccc0f558287f1203917b87a715b37cca970b6d82de873109",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    },
+    {
+      "familyId": "surface/workspace/record-workbench",
+      "path": "governance/manifest/families/surface/workspace/record-workbench/index.json",
+      "digest": "ae573a2a1d044a8a9b3293d7efba87c3e779bba9538e300bf275496b2e941184",
+      "maximumClaim": "SOURCE_BOUND",
+      "reviewVerdict": null
+    }
+  ]
+}

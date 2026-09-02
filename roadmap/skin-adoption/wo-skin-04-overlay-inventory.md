@@ -6,7 +6,7 @@ AlertDialog (24, 2), ContextMenu (23, 2), Popover (22, 2), Dropdown (18, 2), Hov
 (10, 2), Watermark (3, 2), AdaptiveOverlay (1, 1) -- 12 components, ~325
 property-level sites (audit-script count; the script has blind spots noted per
 component below, so per-file totals below sometimes exceed it). Counts sourced from
-`node scripts/engine-token-audit.mjs | grep fleet.inlinePaint.foundation/primitives/overlay`.
+`node scripts/infrastructure/engine-token-audit.mjs | grep fleet.inlinePaint.foundation/primitives/overlay`.
 Format follows the feedback-overlays precedent (`wo-skin-03-overlays-inventory.md`).
 
 **Naming collision warning, read first**: `primitives/overlay/Modal` is a wholly

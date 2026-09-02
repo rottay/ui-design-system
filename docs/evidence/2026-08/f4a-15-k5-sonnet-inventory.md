@@ -34,7 +34,7 @@ node -e 'import(".../manifest/mirror-parity/index.mjs'); import(".../manifest/va
     coveredCount) — sin reimplementar la identidad de hoja ni el criterio de
     cobertura por scope-más-cercano.
 grep/read manual: brand-themes/{rottay,bithire,evnto}/index.ts (secciones
-  CHROME.table / OVERLAY.chrome.table), variant-parity.baseline.json,
+  CHROME.table / OVERLAY.chrome.table), baseline/index.json,
   docs/f4a/mapa-familia-canales.{json,md}, docs/f4a/roster-variantes.md,
   data-table.css (skin consumer), PALETTE seeds de bithire/evnto.
 shasum -a 256 sobre los insumos (tabla §1).
@@ -49,7 +49,7 @@ shasum -a 256 sobre los insumos (tabla §1).
 | `packages/core/src/foundation/tokens/ts/presentation/brand-themes/evnto/index.ts` | `55758dff5edc03fc9f0afaa529cbc73f74db84d64acc5b9326a4ce7a850b53ad` |
 | `packages/core/manifest/mirror-parity/index.mjs` | `e322fde57f65a6598ee5cebb319e3674b55e9eebf647aecfd6784dcbaf2d3e2a` |
 | `packages/core/manifest/variant-parity/index.mjs` | `463111ac45c8d982c909a585bcf746cd7233b5d2b727e4329adf3495b70d6680` |
-| `packages/core/manifest/variant-parity/variant-parity.baseline.json` | `6ae848db429f35cbd7d85ef61ef6774def6c312a367d0eb29ac707deb5d6c39a` |
+| `packages/core/manifest/variant-parity/baseline/index.json` | `6ae848db429f35cbd7d85ef61ef6774def6c312a367d0eb29ac707deb5d6c39a` |
 | `packages/core/manifest/cascade/root-catalog.json` | `35a6912f709f71859eeb7ac7222dc01d8cfb44a0ab11054b9179a13d7e3d6bad` |
 | `docs/f4a/mapa-familia-canales.json` | `78b9192f5d727bfbe5800166d465cb879cfacb61b649bbff77a83ef00a03fd5f` |
 | `docs/f4a/roster-variantes.json` | `7c8f562b3fb799fe3aff063c7b6402f63267ebb96062fed9c8a0a90f1427f09a` |
@@ -211,7 +211,7 @@ verificado, 0 ocurrencias de "table" en ambos, incluso en el JSON completo
 real vive en un artefacto generado no commiteado a `docs/f4a/` — no lo
 localicé y no lo invento). Esto es consistente con lo narrado en
 `docs/ROADMAP-EJECUCION-2026-08-19.md` §13 (F4A-13: "table 40 excluida por
-mi propio brief") y con `variant-parity.baseline.json` ("Baja #12... queda
+mi propio brief") y con `baseline/index.json` ("Baja #12... queda
 sólo rottay table para K5", "Baja #13... exactamente las hojas de
 CHROME.table, que van con K5/F4A-15") — **table fue excluida A PROPÓSITO de
 CADA sweep de familia F4A-7…13, reservada entera para K5.** Consecuencia
@@ -316,7 +316,7 @@ está seteado — independiente de si la fuente del tema deriva o no de
 
 **Gates / artefactos que un lote K5 movería (todos regenerados por la
 cadena estándar, ninguno reanclado por mí):**
-- `manifest/variant-parity/variant-parity.baseline.json` — el ratchet
+- `manifest/variant-parity/baseline/index.json` — el ratchet
   `untaggedAuthoredLeaves: 40` (y posiblemente `divergentSlots: 33` SI el
   write-set también placeholder-cubre los huecos silenciosos de evnto
   base, ver §4/§7) necesita una entrada "Baja #14" escrita a mano por el
@@ -360,7 +360,7 @@ F4A-3b/7…13: byte-idéntico ida y vuelta debe probarse con 3 builds reales.
 2. `packages/core/src/foundation/tokens/ts/presentation/brand-themes/evnto/index.ts`
    — 4 docblocks nuevos (3 seed limpios + 1 con la misma resolución que
    el caso duplicado de bithire).
-3. `packages/core/manifest/variant-parity/variant-parity.baseline.json`
+3. `packages/core/manifest/variant-parity/baseline/index.json`
    — "Baja #14" a mano, DESPUÉS de que el artefacto se regenere y el DT lo
    verifique.
 

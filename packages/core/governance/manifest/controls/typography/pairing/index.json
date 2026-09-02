@@ -1,0 +1,122 @@
+{
+  "schemaVersion": 1,
+  "controlId": "typography.pairing",
+  "lifecycleState": "OPERATIONAL",
+  "tier": "standard",
+  "scope": "tenant",
+  "semanticOwner": {
+    "owner": "design-system",
+    "registryPath": "packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts",
+    "registryDigest": "5941d2eebc8749b7c04aa34aae6135f2eb34f6514842b3b5e040f7ed4faac138"
+  },
+  "title": "Type pairing personality",
+  "valueType": "enum",
+  "domain": {
+    "kind": "closed-enum",
+    "enumValues": [
+      "sober",
+      "editorial",
+      "geometric",
+      "technical"
+    ],
+    "bounds": null,
+    "defaultBehavior": "vertical baseline families"
+  },
+  "ingress": {
+    "staticBrandThemePath": "typography.typePairing",
+    "dbTenantThemePath": "appearance.general.typography.typePairing"
+  },
+  "declaredOutputs": {
+    "channels": [
+      "--ds-font-family-base",
+      "--ds-font-family-heading"
+    ],
+    "rootAttributes": [],
+    "representativeOnly": true
+  },
+  "dependsOn": [],
+  "compatibility": "additive, unset-to-rollback",
+  "productiveConsumerWitness": {
+    "consumer": "src/foundation/tokens/css/runtime/engines/modern/skin/typography.css",
+    "symbol": "var(--ds-font-family"
+  },
+  "calibration": {
+    "normalizedStops": [
+      {
+        "id": "sober",
+        "value": "sober",
+        "law": "Not receiptable for bithire specifically: measured moved=0 on BOTH arms (both declared channels, all fixtures, both modes) -- a genuine baseline coincidence, not a broken door. bithire authors `fontFamilyBase`/`fontFamilyHeading` literally at brand-themes/bithire/index.ts:3492-3499 as `var(--ds-font-pack-humanist-text, ...)` / `var(--ds-font-pack-grotesk-display, ...)` -- byte-identical (mod fallback tail) to TYPE_PAIRINGS.sober, and the fontFamilyHeading field even carries its own source comment '@governor dial: typography.pairing'. Same class of finding as bithire's `flat` non-mover on surfaces.elevation-posture and its sharp/pill static-arm shadow on shape.button-style. Does not threaten H-2: bithire's other 3 stops (editorial/geometric/technical) all discriminate cleanly, so the >=2-witness bar is met without this one."
+      },
+      {
+        "id": "editorial",
+        "value": "editorial"
+      },
+      {
+        "id": "geometric",
+        "value": "geometric"
+      },
+      {
+        "id": "technical",
+        "value": "technical"
+      }
+    ],
+    "identityNote": "No identity stop is declared. Confirmed by exhaustive grep of all three brand-theme sources for a literal `typePairing:` field inside a `typography:` block: zero matches. `resolveIdentityValue` would throw fail-closed on an absent baseline value by design; an identity stop here would have to invent one, same law as shape.button-style/surfaces.elevation-posture/navigation.sidebar-tone.",
+    "assessmentState": "SOURCE_BOUND",
+    "assessmentStateNote": "NOT capped by the causal measurement (that part is clean: see measuredResult) -- capped by `validateControlAssessmentCeiling`, one level up from the family-cell ceiling shape.button-style already hit. A control's assessmentState may never exceed the strongest state ANY of its own family cells reach (scripts/foundation/tokens/manifest/rules/index.mjs, `validateControlAssessmentCeiling`), and reaching IMPLEMENTED (the floor COMPUTED_VERIFIED sits on) on a cell requires non-empty `stableParts`/`propertyGroups`/`computedProperties` where every declared `propertyGroups` entry is OWNED by that family's own `anatomy.propertyGroups`. Exhaustively checked: every family whose `themeControls[].targetBinding.status` for `typography.pairing` is `MUST_REACH` (79 families, primitive/navigation, primitive/display, primitive/overlay, pattern/*, structure/* -- `primitive/display/typography` among them) has `anatomy.propertyGroups: []` right now -- the family's own `anatomy.sourceEvidence.propertyGroupCensusNote.status` says why: 'UNRATIFIED OBSERVATION... blocked on the propertyGroup vocabulary ratification.' This is a program-wide blocker on every possible seat for this control, not a defect of typography.pairing's own wiring or of this measurement. The seat used here (primitive/display/typography, the control's own productiveConsumerWitness family) is written to SOURCE_BOUND with a full internalChannels edge pair, sourceBindings and the 11 receipts below (bithire/sober is a genuine non-mover, see the control's own normalizedStops law, not a 12th receipt) -- everything IMPLEMENTED needs except the two propertyGroups-gated fields, which the family's own anatomy cannot own yet. Raising this control (or shape.button-style's home family, which hit the identical ceiling for an unrelated reason) past SOURCE_BOUND needs the propertyGroups vocabulary ratification first; it is not this packet's write-set. Reported to the DT as a new, general finding, not specific to this control.",
+    "staticDbParityEvidenceIds": [
+      "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/typography-pairing/computed-static-db/rottay-sober.json.receipt.json",
+      "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/typography-pairing/computed-static-db/rottay-editorial.json.receipt.json",
+      "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/typography-pairing/computed-static-db/rottay-geometric.json.receipt.json",
+      "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/typography-pairing/computed-static-db/rottay-technical.json.receipt.json"
+    ],
+    "exactRestoreEvidenceIds": [
+      "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/typography-pairing/computed-static-db/bithire-editorial.json.receipt.json",
+      "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/typography-pairing/computed-static-db/bithire-geometric.json.receipt.json",
+      "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/typography-pairing/computed-static-db/bithire-technical.json.receipt.json",
+      "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/typography-pairing/computed-static-db/evnto-sober.json.receipt.json",
+      "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/typography-pairing/computed-static-db/evnto-editorial.json.receipt.json",
+      "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/typography-pairing/computed-static-db/evnto-geometric.json.receipt.json",
+      "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/typography-pairing/computed-static-db/evnto-technical.json.receipt.json"
+    ],
+    "sourceBindings": [
+      "packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts",
+      "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
+      "packages/core/src/infrastructure/compilers/composition/tenant-theme/index.ts",
+      "packages/core/src/foundation/tokens/ts/presentation/typography/pairings/index.ts",
+      "packages/core/src/infrastructure/compilers/kernel/foundation/css/appearance-posture/index.ts",
+      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css",
+      "packages/core/src/tooling/resolution-probe/foundation/roster/fixtures.json"
+    ],
+    "measuredResult": {
+      "instrument": "packages/core/src/tooling/resolution-probe (causal command), Chromium, --bundle fresh, Node 22.17.0.",
+      "methodologyCorrection": "This control's first measurement pass (this packet's own pause report) mutated a CLONED vertical BrandTheme's `typography.typePairing` directly and called `compileBrandTheme({brandTheme: mutatedClone, tenantSlug})` by hand -- bypassing the causal harness's real mechanism entirely. That measures 'does the VERTICAL's own theme selection survive its own literal fontFamilyBase/Heading' (answer: no, by design -- brand-theme/index.ts:889-892 correctly overwrites the pairing expansion with the theme's OWN authored literal, same direction every posture control in this family already resolves). It does NOT measure what a tenant selects. Diagnosed by Claude Opus (f05-opus) via an A/B on the same compiler, same baselines: the REAL form -- lowerStop()/toCompilerInput() via a `tenantPatch` passed as a SEPARATE parameter from the unmodified vertical brandTheme, exactly what `causal`'s CLI wiring does (public/cli/index.mjs:955-996) -- moves 12/12 (3 verticals x 4 stops) on the static arm in the diagnosis's own sample run. Re-measured directly here with the real `causal` command for all 12 combinations, not reproduced from the diagnosis: 11/12 move; bithire/sober is a genuine, source-confirmed baseline coincidence (see normalizedStops law), not a methodology gap -- the diagnosis's own illustrative bithire table did not exhaustively claim every one of its 4 stops moves, only demonstrated the corrected FORM.",
+      "staticArm": "11/12 moved (3 verticals x 4 stops, minus bithire/sober -- see normalizedStops law), both declared channels, on every receipted scenario. `resolveTenantPosture` (brand-theme/index.ts:1958) reads `patch.typography?.typePairing` into `tenantPosture`, and the SAME function's line ~1094 call to `appearancePostureToVariables` from `tenantPosture` runs AFTER the theme's own literal-family write at :889-892 -- the only one of 5 appearancePostureToVariables call-sites that does. A tenant's own selection therefore always wins; a vertical's own theme selection never overwrites itself (by design, unrelated law). bithire/sober measured moved=0 on this arm too (not merely a coincidence of the DB document) -- byte-identical applied value to bithire's own unmodified baseline on both channels.",
+      "dbArm": "11/12 moved (3 verticals x 4 stops, minus bithire/sober), both declared channels, byte-identical to TYPE_PAIRINGS (typography/pairings/index.ts) on every mover: sober -> humanist-text/grotesk-display, editorial -> editorial-text/editorial-display, geometric -> --ds-font-sans(literal)/geometric-display, technical -> --ds-font-sans(literal, same as geometric)/grotesk-display(same as sober). Works specifically because of E-1 (bae71c705, this same packet family, 2026-08-24): before that commit `compileTenantThemeConfig` passed no `tenantPatch`/`tenantPosture` at all, so this arm would have died the identical way the static arm's mismeasured form did.",
+      "guardH2": "assertStopDiscrimination PASS on BOTH arms, all 3 verticals, all 4 stops as witnesses (bithire/sober's own non-movement does not remove it as a witness value, and bithire's other 3 stops discriminate cleanly regardless) -- no stopDiscriminationException needed. The two intra-pairing collisions (technical.heading==sober.heading; technical.base==geometric.base, both real, both confirmed) do not break discrimination: every pair of stops still differs on at least one of the two declared channels.",
+      "ingressEquivalence": "22/22 byte-exact between static-brand-theme and db-tenant-theme (11 receipted scenarios x 2 channels).",
+      "restore": "restore.exact = true on all 11 receipted scenarios, zero differing rows.",
+      "negativeWitness": "All 4 declared negative controls resolved and held on every receipted scenario: color, border, motion (every-measured-target) and control height (bound to card-modern-md/title, declared-targets). First bound to button-modern-md/hitbox too, which surfaced a genuine, expected effect rather than a defect: `editorial`'s serif family reflows the button LABEL to a different glyph width, so the auto-sized hitbox's own @rect-inline-size legitimately moved (71.546875px -> 69.125px, both arms, byte-identical) -- content-driven auto-sizing responding to a font-family change it was never a violation of, the same class of reasoning that already excludes `font metrics remain fixed` from this control's negative set. Re-bound to card-modern-md/title alone (a target whose own box geometry does not auto-size to its text), which is content-independent geometry and held clean on all 11 receipted scenarios.",
+      "explicitFamilyWinsLawScope": "'An explicit family still wins' (typography/pairings/index.ts header) covers the explicit family OF THE SAME TENANT against that SAME tenant's own pairing selection (both live under one tenant's `appearance.general.typography` document) -- not a vertical's literal against a DIFFERENT tenant's selection. Evidence: the commit that wrote the law (cfd42c2df, 2026-07-18) never touched the static compiler (`git show --stat cfd42c2df -- \"*brand-theme*\"` is empty), and the bridge's own comment (brand-theme/index.ts:774-776) says static selection was DB-only for typePairing/buttonStyle/elevation/motion before this bridge existed. No compiler change is warranted or made by this packet."
+    },
+    "unmeasuredScope": [
+      "Only font-family-base/-heading were bound as the direct-read fixture target and as the declared channel set (representativeOnly: true, same convention as the other Standard posture controls). `typePairingToTypography` also writes `letterSpacing.heading` and `lineHeight.display` -- both DO move under this control (that is why `font metrics remain fixed` is deliberately NOT declared as a negative control here) but neither is separately receipted as its own channel.",
+      "The `mono` field some pairings optionally carry (fontFamilyMono) was not separately measured; no first-party vertical pairing in TYPE_PAIRINGS currently sets it.",
+      "Light mode: not separately receipted per-mode; the causal run composes every scope the compiler writes (M-1), but this control's own light/dark divergence was not individually characterised the way surfaces.elevation-posture's was.",
+      "Responsive divergence (one viewport, 1280x800 dpr1) was not measured.",
+      "The pre-E-1 (bae71c705) historical state of the db-tenant-theme arm was not re-run here; its mechanism and date are established by git provenance (git log -S) in Opus's diagnosis, not by an executed pre-E-1 A/B."
+    ],
+    "negativeControls": [
+      "control height remains fixed",
+      "color remains fixed",
+      "border remains fixed",
+      "motion remains fixed"
+    ],
+    "negativeControlsScopeNote": "`font metrics remain fixed` is deliberately NOT declared: `typePairingToTypography` also writes `letterSpacing.heading` and `lineHeight.display` alongside the two declared channels (measured in `typePairingToTypography`'s own return shape), so a font-metrics negative control would assert against a channel this SAME control's own expansion legitimately moves. The declared channel set stays representative-only (--ds-font-family-base/-heading), same `representativeOnly: true` convention as the other Standard posture controls, but the negative-control vocabulary must stay honest about what the mechanism touches even where the declared channel list is narrower.",
+    "nextAction": "PROPERTY_GROUPS_VOCABULARY_RATIFICATION_THEN_IMPLEMENTED. Causal measurement is complete on both arms (see measuredResult); nothing left to run. Blocked purely on the family-cell ceiling: ratify the propertyGroup vocabulary for primitive/display/typography's anatomy (or any other MUST_REACH family for this control), then this cell and this control can advance directly from SOURCE_BOUND to IMPLEMENTED/COMPUTED_VERIFIED without a new causal run.",
+    "channels": [
+      "--ds-font-family-base",
+      "--ds-font-family-heading"
+    ]
+  },
+  "retiredAliases": []
+}

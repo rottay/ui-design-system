@@ -258,7 +258,7 @@ nadie sobre ninguno**, ni infiero consenso de los precedentes del programa.
   candidatas a `baseline` + las 10 con relación escrita + los 3 seeds de evnto.
 - **Bloqueado** por `OPEN_KIMI` 1, 3 y 6.
 - **Write-set candidato**: `bithire/index.ts`, `evnto/index.ts`, y la entrada
-  "Baja #14" en `variant-parity.baseline.json` **después** de regenerar y
+  "Baja #14" en `baseline/index.json` **después** de regenerar y
   verificar.
 - **Contador esperado**: → **0**.
 

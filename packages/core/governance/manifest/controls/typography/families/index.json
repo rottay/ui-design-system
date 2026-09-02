@@ -1,0 +1,117 @@
+{
+  "schemaVersion": 1,
+  "controlId": "typography.families",
+  "lifecycleState": "OPERATIONAL",
+  "tier": "standard",
+  "scope": "tenant",
+  "semanticOwner": {
+    "owner": "design-system",
+    "registryPath": "packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts",
+    "registryDigest": "5941d2eebc8749b7c04aa34aae6135f2eb34f6514842b3b5e040f7ed4faac138"
+  },
+  "title": "Explicit font stacks",
+  "valueType": "font-stack",
+  "domain": {
+    "kind": "font-stack",
+    "enumValues": [],
+    "bounds": null,
+    "defaultBehavior": "pairing (or vertical baseline) decides"
+  },
+  "ingress": {
+    "staticBrandThemePath": "typography.{fontFamilyBase,fontFamilyHeading,fontFamilyMono,fontFamilyDisplay}",
+    "dbTenantThemePath": "appearance.general.typography.{fontFamilyBase,fontFamilyHeading}"
+  },
+  "declaredOutputs": {
+    "channels": [
+      "--ds-font-family-base",
+      "--ds-font-family-heading",
+      "--ds-font-family-mono",
+      "--ds-font-family-display"
+    ],
+    "rootAttributes": [],
+    "representativeOnly": true
+  },
+  "dependsOn": [],
+  "compatibility": "additive; Arabic-safe tail is a compiler invariant either way",
+  "productiveConsumerWitness": {
+    "consumer": "src/foundation/tokens/css/foundation/themes/default.css",
+    "symbol": "--ds-font-family-mono"
+  },
+  "calibration": {
+    "assessmentState": "SOURCE_BOUND",
+    "normalizedStops": [
+      {
+        "id": "base-quoted",
+        "role": "fontFamilyBase",
+        "value": "\"IBM Plex Sans\", Helvetica, sans-serif"
+      },
+      {
+        "id": "base-unquoted",
+        "role": "fontFamilyBase",
+        "value": "Inter, system-ui, sans-serif"
+      },
+      {
+        "id": "heading-quoted",
+        "role": "fontFamilyHeading",
+        "value": "\"Source Serif 4\", Georgia, serif"
+      },
+      {
+        "id": "heading-unquoted",
+        "role": "fontFamilyHeading",
+        "value": "Poppins, sans-serif"
+      },
+      {
+        "id": "base/identity",
+        "role": "fontFamilyBase",
+        "identity": true,
+        "law": "STATIC ARM ONLY, NOT RECEIPTED (same law as motion.dial's F4B-13 identity stop and palette.seeds' own precedent: a single-arm run cannot pass this evidence kind, ingressEquivalenceHeld requires 2 comparable arms; the CLI refuses to write a receipt for one). All 3 verticals author fontFamilyBase literally: rottay `var(--ds-font-pack-humanist-text, 'Public Sans', ui-sans-serif, system-ui, -apple-system, sans-serif)` (const TYPOGRAPHY, rottay/index.ts:3539-3540); bithire the SAME humanist-text pack literal (bithire/index.ts:3492-3493); evnto the SAME humanist-text pack literal too (evnto/index.ts:1925-1926). Stated as a directly-compiled fact, not receipted evidence."
+      },
+      {
+        "id": "heading/identity",
+        "role": "fontFamilyHeading",
+        "identity": true,
+        "law": "STATIC ARM ONLY, NOT RECEIPTED (same law as base/identity above). All 3 verticals author fontFamilyHeading literally, and unlike base the 3 DIVERGE: rottay repeats the SAME humanist-text pack (rottay/index.ts:3545-3546 -- base and heading are byte-identical in rottay's own baseline); bithire selects grotesk-display (bithire/index.ts:3498-3499); evnto selects geometric-display (evnto/index.ts:1931-1932). rottay's own source comment marks this field `@governor dial: typography.pairing` (its value is the pairing preset's expansion, not an independent families authorship) while bithire/evnto's own fontFamilyBase carries `@governor dial: typography.families` -- per-vertical provenance of WHICH control produced that literal in the FIRST-PARTY baseline, not a claim about which control CAN write it (both can, see the shared-channel precedence note on this control)."
+      }
+    ],
+    "monoDisplayNote": "mono and display carry NO DB door at all (TenantAppearanceGeneral.typography only has fontFamilyBase/fontFamilyHeading, themes/index.ts:3164-3166), and unlike base/heading's identity stops they are NOT declared as `normalizedStops` entries at all: `assertStopDiscrimination` (runtime/ingress/index.mjs:2009-2049, the instrument, frozen for this packet) iterates EVERY stop in this array against EACH requested arm unconditionally, and a plain (non-identity) stop whose role has zero members on an arm's ingress SET throws a generic Error from `resolveIngressMember` that is not on the closed, publishable STOP_EXCLUSION_CLASSES list (verified this packet: attempting `mono-value`/`display-value` as regular stops crashes discrimination on the DB arm for the WHOLE control, including base/heading's own receipted scenarios, since the guard sweeps the full stop set before measuring the one requested). `IDENTITY_NEEDS_A_BASELINE` does not cover this either -- that class is for 'the baseline authors nothing here', not 'this arm has no member for this role at all'. Fixing the guard would touch the instrument, out of this packet's closed write-set (the font-stack branch is Fase B's, frozen). Verified instead by a direct, out-of-band compile (dist/server.js, compileTheme on a rottay clone with fontFamilyMono/fontFamilyDisplay authored): `--ds-font-family-mono` emits the value VERBATIM, no Arabic-safe tail (brand-theme/index.ts:894, `if (ty.fontFamilyMono) vars[...] = ty.fontFamilyMono` -- unlike base/heading/display, no `withArabicSafeFallback` wrap); `--ds-font-family-display` DOES get the tail (`Outfit, \"Noto Sans Arabic\", sans-serif`), matching base/heading's own asymmetry. Documented as a compiled fact, same class as an identity stop's own law text, not as a receipted or CLI-run stop.",
+    "sourceBindings": [
+      "packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts",
+      "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
+      "packages/core/src/infrastructure/compilers/composition/tenant-theme/index.ts",
+      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css",
+      "packages/core/src/tooling/resolution-probe/foundation/roster/fixtures.json"
+    ],
+    "staticDbParityEvidenceIds": [
+      "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/typography-families/computed-static-db/rottay-base-quoted.json.receipt.json",
+      "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/typography-families/computed-static-db/rottay-base-unquoted.json.receipt.json",
+      "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/typography-families/computed-static-db/rottay-heading-quoted.json.receipt.json",
+      "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/typography-families/computed-static-db/rottay-heading-unquoted.json.receipt.json"
+    ],
+    "supersededEvidence": "SUPERSEDED_BY_LIVE_FENCE (DT adjudication, F4B-16 close, 2026-08-25): compound-editorial-plus-explicit-heading.json.receipt.json retired from staticDbParityEvidenceIds above. The producer ad-hoc (/tmp/f4b14-compound-case.mjs) no longer exists -- the receipt's freshness is not re-verifiable by construction. The law it measured (explicit family wins in the compound case, both halves, both doors) is cerca viva by TWO live fences: capability-propagation/index.test.ts:573 (\"does not let one capability move another capability's exclusive channel\", green in CI, same BASE_DOC shape :141-146) AND e2-composed-pairing.test.ts (9 drills, both doors -- STATIC :58 and DB :74 -- covering the exact composed shape, including (iii) F4B-11 preserved and the negative \"a pairing with NO explicit family still lowers the pairing\"). The measurement was verified twice in F4B-14 (Fable ACCEPT postaudit). The artifact and its receipt stay on disk as historical record; evidence is not deleted, only re-classified.",
+    "exactRestoreEvidenceIds": [],
+    "negativeControls": [
+      "control height remains fixed",
+      "color remains fixed",
+      "border remains fixed",
+      "motion remains fixed"
+    ],
+    "sharedChannelPrecedence": "DT ADJUDICATION (F4B-14), NOW MEASURED TRUE ON BOTH THE ISOLATED AND THE COMPOUND CASE (E-2 landed, F4B-14 close). typography.pairing and typography.families declare the SAME 2 primary channels (--ds-font-family-base, --ds-font-family-heading), and the documented law (TenantAppearanceGeneral's own source comment, themes/index.ts:3166-3168: 'Compiler-owned font pairing preset applied before the free-form families; explicit fontFamilyBase/Heading always win') now holds in BOTH shapes: (a) ISOLATED -- no typePairing in the document, explicit family writes the channel directly (this control's own 12 receipted stops, staticDbParityEvidenceIds above). (b) COMPOUND -- typePairing AND an explicit family authored in the SAME document, exactly capability-propagation's own BASE_DOC shape (index.test.ts:141-146). Before E-2 this was FALSE AS WRITTEN (measured this packet, pre-fix: pairing's expansion silently won, an explicit fontFamilyHeading mutation produced ZERO channel movement) -- the real, measured cause of capability-propagation's `does not let one capability move another capability's exclusive channel` (index.test.ts:573), now GREEN. E-2 (tenantPostureFloors re-projects the tenant's own explicit family LAST, after the pairing expansion already ran -- brand-theme/index.ts + tenant-theme/index.ts) fixed the compound case without touching the isolated one (re-verified: isolated stops still 12/12 pass=true post-E-2-rebuild). Re-measured directly this packet, both doors, all 3 verticals, byte-exact to the literal WITH its Arabic-safe fallback tail (`'Zilla Slab', Georgia, \"Noto Sans Arabic\", serif`, matching the wrapper the body uses, not the raw string) -- receipted as `compound-editorial-plus-explicit-heading.json.receipt.json`, staticDbParityEvidenceIds above. families is the explicit dial; pairing is the preset that fills whatever families leaves undeclared -- one final writer per compile with a defined precedence, now true in every authored shape measured.",
+    "nextAction": "OBTAIN_SIGHTED_ACCEPTANCE",
+    "catalog": [
+      "editorial-display",
+      "editorial-text",
+      "grotesk-display",
+      "humanist-text",
+      "geometric-display",
+      "plex-mono"
+    ],
+    "catalogLaw": "catalogo en calibration, NO en enumValues: domain se regenera desde el registro (scripts/foundation/tokens/manifest/generation/index.mjs:201-236), que hoy no declara enumValues para este control; y el kind derivado saltaria a `closed-enum` (generator.mjs:186), que seria FALSO aqui. Copia literal de TENANT_THEME_FONT_PACK_IDS (packages/core/src/foundation/contracts/composition/tenants/themes/tenant-theme/index.ts:473-480). ALCANCE: no son stacks completos ni el dominio total del control. El valor autorado sigue siendo una lista font-family libre; lo CERRADO es el allowlist de packs code-owned que esa lista puede referenciar como `var(--ds-font-pack-<id>)`, y cualquier otro `var()` o fallback queda rechazado por isSafeFontFamily (packages/core/src/infrastructure/compilers/composition/tenant-theme/index.ts:605-631, allowlist en :625). Los ids llevan sufijo de rol porque un slot var() carga UNA lista de familias: un pack que cambia display y body son dos variables (misma fuente, :467-472).",
+    "channels": [
+      "--ds-font-family-base",
+      "--ds-font-family-heading",
+      "--ds-font-family-mono",
+      "--ds-font-family-display"
+    ]
+  },
+  "retiredAliases": []
+}

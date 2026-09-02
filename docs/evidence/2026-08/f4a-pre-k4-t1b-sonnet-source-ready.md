@@ -159,7 +159,7 @@ git status --short:
  M packages/core/scripts/ci/gates-manifest/index.mjs
  M packages/core/scripts/evidence/cra-12-motion-governance/cra-12-motion-governance.reanchor.test.mjs
  M packages/core/scripts/quality-evidence/programs/modern-rescue/README.md
- M packages/core/scripts/quality-evidence/programs/modern-rescue/checkpoint.intent.json
+ M packages/core/scripts/quality-evidence/programs/modern-rescue/checkpoint/index.json
  M packages/core/scripts/quality-evidence/programs/modern-rescue/program-check.test.mjs
  M packages/core/src/tooling/lane-control/public/program-state/index.mjs
 git diff --check: limpio
@@ -170,7 +170,7 @@ Hashes de los 7 paths preexistentes, re-verificados byte-idénticos al cierre:
 - `docs/prompt-codex-continue.md` = `afede1efdd7935c7cd7a64300ba4a1d9ea855403797deb693b4f10ebe28a4c47`
 - `packages/core/scripts/ci/gates-manifest/index.mjs` = `3b7f906f346c338302ff1a439cf18737b5a72a6f3b14dd9711efb4fb964cb64d`
 - `packages/core/scripts/quality-evidence/programs/modern-rescue/README.md` = `281d079238b42a30ae4ab9a73fbb10b76394f70a45b80a7c9747bec636dc0687`
-- `packages/core/scripts/quality-evidence/programs/modern-rescue/checkpoint.intent.json` = `5a86b12ae6369bdd0f56f668f0f6ac906274c4a405c7ea383f459db5e23dd5e4`
+- `packages/core/scripts/quality-evidence/programs/modern-rescue/checkpoint/index.json` = `5a86b12ae6369bdd0f56f668f0f6ac906274c4a405c7ea383f459db5e23dd5e4`
 - `packages/core/scripts/quality-evidence/programs/modern-rescue/program-check.test.mjs` = `6b20d27226c3529971a18e2799c57da3ac383aad2c742bccf2dcaae84b0fa1e2`
 - `packages/core/src/tooling/lane-control/public/program-state/index.mjs` = `263779f068cbd465d024c604420f657a73bd744e069950f9e7ad3ba9bea47594`
 

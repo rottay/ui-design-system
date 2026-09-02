@@ -26,7 +26,7 @@ brief sobre-especificada por una regla, y un rojo de `gates:ci` **ajeno a T-0** 
 
 | # | Path | Prehash (= brief §1) | Posthash |
 |---|---|---|---|
-| 1 | `packages/core/scripts/quality-evidence/programs/modern-rescue/checkpoint.intent.json` | `e05c0fc7ae2bb653ee4caabfa39b09071d5ae67ade9ae53f9c63e69f2ba8d766` | `5a86b12ae6369bdd0f56f668f0f6ac906274c4a405c7ea383f459db5e23dd5e4` |
+| 1 | `packages/core/scripts/quality-evidence/programs/modern-rescue/checkpoint/index.json` | `e05c0fc7ae2bb653ee4caabfa39b09071d5ae67ade9ae53f9c63e69f2ba8d766` | `5a86b12ae6369bdd0f56f668f0f6ac906274c4a405c7ea383f459db5e23dd5e4` |
 | 2 | `packages/core/src/tooling/lane-control/public/program-state/index.mjs` | `e0a78762e12c13d5110a0c4911bb596d1c29e668b844b7120a130d8bf4ab2930` | `263779f068cbd465d024c604420f657a73bd744e069950f9e7ad3ba9bea47594` |
 | 3 | `packages/core/scripts/quality-evidence/programs/modern-rescue/README.md` | `260c08e5d445ccb8a5862f348c55125b7a4e0d2b493df3fa8adeade43d1ef36a` | `281d079238b42a30ae4ab9a73fbb10b76394f70a45b80a7c9747bec636dc0687` |
 | 4 | `packages/core/scripts/ci/gates-manifest/index.mjs` | `699b1e5daab4f0799e6806ee8eeb348d996adff2afec1e58980d49d557629703` | `3b7f906f346c338302ff1a439cf18737b5a72a6f3b14dd9711efb4fb964cb64d` |
@@ -96,7 +96,7 @@ new entry idx: 14 | occurrences: 1
 |---|---|---|---|
 | A1/D1 | `program-state --check` | **EXIT 1, 5 hallazgos** (2×P1, P6, P7, P8) | **EXIT 0**, `no violations`; provenance: *written against HEAD 9d5582dfd, which is still HEAD* |
 | A2/D2 | `runner --list` | `ci-gates: 88 blocking, 2 excluded` | **`ci-gates: 89 blocking, 2 excluded`**; gate presente **1** vez con su argv completo |
-| A3/D3 | `gates-manifest.flags.test.mjs` | 2/2 pass | **2/2 pass** — prueba directa de que el path 2 saldó el phantom |
+| A3/D3 | `gates-tests/flags/index.test.mjs` | 2/2 pass | **2/2 pass** — prueba directa de que el path 2 saldó el phantom |
 | A4/D4 | `runner/index.test.mjs` | 13/13 pass | **13/13 pass** |
 | A5/D5 | `program-check.mjs` | `CONSTITUTION_READY` EXIT 0 | **`CONSTITUTION_READY` EXIT 0** — igual, no peor |
 | N-3 | `effect-registry-audit/index.test.mjs` | — | **9/9 pass** (corrido de verdad, no sólo cubierto por G/H) |

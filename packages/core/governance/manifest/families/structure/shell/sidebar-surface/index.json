@@ -1,0 +1,1151 @@
+{
+  "schemaVersion": 1,
+  "familyId": "structure/shell/sidebar-surface",
+  "identity": {
+    "layer": "structure",
+    "category": "shell",
+    "name": "SidebarSurface",
+    "components": [
+      "SidebarSurface"
+    ],
+    "sourceRoot": "packages/core/src/ui/structures",
+    "sourceOwner": "packages/core/src/ui/structures/shell/navigation/sidebar-surface",
+    "publicComponents": [
+      "SidebarSurface"
+    ],
+    "unresolvedPublicComponents": [],
+    "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
+    "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
+    "inventoryRowDigest": "ca0e5a529b55731f42ea7fac5d7d0168cf986ed11165e5b9d7e294a499f8d34f"
+  },
+  "maximumClaim": "SOURCE_BOUND",
+  "review": {
+    "verdict": null,
+    "acceptedSourceDigest": null,
+    "evidenceIds": [],
+    "decisionReason": null
+  },
+  "anatomy": {
+    "assessmentState": "SOURCE_BOUND",
+    "sourceBindings": [
+      "packages/core/src/ui/structures/shell/navigation/sidebar-surface",
+      "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-sidebar.css"
+    ],
+    "stableParts": [
+      "root",
+      "main",
+      "navigation"
+    ],
+    "states": [
+      "collapsed",
+      "aria-expanded"
+    ],
+    "variantAxes": [
+      "data-aside",
+      "data-bordered",
+      "data-stacked"
+    ],
+    "propertyGroups": [],
+    "invariants": [],
+    "sourceEvidence": {
+      "methodProvenance": {
+        "cohort": "structure-merged",
+        "scoutArtifact": [
+          "mr-anatomy-structure-a.json",
+          "mr-anatomy-structure-full.json"
+        ],
+        "scoutSelfGradedConfidence": {
+          "mr-anatomy-structure-full.json": "SOURCE_BOUND"
+        },
+        "confidenceFieldIsNotLoadBearing": "Admission was decided structurally and from a source index of what the DS actually stamps, not from the scout grade. The double-census adjudication measured scout self-confidence at Cohen kappa 0.179 (REC-4).",
+        "partAnchoringRule": "R-8, decided from source: a part is admitted only where the DS stamps data-part with that name, or a DS component-identity class pair matches. Scout prose is corroboration, not authority.",
+        "sourcePartStampsFound": 3,
+        "dynamicPartExpressionsInSource": 0,
+        "openMethodAxesNotYetRuled": [
+          "part-ownership-across-component-boundaries",
+          "inherited-primitive-paint-attribution",
+          "family-private-channel-inclusion"
+        ]
+      },
+      "partAnchors": [
+        {
+          "part": "root",
+          "anchorKind": "data-part",
+          "anchor": "root-class-stamp",
+          "at": [
+            "packages/core/src/ui/structures/shell/navigation/sidebar-surface/index.tsx:67"
+          ]
+        },
+        {
+          "part": "main",
+          "anchorKind": "data-part",
+          "anchor": "data-part-attribute-stamp",
+          "at": [
+            "packages/core/src/ui/structures/shell/navigation/sidebar-surface/index.tsx:115"
+          ]
+        },
+        {
+          "part": "navigation",
+          "anchorKind": "data-part",
+          "anchor": "data-part-attribute-stamp",
+          "at": [
+            "packages/core/src/ui/structures/shell/navigation/sidebar-surface/index.tsx:104"
+          ]
+        }
+      ],
+      "unanchoredPartClaims": [
+        {
+          "part": "aside",
+          "scoutAnchorClaim": "bem-class-stamp",
+          "reason": "Source stamps no data-part with this name and no DS component-identity class pair matches; not admissible under RULING R-8.",
+          "at": [
+            "packages/core/src/ui/structures/shell/navigation/sidebar-surface/index.tsx:121"
+          ]
+        },
+        {
+          "part": "panel",
+          "scoutAnchorClaim": "bem-class-stamp",
+          "reason": "Source stamps no data-part with this name and no DS component-identity class pair matches; not admissible under RULING R-8.",
+          "at": [
+            "packages/core/src/ui/structures/shell/navigation/sidebar-surface/index.tsx:81",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-sidebar.css:66",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-sidebar.css:72"
+          ]
+        },
+        {
+          "part": "toggle",
+          "scoutAnchorClaim": "bem-class-stamp",
+          "reason": "Source stamps no data-part with this name and no DS component-identity class pair matches; not admissible under RULING R-8.",
+          "at": [
+            "packages/core/src/ui/structures/shell/navigation/sidebar-surface/index.tsx:88"
+          ]
+        }
+      ],
+      "stateAnchors": [
+        {
+          "token": "data-collapsed",
+          "axis": "stamped-data-attribute",
+          "at": [
+            "packages/core/src/ui/structures/shell/navigation/sidebar-surface/index.tsx:69",
+            "packages/core/src/ui/structures/shell/navigation/sidebar-surface/index.tsx:89"
+          ],
+          "state": "collapsed"
+        },
+        {
+          "token": "aria-expanded",
+          "axis": "aria-attribute",
+          "at": [
+            "packages/core/src/ui/structures/shell/navigation/sidebar-surface/index.tsx:94"
+          ],
+          "state": "aria-expanded"
+        }
+      ],
+      "variantAxisAnchors": [
+        {
+          "token": "aside=true",
+          "axis": "css-selector",
+          "at": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-sidebar.css:51"
+          ]
+        },
+        {
+          "token": "bordered=false",
+          "axis": "css-selector",
+          "at": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-sidebar.css:72"
+          ]
+        },
+        {
+          "token": "stacked=true",
+          "axis": "css-selector",
+          "at": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-sidebar.css:60",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-sidebar.css:61",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-sidebar.css:62"
+          ]
+        },
+        {
+          "token": "data-aside",
+          "axis": "stamped-data-attribute",
+          "at": [
+            "packages/core/src/ui/structures/shell/navigation/sidebar-surface/index.tsx:71"
+          ]
+        },
+        {
+          "token": "data-bordered",
+          "axis": "stamped-data-attribute",
+          "at": [
+            "packages/core/src/ui/structures/shell/navigation/sidebar-surface/index.tsx:72"
+          ]
+        },
+        {
+          "token": "data-stacked",
+          "axis": "stamped-data-attribute",
+          "at": [
+            "packages/core/src/ui/structures/shell/navigation/sidebar-surface/index.tsx:70"
+          ]
+        }
+      ],
+      "accessibilityAttributes": {
+        "entries": [
+          {
+            "token": "aria-controls",
+            "axis": "aria-attribute",
+            "at": [
+              "packages/core/src/ui/structures/shell/navigation/sidebar-surface/index.tsx:95"
+            ]
+          }
+        ],
+        "reason": "ARIA semantics. An accessibility contract of the family, not a customization axis and not an interaction state; a tenant control must never be allowed to change it."
+      },
+      "engineDivergence": {
+        "hasEnginesDirectory": false,
+        "paintLayerBreakdown": {
+          "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-sidebar.css": {
+            "rows": 10,
+            "layer": "engine-agnostic skin"
+          }
+        },
+        "engineQualifiedSelectorReads": {},
+        "nestedPrimitiveEngineVariantReads": {},
+        "nestedPrimitiveEngineVariantEvidence": {},
+        "enginesCoveredByVariantBranches": [],
+        "enginesMissingFromVariantBranches": [],
+        "finding": "MEASURED: no engine-qualified selector, no nested-primitive engine-variant class and no engine-scoped paint file participates in this family; its paint is engine-agnostic"
+      },
+      "scoutGaps": {
+        "scopeLimits": [
+          "CSS corpus indexed is packages/core/src/foundation/tokens/css/** excluding the generated facade/artifacts snapshot; a rule living outside that tree would not be seen",
+          "attribution is by stamped class token and by data-part inside a purely shared class scope; a rule reaching this family only through an element or descendant selector carrying no owned class token is not counted"
+        ]
+      },
+      "variableReadCensus": {
+        "attribution": "UNATTRIBUTED RAW EVIDENCE. Measured reads and declarations, not mapped to any controlId. themeControls stays UNKNOWN until the mapping wave; this block must not be read as a control edge.",
+        "customPropertyCensus": [
+          {
+            "variable": "--_ds-sidebar-inline-size",
+            "part": "root",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-sidebar.css:43",
+            "selector": ".ds-surface.ds-sidebar[data-part='root']",
+            "states": [],
+            "landsOn": "grid-template-columns",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "geometry",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": "280px",
+            "hasFallback": true,
+            "fallbackKind": "literal-scalar",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/ui/structures/shell/navigation/sidebar-surface/index.tsx:75"
+            ],
+            "declarationSiteCount": 1
+          },
+          {
+            "variable": "--ds-spacing-6",
+            "part": "root",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-sidebar.css:46",
+            "selector": ".ds-surface.ds-sidebar[data-part='root']",
+            "states": [],
+            "landsOn": "gap",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "geometry",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": "24px",
+            "hasFallback": true,
+            "fallbackKind": "literal-scalar",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/foundation/base/density.css:83",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:689"
+            ],
+            "declarationSiteCount": 2
+          },
+          {
+            "variable": "--ds-rhythm-effective-scale",
+            "part": "root",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-sidebar.css:46",
+            "selector": ".ds-surface.ds-sidebar[data-part='root']",
+            "states": [],
+            "landsOn": "gap",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "geometry",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": "1",
+            "hasFallback": true,
+            "fallbackKind": "literal-scalar",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:682",
+              "packages/core/src/tooling/resolution-probe/foundation/roster/fixtures.json:152"
+            ],
+            "declarationSiteCount": 2
+          },
+          {
+            "variable": "--_ds-sidebar-inline-size",
+            "part": "root",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-sidebar.css:51",
+            "selector": ".ds-surface.ds-sidebar[data-part='root'][data-aside='true']",
+            "states": [
+              "aside=true"
+            ],
+            "landsOn": "grid-template-columns",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "geometry",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": "280px",
+            "hasFallback": true,
+            "fallbackKind": "literal-scalar",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/ui/structures/shell/navigation/sidebar-surface/index.tsx:75"
+            ],
+            "declarationSiteCount": 1
+          },
+          {
+            "variable": "--_ds-sidebar-aside-inline-size",
+            "part": "root",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-sidebar.css:51",
+            "selector": ".ds-surface.ds-sidebar[data-part='root'][data-aside='true']",
+            "states": [
+              "aside=true"
+            ],
+            "landsOn": "grid-template-columns",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "geometry",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": "320px",
+            "hasFallback": true,
+            "fallbackKind": "literal-scalar",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/ui/structures/shell/navigation/sidebar-surface/index.tsx:76"
+            ],
+            "declarationSiteCount": 1
+          }
+        ],
+        "paintOwnership": {
+          "owners": {
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-sidebar.css": {
+              "rows": 10,
+              "layer": "engine-agnostic skin"
+            }
+          },
+          "attribution": {
+            "viaPrefixedOwnedClassToken": 10,
+            "viaUniqueDataPartInSharedClassScope": 0,
+            "viaGenericTokenInsideEstablishedPaintOwner": 0
+          },
+          "ownedClassTokens": [
+            "ds-sidebar",
+            "ds-sidebar__aside",
+            "ds-sidebar__main",
+            "ds-sidebar__navigation",
+            "ds-sidebar__panel",
+            "ds-sidebar__toggle"
+          ],
+          "sharedClassTokens": [
+            "ds-surface"
+          ],
+          "utilityClassTokensExcluded": [],
+          "foreignStampSitesOfOwnedTokens": {},
+          "bareDsLiteralsPromotedToClass": [],
+          "bareDsLiteralsNotUsedAsAnyClassSelector": [],
+          "matchedRuleRows": 10
+        },
+        "measuredAbsence": {
+          "rawSourceOccurrences": {
+            "className": 6,
+            "dataPart": 3,
+            "styleAttribute": 1
+          },
+          "perFile": {
+            "packages/core/src/ui/structures/shell/navigation/sidebar-surface/index.tsx": {
+              "classNameOccurrences": 6,
+              "dataPartOccurrences": 3,
+              "styleAttributeOccurrences": 1,
+              "lines": 128
+            }
+          },
+          "cssRuleRowsAttributedToThisFamily": 10,
+          "customPropertyReadsAttributed": 5,
+          "inlineStyleCustomPropertyReads": 0,
+          "verdict": "NOT_ABSENT: this family owns attributed paint (see customPropertyCensus)"
+        }
+      }
+    },
+    "evidenceIds": [],
+    "nextAction": "RATIFY_PROPERTY_GROUP_VOCABULARY_THEN_BIND_PROPERTY_GROUPS_COMPUTED_PROPERTIES_AND_CHANNELS"
+  },
+  "themeControls": [
+    {
+      "controlId": "palette.seeds",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "color.mode",
+            "socketPattern": null,
+            "prop": "idem",
+            "tier": "standard",
+            "examples": [],
+            "noSocketReason": "sin socket propio; mismo mecanismo",
+            "socketsResolved": true,
+            "carrier": "shared-channel"
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazo compartido (foundation o multi-lector real; nivel 2/3)": [
+            "--ds-spacing-6"
+          ]
+        },
+        "reviewedFrom": "anatomy",
+        "migratedToInternalChannels": true
+      }
+    },
+    {
+      "controlId": "typography.pairing",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "bindings": [
+          {
+            "root": "type.pairing",
+            "socketPattern": "(via canales compartidos, sin socket de familia)",
+            "prop": "sobre canales compartidos",
+            "tier": "standard",
+            "sockets": [],
+            "socketsResolved": true,
+            "why": "debe reflejarse sin socket propio",
+            "noSocketReason": "via canales compartidos, sin socket de familia"
+          }
+        ],
+        "migratedToInternalChannels": true
+      }
+    },
+    {
+      "controlId": "typography.families",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "bindings": [
+          {
+            "root": "type.pairing",
+            "socketPattern": "(via canales compartidos, sin socket de familia)",
+            "prop": "sobre canales compartidos",
+            "tier": "standard",
+            "sockets": [],
+            "socketsResolved": true,
+            "why": "debe reflejarse sin socket propio",
+            "noSocketReason": "via canales compartidos, sin socket de familia"
+          }
+        ],
+        "migratedToInternalChannels": true
+      }
+    },
+    {
+      "controlId": "typography.scale",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "bindings": [
+          {
+            "root": "type.scale",
+            "socketPattern": "(via canales compartidos, sin socket de familia)",
+            "prop": "sobre la rampa compartida",
+            "tier": "standard",
+            "sockets": [],
+            "socketsResolved": true,
+            "why": "debe reflejarse sin socket propio",
+            "noSocketReason": "via canales compartidos, sin socket de familia"
+          }
+        ],
+        "migratedToInternalChannels": true
+      }
+    },
+    {
+      "controlId": "shape.radius-scale",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "bindings": [
+          {
+            "root": "shape.corner",
+            "socketPattern": "--_ds-page-panel-radius",
+            "prop": "radio de paneles del shell estructural (slug vivo: page)",
+            "tier": "standard",
+            "sockets": [
+              "--_ds-page-panel-radius"
+            ],
+            "socketsResolved": true,
+            "why": "la raiz debe reflejarse aqui; el socket es el punto de customizacion de la familia"
+          }
+        ],
+        "uncoveredByDesign": {
+          "CONSUMO (migracion): ownedBy pattern/shell/pattern-page-shell#shape.radius-scale": [
+            "--_ds-page-panel-radius"
+          ]
+        },
+        "migratedToInternalChannels": true
+      },
+      "internalChannels": [
+        {
+          "channelId": "--_ds-page-panel-radius",
+          "semanticOwner": "shape.radius-scale",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "structure/shell/sidebar-surface"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+          }
+        }
+      ]
+    },
+    {
+      "controlId": "shape.button-style",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "los controles del shell son primitivas: sus acciones son Button/primitivas que ya reciben la raiz por su propio socket; un socket de familia crearia dos autoridades sobre el mismo pixel (L4 en espiritu)",
+        "source": "huecos-fable"
+      }
+    },
+    {
+      "controlId": "density.mode",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "density.mode",
+            "why": "si density comprimiera los margenes de seccion ademas del interior de controles, compacta colapsaria la jerarquia visual de la pagina: dos raices peleando el mismo pixel. Density es DENTRO de controles; rhythm es ENTRE bloques."
+          }
+        ]
+      }
+    },
+    {
+      "controlId": "spacing.rhythm",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "space.rhythm",
+            "socketPattern": "--_ds-<comp>-section-gap",
+            "prop": "gap vertical entre secciones del shell via calc(base * var(--ds-rhythm-effective-scale))",
+            "tier": "standard",
+            "examples": [
+              "--_ds-page-section-gap",
+              "--_ds-layout-content-gap"
+            ],
+            "sockets": [
+              "--_ds-sidebar-surface-section-gap"
+            ],
+            "socketsResolved": true
+          }
+        ],
+        "uncoveredByDesign": {
+          "CONSUMO (migracion): ownedBy structure/shell/sidebar-surface#navigation.sidebar-tone": [
+            "--_ds-sidebar-surface-section-gap"
+          ]
+        },
+        "migratedToInternalChannels": true
+      },
+      "internalChannels": [
+        {
+          "channelId": "--_ds-sidebar-surface-section-gap",
+          "semanticOwner": "spacing.rhythm",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-sidebar.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "structure/shell/sidebar-surface"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-sidebar.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+          }
+        }
+      ]
+    },
+    {
+      "controlId": "motion.dial",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "motion.character",
+            "socketPattern": "--_ds-<comp>-transition-duration",
+            "prop": "transition-duration",
+            "tier": "standard",
+            "examples": [
+              "--_ds-drawer-transition-duration",
+              "--_ds-sidebar-collapse-transition-duration"
+            ],
+            "sockets": [
+              "--_ds-sidebar-surface-transition-duration"
+            ],
+            "socketsResolved": true
+          }
+        ],
+        "uncoveredByDesign": {
+          "CONSUMO (migracion): ownedBy structure/shell/sidebar-surface#navigation.sidebar-tone": [
+            "--_ds-sidebar-surface-transition-duration"
+          ]
+        },
+        "migratedToInternalChannels": true
+      },
+      "internalChannels": [
+        {
+          "channelId": "--_ds-sidebar-surface-transition-duration",
+          "semanticOwner": "motion.dial",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-sidebar.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "structure/shell/sidebar-surface"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-sidebar.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+          }
+        }
+      ]
+    },
+    {
+      "controlId": "surfaces.elevation-posture",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "surface.elevation",
+            "socketPattern": "--_ds-<comp>-elevation",
+            "prop": "box-shadow",
+            "tier": "standard",
+            "examples": [
+              "--_ds-drawer-elevation"
+            ],
+            "sockets": [
+              "--_ds-sidebar-surface-elevation"
+            ],
+            "socketsResolved": true
+          }
+        ],
+        "uncoveredByDesign": {
+          "CONSUMO (migracion): ownedBy structure/shell/sidebar-surface#navigation.sidebar-tone": [
+            "--_ds-sidebar-surface-elevation"
+          ]
+        },
+        "migratedToInternalChannels": true
+      },
+      "internalChannels": [
+        {
+          "channelId": "--_ds-sidebar-surface-elevation",
+          "semanticOwner": "surfaces.elevation-posture",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-sidebar.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "structure/shell/sidebar-surface"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-sidebar.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+          }
+        }
+      ]
+    },
+    {
+      "controlId": "surfaces.effect-intensity",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "chrome mate",
+        "source": "huecos-kimi"
+      }
+    },
+    {
+      "controlId": "navigation.sidebar-tone",
+      "disposition": "UNKNOWN",
+      "verificationState": "SOURCE_BOUND",
+      "unknownReason": "NOT_ASSESSED_PAST_SOURCE_BOUND. Causal measurement complete and positive: 18/18 (scenario x mode) lowerings show demonstrated life on both ingress arms, and the channel-level union is 52/54 moved (9 scenarios x 6 channels) -- the 2 non-movers are a named, benign value-coincidence with the vertical's own authored baseline (see the control's own calibration.measuredResult and unmeasuredScope; F4B-12, 2026-08-24). NOT raised to IMPLEMENTED here: that rank requires non-empty `stableParts`/`propertyGroups`/`computedProperties`, and every `propertyGroups` entry must be OWNED by this family's own `anatomy.propertyGroups` -- which is `[]` right now (same program-wide propertyGroups-vocabulary blocker F4B-11 already documented on primitive/display/typography, `anatomy.sourceEvidence.propertyGroupCensusNote.status`: 'UNRATIFIED OBSERVATION... blocked on the propertyGroup vocabulary ratification'). `stableParts`/`propertyGroups`/`computedProperties` stay unset for that reason; `internalChannels` is populated below with the REAL producers (corrected from the prior REQUIRED_ADDITION placeholders, which cited `layout-sidebar.css` -- a real file that owns this family's LAYOUT GEOMETRY only, produces neither the tone's six channels nor the three removed phantom sockets, and was simply the wrong producer for a colour control). DT ruling (F4B-12 widen adjudication): declaredOutputs widened from 2 to the full closed six-channel `SIDEBAR_TONE_LEAF_FIELDS` table -- the control's authority IS that table, and declaring a subset under-declares the real governed surface.",
+      "evidenceIds": [
+        "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/navigation-sidebar-tone/computed-static-db/rottay-subtle.json.receipt.json",
+        "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/navigation-sidebar-tone/computed-static-db/rottay-strong.json.receipt.json",
+        "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/navigation-sidebar-tone/computed-static-db/rottay-inverse.json.receipt.json",
+        "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/navigation-sidebar-tone/computed-static-db/bithire-subtle.json.receipt.json",
+        "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/navigation-sidebar-tone/computed-static-db/bithire-strong.json.receipt.json",
+        "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/navigation-sidebar-tone/computed-static-db/bithire-inverse.json.receipt.json",
+        "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/navigation-sidebar-tone/computed-static-db/evnto-subtle.json.receipt.json",
+        "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/navigation-sidebar-tone/computed-static-db/evnto-strong.json.receipt.json",
+        "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/navigation-sidebar-tone/computed-static-db/evnto-inverse.json.receipt.json"
+      ],
+      "nextAction": "PROPERTY_GROUPS_VOCABULARY_RATIFICATION_THEN_IMPLEMENTED",
+      "sourceBindings": [
+        "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/menu.css",
+        "packages/core/src/foundation/tokens/css/presentation/components/skin/app-shell.css",
+        "packages/core/src/infrastructure/compilers/kernel/foundation/css/chrome-variables/index.ts",
+        "packages/core/src/infrastructure/compilers/composition/tenant-theme/index.ts",
+        "packages/core/governance/manifest/controls/navigation/sidebar-tone/index.json"
+      ],
+      "negativeControls": [
+        "control height remains fixed",
+        "font metrics remain fixed",
+        "border remains fixed",
+        "motion remains fixed"
+      ],
+      "negativeControlsScopeNote": "The same four the control declares, restated on this root so the cell is self-describing. `color remains fixed` is deliberately NOT declared, unlike most Standard posture controls: this control's entire job is moving colour channels, so a blanket colour negative control would be self-contradicting. No vocabulary phrase exists for 'one specific colour channel among many stays fixed' -- the neighbouring-leaf proof (`--ds-sidebar-item-color`, chrome-variables/index.ts:1351, `s.itemColor`, a DIFFERENT leaf from the tone's own six) is a direct measurement instead, not a formal negativeControls entry. With declaredOutputs now widened to all 6 real channels (DT ruling, F4B-12), this witness proves what it claims: the tone's full, formally-declared six-channel surface moves and the seventh, non-declared neighbour does not -- see the control's own measuredResult.negativeWitness.",
+      "stressCases": [
+        "The registry's prior `chrome.sidebar.*` keypath was a broken wildcard: the ingress walker only understands brace SETS (`{a,b,c}`), so `*` resolved to itself as a literal member (`chrome.sidebar['*']`), a false-INERT-by-path defect distinct from a compiler defect. Fixed to the real field `chrome.sidebar.tone` (SIDEBAR_TONE_FIELD).",
+        "The prior declaredOutputs (2 channels: --ds-sidebar-bg, --ds-sidebar-item-color -- the latter a typo/omission for -active) under-declared the control's real six-channel authority. Widened (DT ruling, F4B-12) to the full closed `SIDEBAR_TONE_LEAF_FIELDS` table; the neighbouring-leaf proof (see restoreRequirements/measuredResult) only became a meaningful witness once all six real channels were formally declared alongside it.",
+        "internalChannels' prior producer, `layout-sidebar.css`, is a REAL file (verified: 73 lines, `presentation/components/skin/layout-sidebar.css`) but owns this family's LAYOUT GEOMETRY only (`--_ds-sidebar-inline-size`/`--_ds-sidebar-aside-inline-size`, grid tracks, gap, min-block-size) -- its own docblock says so explicitly ('geometry data, not paint'). It produces neither the tone's six colour channels nor the three removed phantom sockets. Corrected to the real colour producers, `menu.css` (5 of 6 channels) and `app-shell.css` (--ds-sidebar-bg, read at its own :70/:95/:217).",
+        "All 3 first-party verticals author the six tone leaves literally in their own baseline theme (rottay/bithire/evnto's `chrome.sidebar.{bg,text,textMuted,itemBgHover,itemBgActive,itemColorActive}`) -- an earlier draft of this evidence wrongly claimed otherwise. The 9 receipted scenarios measured `assignToneUnderTenantLeaves`'s rank mechanism working exactly as designed on every one of the 54 (scenario x channel) cells -- tone always outranks a baseline-authored leaf, never the reverse -- because `tenantAuthoredPaths` (chrome-variables/index.ts:213-230) is built from the causal harness's own `tenantPatch` alone (runtime/ingress/index.mjs's `staticTenantAuthoredPaths`); a vertical's baseline-authored leaf never enters it, so every leaf's rank falls to `baselineLeaf(1)` against the stop's own `tenantDerived(3)` tone, regardless of the vertical's own literal authorship. This is NOT the same claim as 'every channel moved': 2 of the 54 cells are non-movers because the tone's WINNING value happens to numerically equal the leaf it beat (a value coincidence, not a rank failure) -- see the control's own unmeasuredScope for the 2 named cells. See the control's own B-2 drill 6 fix for the full rank mechanism."
+      ],
+      "restoreRequirements": [
+        "Unsetting the control through either door restores the baseline sidebar colours exactly (measured: restore.exact true on every receipted scenario, byte-identical rows)."
+      ],
+      "internalChannels": [
+        {
+          "channelId": "--ds-sidebar-bg",
+          "semanticOwner": "navigation.sidebar-tone",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/app-shell.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
+          "productiveConsumerFamilyIds": [
+            "structure/shell/sidebar-surface"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/app-shell.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--ds-sidebar-text",
+          "semanticOwner": "navigation.sidebar-tone",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/menu.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
+          "productiveConsumerFamilyIds": [
+            "structure/shell/sidebar-surface"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/menu.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--ds-sidebar-text-muted",
+          "semanticOwner": "navigation.sidebar-tone",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/menu.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
+          "productiveConsumerFamilyIds": [
+            "structure/shell/sidebar-surface"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/menu.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--ds-sidebar-item-bg-hover",
+          "semanticOwner": "navigation.sidebar-tone",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/menu.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "structure/shell/sidebar-surface"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/menu.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--ds-sidebar-item-bg-active",
+          "semanticOwner": "navigation.sidebar-tone",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/menu.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "structure/shell/sidebar-surface"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/menu.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--ds-sidebar-item-color-active",
+          "semanticOwner": "navigation.sidebar-tone",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/menu.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
+          "productiveConsumerFamilyIds": [
+            "structure/shell/sidebar-surface"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/menu.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        }
+      ]
+    },
+    {
+      "controlId": "experience.profile",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "ningun componente ni superficie lee --ds-experience-profile: selecciona la composicion de raices en carga y su expansion siempre pierde contra cualquier campo autorado; el marcador es inmutable tras el mount",
+        "source": "huecos-kimi"
+      }
+    },
+    {
+      "controlId": "chrome.families",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "layer.stack",
+            "socketPattern": "--_ds-<comp>-z-index",
+            "prop": "z-index",
+            "tier": "standard",
+            "examples": [
+              "--_ds-drawer-z-index",
+              "--_ds-sidebar-sticky-z-index"
+            ],
+            "sockets": [
+              "--_ds-sidebar-surface-z-index"
+            ],
+            "socketsResolved": true
+          }
+        ],
+        "uncoveredByDesign": {
+          "CONSUMO (migracion): ownedBy structure/shell/sidebar-surface#navigation.sidebar-tone": [
+            "--_ds-sidebar-surface-z-index"
+          ]
+        },
+        "migratedToInternalChannels": true
+      },
+      "internalChannels": [
+        {
+          "channelId": "--_ds-sidebar-surface-z-index",
+          "semanticOwner": "chrome.families",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-sidebar.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "structure/shell/sidebar-surface"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-sidebar.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+          }
+        }
+      ]
+    },
+    {
+      "controlId": "chrome.anatomy",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "huecos-fable",
+        "bindings": [
+          {
+            "root": "shape.edge",
+            "socketPattern": "--_ds-page-rule-style",
+            "prop": "reglas de seccion del shell",
+            "tier": "standard",
+            "sockets": [
+              "--_ds-page-rule-style"
+            ],
+            "socketsResolved": true,
+            "why": "la raiz debe reflejarse aqui; el socket es el punto de customizacion de la familia"
+          }
+        ],
+        "uncoveredByDesign": {
+          "CONSUMO (migracion): ownedBy pattern/shell/pattern-page-shell#chrome.anatomy": [
+            "--_ds-page-rule-style"
+          ]
+        },
+        "migratedToInternalChannels": true
+      },
+      "internalChannels": [
+        {
+          "channelId": "--_ds-page-rule-style",
+          "semanticOwner": "chrome.anatomy",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "structure/shell/sidebar-surface"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+          }
+        }
+      ]
+    },
+    {
+      "controlId": "token-overrides",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "ESCAPE_HATCH",
+        "why": "es la valvula de escape, no el modelo -- textual del canon: \"escape hatch, not the model: every recurring override is a candidate for a real capability\". Alcanza cualquier canal por construccion (allowlist cerrada, max 200, falla cerrado) y por eso no declara nada por familia.",
+        "instrument": "un override recurrente sobre esta familia es EVIDENCIA de una capacidad faltante: convertilo en un control real, no lo normalices aqui",
+        "consumer": "src/infrastructure/compilers/composition/tenant-theme/index.ts :: tokenOverrides",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/token-overrides.json"
+      }
+    },
+    {
+      "controlId": "recipe-profile",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "ningun componente ni superficie lee --ds-recipe-profile: la receta rebinds raices y el marcador vive en el :root del tema compilado; leerla directamente rompe la cascada (L4)",
+        "source": "huecos-kimi"
+      }
+    },
+    {
+      "controlId": "profiles.expressive",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "OVERLAY_OF_ROOTS",
+        "why": "no necesita raiz propia: dependsOn=[experience.profile] y sus seis ejes sobrescriben por eje los MISMOS canales que ya componen las raices existentes. Los sockets de esta celda son los sockets de las raices mapeadas, no unos nuevos.",
+        "axisToRoot": {
+          "type": [
+            "type.pairing",
+            "type.scale"
+          ],
+          "geometry": [
+            "shape.corner",
+            "shape.control-silhouette"
+          ],
+          "edge": [
+            "shape.edge"
+          ],
+          "material": [
+            "surface.finish"
+          ],
+          "elevation": [
+            "surface.elevation"
+          ],
+          "motif": [
+            "surface.finish"
+          ]
+        },
+        "consumer": "src/infrastructure/runtime/bootstrap/facade/react/provider/index.tsx :: sanitizeExpressiveOverrides",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/profiles.expressive.json"
+      }
+    },
+    {
+      "controlId": "palette.status-seeds",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "ningun sourceBinding de esta familia lee --ds-color-{success,warning,error,info}(-[0-9]+)? ni --ds-color-on-{success,warning,error,info}; barrido verificado sobre layout-sidebar.css (0 coincidencias)",
+        "reviewedFrom": "anatomy"
+      }
+    },
+    {
+      "controlId": "profiles.icon",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "internalChannels": [
+        {
+          "channelId": "--_ds-page-icon-stroke-width",
+          "semanticOwner": "profiles.icon",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-sidebar.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "structure/shell/sidebar-surface"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-sidebar.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+          }
+        }
+      ]
+    },
+    {
+      "controlId": "responsive.posture",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "NO_CSS_CHANNEL",
+        "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
+        "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
+        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/responsive.posture.json"
+      }
+    }
+  ],
+  "retiredThemeControls": [],
+  "recipeAnatomy": {
+    "assessmentState": "UNKNOWN",
+    "groupBindings": [],
+    "variants": [],
+    "deprecatedAliases": [],
+    "evidenceIds": [],
+    "nextAction": "CENSUS_TYPED_RECIPE_AND_ANATOMY_VARIANTS"
+  },
+  "instanceApi": {
+    "assessmentState": "UNKNOWN",
+    "props": [],
+    "slots": [],
+    "callbacks": [],
+    "controlledState": [],
+    "evidenceIds": [],
+    "nextAction": "CENSUS_PUBLIC_PROPS_SLOTS_CALLBACKS_AND_CONTROLLED_STATE"
+  },
+  "hostAdaptation": {
+    "assessmentState": "UNKNOWN",
+    "contexts": [],
+    "containerRules": [],
+    "invariants": [],
+    "evidenceIds": [],
+    "nextAction": "PROVE_PAGE_EMBED_CONTAINER_VIEWPORT_AND_HOST_POSTURES"
+  },
+  "statesMotion": {
+    "assessmentState": "UNKNOWN",
+    "states": [],
+    "transitions": [],
+    "inputModes": [],
+    "reducedMotion": [],
+    "evidenceIds": [],
+    "nextAction": "CENSUS_STATES_TRANSITIONS_INPUTS_AND_REDUCED_MOTION"
+  },
+  "invariants": {
+    "assessmentState": "UNKNOWN",
+    "entries": [],
+    "evidenceIds": [],
+    "nextAction": "AUTHOR_STRUCTURAL_BEHAVIORAL_ACCESSIBILITY_AND_RESTORE_INVARIANTS"
+  },
+  "premiumCandidates": []
+}

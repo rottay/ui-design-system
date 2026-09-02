@@ -53,7 +53,7 @@ Medido por `git diff` línea a línea (conteo de `@domicile` agregados por archi
 | 2 | `brand-themes/bithire/index.ts` | mano | +36 docblocks |
 | 3 | `brand-themes/evnto/index.ts` | mano | +4 docblocks |
 | 4 | `manifest/generated/variant-parity.json` | productor | `2559 slots, 33 divergentes` — check intermedio: **exactamente** `untaggedAuthoredLeaves SHRANK from 40 to 0` |
-| 5 | `manifest/variant-parity/variant-parity.baseline.json` | mano | Baja #14 única: `untaggedAuthoredLeaves` 40→0; `divergentSlots` intacto 33; post-check: `2559 slots, 2526 con posicion en los 3, 33 divergentes, 0 hojas sin tag (4155 tags leidos)` |
+| 5 | `manifest/variant-parity/baseline/index.json` | mano | Baja #14 única: `untaggedAuthoredLeaves` 40→0; `divergentSlots` intacto 33; post-check: `2559 slots, 2526 con posicion en los 3, 33 divergentes, 0 hojas sin tag (4155 tags leidos)` |
 | 6 | `manifest/generated/fanout-facts.json` | productor | summary idéntico (7504 canales, mismo set exacto pre/post, 0 diff de claves); sólo referencias de línea |
 | 7 | `manifest/generated/root-checklists.json` | productor (después de 6) | **byte-idéntico** (este productor no embebe referencias de línea de theme; sets de roots/channels intactos por construcción) |
 | 8 | `manifest/generated/mirror-parity.json` | productor (después de 7) | sólo `bytes/lines/sha256` de los 3 themes actualizados; resto inmóvil |

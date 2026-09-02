@@ -66,7 +66,7 @@
     "packages/core/src/ui/primitives/display/Card/index.tsx"
   ],
   "sourceDigest": "85e717672fbdb239627d57212b22ee111833ecc526c3c397cbf370bc03f82450",
-  "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/experience-profile/rottay-technical.json",
+  "artifactPath": "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/experience-profile/computed-static-db/rottay-technical.json",
   "artifactSha256": "6fbcd43e6d468bb2391f33b6463a8fd3f651d7a01f14b043c7be767f3aedc5df",
   "createdAt": "2026-08-23T19:01:13.360Z",
   "negativeDrill": {

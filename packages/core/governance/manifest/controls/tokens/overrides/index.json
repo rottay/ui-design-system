@@ -1,0 +1,92 @@
+{
+  "schemaVersion": 1,
+  "controlId": "token-overrides",
+  "lifecycleState": "OPERATIONAL",
+  "tier": "pro",
+  "scope": "tenant",
+  "semanticOwner": {
+    "owner": "design-system",
+    "registryPath": "packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts",
+    "registryDigest": "5941d2eebc8749b7c04aa34aae6135f2eb34f6514842b3b5e040f7ed4faac138"
+  },
+  "title": "Bounded raw channel overrides",
+  "valueType": "token-map",
+  "domain": {
+    "kind": "map-entry",
+    "enumValues": [],
+    "bounds": null,
+    "defaultBehavior": "none; closed allowlist, max 200 entries, fails closed"
+  },
+  "ingress": {
+    "staticBrandThemePath": "tokenOverrides",
+    "dbTenantThemePath": "visualFoundation.advanced.tokenOverrides.{--ds-color-error,--ds-color-bg-overlay}"
+  },
+  "declaredOutputs": {
+    "channels": [
+      "--ds-color-error",
+      "--ds-surface-card",
+      "--ds-color-bg-overlay"
+    ],
+    "rootAttributes": [],
+    "representativeOnly": true
+  },
+  "dependsOn": [],
+  "compatibility": "escape hatch, not the model: every recurring override is a candidate for a real capability",
+  "productiveConsumerWitness": {
+    "consumer": "src/infrastructure/compilers/composition/tenant-theme/index.ts",
+    "symbol": "tokenOverrides"
+  },
+  "calibration": {
+    "assessmentState": "SOURCE_BOUND",
+    "normalizedStops": [
+      {
+        "id": "error-hex",
+        "role": "--ds-color-error",
+        "value": "#B4231F"
+      },
+      {
+        "id": "overlay-hex",
+        "role": "--ds-color-bg-overlay",
+        "value": "#1E2833"
+      }
+    ],
+    "entryCatalog": [
+      {
+        "role": "--ds-color-error",
+        "valueType": "color",
+        "channel": "--ds-color-error"
+      },
+      {
+        "role": "--ds-color-bg-overlay",
+        "valueType": "color",
+        "channel": "--ds-color-bg-overlay"
+      }
+    ],
+    "entryCatalogNote": "PACKET K. The catalogue is a PROJECTION of the live product gate, not a copy of it: the closed source is TENANT_THEME_OVERRIDE_TOKENS (290 published names) typed by `tokenValueRules` (compilers/kernel/foundation/schemas/tenant-theme/index.ts:1892-1909, type by prefix). Only the entries this control actually exercises are declared, because the catalogue bounds STOPS -- declaring all 290 would assert 288 doors no evidence covers, which is the inverse of the ceiling law. Both declared entries are `color`, and both are ABSENT from TEXT_CONTRAST_PAIRINGS, so neither can trip the governed APCA floor at any authored hex. Measured this packet across all 290 with a uniform #123456: the schema accepts 275 and refuses 15 (4 `unsafe_value: Invalid or unsafe font-family`, 7 `invalid_type: Expected a finite number`, 4 `unsafe_value: Invalid or unsafe visual-value`); of those 275 the compiler then refuses 8 more at the contrast floor, leaving 267. All 15 are accepted once the value carries its declared type, so NONE of the 23 is a rejected KEY -- an unpublished key is a third, distinct mechanism (`unknown_key: Field is not part of TenantThemeConfig v1`). The declared types are pinned against the live gate behaviourally by PACKET-K drill 1, never re-derived here.",
+    "normalizedStopsNote": "PACKET K. Two stops, one per catalogued entry, each writing a DIFFERENT channel -- which is the shape a map domain always has and the reason H-2 still holds for it: `assertStopDiscrimination` maps an ABSENT channel to a sentinel value, so each declared channel reads {authored, absent} across the set and discriminates without an exception. Fenced by PACKET-K drill 7 against the real compiler. Values verified before they were fixed, two ways: (a) neither role appears in TEXT_CONTRAST_PAIRINGS (src/foundation/kernel/accessibility/branding-contrast/text-contrast-autocorrect/index.ts:97-188), so neither can trip the governed dark-mode APCA floor at any authored hex -- positive control: all 8 channels that DO get refused at that floor are present in the same table; (b) compiled on all three verticals, both baseline to `undefined` (no coincidental-default risk) and both move. The per-vertical cascade asymmetry F4B-17 documented is reproduced exactly and is NOT a defect: --ds-color-error moves 2 channels on rottay (with --ds-color-on-error), 11 on bithire and 8 on evnto (each vertical's own shade-ramp generation), while --ds-color-bg-overlay moves exactly 1 channel on all three. The receipted causal matrix for these stops is F4B-17B and is NOT run by this packet, so `assessmentState` and `nextAction` stay where F4B-17 left them: flipping them without receipts would let the control outrank its own evidence.",
+    "staticDbParityEvidenceIds": [],
+    "exactRestoreEvidenceIds": [],
+    "negativeControls": [],
+    "nextAction": "F5_INSTRUMENT_SEALED_DOOR_SINGLE_ARM_VERDICT",
+    "structuralCeilingNote": "F4B-17B (DT adjudication, owner ruling, option 3): SOURCE_BOUND is this control's PERMANENT ceiling under the current instrument, not a pending calibration. Triple blockage, verified this packet: (1) verdict.pass (composition/run/index.mjs:538-545) unconditionally requires ingressEquivalenceHeld; (2) ingressEquivalenceHeld = ingressEquivalence.comparable && ingressEquivalence.equivalent (composition/run/index.mjs:515-516), and compareArms returns comparable:false whenever fewer than two arms ran -- the code's own comment states the law: 'a claim that was never tested is not a claim that held'; (3) running BOTH arms is refused outright by assertStopDiscrimination's anti-false-INERT guard (runtime/ingress/index.mjs:2227), because every declared channel lowers a CONSTANT on the sealed static arm across both witness stops -- confirmed by direct reproduction this packet, same error on the corrected 2-channel manifest. A CSS-terminal control (real declaredOutputs.channels, unlike the DATA-terminal responsive.posture/profiles.icon precedent) whose static door is STRUCTURALLY_UNREACHABLE therefore has NO path to a receipted pass:true through the standard causal CLI, with one arm or two. The instrument's law is judged CORRECT here and is not touched to manufacture a receipt: a pass without tested equivalence would be the exact false-green the law exists to prevent. What the control DOES have, measured and stated as measurement rather than as receipt: the map-entry lowering mechanism proven end-to-end against the real DB compiler (PACKET-K drill 7); F4B-17's direct dist/server.js measurements (both channels move cleanly on all 3 verticals, baseline to `undefined`, an out-of-allowlist key is refused outright, both channels sit outside the closed APCA-pairing table); the static door's seal itself, both by census (0 property-access occurrences of `.tokenOverrides` in brand-theme/index.ts) and by conduct (an authored value never reaches the compiled artifact); and this packet's own 6 scenarios reaching `controlLiveness: harness-live` with `--ds-color-error` genuinely moving under `token-readout`, before failing solely on the two-arm equivalence law -- the failure is the LAW, not the mechanism. A durable fix (a sealed-door branch in the pass formula, admitting a single-arm verdict for a control whose OTHER arm is independently proven unreachable) is a change to the instrument's own contract, not a mechanical implementation riding along this matrix -- it is registered as an F5 candidate (compiler/authority, where the sealed-door class lives) so the question is written down rather than re-discovered the next time a CSS-terminal control seals a door.",
+    "sourceBindings": [
+      "packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts",
+      "packages/core/src/foundation/contracts/composition/tenants/themes/index.ts",
+      "packages/core/src/foundation/contracts/composition/tenants/themes/tenant-theme/index.ts",
+      "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
+      "packages/core/src/infrastructure/compilers/composition/tenant-theme/index.ts",
+      "packages/core/src/infrastructure/compilers/kernel/foundation/schemas/tenant-theme/index.ts",
+      "packages/core/src/foundation/kernel/accessibility/branding-contrast/text-contrast-autocorrect/index.ts",
+      "packages/core/src/tooling/resolution-probe/foundation/roster/fixtures.json"
+    ],
+    "staticDoorNote": "STRUCTURALLY_UNREACHABLE (DT ruling, F4B-17). BrandTheme.tokenOverrides (the field the registry's staticBrandThemePath names) is declared on the type but never read by compileBrandTheme -- 0 property-access occurrences of `.tokenOverrides` anywhere in infrastructure/compilers/kernel/runtime/brand-theme/index.ts, verified this packet by direct grep against the live tree. The only reachable slot under a similar name, BrandCompilerInput.verticalTokenOverrides, is a SEPARATE compiler-input parameter carrying the VERTICAL's own baseline structural overrides (TenantTokenOverrides: surface/motion, not the raw --ds-* map) -- writing there would measure the wrong actor, the H-1 class the DT ruling names. Full chain, both cases and the consequence of each false path: artifacts/quality/programs/modern-rescue/cascade-proofs/controls/token-overrides/computed-static-db/static-door.STRUCTURALLY-UNREACHABLE.json (unreceipted by design, same law as responsive.posture's own precedent -- stronger here, since the field has no reader at all, for any caller).",
+    "domainKindGapNote": "STOP -- reported, not worked around. `domain.kind` for this control is derived from the registry's `valueType: 'token-map'` (scripts/foundation/tokens/manifest/generation/index.mjs:186 falls through enumValues/bounds to the raw valueType when neither is set). `ingressValueForStop` (runtime/ingress/index.mjs:921-1059) recognises exactly five kinds -- closed-enum, bounded, profile-id, font-stack, color-set -- and throws `DOMAIN_KIND_NOT_LOWERED` for anything else, `token-map` included. This is NOT specific to this control's channel choice: grep confirms `chrome.families` (`domain.kind: 'chrome-map'`) is in the SAME unrecognised state and is still calibration.assessmentState `UNKNOWN` with zero normalizedStops -- no packet in this programme has yet lowered a map-shaped domain through the standard causal CLI. A brace-set ingress path CAN name one specific allowlisted channel as its own door (`visualFoundation.advanced.tokenOverrides.{--ds-color-error,--ds-color-bg-overlay}`, resolveIngressMember selects by last-segment role exactly as it does for `palette.{...}`) and `color-set`'s branch would lower a hex value at it correctly -- verified by reading, not yet by running. But making that work requires the registry's `valueType` to read `color-set` instead of `token-map`, which RECLASSIFIES how this control's domain is characterised system-wide (this control's true domain is a 200-entry heterogeneous map: colors, font stacks, numbers -- 'color-set' would only be honest for the two channels this packet chose to test, not for the control). That is a design decision about domain taxonomy, not a mechanical implementation of the already-adjudicated ruling this brief authorises -- and touching `capabilities/index.ts` at all restales the ~130 live receipts and requires the closing-lane coordination the DT's own dispatch named (never simultaneous with Opus's concurrent packet). Escalated rather than decided unilaterally. Two DB-side findings below (`dbSideMeasuredNote`, `staticDoorNote`) stand regardless of how this is adjudicated: they were measured by a direct dist/server.js compile, no causal CLI, no instrument dependency.",
+    "dbSideMeasuredNote": "Measured directly (hydrateTenantThemeConfig -> compileTenantThemeConfig against dist/server.js, this packet, all 3 verticals), NOT through the causal CLI (blocked, see domainKindGapNote). `visualFoundation.advanced.tokenOverrides: {'--ds-color-error': '#123456'}` moves `--ds-color-error` cleanly on all 3 verticals; rottay ALSO moves the derived `--ds-color-on-error` (2 channels), while bithire/evnto instead generate a full 11-step shade ramp (`--ds-color-error-50` through `-900`, plus the base) from the same single entry -- a genuine, value-independent per-vertical asymmetry (rottay's own baseline seeds no ramp-generation branch for authored semantic colors; bithire/evnto's does), not a defect. `--ds-color-bg-overlay` moves as a single, clean channel on all 3 verticals with no cascade. Both channels baseline to `undefined` on an empty tokenOverrides document on all 3 verticals -- no coincidental-default risk (F4B-16's own class) for either. `--ds-surface-card`, the third declaredOutputs entry, was measured but NOT chosen as a stop candidate: authoring it cascades to 8 channels including 10 chart-category series colors (`--ds-chart-series-1..10` odd/even split observed; a real categorical-palette-generation side effect of naming the card surface, not a bug) -- too broad for a single-entry causal attribution, though legitimate as a `representativeOnly` declaration. `--ds-line-height-body`, a genuinely non-colour allowlisted channel (TENANT_THEME_OVERRIDE_TOKENS, tenant-theme/index.ts:211; schema type `number({min:0.5,max:3})`), also moves cleanly and in isolation (neighbour `--ds-line-height-heading` stays `undefined` on both sides) -- cited as an additional class-coverage fact per the brief's own preference, not declared as a stop (would need its own domain-kind resolution, same gap). An out-of-allowlist key (`--ds-color-not-a-real-channel-xyz`) is REJECTED outright by schema validation (`Field is not part of TenantThemeConfig v1`, a thrown TenantThemeValidationError) -- the compiler does not silently elide it, it refuses the whole document. Max entries is exactly 200 (limits.maxTokenOverrides), confirmed by a 201-entry document throwing the count violation alongside the per-key rejections. `--ds-color-error` and `--ds-color-bg-overlay` are BOTH absent from the closed TEXT_CONTRAST_PAIRINGS list (src/foundation/kernel/accessibility/branding-contrast/text-contrast-autocorrect/index.ts:97-188) that gates authored colors through the compiler's own dark-mode APCA floor (tenant-theme/index.ts:2086-2094, `validateCompiledThemeContrast` throws `TenantThemeValidationError` when it fires) -- so neither chosen channel can trip that validator at any authored value, which is the honest P3 answer for THIS measured scene: the allowlist DOES contain other channels that are APCA-paired (`--ds-color-text-primary`, the button-variant `-color` tokens, several `--ds-material-*-foreground*` roles), so the P3 concern is real for the control as a whole, just not for the two representative channels this packet measured.",
+    "familyLandingNote": "Seated at primitive/feedback/alert.json rather than button.json (the brief's own steer): --ds-color-error/--ds-color-on-error are semantically alert/danger-state chrome, and alert.json's own cell already carries the control's universal ESCAPE_HATCH targetBinding scaffold (identical across effectively every family manifest -- adjudicatedFrom controls/token-overrides.json, socketsExpected:false), same as every other family's cell for this control. No family 'reaches' this control differently from any other by design; alert.json is the most honest landing site for THIS packet's two chosen channels, not evidence that the control is scoped to alerts.",
+    "channels": [
+      "--ds-color-error",
+      "--ds-color-bg-overlay"
+    ]
+  },
+  "retiredAliases": []
+}

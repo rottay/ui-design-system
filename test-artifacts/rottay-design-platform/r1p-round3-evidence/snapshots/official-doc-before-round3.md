@@ -51,7 +51,7 @@ Points where the audit's original claim is retained against a possible weaker re
 |---|---|---|---|
 | R2-1 | TMM must not be called "DB-backed visual canary" yet; correct name: "DB-contract/fixture-backed canary, pending live DB→SSR→browser certification in R2" | ACCEPTED | Renamed at every occurrence (sections 1, 2#3, 7-R2, 8). |
 | R2-2 | "App :root wins 97 variables" is wrong: per Selectors Level 4, `:is()` carries the specificity of its MOST SPECIFIC list argument, computed statically and independent of which arm matches. The vertical artifact selector is therefore (0,1,1) — from the `html[data-tenant='bithire']` arm — even when only the `:where()` arm matches operationally (custom tenants), and it beats app `:root` (0,1,0) regardless of source order | ACCEPTED — original claim RETRACTED | The audit's L1-F3 "(0,0,0) surviving arm" reasoning (and the orchestrator's verification pass, which did not catch it) mis-applied the spec: :is() specificity is not per-matched-arm. Selector shape re-confirmed in the artifact (artifacts/bithire/index.css:14). Reclassification executed below; no mass :root drain may be premised on the retracted claim. Name collisions are NOT proof of effective authority. |
-| R2-3 | Daisy: class consumers are now 0, while the plugin + ~128 KB of Daisy CSS remain in the bundle — two distinct properties | ACCEPTED | Verified: `engine-token-audit.baseline.json:17` reads `"daisy.classConsumers": 0` in the current worktree. R0 split into two rows: consumer drain (CLOSED_IN_WIP, confirmed at 0) vs framework-in-bundle (`@plugin "daisyui"` in compiled.css + Daisy portion of modern-engine.css spliced into every vertical bundle — OPEN). |
+| R2-3 | Daisy: class consumers are now 0, while the plugin + ~128 KB of Daisy CSS remain in the bundle — two distinct properties | ACCEPTED | Verified: `engine-token-baseline/index.json:17` reads `"daisy.classConsumers": 0` in the current worktree. R0 split into two rows: consumer drain (CLOSED_IN_WIP, confirmed at 0) vs framework-in-bundle (`@plugin "daisyui"` in compiled.css + Daisy portion of modern-engine.css spliced into every vertical bundle — OPEN). |
 
 Reclassification of the 97 :root name collisions (static pre-classification by this reconciliation; final classification requires computed-style DOM validation — Codex, on BitHire static, a projected custom tenant, and later TMM live):
 
@@ -167,7 +167,7 @@ Method: WIP file census captured at audit start (164 M + 57 ?? DS; 185 M + 14 ??
 | a11y gate scope + A11Y_STRICT | OPEN |
 | i18n key-parity gate | CLOSED_IN_WIP candidate (gate NEW in WIP); CI wiring still OPEN |
 | Arabic direction/language groundwork | CLOSED_IN_WIP candidate (language-arabic.css + direction/ + ar catalogs); app logical-CSS migration OPEN |
-| Daisy class consumers | CLOSED_IN_WIP — CONFIRMED at 0 (engine-token-audit.baseline.json:17 `daisy.classConsumers: 0`) |
+| Daisy class consumers | CLOSED_IN_WIP — CONFIRMED at 0 (engine-token-baseline/index.json:17 `daisy.classConsumers: 0`) |
 | Daisy plugin + ~128 KB CSS in every vertical bundle | OPEN (distinct property: `@plugin "daisyui"` in compiled.css + splice via build-vertical-css.mjs; removable now that consumers = 0) |
 | "~10,500 tests" claim | STALE (metric clarified; pin executed count via manifest) |
 | Static BrandTheme manifest | OPEN as P2 parity tooling (reclassified per adjudication #4) |

@@ -1,0 +1,4744 @@
+{
+  "schemaVersion": 1,
+  "familyId": "primitive/inputs/cascader",
+  "identity": {
+    "layer": "primitive",
+    "category": "inputs",
+    "name": "Cascader",
+    "components": [
+      "Cascader"
+    ],
+    "sourceRoot": "packages/core/src/ui/primitives",
+    "sourceOwner": "packages/core/src/ui/primitives/inputs/Cascader",
+    "publicComponents": [
+      "Cascader"
+    ],
+    "unresolvedPublicComponents": [],
+    "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
+    "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
+    "inventoryRowDigest": "1229667e4c42d305bf2ea319f2a0511e35bdea4b04a2c9bf7c54b85bd4aae23a"
+  },
+  "maximumClaim": "SOURCE_BOUND",
+  "review": {
+    "verdict": null,
+    "acceptedSourceDigest": null,
+    "evidenceIds": [],
+    "decisionReason": null
+  },
+  "anatomy": {
+    "assessmentState": "SOURCE_BOUND",
+    "sourceBindings": [
+      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css",
+      "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/cascader.css",
+      "packages/core/src/ui/primitives/inputs/Cascader"
+    ],
+    "stableParts": [
+      "trigger",
+      "option",
+      "clear-button",
+      "search-input",
+      "dropdown",
+      "menu-column",
+      "empty",
+      "loading",
+      "loading-spinner",
+      "option-list",
+      "arrow-icon",
+      "loading-state",
+      "chevron",
+      "option-label",
+      "trigger-loading",
+      "search-input-wrapper",
+      "menu-item-arrow",
+      "root"
+    ],
+    "states": [
+      "focus-visible",
+      "selected",
+      "disabled",
+      "hover",
+      "active",
+      "open",
+      "error",
+      "warning",
+      "focus",
+      "status"
+    ],
+    "variantAxes": [
+      "data-size"
+    ],
+    "propertyGroups": [],
+    "invariants": [
+      "The trigger is role=\"combobox\" with aria-expanded, aria-haspopup=\"listbox\", aria-disabled and aria-invalid; the popup id is instance-scoped. [at packages/core/src/ui/primitives/inputs/Cascader/engines/modern/index.tsx:554, packages/core/src/ui/primitives/inputs/Cascader/engines/modern/index.tsx:555, packages/core/src/ui/primitives/inputs/Cascader/engines/modern/index.tsx:557, packages/core/src/ui/primitives/inputs/Cascader/engines/modern/index.tsx:559 and more]",
+      "Each option column is a role=\"listbox\" whose children keep role=\"option\"; the empty row keeps role=\"option\" plus aria-disabled so the listbox never has an illegal child. [at packages/core/src/ui/primitives/inputs/Cascader/engines/modern/index.tsx:631, packages/core/src/ui/primitives/inputs/Cascader/engines/modern/index.tsx:642, packages/core/src/ui/primitives/inputs/Cascader/engines/modern/index.tsx:654]",
+      "The loading panel is a role=\"status\" region, not a silent visual mask. [at packages/core/src/ui/primitives/inputs/Cascader/engines/modern/index.tsx:604]"
+    ],
+    "sourceEvidence": {
+      "methodProvenance": {
+        "cohort": "inputs-a",
+        "scoutArtifact": "mr-anatomy-inputs-a.json",
+        "scoutSelfGradedConfidence": "PARTIAL",
+        "confidenceFieldIsNotLoadBearing": "Admission was decided structurally and from a source index of what the DS actually stamps, not from the scout grade. The double-census adjudication measured scout self-confidence at Cohen kappa 0.179 (REC-4).",
+        "partAnchoringRule": "R-8, decided from source: a part is admitted only where the DS stamps data-part with that name, or a DS component-identity class pair matches. Scout prose is corroboration, not authority.",
+        "sourcePartStampsFound": 18,
+        "dynamicPartExpressionsInSource": 2,
+        "openMethodAxesNotYetRuled": [
+          "part-ownership-across-component-boundaries",
+          "inherited-primitive-paint-attribution",
+          "family-private-channel-inclusion"
+        ]
+      },
+      "partAnchors": [
+        {
+          "part": "trigger",
+          "anchorKind": "data-part",
+          "anchor": "data-part",
+          "at": [
+            "packages/core/src/ui/primitives/inputs/Cascader/engines/modern/index.tsx:551",
+            "packages/core/src/ui/primitives/inputs/Cascader/engines/rustic/index.tsx:582",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:118"
+          ]
+        },
+        {
+          "part": "option",
+          "anchorKind": "data-part",
+          "anchor": "data-part",
+          "at": [
+            "packages/core/src/ui/primitives/inputs/Cascader/engines/modern/index.tsx:390",
+            "packages/core/src/ui/primitives/inputs/Cascader/engines/modern/index.tsx:408",
+            "packages/core/src/ui/primitives/inputs/Cascader/engines/modern/index.tsx:417",
+            "packages/core/src/ui/primitives/inputs/Cascader/engines/modern/index.tsx:433",
+            "packages/core/src/ui/primitives/inputs/Cascader/engines/modern/index.tsx:453",
+            "packages/core/src/ui/primitives/inputs/Cascader/engines/modern/index.tsx:470"
+          ],
+          "atSiteCount": 7
+        },
+        {
+          "part": "clear-button",
+          "anchorKind": "data-part",
+          "anchor": "data-part",
+          "at": [
+            "packages/core/src/ui/primitives/inputs/Cascader/engines/modern/index.tsx:587",
+            "packages/core/src/ui/primitives/inputs/Cascader/engines/rustic/index.tsx:596",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:171"
+          ]
+        },
+        {
+          "part": "search-input",
+          "anchorKind": "data-part",
+          "anchor": "data-part",
+          "at": [
+            "packages/core/src/ui/primitives/inputs/Cascader/engines/modern/index.tsx:616",
+            "packages/core/src/ui/primitives/inputs/Cascader/engines/rustic/index.tsx:481",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:272"
+          ]
+        },
+        {
+          "part": "dropdown",
+          "anchorKind": "data-part",
+          "anchor": "data-part",
+          "at": [
+            "packages/core/src/ui/primitives/inputs/Cascader/engines/modern/index.tsx:602",
+            "packages/core/src/ui/primitives/inputs/Cascader/engines/rustic/index.tsx:467",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:232"
+          ]
+        },
+        {
+          "part": "menu-column",
+          "anchorKind": "data-part",
+          "anchor": "data-part",
+          "at": [
+            "packages/core/src/ui/primitives/inputs/Cascader/engines/modern/index.tsx:388",
+            "packages/core/src/ui/primitives/inputs/Cascader/engines/modern/index.tsx:441",
+            "packages/core/src/ui/primitives/inputs/Cascader/engines/modern/index.tsx:445",
+            "packages/core/src/ui/primitives/inputs/Cascader/engines/modern/index.tsx:468",
+            "packages/core/src/ui/primitives/inputs/Cascader/engines/modern/index.tsx:665",
+            "packages/core/src/ui/primitives/inputs/Cascader/engines/rustic/index.tsx:523"
+          ],
+          "atSiteCount": 7
+        },
+        {
+          "part": "empty",
+          "anchorKind": "data-part",
+          "anchor": "data-part",
+          "at": [
+            "packages/core/src/ui/primitives/inputs/Cascader/engines/modern/index.tsx:654",
+            "packages/core/src/ui/primitives/inputs/Cascader/engines/modern/index.tsx:714",
+            "packages/core/src/ui/primitives/inputs/Cascader/engines/rustic/index.tsx:513",
+            "packages/core/src/ui/primitives/inputs/Cascader/engines/rustic/index.tsx:560",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:306"
+          ]
+        },
+        {
+          "part": "loading",
+          "anchorKind": "data-part",
+          "anchor": "data-part",
+          "at": [
+            "packages/core/src/ui/primitives/inputs/Cascader/engines/modern/index.tsx:699",
+            "packages/core/src/ui/primitives/inputs/Cascader/engines/rustic/index.tsx:550",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:432"
+          ]
+        },
+        {
+          "part": "loading-spinner",
+          "anchorKind": "data-part",
+          "anchor": "data-part",
+          "at": [
+            "packages/core/src/ui/primitives/inputs/Cascader/engines/modern/index.tsx:605",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:561"
+          ]
+        },
+        {
+          "part": "option-list",
+          "anchorKind": "data-part",
+          "anchor": "data-part",
+          "at": [
+            "packages/core/src/ui/primitives/inputs/Cascader/engines/modern/index.tsx:442",
+            "packages/core/src/ui/primitives/inputs/Cascader/engines/modern/index.tsx:631",
+            "packages/core/src/ui/primitives/inputs/Cascader/engines/modern/index.tsx:661",
+            "packages/core/src/ui/primitives/inputs/Cascader/engines/rustic/index.tsx:490",
+            "packages/core/src/ui/primitives/inputs/Cascader/engines/rustic/index.tsx:518",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:254"
+          ]
+        },
+        {
+          "part": "arrow-icon",
+          "anchorKind": "data-part",
+          "anchor": "data-part",
+          "at": [
+            "packages/core/src/ui/primitives/inputs/Cascader/engines/modern/index.tsx:574",
+            "packages/core/src/ui/primitives/inputs/Cascader/engines/rustic/index.tsx:601",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:193"
+          ]
+        },
+        {
+          "part": "loading-state",
+          "anchorKind": "data-part",
+          "anchor": "data-part",
+          "at": [
+            "packages/core/src/ui/primitives/inputs/Cascader/engines/modern/index.tsx:604",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:586"
+          ]
+        },
+        {
+          "part": "chevron",
+          "anchorKind": "data-part",
+          "anchor": "data-part",
+          "at": [
+            "packages/core/src/ui/primitives/inputs/Cascader/engines/modern/index.tsx:704",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:426"
+          ]
+        },
+        {
+          "part": "option-label",
+          "anchorKind": "data-part",
+          "anchor": "data-part",
+          "at": [
+            "packages/core/src/ui/primitives/inputs/Cascader/engines/modern/index.tsx:645",
+            "packages/core/src/ui/primitives/inputs/Cascader/engines/modern/index.tsx:695",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:417"
+          ]
+        },
+        {
+          "part": "trigger-loading",
+          "anchorKind": "data-part",
+          "anchor": "data-part",
+          "at": [
+            "packages/core/src/ui/primitives/inputs/Cascader/engines/modern/index.tsx:572",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:569"
+          ]
+        },
+        {
+          "part": "search-input-wrapper",
+          "anchorKind": "data-part",
+          "anchor": "data-part",
+          "at": [
+            "packages/core/src/ui/primitives/inputs/Cascader/engines/modern/index.tsx:612",
+            "packages/core/src/ui/primitives/inputs/Cascader/engines/rustic/index.tsx:472",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:267"
+          ]
+        },
+        {
+          "part": "menu-item-arrow",
+          "anchorKind": "data-part",
+          "anchor": "data-part",
+          "at": [
+            "packages/core/src/ui/primitives/inputs/Cascader/engines/rustic/index.tsx:553",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/cascader.css:211"
+          ]
+        },
+        {
+          "part": "root",
+          "anchorKind": "data-part",
+          "anchor": "data-part",
+          "at": [
+            "packages/core/src/ui/primitives/inputs/Cascader/engines/modern/index.tsx:527",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:114"
+          ]
+        }
+      ],
+      "unanchoredPartClaims": [
+        {
+          "part": "UNATTRIBUTED(elementSelector)",
+          "scoutAnchorClaim": "element:from, element:to",
+          "reason": "Not a part name. The scout recorded a placeholder or a raw class token here, not a DS-stamped part identity; nothing addressable follows from it under RULING R-8.",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:80"
+          ]
+        },
+        {
+          "part": "placeholder",
+          "scoutAnchorClaim": "data-part",
+          "reason": "Source stamps no data-part with this name and no DS component-identity class pair matches; not admissible under RULING R-8.",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:153"
+          ]
+        }
+      ],
+      "stateAnchors": [
+        {
+          "token": "pseudo:focus-visible",
+          "occurrences": 22,
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:143"
+          ],
+          "state": "focus-visible"
+        },
+        {
+          "token": "data-selected='true'",
+          "occurrences": 11,
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:382"
+          ],
+          "state": "selected"
+        },
+        {
+          "token": "data-disabled='true'",
+          "occurrences": 10,
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:133"
+          ],
+          "state": "disabled"
+        },
+        {
+          "token": "pseudo:hover",
+          "occurrences": 5,
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:133"
+          ],
+          "state": "hover"
+        },
+        {
+          "token": "pseudo:active",
+          "occurrences": 4,
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:139"
+          ],
+          "state": "active"
+        },
+        {
+          "token": "data-open='true'",
+          "occurrences": 3,
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:223"
+          ],
+          "state": "open"
+        },
+        {
+          "token": "data-status='error'",
+          "occurrences": 2,
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:551"
+          ],
+          "state": "error"
+        },
+        {
+          "token": "data-status='warning'",
+          "occurrences": 2,
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:554"
+          ],
+          "state": "warning"
+        },
+        {
+          "token": "pseudo:disabled",
+          "occurrences": 2,
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:290"
+          ],
+          "state": "disabled"
+        },
+        {
+          "token": "pseudo:focus",
+          "occurrences": 2,
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/cascader.css:180"
+          ],
+          "state": "focus"
+        },
+        {
+          "token": "[data-status]",
+          "occurrences": 1,
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/cascader.css:135"
+          ],
+          "state": "status"
+        }
+      ],
+      "variantAxisAnchors": [
+        {
+          "token": "data-size='large'",
+          "occurrences": 4,
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:531"
+          ]
+        },
+        {
+          "token": "data-size='middle'",
+          "occurrences": 4,
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:525"
+          ]
+        },
+        {
+          "token": "data-size='small'",
+          "occurrences": 4,
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:519"
+          ]
+        }
+      ],
+      "structuralPositionAnchors": {
+        "entries": [
+          {
+            "token": "data-last='true'",
+            "occurrences": 3,
+            "at": [
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:343"
+            ]
+          }
+        ],
+        "reason": "Position within a collection. Not a state and not a variant axis."
+      },
+      "partAddressingAttributes": [
+        {
+          "token": "data-part='root'",
+          "occurrences": 215,
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:114"
+          ]
+        },
+        {
+          "token": "data-part='trigger'",
+          "occurrences": 50,
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:118"
+          ]
+        },
+        {
+          "token": "data-part='option'",
+          "occurrences": 40,
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:360"
+          ]
+        },
+        {
+          "token": "data-part='dropdown'",
+          "occurrences": 37,
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:232"
+          ]
+        },
+        {
+          "token": "data-part='clear-button'",
+          "occurrences": 30,
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:171"
+          ]
+        },
+        {
+          "token": "data-part='search-input'",
+          "occurrences": 28,
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:272"
+          ]
+        },
+        {
+          "token": "data-part='menu-column'",
+          "occurrences": 16,
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:322"
+          ]
+        },
+        {
+          "token": "data-part='loading'",
+          "occurrences": 12,
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:432"
+          ]
+        },
+        {
+          "token": "data-part='empty'",
+          "occurrences": 11,
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:306"
+          ]
+        },
+        {
+          "token": "data-part='trigger-loading'",
+          "occurrences": 11,
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:561"
+          ]
+        },
+        {
+          "token": "data-part='loading-spinner'",
+          "occurrences": 10,
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:561"
+          ]
+        },
+        {
+          "token": "data-part='option-list'",
+          "occurrences": 8,
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:254"
+          ]
+        },
+        {
+          "token": "data-part='arrow-icon'",
+          "occurrences": 7,
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:193"
+          ]
+        },
+        {
+          "token": "data-part='placeholder'",
+          "occurrences": 7,
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:153"
+          ]
+        },
+        {
+          "token": "data-part='loading-state'",
+          "occurrences": 6,
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:586"
+          ]
+        },
+        {
+          "token": "data-part='value'",
+          "occurrences": 5,
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:160"
+          ]
+        },
+        {
+          "token": "data-part='chevron'",
+          "occurrences": 4,
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:426"
+          ]
+        },
+        {
+          "token": "data-part='option-label'",
+          "occurrences": 4,
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:417"
+          ]
+        },
+        {
+          "token": "data-part='search-input-wrapper'",
+          "occurrences": 4,
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:267"
+          ]
+        },
+        {
+          "token": "data-part='menu-item-arrow'",
+          "occurrences": 1,
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/cascader.css:211"
+          ]
+        }
+      ],
+      "engineDivergence": {
+        "engineSiblings": {
+          "classic": {
+            "exists": true,
+            "path": "packages/core/src/ui/primitives/inputs/Cascader/engines/classic/index.tsx",
+            "lines": 100
+          },
+          "modern": {
+            "exists": true,
+            "path": "packages/core/src/ui/primitives/inputs/Cascader/engines/modern/index.tsx",
+            "lines": 734
+          },
+          "rustic": {
+            "exists": true,
+            "path": "packages/core/src/ui/primitives/inputs/Cascader/engines/rustic/index.tsx",
+            "lines": 612
+          }
+        },
+        "classicSkinCssPresent": false,
+        "classicPaintOwner": "Ant Design 5.21 plus packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css - the classic engine ships no per-family skin CSS directory, so classic paint is not addressable through this family CSS file.",
+        "partsStyledByModernOnly": [
+          "loading-spinner",
+          "option-list",
+          "loading-state",
+          "chevron",
+          "option-label",
+          "trigger-loading",
+          "root"
+        ],
+        "partsStyledByRusticOnly": [
+          "menu-item-arrow"
+        ],
+        "partsStyledByBothSkins": [
+          "trigger",
+          "option",
+          "clear-button",
+          "search-input",
+          "UNATTRIBUTED(elementSelector)",
+          "dropdown",
+          "menu-column",
+          "empty",
+          "loading",
+          "placeholder",
+          "arrow-icon",
+          "search-input-wrapper"
+        ],
+        "partsEmittedInTsxButStyledByNoSkinFile": [],
+        "variablesReadOnlyByModernSkin": [
+          "--ds-cascader-border-hover",
+          "--ds-cascader-clear-gap",
+          "--ds-cascader-clear-inset-inline-end",
+          "--ds-cascader-clear-size",
+          "--ds-cascader-column-max-height",
+          "--ds-cascader-column-width",
+          "--ds-cascader-dropdown-z",
+          "--ds-cascader-shadow-focus",
+          "--ds-cascader-spinner-duration",
+          "--ds-cascader-touch-target-min",
+          "--ds-color-bg-hover",
+          "--ds-color-bg-selected",
+          "--ds-color-border",
+          "--ds-color-error",
+          "--ds-color-text-muted",
+          "--ds-color-text-primary",
+          "--ds-color-text-secondary",
+          "--ds-color-warning",
+          "--ds-disabled-opacity",
+          "--ds-elevation-2",
+          "--ds-elevation-surface-3",
+          "--ds-font-size-sm",
+          "--ds-font-weight-medium",
+          "--ds-input-bg",
+          "--ds-input-clear-color-hover",
+          "--ds-input-color-placeholder",
+          "--ds-input-lg-font-size",
+          "--ds-input-lg-height",
+          "--ds-input-lg-padding-x",
+          "--ds-input-md-font-size",
+          "--ds-input-md-height",
+          "--ds-input-md-padding-x",
+          "--ds-input-sm-font-size",
+          "--ds-input-sm-height",
+          "--ds-input-sm-padding-x",
+          "--ds-line-height-snug",
+          "--ds-material-control-border-hover",
+          "--ds-material-overlay-background",
+          "--ds-material-overlay-border",
+          "--ds-material-overlay-shadow",
+          "--ds-motion-ease-out",
+          "--ds-motion-fast",
+          "--ds-motion-glacial",
+          "--ds-radius-lg",
+          "--ds-radius-md",
+          "--ds-radius-sm",
+          "--ds-shadow-focus-ring",
+          "--ds-spacing-1",
+          "--ds-spacing-1-5",
+          "--ds-spacing-2",
+          "--ds-spacing-3",
+          "--ds-spacing-4",
+          "--ds-surface-card",
+          "--ds-surface-control",
+          "--ds-touch-target-min",
+          "--ds-z-index-dropdown"
+        ],
+        "variablesReadOnlyByRusticSkin": [
+          "--ds-card-shadow",
+          "--ds-cascader-arrow-color",
+          "--ds-cascader-bg",
+          "--ds-cascader-border",
+          "--ds-cascader-border-error",
+          "--ds-cascader-border-warning",
+          "--ds-cascader-clear-color",
+          "--ds-cascader-dropdown-radius",
+          "--ds-cascader-empty-color",
+          "--ds-cascader-item-bg-hover",
+          "--ds-cascader-item-bg-selected",
+          "--ds-cascader-menu-border",
+          "--ds-cascader-placeholder-color",
+          "--ds-cascader-radius"
+        ],
+        "variablesReadOnlyByClassicTsx": [],
+        "counts": {
+          "modernSkinVariables": 60,
+          "rusticSkinVariables": 18,
+          "classicTsxVariables": 0
+        }
+      },
+      "scoutGaps": {
+        "assessmentConfidenceGaps": [
+          "Some variable reads occur in TSX inline style objects where the reading element carries no data-part on the same line; those reads are attributed to the family, not to a part (partsThatRead=UNRESOLVED_TSX_INLINE).",
+          "Some CSS blocks target selectors that are neither data-part nor a family root class; they are reported verbatim as UNATTRIBUTED(...) rather than being folded into an invented part."
+        ]
+      },
+      "variableReadCensus": {
+        "attribution": "UNATTRIBUTED RAW EVIDENCE. Measured reads and declarations, not mapped to any controlId. themeControls stays UNKNOWN until the mapping wave; this block must not be read as a control edge.",
+        "variableCensus": [
+          {
+            "variable": "--ds-cascader-arrow-color",
+            "declaredInPackage": false,
+            "declarationSites": [],
+            "readSiteCount": 3,
+            "readWithFallbackCount": 0,
+            "readWithoutFallbackCount": 3,
+            "partsThatRead": [
+              "arrow-icon",
+              "loading",
+              "menu-item-arrow"
+            ],
+            "landsOnProperties": [
+              "border",
+              "color"
+            ],
+            "readingEngines": [
+              "rustic"
+            ],
+            "atRuleScopes": [],
+            "reads": [
+              {
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/cascader.css:149",
+                "part": "arrow-icon",
+                "property": "color",
+                "hasFallback": false,
+                "fallback": null
+              },
+              {
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/cascader.css:211",
+                "part": "menu-item-arrow",
+                "property": "color",
+                "hasFallback": false,
+                "fallback": null
+              },
+              {
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/cascader.css:218",
+                "part": "loading",
+                "property": "border",
+                "hasFallback": false,
+                "fallback": null
+              }
+            ],
+            "declaredOnlyInGeneratedStyleBundles": false
+          },
+          {
+            "variable": "--ds-cascader-bg",
+            "declaredInPackage": false,
+            "declarationSites": [],
+            "readSiteCount": 2,
+            "readWithFallbackCount": 0,
+            "readWithoutFallbackCount": 2,
+            "partsThatRead": [
+              "search-input",
+              "trigger"
+            ],
+            "landsOnProperties": [
+              "background-color"
+            ],
+            "readingEngines": [
+              "rustic"
+            ],
+            "atRuleScopes": [],
+            "reads": [
+              {
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/cascader.css:123",
+                "part": "trigger",
+                "property": "background-color",
+                "hasFallback": false,
+                "fallback": null
+              },
+              {
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/cascader.css:173",
+                "part": "search-input",
+                "property": "background-color",
+                "hasFallback": false,
+                "fallback": null
+              }
+            ],
+            "declaredOnlyInGeneratedStyleBundles": false
+          },
+          {
+            "variable": "--ds-cascader-border",
+            "declaredInPackage": false,
+            "declarationSites": [],
+            "readSiteCount": 2,
+            "readWithFallbackCount": 0,
+            "readWithoutFallbackCount": 2,
+            "partsThatRead": [
+              "search-input",
+              "trigger"
+            ],
+            "landsOnProperties": [
+              "border"
+            ],
+            "readingEngines": [
+              "rustic"
+            ],
+            "atRuleScopes": [],
+            "reads": [
+              {
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/cascader.css:126",
+                "part": "trigger",
+                "property": "border",
+                "hasFallback": false,
+                "fallback": null
+              },
+              {
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/cascader.css:177",
+                "part": "search-input",
+                "property": "border",
+                "hasFallback": false,
+                "fallback": null
+              }
+            ],
+            "declaredOnlyInGeneratedStyleBundles": false
+          },
+          {
+            "variable": "--ds-cascader-border-error",
+            "declaredInPackage": false,
+            "declarationSites": [],
+            "readSiteCount": 1,
+            "readWithFallbackCount": 0,
+            "readWithoutFallbackCount": 1,
+            "partsThatRead": [
+              "trigger"
+            ],
+            "landsOnProperties": [
+              "border"
+            ],
+            "readingEngines": [
+              "rustic"
+            ],
+            "atRuleScopes": [],
+            "reads": [
+              {
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/cascader.css:129",
+                "part": "trigger",
+                "property": "border",
+                "hasFallback": false,
+                "fallback": null
+              }
+            ],
+            "declaredOnlyInGeneratedStyleBundles": false
+          },
+          {
+            "variable": "--ds-cascader-border-focus",
+            "declaredInPackage": false,
+            "declarationSites": [],
+            "readSiteCount": 3,
+            "readWithFallbackCount": 2,
+            "readWithoutFallbackCount": 1,
+            "partsThatRead": [
+              "search-input",
+              "trigger"
+            ],
+            "landsOnProperties": [
+              "border",
+              "border-color"
+            ],
+            "readingEngines": [
+              "modern",
+              "rustic"
+            ],
+            "atRuleScopes": [],
+            "reads": [
+              {
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:143",
+                "part": "trigger",
+                "property": "border-color",
+                "hasFallback": true,
+                "fallback": "var(--ds-color-primary)"
+              },
+              {
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:284",
+                "part": "search-input",
+                "property": "border-color",
+                "hasFallback": true,
+                "fallback": "var(--ds-color-primary)"
+              },
+              {
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/cascader.css:135",
+                "part": "trigger",
+                "property": "border",
+                "hasFallback": false,
+                "fallback": null
+              }
+            ],
+            "declaredOnlyInGeneratedStyleBundles": false
+          },
+          {
+            "variable": "--ds-cascader-border-hover",
+            "declaredInPackage": false,
+            "declarationSites": [],
+            "readSiteCount": 4,
+            "readWithFallbackCount": 4,
+            "readWithoutFallbackCount": 0,
+            "partsThatRead": [
+              "search-input",
+              "trigger"
+            ],
+            "landsOnProperties": [
+              "border-color"
+            ],
+            "readingEngines": [
+              "modern"
+            ],
+            "atRuleScopes": [
+              "@media (hover: hover)"
+            ],
+            "reads": [
+              {
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:133",
+                "part": "trigger",
+                "property": "border-color",
+                "hasFallback": true,
+                "fallback": "var(--ds-material-control-border-hover)"
+              },
+              {
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:139",
+                "part": "trigger",
+                "property": "border-color",
+                "hasFallback": true,
+                "fallback": "var(--ds-material-control-border-hover)"
+              },
+              {
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:290",
+                "part": "search-input",
+                "property": "border-color",
+                "hasFallback": true,
+                "fallback": "var(--ds-material-control-border-hover)"
+              },
+              {
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:296",
+                "part": "search-input",
+                "property": "border-color",
+                "hasFallback": true,
+                "fallback": "var(--ds-material-control-border-hover)"
+              }
+            ],
+            "declaredOnlyInGeneratedStyleBundles": false
+          },
+          {
+            "variable": "--ds-cascader-border-warning",
+            "declaredInPackage": false,
+            "declarationSites": [],
+            "readSiteCount": 1,
+            "readWithFallbackCount": 0,
+            "readWithoutFallbackCount": 1,
+            "partsThatRead": [
+              "trigger"
+            ],
+            "landsOnProperties": [
+              "border"
+            ],
+            "readingEngines": [
+              "rustic"
+            ],
+            "atRuleScopes": [],
+            "reads": [
+              {
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/cascader.css:132",
+                "part": "trigger",
+                "property": "border",
+                "hasFallback": false,
+                "fallback": null
+              }
+            ],
+            "declaredOnlyInGeneratedStyleBundles": false
+          },
+          {
+            "variable": "--ds-cascader-clear-color",
+            "declaredInPackage": false,
+            "declarationSites": [],
+            "readSiteCount": 1,
+            "readWithFallbackCount": 0,
+            "readWithoutFallbackCount": 1,
+            "partsThatRead": [
+              "clear-button"
+            ],
+            "landsOnProperties": [
+              "color"
+            ],
+            "readingEngines": [
+              "rustic"
+            ],
+            "atRuleScopes": [],
+            "reads": [
+              {
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/cascader.css:145",
+                "part": "clear-button",
+                "property": "color",
+                "hasFallback": false,
+                "fallback": null
+              }
+            ],
+            "declaredOnlyInGeneratedStyleBundles": false
+          },
+          {
+            "variable": "--ds-cascader-clear-gap",
+            "declaredInPackage": false,
+            "declarationSites": [],
+            "readSiteCount": 2,
+            "readWithFallbackCount": 2,
+            "readWithoutFallbackCount": 0,
+            "partsThatRead": [
+              "arrow-icon",
+              "trigger-loading"
+            ],
+            "landsOnProperties": [
+              "margin-inline-start"
+            ],
+            "readingEngines": [
+              "modern"
+            ],
+            "atRuleScopes": [],
+            "reads": [
+              {
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:193",
+                "part": "arrow-icon",
+                "property": "margin-inline-start",
+                "hasFallback": true,
+                "fallback": "20px"
+              },
+              {
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:583",
+                "part": "trigger-loading",
+                "property": "margin-inline-start",
+                "hasFallback": true,
+                "fallback": "20px"
+              }
+            ],
+            "declaredOnlyInGeneratedStyleBundles": false
+          },
+          {
+            "variable": "--ds-cascader-clear-inset-inline-end",
+            "declaredInPackage": false,
+            "declarationSites": [],
+            "readSiteCount": 1,
+            "readWithFallbackCount": 1,
+            "readWithoutFallbackCount": 0,
+            "partsThatRead": [
+              "clear-button"
+            ],
+            "landsOnProperties": [
+              "inset-inline-end"
+            ],
+            "readingEngines": [
+              "modern"
+            ],
+            "atRuleScopes": [],
+            "reads": [
+              {
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:172",
+                "part": "clear-button",
+                "property": "inset-inline-end",
+                "hasFallback": true,
+                "fallback": "30px"
+              }
+            ],
+            "declaredOnlyInGeneratedStyleBundles": false
+          },
+          {
+            "variable": "--ds-cascader-clear-size",
+            "declaredInPackage": false,
+            "declarationSites": [],
+            "readSiteCount": 2,
+            "readWithFallbackCount": 2,
+            "readWithoutFallbackCount": 0,
+            "partsThatRead": [
+              "clear-button"
+            ],
+            "landsOnProperties": [
+              "block-size",
+              "inline-size"
+            ],
+            "readingEngines": [
+              "modern"
+            ],
+            "atRuleScopes": [],
+            "reads": [
+              {
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:175",
+                "part": "clear-button",
+                "property": "inline-size",
+                "hasFallback": true,
+                "fallback": "24px"
+              },
+              {
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:176",
+                "part": "clear-button",
+                "property": "block-size",
+                "hasFallback": true,
+                "fallback": "24px"
+              }
+            ],
+            "declaredOnlyInGeneratedStyleBundles": false
+          },
+          {
+            "variable": "--ds-cascader-column-max-height",
+            "declaredInPackage": false,
+            "declarationSites": [],
+            "readSiteCount": 2,
+            "readWithFallbackCount": 2,
+            "readWithoutFallbackCount": 0,
+            "partsThatRead": [
+              "menu-column",
+              "option-list"
+            ],
+            "landsOnProperties": [
+              "max-block-size"
+            ],
+            "readingEngines": [
+              "modern"
+            ],
+            "atRuleScopes": [],
+            "reads": [
+              {
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:327",
+                "part": "menu-column",
+                "property": "max-block-size",
+                "hasFallback": true,
+                "fallback": "240px"
+              },
+              {
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:351",
+                "part": "option-list",
+                "property": "max-block-size",
+                "hasFallback": true,
+                "fallback": "240px"
+              }
+            ],
+            "declaredOnlyInGeneratedStyleBundles": false
+          },
+          {
+            "variable": "--ds-cascader-column-width",
+            "declaredInPackage": false,
+            "declarationSites": [],
+            "readSiteCount": 1,
+            "readWithFallbackCount": 1,
+            "readWithoutFallbackCount": 0,
+            "partsThatRead": [
+              "menu-column"
+            ],
+            "landsOnProperties": [
+              "inline-size"
+            ],
+            "readingEngines": [
+              "modern"
+            ],
+            "atRuleScopes": [],
+            "reads": [
+              {
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:325",
+                "part": "menu-column",
+                "property": "inline-size",
+                "hasFallback": true,
+                "fallback": "192px"
+              }
+            ],
+            "declaredOnlyInGeneratedStyleBundles": false
+          },
+          {
+            "variable": "--ds-cascader-dropdown-bg",
+            "declaredInPackage": false,
+            "declarationSites": [],
+            "readSiteCount": 2,
+            "readWithFallbackCount": 1,
+            "readWithoutFallbackCount": 1,
+            "partsThatRead": [
+              "dropdown"
+            ],
+            "landsOnProperties": [
+              "background",
+              "background-color"
+            ],
+            "readingEngines": [
+              "modern",
+              "rustic"
+            ],
+            "atRuleScopes": [],
+            "reads": [
+              {
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:242",
+                "part": "dropdown",
+                "property": "background",
+                "hasFallback": true,
+                "fallback": "var(--ds-material-overlay-background, var(--ds-surface-card))"
+              },
+              {
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/cascader.css:161",
+                "part": "dropdown",
+                "property": "background-color",
+                "hasFallback": false,
+                "fallback": null
+              }
+            ],
+            "declaredOnlyInGeneratedStyleBundles": false
+          },
+          {
+            "variable": "--ds-cascader-dropdown-radius",
+            "declaredInPackage": false,
+            "declarationSites": [],
+            "readSiteCount": 1,
+            "readWithFallbackCount": 0,
+            "readWithoutFallbackCount": 1,
+            "partsThatRead": [
+              "dropdown"
+            ],
+            "landsOnProperties": [
+              "border-radius"
+            ],
+            "readingEngines": [
+              "rustic"
+            ],
+            "atRuleScopes": [],
+            "reads": [
+              {
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/cascader.css:162",
+                "part": "dropdown",
+                "property": "border-radius",
+                "hasFallback": false,
+                "fallback": null
+              }
+            ],
+            "declaredOnlyInGeneratedStyleBundles": false
+          },
+          {
+            "variable": "--ds-cascader-dropdown-shadow",
+            "declaredInPackage": false,
+            "declarationSites": [],
+            "readSiteCount": 2,
+            "readWithFallbackCount": 1,
+            "readWithoutFallbackCount": 1,
+            "partsThatRead": [
+              "dropdown"
+            ],
+            "landsOnProperties": [
+              "box-shadow"
+            ],
+            "readingEngines": [
+              "modern",
+              "rustic"
+            ],
+            "atRuleScopes": [],
+            "reads": [
+              {
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:243",
+                "part": "dropdown",
+                "property": "box-shadow",
+                "hasFallback": true,
+                "fallback": "var(--ds-material-overlay-shadow, var(--ds-elevation-2))"
+              },
+              {
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/cascader.css:163",
+                "part": "dropdown",
+                "property": "box-shadow",
+                "hasFallback": false,
+                "fallback": null
+              }
+            ],
+            "declaredOnlyInGeneratedStyleBundles": false
+          },
+          {
+            "variable": "--ds-cascader-dropdown-z",
+            "declaredInPackage": false,
+            "declarationSites": [],
+            "readSiteCount": 1,
+            "readWithFallbackCount": 1,
+            "readWithoutFallbackCount": 0,
+            "partsThatRead": [
+              "dropdown"
+            ],
+            "landsOnProperties": [
+              "z-index"
+            ],
+            "readingEngines": [
+              "modern"
+            ],
+            "atRuleScopes": [],
+            "reads": [
+              {
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:234",
+                "part": "dropdown",
+                "property": "z-index",
+                "hasFallback": true,
+                "fallback": "var(--ds-z-index-dropdown)"
+              }
+            ],
+            "declaredOnlyInGeneratedStyleBundles": false
+          },
+          {
+            "variable": "--ds-cascader-empty-color",
+            "declaredInPackage": false,
+            "declarationSites": [],
+            "readSiteCount": 1,
+            "readWithFallbackCount": 0,
+            "readWithoutFallbackCount": 1,
+            "partsThatRead": [
+              "empty"
+            ],
+            "landsOnProperties": [
+              "color"
+            ],
+            "readingEngines": [
+              "rustic"
+            ],
+            "atRuleScopes": [],
+            "reads": [
+              {
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/cascader.css:185",
+                "part": "empty",
+                "property": "color",
+                "hasFallback": false,
+                "fallback": null
+              }
+            ],
+            "declaredOnlyInGeneratedStyleBundles": false
+          },
+          {
+            "variable": "--ds-cascader-item-bg-hover",
+            "declaredInPackage": false,
+            "declarationSites": [],
+            "readSiteCount": 1,
+            "readWithFallbackCount": 0,
+            "readWithoutFallbackCount": 1,
+            "partsThatRead": [
+              "option"
+            ],
+            "landsOnProperties": [
+              "background-color"
+            ],
+            "readingEngines": [
+              "rustic"
+            ],
+            "atRuleScopes": [],
+            "reads": [
+              {
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/cascader.css:201",
+                "part": "option",
+                "property": "background-color",
+                "hasFallback": false,
+                "fallback": null
+              }
+            ],
+            "declaredOnlyInGeneratedStyleBundles": false
+          },
+          {
+            "variable": "--ds-cascader-item-bg-selected",
+            "declaredInPackage": false,
+            "declarationSites": [],
+            "readSiteCount": 1,
+            "readWithFallbackCount": 0,
+            "readWithoutFallbackCount": 1,
+            "partsThatRead": [
+              "option"
+            ],
+            "landsOnProperties": [
+              "background-color"
+            ],
+            "readingEngines": [
+              "rustic"
+            ],
+            "atRuleScopes": [],
+            "reads": [
+              {
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/cascader.css:204",
+                "part": "option",
+                "property": "background-color",
+                "hasFallback": false,
+                "fallback": null
+              }
+            ],
+            "declaredOnlyInGeneratedStyleBundles": false
+          },
+          {
+            "variable": "--ds-cascader-item-padding",
+            "declaredInPackage": false,
+            "declarationSites": [],
+            "readSiteCount": 2,
+            "readWithFallbackCount": 0,
+            "readWithoutFallbackCount": 2,
+            "partsThatRead": [
+              "UNRESOLVED_TSX_INLINE"
+            ],
+            "landsOnProperties": [
+              "padding"
+            ],
+            "readingEngines": [
+              "tsx:rustic"
+            ],
+            "atRuleScopes": [],
+            "reads": [
+              {
+                "at": "packages/core/src/ui/primitives/inputs/Cascader/engines/rustic/index.tsx:433",
+                "part": "UNRESOLVED_TSX_INLINE",
+                "property": "padding",
+                "hasFallback": false,
+                "fallback": null
+              },
+              {
+                "at": "packages/core/src/ui/primitives/inputs/Cascader/engines/rustic/index.tsx:445",
+                "part": "UNRESOLVED_TSX_INLINE",
+                "property": "padding",
+                "hasFallback": false,
+                "fallback": null
+              }
+            ],
+            "declaredOnlyInGeneratedStyleBundles": false
+          },
+          {
+            "variable": "--ds-cascader-lg-height",
+            "declaredInPackage": false,
+            "declarationSites": [],
+            "readSiteCount": 1,
+            "readWithFallbackCount": 0,
+            "readWithoutFallbackCount": 1,
+            "partsThatRead": [
+              "UNRESOLVED_TSX_INLINE"
+            ],
+            "landsOnProperties": [
+              "large"
+            ],
+            "readingEngines": [
+              "tsx:rustic"
+            ],
+            "atRuleScopes": [],
+            "reads": [
+              {
+                "at": "packages/core/src/ui/primitives/inputs/Cascader/engines/rustic/index.tsx:97",
+                "part": "UNRESOLVED_TSX_INLINE",
+                "property": "large",
+                "hasFallback": false,
+                "fallback": null
+              }
+            ],
+            "declaredOnlyInGeneratedStyleBundles": false
+          },
+          {
+            "variable": "--ds-cascader-md-height",
+            "declaredInPackage": false,
+            "declarationSites": [],
+            "readSiteCount": 1,
+            "readWithFallbackCount": 0,
+            "readWithoutFallbackCount": 1,
+            "partsThatRead": [
+              "UNRESOLVED_TSX_INLINE"
+            ],
+            "landsOnProperties": [
+              "default"
+            ],
+            "readingEngines": [
+              "tsx:rustic"
+            ],
+            "atRuleScopes": [],
+            "reads": [
+              {
+                "at": "packages/core/src/ui/primitives/inputs/Cascader/engines/rustic/index.tsx:96",
+                "part": "UNRESOLVED_TSX_INLINE",
+                "property": "default",
+                "hasFallback": false,
+                "fallback": null
+              }
+            ],
+            "declaredOnlyInGeneratedStyleBundles": false
+          },
+          {
+            "variable": "--ds-cascader-menu-border",
+            "declaredInPackage": false,
+            "declarationSites": [],
+            "readSiteCount": 2,
+            "readWithFallbackCount": 0,
+            "readWithoutFallbackCount": 2,
+            "partsThatRead": [
+              "menu-column",
+              "search-input-wrapper"
+            ],
+            "landsOnProperties": [
+              "border-bottom",
+              "border-right"
+            ],
+            "readingEngines": [
+              "rustic"
+            ],
+            "atRuleScopes": [],
+            "reads": [
+              {
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/cascader.css:167",
+                "part": "search-input-wrapper",
+                "property": "border-bottom",
+                "hasFallback": false,
+                "fallback": null
+              },
+              {
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/cascader.css:193",
+                "part": "menu-column",
+                "property": "border-right",
+                "hasFallback": false,
+                "fallback": null
+              }
+            ],
+            "declaredOnlyInGeneratedStyleBundles": false
+          },
+          {
+            "variable": "--ds-cascader-menu-height",
+            "declaredInPackage": false,
+            "declarationSites": [],
+            "readSiteCount": 2,
+            "readWithFallbackCount": 0,
+            "readWithoutFallbackCount": 2,
+            "partsThatRead": [
+              "UNRESOLVED_TSX_INLINE"
+            ],
+            "landsOnProperties": [
+              "maxHeight"
+            ],
+            "readingEngines": [
+              "tsx:rustic"
+            ],
+            "atRuleScopes": [],
+            "reads": [
+              {
+                "at": "packages/core/src/ui/primitives/inputs/Cascader/engines/rustic/index.tsx:426",
+                "part": "UNRESOLVED_TSX_INLINE",
+                "property": "maxHeight",
+                "hasFallback": false,
+                "fallback": null
+              },
+              {
+                "at": "packages/core/src/ui/primitives/inputs/Cascader/engines/rustic/index.tsx:496",
+                "part": "UNRESOLVED_TSX_INLINE",
+                "property": "maxHeight",
+                "hasFallback": false,
+                "fallback": null
+              }
+            ],
+            "declaredOnlyInGeneratedStyleBundles": false
+          },
+          {
+            "variable": "--ds-cascader-menu-width",
+            "declaredInPackage": false,
+            "declarationSites": [],
+            "readSiteCount": 1,
+            "readWithFallbackCount": 0,
+            "readWithoutFallbackCount": 1,
+            "partsThatRead": [
+              "UNRESOLVED_TSX_INLINE"
+            ],
+            "landsOnProperties": [
+              "minWidth"
+            ],
+            "readingEngines": [
+              "tsx:rustic"
+            ],
+            "atRuleScopes": [],
+            "reads": [
+              {
+                "at": "packages/core/src/ui/primitives/inputs/Cascader/engines/rustic/index.tsx:425",
+                "part": "UNRESOLVED_TSX_INLINE",
+                "property": "minWidth",
+                "hasFallback": false,
+                "fallback": null
+              }
+            ],
+            "declaredOnlyInGeneratedStyleBundles": false
+          },
+          {
+            "variable": "--ds-cascader-placeholder-color",
+            "declaredInPackage": false,
+            "declarationSites": [],
+            "readSiteCount": 1,
+            "readWithFallbackCount": 0,
+            "readWithoutFallbackCount": 1,
+            "partsThatRead": [
+              "placeholder"
+            ],
+            "landsOnProperties": [
+              "color"
+            ],
+            "readingEngines": [
+              "rustic"
+            ],
+            "atRuleScopes": [],
+            "reads": [
+              {
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/cascader.css:139",
+                "part": "placeholder",
+                "property": "color",
+                "hasFallback": false,
+                "fallback": null
+              }
+            ],
+            "declaredOnlyInGeneratedStyleBundles": false
+          },
+          {
+            "variable": "--ds-cascader-radius",
+            "declaredInPackage": false,
+            "declarationSites": [],
+            "readSiteCount": 2,
+            "readWithFallbackCount": 0,
+            "readWithoutFallbackCount": 2,
+            "partsThatRead": [
+              "search-input",
+              "trigger"
+            ],
+            "landsOnProperties": [
+              "border-radius"
+            ],
+            "readingEngines": [
+              "rustic"
+            ],
+            "atRuleScopes": [],
+            "reads": [
+              {
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/cascader.css:122",
+                "part": "trigger",
+                "property": "border-radius",
+                "hasFallback": false,
+                "fallback": null
+              },
+              {
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/cascader.css:171",
+                "part": "search-input",
+                "property": "border-radius",
+                "hasFallback": false,
+                "fallback": null
+              }
+            ],
+            "declaredOnlyInGeneratedStyleBundles": false
+          },
+          {
+            "variable": "--ds-cascader-shadow-focus",
+            "declaredInPackage": false,
+            "declarationSites": [],
+            "readSiteCount": 4,
+            "readWithFallbackCount": 4,
+            "readWithoutFallbackCount": 0,
+            "partsThatRead": [
+              "clear-button",
+              "option",
+              "search-input",
+              "trigger"
+            ],
+            "landsOnProperties": [
+              "box-shadow"
+            ],
+            "readingEngines": [
+              "modern"
+            ],
+            "atRuleScopes": [],
+            "reads": [
+              {
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:144",
+                "part": "trigger",
+                "property": "box-shadow",
+                "hasFallback": true,
+                "fallback": "var(--ds-shadow-focus-ring)"
+              },
+              {
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:211",
+                "part": "clear-button",
+                "property": "box-shadow",
+                "hasFallback": true,
+                "fallback": "var(--ds-shadow-focus-ring)"
+              },
+              {
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:285",
+                "part": "search-input",
+                "property": "box-shadow",
+                "hasFallback": true,
+                "fallback": "var(--ds-shadow-focus-ring)"
+              },
+              {
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:396",
+                "part": "option",
+                "property": "box-shadow",
+                "hasFallback": true,
+                "fallback": "var(--ds-shadow-focus-ring)"
+              }
+            ],
+            "declaredOnlyInGeneratedStyleBundles": false
+          },
+          {
+            "variable": "--ds-cascader-sm-height",
+            "declaredInPackage": false,
+            "declarationSites": [],
+            "readSiteCount": 1,
+            "readWithFallbackCount": 0,
+            "readWithoutFallbackCount": 1,
+            "partsThatRead": [
+              "UNRESOLVED_TSX_INLINE"
+            ],
+            "landsOnProperties": [
+              "small"
+            ],
+            "readingEngines": [
+              "tsx:rustic"
+            ],
+            "atRuleScopes": [],
+            "reads": [
+              {
+                "at": "packages/core/src/ui/primitives/inputs/Cascader/engines/rustic/index.tsx:95",
+                "part": "UNRESOLVED_TSX_INLINE",
+                "property": "small",
+                "hasFallback": false,
+                "fallback": null
+              }
+            ],
+            "declaredOnlyInGeneratedStyleBundles": false
+          },
+          {
+            "variable": "--ds-cascader-spinner-duration",
+            "declaredInPackage": false,
+            "declarationSites": [],
+            "readSiteCount": 2,
+            "readWithFallbackCount": 2,
+            "readWithoutFallbackCount": 0,
+            "partsThatRead": [
+              "loading",
+              "loading-spinner"
+            ],
+            "landsOnProperties": [
+              "animation"
+            ],
+            "readingEngines": [
+              "modern"
+            ],
+            "atRuleScopes": [],
+            "reads": [
+              {
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:440",
+                "part": "loading",
+                "property": "animation",
+                "hasFallback": true,
+                "fallback": "var(--ds-motion-glacial)"
+              },
+              {
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:566",
+                "part": "loading-spinner",
+                "property": "animation",
+                "hasFallback": true,
+                "fallback": "var(--ds-motion-glacial)"
+              }
+            ],
+            "declaredOnlyInGeneratedStyleBundles": false
+          },
+          {
+            "variable": "--ds-cascader-touch-target-min",
+            "declaredInPackage": false,
+            "declarationSites": [],
+            "readSiteCount": 1,
+            "readWithFallbackCount": 1,
+            "readWithoutFallbackCount": 0,
+            "partsThatRead": [
+              "clear-button"
+            ],
+            "landsOnProperties": [
+              "min-block-size"
+            ],
+            "readingEngines": [
+              "modern"
+            ],
+            "atRuleScopes": [
+              "@media (hover: none) and (pointer: coarse)"
+            ],
+            "reads": [
+              {
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:449",
+                "part": "clear-button",
+                "property": "min-block-size",
+                "hasFallback": true,
+                "fallback": "var(--ds-touch-target-min, 44px)"
+              }
+            ],
+            "declaredOnlyInGeneratedStyleBundles": false
+          },
+          {
+            "variable": "--ds-color-bg-selected",
+            "declaredInPackage": false,
+            "declarationSites": [],
+            "readSiteCount": 1,
+            "readWithFallbackCount": 1,
+            "readWithoutFallbackCount": 0,
+            "partsThatRead": [
+              "option"
+            ],
+            "landsOnProperties": [
+              "background"
+            ],
+            "readingEngines": [
+              "modern"
+            ],
+            "atRuleScopes": [],
+            "reads": [
+              {
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:408",
+                "part": "option",
+                "property": "background",
+                "hasFallback": true,
+                "fallback": "color-mix(in srgb, var(--ds-color-primary) 10%, transparent)"
+              }
+            ],
+            "declaredOnlyInGeneratedStyleBundles": false
+          },
+          {
+            "variable": "--ds-disabled-opacity",
+            "declaredInPackage": false,
+            "declarationSites": [],
+            "readSiteCount": 2,
+            "readWithFallbackCount": 2,
+            "readWithoutFallbackCount": 0,
+            "partsThatRead": [
+              "option",
+              "trigger"
+            ],
+            "landsOnProperties": [
+              "opacity"
+            ],
+            "readingEngines": [
+              "modern"
+            ],
+            "atRuleScopes": [],
+            "reads": [
+              {
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:148",
+                "part": "trigger",
+                "property": "opacity",
+                "hasFallback": true,
+                "fallback": "0.5"
+              },
+              {
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:400",
+                "part": "option",
+                "property": "opacity",
+                "hasFallback": true,
+                "fallback": "0.5"
+              }
+            ],
+            "declaredOnlyInGeneratedStyleBundles": false
+          },
+          {
+            "variable": "--ds-material-overlay-border",
+            "declaredInPackage": false,
+            "declarationSites": [],
+            "readSiteCount": 1,
+            "readWithFallbackCount": 1,
+            "readWithoutFallbackCount": 0,
+            "partsThatRead": [
+              "dropdown"
+            ],
+            "landsOnProperties": [
+              "border-color"
+            ],
+            "readingEngines": [
+              "modern"
+            ],
+            "atRuleScopes": [],
+            "reads": [
+              {
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:244",
+                "part": "dropdown",
+                "property": "border-color",
+                "hasFallback": true,
+                "fallback": "var(--ds-color-border)"
+              }
+            ],
+            "declaredOnlyInGeneratedStyleBundles": false
+          },
+          {
+            "variable": "--ds-personality-animation-entrance-duration",
+            "declaredInPackage": false,
+            "declarationSites": [],
+            "readSiteCount": 1,
+            "readWithFallbackCount": 1,
+            "readWithoutFallbackCount": 0,
+            "partsThatRead": [
+              "UNRESOLVED_TSX_INLINE"
+            ],
+            "landsOnProperties": [
+              "animation"
+            ],
+            "readingEngines": [
+              "tsx:rustic"
+            ],
+            "atRuleScopes": [],
+            "reads": [
+              {
+                "at": "packages/core/src/ui/primitives/inputs/Cascader/engines/rustic/index.tsx:406",
+                "part": "UNRESOLVED_TSX_INLINE",
+                "property": "animation",
+                "hasFallback": true,
+                "fallback": "0.15s"
+              }
+            ],
+            "declaredOnlyInGeneratedStyleBundles": false
+          },
+          {
+            "variable": "--ds-spacing-1-5",
+            "declaredInPackage": false,
+            "declarationSites": [],
+            "readSiteCount": 1,
+            "readWithFallbackCount": 1,
+            "readWithoutFallbackCount": 0,
+            "partsThatRead": [
+              "option"
+            ],
+            "landsOnProperties": [
+              "padding-block"
+            ],
+            "readingEngines": [
+              "modern"
+            ],
+            "atRuleScopes": [],
+            "reads": [
+              {
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:364",
+                "part": "option",
+                "property": "padding-block",
+                "hasFallback": true,
+                "fallback": "var(--ds-spacing-1)"
+              }
+            ],
+            "declaredOnlyInGeneratedStyleBundles": false
+          },
+          {
+            "variable": "--ds-card-shadow",
+            "declaredInPackage": true,
+            "declarationSites": [
+              "packages/core/artifacts/generated/css/verticals/rottay/index.css:2118",
+              "packages/core/artifacts/generated/css/verticals/rottay/index.css:32207",
+              "packages/core/artifacts/generated/css/verticals/rottay/index.css:32272"
+            ],
+            "readSiteCount": 1,
+            "readWithFallbackCount": 1,
+            "readWithoutFallbackCount": 0,
+            "partsThatRead": [
+              "dropdown"
+            ],
+            "landsOnProperties": [
+              "box-shadow"
+            ],
+            "readingEngines": [
+              "rustic"
+            ],
+            "atRuleScopes": [],
+            "reads": [
+              {
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/cascader.css:163",
+                "part": "dropdown",
+                "property": "box-shadow",
+                "hasFallback": true,
+                "fallback": "var(--ds-cascader-dropdown-shadow)"
+              }
+            ],
+            "declaredOnlyInGeneratedStyleBundles": true
+          },
+          {
+            "variable": "--ds-color-bg-hover",
+            "declaredInPackage": true,
+            "declarationSites": [
+              "packages/core/artifacts/generated/css/verticals/rottay/index.css:1249",
+              "packages/core/artifacts/generated/css/verticals/rottay/index.css:3150",
+              "packages/core/artifacts/generated/css/verticals/rottay/index.css:124273"
+            ],
+            "readSiteCount": 2,
+            "readWithFallbackCount": 0,
+            "readWithoutFallbackCount": 2,
+            "partsThatRead": [
+              "option"
+            ],
+            "landsOnProperties": [
+              "background"
+            ],
+            "readingEngines": [
+              "modern"
+            ],
+            "atRuleScopes": [
+              "@media (hover: hover)"
+            ],
+            "reads": [
+              {
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:382",
+                "part": "option",
+                "property": "background",
+                "hasFallback": false,
+                "fallback": null
+              },
+              {
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:391",
+                "part": "option",
+                "property": "background",
+                "hasFallback": false,
+                "fallback": null
+              }
+            ],
+            "declaredOnlyInGeneratedStyleBundles": true
+          },
+          {
+            "variable": "--ds-color-border",
+            "declaredInPackage": true,
+            "declarationSites": [
+              "packages/core/artifacts/generated/css/verticals/rottay/index.css:1271",
+              "packages/core/artifacts/generated/css/verticals/rottay/index.css:3153",
+              "packages/core/artifacts/generated/css/verticals/rottay/index.css:124031"
+            ],
+            "readSiteCount": 8,
+            "readWithFallbackCount": 0,
+            "readWithoutFallbackCount": 8,
+            "partsThatRead": [
+              "dropdown",
+              "empty",
+              "loading",
+              "loading-spinner",
+              "menu-column",
+              "search-input",
+              "search-input-wrapper",
+              "trigger"
+            ],
+            "landsOnProperties": [
+              "border",
+              "border-bottom",
+              "border-color",
+              "border-inline-end"
+            ],
+            "readingEngines": [
+              "modern"
+            ],
+            "atRuleScopes": [],
+            "reads": [
+              {
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:121",
+                "part": "trigger",
+                "property": "border",
+                "hasFallback": false,
+                "fallback": null
+              },
+              {
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:244",
+                "part": "dropdown",
+                "property": "border-color",
+                "hasFallback": false,
+                "fallback": null
+              },
+              {
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:268",
+                "part": "search-input-wrapper",
+                "property": "border-bottom",
+                "hasFallback": false,
+                "fallback": null
+              },
+              {
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:273",
+                "part": "search-input",
+                "property": "border",
+                "hasFallback": false,
+                "fallback": null
+              }
+            ],
+            "declaredOnlyInGeneratedStyleBundles": true
+          },
+          {
+            "variable": "--ds-color-error",
+            "declaredInPackage": true,
+            "declarationSites": [
+              "packages/core/artifacts/generated/css/verticals/rottay/index.css:1219",
+              "packages/core/artifacts/generated/css/verticals/rottay/index.css:123521",
+              "packages/core/artifacts/generated/css/verticals/rottay/index.css:124037"
+            ],
+            "readSiteCount": 1,
+            "readWithFallbackCount": 0,
+            "readWithoutFallbackCount": 1,
+            "partsThatRead": [
+              "trigger"
+            ],
+            "landsOnProperties": [
+              "border-color"
+            ],
+            "readingEngines": [
+              "modern"
+            ],
+            "atRuleScopes": [],
+            "reads": [
+              {
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:551",
+                "part": "trigger",
+                "property": "border-color",
+                "hasFallback": false,
+                "fallback": null
+              }
+            ],
+            "declaredOnlyInGeneratedStyleBundles": true
+          },
+          {
+            "variable": "--ds-color-primary",
+            "declaredInPackage": true,
+            "declarationSites": [
+              "packages/core/artifacts/generated/css/verticals/rottay/index.css:1198",
+              "packages/core/artifacts/generated/css/verticals/rottay/index.css:123547",
+              "packages/core/artifacts/generated/css/verticals/rottay/index.css:124066"
+            ],
+            "readSiteCount": 8,
+            "readWithFallbackCount": 2,
+            "readWithoutFallbackCount": 6,
+            "partsThatRead": [
+              "loading",
+              "loading-spinner",
+              "option",
+              "search-input",
+              "trigger"
+            ],
+            "landsOnProperties": [
+              "background",
+              "border-color",
+              "border-top-color",
+              "box-shadow"
+            ],
+            "readingEngines": [
+              "modern",
+              "rustic"
+            ],
+            "atRuleScopes": [],
+            "reads": [
+              {
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:143",
+                "part": "trigger",
+                "property": "border-color",
+                "hasFallback": false,
+                "fallback": null
+              },
+              {
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:284",
+                "part": "search-input",
+                "property": "border-color",
+                "hasFallback": false,
+                "fallback": null
+              },
+              {
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:408",
+                "part": "option",
+                "property": "background",
+                "hasFallback": false,
+                "fallback": null
+              },
+              {
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:409",
+                "part": "option",
+                "property": "border-color",
+                "hasFallback": false,
+                "fallback": null
+              }
+            ],
+            "declaredOnlyInGeneratedStyleBundles": true
+          },
+          {
+            "variable": "--ds-color-text-muted",
+            "declaredInPackage": true,
+            "declarationSites": [
+              "packages/core/artifacts/generated/css/verticals/rottay/index.css:1265",
+              "packages/core/artifacts/generated/css/verticals/rottay/index.css:3173",
+              "packages/core/artifacts/generated/css/verticals/rottay/index.css:124105"
+            ],
+            "readSiteCount": 4,
+            "readWithFallbackCount": 0,
+            "readWithoutFallbackCount": 4,
+            "partsThatRead": [
+              "chevron",
+              "empty",
+              "placeholder",
+              "search-input"
+            ],
+            "landsOnProperties": [
+              "color"
+            ],
+            "readingEngines": [
+              "modern"
+            ],
+            "atRuleScopes": [],
+            "reads": [
+              {
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:153",
+                "part": "placeholder",
+                "property": "color",
+                "hasFallback": false,
+                "fallback": null
+              },
+              {
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:299",
+                "part": "search-input",
+                "property": "color",
+                "hasFallback": false,
+                "fallback": null
+              },
+              {
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:312",
+                "part": "empty",
+                "property": "color",
+                "hasFallback": false,
+                "fallback": null
+              },
+              {
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:428",
+                "part": "chevron",
+                "property": "color",
+                "hasFallback": false,
+                "fallback": null
+              }
+            ],
+            "declaredOnlyInGeneratedStyleBundles": true
+          },
+          {
+            "variable": "--ds-color-text-primary",
+            "declaredInPackage": true,
+            "declarationSites": [
+              "packages/core/artifacts/generated/css/verticals/rottay/index.css:1259",
+              "packages/core/artifacts/generated/css/verticals/rottay/index.css:3170",
+              "packages/core/artifacts/generated/css/verticals/rottay/index.css:124107"
+            ],
+            "readSiteCount": 6,
+            "readWithFallbackCount": 0,
+            "readWithoutFallbackCount": 6,
+            "partsThatRead": [
+              "clear-button",
+              "option",
+              "search-input",
+              "trigger"
+            ],
+            "landsOnProperties": [
+              "color"
+            ],
+            "readingEngines": [
+              "modern"
+            ],
+            "atRuleScopes": [
+              "@media (hover: hover)"
+            ],
+            "reads": [
+              {
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:124",
+                "part": "trigger",
+                "property": "color",
+                "hasFallback": false,
+                "fallback": null
+              },
+              {
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:183",
+                "part": "clear-button",
+                "property": "color",
+                "hasFallback": false,
+                "fallback": null
+              },
+              {
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:198",
+                "part": "clear-button",
+                "property": "color",
+                "hasFallback": false,
+                "fallback": null
+              },
+              {
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:206",
+                "part": "clear-button",
+                "property": "color",
+                "hasFallback": false,
+                "fallback": null
+              }
+            ],
+            "declaredOnlyInGeneratedStyleBundles": true
+          },
+          {
+            "variable": "--ds-color-text-secondary",
+            "declaredInPackage": true,
+            "declarationSites": [
+              "packages/core/artifacts/generated/css/verticals/rottay/index.css:1260",
+              "packages/core/artifacts/generated/css/verticals/rottay/index.css:3171",
+              "packages/core/artifacts/generated/css/verticals/rottay/index.css:124108"
+            ],
+            "readSiteCount": 1,
+            "readWithFallbackCount": 0,
+            "readWithoutFallbackCount": 1,
+            "partsThatRead": [
+              "loading-state"
+            ],
+            "landsOnProperties": [
+              "color"
+            ],
+            "readingEngines": [
+              "modern"
+            ],
+            "atRuleScopes": [],
+            "reads": [
+              {
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:590",
+                "part": "loading-state",
+                "property": "color",
+                "hasFallback": false,
+                "fallback": null
+              }
+            ],
+            "declaredOnlyInGeneratedStyleBundles": true
+          },
+          {
+            "variable": "--ds-color-warning",
+            "declaredInPackage": true,
+            "declarationSites": [
+              "packages/core/artifacts/generated/css/verticals/rottay/index.css:1218",
+              "packages/core/artifacts/generated/css/verticals/rottay/index.css:123581",
+              "packages/core/artifacts/generated/css/verticals/rottay/index.css:124110"
+            ],
+            "readSiteCount": 1,
+            "readWithFallbackCount": 0,
+            "readWithoutFallbackCount": 1,
+            "partsThatRead": [
+              "trigger"
+            ],
+            "landsOnProperties": [
+              "border-color"
+            ],
+            "readingEngines": [
+              "modern"
+            ],
+            "atRuleScopes": [],
+            "reads": [
+              {
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:554",
+                "part": "trigger",
+                "property": "border-color",
+                "hasFallback": false,
+                "fallback": null
+              }
+            ],
+            "declaredOnlyInGeneratedStyleBundles": true
+          },
+          {
+            "variable": "--ds-elevation-2",
+            "declaredInPackage": true,
+            "declarationSites": [
+              "packages/core/artifacts/generated/css/verticals/rottay/index.css:1843",
+              "packages/core/artifacts/generated/css/verticals/rottay/index.css:124406"
+            ],
+            "readSiteCount": 1,
+            "readWithFallbackCount": 0,
+            "readWithoutFallbackCount": 1,
+            "partsThatRead": [
+              "dropdown"
+            ],
+            "landsOnProperties": [
+              "box-shadow"
+            ],
+            "readingEngines": [
+              "modern"
+            ],
+            "atRuleScopes": [],
+            "reads": [
+              {
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:243",
+                "part": "dropdown",
+                "property": "box-shadow",
+                "hasFallback": false,
+                "fallback": null
+              }
+            ],
+            "declaredOnlyInGeneratedStyleBundles": true
+          },
+          {
+            "variable": "--ds-elevation-surface-3",
+            "declaredInPackage": true,
+            "declarationSites": [
+              "packages/core/artifacts/generated/css/verticals/rottay/index.css:1866",
+              "packages/core/artifacts/generated/css/all-verticals/index.css:1945"
+            ],
+            "readSiteCount": 2,
+            "readWithFallbackCount": 0,
+            "readWithoutFallbackCount": 2,
+            "partsThatRead": [
+              "dropdown"
+            ],
+            "landsOnProperties": [
+              "background"
+            ],
+            "readingEngines": [
+              "modern"
+            ],
+            "atRuleScopes": [],
+            "reads": [
+              {
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:242",
+                "part": "dropdown",
+                "property": "background",
+                "hasFallback": false,
+                "fallback": null
+              },
+              {
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:242",
+                "part": "dropdown",
+                "property": "background",
+                "hasFallback": false,
+                "fallback": null
+              }
+            ],
+            "declaredOnlyInGeneratedStyleBundles": true
+          },
+          {
+            "variable": "--ds-font-family-base",
+            "declaredInPackage": true,
+            "declarationSites": [
+              "packages/core/artifacts/generated/css/verticals/rottay/index.css:1548",
+              "packages/core/artifacts/generated/css/verticals/rottay/index.css:123596",
+              "packages/core/artifacts/generated/css/verticals/rottay/index.css:124387"
+            ],
+            "readSiteCount": 1,
+            "readWithFallbackCount": 0,
+            "readWithoutFallbackCount": 1,
+            "partsThatRead": [
+              "UNRESOLVED_TSX_INLINE"
+            ],
+            "landsOnProperties": [
+              "fontFamily"
+            ],
+            "readingEngines": [
+              "tsx:rustic"
+            ],
+            "atRuleScopes": [],
+            "reads": [
+              {
+                "at": "packages/core/src/ui/primitives/inputs/Cascader/engines/rustic/index.tsx:374",
+                "part": "UNRESOLVED_TSX_INLINE",
+                "property": "fontFamily",
+                "hasFallback": false,
+                "fallback": null
+              }
+            ],
+            "declaredOnlyInGeneratedStyleBundles": true
+          },
+          {
+            "variable": "--ds-font-size-sm",
+            "declaredInPackage": true,
+            "declarationSites": [
+              "packages/core/artifacts/generated/css/verticals/rottay/index.css:1651",
+              "packages/core/artifacts/generated/css/all-verticals/index.css:1730"
+            ],
+            "readSiteCount": 5,
+            "readWithFallbackCount": 0,
+            "readWithoutFallbackCount": 5,
+            "partsThatRead": [
+              "UNRESOLVED_TSX_INLINE",
+              "empty"
+            ],
+            "landsOnProperties": [
+              "font-size",
+              "fontSize"
+            ],
+            "readingEngines": [
+              "modern",
+              "tsx:rustic"
+            ],
+            "atRuleScopes": [],
+            "reads": [
+              {
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:313",
+                "part": "empty",
+                "property": "font-size",
+                "hasFallback": false,
+                "fallback": null
+              },
+              {
+                "at": "packages/core/src/ui/primitives/inputs/Cascader/engines/rustic/index.tsx:384",
+                "part": "UNRESOLVED_TSX_INLINE",
+                "property": "fontSize",
+                "hasFallback": false,
+                "fallback": null
+              },
+              {
+                "at": "packages/core/src/ui/primitives/inputs/Cascader/engines/rustic/index.tsx:417",
+                "part": "UNRESOLVED_TSX_INLINE",
+                "property": "fontSize",
+                "hasFallback": false,
+                "fallback": null
+              },
+              {
+                "at": "packages/core/src/ui/primitives/inputs/Cascader/engines/rustic/index.tsx:439",
+                "part": "UNRESOLVED_TSX_INLINE",
+                "property": "fontSize",
+                "hasFallback": false,
+                "fallback": null
+              }
+            ],
+            "declaredOnlyInGeneratedStyleBundles": true
+          },
+          {
+            "variable": "--ds-font-weight-medium",
+            "declaredInPackage": true,
+            "declarationSites": [
+              "packages/core/artifacts/generated/css/verticals/rottay/index.css:1665",
+              "packages/core/artifacts/generated/css/all-verticals/index.css:1744"
+            ],
+            "readSiteCount": 1,
+            "readWithFallbackCount": 0,
+            "readWithoutFallbackCount": 1,
+            "partsThatRead": [
+              "option"
+            ],
+            "landsOnProperties": [
+              "font-weight"
+            ],
+            "readingEngines": [
+              "modern"
+            ],
+            "atRuleScopes": [],
+            "reads": [
+              {
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:410",
+                "part": "option",
+                "property": "font-weight",
+                "hasFallback": false,
+                "fallback": null
+              }
+            ],
+            "declaredOnlyInGeneratedStyleBundles": true
+          },
+          {
+            "variable": "--ds-input-bg",
+            "declaredInPackage": true,
+            "declarationSites": [
+              "packages/core/artifacts/generated/css/verticals/rottay/index.css:3210",
+              "packages/core/artifacts/generated/css/verticals/rottay/index.css:6773",
+              "packages/core/artifacts/generated/css/verticals/rottay/index.css:98338"
+            ],
+            "readSiteCount": 2,
+            "readWithFallbackCount": 2,
+            "readWithoutFallbackCount": 0,
+            "partsThatRead": [
+              "search-input",
+              "trigger"
+            ],
+            "landsOnProperties": [
+              "background"
+            ],
+            "readingEngines": [
+              "modern"
+            ],
+            "atRuleScopes": [],
+            "reads": [
+              {
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:123",
+                "part": "trigger",
+                "property": "background",
+                "hasFallback": true,
+                "fallback": "var(--ds-surface-control)"
+              },
+              {
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:275",
+                "part": "search-input",
+                "property": "background",
+                "hasFallback": true,
+                "fallback": "var(--ds-surface-control)"
+              }
+            ],
+            "declaredOnlyInGeneratedStyleBundles": true
+          },
+          {
+            "variable": "--ds-input-clear-color-hover",
+            "declaredInPackage": true,
+            "declarationSites": [
+              "packages/core/artifacts/generated/css/verticals/rottay/index.css:6878",
+              "packages/core/artifacts/generated/css/verticals/rottay/index.css:98344",
+              "packages/core/artifacts/generated/css/verticals/rottay/index.css:123613"
+            ],
+            "readSiteCount": 2,
+            "readWithFallbackCount": 2,
+            "readWithoutFallbackCount": 0,
+            "partsThatRead": [
+              "clear-button"
+            ],
+            "landsOnProperties": [
+              "color"
+            ],
+            "readingEngines": [
+              "modern"
+            ],
+            "atRuleScopes": [
+              "@media (hover: hover)"
+            ],
+            "reads": [
+              {
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:198",
+                "part": "clear-button",
+                "property": "color",
+                "hasFallback": true,
+                "fallback": "var(--ds-color-text-primary)"
+              },
+              {
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:206",
+                "part": "clear-button",
+                "property": "color",
+                "hasFallback": true,
+                "fallback": "var(--ds-color-text-primary)"
+              }
+            ],
+            "declaredOnlyInGeneratedStyleBundles": true
+          },
+          {
+            "variable": "--ds-input-color-placeholder",
+            "declaredInPackage": true,
+            "declarationSites": [
+              "packages/core/artifacts/generated/css/verticals/rottay/index.css:6779",
+              "packages/core/artifacts/generated/css/verticals/rottay/index.css:98341",
+              "packages/core/artifacts/generated/css/verticals/rottay/index.css:123616"
+            ],
+            "readSiteCount": 2,
+            "readWithFallbackCount": 2,
+            "readWithoutFallbackCount": 0,
+            "partsThatRead": [
+              "placeholder",
+              "search-input"
+            ],
+            "landsOnProperties": [
+              "color"
+            ],
+            "readingEngines": [
+              "modern"
+            ],
+            "atRuleScopes": [],
+            "reads": [
+              {
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:153",
+                "part": "placeholder",
+                "property": "color",
+                "hasFallback": true,
+                "fallback": "var(--ds-color-text-muted)"
+              },
+              {
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:299",
+                "part": "search-input",
+                "property": "color",
+                "hasFallback": true,
+                "fallback": "var(--ds-color-text-muted)"
+              }
+            ],
+            "declaredOnlyInGeneratedStyleBundles": true
+          },
+          {
+            "variable": "--ds-input-lg-font-size",
+            "declaredInPackage": true,
+            "declarationSites": [
+              "packages/core/artifacts/generated/css/verticals/rottay/index.css:6749",
+              "packages/core/artifacts/generated/css/verticals/rottay/index.css:123633"
+            ],
+            "readSiteCount": 1,
+            "readWithFallbackCount": 0,
+            "readWithoutFallbackCount": 1,
+            "partsThatRead": [
+              "trigger"
+            ],
+            "landsOnProperties": [
+              "font-size"
+            ],
+            "readingEngines": [
+              "modern"
+            ],
+            "atRuleScopes": [],
+            "reads": [
+              {
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:534",
+                "part": "trigger",
+                "property": "font-size",
+                "hasFallback": false,
+                "fallback": null
+              }
+            ],
+            "declaredOnlyInGeneratedStyleBundles": true
+          },
+          {
+            "variable": "--ds-input-lg-height",
+            "declaredInPackage": true,
+            "declarationSites": [
+              "packages/core/artifacts/generated/css/verticals/rottay/index.css:6746",
+              "packages/core/artifacts/generated/css/verticals/rottay/index.css:123634"
+            ],
+            "readSiteCount": 1,
+            "readWithFallbackCount": 0,
+            "readWithoutFallbackCount": 1,
+            "partsThatRead": [
+              "trigger"
+            ],
+            "landsOnProperties": [
+              "block-size"
+            ],
+            "readingEngines": [
+              "modern"
+            ],
+            "atRuleScopes": [],
+            "reads": [
+              {
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:531",
+                "part": "trigger",
+                "property": "block-size",
+                "hasFallback": false,
+                "fallback": null
+              }
+            ],
+            "declaredOnlyInGeneratedStyleBundles": true
+          },
+          {
+            "variable": "--ds-input-lg-padding-x",
+            "declaredInPackage": true,
+            "declarationSites": [
+              "packages/core/artifacts/generated/css/verticals/rottay/index.css:6747",
+              "packages/core/artifacts/generated/css/verticals/rottay/index.css:123637"
+            ],
+            "readSiteCount": 1,
+            "readWithFallbackCount": 0,
+            "readWithoutFallbackCount": 1,
+            "partsThatRead": [
+              "trigger"
+            ],
+            "landsOnProperties": [
+              "padding-inline"
+            ],
+            "readingEngines": [
+              "modern"
+            ],
+            "atRuleScopes": [],
+            "reads": [
+              {
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:533",
+                "part": "trigger",
+                "property": "padding-inline",
+                "hasFallback": false,
+                "fallback": null
+              }
+            ],
+            "declaredOnlyInGeneratedStyleBundles": true
+          },
+          {
+            "variable": "--ds-input-md-font-size",
+            "declaredInPackage": true,
+            "declarationSites": [
+              "packages/core/artifacts/generated/css/verticals/rottay/index.css:6740",
+              "packages/core/artifacts/generated/css/verticals/rottay/index.css:102716",
+              "packages/core/artifacts/generated/css/verticals/rottay/index.css:123640"
+            ],
+            "readSiteCount": 1,
+            "readWithFallbackCount": 0,
+            "readWithoutFallbackCount": 1,
+            "partsThatRead": [
+              "trigger"
+            ],
+            "landsOnProperties": [
+              "font-size"
+            ],
+            "readingEngines": [
+              "modern"
+            ],
+            "atRuleScopes": [],
+            "reads": [
+              {
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:528",
+                "part": "trigger",
+                "property": "font-size",
+                "hasFallback": false,
+                "fallback": null
+              }
+            ],
+            "declaredOnlyInGeneratedStyleBundles": true
+          },
+          {
+            "variable": "--ds-input-md-height",
+            "declaredInPackage": true,
+            "declarationSites": [
+              "packages/core/artifacts/generated/css/verticals/rottay/index.css:6737",
+              "packages/core/artifacts/generated/css/verticals/rottay/index.css:123641"
+            ],
+            "readSiteCount": 1,
+            "readWithFallbackCount": 0,
+            "readWithoutFallbackCount": 1,
+            "partsThatRead": [
+              "trigger"
+            ],
+            "landsOnProperties": [
+              "block-size"
+            ],
+            "readingEngines": [
+              "modern"
+            ],
+            "atRuleScopes": [],
+            "reads": [
+              {
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:525",
+                "part": "trigger",
+                "property": "block-size",
+                "hasFallback": false,
+                "fallback": null
+              }
+            ],
+            "declaredOnlyInGeneratedStyleBundles": true
+          },
+          {
+            "variable": "--ds-input-md-padding-x",
+            "declaredInPackage": true,
+            "declarationSites": [
+              "packages/core/artifacts/generated/css/verticals/rottay/index.css:6738",
+              "packages/core/artifacts/generated/css/verticals/rottay/index.css:123644"
+            ],
+            "readSiteCount": 1,
+            "readWithFallbackCount": 0,
+            "readWithoutFallbackCount": 1,
+            "partsThatRead": [
+              "trigger"
+            ],
+            "landsOnProperties": [
+              "padding-inline"
+            ],
+            "readingEngines": [
+              "modern"
+            ],
+            "atRuleScopes": [],
+            "reads": [
+              {
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:527",
+                "part": "trigger",
+                "property": "padding-inline",
+                "hasFallback": false,
+                "fallback": null
+              }
+            ],
+            "declaredOnlyInGeneratedStyleBundles": true
+          },
+          {
+            "variable": "--ds-input-sm-font-size",
+            "declaredInPackage": true,
+            "declarationSites": [
+              "packages/core/artifacts/generated/css/verticals/rottay/index.css:6731",
+              "packages/core/artifacts/generated/css/verticals/rottay/index.css:123649"
+            ],
+            "readSiteCount": 4,
+            "readWithFallbackCount": 0,
+            "readWithoutFallbackCount": 4,
+            "partsThatRead": [
+              "loading-state",
+              "option",
+              "search-input",
+              "trigger"
+            ],
+            "landsOnProperties": [
+              "font-size"
+            ],
+            "readingEngines": [
+              "modern"
+            ],
+            "atRuleScopes": [],
+            "reads": [
+              {
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:370",
+                "part": "option",
+                "property": "font-size",
+                "hasFallback": false,
+                "fallback": null
+              },
+              {
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:522",
+                "part": "trigger",
+                "property": "font-size",
+                "hasFallback": false,
+                "fallback": null
+              },
+              {
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:543",
+                "part": "search-input",
+                "property": "font-size",
+                "hasFallback": false,
+                "fallback": null
+              },
+              {
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:591",
+                "part": "loading-state",
+                "property": "font-size",
+                "hasFallback": false,
+                "fallback": null
+              }
+            ],
+            "declaredOnlyInGeneratedStyleBundles": true
+          },
+          {
+            "variable": "--ds-input-sm-height",
+            "declaredInPackage": true,
+            "declarationSites": [
+              "packages/core/artifacts/generated/css/verticals/rottay/index.css:6728",
+              "packages/core/artifacts/generated/css/verticals/rottay/index.css:123650"
+            ],
+            "readSiteCount": 2,
+            "readWithFallbackCount": 0,
+            "readWithoutFallbackCount": 2,
+            "partsThatRead": [
+              "search-input",
+              "trigger"
+            ],
+            "landsOnProperties": [
+              "block-size"
+            ],
+            "readingEngines": [
+              "modern"
+            ],
+            "atRuleScopes": [],
+            "reads": [
+              {
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:519",
+                "part": "trigger",
+                "property": "block-size",
+                "hasFallback": false,
+                "fallback": null
+              },
+              {
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:540",
+                "part": "search-input",
+                "property": "block-size",
+                "hasFallback": false,
+                "fallback": null
+              }
+            ],
+            "declaredOnlyInGeneratedStyleBundles": true
+          },
+          {
+            "variable": "--ds-input-sm-padding-x",
+            "declaredInPackage": true,
+            "declarationSites": [
+              "packages/core/artifacts/generated/css/verticals/rottay/index.css:6729",
+              "packages/core/artifacts/generated/css/verticals/rottay/index.css:123653"
+            ],
+            "readSiteCount": 2,
+            "readWithFallbackCount": 0,
+            "readWithoutFallbackCount": 2,
+            "partsThatRead": [
+              "search-input",
+              "trigger"
+            ],
+            "landsOnProperties": [
+              "padding-inline"
+            ],
+            "readingEngines": [
+              "modern"
+            ],
+            "atRuleScopes": [],
+            "reads": [
+              {
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:521",
+                "part": "trigger",
+                "property": "padding-inline",
+                "hasFallback": false,
+                "fallback": null
+              },
+              {
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:542",
+                "part": "search-input",
+                "property": "padding-inline",
+                "hasFallback": false,
+                "fallback": null
+              }
+            ],
+            "declaredOnlyInGeneratedStyleBundles": true
+          },
+          {
+            "variable": "--ds-line-height-snug",
+            "declaredInPackage": true,
+            "declarationSites": [
+              "packages/core/artifacts/generated/css/verticals/rottay/index.css:1674",
+              "packages/core/artifacts/generated/css/all-verticals/index.css:1753"
+            ],
+            "readSiteCount": 1,
+            "readWithFallbackCount": 0,
+            "readWithoutFallbackCount": 1,
+            "partsThatRead": [
+              "empty"
+            ],
+            "landsOnProperties": [
+              "line-height"
+            ],
+            "readingEngines": [
+              "modern"
+            ],
+            "atRuleScopes": [],
+            "reads": [
+              {
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:314",
+                "part": "empty",
+                "property": "line-height",
+                "hasFallback": false,
+                "fallback": null
+              }
+            ],
+            "declaredOnlyInGeneratedStyleBundles": true
+          },
+          {
+            "variable": "--ds-material-control-border-hover",
+            "declaredInPackage": true,
+            "declarationSites": [
+              "packages/core/artifacts/generated/css/verticals/rottay/index.css:1448",
+              "packages/core/artifacts/generated/css/all-verticals/index.css:1527"
+            ],
+            "readSiteCount": 4,
+            "readWithFallbackCount": 0,
+            "readWithoutFallbackCount": 4,
+            "partsThatRead": [
+              "search-input",
+              "trigger"
+            ],
+            "landsOnProperties": [
+              "border-color"
+            ],
+            "readingEngines": [
+              "modern"
+            ],
+            "atRuleScopes": [
+              "@media (hover: hover)"
+            ],
+            "reads": [
+              {
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:133",
+                "part": "trigger",
+                "property": "border-color",
+                "hasFallback": false,
+                "fallback": null
+              },
+              {
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:139",
+                "part": "trigger",
+                "property": "border-color",
+                "hasFallback": false,
+                "fallback": null
+              },
+              {
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:290",
+                "part": "search-input",
+                "property": "border-color",
+                "hasFallback": false,
+                "fallback": null
+              },
+              {
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:296",
+                "part": "search-input",
+                "property": "border-color",
+                "hasFallback": false,
+                "fallback": null
+              }
+            ],
+            "declaredOnlyInGeneratedStyleBundles": true
+          },
+          {
+            "variable": "--ds-material-overlay-background",
+            "declaredInPackage": true,
+            "declarationSites": [
+              "packages/core/artifacts/generated/css/verticals/rottay/index.css:1469",
+              "packages/core/artifacts/generated/css/all-verticals/index.css:1548"
+            ],
+            "readSiteCount": 1,
+            "readWithFallbackCount": 1,
+            "readWithoutFallbackCount": 0,
+            "partsThatRead": [
+              "dropdown"
+            ],
+            "landsOnProperties": [
+              "background"
+            ],
+            "readingEngines": [
+              "modern"
+            ],
+            "atRuleScopes": [],
+            "reads": [
+              {
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:242",
+                "part": "dropdown",
+                "property": "background",
+                "hasFallback": true,
+                "fallback": "var(--ds-surface-card)"
+              }
+            ],
+            "declaredOnlyInGeneratedStyleBundles": true
+          },
+          {
+            "variable": "--ds-material-overlay-shadow",
+            "declaredInPackage": true,
+            "declarationSites": [
+              "packages/core/artifacts/generated/css/verticals/rottay/index.css:59858",
+              "packages/core/artifacts/generated/css/all-verticals/index.css:59937"
+            ],
+            "readSiteCount": 1,
+            "readWithFallbackCount": 1,
+            "readWithoutFallbackCount": 0,
+            "partsThatRead": [
+              "dropdown"
+            ],
+            "landsOnProperties": [
+              "box-shadow"
+            ],
+            "readingEngines": [
+              "modern"
+            ],
+            "atRuleScopes": [],
+            "reads": [
+              {
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:243",
+                "part": "dropdown",
+                "property": "box-shadow",
+                "hasFallback": true,
+                "fallback": "var(--ds-elevation-2)"
+              }
+            ],
+            "declaredOnlyInGeneratedStyleBundles": true
+          },
+          {
+            "variable": "--ds-motion-ease-out",
+            "declaredInPackage": true,
+            "declarationSites": [
+              "packages/core/artifacts/generated/css/verticals/rottay/index.css:3385",
+              "packages/core/artifacts/generated/css/all-verticals/index.css:3464"
+            ],
+            "readSiteCount": 10,
+            "readWithFallbackCount": 0,
+            "readWithoutFallbackCount": 10,
+            "partsThatRead": [
+              "arrow-icon",
+              "clear-button",
+              "dropdown",
+              "menu-column",
+              "option",
+              "search-input",
+              "trigger"
+            ],
+            "landsOnProperties": [
+              "animation",
+              "transition"
+            ],
+            "readingEngines": [
+              "modern"
+            ],
+            "atRuleScopes": [],
+            "reads": [
+              {
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:128",
+                "part": "trigger",
+                "property": "transition",
+                "hasFallback": false,
+                "fallback": null
+              },
+              {
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:128",
+                "part": "trigger",
+                "property": "transition",
+                "hasFallback": false,
+                "fallback": null
+              },
+              {
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:187",
+                "part": "clear-button",
+                "property": "transition",
+                "hasFallback": false,
+                "fallback": null
+              },
+              {
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:218",
+                "part": "arrow-icon",
+                "property": "transition",
+                "hasFallback": false,
+                "fallback": null
+              }
+            ],
+            "declaredOnlyInGeneratedStyleBundles": true
+          },
+          {
+            "variable": "--ds-motion-fast",
+            "declaredInPackage": true,
+            "declarationSites": [
+              "packages/core/artifacts/generated/css/verticals/rottay/index.css:3356",
+              "packages/core/artifacts/generated/css/verticals/rottay/index.css:3660",
+              "packages/core/artifacts/generated/css/verticals/rottay/index.css:121926"
+            ],
+            "readSiteCount": 10,
+            "readWithFallbackCount": 0,
+            "readWithoutFallbackCount": 10,
+            "partsThatRead": [
+              "arrow-icon",
+              "clear-button",
+              "dropdown",
+              "menu-column",
+              "option",
+              "search-input",
+              "trigger"
+            ],
+            "landsOnProperties": [
+              "animation",
+              "transition"
+            ],
+            "readingEngines": [
+              "modern"
+            ],
+            "atRuleScopes": [],
+            "reads": [
+              {
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:128",
+                "part": "trigger",
+                "property": "transition",
+                "hasFallback": false,
+                "fallback": null
+              },
+              {
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:128",
+                "part": "trigger",
+                "property": "transition",
+                "hasFallback": false,
+                "fallback": null
+              },
+              {
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:187",
+                "part": "clear-button",
+                "property": "transition",
+                "hasFallback": false,
+                "fallback": null
+              },
+              {
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:218",
+                "part": "arrow-icon",
+                "property": "transition",
+                "hasFallback": false,
+                "fallback": null
+              }
+            ],
+            "declaredOnlyInGeneratedStyleBundles": true
+          },
+          {
+            "variable": "--ds-motion-glacial",
+            "declaredInPackage": true,
+            "declarationSites": [
+              "packages/core/artifacts/generated/css/verticals/rottay/index.css:3359",
+              "packages/core/artifacts/generated/css/verticals/rottay/index.css:3663",
+              "packages/core/artifacts/generated/css/verticals/rottay/index.css:121929"
+            ],
+            "readSiteCount": 2,
+            "readWithFallbackCount": 0,
+            "readWithoutFallbackCount": 2,
+            "partsThatRead": [
+              "loading",
+              "loading-spinner"
+            ],
+            "landsOnProperties": [
+              "animation"
+            ],
+            "readingEngines": [
+              "modern"
+            ],
+            "atRuleScopes": [],
+            "reads": [
+              {
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:440",
+                "part": "loading",
+                "property": "animation",
+                "hasFallback": false,
+                "fallback": null
+              },
+              {
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:566",
+                "part": "loading-spinner",
+                "property": "animation",
+                "hasFallback": false,
+                "fallback": null
+              }
+            ],
+            "declaredOnlyInGeneratedStyleBundles": true
+          },
+          {
+            "variable": "--ds-radius-lg",
+            "declaredInPackage": true,
+            "declarationSites": [
+              "packages/core/artifacts/generated/css/verticals/rottay/index.css:1813",
+              "packages/core/artifacts/generated/css/all-verticals/index.css:1892"
+            ],
+            "readSiteCount": 1,
+            "readWithFallbackCount": 0,
+            "readWithoutFallbackCount": 1,
+            "partsThatRead": [
+              "dropdown"
+            ],
+            "landsOnProperties": [
+              "border-radius"
+            ],
+            "readingEngines": [
+              "modern"
+            ],
+            "atRuleScopes": [],
+            "reads": [
+              {
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:237",
+                "part": "dropdown",
+                "property": "border-radius",
+                "hasFallback": false,
+                "fallback": null
+              }
+            ],
+            "declaredOnlyInGeneratedStyleBundles": true
+          },
+          {
+            "variable": "--ds-radius-md",
+            "declaredInPackage": true,
+            "declarationSites": [
+              "packages/core/artifacts/generated/css/verticals/rottay/index.css:1812",
+              "packages/core/artifacts/generated/css/all-verticals/index.css:1891"
+            ],
+            "readSiteCount": 3,
+            "readWithFallbackCount": 0,
+            "readWithoutFallbackCount": 3,
+            "partsThatRead": [
+              "empty",
+              "search-input",
+              "trigger"
+            ],
+            "landsOnProperties": [
+              "border-radius"
+            ],
+            "readingEngines": [
+              "modern"
+            ],
+            "atRuleScopes": [],
+            "reads": [
+              {
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:122",
+                "part": "trigger",
+                "property": "border-radius",
+                "hasFallback": false,
+                "fallback": null
+              },
+              {
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:274",
+                "part": "search-input",
+                "property": "border-radius",
+                "hasFallback": false,
+                "fallback": null
+              },
+              {
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:311",
+                "part": "empty",
+                "property": "border-radius",
+                "hasFallback": false,
+                "fallback": null
+              }
+            ],
+            "declaredOnlyInGeneratedStyleBundles": true
+          },
+          {
+            "variable": "--ds-radius-sm",
+            "declaredInPackage": true,
+            "declarationSites": [
+              "packages/core/artifacts/generated/css/verticals/rottay/index.css:1811",
+              "packages/core/artifacts/generated/css/all-verticals/index.css:1890"
+            ],
+            "readSiteCount": 1,
+            "readWithFallbackCount": 0,
+            "readWithoutFallbackCount": 1,
+            "partsThatRead": [
+              "option"
+            ],
+            "landsOnProperties": [
+              "border-radius"
+            ],
+            "readingEngines": [
+              "modern"
+            ],
+            "atRuleScopes": [],
+            "reads": [
+              {
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:367",
+                "part": "option",
+                "property": "border-radius",
+                "hasFallback": false,
+                "fallback": null
+              }
+            ],
+            "declaredOnlyInGeneratedStyleBundles": true
+          },
+          {
+            "variable": "--ds-shadow-focus-ring",
+            "declaredInPackage": true,
+            "declarationSites": [
+              "packages/core/artifacts/generated/css/verticals/rottay/index.css:863",
+              "packages/core/artifacts/generated/css/verticals/rottay/index.css:1891",
+              "packages/core/artifacts/generated/css/verticals/rottay/index.css:124422"
+            ],
+            "readSiteCount": 4,
+            "readWithFallbackCount": 0,
+            "readWithoutFallbackCount": 4,
+            "partsThatRead": [
+              "clear-button",
+              "option",
+              "search-input",
+              "trigger"
+            ],
+            "landsOnProperties": [
+              "box-shadow"
+            ],
+            "readingEngines": [
+              "modern"
+            ],
+            "atRuleScopes": [],
+            "reads": [
+              {
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:144",
+                "part": "trigger",
+                "property": "box-shadow",
+                "hasFallback": false,
+                "fallback": null
+              },
+              {
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:211",
+                "part": "clear-button",
+                "property": "box-shadow",
+                "hasFallback": false,
+                "fallback": null
+              },
+              {
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:285",
+                "part": "search-input",
+                "property": "box-shadow",
+                "hasFallback": false,
+                "fallback": null
+              },
+              {
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:396",
+                "part": "option",
+                "property": "box-shadow",
+                "hasFallback": false,
+                "fallback": null
+              }
+            ],
+            "declaredOnlyInGeneratedStyleBundles": true
+          },
+          {
+            "variable": "--ds-spacing-1",
+            "declaredInPackage": true,
+            "declarationSites": [
+              "packages/core/artifacts/generated/css/verticals/rottay/index.css:229",
+              "packages/core/artifacts/generated/css/verticals/rottay/index.css:1726"
+            ],
+            "readSiteCount": 7,
+            "readWithFallbackCount": 0,
+            "readWithoutFallbackCount": 7,
+            "partsThatRead": [
+              "dropdown",
+              "menu-column",
+              "option",
+              "option-list",
+              "search-input",
+              "trigger"
+            ],
+            "landsOnProperties": [
+              "margin-block-start",
+              "max-inline-size",
+              "padding",
+              "padding-block"
+            ],
+            "readingEngines": [
+              "modern"
+            ],
+            "atRuleScopes": [],
+            "reads": [
+              {
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:235",
+                "part": "dropdown",
+                "property": "margin-block-start",
+                "hasFallback": false,
+                "fallback": null
+              },
+              {
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:261",
+                "part": "option-list",
+                "property": "max-inline-size",
+                "hasFallback": false,
+                "fallback": null
+              },
+              {
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:324",
+                "part": "menu-column",
+                "property": "padding",
+                "hasFallback": false,
+                "fallback": null
+              },
+              {
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:350",
+                "part": "option-list",
+                "property": "padding",
+                "hasFallback": false,
+                "fallback": null
+              }
+            ],
+            "declaredOnlyInGeneratedStyleBundles": true
+          },
+          {
+            "variable": "--ds-spacing-2",
+            "declaredInPackage": true,
+            "declarationSites": [
+              "packages/core/artifacts/generated/css/verticals/rottay/index.css:230",
+              "packages/core/artifacts/generated/css/verticals/rottay/index.css:1727"
+            ],
+            "readSiteCount": 7,
+            "readWithFallbackCount": 0,
+            "readWithoutFallbackCount": 7,
+            "partsThatRead": [
+              "chevron",
+              "empty",
+              "loading-state",
+              "option",
+              "search-input-wrapper",
+              "trigger"
+            ],
+            "landsOnProperties": [
+              "gap",
+              "margin-inline-start",
+              "padding",
+              "padding-block",
+              "padding-inline"
+            ],
+            "readingEngines": [
+              "modern"
+            ],
+            "atRuleScopes": [],
+            "reads": [
+              {
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:267",
+                "part": "search-input-wrapper",
+                "property": "padding",
+                "hasFallback": false,
+                "fallback": null
+              },
+              {
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:309",
+                "part": "empty",
+                "property": "padding",
+                "hasFallback": false,
+                "fallback": null
+              },
+              {
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:365",
+                "part": "option",
+                "property": "padding-inline",
+                "hasFallback": false,
+                "fallback": null
+              },
+              {
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:427",
+                "part": "chevron",
+                "property": "margin-inline-start",
+                "hasFallback": false,
+                "fallback": null
+              }
+            ],
+            "declaredOnlyInGeneratedStyleBundles": true
+          },
+          {
+            "variable": "--ds-spacing-3",
+            "declaredInPackage": true,
+            "declarationSites": [
+              "packages/core/artifacts/generated/css/verticals/rottay/index.css:231",
+              "packages/core/artifacts/generated/css/verticals/rottay/index.css:1728"
+            ],
+            "readSiteCount": 2,
+            "readWithFallbackCount": 0,
+            "readWithoutFallbackCount": 2,
+            "partsThatRead": [
+              "empty",
+              "trigger"
+            ],
+            "landsOnProperties": [
+              "padding",
+              "padding-block"
+            ],
+            "readingEngines": [
+              "modern"
+            ],
+            "atRuleScopes": [],
+            "reads": [
+              {
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:309",
+                "part": "empty",
+                "property": "padding",
+                "hasFallback": false,
+                "fallback": null
+              },
+              {
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:526",
+                "part": "trigger",
+                "property": "padding-block",
+                "hasFallback": false,
+                "fallback": null
+              }
+            ],
+            "declaredOnlyInGeneratedStyleBundles": true
+          },
+          {
+            "variable": "--ds-spacing-4",
+            "declaredInPackage": true,
+            "declarationSites": [
+              "packages/core/artifacts/generated/css/verticals/rottay/index.css:232",
+              "packages/core/artifacts/generated/css/verticals/rottay/index.css:1729"
+            ],
+            "readSiteCount": 2,
+            "readWithFallbackCount": 0,
+            "readWithoutFallbackCount": 2,
+            "partsThatRead": [
+              "dropdown",
+              "option-list"
+            ],
+            "landsOnProperties": [
+              "max-inline-size"
+            ],
+            "readingEngines": [
+              "modern"
+            ],
+            "atRuleScopes": [],
+            "reads": [
+              {
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:236",
+                "part": "dropdown",
+                "property": "max-inline-size",
+                "hasFallback": false,
+                "fallback": null
+              },
+              {
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:261",
+                "part": "option-list",
+                "property": "max-inline-size",
+                "hasFallback": false,
+                "fallback": null
+              }
+            ],
+            "declaredOnlyInGeneratedStyleBundles": true
+          },
+          {
+            "variable": "--ds-surface-card",
+            "declaredInPackage": true,
+            "declarationSites": [
+              "packages/core/artifacts/generated/css/verticals/rottay/index.css:1307",
+              "packages/core/artifacts/generated/css/all-verticals/index.css:1386"
+            ],
+            "readSiteCount": 1,
+            "readWithFallbackCount": 0,
+            "readWithoutFallbackCount": 1,
+            "partsThatRead": [
+              "dropdown"
+            ],
+            "landsOnProperties": [
+              "background"
+            ],
+            "readingEngines": [
+              "modern"
+            ],
+            "atRuleScopes": [],
+            "reads": [
+              {
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:242",
+                "part": "dropdown",
+                "property": "background",
+                "hasFallback": false,
+                "fallback": null
+              }
+            ],
+            "declaredOnlyInGeneratedStyleBundles": true
+          },
+          {
+            "variable": "--ds-surface-control",
+            "declaredInPackage": true,
+            "declarationSites": [
+              "packages/core/artifacts/generated/css/verticals/rottay/index.css:1309",
+              "packages/core/artifacts/generated/css/all-verticals/index.css:1388"
+            ],
+            "readSiteCount": 2,
+            "readWithFallbackCount": 0,
+            "readWithoutFallbackCount": 2,
+            "partsThatRead": [
+              "search-input",
+              "trigger"
+            ],
+            "landsOnProperties": [
+              "background"
+            ],
+            "readingEngines": [
+              "modern"
+            ],
+            "atRuleScopes": [],
+            "reads": [
+              {
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:123",
+                "part": "trigger",
+                "property": "background",
+                "hasFallback": false,
+                "fallback": null
+              },
+              {
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:275",
+                "part": "search-input",
+                "property": "background",
+                "hasFallback": false,
+                "fallback": null
+              }
+            ],
+            "declaredOnlyInGeneratedStyleBundles": true
+          },
+          {
+            "variable": "--ds-touch-target-min",
+            "declaredInPackage": true,
+            "declarationSites": [
+              "packages/core/artifacts/generated/css/verticals/rottay/index.css:1963",
+              "packages/core/artifacts/generated/css/all-verticals/index.css:2042"
+            ],
+            "readSiteCount": 1,
+            "readWithFallbackCount": 1,
+            "readWithoutFallbackCount": 0,
+            "partsThatRead": [
+              "clear-button"
+            ],
+            "landsOnProperties": [
+              "min-block-size"
+            ],
+            "readingEngines": [
+              "modern"
+            ],
+            "atRuleScopes": [
+              "@media (hover: none) and (pointer: coarse)"
+            ],
+            "reads": [
+              {
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:449",
+                "part": "clear-button",
+                "property": "min-block-size",
+                "hasFallback": true,
+                "fallback": "44px"
+              }
+            ],
+            "declaredOnlyInGeneratedStyleBundles": true
+          },
+          {
+            "variable": "--ds-transition-fast",
+            "declaredInPackage": true,
+            "declarationSites": [
+              "packages/core/artifacts/generated/css/verticals/rottay/index.css:2008",
+              "packages/core/artifacts/generated/css/all-verticals/index.css:2087"
+            ],
+            "readSiteCount": 1,
+            "readWithFallbackCount": 0,
+            "readWithoutFallbackCount": 1,
+            "partsThatRead": [
+              "UNRESOLVED_TSX_INLINE"
+            ],
+            "landsOnProperties": [
+              "transition"
+            ],
+            "readingEngines": [
+              "tsx:rustic"
+            ],
+            "atRuleScopes": [],
+            "reads": [
+              {
+                "at": "packages/core/src/ui/primitives/inputs/Cascader/engines/rustic/index.tsx:375",
+                "part": "UNRESOLVED_TSX_INLINE",
+                "property": "transition",
+                "hasFallback": false,
+                "fallback": null
+              }
+            ],
+            "declaredOnlyInGeneratedStyleBundles": true
+          },
+          {
+            "variable": "--ds-z-index-dropdown",
+            "declaredInPackage": true,
+            "declarationSites": [
+              "packages/core/artifacts/generated/css/verticals/rottay/index.css:1974",
+              "packages/core/artifacts/generated/css/all-verticals/index.css:2053"
+            ],
+            "readSiteCount": 1,
+            "readWithFallbackCount": 0,
+            "readWithoutFallbackCount": 1,
+            "partsThatRead": [
+              "dropdown"
+            ],
+            "landsOnProperties": [
+              "z-index"
+            ],
+            "readingEngines": [
+              "modern"
+            ],
+            "atRuleScopes": [],
+            "reads": [
+              {
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:234",
+                "part": "dropdown",
+                "property": "z-index",
+                "hasFallback": false,
+                "fallback": null
+              }
+            ],
+            "declaredOnlyInGeneratedStyleBundles": true
+          }
+        ],
+        "variableCensusSummary": {
+          "distinctVariablesRead": 83,
+          "declaredSomewhereInPackage": 46,
+          "declaredOnlyInGeneratedStyleBundles": 46,
+          "undeclaredAnywhere": 37,
+          "undeclaredAndReadWithoutAnyFallback": 22,
+          "undeclaredVariables": [
+            "--ds-cascader-arrow-color",
+            "--ds-cascader-bg",
+            "--ds-cascader-border",
+            "--ds-cascader-border-error",
+            "--ds-cascader-border-focus",
+            "--ds-cascader-border-hover",
+            "--ds-cascader-border-warning",
+            "--ds-cascader-clear-color",
+            "--ds-cascader-clear-gap",
+            "--ds-cascader-clear-inset-inline-end",
+            "--ds-cascader-clear-size",
+            "--ds-cascader-column-max-height",
+            "--ds-cascader-column-width",
+            "--ds-cascader-dropdown-bg",
+            "--ds-cascader-dropdown-radius",
+            "--ds-cascader-dropdown-shadow",
+            "--ds-cascader-dropdown-z",
+            "--ds-cascader-empty-color",
+            "--ds-cascader-item-bg-hover",
+            "--ds-cascader-item-bg-selected",
+            "--ds-cascader-item-padding",
+            "--ds-cascader-lg-height",
+            "--ds-cascader-md-height",
+            "--ds-cascader-menu-border",
+            "--ds-cascader-menu-height",
+            "--ds-cascader-menu-width",
+            "--ds-cascader-placeholder-color",
+            "--ds-cascader-radius",
+            "--ds-cascader-shadow-focus",
+            "--ds-cascader-sm-height",
+            "--ds-cascader-spinner-duration",
+            "--ds-cascader-touch-target-min",
+            "--ds-color-bg-selected",
+            "--ds-disabled-opacity",
+            "--ds-material-overlay-border",
+            "--ds-personality-animation-entrance-duration",
+            "--ds-spacing-1-5"
+          ],
+          "note": null
+        },
+        "templateConstructedReads": {
+          "constructedAt": [],
+          "note": "No template-constructed --ds-* read found in this family source owner."
+        },
+        "hardcodedValues": [
+          {
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/cascader.css:180",
+            "sourceKind": "rustic-skin-css",
+            "class": "LITERAL_COLOR_AS_VAR_FALLBACK",
+            "property": "border-color",
+            "literal": "#1677ff",
+            "declaration": "border-color: var(--ds-color-primary, #1677ff);"
+          },
+          {
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/cascader.css:181",
+            "sourceKind": "rustic-skin-css",
+            "class": "LITERAL_COLOR_DIRECT",
+            "property": "box-shadow",
+            "literal": "rgba(22, 119, 255, 0.15)",
+            "declaration": "box-shadow: 0 0 0 3px rgba(22, 119, 255, 0.15), 0 0 8px rgba(22, 119, 255, 0.08);"
+          },
+          {
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/cascader.css:181",
+            "sourceKind": "rustic-skin-css",
+            "class": "LITERAL_COLOR_DIRECT",
+            "property": "box-shadow",
+            "literal": "rgba(22, 119, 255, 0.08)",
+            "declaration": "box-shadow: 0 0 0 3px rgba(22, 119, 255, 0.15), 0 0 8px rgba(22, 119, 255, 0.08);"
+          },
+          {
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/cascader.css:207",
+            "sourceKind": "rustic-skin-css",
+            "class": "LITERAL_COLOR_AS_VAR_FALLBACK",
+            "property": "box-shadow",
+            "literal": "#1677ff",
+            "declaration": "box-shadow: inset 0 0 0 1px var(--ds-color-primary, #1677ff);"
+          },
+          {
+            "at": "packages/core/src/ui/primitives/inputs/Cascader/engines/rustic/index.tsx:395",
+            "sourceKind": "engine-tsx",
+            "class": "LITERAL_DURATION_DIRECT",
+            "property": "transition",
+            "literal": "0.2s",
+            "declaration": "transition: 'transform 0.2s',"
+          },
+          {
+            "at": "packages/core/src/ui/primitives/inputs/Cascader/engines/rustic/index.tsx:418",
+            "sourceKind": "engine-tsx",
+            "class": "LITERAL_DURATION_DIRECT",
+            "property": "transition",
+            "literal": "0.15s",
+            "declaration": "transition: 'border-color 0.15s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1)',"
+          },
+          {
+            "at": "packages/core/src/ui/primitives/inputs/Cascader/engines/rustic/index.tsx:418",
+            "sourceKind": "engine-tsx",
+            "class": "LITERAL_DURATION_DIRECT",
+            "property": "transition",
+            "literal": "0.2s",
+            "declaration": "transition: 'border-color 0.15s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1)',"
+          },
+          {
+            "at": "packages/core/src/ui/primitives/inputs/Cascader/engines/rustic/index.tsx:440",
+            "sourceKind": "engine-tsx",
+            "class": "LITERAL_DURATION_DIRECT",
+            "property": "transition",
+            "literal": "0.15s",
+            "declaration": "transition: 'background-color 0.15s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.15s',"
+          },
+          {
+            "at": "packages/core/src/ui/primitives/inputs/Cascader/engines/rustic/index.tsx:440",
+            "sourceKind": "engine-tsx",
+            "class": "LITERAL_DURATION_DIRECT",
+            "property": "transition",
+            "literal": "0.15s",
+            "declaration": "transition: 'background-color 0.15s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.15s',"
+          },
+          {
+            "at": "packages/core/src/ui/primitives/inputs/Cascader/engines/rustic/index.tsx:454",
+            "sourceKind": "engine-tsx",
+            "class": "LITERAL_DURATION_DIRECT",
+            "property": "animation",
+            "literal": "0.8s",
+            "declaration": "animation: 'ds-cascader-spin 0.8s cubic-bezier(0.4, 0, 0.2, 1) infinite',"
+          }
+        ],
+        "hardcodedValueCounts": {
+          "LITERAL_COLOR_AS_VAR_FALLBACK": 2,
+          "LITERAL_COLOR_DIRECT": 2,
+          "LITERAL_DURATION_DIRECT": 6
+        }
+      }
+    },
+    "evidenceIds": [],
+    "nextAction": "RATIFY_PROPERTY_GROUP_VOCABULARY_THEN_BIND_PROPERTY_GROUPS_COMPUTED_PROPERTIES_AND_CHANNELS"
+  },
+  "themeControls": [
+    {
+      "controlId": "palette.seeds",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "uncoveredByDesign": {
+          "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
+            "--ds-cascader-touch-target-min",
+            "--ds-color-bg-hover",
+            "--ds-color-border",
+            "--ds-color-error",
+            "--ds-color-primary",
+            "--ds-color-text-muted",
+            "--ds-color-text-primary",
+            "--ds-color-text-secondary",
+            "--ds-color-warning",
+            "--ds-elevation-2",
+            "--ds-elevation-surface-3",
+            "--ds-font-size-sm",
+            "--ds-font-weight-medium",
+            "--ds-line-height-snug",
+            "--ds-material-control-border-hover",
+            "--ds-material-overlay-background",
+            "--ds-material-overlay-border",
+            "--ds-material-overlay-shadow",
+            "--ds-motion-ease-out",
+            "--ds-motion-fast",
+            "--ds-motion-glacial",
+            "--ds-radius-lg",
+            "--ds-radius-md",
+            "--ds-radius-sm",
+            "--ds-spacing-1",
+            "--ds-spacing-1-5",
+            "--ds-spacing-2",
+            "--ds-spacing-3",
+            "--ds-spacing-4",
+            "--ds-surface-card",
+            "--ds-surface-control",
+            "--ds-touch-target-min",
+            "--ds-z-index-dropdown"
+          ],
+          "Sombras/inset leidas y NO cubiertas (la elevacion la gobierna la postura global, no sockets de familia)": [
+            "--ds-cascader-dropdown-shadow"
+          ],
+          "Opacidades/texturas/filtros leidos y NO cubiertos (state-affordance o efecto gobernado por effect-intensity)": [
+            "--ds-disabled-opacity"
+          ],
+          "Canales z leidos y NO cubiertos por adjudicacion --ds-z-* (dos ortografias de una decision; correccion, no gusto)": [
+            "--ds-cascader-dropdown-z"
+          ],
+          "EXCEPCION ARGUMENTADA - Piso de accesibilidad (touch-target): clase propia de exclusion, JAMAS socket - encoger el area tactil bajo el piso WCAG produce mis-taps; el propio mensaje del adjudicador la declara clase aparte y el archivo la contradecia": [
+            "--ds-cascader-touch-target-min"
+          ]
+        },
+        "migratedToInternalChannels": true
+      },
+      "internalChannels": [
+        {
+          "channelId": "--_ds-cascader-accent-bg",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/cascader"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+          }
+        },
+        {
+          "channelId": "--_ds-cascader-accent-color",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/cascader"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+          }
+        },
+        {
+          "channelId": "--_ds-cascader-border-hover",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/cascader"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-cascader-dropdown-bg",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/cascader"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-cascader-error-border",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/cascader"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+          }
+        },
+        {
+          "channelId": "--_ds-cascader-error-color",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/cascader"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+          }
+        }
+      ]
+    },
+    {
+      "controlId": "typography.pairing",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "type.pairing",
+            "why": "un campo con tipografia propia rompe la homogeneidad del formulario: los inputs leen la base compartida SIN socket de familia; la unica variacion legal es el registro mono de datos."
+          }
+        ]
+      }
+    },
+    {
+      "controlId": "typography.families",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "type.pairing",
+            "why": "un campo con tipografia propia rompe la homogeneidad del formulario: los inputs leen la base compartida SIN socket de familia; la unica variacion legal es el registro mono de datos."
+          }
+        ]
+      }
+    },
+    {
+      "controlId": "typography.scale",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "internalChannels": [
+        {
+          "channelId": "--_ds-cascader-font-size",
+          "semanticOwner": "typography.scale",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/cascader"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+          }
+        }
+      ]
+    },
+    {
+      "controlId": "shape.radius-scale",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "internalChannels": [
+        {
+          "channelId": "--_ds-cascader-radius",
+          "semanticOwner": "shape.radius-scale",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/cascader"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+          }
+        }
+      ]
+    },
+    {
+      "controlId": "shape.button-style",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "shape.control-silhouette",
+            "socketPattern": "--_ds-<comp>-radius",
+            "prop": "border-radius del control",
+            "tier": "standard",
+            "examples": [
+              "--_ds-button-radius",
+              "--_ds-segmented-radius",
+              "--_ds-pagination-item-radius"
+            ],
+            "sockets": [
+              "--_ds-cascader-radius"
+            ],
+            "socketsResolved": true
+          }
+        ],
+        "uncoveredByDesign": {
+          "CONSUMO (migracion): ownedBy primitive/inputs/cascader#shape.radius-scale": [
+            "--_ds-cascader-radius"
+          ]
+        },
+        "migratedToInternalChannels": true
+      }
+    },
+    {
+      "controlId": "density.mode",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "internalChannels": [
+        {
+          "channelId": "--_ds-cascader-density-factor",
+          "semanticOwner": "density.mode",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/cascader"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+          }
+        },
+        {
+          "channelId": "--_ds-cascader-clear-gap",
+          "semanticOwner": "density.mode",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/cascader"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-cascader-clear-inset-inline-end",
+          "semanticOwner": "density.mode",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/cascader"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-cascader-clear-size",
+          "semanticOwner": "density.mode",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/cascader"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-cascader-column-max-height",
+          "semanticOwner": "density.mode",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/cascader"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-cascader-column-width",
+          "semanticOwner": "density.mode",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/cascader"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        }
+      ]
+    },
+    {
+      "controlId": "spacing.rhythm",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "space.rhythm",
+            "why": "el interior del control es el pixel de density: si rhythm tambien lo moviera, compacta+aireado seria contradiccion irresoluble en el mismo padding."
+          }
+        ]
+      }
+    },
+    {
+      "controlId": "motion.dial",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "internalChannels": [
+        {
+          "channelId": "--_ds-cascader-transition-duration",
+          "semanticOwner": "motion.dial",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/cascader"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+          }
+        },
+        {
+          "channelId": "--_ds-cascader-spinner-duration",
+          "semanticOwner": "motion.dial",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/cascader"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        }
+      ]
+    },
+    {
+      "controlId": "surfaces.elevation-posture",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "surface.elevation",
+            "why": "Los campos en reposo van planos; la elevacion de estado (focus) es ruido: el foco ya lo dice focus.ring. Sombras/inset leidas y NO cubiertas (la elevacion la gobierna la postura global, no sockets de familia): --ds-cascader-dropdown-shadow"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
+    },
+    {
+      "controlId": "surfaces.effect-intensity",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "surface.finish",
+            "why": "Un campo con glass o gradiente pierde affordance de escritura; el input es mate siempre. Opacidades/texturas/filtros leidos y NO cubiertos (state-affordance o efecto gobernado por effect-intensity): --ds-disabled-opacity"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
+    },
+    {
+      "controlId": "navigation.sidebar-tone",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "navigation.tone",
+            "why": "Ningun control fuera de la sidebar lee tono de navegacion; dentro de la sidebar usan las hojas text/item-*."
+          }
+        ]
+      }
+    },
+    {
+      "controlId": "experience.profile",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "experience.profile",
+            "why": "Ningun componente lee el perfil de experiencia: un Button no sabe en que experiencia vive. Si lo sabe, la cascada murio en la raiz mas alta."
+          }
+        ]
+      }
+    },
+    {
+      "controlId": "chrome.families",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "layer.stack",
+            "why": "Ningun control en flujo tiene z propio; un z-index en un input esconde un problema de capas. Canales z leidos y NO cubiertos por adjudicacion --ds-z-* (dos ortografias de una decision; correccion, no gusto): --ds-cascader-dropdown-z"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
+    },
+    {
+      "controlId": "chrome.anatomy",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "internalChannels": [
+        {
+          "channelId": "--_ds-cascader-border-style",
+          "semanticOwner": "chrome.anatomy",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/cascader"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+          }
+        },
+        {
+          "channelId": "--_ds-cascader-border-width",
+          "semanticOwner": "chrome.anatomy",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/cascader"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+          }
+        },
+        {
+          "channelId": "--_ds-cascader-focus-ring-color",
+          "semanticOwner": "chrome.anatomy",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/cascader"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+          }
+        },
+        {
+          "channelId": "--_ds-cascader-border-focus",
+          "semanticOwner": "chrome.anatomy",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/cascader"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-cascader-shadow-focus",
+          "semanticOwner": "chrome.anatomy",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/cascader"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        }
+      ]
+    },
+    {
+      "controlId": "token-overrides",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "ESCAPE_HATCH",
+        "why": "es la valvula de escape, no el modelo -- textual del canon: \"escape hatch, not the model: every recurring override is a candidate for a real capability\". Alcanza cualquier canal por construccion (allowlist cerrada, max 200, falla cerrado) y por eso no declara nada por familia.",
+        "instrument": "un override recurrente sobre esta familia es EVIDENCIA de una capacidad faltante: convertilo en un control real, no lo normalices aqui",
+        "consumer": "src/infrastructure/compilers/composition/tenant-theme/index.ts :: tokenOverrides",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/token-overrides.json"
+      }
+    },
+    {
+      "controlId": "recipe-profile",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "control.recipe",
+            "why": "Ningun componente lee --ds-recipe-profile: la receta rebinds RAICES y los componentes leen sus sockets. Leer la receta directamente rompe la cascada y la hace intestable."
+          }
+        ]
+      }
+    },
+    {
+      "controlId": "profiles.expressive",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "OVERLAY_OF_ROOTS",
+        "why": "no necesita raiz propia: dependsOn=[experience.profile] y sus seis ejes sobrescriben por eje los MISMOS canales que ya componen las raices existentes. Los sockets de esta celda son los sockets de las raices mapeadas, no unos nuevos.",
+        "axisToRoot": {
+          "type": [
+            "type.pairing",
+            "type.scale"
+          ],
+          "geometry": [
+            "shape.corner",
+            "shape.control-silhouette"
+          ],
+          "edge": [
+            "shape.edge"
+          ],
+          "material": [
+            "surface.finish"
+          ],
+          "elevation": [
+            "surface.elevation"
+          ],
+          "motif": [
+            "surface.finish"
+          ]
+        },
+        "consumer": "src/infrastructure/runtime/bootstrap/facade/react/provider/index.tsx :: sanitizeExpressiveOverrides",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/profiles.expressive.json"
+      }
+    },
+    {
+      "controlId": "palette.status-seeds",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "palette.status-seeds",
+            "socketPattern": null,
+            "prop": "color de estado (error/advertencia) leido directo del canal compartido de la raiz en la skin modern",
+            "tier": "standard",
+            "examples": [
+              "--ds-color-error"
+            ],
+            "noSocketReason": "sin socket propio; consumo directo de --ds-color-error, --ds-color-warning via canal compartido; evidencia verificada en runtime/engines/modern/skin/cascader.css:551,554.",
+            "socketsResolved": true,
+            "carrier": "shared-channel"
+          }
+        ],
+        "reviewedFrom": "anatomy",
+        "sourceBindings": [
+          "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css"
+        ]
+      }
+    },
+    {
+      "controlId": "profiles.icon",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "internalChannels": [
+        {
+          "channelId": "--_ds-cascader-icon-stroke-width",
+          "semanticOwner": "profiles.icon",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/inputs/cascader"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+          }
+        }
+      ]
+    },
+    {
+      "controlId": "responsive.posture",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "NO_CSS_CHANNEL",
+        "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
+        "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
+        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/responsive.posture.json"
+      }
+    }
+  ],
+  "retiredThemeControls": [],
+  "recipeAnatomy": {
+    "assessmentState": "UNKNOWN",
+    "groupBindings": [],
+    "variants": [],
+    "deprecatedAliases": [],
+    "evidenceIds": [],
+    "nextAction": "CENSUS_TYPED_RECIPE_AND_ANATOMY_VARIANTS"
+  },
+  "instanceApi": {
+    "assessmentState": "UNKNOWN",
+    "props": [],
+    "slots": [],
+    "callbacks": [],
+    "controlledState": [],
+    "evidenceIds": [],
+    "nextAction": "CENSUS_PUBLIC_PROPS_SLOTS_CALLBACKS_AND_CONTROLLED_STATE"
+  },
+  "hostAdaptation": {
+    "assessmentState": "UNKNOWN",
+    "contexts": [],
+    "containerRules": [],
+    "invariants": [],
+    "evidenceIds": [],
+    "nextAction": "PROVE_PAGE_EMBED_CONTAINER_VIEWPORT_AND_HOST_POSTURES"
+  },
+  "statesMotion": {
+    "assessmentState": "UNKNOWN",
+    "states": [],
+    "transitions": [],
+    "inputModes": [],
+    "reducedMotion": [],
+    "evidenceIds": [],
+    "nextAction": "CENSUS_STATES_TRANSITIONS_INPUTS_AND_REDUCED_MOTION"
+  },
+  "invariants": {
+    "assessmentState": "UNKNOWN",
+    "entries": [],
+    "evidenceIds": [],
+    "nextAction": "AUTHOR_STRUCTURAL_BEHAVIORAL_ACCESSIBILITY_AND_RESTORE_INVARIANTS"
+  },
+  "premiumCandidates": []
+}

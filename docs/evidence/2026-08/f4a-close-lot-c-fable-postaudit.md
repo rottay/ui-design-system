@@ -86,7 +86,7 @@ la copia post (`-generated-correct.json`) es byte-idéntica al árbol (`678d4711
 - Contadores leídos del generated: tagRegistry.count **4208**, silentPairs **0**,
   placeholderPairs **3969**, declaredAbsentPairs **53**, untaggedAuthoredLeaves **0**,
   divergentSlots **33** (informativo) — exactos contra §3 de la autoridad.
-- Pines del baseline (`variant-parity.baseline.json`): 0 / 3969 / 0 quietos,
+- Pines del baseline (`baseline/index.json`): 0 / 3969 / 0 quietos,
   divergentSlots 33 informativo — archivo con mtime 2026-08-21 23:07, fuera de la
   ventana del lote: NO tocado.
 - Temas: los 3 `brand-themes/*/index.ts` con mtimes 00:04–00:08 (pre-lote) — ni

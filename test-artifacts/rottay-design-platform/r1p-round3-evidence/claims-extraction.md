@@ -204,8 +204,8 @@ L249-252 is important: the doc traces provenance **from** the artifact path onwa
 
 ### engine-token-audit — 2 occurrences (L54, L170)
 
-- L54: `| R2-3 | Daisy: class consumers are now 0, ... | ACCEPTED | Verified: `engine-token-audit.baseline.json:17` reads `"daisy.classConsumers": 0` in the current worktree. ...`
-- L170: `| Daisy class consumers | CLOSED_IN_WIP — CONFIRMED at 0 (engine-token-audit.baseline.json:17 `daisy.classConsumers: 0`) |`
+- L54: `| R2-3 | Daisy: class consumers are now 0, ... | ACCEPTED | Verified: `engine-token-baseline/index.json:17` reads `"daisy.classConsumers": 0` in the current worktree. ...`
+- L170: `| Daisy class consumers | CLOSED_IN_WIP — CONFIRMED at 0 (engine-token-baseline/index.json:17 `daisy.classConsumers: 0`) |`
 
 Also relevant, L95 and L46 — `engine-audit:check` is the *one* gate the doc credits as properly CI-wired:
 > L46: `- The nine-gates finding was re-verified TODAY against the current worktree: `engine-audit:check` IS explicitly wired (ci.yml:128, with the :126 comment admitting the pretest gap), and the nine named gates have ZERO occurrences in ci.yml. The archetype is documented in the file itself and was fixed for exactly one gate.`

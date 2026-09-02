@@ -1,7 +1,7 @@
 # WO-SKIN-06 checkpoint CK-H inventory (read-only) — brand-preview + misc
 
 Scope: the 13 files named in the CK-H row of `wo-skin-06-triage.md` §6, verified
-against `node scripts/engine-token-audit.mjs | grep fleet.inlinePaint.runtime/patterns/misc`
+against `node scripts/infrastructure/engine-token-audit.mjs | grep fleet.inlinePaint.runtime/patterns/misc`
 (counts match exactly, 453 total):
 
 | file | sites | half |
@@ -25,7 +25,7 @@ brand-studio). H2 = 216 sites, 9 files (file-manager, user-profile-card,
 pricing-table, empty-state ×2 engines each, token-inspector).** All 13 files
 read in full, not sampled. Every raw count below is grep-verified against the
 counter's exact channel regex (`ARC09_PAINT_KEY_RE` from
-`scripts/lib/inline-paint-counter.mjs`) before classification, not estimated.
+`scripts/tooling/libraries/inline-paint-counter.mjs`) before classification, not estimated.
 
 `patterns/misc/cockpit-header`, `page-shell`, `workbench-header` also live
 under `patterns/misc/` but are **not** in CK-H scope (they belong to CK-B/CK-C)
@@ -501,7 +501,7 @@ load-bearing anatomy for the `<style>`-injection mechanism, distinct from
 Read all 13 files in full. Every file's raw paint-key count was independently
 verified with
 `grep -noE "\b(background[A-Za-z]*|border[A-Za-z]*|outline[A-Za-z]*|color|boxShadow|textShadow|fill|stroke|accentColor|filter|backdropFilter|WebkitBackdropFilter|transform)\s*:" <file> | wc -l`
-(the exact `ARC09_PAINT_KEY_RE` from `scripts/lib/inline-paint-counter.mjs`),
+(the exact `ARC09_PAINT_KEY_RE` from `scripts/tooling/libraries/inline-paint-counter.mjs`),
 minus `ARC09_PAINT_EXEMPT` hits (`borderCollapse`/`borderSpacing`), and
 matched the counter's per-file total exactly before classification began —
 every file in this report reproduces the counter's number on the nose, not

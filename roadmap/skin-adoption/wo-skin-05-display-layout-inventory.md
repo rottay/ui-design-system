@@ -15,7 +15,7 @@ WHERE the runtime identifier lands, not whether one is mentioned —
 `--ds-*` custom-property hatch).
 
 **Table is excluded** (already migrated, WO-ARC-09). **Coverage checklist**
-(from `node scripts/engine-token-audit.mjs | grep -E
+(from `node scripts/infrastructure/engine-token-audit.mjs | grep -E
 "fleet.inlinePaint.foundation/primitives/(display|layout)"`, 2026-07-13): 23 components,
 54 files, 624 sites (Display: Calendar 76, Tree 51, Card 48, Avatar 38, Tag 35,
 Image 35, Tooltip 34, Badge 33, QRCode 33, List 31, Timeline 28, Carousel 28,

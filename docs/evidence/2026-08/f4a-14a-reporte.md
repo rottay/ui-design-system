@@ -186,7 +186,7 @@ Preestado (8 líneas):
  M packages/core/scripts/ci/gates-manifest/index.mjs
  M packages/core/scripts/evidence/cra-12-motion-governance/cra-12-motion-governance.reanchor.test.mjs
  M packages/core/scripts/quality-evidence/programs/modern-rescue/README.md
- M packages/core/scripts/quality-evidence/programs/modern-rescue/checkpoint.intent.json
+ M packages/core/scripts/quality-evidence/programs/modern-rescue/checkpoint/index.json
  M packages/core/scripts/quality-evidence/programs/modern-rescue/program-check.test.mjs
  M packages/core/src/tooling/lane-control/public/program-state/index.mjs
 
@@ -196,7 +196,7 @@ Final (11 líneas) = preestado + exactamente:
  M packages/core/manifest/cascade/root-catalog.json
 ```
 
-Los 8 preexistentes, re-verificados byte-idénticos al cierre (mismos hashes que al abrir esta sesión): `docs/prompt-codex-continue.md` = `afede1efdd7935c7cd7a64300ba4a1d9ea855403797deb693b4f10ebe28a4c47`; `gates-manifest/index.mjs` = `3b7f906f346c338302ff1a439cf18737b5a72a6f3b14dd9711efb4fb964cb64d`; `modern-rescue/README.md` = `281d079238b42a30ae4ab9a73fbb10b76394f70a45b80a7c9747bec636dc0687`; `checkpoint.intent.json` = `5a86b12ae6369bdd0f56f668f0f6ac906274c4a405c7ea383f459db5e23dd5e4`; `program-check.test.mjs` = `6b20d27226c3529971a18e2799c57da3ac383aad2c742bccf2dcaae84b0fa1e2`; `program-state/index.mjs` = `263779f068cbd465d024c604420f657a73bd744e069950f9e7ad3ba9bea47594`; `cra-12-motion-governance.reanchor.test.mjs` = `39d65b6ed18d2ec34e3f69ecb578d3d64c502f88f0f3dbbb0423af2663c82a3c`; roadmap = `34aa05a46638b664e20626b10904fd15c85466afe82c59f689e3e63cee3b70cf`.
+Los 8 preexistentes, re-verificados byte-idénticos al cierre (mismos hashes que al abrir esta sesión): `docs/prompt-codex-continue.md` = `afede1efdd7935c7cd7a64300ba4a1d9ea855403797deb693b4f10ebe28a4c47`; `gates-manifest/index.mjs` = `3b7f906f346c338302ff1a439cf18737b5a72a6f3b14dd9711efb4fb964cb64d`; `modern-rescue/README.md` = `281d079238b42a30ae4ab9a73fbb10b76394f70a45b80a7c9747bec636dc0687`; `checkpoint/index.json` = `5a86b12ae6369bdd0f56f668f0f6ac906274c4a405c7ea383f459db5e23dd5e4`; `program-check.test.mjs` = `6b20d27226c3529971a18e2799c57da3ac383aad2c742bccf2dcaae84b0fa1e2`; `program-state/index.mjs` = `263779f068cbd465d024c604420f657a73bd744e069950f9e7ad3ba9bea47594`; `cra-12-motion-governance.reanchor.test.mjs` = `39d65b6ed18d2ec34e3f69ecb578d3d64c502f88f0f3dbbb0423af2663c82a3c`; roadmap = `34aa05a46638b664e20626b10904fd15c85466afe82c59f689e3e63cee3b70cf`.
 
 `git diff --check`: limpio. `staged`: 0.
 

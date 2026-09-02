@@ -18,7 +18,7 @@ El cuerpo técnico de Kimi es **correcto y verificado**: confirmé con evidencia
 
 El defecto central es **C1/H4: Kimi confunde un handoff PREPARADO con una transferencia de autoridad CONSUMADA**. Determinación explícita (pregunta vinculante del encargo):
 
-> **La sucesión DT 2026-08-23 (Codex → Kimi K3) NO está consumada.** La última orden explícita del owner fue: Codex no transfiere ni opera la sesión Kimi; sólo deja un prompt; el owner abre/comunica personalmente la sesión fresca. La autorización posterior fue para contactar a Kimi K3 **únicamente para esta re-auditoría** — y el propio header de la re-auditoría lo confirma ("auditor principal independiente, READ-ONLY, por override del owner 2026-08-23"). Un documento de handoff redactado por Codex (SHA `088ddd36…`) no puede consumar una sucesión que sólo una orden del owner consuma. **Toda la autoridad viva verificada nombra hoy a Codex como DT y eso es el estado CORRECTO, no drift**: `program-check.mjs` (`LIVE_COORDINATOR='Codex'`, cadena de 2 records), `AGENTS.md:34-56`, `CLAUDE.md`, `agent-orchestration.json` (coordinator.model + succession de 2 records), README del programa (:194,:254,:308), `tenant-art-direction.json:7,9,367`, `rounds.json`, `checkpoint.intent.json:10-11`. Aplicar C1 tal como está escrito **fabricaría una mentira de autoridad** (una sucesión con fecha 2026-08-23 que ningún owner ordenó). Ninguna recomendación de este memo declara a Kimi DT vivo; el packet de sucesión queda REDACTADO Y BLOQUEADO hasta orden explícita del owner, y se ejecutará con la fecha REAL de esa orden, no con 2026-08-23 por retroproyección.
+> **La sucesión DT 2026-08-23 (Codex → Kimi K3) NO está consumada.** La última orden explícita del owner fue: Codex no transfiere ni opera la sesión Kimi; sólo deja un prompt; el owner abre/comunica personalmente la sesión fresca. La autorización posterior fue para contactar a Kimi K3 **únicamente para esta re-auditoría** — y el propio header de la re-auditoría lo confirma ("auditor principal independiente, READ-ONLY, por override del owner 2026-08-23"). Un documento de handoff redactado por Codex (SHA `088ddd36…`) no puede consumar una sucesión que sólo una orden del owner consuma. **Toda la autoridad viva verificada nombra hoy a Codex como DT y eso es el estado CORRECTO, no drift**: `program-check.mjs` (`LIVE_COORDINATOR='Codex'`, cadena de 2 records), `AGENTS.md:34-56`, `CLAUDE.md`, `orchestration/index.json` (coordinator.model + succession de 2 records), README del programa (:194,:254,:308), `art-direction/index.json:7,9,367`, `rounds/index.json`, `checkpoint/index.json:10-11`. Aplicar C1 tal como está escrito **fabricaría una mentira de autoridad** (una sucesión con fecha 2026-08-23 que ningún owner ordenó). Ninguna recomendación de este memo declara a Kimi DT vivo; el packet de sucesión queda REDACTADO Y BLOQUEADO hasta orden explícita del owner, y se ejecutará con la fecha REAL de esa orden, no con 2026-08-23 por retroproyección.
 
 Lo demás de la re-auditoría se sostiene: los reds H1/H2 son reales (los corrí yo), la brecha de escribanía H3 es real (grep negativo en el roadmap para los 15 SHAs del drenado; sin memos de doble postaudit en /tmp), y el orden de correcciones C2→C3→C4 antes de F4B 5/20 es el correcto.
 
@@ -28,7 +28,7 @@ Lo demás de la re-auditoría se sostiene: los reds H1/H2 son reales (los corrí
 
 | H | Veredicto | Evidencia propia |
 |---|---|---|
-| H1 | **CONFIRMADO** | Corrí `program-check.mjs` en HEAD: `BLOCKED`, exactamente **24 fallos**, todos `spacing.rhythm` en `manifest/families/primitive/layout/{flex,grid,space,stack}.json` (4 archivos × 6 clases: mechanism null, internalChannels vacío, evidenceIds `R2:…` fuera del root — los artifacts viven en `test-artifacts/quality-evidence/wo-cra-23/F4B/spacing-rhythm/` —, evidenceKind sin computed-delta ni exact-restore). "Desde `56847146f`" corroborado por aritmética del propio ledger: roadmap:1350 (25→24 en `5ce42e1b7`, "0 nuevos") y :1456 ("los mismos 24… que ya existían"). |
+| H1 | **CONFIRMADO** | Corrí `program-check.mjs` en HEAD: `BLOCKED`, exactamente **24 fallos**, todos `spacing.rhythm` en `manifest/families/primitive/layout/{flex,grid,space,stack}.json` (4 archivos × 6 clases: mechanism null, internalChannels vacío, evidenceIds `R2:…` fuera del root — los artifacts viven en `artifacts/quality/programs/modern-rescue/cascade-proofs/controls/spacing-rhythm/computed-static-db/` —, evidenceKind sin computed-delta ni exact-restore). "Desde `56847146f`" corroborado por aritmética del propio ledger: roadmap:1350 (25→24 en `5ce42e1b7`, "0 nuevos") y :1456 ("los mismos 24… que ya existían"). |
 | H2 | **CONFIRMADO** | Corrí `gat07:check` con Node 22.17.0: `stale/missing` (semantic-evidence.json + semantic-hash.txt). Intersección propia sello vs `git diff 1c127bf0e..HEAD`: **exactamente 18 inputs sellados modificados** de 134 archivos cambiados (el "4 nuevos sin sellar" no lo reconté; el veredicto stale no depende de él). Último resello: `1c127bf0e` (08-22). Ningún resello por packet durante F4B. |
 | H3 | **CONFIRMADO con enmienda** | El rango `8d2985638..6cfdcc1a9` inclusive son **15 commits, no 14** (git rev-list). Los 15 con cuerpo vacío (verificado). Exactamente **2 archivos de `packages/core/src/`** tocados: `foundation/tokens/ts/runtime/personality/index.ts` y `infrastructure/runtime/theming/presentation/adapters/react/css-variables-bridge/index.tsx` — fuera del write-set mínimo declarado A4/A5/A6 (roadmap:1140-1141). Grep del roadmap: **ningún** asiento cita esos SHAs, ni el ruling de Lote B, ni las dos auditorías que la condición vinculante roadmap:1142-1146 exigía. En /tmp hay logs de corrida, no memos de postaudit. |
 | H4 | **RECHAZADO como enmarcado** | Los 8 puntos nombran a Codex — verificado uno por uno — pero eso es el estado vivo CORRECTO (§1). No hay drift; habría drift recién cuando el owner consuma la sucesión. |
@@ -36,7 +36,7 @@ Lo demás de la re-auditoría se sostiene: los reds H1/H2 son reales (los corrí
 | H6 | **CONFIRMADO** | `packages/core/manifest/controls/experience.profile.json:95` declara `OPEN_VERTICAL_CASCADE_DEFECT` con remediation "Out of scope for a single-control packet". Anclas reales: `artifacts/bithire/index.css:644` (`--ds-letter-spacing-heading: -0.025em`) vs `:1496` (`-0.01em`, bloque dark con selector de mayor especificidad). Sin dueño de packet. |
 | H7 | **CONFIRMADO** | `experience.profile.json:103` declara `OPEN_ARM_ASYMMETRY` con remediation "Owner adjudication… a compiler decision above this packet". Sin resolver. |
 | H8 | **CONFIRMADO mecánicamente, ENMENDADO procesalmente** | Corrí el suite: **11/12 pass**, el que falla es exactamente `negative drill: the producer may not be the sighted approver` (`tooling/resolution-probe/composition/receipt/tests/index.test.mjs:197`); `SIGHTED_APPROVER='Codex (DT)'` en `quality-evidence/v2/receipts.mjs:7` vs `'Codex'` pasado. **PERO** este rojo ya está asentado con **ruling del dueño** "fuera de alcance" en roadmap:1356-1359 — Kimi lo presenta como hallazgo sin escribanía y no lo es. Reabrirlo requiere asiento que supersede ese ruling (dueño), no un fix colado en un barrido. Y "doblemente stale tras la sucesión" cae con H4. |
-| H9 | **DIVIDIDO** | `checkpoint.intent.json:3` describe F4A como frente abierto con K4/K5 como próximos packets — **genuinamente stale HOY** (F4A cerró 08-22), independiente de toda sucesión. En cambio `rounds.json` (`codex-audit`/`Codex GO`) **no está stale**: Codex ES el DT vivo. La neutralización "asiento DT" es higiene deseable, diferida al packet de sucesión. Nota: `program-check.mjs:145,972-975` lee y valida `checkpoint.intent.json` — su edición es contrato máquina bajo cuidado T-1, no documentación. |
+| H9 | **DIVIDIDO** | `checkpoint/index.json:3` describe F4A como frente abierto con K4/K5 como próximos packets — **genuinamente stale HOY** (F4A cerró 08-22), independiente de toda sucesión. En cambio `rounds/index.json` (`codex-audit`/`Codex GO`) **no está stale**: Codex ES el DT vivo. La neutralización "asiento DT" es higiene deseable, diferida al packet de sucesión. Nota: `program-check.mjs:145,972-975` lee y valida `checkpoint/index.json` — su edición es contrato máquina bajo cuidado T-1, no documentación. |
 
 Otros verificados: H10 (4 cuerpos vacíos ✓), H11 (reflog: `reset: moving to HEAD~1` 08-19 19:23, re-commit `6de85d530` 19:34 ✓, sin push), H12 (núcleo ✓ — ver §4 patch 5: la corrección de Kimi es a su vez incorrecta), H13 (docs en /tmp ✓; **hallazgo ampliado: son 60, no 9** — ver C5), H14 (import muerto, 1 sola ocurrencia = el import ✓; path real `infrastructure/compilers/composition/tenant-theme/index.ts`), H15 (✓ con matiz: la única mención productiva es un COMENTARIO en el provider; los consumidores reales son tests — "retirar o gate-ar" sigue bien), H16 (✓ en sustancia: ~12-13 formas no literales en el listado de `staticBrandThemePath`), H20 (stash `stash@{0}` pre-programa existe ✓).
 
@@ -67,12 +67,12 @@ Otros verificados: H10 (4 cuerpos vacíos ✓), H11 (reflog: `reset: moving to H
 | 5 | roadmap:1642 | **APLICAR AHORA, con texto corregido** | El texto de Kimi introduce un error nuevo (§3.C7.a). Texto exacto en §6.D1c. |
 | 6 | AGENTS.md | **DIFERIR** (owner-gated, C1″) | Hoy es exacto. Cambiarlo sin orden = mentira de autoridad. |
 | 7 | CLAUDE.md | **DIFERIR** (owner-gated) | Ídem. |
-| 8 | agent-orchestration.json | **DIFERIR** (owner-gated) | Ídem; el 3er record de sucesión se escribe con la fecha real de la orden. |
+| 8 | orchestration/index.json | **DIFERIR** (owner-gated) | Ídem; el 3er record de sucesión se escribe con la fecha real de la orden. |
 | 9 | program-check.mjs | **DIFERIR** (owner-gated) | Ídem; procedimiento T-1 correcto cuando ocurra. |
 | 10 | README del programa | **DIFERIR** (owner-gated) | Ídem. |
-| 11 | tenant-art-direction.json | **DIFERIR + motivo rechazado** | Su justificación es errónea: ":9 Kimi retired from all live seats" NO está "contradicho por el handoff" — un handoff de Codex no override una orden del owner. El override del 08-23 fue puntual (re-auditoría) y se registra en el roadmap, no reescribiendo la constitución. |
-| 12 | rounds.json | **DIFERIR** | Hoy no está stale (Codex es DT). Neutralización a "asiento DT" = higiene del packet de sucesión. |
-| 13 | checkpoint.intent.json | **DIVIDIR** | `currentWave` stale (F4A cerró): corregible YA, pero es contrato máquina leído por program-check (:145,:972-975) → **micro-packet T-A propio** (DT autoriza; program-check antes/después), NO en el commit documental. `authority: codex-dt`: exacto hoy → DIFERIR. |
+| 11 | art-direction/index.json | **DIFERIR + motivo rechazado** | Su justificación es errónea: ":9 Kimi retired from all live seats" NO está "contradicho por el handoff" — un handoff de Codex no override una orden del owner. El override del 08-23 fue puntual (re-auditoría) y se registra en el roadmap, no reescribiendo la constitución. |
+| 12 | rounds/index.json | **DIFERIR** | Hoy no está stale (Codex es DT). Neutralización a "asiento DT" = higiene del packet de sucesión. |
+| 13 | checkpoint/index.json | **DIVIDIR** | `currentWave` stale (F4A cerró): corregible YA, pero es contrato máquina leído por program-check (:145,:972-975) → **micro-packet T-A propio** (DT autoriza; program-check antes/después), NO en el commit documental. `authority: codex-dt`: exacto hoy → DIFERIR. |
 | 14 | fence index.test.mjs:197 | **TRANCHE SEPARADO, owner-gated** | Defecto real (corrida propia 11/12) pero con ruling del dueño "fuera de alcance" ya asentado (roadmap:1356-1359). Fix = edit de código + superseder un ruling del owner → requiere asiento con esa autorización. No entra en el paquete documental. |
 
 **Resumen:** aplicar ahora (enmendados): 1, 4, 5 + la mitad documental de 2/3. Diferir hasta orden owner: 6, 7, 8, 9, 10, 11, 12, mitad de 13, 14. Ninguno se aplica tal cual está redactado por Kimi sin enmienda.
@@ -84,7 +84,7 @@ Otros verificados: H10 (4 cuerpos vacíos ✓), H11 (reflog: `reset: moving to H
 **(a) Actualización documental honesta — AHORA (paquete Opus, §6):** asiento vivo 2026-08-23 (autoridad real + re-auditoría + brecha C4 + reglas C3-doc + OPEN de C6), enmiendas :1199 y :1642, persistencia C5 de los 60 memos, prompt fresco corregido.
 
 **(b) Implementación/gates pendiente (fuera del paquete documental):**
-- **T-A (writer bajo DT, bloquea F4B 5/20):** C2 (celdas spacing.rhythm o enmienda única de ley + vocabulary), resello gat-07 (`gat07:write`), micro-packet `checkpoint.intent.json currentWave`, y la doble postaudit retroactiva C4 (Fable + independiente) o dispensa explícita del owner.
+- **T-A (writer bajo DT, bloquea F4B 5/20):** C2 (celdas spacing.rhythm o enmienda única de ley + vocabulary), resello gat-07 (`gat07:write`), micro-packet `checkpoint/index.json currentWave`, y la doble postaudit retroactiva C4 (Fable + independiente) o dispensa explícita del owner.
 - **T-C (barrido de código C7, no bloqueante):** import muerto + docblocks (tenant-theme), retiro/gate de `compileAppearanceVariables` (con sus tests), poda/re-anclaje de `phase-a/ledger-schema.json`, convención de cuerpo de commit hacia adelante.
 
 **(c) Cambios de autoridad que requieren NUEVA orden del owner:** todo el packet de sucesión C1″ (patches 6–12, lane de 13, y el fence 14 por su ruling previo); la resolución del stash; la política de backup de los 519 commits locales (H20) — decisión operativa del owner, no del DT.
@@ -110,9 +110,9 @@ Commit: `docs(modern-rescue): asiento 2026-08-23 — re-auditoria Kimi, brecha P
   un prompt sin transferir ni operar la sesión, y la autorización posterior a
   Codex fue contactar a Kimi K3 únicamente para la re-auditoría. La sucesión
   sólo la consuma una orden explícita del owner; cuando ocurra, el packet de
-  autoridad (AGENTS.md, CLAUDE.md, agent-orchestration.json, program-check.mjs,
-  README del programa, tenant-art-direction.json, rounds.json,
-  checkpoint.intent.json, fence SIGHTED_APPROVER) se ejecuta en UN packet con
+  autoridad (AGENTS.md, CLAUDE.md, orchestration/index.json, program-check.mjs,
+  README del programa, art-direction/index.json, rounds/index.json,
+  checkpoint/index.json, fence SIGHTED_APPROVER) se ejecuta en UN packet con
   procedimiento T-1 y con la fecha real de esa orden.
 - **Re-auditoría independiente Kimi K3 (owner override 2026-08-23, READ-ONLY):**
   veredicto `ACCEPT_WITH_CORRECTIONS`.
@@ -129,7 +129,7 @@ Commit: `docs(modern-rescue): asiento 2026-08-23 — re-auditoria Kimi, brecha P
   `manifest/families/primitive/layout/{flex,grid,space,stack}.json`
   (mechanism null; internalChannels vacío; evidenceIds `R2:…` fuera del
   evidence root — los artifacts viven en
-  `test-artifacts/quality-evidence/wo-cra-23/F4B/spacing-rhythm/`; evidenceKind
+  `artifacts/quality/programs/modern-rescue/cascade-proofs/controls/spacing-rhythm/computed-static-db/`; evidenceKind
   sin computed-delta ni exact-restore). Heredado desde `56847146f` (25→24 en
   `5ce42e1b7`, 0 nuevos después). `gat07:check` = STALE: sello vigente
   `1c127bf0e` (2026-08-22) invalidado por la serie F4B (18 inputs sellados
@@ -141,7 +141,7 @@ Commit: `docs(modern-rescue): asiento 2026-08-23 — re-auditoria Kimi, brecha P
 - **Correcciones que bloquean F4B 5/20 (orden):** C2 (program-check verde:
   corregir las celdas o enmendar la ley del gate UNA sola vez con asiento,
   unificando el vocabulary evidenceKind con los otros 3 controles), C3
-  (resello gat-07), C4 (abajo). C2 y el refresh de `checkpoint.intent.json`
+  (resello gat-07), C4 (abajo). C2 y el refresh de `checkpoint/index.json`
   (`currentWave` describe F4A como frente abierto; F4A cerró 2026-08-22) son
   contratos máquina: se ejecutan como packets T-A con program-check corrido
   antes y después, nunca como edits documentales.
@@ -224,7 +224,7 @@ inventa retroactivamente un ruling que no se registró.
 Base: el texto íntegro del prompt Kimi (SHA `c328f425…`), con EXACTAMENTE estas 8 correcciones (el resto se copia verbatim):
 
 1. Línea 3: reemplazar `Sos el DT entrante del programa Modern Rescue (WO-CRA-23)` por `Sos una sesión de trabajo del programa Modern Rescue (WO-CRA-23). El DT vivo es Codex; asumís el asiento DT SOLO si el owner te lo ordena explícitamente al abrir esta sesión — esa orden, con su fecha real, es la que consuma la sucesión y habilita el packet de autoridad; sin ella, coordiná el trabajo listado sin tocar autoridad viva`.
-2. Ítem 4 (C1 — drift de autoridad): reemplazar el ítem completo por: `C1 — packet de sucesión DT: REDACTADO Y BLOQUEADO hasta orden explícita del owner. La autoridad viva (AGENTS.md, CLAUDE.md, agent-orchestration.json, program-check.mjs, README, tenant-art-direction.json, rounds.json, checkpoint.intent.json) nombra hoy a Codex como DT y ESO ES CORRECTO: no editar ninguno de esos archivos por inferencia. Si el owner ordena la sucesión, ejecutar el packet completo en UN commit con procedimiento T-1 (program-check + program-check.test antes y después) usando la fecha real de la orden. Independiente de la sucesión: el refresh de checkpoint.intent.json currentWave (F4A cerró 08-22) es un micro-packet T-1 propio, y el fence SIGHTED_APPROVER (receipts.mjs:7 'Codex (DT)' vs test :197 'Codex') tiene ruling previo del dueño "fuera de alcance" (roadmap, packet effect-intensity) — reabrirlo requiere superseder ese ruling con asiento`.
+2. Ítem 4 (C1 — drift de autoridad): reemplazar el ítem completo por: `C1 — packet de sucesión DT: REDACTADO Y BLOQUEADO hasta orden explícita del owner. La autoridad viva (AGENTS.md, CLAUDE.md, orchestration/index.json, program-check.mjs, README, art-direction/index.json, rounds/index.json, checkpoint/index.json) nombra hoy a Codex como DT y ESO ES CORRECTO: no editar ninguno de esos archivos por inferencia. Si el owner ordena la sucesión, ejecutar el packet completo en UN commit con procedimiento T-1 (program-check + program-check.test antes y después) usando la fecha real de la orden. Independiente de la sucesión: el refresh de checkpoint/index.json currentWave (F4A cerró 08-22) es un micro-packet T-1 propio, y el fence SIGHTED_APPROVER (receipts.mjs:7 'Codex (DT)' vs test :197 'Codex') tiene ruling previo del dueño "fuera de alcance" (roadmap, packet effect-intensity) — reabrirlo requiere superseder ese ruling con asiento`.
 3. Ítem 3 (C4): reemplazar `los 14 commits` por `los 15 commits` y agregar al final: `; la acción inmediata es la declaración de brecha ya asentada en el roadmap (asiento 2026-08-23) y agendar la doble postaudit retroactiva o la dispensa explícita del owner`.
 4. Ítem 5 (C5): reemplazar por: `C5 — evidencia persistida: los memos /tmp con SHA asentado en el roadmap (60) más los 3 artefactos del 2026-08-23 están copiados en docs/evidence/2026-08/ con INDEX.md; verificar que el INDEX no registre MISMATCH antes de confiar en una copia`.
 5. Ítem 7 (C7): en la frase del stash, reemplazar `resolver el stash pre-programa (2026-03-17)` por `el stash pre-programa queda OPEN_OWNER: ninguna operación de stash sin orden explícita del owner`; y en la frase de narrativa, reemplazar `(surfaces SÍ fue reemitido)` por `(ya corregida en el roadmap: ambos controles fueron reescritos a nivel archivo en 56fb593fd y sólo conservaron el roundId R2)`.
@@ -245,7 +245,7 @@ Base: el texto íntegro del prompt Kimi (SHA `c328f425…`), con EXACTAMENTE est
   2. **C2** — program-check verde (decisión única del DT: celdas vs ley + vocabulary), verificado con corrida antes del siguiente commit F4B.
   3. **C3** — resello gat-07 (`gat07:write`, Node 22.17.0) + regla por-packet ya vinculante.
   4. **C4** — doble postaudit retroactiva del drenado o dispensa explícita del owner, asentada.
-  5. Micro-packet `checkpoint.intent.json currentWave` (T-1).
+  5. Micro-packet `checkpoint/index.json currentWave` (T-1).
 - **No bloquean F4B 5/20** (pero sí frentes posteriores): C6-decisión owner (bloquea F2-asimétrico/F3 y cualquier control que toque cascada vertical bithire; los candidatos 5/20 `responsive.posture`/`density.mode` no dependen del bloque dark de bithire), T-C (barrido C7), packet de sucesión C1″ (sólo si el owner la ordena).
 
 ---

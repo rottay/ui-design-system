@@ -12,7 +12,7 @@ from data at render time — stays inline or rides a `--ds-*` custom-property ha
 discriminator used throughout (per P-76-era triage doc §2): ask *where the runtime
 identifier lands*, not whether one is mentioned in the expression.
 
-**Coverage checklist** (`node scripts/engine-token-audit.mjs | grep
+**Coverage checklist** (`node scripts/infrastructure/engine-token-audit.mjs | grep
 "fleet.inlinePaint.(structures/headers|patterns/misc/(page-shell|cockpit-header|workbench-header))"`,
 re-run 2026-07-13 for this report — 1 site lower than the number in the delegating
 brief/triage table, `headers/edit` drifted 49→48 between when the triage table was

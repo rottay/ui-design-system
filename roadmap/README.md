@@ -263,7 +263,7 @@ be fixed or deliberately respecified in its own work order.
 > HOW TO PERFORM: (1) WO statuses change ONLY via `node scripts/roadmap/status/index.mjs` (claim/progress/done/reopen;
 > deps, mustLandWith hazards, and evidence are enforced). `node scripts/roadmap/status/index.mjs delegate
 > WO-ENG-NN` prints the ready-to-paste executor prompt. (2) Gates are truth: a WO is done only when its
-> acceptance gate is green — the lane's mechanical gate is `node scripts/engine-token-audit.mjs --check`
+> acceptance gate is green — the lane's mechanical gate is `node scripts/infrastructure/engine-token-audit.mjs --check`
 > (created by WO-ENG-01, extended by every later token WO) plus `pnpm --filter @rottay/design-system run
 > build` and `pnpm test`. (3) For EVERY visual WO the SIGHTED CHECK is mandatory: run the showroom
 > (`pnpm --filter @rottay/design-system-showroom run dev`, http://localhost:7001), capture the affected
@@ -344,7 +344,7 @@ be fixed or deliberately respecified in its own work order.
 
 Everything needed to resume from ANY machine or session lives in-repo: this README (protocol + start
 order), `registry.json` (who claimed what, evidence on done), generated `STATUS.md`, the lane spec, the
-normative spec in docs-engineering, and the gate (`scripts/engine-token-audit.mjs`). A fresh session's
+normative spec in docs-engineering, and the gate (`scripts/infrastructure/engine-token-audit.mjs`). A fresh session's
 first command is always `pnpm roadmap:status`.
 
 ## Start order (first working window)

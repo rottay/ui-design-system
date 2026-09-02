@@ -133,6 +133,6 @@ must preserve or explicitly re-adjudicate all of the following together:
 
 The focused contract passes `8/8`; core and showroom production builds are green; and the five
 committed screenshots pass two independent `5/5` Playwright runs without snapshot updates. The core
-build regenerated the tracked `packages/core/styles/**` bundles so every published CSS graph carries
+build regenerated the tracked `packages/core/artifacts/generated/styles/**` bundles so every published CSS graph carries
 the externalized skin. No visual snapshot changed. Registry/status closure remains part of the final
 WO-SKIN-06 certification after CK-H1 and CK-E, rather than being claimed by this addendum alone.

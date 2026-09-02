@@ -54,7 +54,7 @@ y el conjunto está **incompleto** en 3 más. Cierre mínimo COMPLETO ≠ 13.
 
 | # | Ítem | Inventario | **Mi adjudicación** | Razón |
 |---|---|---|---|---|
-| 5 | `checkpoint.intent.json.blockedOn` | MUST_CLOSE (fila propia) | **NO ES OBLIGACIÓN — es un espejo, y hoy está roto** | No añade contenido: reproduce obligaciones ya contadas. **Y la afirmación del inventario es FALSA** — ver §10.A |
+| 5 | `checkpoint/index.json.blockedOn` | MUST_CLOSE (fila propia) | **NO ES OBLIGACIÓN — es un espejo, y hoy está roto** | No añade contenido: reproduce obligaciones ya contadas. **Y la afirmación del inventario es FALSA** — ver §10.A |
 | 12 | Prosa "63 raíces" en `root-catalog` | MUST_CLOSE ambigua | **DEFER_F4B con cerca escrita** | K4 v3 §11 es explícito: "se registra el drift, **no se reescribe** — corregir la cobertura de A+B exige re-medir los 3275 canales asignados". Re-medir 3275 canales no cabe en F4A-close. Obligación de F4A-close: **sólo** que la entrada `corrections` diga que la prosa es stale y por qué |
 | 13 | Clase F4B en roster/fuente | MUST_CLOSE sin resolución | **DEFER_F4B — es un puntero, no una deuda** | K4 v3 §4.7/§11 la listan como "lo que este lote NO cierra", nunca como trabajo de F4A-close. Obligación de F4A-close: que el puntero sea inequívoco |
 
@@ -276,9 +276,9 @@ Sin re-medición, sin mover baseline. Es cambio de etiqueta/comentario — coher
 
 **NO existe en el árbol.** `grep -rn "realKeypathParity"` (sin `node_modules`) devuelve **4 coincidencias, todas prosa**:
 `docs/prompt-codex-continue.md:51`, `docs/prompt-kimi-continue.md:324`, `docs/ROADMAP-EJECUCION-2026-08-19.md:931`,
-`packages/core/manifest/variant-parity/variant-parity.baseline.json:8`.
+`packages/core/manifest/variant-parity/baseline/index.json:8`.
 Sin script, sin test, sin entrada en `gates-manifest`. *(Corrección al inventario: dice "sólo … dentro de
-`variant-parity.baseline.json`"; son 4, tres en docs. La conclusión sustantiva es correcta.)*
+`baseline/index.json`"; son 4, tres en docs. La conclusión sustantiva es correcta.)*
 
 ### 5.2 Semántica exacta que debe probar
 
@@ -323,7 +323,7 @@ archivo, a proposito"* (docstring de `cascade-wiring-ratchet`). Un walker, un co
 
 - `packages/core/manifest/variant-parity/index.mjs` — emitir `realParity` desde el walk existente
 - `packages/core/manifest/variant-parity/index.test.mjs` — las negativas
-- `packages/core/manifest/variant-parity/variant-parity.baseline.json` — clave pinada nueva (0 al cierre)
+- `packages/core/manifest/variant-parity/baseline/index.json` — clave pinada nueva (0 al cierre)
 - `packages/core/manifest/generated/variant-parity.json` — salida regenerada
 - `packages/core/scripts/ci/gates-manifest/index.mjs` — **una** entrada
 **Ningún árbol de archivos nuevo. Ese es el punto.**
@@ -374,11 +374,11 @@ Contraste deliberado: el bucle de `:966-975` **sí** hace `existsSync(join(repoR
 Stamp: `head=68f258690 written=2026-08-13T16:16:13.760Z intent=aa3a79f7f00ac414 render=adcfc6b9becc8a94`.
 HEAD real hoy: `9d5582dfd` (68f258690 es del **2026-08-11**). Renderiza:
 - "**Current wave:** Roadmap reconciliation and first control calibration" — superada.
-- "**Blocked on:** … Competing human authorities must be retired …" — **no** es lo que dice el `checkpoint.intent.json` de hoy.
+- "**Blocked on:** … Competing human authorities must be retired …" — **no** es lo que dice el `checkpoint/index.json` de hoy.
 - lane `advisory-audit` model = **`fable-and-kimi-read-only`** — **nombra como auditor activo a un asiento retirado**
   (el intent vigente dice `fable`, y Kimi K3 está retirado por orden del owner del 2026-08-21).
 
-Este archivo es a la vez `program.json.humanEntry` **y** `workOrderAuthority`. **El único punto de entrada humano del
+Este archivo es a la vez `program/index.json.humanEntry` **y** `workOrderAuthority`. **El único punto de entrada humano del
 programa publica hoy un modelo operativo retirado.**
 
 **Y existe la herramienta que lo caza:** `program-state --check` (`src/tooling/lane-control/public/program-state/index.mjs`)
@@ -393,8 +393,8 @@ punto de entrada humano stale y auto-contradictorio, porque el único chequeo qu
 ### 6.4 Qué se actualiza después de K4/K5 y qué **no debe esperar**
 
 **NO debe esperar (T-0, antes de cualquier write de K4):**
-1. Corregir `checkpoint.intent.json.blockedOn` — hoy es **falso** (ver §10.A).
-2. `program-state --write --intent <checkpoint.intent.json>` para re-renderizar el bloque.
+1. Corregir `checkpoint/index.json.blockedOn` — hoy es **falso** (ver §10.A).
+2. `program-state --write --intent <checkpoint/index.json>` para re-renderizar el bloque.
 3. Cablear `program-state --check` a `gates-manifest`.
 
 **Orden obligatorio dentro de T-0**: primero arreglar `blockedOn`, *después* `--write`, *después* cablear `--check`.
@@ -439,7 +439,7 @@ El §8.5 del inventario admite `git show HEAD:<path> > <path>` "bajo el protocol
 
 | # | Tranche | Precondición | Owner | Write-set | Gates | Stop | Kimi / Fable |
 |---|---|---|---|---|---|---|---|
-| **T-0** | **Authority-honesty** | ninguna | **DT (Codex)** | `checkpoint.intent.json`; bloque stampado de `modern-rescue/README.md`; `gates-manifest/index.mjs` | `program-state --check` verde; `program-check.mjs`; `gates:ci` | si `--write` toca algo fuera del bloque stampado | Kimi **no**; Fable ligera |
+| **T-0** | **Authority-honesty** | ninguna | **DT (Codex)** | `checkpoint/index.json`; bloque stampado de `modern-rescue/README.md`; `gates-manifest/index.mjs` | `program-state --check` verde; `program-check.mjs`; `gates:ci` | si `--write` toca algo fuera del bloque stampado | Kimi **no**; Fable ligera |
 | **T-1a** | program-check → sandbox (c1) + cerca (a) | T-0 | Sonnet bajo brief DT | `program-check.test.mjs`, `gates-manifest/index.mjs` | las 4 negativas de §2.6 | si (c1) exige tocar `program-check.mjs` → medir y **reportar** antes de caer a (c2) | Kimi **no**; **Fable sí** (negativa de crash) |
 | **T-1b** | cra-12 → `--workspace-root` + copia completa | T-0 | Sonnet bajo brief DT | `cra-12-motion-governance.reanchor.test.mjs`; baseline pair-aware de la suite | suite pierna 1 **determinista**; par colapsado y **declarado** | si el costo de copia resulta prohibitivo → **parar y reportar**, no improvisar | Kimi **no**; **Fable sí** |
 | **T-2** | **K4** (3 paths) | **Kimi o excepción del owner** | Sonnet bajo K4 v3 | los 3 de K4 v3 | los del brief | los del brief §9 | **Kimi SÍ** (bloqueante hoy) |
@@ -501,21 +501,21 @@ DT**, no mía. Preparación honesta: **~8/13 diseñada, 13/13 medida, 0/13 imple
 
 ## 10. Claims del inventario falsos, sobreafirmados o de evidencia indirecta
 
-**A. FALSO — §1.A fila 5.** "`checkpoint.intent.json.blockedOn` repite **exactamente los 3 primeros ítems**".
+**A. FALSO — §1.A fila 5.** "`checkpoint/index.json.blockedOn` repite **exactamente los 3 primeros ítems**".
 El texto real (`:4`) es: *"No external blocker. F4A-close exige el ratchet a tolerancia cero + el gate de paridad real
 sobre keypaths evaluados (sin cobertura por placeholders) + **la auditoría Fable del frente**."*
 Repite los ítems **1, 2 y 4**. **Omite `gates:ci` final** (ítem 3), que el roadmap `:1728` sí nombra. No son "los 3 primeros".
 
-**B. FALSO — §6.** "`checkpoint.intent.json` … **Ninguno** [drift] — este archivo está al día."
+**B. FALSO — §6.** "`checkpoint/index.json` … **Ninguno** [drift] — este archivo está al día."
 Dos defectos: (i) su lista de 3 **no coincide** con la de 4 del roadmap (ver A); (ii) abre con **"No external blocker."**
 mientras K4 está detenido esperando a Kimi — bloqueo que el propio inventario documenta en §2 y §9 y que yo verifiqué por
 ausencia de memo+flag. **El archivo que el inventario declara limpio es el que contradice su propio hallazgo central.**
 
-**C. SOBREAFIRMADO — §6.** "`program.json:8` … **Resuelve correctamente** contra la raíz del repo".
+**C. SOBREAFIRMADO — §6.** "`program/index.json:8` … **Resuelve correctamente** contra la raíz del repo".
 Ningún código lo resuelve: es comparación literal (`program-check.mjs:934`), deliberadamente excluida del bucle
 `existsSync` de `:966-975`. Inferencia razonable presentada como resolución verificada.
 
-**D. IMPRECISO — §4.** "`grep -rl realKeypathParity` sólo encuentra la MENCIÓN … dentro de `variant-parity.baseline.json`".
+**D. IMPRECISO — §4.** "`grep -rl realKeypathParity` sólo encuentra la MENCIÓN … dentro de `baseline/index.json`".
 Son **4** coincidencias; 3 están en `docs/` (incluidas las que el propio inventario cita como autoridad).
 **Conclusión sustantiva (no existe como código) — CORRECTA.**
 

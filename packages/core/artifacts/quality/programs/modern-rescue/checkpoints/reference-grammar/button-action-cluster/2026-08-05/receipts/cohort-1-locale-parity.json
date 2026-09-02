@@ -1,0 +1,1060 @@
+{
+  "schemaVersion": 1,
+  "receiptId": "wo-cra-23-R1-C1-locale-parity",
+  "generatedBy": "packages/core/test-artifacts/quality-evidence/wo-cra-23/R1/receipts/locale-parity-check.mjs",
+  "mandate": "Cohort 1 gap-map rank 6 (stressMatrix.localeParity = [fr, pt]). Measurement only -- no catalog file is read-write, only read.",
+  "scope": {
+    "namespace": "components",
+    "namespaceFileScopeNote": "Each locale directory also has common.json, errors.json and validation.json; those are covered by the existing governed gate (see governedGateCrossReference) but are OUT OF SCOPE for this script by explicit task instruction, which named components.json specifically.",
+    "locales": [
+      "en",
+      "es",
+      "ar",
+      "fr",
+      "pt"
+    ],
+    "referenceLocale": "en",
+    "referenceKeyCount": 1105
+  },
+  "defectClasses": {
+    "missing": "a key en has that the locale entirely lacks.",
+    "extra": "a key the locale has that en does not -- dead copy unreachable through the en-keyed contract.",
+    "identicalToEn": "the key exists in both and resolves, but the string is byte-identical to en's -- a SUSPECTED untranslated placeholder, reported separately from \"missing\" because it renders and needs a different fix. Mechanical flag, not a linguistic judgement."
+  },
+  "perLocale": {
+    "en": {
+      "file": "src/foundation/i18n/runtime/catalog/translations/locales/en/components.json",
+      "leafCount": 1105,
+      "nonStringLeaves": [],
+      "missingCount": 0,
+      "missingKeys": [],
+      "extraCount": 0,
+      "extraKeys": [],
+      "identicalToEnCount": 0,
+      "identicalToEn": [],
+      "coveragePercentAgainstEn": 100
+    },
+    "es": {
+      "file": "src/foundation/i18n/runtime/catalog/translations/locales/es/components.json",
+      "leafCount": 1105,
+      "nonStringLeaves": [],
+      "missingCount": 0,
+      "missingKeys": [],
+      "extraCount": 0,
+      "extraKeys": [],
+      "identicalToEnCount": 41,
+      "identicalToEn": [
+        {
+          "key": "avatar.image_alt",
+          "value": "Avatar"
+        },
+        {
+          "key": "bottomTabBar.itemWithBadge",
+          "value": "{label}, {count}"
+        },
+        {
+          "key": "brandStudio.tenantReport.packOne",
+          "value": "pack"
+        },
+        {
+          "key": "brandStudio.tenantReport.packOther",
+          "value": "packs"
+        },
+        {
+          "key": "brandingPreview.table.sampleDateA",
+          "value": "Apr 17, 2026"
+        },
+        {
+          "key": "brandingPreview.table.sampleDateB",
+          "value": "Apr 16, 2026"
+        },
+        {
+          "key": "brandingPreview.table.sampleNameA",
+          "value": "John Doe"
+        },
+        {
+          "key": "brandingPreview.table.sampleNameB",
+          "value": "Jane Smith"
+        },
+        {
+          "key": "columnSettings.pinSideLeft",
+          "value": "L"
+        },
+        {
+          "key": "columnSettings.pinSideRight",
+          "value": "R"
+        },
+        {
+          "key": "connectedCommandPalette.globalCategory",
+          "value": "Global"
+        },
+        {
+          "key": "datepicker.ok",
+          "value": "OK"
+        },
+        {
+          "key": "invoice_template.col_total",
+          "value": "Total"
+        },
+        {
+          "key": "invoice_template.subtotal",
+          "value": "Subtotal"
+        },
+        {
+          "key": "invoice_template.total",
+          "value": "Total"
+        },
+        {
+          "key": "map_view.zoom",
+          "value": "Zoom: {zoom}"
+        },
+        {
+          "key": "popconfirm.cancel",
+          "value": "No"
+        },
+        {
+          "key": "selectionPreviewRail.no",
+          "value": "No"
+        },
+        {
+          "key": "shortcutsOverlay.general",
+          "value": "General"
+        },
+        {
+          "key": "surfaces.billing.tab_plan",
+          "value": "Plan"
+        },
+        {
+          "key": "surfaces.chat.composer_title",
+          "value": "Composer"
+        },
+        {
+          "key": "surfaces.collection_workspace.boolean_no",
+          "value": "No"
+        },
+        {
+          "key": "surfaces.decision_inbox.sla_duration_short",
+          "value": "{hours}h {mins}m"
+        },
+        {
+          "key": "surfaces.decision_inbox.sla_header",
+          "value": "SLA"
+        },
+        {
+          "key": "surfaces.editor.title",
+          "value": "Editor"
+        },
+        {
+          "key": "surfaces.guided_draft_form.progress_count",
+          "value": "{completed}/{total}"
+        },
+        {
+          "key": "surfaces.import_export.preview_total",
+          "value": "Total: {count}"
+        },
+        {
+          "key": "surfaces.integration.webhooks_list_aria",
+          "value": "Webhooks"
+        },
+        {
+          "key": "surfaces.integration.webhooks_title",
+          "value": "Webhooks"
+        },
+        {
+          "key": "surfaces.list.view_cards",
+          "value": "Cards"
+        },
+        {
+          "key": "surfaces.notification.preferences_default_category",
+          "value": "General"
+        },
+        {
+          "key": "surfaces.report.export_csv",
+          "value": "CSV"
+        },
+        {
+          "key": "surfaces.report.export_excel",
+          "value": "EXCEL"
+        },
+        {
+          "key": "surfaces.report.export_pdf",
+          "value": "PDF"
+        },
+        {
+          "key": "tenantPreview.no",
+          "value": "No"
+        },
+        {
+          "key": "tenantPreview.sampleRowAmountA",
+          "value": "$12,400"
+        },
+        {
+          "key": "tenantPreview.sampleRowAmountB",
+          "value": "$8,200"
+        },
+        {
+          "key": "timepicker.minutes_label",
+          "value": "Min"
+        },
+        {
+          "key": "timepicker.ok",
+          "value": "OK"
+        },
+        {
+          "key": "transfer.move_left",
+          "value": "<"
+        },
+        {
+          "key": "transfer.move_right",
+          "value": ">"
+        }
+      ],
+      "coveragePercentAgainstEn": 100
+    },
+    "ar": {
+      "file": "src/foundation/i18n/runtime/catalog/translations/locales/ar/components.json",
+      "leafCount": 1105,
+      "nonStringLeaves": [],
+      "missingCount": 0,
+      "missingKeys": [],
+      "extraCount": 0,
+      "extraKeys": [],
+      "identicalToEnCount": 16,
+      "identicalToEn": [
+        {
+          "key": "bottomTabBar.itemWithBadge",
+          "value": "{label}, {count}"
+        },
+        {
+          "key": "brandingPreview.table.sampleDateA",
+          "value": "Apr 17, 2026"
+        },
+        {
+          "key": "brandingPreview.table.sampleDateB",
+          "value": "Apr 16, 2026"
+        },
+        {
+          "key": "brandingPreview.table.sampleNameA",
+          "value": "John Doe"
+        },
+        {
+          "key": "brandingPreview.table.sampleNameB",
+          "value": "Jane Smith"
+        },
+        {
+          "key": "columnSettings.pinSideLeft",
+          "value": "L"
+        },
+        {
+          "key": "columnSettings.pinSideRight",
+          "value": "R"
+        },
+        {
+          "key": "surfaces.decision_inbox.sla_header",
+          "value": "SLA"
+        },
+        {
+          "key": "surfaces.guided_draft_form.progress_count",
+          "value": "{completed}/{total}"
+        },
+        {
+          "key": "surfaces.report.export_csv",
+          "value": "CSV"
+        },
+        {
+          "key": "surfaces.report.export_excel",
+          "value": "EXCEL"
+        },
+        {
+          "key": "surfaces.report.export_pdf",
+          "value": "PDF"
+        },
+        {
+          "key": "tenantPreview.sampleRowAmountA",
+          "value": "$12,400"
+        },
+        {
+          "key": "tenantPreview.sampleRowAmountB",
+          "value": "$8,200"
+        },
+        {
+          "key": "transfer.move_left",
+          "value": "<"
+        },
+        {
+          "key": "transfer.move_right",
+          "value": ">"
+        }
+      ],
+      "coveragePercentAgainstEn": 100
+    },
+    "fr": {
+      "file": "src/foundation/i18n/runtime/catalog/translations/locales/fr/components.json",
+      "leafCount": 961,
+      "nonStringLeaves": [],
+      "missingCount": 144,
+      "missingKeys": [
+        "alertDialog.cancel",
+        "anchor.navigation",
+        "appShell.skipToContent.label",
+        "autocomplete.clear",
+        "autocomplete.not_found",
+        "backTop.back_to_top",
+        "carousel.goToSlide",
+        "carousel.navigation",
+        "carousel.nextSlide",
+        "carousel.previousSlide",
+        "carousel.slideOf",
+        "cascader.clear",
+        "cascader.column_label",
+        "cascader.not_found",
+        "cascader.placeholder",
+        "cascader.search_placeholder",
+        "cascader.search_results",
+        "codeBlock.regionLabel",
+        "colorpicker.chooseColor",
+        "colorpicker.clear",
+        "colorpicker.hexLabel",
+        "colorpicker.invalidHex",
+        "colorpicker.selectColor",
+        "commandPalette.dialogLabel",
+        "commandPalette.empty",
+        "commandPalette.placeholder",
+        "commandPalette.recent",
+        "confirmDialog.cancel",
+        "confirmDialog.confirm",
+        "datepicker.calendar_dates",
+        "datepicker.clear_date",
+        "datepicker.clear_dates",
+        "datepicker.date_picker",
+        "datepicker.end_date",
+        "datepicker.hour",
+        "datepicker.minute",
+        "datepicker.next_decade",
+        "datepicker.next_month",
+        "datepicker.next_year",
+        "datepicker.now",
+        "datepicker.previous_decade",
+        "datepicker.previous_month",
+        "datepicker.previous_year",
+        "datepicker.start_date",
+        "descriptions.region_label",
+        "detailPanel.back",
+        "detailPanel.breadcrumb",
+        "detailPanel.tabs",
+        "drawer.actions",
+        "environmentToggle.banner",
+        "environmentToggle.cancel",
+        "environmentToggle.confirmTitle",
+        "environmentToggle.group_label",
+        "environmentToggle.select",
+        "exportButton.copied",
+        "exportButton.formatClipboard",
+        "exportButton.formatCsv",
+        "exportButton.formatJson",
+        "exportButton.panelLabel",
+        "exportButton.triggerLabel",
+        "floatbutton.actionLabel",
+        "floatbutton.backTop",
+        "floatbutton.closeGroup",
+        "floatbutton.openGroup",
+        "form_builder.empty",
+        "form_builder.next",
+        "form_builder.previous",
+        "form_builder.step_counter",
+        "form_sections.optional",
+        "form_sections.required",
+        "input_number.decrease",
+        "input_number.increase",
+        "kanbanBoard.add_item",
+        "kanbanBoard.empty_board",
+        "layout.collapse_sidebar",
+        "layout.expand_sidebar",
+        "loadingOverlay.message",
+        "locale_switcher.trigger_aria",
+        "markdownView.taskChecked",
+        "markdownView.taskUnchecked",
+        "mentions.input_label",
+        "mentions.loading",
+        "mentions.not_found",
+        "mentions.suggestions_label",
+        "otp.digit_label",
+        "pagination.navigation",
+        "pagination.total_items",
+        "popconfirm.cancel",
+        "popconfirm.ok",
+        "progress.indeterminate",
+        "progress.percent_complete",
+        "record.actionRail",
+        "record.copiedField",
+        "record.copyField",
+        "record.notSet",
+        "scopeSwitcher.groupLabel",
+        "scrollArea.region_label",
+        "slider.end_value",
+        "slider.label",
+        "slider.start_value",
+        "splitter.resize_gutter",
+        "stepper.navigation",
+        "surfaces.chat.composer_label",
+        "surfaces.editor.input_label",
+        "surfaces.editor.preview_title",
+        "surfaces.form.actions_aria",
+        "surfaces.kanban.empty_description",
+        "surfaces.kanban.empty_title",
+        "surfaces.kanban.filters_title",
+        "surfaces.kanban.lanes_nav_aria",
+        "surfaces.media.untitled_item",
+        "surfaces.operational.stats_group_aria",
+        "surfaces.search.filters_title",
+        "surfaces.search.results_group_aria",
+        "table.collapse_row",
+        "table.expand_row",
+        "table.filter_column",
+        "table.next_page",
+        "table.page",
+        "table.previous_page",
+        "table.resize_column",
+        "table.select_all",
+        "table.select_row",
+        "taginput.placeholder",
+        "timepicker.end_time",
+        "timepicker.hours_label",
+        "timepicker.minutes_label",
+        "timepicker.seconds_label",
+        "timepicker.start_time",
+        "tree.collapse",
+        "tree.expand",
+        "tree.select_node",
+        "treeView.empty",
+        "treeView.empty_results",
+        "treeView.search_placeholder",
+        "upload.add_file",
+        "upload.button",
+        "upload.close_preview",
+        "upload.drop_hint",
+        "upload.file_list",
+        "upload.preview",
+        "upload.progress",
+        "upload.remove_named",
+        "upload.upload_file"
+      ],
+      "extraCount": 0,
+      "extraKeys": [],
+      "identicalToEnCount": 56,
+      "identicalToEn": [
+        {
+          "key": "appShell.navigation.label",
+          "value": "Navigation"
+        },
+        {
+          "key": "avatar.image_alt",
+          "value": "Avatar"
+        },
+        {
+          "key": "bottomTabBar.itemWithBadge",
+          "value": "{label}, {count}"
+        },
+        {
+          "key": "brandStudio.tenantReport.packOne",
+          "value": "pack"
+        },
+        {
+          "key": "brandStudio.tenantReport.packOther",
+          "value": "packs"
+        },
+        {
+          "key": "brandingPreview.table.sampleDateA",
+          "value": "Apr 17, 2026"
+        },
+        {
+          "key": "brandingPreview.table.sampleDateB",
+          "value": "Apr 16, 2026"
+        },
+        {
+          "key": "brandingPreview.table.sampleNameA",
+          "value": "John Doe"
+        },
+        {
+          "key": "brandingPreview.table.sampleNameB",
+          "value": "Jane Smith"
+        },
+        {
+          "key": "columnMenu.visibleSuffix",
+          "value": "visible"
+        },
+        {
+          "key": "columnSettings.pinSideLeft",
+          "value": "L"
+        },
+        {
+          "key": "columnSettings.pinSideRight",
+          "value": "R"
+        },
+        {
+          "key": "columnSettings.visibleSuffix",
+          "value": "visible"
+        },
+        {
+          "key": "connectedCommandPalette.globalCategory",
+          "value": "Global"
+        },
+        {
+          "key": "dataTerminalCard.statusAttention",
+          "value": "ATTENTION"
+        },
+        {
+          "key": "dataTerminalCard.statusOptimal",
+          "value": "OPTIMAL"
+        },
+        {
+          "key": "datepicker.ok",
+          "value": "OK"
+        },
+        {
+          "key": "editFields.section.number",
+          "value": "Section {number}"
+        },
+        {
+          "key": "fileManager.columnActions",
+          "value": "Actions"
+        },
+        {
+          "key": "filter_panel.max",
+          "value": "Max"
+        },
+        {
+          "key": "filter_panel.min",
+          "value": "Min"
+        },
+        {
+          "key": "invoice_template.col_description",
+          "value": "Description"
+        },
+        {
+          "key": "invoice_template.col_total",
+          "value": "Total"
+        },
+        {
+          "key": "invoice_template.notes_label",
+          "value": "Notes"
+        },
+        {
+          "key": "invoice_template.total",
+          "value": "Total"
+        },
+        {
+          "key": "metrics.chartTitle",
+          "value": "Performance"
+        },
+        {
+          "key": "notificationCenter.title",
+          "value": "Notifications"
+        },
+        {
+          "key": "savedViews.options",
+          "value": "options"
+        },
+        {
+          "key": "savedViewsMenu.shareTypePrefix",
+          "value": "Type"
+        },
+        {
+          "key": "surfaces.chat.composer_title",
+          "value": "Composer"
+        },
+        {
+          "key": "surfaces.chat.conversation_title",
+          "value": "Conversation"
+        },
+        {
+          "key": "surfaces.collection_workspace.page_size_option",
+          "value": "{count} / page"
+        },
+        {
+          "key": "surfaces.collection_workspace.per_page",
+          "value": "/ page"
+        },
+        {
+          "key": "surfaces.decision_inbox.sla_header",
+          "value": "SLA"
+        },
+        {
+          "key": "surfaces.guided_draft_form.progress_count",
+          "value": "{completed}/{total}"
+        },
+        {
+          "key": "surfaces.guided_draft_form.section_nav_label",
+          "value": "Section"
+        },
+        {
+          "key": "surfaces.guided_draft_form.section_nav_label_plural",
+          "value": "Sections"
+        },
+        {
+          "key": "surfaces.import_export.format_label",
+          "value": "Format"
+        },
+        {
+          "key": "surfaces.integration.webhooks_list_aria",
+          "value": "Webhooks"
+        },
+        {
+          "key": "surfaces.integration.webhooks_title",
+          "value": "Webhooks"
+        },
+        {
+          "key": "surfaces.list.view_cards",
+          "value": "Cards"
+        },
+        {
+          "key": "surfaces.media.details_title",
+          "value": "Details"
+        },
+        {
+          "key": "surfaces.notification.notifications_section",
+          "value": "Notifications"
+        },
+        {
+          "key": "surfaces.report.export_csv",
+          "value": "CSV"
+        },
+        {
+          "key": "surfaces.report.export_excel",
+          "value": "EXCEL"
+        },
+        {
+          "key": "surfaces.report.export_pdf",
+          "value": "PDF"
+        },
+        {
+          "key": "tenantPreview.badges",
+          "value": "Badges"
+        },
+        {
+          "key": "tenantPreview.tileAnimation",
+          "value": "Animation"
+        },
+        {
+          "key": "timepicker.am",
+          "value": "AM"
+        },
+        {
+          "key": "timepicker.meridiem_label",
+          "value": "AM/PM"
+        },
+        {
+          "key": "timepicker.ok",
+          "value": "OK"
+        },
+        {
+          "key": "timepicker.pm",
+          "value": "PM"
+        },
+        {
+          "key": "transfer.move_left",
+          "value": "<"
+        },
+        {
+          "key": "transfer.move_right",
+          "value": ">"
+        },
+        {
+          "key": "transfer.source_title",
+          "value": "Source"
+        },
+        {
+          "key": "workbenchHeader.exceptions",
+          "value": "{count} exceptions"
+        }
+      ],
+      "coveragePercentAgainstEn": 86.97
+    },
+    "pt": {
+      "file": "src/foundation/i18n/runtime/catalog/translations/locales/pt/components.json",
+      "leafCount": 960,
+      "nonStringLeaves": [],
+      "missingCount": 145,
+      "missingKeys": [
+        "activeFiltersBar.active_count",
+        "activeFiltersBar.addFilter",
+        "activeFiltersBar.clearAll",
+        "activeFiltersBar.regionLabel",
+        "activeFiltersBar.remove_filter_named",
+        "alertDialog.cancel",
+        "anchor.navigation",
+        "appShell.skipToContent.label",
+        "autocomplete.clear",
+        "autocomplete.not_found",
+        "backTop.back_to_top",
+        "carousel.goToSlide",
+        "carousel.navigation",
+        "carousel.nextSlide",
+        "carousel.previousSlide",
+        "carousel.slideOf",
+        "cascader.clear",
+        "cascader.column_label",
+        "cascader.not_found",
+        "cascader.placeholder",
+        "cascader.search_placeholder",
+        "cascader.search_results",
+        "codeBlock.regionLabel",
+        "colorpicker.chooseColor",
+        "colorpicker.clear",
+        "colorpicker.hexLabel",
+        "colorpicker.invalidHex",
+        "colorpicker.selectColor",
+        "commandPalette.dialogLabel",
+        "commandPalette.empty",
+        "commandPalette.placeholder",
+        "commandPalette.recent",
+        "confirmDialog.cancel",
+        "confirmDialog.confirm",
+        "descriptions.region_label",
+        "detailPanel.back",
+        "detailPanel.breadcrumb",
+        "detailPanel.tabs",
+        "drawer.actions",
+        "environmentToggle.banner",
+        "environmentToggle.cancel",
+        "environmentToggle.confirmTitle",
+        "environmentToggle.group_label",
+        "environmentToggle.select",
+        "exportButton.copied",
+        "exportButton.formatClipboard",
+        "exportButton.formatCsv",
+        "exportButton.formatJson",
+        "exportButton.panelLabel",
+        "exportButton.triggerLabel",
+        "floatbutton.actionLabel",
+        "floatbutton.backTop",
+        "floatbutton.closeGroup",
+        "floatbutton.openGroup",
+        "form_builder.empty",
+        "form_builder.next",
+        "form_builder.previous",
+        "form_builder.step_counter",
+        "form_sections.optional",
+        "form_sections.required",
+        "input_number.decrease",
+        "input_number.increase",
+        "kanbanBoard.add_item",
+        "kanbanBoard.empty_board",
+        "layout.collapse_sidebar",
+        "layout.expand_sidebar",
+        "liveFeed.empty",
+        "liveFeed.loadMore",
+        "liveFeed.newItem",
+        "liveFeed.newItems",
+        "liveFeed.refresh",
+        "loadingOverlay.message",
+        "locale_switcher.trigger_aria",
+        "map_view.center",
+        "map_view.empty",
+        "map_view.marker_count_one",
+        "map_view.marker_count_other",
+        "map_view.no_center",
+        "map_view.placeholder",
+        "map_view.zoom",
+        "markdownView.taskChecked",
+        "markdownView.taskUnchecked",
+        "mentions.input_label",
+        "mentions.loading",
+        "mentions.not_found",
+        "mentions.suggestions_label",
+        "otp.digit_label",
+        "pagination.navigation",
+        "pagination.total_items",
+        "popconfirm.cancel",
+        "popconfirm.ok",
+        "progress.indeterminate",
+        "progress.percent_complete",
+        "qrcode.contains",
+        "qrcode.expired",
+        "qrcode.loading",
+        "qrcode.refresh",
+        "qrcode.refreshLabel",
+        "qrcode.scanned",
+        "record.actionRail",
+        "record.copiedField",
+        "record.copyField",
+        "record.notSet",
+        "savedViews.delete",
+        "savedViews.duplicate",
+        "savedViews.options",
+        "savedViews.rename",
+        "savedViews.unsavedChanges",
+        "scopeSwitcher.groupLabel",
+        "scrollArea.region_label",
+        "shortcutsOverlay.close",
+        "shortcutsOverlay.empty",
+        "shortcutsOverlay.general",
+        "shortcutsOverlay.searchPlaceholder",
+        "shortcutsOverlay.title",
+        "slider.end_value",
+        "slider.label",
+        "slider.start_value",
+        "splitter.resize_gutter",
+        "step_wizard.actions",
+        "step_wizard.complete",
+        "step_wizard.next",
+        "step_wizard.prev",
+        "step_wizard.progress",
+        "step_wizard.skip",
+        "step_wizard.validation_default",
+        "stepper.navigation",
+        "taginput.placeholder",
+        "timepicker.end_time",
+        "timepicker.hours_label",
+        "timepicker.minutes_label",
+        "timepicker.seconds_label",
+        "timepicker.start_time",
+        "tree.collapse",
+        "tree.expand",
+        "tree.select_node",
+        "treeView.empty",
+        "treeView.empty_results",
+        "treeView.search_placeholder",
+        "treeselect.clear",
+        "treeselect.collapse",
+        "treeselect.expand",
+        "treeselect.not_found",
+        "treeselect.placeholder",
+        "treeselect.search_placeholder"
+      ],
+      "extraCount": 0,
+      "extraKeys": [],
+      "identicalToEnCount": 38,
+      "identicalToEn": [
+        {
+          "key": "avatar.image_alt",
+          "value": "Avatar"
+        },
+        {
+          "key": "avatar.status.offline",
+          "value": "Offline"
+        },
+        {
+          "key": "avatar.status.online",
+          "value": "Online"
+        },
+        {
+          "key": "bottomTabBar.itemWithBadge",
+          "value": "{label}, {count}"
+        },
+        {
+          "key": "brandingPreview.table.sampleDateA",
+          "value": "Apr 17, 2026"
+        },
+        {
+          "key": "brandingPreview.table.sampleDateB",
+          "value": "Apr 16, 2026"
+        },
+        {
+          "key": "brandingPreview.table.sampleNameA",
+          "value": "John Doe"
+        },
+        {
+          "key": "brandingPreview.table.sampleNameB",
+          "value": "Jane Smith"
+        },
+        {
+          "key": "columnSettings.pinSideLeft",
+          "value": "L"
+        },
+        {
+          "key": "columnSettings.pinSideRight",
+          "value": "R"
+        },
+        {
+          "key": "command_center.insights_aria",
+          "value": "Insights"
+        },
+        {
+          "key": "connectedCommandPalette.globalCategory",
+          "value": "Global"
+        },
+        {
+          "key": "datepicker.ok",
+          "value": "OK"
+        },
+        {
+          "key": "invoice_template.col_total",
+          "value": "Total"
+        },
+        {
+          "key": "invoice_template.subtotal",
+          "value": "Subtotal"
+        },
+        {
+          "key": "invoice_template.total",
+          "value": "Total"
+        },
+        {
+          "key": "surfaces.chat.composer_title",
+          "value": "Composer"
+        },
+        {
+          "key": "surfaces.decision_inbox.sla_header",
+          "value": "SLA"
+        },
+        {
+          "key": "surfaces.editor.title",
+          "value": "Editor"
+        },
+        {
+          "key": "surfaces.guided_draft_form.progress_count",
+          "value": "{completed}/{total}"
+        },
+        {
+          "key": "surfaces.import_export.preview_total",
+          "value": "Total: {count}"
+        },
+        {
+          "key": "surfaces.integration.webhooks_list_aria",
+          "value": "Webhooks"
+        },
+        {
+          "key": "surfaces.integration.webhooks_title",
+          "value": "Webhooks"
+        },
+        {
+          "key": "surfaces.list.view_cards",
+          "value": "Cards"
+        },
+        {
+          "key": "surfaces.report.export_csv",
+          "value": "CSV"
+        },
+        {
+          "key": "surfaces.report.export_excel",
+          "value": "EXCEL"
+        },
+        {
+          "key": "surfaces.report.export_pdf",
+          "value": "PDF"
+        },
+        {
+          "key": "tenantPreview.colStatus",
+          "value": "Status"
+        },
+        {
+          "key": "tenantPreview.sampleRowAmountA",
+          "value": "$12,400"
+        },
+        {
+          "key": "tenantPreview.sampleRowAmountB",
+          "value": "$8,200"
+        },
+        {
+          "key": "timepicker.am",
+          "value": "AM"
+        },
+        {
+          "key": "timepicker.meridiem_label",
+          "value": "AM/PM"
+        },
+        {
+          "key": "timepicker.ok",
+          "value": "OK"
+        },
+        {
+          "key": "timepicker.pm",
+          "value": "PM"
+        },
+        {
+          "key": "transfer.item_unit",
+          "value": "item"
+        },
+        {
+          "key": "transfer.move_left",
+          "value": "<"
+        },
+        {
+          "key": "transfer.move_right",
+          "value": ">"
+        },
+        {
+          "key": "workspaceSwitcher.panel",
+          "value": "Workspaces"
+        }
+      ],
+      "coveragePercentAgainstEn": 86.88
+    }
+  },
+  "governedGateCrossReference": {
+    "source": "packages/core/scripts/i18n-key-parity-gate.mjs, imported read-only (no --seed, no write)",
+    "scopeDifference": "ALL FOUR namespaces (common, components, errors, validation), reference = UNION of en+es+ar leaf keys, not en alone. Not directly comparable count-for-count to perLocale above, which is components.json-only and en-anchored; both are reported so they are never conflated.",
+    "referenceKeyCount": 1251,
+    "pass": true,
+    "failures": [],
+    "tightenOpportunities": [
+      "the mandatory key corpus grew to 1251 (floor 1247) — run --seed to raise the floor"
+    ],
+    "census": [
+      {
+        "locale": "es",
+        "classification": "mandatory",
+        "present": 1251,
+        "missingCount": 0,
+        "extraCount": 0,
+        "coveragePercent": 100
+      },
+      {
+        "locale": "en",
+        "classification": "mandatory",
+        "present": 1251,
+        "missingCount": 0,
+        "extraCount": 0,
+        "coveragePercent": 100
+      },
+      {
+        "locale": "pt",
+        "classification": "declared-partial",
+        "present": 1106,
+        "missingCount": 145,
+        "extraCount": 0,
+        "coveragePercent": 88.41
+      },
+      {
+        "locale": "fr",
+        "classification": "declared-partial",
+        "present": 1107,
+        "missingCount": 144,
+        "extraCount": 0,
+        "coveragePercent": 88.49
+      },
+      {
+        "locale": "ar",
+        "classification": "mandatory",
+        "present": 1251,
+        "missingCount": 0,
+        "extraCount": 0,
+        "coveragePercent": 100
+      }
+    ]
+  },
+  "committedBaselineForDeclaredPartialLocales": {
+    "source": "packages/core/scripts/i18n-baseline/index.json, read-only, not re-seeded",
+    "scopeDifference": "This baseline's missing/present numbers are ALL FOUR namespaces combined, not components.json alone.",
+    "_comment": "Locale classification + decrease-only shortfall ledger for i18n-key-parity-gate.mjs. `mandatoryLocales` ship at 100% of the reference key set (the union of every mandatory locale's leaf keys) -- any hole fails --check and there is NO baseline escape for them. `declaredPartialLocales` ship incomplete BY DECISION; their `missing` count is a decrease-only CEILING: growth fails --check, a NEW partial locale with no entry fails --check, and a shrink reports a tighten opportunity (run --seed to lower the ceiling). Every locale in SUPPORTED_LOCALES must appear in exactly one of the two lists.",
+    "referenceKeyCount": 1247,
+    "mandatoryLocales": [
+      "en",
+      "es",
+      "ar"
+    ],
+    "declaredPartialLocales": {
+      "fr": {
+        "missing": 144,
+        "present": 1103,
+        "reason": "French is a declared-partial, non-product locale. The 2026-07-30 Modern full-coverage wave expanded the mandatory EN/ES/AR contract from 456 to 1127 keys; French received 671 natural translations in the same wave and preserved the committed 147-key debt ceiling by shrinking it to 146. No English-copy placeholders were added to simulate translation."
+      },
+      "pt": {
+        "missing": 145,
+        "present": 1102,
+        "reason": "Portuguese is a declared-partial, non-product locale. The 2026-07-30 Modern full-coverage wave expanded the mandatory EN/ES/AR contract from 456 to 1127 keys; Portuguese received 670 natural translations in the same wave and preserved the committed 147-key debt ceiling. No English-copy placeholders were added to simulate translation."
+      }
+    }
+  }
+}

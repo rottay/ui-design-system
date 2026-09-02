@@ -6,16 +6,16 @@ these files in order and obey the machine checks before editing.
 ## Read order
 
 1. `CLAUDE.md` — project-wide bootstrap and general rules.
-2. `packages/core/scripts/quality-evidence/programs/modern-rescue/README.md` —
+2. `packages/core/scripts/tooling/quality/evidence/programs/modern-rescue/README.md` —
    **only human entry point** for WO-CRA-23: product promise, authority tree,
    fixed scope, lifecycle, resume algorithm, test-truth policy, fences.
-3. `packages/core/scripts/quality-evidence/programs/modern-rescue/program.json` —
+3. `packages/core/scripts/tooling/quality/evidence/programs/modern-rescue/program/index.json` —
    programme identity, fences, denominators and invariants.
-4. `packages/core/scripts/quality-evidence/programs/modern-rescue/customization-model.json` —
+4. `packages/core/scripts/tooling/quality/evidence/programs/modern-rescue/customization-model/index.json` —
    operational controls, namespace lifecycle, target/proposed distinction.
-5. `packages/core/scripts/quality-evidence/programs/modern-rescue/agent-orchestration.json` —
+5. `packages/core/scripts/tooling/quality/evidence/programs/modern-rescue/orchestration/index.json` —
    exact roles, commit policy and routing for this programme.
-6. `packages/core/scripts/quality-evidence/programs/modern-rescue/program-check.mjs` —
+6. `packages/core/scripts/tooling/quality/evidence/programs/modern-rescue/check/index.mjs` —
    run this to verify the constitution is internally consistent.
 
 
@@ -75,8 +75,8 @@ public API requirement.
 ## Verification command
 
 ```bash
-node packages/core/scripts/quality-evidence/programs/modern-rescue/program-check.mjs
-node packages/core/scripts/quality-evidence/programs/modern-rescue/program-check.test.mjs
+node packages/core/scripts/tooling/quality/evidence/programs/modern-rescue/check/index.mjs
+node packages/core/scripts/tooling/quality/evidence/programs/modern-rescue/check/index.test.mjs
 ```
 
 Run these before and after any T-1 constitution edit. Fail-closed on drift.

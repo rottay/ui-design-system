@@ -32,7 +32,7 @@ same mechanism is live in one component and dead in another — never pattern-ma
 
 **CORRECTION (2026-07-13) — an earlier revision of this contract said "the counter is BLIND to the
 `.style.x =` shape". That is FALSE**, and it was corrected only because a migration agent read the
-lexer instead of believing the brief. `scripts/lib/inline-paint-counter.mjs:227-240` has an explicit
+lexer instead of believing the brief. `scripts/tooling/libraries/inline-paint-counter.mjs:227-240` has an explicit
 `.style.` branch counting both the assignment form and `.style.setProperty('paint-prop', …)`. So
 command-palette CANNOT reach `inlinePaint: 0` with the hover still inline — the counter is a second
 gate on these ten writes, not a blind spot. (What IS blind: `(el.style as any).background = …`, where

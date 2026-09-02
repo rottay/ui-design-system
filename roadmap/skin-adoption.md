@@ -176,7 +176,7 @@ surface), preserved at commit `2454ef4f`. `roadmap/skin-census.json` is intentio
 residual**, not that frozen start; after Stage 1 it reports `30 components / 60 files / 634 sites`,
 all adjudicated by exact runtime/non-paint floors. Ratchet live:
 `fleet.inlinePaint.<file>` decrease-only counters, same lexer as arc09 (shared module
-`scripts/lib/inline-paint-counter.mjs`). Model tier from script-detected trap markers
+`scripts/tooling/libraries/inline-paint-counter.mjs`). Model tier from script-detected trap markers
 (imperative paint, hover handlers, state-hover, Text color, style-into-child, keyframes tags,
 portals); the per-batch contract still resolves each collision exactly.
 

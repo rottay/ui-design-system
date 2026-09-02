@@ -47,7 +47,7 @@ assert.deepEqual(drills.run, DRILLS_ARGV, 'the tooling drill gate must run both 
 ```
 Insertar el flag hace `deepEqual` fallar → **exigiría editar `runner/index.test.mjs` (tercer path)**.
 
-**(b) Rompe el gate de flags phantom.** En `gates-manifest.flags.test.mjs:30`,
+**(b) Rompe el gate de flags phantom.** En `gates-tests/flags/index.test.mjs:30`,
 `NODE_OWNED = {'--test','--experimental-vm-modules','--conditions'}`. Medido: `--test-concurrency=1`
 parte en `--test-concurrency`, que **no** está en ese conjunto, así que se colecta como flag de script y
 se busca entrecomillado en las dos fuentes de la cohorte. Medido: **0 ocurrencias en ambas** →
@@ -76,7 +76,7 @@ elimina P0 y P1 por construcción, sin tocar el manifiesto de gates. **Cero gate
 | **1 (único)** | `packages/core/scripts/quality-evidence/programs/modern-rescue/program-check.test.mjs` |
 
 **Fuera del write-set, explícitamente:** `program-check.mjs`, `gates-manifest/index.mjs`,
-`runner/index.test.mjs`, `gates-manifest.flags.test.mjs`, `manifest/generator/index.test.mjs`,
+`runner/index.test.mjs`, `gates-tests/flags/index.test.mjs`, `manifest/generator/index.test.mjs`,
 el roadmap, y todo lo demás.
 
 ---
@@ -151,10 +151,10 @@ El inventario acierta en **los 15**. Los atribuí uno por uno:
 | 6 | `packages/core/manifest/**` | objetivo de las 37 writes y 3 renames + `schema.json`, `rules/index.mjs`, `index.json`, `cascade/roots/*`, `controls/*`, `families/**` |
 | 7 | `packages/core/scripts/quality-evidence/**` | dir del programa + `v2/contracts.mjs` + `v2/receipts.mjs` |
 | 8 | `packages/core/scripts/lib/**` | `repo-root/index.mjs` |
-| 9 | `packages/core/scripts/tokens/customization-surface-census/**` | `parseRegistry` (importado por el generator) + `customization-surface-report.json` (`program.json.tokenCensus`) + su baseline `dead-writers` |
-| 10 | `packages/core/scripts/tokens/kimi-preservation-manifest/**` | `program.json.kimiPreservation` |
-| 11 | `packages/core/hooks-manifest.json` | `program.json.appHooks` **y** `MANIFEST_PATH` del census (:59) |
-| 12 | `packages/core/tokens/controls/README.md` | `program.json.controls` |
+| 9 | `packages/core/scripts/tokens/customization-surface-census/**` | `parseRegistry` (importado por el generator) + `customization-surface-report.json` (`program/index.json.tokenCensus`) + su baseline `dead-writers` |
+| 10 | `packages/core/scripts/tokens/kimi-preservation-manifest/**` | `program/index.json.kimiPreservation` |
+| 11 | `packages/core/hooks-manifest.json` | `program/index.json.appHooks` **y** `MANIFEST_PATH` del census (:59) |
+| 12 | `packages/core/tokens/controls/README.md` | `program/index.json.controls` |
 | 13 | `packages/core/src/**` | `prototypeLedger`; `REGISTRY_PATH`/`ALLOWLIST_PATH`/`EXPRESSIVE_PATH`/`ARTIFACTS_DIR` del census; y **232 de 235 valores `site`** del manifiesto (los otros 3 son centinelas: `engine-inline`, `js-computed-style-read`, `skin-css`) |
 | 14 | `packages/showroom/src/**` | `referenceLab.page`, `referenceLab.substrate`, `sceneRegistry` |
 | 15 | `packages/showroom/e2e/whitelabel/density-authority-matrix.spec.ts` | **`manifest/controls/spacing.rhythm.json:68`**, `sourceBindings.existingFivePlaneHarness` |

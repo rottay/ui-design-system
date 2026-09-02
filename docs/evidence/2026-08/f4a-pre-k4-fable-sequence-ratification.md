@@ -43,7 +43,7 @@ Re-conté el manifiesto por import esta sesión: hoy **90 = 88 blocking + 2 excl
 
 ### 5. Registro oficial sólo tras postaudit — CUMPLIDO
 
-La ley por tranche ("…inspección DT del diff, mismo diff completo a Fable, y sólo después registro oficial"), el "no toque roadmap/registry todavía" de T-0, y el paso final de la cola (actualización oficial tras gates:ci + auditoría) son consistentes entre sí y con la excepción legítima: `checkpoint.intent.json` y el bloque README son el objeto propio de T-0, no registro de progreso. El asiento dirty actual es la consolidación misma que el owner ordenó y declara estados de preparación, no cierres (ver punto 7).
+La ley por tranche ("…inspección DT del diff, mismo diff completo a Fable, y sólo después registro oficial"), el "no toque roadmap/registry todavía" de T-0, y el paso final de la cola (actualización oficial tras gates:ci + auditoría) son consistentes entre sí y con la excepción legítima: `checkpoint/index.json` y el bloque README son el objeto propio de T-0, no registro de progreso. El asiento dirty actual es la consolidación misma que el owner ordenó y declara estados de preparación, no cierres (ver punto 7).
 
 ### 6. Condiciones de seguridad y precedencia — UNA FALTA SUSTANTIVA (R-1), UNA DE CONSISTENCIA EN DISCO (R-2)
 

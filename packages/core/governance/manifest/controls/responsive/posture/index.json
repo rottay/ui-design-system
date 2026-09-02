@@ -1,0 +1,126 @@
+{
+  "schemaVersion": 1,
+  "controlId": "responsive.posture",
+  "lifecycleState": "OPERATIONAL",
+  "tier": "pro",
+  "scope": "tenant",
+  "semanticOwner": {
+    "owner": "design-system",
+    "registryPath": "packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts",
+    "registryDigest": "5941d2eebc8749b7c04aa34aae6135f2eb34f6514842b3b5e040f7ed4faac138"
+  },
+  "title": "Responsive posture profile",
+  "valueType": "profile-id",
+  "domain": {
+    "kind": "closed-enum",
+    "enumValues": [
+      "compact",
+      "balanced",
+      "expansive"
+    ],
+    "bounds": null,
+    "defaultBehavior": "the balanced ladder, whose container thresholds (compact ≤639px, standard ≤839px) and `preferred` span resolution ARE the constants the adaptive runtime and pure solver used before this axis opened — so an absent selection is byte-for-byte the pre-capability layout, and \"unset it\" is a true rollback rather than an approximate one"
+  },
+  "ingress": {
+    "staticBrandThemePath": "responsive.posture",
+    "dbTenantThemePath": "visualFoundation.advanced.responsivePosture"
+  },
+  "declaredOutputs": {
+    "channels": [],
+    "rootAttributes": [],
+    "representativeOnly": true
+  },
+  "dependsOn": [],
+  "compatibility": "additive, unset-to-rollback; the ladder travels as DATA (document → schema → artifact normalizedAppearance) and selects a published threshold pair plus a span bias — never authored thresholds, never a viewport read, never a CSS channel. It reaches geometry ONLY through solver door 2 (`AdaptiveLayoutEnv.spanBias`) and through container-posture bucketing, both bounded by each item's own min/max contract and by the tier capacity, so no selection can overflow, reorder DOM/focus, or open an avoidable hole — drilled by the property sweep under all three profiles. WidgetBoard's collapse TIER is deliberately NOT tenant-driven: widget-board.css mirrors 639/839 as container queries that repoint the grid tracks, so the tier is CSS-co-authored and a JS-only move would manufacture implicit columns. A live swap invalidates measurements and saved layouts for free, because the environment epoch already folds artifactRevision.",
+  "productiveConsumerWitness": {
+    "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts",
+    "symbol": "resolveActiveResponsivePosture"
+  },
+  "calibration": {
+    "assessmentState": "COMPUTED_VERIFIED",
+    "normalizedStops": [
+      {
+        "id": "compact",
+        "value": null,
+        "law": "container ladder 759/959, spanBias 'min'. The band is 200px wide, as in every profile; the onset shifts +120px from balanced."
+      },
+      {
+        "id": "balanced",
+        "value": null,
+        "law": "DEFAULT. 639/839, spanBias 'preferred' -- byte-for-byte the constants the adaptive runtime used before this axis opened, so an absent selection is a true rollback rather than an approximation. Unreceipted as a stop for the same reason density's `normal` is: it IS the pre-capability state."
+      },
+      {
+        "id": "expansive",
+        "value": null,
+        "law": "container ladder 519/719, spanBias 'max'. Onset shifts -120px from balanced; band width unchanged at 200px."
+      }
+    ],
+    "staticDbParityEvidenceIds": [],
+    "exactRestoreEvidenceIds": [
+      "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/responsive-posture/computed-static-db/rottay.json.receipt.json",
+      "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/responsive-posture/computed-static-db/bithire.json.receipt.json",
+      "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/responsive-posture/computed-static-db/evnto.json.receipt.json"
+    ],
+    "negativeControls": [
+      "the board capacity tier does not move with the tenant stop",
+      "no CSS custom property is emitted by any stop",
+      "the three sibling fields of .advanced (chrome, tokenOverrides, profiles) do not move",
+      "an out-of-catalog id neither compiles nor renders as itself"
+    ],
+    "nextAction": "OBTAIN_SIGHTED_ACCEPTANCE. The DATA half is done and receipted on all three verticals through the one reachable door, at all three stops, with the solver response measured, and the ladder now has the vocabulary to carry it. Nothing further about arrival or variation is measurable by this instrument. Whether the resulting geometry is good is sighted acceptance (X-E), and the simplification gap below stays an owner decision, not a measurement.",
+    "staticDbParityScopeNote": "NO PARITY CLAIM IS MADE, and the omission is structural rather than unfinished. Parity means the two ingress doors agree; here only one door exists in a first-party vertical render. The static door is measured and deliberately NOT receipted in artifacts/quality/programs/modern-rescue/cascade-proofs/controls/responsive-posture/computed-static-db/static-door.STRUCTURALLY-UNREACHABLE.json: getCodeOwnedRuntimeConfig strips brandTheme (registry/index.ts:155-162) AND refuses any config that is not the registry object (registry/index.ts:148-151), so bithire's own authored posture resolves to `balanced` after projection while the same theme resolves to `expansive` if the projection is skipped. Receipting that arm would certify a path production does not take -- the H-1 lesson, and worse here, because with no CSS channel nothing would have betrayed the substitution.",
+    "negativeControlsScopeNote": "The first negative is the one that matters and it is a MEASURED GAP, not a clean bill of health: WidgetBoard buckets its capacity tier on hardcoded 639/839 literals (widget-board/runtime/adaptive/react/index.ts:147), so the board answers `single`/`mid`/`full` identically under all three stops. The witness is written so both halves must hold -- the board constant AND the tenant ladder demonstrably moving at the same widths -- because a control asserting only \"the board did not move\" would also pass with a dead ladder. Measured at 600/750/1000px: the board gives one answer per width across all stops while the ladder gives compact/compact/standard, compact/standard/expanded and expanded/expanded/expanded. The pin is DELIBERATE and reasoned in source at :133-146: widget-board.css mirrors the two literals as container queries that repoint the grid tracks, the solver's inline grid-column wins over them, and moving the tier in JS alone would stamp `1 / span 6` into a one-track grid -- manufacturing the overflow this axis promises not to cause. Unifying the two authorities requires the CSS to stop pinning tracks, which is a separate CSS-moving change.",
+    "sourceBindings": [
+      "packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts",
+      "packages/core/src/foundation/tokens/ts/presentation/responsive-postures/index.ts",
+      "packages/core/src/infrastructure/compilers/kernel/foundation/schemas/tenant-theme/index.ts",
+      "packages/core/src/infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts",
+      "packages/core/src/infrastructure/runtime/tenant/foundation/configuration/registry/index.ts",
+      "packages/core/src/ui/patterns/runtime/adaptive-layout/foundation/index.ts",
+      "packages/core/src/ui/patterns/runtime/adaptive-layout/runtime/index.ts",
+      "packages/core/src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts",
+      "packages/core/src/ui/patterns/data/widget-board/runtime/adaptive/react/index.ts",
+      "packages/core/src/ui/surfaces/presentation/pages/data/dashboard/index.tsx"
+    ],
+    "evidenceKindLabellingRule": "All three receipts carry evidenceKind data-field-delta, the DATA terminal proof role, emitted by a live re-run of the producer rather than relabelled by hand -- the difference between evidence and editing. None carries static-db-computed-parity, because this control has ONE reachable door (see staticDbParityScopeNote). One receipt satisfies BOTH legs of COMPUTED_VERIFIED inside the DATA branch, and that is mechanical rather than generous: composition/data-run/index.mjs sets verdict.pass only when restore.exact is true, exitCode mirrors the verdict, and scripts/tooling/quality/evidence/framework/receipts/index.mjs:139-140 refuses any receipt whose exitCode is non-zero. A data-field-delta receipt that exists has already proven its own exact restore, inside the same artifact.",
+    "terminalKind": "DATA. This is the first control the programme certifies whose terminal is not a painted CSS channel: declaredOutputs.channels is empty by design and the ladder travels document -> schema -> compiled artifact -> JS solver. The CSS instrument REFUSES it by construction (lowerStop and assertStopDiscrimination both throw on empty channels; the DB arm cannot even build an input, because toCompilerInput requires appearance.general and this keypath is visualFoundation.advanced.responsivePosture), and that refusal is correct and must stay. The evidence therefore comes from a SIBLING instrument, packages/core/src/tooling/resolution-probe/composition/data-run/, which inherits the three phases, the exact-restore law and the row vocabulary, and pays no Chromium cost because both halves are plain function calls.",
+    "measuredResult": {
+      "instrument": "packages/core/src/tooling/resolution-probe (data-causal command), pure Node 22.17.0, no Chromium, no bundle. Compiles through the published dist/server.js under the same assertDistFresh law the CSS arms obey, via hydrateTenantThemeConfig -> compileTenantThemeConfig with an explicit vertical envelope (advanced mode does not resolve one from the trusted key).",
+      "scenarios": "3 = {rottay, bithire, evnto} x the DB door x all three stops {compact, balanced, expansive}, each a full baseline -> stop -> removal cycle. Zero guard failures on all three; restore.exact true and every behavioural witness held on all three.",
+      "datumArrives": "S1. normalizedAppearance.advanced.responsivePosture reads exactly the requested stop on every vertical: compact -> \"compact\", balanced -> \"balanced\", expansive -> \"expansive\". Three distinct values, so the data-constant guard has real work to do rather than passing vacuously.",
+      "equalityExceptTheField": "The three declared siblings held on all 9 (vertical x stop) rows: chrome, tokenOverrides and profiles are byte-identical to baseline while the governed field moves. The surface is the CLOSED 4-field list of .advanced, passed in rather than walked off the object, so a fifth field appearing there reddens a drill instead of being swept silently into the diff. Chosen non-colour on purpose (radius, anatomy, edge): an authored card colour trips the compiler's APCA dark-mode contrast validation, and a probe that cannot compile its own baseline proves nothing about the field it came to measure.",
+      "exactRestore": "Removal returns the field to UNDEFINED, not to the default value, and the guard demands exactly that. The distinction is not pedantry: resolveActiveResponsivePosture branches on `fromDocument !== undefined` (react:74), so a removal leaving responsivePosture:\"balanced\" would read identically and take the OTHER branch -- same value, different code path. compareExact reports 0 differing rows between baseline and removal on all three verticals.",
+      "consumerResolves": "S2. Fed the REAL compiled artifact shaped as production shapes it (config.appearance = normalizedAppearance), resolveActiveResponsivePosture returns the requested stop and not the default, on all three stops of all three verticals.",
+      "falsifiablePrediction": "Declared BEFORE the run in normalizedStops and confirmed exactly. Band width invariant at 200px across all three stops; onset shifts +/-120px from balanced: compact 759/959 with spanBias \"min\", balanced 639/839 with \"preferred\", expansive 519/719 with \"max\". Stated as an equality on the band plus a strict ordering of the onsets, so a ladder that widened one stop's band would break it even if every onset still moved.",
+      "geometryMoves": "S3. The control REACHES the solver, which is the claim that separates this from a datum that merely travels. At identical width, cols=6, posture=standard and identical contracts, varying ONLY spanBias yields three distinct geometries: min -> \"a:4@r1 b:1@r1 c:1@r1\", preferred -> \"a:2@r1 b:2@r1 c:2@r1\", max -> \"a:6@r1 b:6@r2 c:6@r3\". Three biases, three geometries. The contracts were given genuinely different min/preferred/max, because a contract with one possible span would produce one geometry under every bias and the scenario would pass while proving nothing.",
+      "failClosed": "The bypass guard asserts BOTH layers SEPARATELY and records what it saw even when it holds. An out-of-catalog id (\"not-a-posture\") throws at write time in the compiler AND resolves to the fail-closed default at render time. The expected default is MEASURED, not asserted: it is whatever resolveResponsivePosture(undefined) answers (\"balanced\"), so the guard agrees with the resolver rather than with a constant that would keep agreeing after somebody changed it.",
+      "cellCensus": "X-A, counted on disk and not from a summary: all 255 family manifests carry a responsive.posture cell and ALL 255 have targetBinding.status NO_CSS_CHANNEL. 251 carry nextAction DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING -- the manifest named this instrument before it existed -- and 4 are the layout primitives flex/grid/space/stack, whose nextAction is the PROVE_..._DOES_NOT_CHANGE_..._BREAKPOINTS form. This packet closes exactly ONE cell, pattern/data/widget-board; the other 254 are untouched.",
+      "orderOfRefusal": "Worth recording because it changed during this packet: before normalizedStops were populated, lowerStop threw first on the empty stop list, which masked the structural reason. With the stops declared, the refusals are the ones the design predicted -- static: \"declares no output channels\"; db: no appearance.general object. The CSS instrument now refuses this control for the RIGHT reason."
+    },
+    "unmeasuredScope": [
+      "ONE FAMILY was measured, pattern/data/widget-board, and it is the direct spanBias consumer. THREE more families carry responsive.posture cells that this packet did not measure and left untouched: surface/data/dashboard, structure/dashboard/dashboard-insights and structure/headers/dashboard-header. The 254-cell remainder of the census is inventory, not a claim.",
+      "GEOMETRY GOODNESS IS NOT CLAIMED (X-E). The probe proves the datum ARRIVES and VARIES: the field lands where the contract says, differs per stop, disappears on removal, and moves the solver's output. It does NOT prove the resulting geometry is the RIGHT geometry -- that a board laid out under spanBias \"min\" looks as it should is sighted acceptance, not a fact any function call in this instrument can establish.",
+      "The static arm is measured and NOT receipted (see staticDbParityScopeNote), so no claim is made about a host that builds its own unprojected TenantConfig -- tenant preview, a test harness, or a third party. Case B of the static-door artifact shows that path DOES deliver the authored posture; nothing here certifies it.",
+      "No viewport claim. Both halves are function calls on a compiled artifact, so nothing was rendered and no breakpoint was exercised. The container thresholds are read from the published ladder, not observed firing.",
+      "The S3 contracts are synthetic. They prove the solver responds to the bias; they are not WidgetBoard's real contracts and say nothing about how any shipped board is authored."
+    ],
+    "knownDefects": [
+      {
+        "familyId": "SIMPLIFICATION_GAP/responsive.posture",
+        "finding": "The capability phrase promises a posture that simplifies the interface; the control that EXISTS moves span resolution and container bucketing. Three measurements, each verified in source. (1) The dashboard's real mobile simplification is driven by an isMobile VIEWPORT signal, not by this control: surfaces/presentation/pages/data/dashboard/index.tsx:194 filters sections on `isMobile && section.hideOnMobile` and :206 caps stats on `isMobile && config.visual.mobileStatsLimit`. A tenant stop cannot move either. (2) WidgetBoard's capacity tier fires on hardcoded 639/839 literals (widget-board/runtime/adaptive/react/index.ts:147) that the tenant cannot move -- measured in the TIER_NEGATIVE witness of all three receipts. (3) The solver's hide/defer valve only ever considers secondary items (adaptive-layout/runtime/index.ts:196 `if (item.contract.priority !== 'secondary') continue;`), and every dashboard contract is authored `priority: 'primary'` (dashboard/index.tsx:286, the only priority literal in the file), so that valve structurally cannot fire on a dashboard at any stop.",
+        "disposition": "OPEN_OWNER",
+        "remediation": "Not touched here, and not a bug to patch in this packet: closing it means either narrowing the capability phrase to what the axis does, or moving CSS. Item (2) has a reasoned in-source pin at widget-board react:133-146 -- widget-board.css mirrors the literals as container queries that repoint the grid tracks, and a JS-only move would stamp `1 / span 6` into a one-track grid, manufacturing the overflow this axis promises not to cause. Item (3) is an authoring choice in the surface, not a solver defect. The packet certifies the control that exists and registers the gap MEASURED rather than inventing a control to match the phrase."
+      },
+      {
+        "familyId": "LADDER_VOCABULARY/data-terminal-controls",
+        "finding": "The assessment ladder cannot express a certified DATA-terminal control. scripts/foundation/tokens/manifest/rules/index.mjs:937 requires non-empty stableParts, propertyGroups AND computedProperties at IMPLEMENTED; :946 requires non-empty internalChannels at the same rank; :994 requires an evidenceKind from EVIDENCE_PROOF_ROLES.COMPUTED_DELTA (:426-430) at COMPUTED_VERIFIED. All five are CSS-shaped. responsive.posture emits no CSS property at any stop by design -- targetBinding.status is NO_CSS_CHANNEL on all 255 cells -- so the only way for its cell to climb is to fabricate a computed property, an internal channel and a computed delta it does not have. This packet refused to, and the cell therefore sits at SOURCE_BOUND while carrying three receipted runs. A second, quieter half: calibration.assessmentState on a CONTROL manifest is not validated by any gate, so an inconsistent rank-3 claim here would have passed unnoticed.",
+        "disposition": "CLOSED_BY_LAW_AMENDMENT",
+        "remediation": "CLOSED by L-1, the second application of the mechanism customization-model/index.json#cascadeHeadFailClosedAmendment established: the LAW is amended, never the marker. scripts/foundation/tokens/manifest/rules/index.mjs gains a DATA branch selected NOT by a field a cell can set but by the control's cascade root declaring rootChannel.channel null -- the one authority that already exists and is already gated. The branch relaxes nothing: it charges a different complete conjunction, and it adds two refusals that did not exist (a CSS control declaring dataTerminal, and a DATA cell declaring internalChannels or computedProperties). Retrospective invariance was measured, not asserted: all 5100 cells graded under both modules, 0 verdicts changed outside this control. The second half of the finding -- that nothing compared a control's claim against its cells -- is closed by validateControlAssessmentCeiling; see assessmentStateNote for the corrected characterisation.",
+        "closedBy": "L-1 (ladder DATA-terminal amendment)"
+      }
+    ],
+    "assessmentStateNote": "COMPUTED_VERIFIED under the ladder amendment (L-1), whose DATA branch demands its own complete conjunction -- a cited terminalReason, fieldPath, a closed equalitySurface containing the governed field, behavioural witnesses, and a data-field-delta receipt -- instead of the five CSS-shaped fields this control has none of by design. CORRECTION OF AN EARLIER PHRASE HERE: this note previously said that no gate validated a control's calibration.assessmentState. That was imprecise, and the full characterisation is: scripts/foundation/tokens/manifest/generation/index.mjs:568-586 validates the value against the vocabulary and requires non-empty sourceBindings from SOURCE_BOUND up; scripts/foundation/tokens/manifest/rules/index.mjs:1071-1095 validates the assessmentState of family SECTIONS; what did not exist was a CEILING against the cells. L-1 adds it (validateControlAssessmentCeiling), so this claim is now gated: it is legal here only because pattern/data/widget-board carries COMPUTED_VERIFIED for this control.",
+    "channels": []
+  },
+  "retiredAliases": []
+}

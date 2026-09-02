@@ -24,7 +24,7 @@ entries (`artifact-provenance-drill`, `artifact-provenance`) in the right order
 The three gate files were untracked (authored by the prior wave) = clean-or-ours.
 NOT MINE, already dirty before I started, never touched by me:
 `app-ds-boundary-gate.{mjs,test.mjs,baseline.json}`, `build-vertical-artifacts.mjs`,
-`cra-12-motion-governance.registry.json`, `i18n-key-parity-gate.baseline.json`,
+`cra-12-motion-governance.registry.json`, `i18n-baseline/index.json`,
 and all six `artifacts/{bithire,evnto,rottay}/{index.css,_source/extension.css}`.
 The baseline was seeded from that current (dirty) tree state, which is the state
 Codex audited — my measured 388 rules / 2132 declarations reproduce the audit

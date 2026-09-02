@@ -66,7 +66,7 @@
     "packages/core/src/ui/primitives/display/Card/index.tsx"
   ],
   "sourceDigest": "1606058e7bb7f5b50cdfce620ca3a058dcf7467b18e419ddedd57bdfa3e64502",
-  "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/experience-profile/evnto-editorial.json",
+  "artifactPath": "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/experience-profile/computed-static-db/evnto-editorial.json",
   "artifactSha256": "f44a7dd89c1ec058ceac768cd9eaab7e8bae01d5b2350c6f794c5d3057741b7b",
   "createdAt": "2026-08-23T19:01:49.262Z",
   "negativeDrill": {

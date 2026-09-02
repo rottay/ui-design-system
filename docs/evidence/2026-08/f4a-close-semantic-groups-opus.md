@@ -31,7 +31,7 @@ Igual medí los otros nombres que el encargo pide no dar por históricos:
 - **`K5c`**: **0 menciones** en `docs/ROADMAP-EJECUCION-2026-08-19.md`. La ley sí nombra *"K5: siete
   `OPEN_DT`, **tranches a/b/c**"* (§691), así que **el tranche “c” existe**; la etiqueta `K5c` y su
   contenido detallado son construcción de `/private/tmp`.
-- **`realKeypathParity`**: existe **sólo como prosa** — 1 nota en `variant-parity.baseline.json`, 1 en
+- **`realKeypathParity`**: existe **sólo como prosa** — 1 nota en `baseline/index.json`, 1 en
   cada handoff, 2 en el roadmap. **Cero código.**
 
 ### H-2 — El sidecar no está en la cola vinculante ni en el núcleo de F4A-close
@@ -71,7 +71,7 @@ placeholder que **ya existe** y que ya sostiene los 33 vigentes.
 No es sólo que el sidecar no sea previo. **Sembrar el placeholder antes de rediseñar `realKeypathParity`
 es el orden equivocado**, por una razón escrita en el árbol:
 
-`variant-parity.baseline.json:8` (nota medida, verbatim):
+`baseline/index.json:8` (nota medida, verbatim):
 
 > «El 0 real se certifica sobre keypaths evaluados por el gate `realKeypathParity` de F4A-close
 > (adjudicación A4), **no con este contador que incluye placeholders**.»
@@ -132,7 +132,7 @@ placeholder es siquiera el instrumento adecuado.
 ## 5. Conflicto con el dirty actual, y por qué también aconseja parar
 
 Porcelain **25**, **antes del asiento de roadmap**. Entre los sucios están
-`manifest/generated/variant-parity.json` y `manifest/variant-parity/variant-parity.baseline.json`, que son
+`manifest/generated/variant-parity.json` y `manifest/variant-parity/baseline/index.json`, que son
 **exactamente** los archivos que un tranche de sidecar tocaría o leería como vecinos. Abrir un tranche
 cuyo write-set colinda con paths sucios **antes** de que el asiento cierre viola la precondición
 "write-set limpio path por path" que rige todos los tranches de este frente. **Primero el asiento; después,

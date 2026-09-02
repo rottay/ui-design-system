@@ -40,7 +40,7 @@ La estimación canónica **39–43% realizado** se sostiene como **cota prudente
 - **H6 (Lane C).** Defecto de cascada vertical abierto en bithire: el bloque theme-scoped del artifact generado supera en especificidad al brazo estático (`artifacts/bithire/index.css:644` vs `:1496`); un control COMPUTED_VERIFIED (`experience.profile`) no pinta en bithire/dark vía static. Declarado como `OPEN_VERTICAL_CASCADE_DEFECT` con remediation "fuera de scope del packet" — **sigue sin dueño de packet**.
 - **H7 (Lane C).** Asimetría de brazos estático/DB (`OPEN_ARM_ASYMMETRY`, bithire/editorial light): decisión elevada al owner, **sin resolver**; bloquea un escenario F4B y se arrastra a F2-asimétrico.
 - **H8 (Lane E).** Fence de segregación roto y mal nombrado: drill `composition/receipt` 11/12 compara contra `SIGHTED_APPROVER='Codex (DT)'` pasando `'Codex'` — una valla que no valla, doblemente stale tras la sucesión.
-- **H9 (Lane E).** Contratos máquina stale: `rounds.json` exige `codex-audit`/`Codex GO` como ley; `checkpoint.intent.json` mantiene lane `authority: codex-dt` y `currentWave` describiendo F4A como frente abierto (cerrado 08-22).
+- **H9 (Lane E).** Contratos máquina stale: `rounds/index.json` exige `codex-audit`/`Codex GO` como ley; `checkpoint/index.json` mantiene lane `authority: codex-dt` y `currentWave` describiendo F4A como frente abierto (cerrado 08-22).
 
 ### MINOR
 
@@ -65,7 +65,7 @@ La estimación canónica **39–43% realizado** se sostiene como **cota prudente
 
 ## 5. Correcciones mínimas (bloquean reanudar F4B)
 
-- **C1 (por H4/H8/H9).** Patchear la constitución para la sucesión DT 2026-08-23 con el procedimiento T-1 (program-check + program-check.test antes y después): AGENTS.md, CLAUDE.md, agent-orchestration.json (3er record de sucesión + asiento vivo), program-check.mjs (`LIVE_COORDINATOR`, cadena de 3 records), README del programa, tenant-art-direction.json, rounds.json (`codex-audit`/`Codex GO` → ley neutra de DT), checkpoint.intent.json, y el fence SIGHTED_APPROVER. Todo en UN packet de autoridad, con evidencia.
+- **C1 (por H4/H8/H9).** Patchear la constitución para la sucesión DT 2026-08-23 con el procedimiento T-1 (program-check + program-check.test antes y después): AGENTS.md, CLAUDE.md, orchestration/index.json (3er record de sucesión + asiento vivo), program-check.mjs (`LIVE_COORDINATOR`, cadena de 3 records), README del programa, art-direction/index.json, rounds/index.json (`codex-audit`/`Codex GO` → ley neutra de DT), checkpoint/index.json, y el fence SIGHTED_APPROVER. Todo en UN packet de autoridad, con evidencia.
 - **C2 (por H1).** Resolver el BLOCKED de program-check: corregir las celdas spacing.rhythm (evidenceIds al root real `F4B/spacing-rhythm/`, `mechanism`, `internalChannels`, vocabulary de evidenceKind — unificar `computed-causal-run` vs `static-db-computed-parity` en una decisión única) o enmendar la ley del gate una sola vez, con asiento. Verificar gate verde antes de cualquier commit F4B nuevo.
 - **C3 (por H2).** Resellar gat-07 ahora y asignar el resello por lote como paso obligatorio del cierre de cada packet F4B restante (era tarea secuenciada sin dueño desde §0.1).
 - **C4 (por H3).** Regularizar el desbloqueo de F4B: producir la doble postaudit retroactiva del diff `8d2985638`…`6cfdcc1a9` (incluidos los 2 archivos src fuera de write-set) y asentar en el roadmap el ruling que autorizó Lote B, o declarar la brecha y su remedación. Sin esto, PRE_F4B/F4B descansan sobre una condición incumplida.
@@ -82,12 +82,12 @@ La estimación canónica **39–43% realizado** se sostiene como **cota prudente
 5. **`docs/ROADMAP-EJECUCION-2026-08-19.md:1642`** — Corregir: surfaces.effect-intensity **sí fue reemitido** (createdAt 10:49Z en HEAD); sólo spacing.rhythm conservó emisión original.
 6. **`AGENTS.md:36,40-56`** — Tabla de roles: DT = Kimi K3; agregar 3ra sucesión (Codex → Kimi K3, 2026-08-23, orden owner con handoff SHA `088ddd36…84e665`); Codex retirado del asiento vivo.
 7. **`CLAUDE.md:14-16`** — "Codex is the DT/coordinator" → Kimi K3 (misma referencia de orden).
-8. **`agent-orchestration.json:15,19,21-36,284,312`** — `coordinator.model` → Kimi K3; agregar record de sucesión {Codex→Kimi K3, 2026-08-23}; re-pointear `r7Execution`/`telemetryLaw` al DT vivo.
+8. **`orchestration/index.json:15,19,21-36,284,312`** — `coordinator.model` → Kimi K3; agregar record de sucesión {Codex→Kimi K3, 2026-08-23}; re-pointear `r7Execution`/`telemetryLaw` al DT vivo.
 9. **`program-check.mjs:63-66,99-102`** — `LIVE_COORDINATOR` y `COORDINATOR_SUCCESSION_CHAIN` de 2→3 records. (T-1: correr program-check y program-check.test.mjs antes y después.)
 10. **`packages/core/scripts/quality-evidence/programs/modern-rescue/README.md:194,254,308,352-384`** — roles e historia de sucesión.
-11. **`tenant-art-direction.json:7,9,367`** — adjudicator/promotionAuthority → DT vivo; corregir ":9 Kimi retired from all live seats" (contradicho por el handoff 2026-08-23).
-12. **`rounds.json`** (checkpointPolicy) — `codex-audit`, `explicit Codex GO`, `IMPLEMENTED_PENDING_CODEX_AUDIT` → ley neutra del asiento DT (quien sea el DT vivo).
-13. **`checkpoint.intent.json`** — lane `authority` model `codex-dt` → DT vivo; `currentWave` → "F4B 4/20, siguiente: correcciones C1–C4 + control 5/20" (F4A cerrado 08-22).
+11. **`art-direction/index.json:7,9,367`** — adjudicator/promotionAuthority → DT vivo; corregir ":9 Kimi retired from all live seats" (contradicho por el handoff 2026-08-23).
+12. **`rounds/index.json`** (checkpointPolicy) — `codex-audit`, `explicit Codex GO`, `IMPLEMENTED_PENDING_CODEX_AUDIT` → ley neutra del asiento DT (quien sea el DT vivo).
+13. **`checkpoint/index.json`** — lane `authority` model `codex-dt` → DT vivo; `currentWave` → "F4B 4/20, siguiente: correcciones C1–C4 + control 5/20" (F4A cerrado 08-22).
 14. **Fence** `packages/core/src/.../composition/receipt/tests/index.test.mjs:197` — reparar comparación `SIGHTED_APPROVER` ('Codex (DT)' vs 'Codex') y actualizar al asiento vivo.
 
 ## 7. Arquitectura equivocada aunque los números cierren

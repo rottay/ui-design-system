@@ -20,7 +20,7 @@ components) and **no skin CSS file exists yet for any of them** — every compon
 below is greenfield, same starting state as WO-SKIN-03's five status components. All
 proposed scope classes below are grep-confirmed FREE unless flagged otherwise.
 
-**Coverage checklist** (from `node scripts/engine-token-audit.mjs | grep
+**Coverage checklist** (from `node scripts/infrastructure/engine-token-audit.mjs | grep
 "fleet.inlinePaint.foundation/primitives/navigation"`, 2026-07-13): 34 files, 281 sites by the
 counter's count (the counter is blind to string-embedded `<style>` tag content and
 `.style.x as any =` writes — see per-component notes below for where that blind spot
